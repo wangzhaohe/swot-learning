@@ -8,6 +8,7 @@
 <vnodes>
 <v t="swot.20250508123413.1"><vh>@adoc README.adoc</vh>
 <v t="swot.20250508123515.1"><vh>Record learning contents</vh>
+<v t="swot.20250508125533.1"><vh>Read document</vh></v>
 <v t="swot.20250508123848.1"><vh>Asciidoctor</vh></v>
 <v t="swot.20250508123546.1"><vh>leo-editor</vh></v>
 </v>
@@ -110,5 +111,7 @@ https://docs.asciidoctor.org/asciidoctor/latest/[ Asciidoctor Documentation ]
 
 </t>
 <t tx="swot.20250508124711.1"></t>
+<t tx="swot.20250508125533.1">The AsciiDoc file(.adoc) is intended for online viewing, while the HTML file(.html) is for offline access.
+</t>
 </tnodes>
 </leo_file>
