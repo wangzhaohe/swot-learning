@@ -25,6 +25,9 @@
 <v t="swot.20250508224645.1"><vh>asciidoctor-diagram local drawing</vh>
 <v t="swot.20250508224817.1"><vh>plantuml</vh>
 <v t="swot.20250508230637.1"><vh>gantt</vh></v>
+<v t="swot.20250508233908.1"><vh>json</vh>
+<v t="swot.20250508233908.2"><vh>@ignore-node #edit data/diagram-json1.puml</vh></v>
+</v>
 <v t="swot.20250508232203.1"><vh>mindmap</vh></v>
 <v t="swot.20250508225006.1"><vh>Salt -&gt; Draw the prototype diagram</vh></v>
 <v t="swot.20250508232842.1"><vh>yaml</vh></v>
@@ -767,5 +770,61 @@ aliyun:
 @endyaml
 ....
 </t>
+<t tx="swot.20250508233908.1">@language asciidoc
+Example: Using different styles for highlight -&gt; link:data/diagram-json1.puml[show json source]
+Ref: https://plantuml.com/zh/json
+
+    [plantuml, img/diagram-json-2025-05-08-233937, format=png]
+    ----
+    include::data/diagram-json1.puml[]
+    ----
+
+.link:img/diagram-json-2025-05-08-233937.png[draw json image]
+[plantuml, img/diagram-json-2025-05-08-233937, format=png]
+----
+include::data/diagram-json1.puml[]
+----
+</t>
+<t tx="swot.20250508233908.2">@startjson
+&lt;style&gt;
+  .h1 {
+    BackGroundColor green
+    FontColor white
+    FontStyle italic
+  }
+  .h2 {
+    BackGroundColor red
+    FontColor white
+    FontStyle bold
+  }
+&lt;/style&gt;
+#highlight "lastName"
+#highlight "address" / "city" &lt;&lt;h1&gt;&gt;
+#highlight "phoneNumbers" / "0" / "number" &lt;&lt;h2&gt;&gt;
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "isAlive": true,
+  "age": 28,
+  "address": {
+    "streetAddress": "21 2nd Street",
+    "city": "New York",
+    "state": "NY",
+    "postalCode": "10021-3100"
+  },
+  "phoneNumbers": [
+    {
+      "type": "home",
+      "number": "212 555-1234"
+    },
+    {
+      "type": "office",
+      "number": "646 555-4567"
+    }
+  ],
+  "children": [],
+  "spouse": null
+}
+@endjson</t>
 </tnodes>
 </leo_file>
