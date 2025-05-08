@@ -72,7 +72,9 @@ Create a hard link:
 :toc:
 :toc: right
 :toc-title: Table of Contents
-:toclevels: 3</t>
+:toclevels: 3
+
+</t>
 <t tx="swot.20250508123515.1">
 ++++
 &lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
@@ -107,8 +109,9 @@ https://groups.google.com/g/leo-editor[ Leo's forum ]
 </t>
 <t tx="swot.20250508123848.1">Asciidoctor is a fast, open source, text processor for parsing AsciiDoc into a document model, then converting it to output formats such as HTML 5, DocBook 5, man(ual) pages, PDF, and EPUB 3. Asciidoctor is written in the Ruby programming language.
 
-https://docs.asciidoctor.org/asciidoctor/latest/[ Asciidoctor Documentation ]
+xref:asciidoctor/asciidoctor.adoc[ Read Asciidoctor learning Notes ]
 
+https://docs.asciidoctor.org/asciidoctor/latest/[ Asciidoctor Documentation ]
 </t>
 <t tx="swot.20250508124711.1"></t>
 <t tx="swot.20250508125533.1">The AsciiDoc file(.adoc) is intended for online viewing, while the HTML file(.html) is for offline access.
