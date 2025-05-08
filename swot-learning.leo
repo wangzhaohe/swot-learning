@@ -23,7 +23,7 @@
 <v t="swot.20250508105043.2"><vh>@path leo-editor</vh>
 <v t="swot.20250508134307.1"><vh>@adoc leo-editor.adoc</vh>
 <v t="swot.20250508134351.1"><vh>Learning Leo</vh>
-<v t="swot.20250508134253.1"><vh>Install leo-editor</vh></v>
+<v t="swot.20250508134253.1"><vh>Install leo-editor from source</vh></v>
 </v>
 </v>
 </v>
@@ -124,7 +124,41 @@ https://docs.asciidoctor.org/asciidoctor/latest/[ Asciidoctor Documentation ]
 <t tx="swot.20250508124711.1"></t>
 <t tx="swot.20250508125533.1">The AsciiDoc file(.adoc) is intended for online viewing, while the HTML file(.html) is for offline access.
 </t>
-<t tx="swot.20250508134253.1"></t>
+<t tx="swot.20250508134253.1">1. Clone leo-editor source code
+
+    git clone https://github.com/leo-editor/leo-editor.git
+
+2. Install python3
+
+    https://www.python.org/downloads/
+
+3. Create a Python virtual environment
+
+    python3 -m venv your_environment_name
+    source your_environment_name/bin/activate
+
+4. Install some packages
++
+....
+pip install pyqt6
+pip install PyQtWebEngine
+pip install docutils markdown nbformat numpy matplotlib nbconvert pygments
+pip install jupyter-client==6.1.12 qtconsole // &lt;1&gt;
+....
++
+&lt;1&gt; for python debug in shell
+NOTE: jupyter-client-7.3.4 has bug, and can't run `qtconsole`
++
+.Change pip source
+[NOTE]
+====
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+====
+
+5. launch leo-editor
+
+    python launchLeo.py
+</t>
 <t tx="swot.20250508134307.1">@language asciidoc
 :source-highlighter: pygments
 :icons: font
