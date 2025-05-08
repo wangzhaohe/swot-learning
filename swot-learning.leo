@@ -25,6 +25,7 @@
 <v t="swot.20250508224645.1"><vh>asciidoctor-diagram local drawing</vh>
 <v t="swot.20250508224817.1"><vh>plantuml</vh>
 <v t="swot.20250508230637.1"><vh>gantt</vh></v>
+<v t="swot.20250508232203.1"><vh>mindmap</vh></v>
 <v t="swot.20250508225006.1"><vh>Salt -&gt; Draw the prototype diagram</vh></v>
 </v>
 </v>
@@ -657,6 +658,74 @@ Project starts the 1st of january 2021
 2021-01-18 to 2021-01-22 are named [End's committee]
 2021-01-18 to 2021-01-22 are colored in salmon 
 @endgantt
+....
+</t>
+<t tx="swot.20250508232203.1">.link:img/diagram-mindmap-2025-05-08-232219.png[mindmap]
+[plantuml, target=img/diagram-mindmap-2025-05-08-232219, format=png]
+....
+@startmindmap
+* Creole on Mindmap
+left side
+**:==Creole
+  This is **bold**
+  This is //italics//
+  This is ""monospaced""
+  This is --stricken-out--
+  This is __underlined__
+  This is ~~wave-underlined~~
+--test Unicode and icons--
+  This is &lt;U+221E&gt; long
+  This is a &lt;&amp;code&gt; icon
+  Use image : &lt;img:https://plantuml.com/logo3.png&gt;
+;
+**: &lt;b&gt;HTML Creole 
+  This is &lt;b&gt;bold&lt;/b&gt;
+  This is &lt;i&gt;italics&lt;/i&gt;
+  This is &lt;font:monospaced&gt;monospaced&lt;/font&gt;
+  This is &lt;s&gt;stroked&lt;/s&gt;
+  This is &lt;u&gt;underlined&lt;/u&gt;
+  This is &lt;w&gt;waved&lt;/w&gt;
+  This is &lt;s:green&gt;stroked&lt;/s&gt;
+  This is &lt;u:red&gt;underlined&lt;/u&gt;
+  This is &lt;w:#0000FF&gt;waved&lt;/w&gt;
+-- other examples --
+  This is &lt;color:blue&gt;Blue&lt;/color&gt;
+  This is &lt;back:orange&gt;Orange background&lt;/back&gt;
+  This is &lt;size:20&gt;big&lt;/size&gt;
+;
+right side
+**:==Creole line
+You can have horizontal line
+----
+Or double line
+====
+Or strong line
+____
+Or dotted line
+..My title..
+Or dotted title
+//and title... //
+==Title==
+Or double-line title
+--Another title--
+Or single-line title
+Enjoy!;
+**:==Creole list item
+**test list 1**
+* Bullet list
+* Second item
+** Sub item
+*** Sub sub item
+* Third item
+----
+**test list 2**
+# Numbered list
+# Second item
+## Sub item
+## Another sub item
+# Third item
+;
+@endmindmap
 ....
 </t>
 </tnodes>
