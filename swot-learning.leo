@@ -24,6 +24,7 @@
 </v>
 <v t="swot.20250508224645.1"><vh>asciidoctor-diagram local drawing</vh>
 <v t="swot.20250508224817.1"><vh>plantuml</vh>
+<v t="swot.20250508230637.1"><vh>gantt</vh></v>
 <v t="swot.20250508225006.1"><vh>Salt -&gt; Draw the prototype diagram</vh></v>
 </v>
 </v>
@@ -636,6 +637,26 @@ repeat :read data;
 repeat while (\n{{\nsalt\n{^"Next step"\n  Do you want to continue? \n[Yes]|[No]\n}\n}}\n)
 stop
 @enduml
+....
+</t>
+<t tx="swot.20250508230637.1">.link:img/diagram-gantt-2025-05-08-230846.png[gantt]
+[plantuml, target=img/diagram-gantt-2025-05-08-230846, format=png]
+....
+@startgantt
+scale 1.5
+'skinparam dpi 300
+saturday are closed
+sunday are closed
+
+Project starts the 1st of january 2021
+[Prototype design end] as [TASK1] requires 19 days
+[TASK1] is colored in Lavender/LightBlue
+[Testing] requires 14 days
+[TASK1]-&gt;[Testing]
+
+2021-01-18 to 2021-01-22 are named [End's committee]
+2021-01-18 to 2021-01-22 are colored in salmon 
+@endgantt
 ....
 </t>
 </tnodes>
