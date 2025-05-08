@@ -10,6 +10,7 @@
 <v t="swot.20250508123515.1"><vh>Record learning contents</vh>
 <v t="swot.20250508125533.1"><vh>Read document</vh></v>
 <v t="swot.20250508123848.1"><vh>Asciidoctor</vh></v>
+<v t="swot.20250508161823.1"><vh>Git</vh></v>
 <v t="swot.20250508123546.1"><vh>leo-editor</vh></v>
 </v>
 </v>
@@ -29,6 +30,13 @@
 <v t="swot.20250508154257.3"><vh>write code</vh></v>
 <v t="swot.20250508154257.4"><vh>show content</vh></v>
 </v>
+</v>
+</v>
+</v>
+<v t="swot.20250508160844.1"><vh>@path git</vh>
+<v t="swot.20250508161005.1"><vh>@adoc git.adoc</vh>
+<v t="swot.20250508161024.1"><vh>Git</vh>
+<v t="swot.20250508161032.1"><vh>git-filter-repo -&gt; delete file</vh></v>
 </v>
 </v>
 </v>
@@ -228,6 +236,78 @@ If the key documents and main code can be combined and written only once, and pr
 在演示时多采用 ppt，可以实现每个知识节点的分页显示。
 
 如果能够将重点文档和主要代码结合在一起且只写一次，以节点的方式呈现出来，则能达到文档、代码、演示合一的目的。
+</t>
+<t tx="swot.20250508160844.1"></t>
+<t tx="swot.20250508161005.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3</t>
+<t tx="swot.20250508161024.1">
+++++
+&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'none';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20250508161032.1">https://github.com/newren/git-filter-repo
+
+To **delete a specific file from all commits in a Git repository**, you can use `git-filter-repo` which is a modern and faster replacement for `git filter-branch`.
+
+Here’s the command to delete a file from all commits:
+
+```bash
+git filter-repo --path &lt;path/to/file&gt; --invert-paths
+```
+
+Example:
+
+To delete `secret.txt` from all history:
+
+```bash
+git filter-repo --path secret.txt --invert-paths
+```
+
+Notes:
+
+* This permanently **removes the file from the entire Git history**, including all branches and tags.
+* `--invert-paths` means "remove this path instead of keeping it".
+* After running this command, you'll likely need to force-push to remote:
+
+```bash
+git push --force --all
+git push --force --tags
+```
+
+&gt; ⚠️ Warning: This rewrites history. All collaborators will need to re-clone or rebase their work.
+
+</t>
+<t tx="swot.20250508161823.1">Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+
+xref:git/git.adoc[ Read git learning Notes ]
+
+https://git-scm.com/
+
+https://git-scm.com/downloads
+
 </t>
 </tnodes>
 </leo_file>

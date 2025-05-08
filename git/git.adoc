@@ -1,0 +1,63 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3
+
+= Git
+
+++++
+<button id="toggleButton">Table of Contents</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'none';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== git-filter-repo -> delete file
+https://github.com/newren/git-filter-repo
+
+To **delete a specific file from all commits in a Git repository**, you can use `git-filter-repo` which is a modern and faster replacement for `git filter-branch`.
+
+Here’s the command to delete a file from all commits:
+
+```bash
+git filter-repo --path <path/to/file> --invert-paths
+```
+
+Example:
+
+To delete `secret.txt` from all history:
+
+```bash
+git filter-repo --path secret.txt --invert-paths
+```
+
+Notes:
+
+* This permanently **removes the file from the entire Git history**, including all branches and tags.
+* `--invert-paths` means "remove this path instead of keeping it".
+* After running this command, you'll likely need to force-push to remote:
+
+```bash
+git push --force --all
+git push --force --tags
+```
+
+> ⚠️ Warning: This rewrites history. All collaborators will need to re-clone or rebase their work.
+
