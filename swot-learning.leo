@@ -12,13 +12,14 @@
 <v t="swot.20250508123546.1"><vh>leo-editor</vh></v>
 </v>
 </v>
-<v t="swot.20250508105043.2"><vh>@path leo-editor</vh>
+<v t="swot.20250508124711.1"><vh>@path asciidoctor</vh>
 <v t="swot.20250508105244.1"><vh>@adoc asciidoctor.adoc</vh>
 <v t="swot.20250508114609.1"><vh>Asciidoctor</vh>
 <v t="swot.20250508105234.1"><vh>asciidoctor-default.css -&gt; custom your export html</vh></v>
 </v>
 </v>
 </v>
+<v t="swot.20250508105043.2"><vh>@path leo-editor</vh></v>
 </vnodes>
 <tnodes>
 <t tx="swot.20250508105043.2"></t>
@@ -108,5 +109,6 @@ https://groups.google.com/g/leo-editor[ Leo's forum ]
 https://docs.asciidoctor.org/asciidoctor/latest/[ Asciidoctor Documentation ]
 
 </t>
+<t tx="swot.20250508124711.1"></t>
 </tnodes>
 </leo_file>
