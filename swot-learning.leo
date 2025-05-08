@@ -11,7 +11,8 @@
 <v t="swot.20250508125533.1"><vh>Read document</vh></v>
 <v t="swot.20250508123848.1"><vh>Asciidoctor</vh></v>
 <v t="swot.20250508161823.1"><vh>Git</vh></v>
-<v t="swot.20250508123546.1"><vh>leo-editor</vh></v>
+<v t="swot.20250508123546.1"><vh>LEO-Editor</vh></v>
+<v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 </v>
 </v>
 <v t="swot.20250508124711.1"><vh>@path asciidoctor</vh>
@@ -37,6 +38,19 @@
 <v t="swot.20250508161005.1"><vh>@adoc git.adoc</vh>
 <v t="swot.20250508161024.1"><vh>Git</vh>
 <v t="swot.20250508161032.1"><vh>git-filter-repo -&gt; delete file</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20250508162519.1"><vh>@path software-designer</vh>
+<v t="swot.20250508162628.1"><vh>@adoc software-designer.adoc</vh>
+<v t="swot.20250508162652.1"><vh>软件设计师例题精讲</vh>
+<v t="swot.20250508163105.1"><vh>操作系统</vh>
+<v t="swot.20250508163140.1"><vh>进程同步与互斥（PV 操作）</vh>
+<v t="swot.20250508163626.1"><vh>前趋图</vh></v>
+<v t="swot.20250508164139.1"><vh>PV 操作</vh></v>
+<v t="swot.20250508192826.1"><vh>Example</vh></v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -308,6 +322,151 @@ https://git-scm.com/
 
 https://git-scm.com/downloads
 
+</t>
+<t tx="swot.20250508162519.1"></t>
+<t tx="swot.20250508162628.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3</t>
+<t tx="swot.20250508162652.1">
+++++
+&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'none';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20250508162744.1">Now only for Chinese.
+
+xref:software-designer/software-designer.adoc[ Read software-designer learning Notes ]
+
+https://bm.ruankao.org.cn/sign/welcome
+
+https://ruankaodaren.com/exam/#/
+
+</t>
+<t tx="swot.20250508163105.1"></t>
+<t tx="swot.20250508163140.1"></t>
+<t tx="swot.20250508163626.1">前趋图（Precedence Graph）是一种用于表示任务或进程之间执行顺序关系的图形表示方法。它通常用于项目管理、操作系统的进程调度、编译原理中的指令调度等领域，以帮助确定任务或进程的执行顺序和依赖关系。
+
+前趋图的特点：
+
+1. **节点（Vertices）**：图中的每个节点代表一个任务或进程。
+2. **有向边（Directed Edges）**：图中的边表示任务或进程之间的依赖关系。如果存在一条从节点 A 指向节点 B 的有向边，那么它表示任务 A 必须在任务 B 之前完成。
+
+前趋图的作用：
+
+- **确定执行顺序**：通过分析前趋图，可以确定哪些任务可以并行执行，哪些任务必须按顺序执行。
+- **避免死锁**：在操作系统中，前趋图可以帮助设计避免死锁的资源分配策略。
+- **优化调度**：在编译器设计中，前趋图可以帮助优化指令的执行顺序，提高程序的执行效率。
+
+前趋图的示例：
+
+假设有四个任务 A、B、C、D，其中：
+- 任务 A 必须在任务 B 和 C 之前完成。
+- 任务 B 和 C 必须在任务 D 之前完成。
+
+前趋图可以表示为：
+
+```
+  A
+  │
+  ▼
+  B---C
+  │    │
+  ▼    ▼
+    D
+```
+
+在这个图中，A 是 B 和 C 的前趋，B 和 C 是 D 的前趋。
+
+在操作系统的进程调度中，前趋图可以帮助操作系统确定进程的执行顺序，确保系统资源的有效利用和进程的正确执行。
+</t>
+<t tx="swot.20250508164139.1">PV操作是操作系统中用于进程同步与互斥的一种机制，由两部分组成：P操作（Proberen，荷兰语中的“测试”）和V操作（Verhogen，荷兰语中的“增加”）。这种机制通常与信号量（Semaphore）一起使用，信号量是一个整数变量，用于控制对共享资源的访问。
+
+* P操作（等待操作）
+
+    ** P操作用于申请资源。当一个进程需要访问共享资源时，它会执行P操作。如果信号量的值大于0，表示资源可用，信号量减1，进程继续执行。如果信号量的值为0，表示资源不可用，进程将被阻塞，直到信号量的值变为正数。
+
+* V操作（释放操作）
+
+    ** V操作用于释放资源。当一个进程完成对共享资源的访问后，它会执行V操作。这会使信号量的值增加1。如果此时有其他进程因为资源不可用而被阻塞，那么V操作会唤醒其中一个阻塞的进程，使其可以继续执行。
+
+* 信号量的类型
+
+    1. **整型信号量**：信号量的值可以是任意整数，用于表示资源的数量。当信号量的值为0时，表示没有资源可用。
+    2. **二进制信号量**：信号量的值只能是0或1，用于实现互斥锁。0表示锁被占用，1表示锁可用。
+
+PV操作广泛应用于操作系统中的进程同步、互斥、死锁避免等领域。例如：
+
+- **进程同步**：确保多个进程按照特定的顺序执行。
+- **互斥访问**：确保在任何时刻只有一个进程可以访问共享资源。
+- **避免死锁**：通过控制资源的分配和释放，避免系统进入死锁状态。
+
+通过合理使用PV操作，可以有效地管理进程间的协作和资源共享，提高系统的稳定性和效率。
+</t>
+<t tx="swot.20250508192826.1">进程 P1、P2、P3、P4、P5 的 link:img/graphviz-pv-2025-05-08-193314.png[前趋图] 如下：
+
+[graphviz, target="img/graphviz-pv-2025-05-08-193314", format=png]
+....
+digraph finite_state_machine {
+    rankdir=LR;
+    node [shape = circle];
+
+    P1 -&gt; P3;
+    P2 -&gt; P3;
+    P3 -&gt; P4;
+    P3 -&gt; P5;
+}
+....
+
+若用 PV 操作控制进程并发执行的过程，则需要设置 4 个信号量 S1、S2、S3、S4，且信号量初值都等于零。下面 link:img/graphviz-2025-05-08-194149.png[PV图] 中 a 和 b 应分别填写（），c 和 d 应分别填写（），e 和 f 应分别填写（）。
+
+[graphviz, target="img/graphviz-2025-05-08-194149", format=png]
+....
+digraph PetriNet {
+    rankdir=TB;
+    node [shape=circle]; P1 P2;
+    node [shape=box]; P3 P4 P5 a b c d e f;
+    end1 [label="", shape=circle];
+    end2 [label="", shape=circle];
+
+    P1 -&gt; a [label="P1执行"];
+    P2 -&gt; b [label="P2执行"];
+    c  -&gt; P3
+    P3 -&gt; d [label="P3执行"];
+    e -&gt; P4
+    P4 -&gt; end1
+    f -&gt; P5
+    P5 -&gt; end2
+}
+....
+
+*答案解析：*
+
+- **a 和 b 处**：当 P1 和 P2 执行完毕后，它们需要通过执行 V 操作来增加信号量 S1 和 S2 的值，从而通知 P3 可以开始执行。因此，a 处应填写 V(S1)，b 处应填写 V(S2)。
+
+- **c 和 d 处**：进程 P3 在开始执行前，需要通过执行 P 操作来检查 S1 和 S2 的值是否大于 0。如果 S1 和 S2 的值都大于 0，表示 P1 和 P2 已经执行完毕，P3 可以开始执行。因此，c 处应填写 P(S1)，d 处应填写 P(S2)。
+
+- **e 和 f 处**：进程 P4 和 P5 在开始执行前，需要通过执行 P 操作来检查 S3 和 S4 的值是否大于 0。如果 S3 和 S4 的值都大于 0，表示 P3 已经执行完毕，P4 和 P5 可以开始执行。因此，e 处应填写 P(S3)，f 处应填写 P(S4)。
 </t>
 </tnodes>
 </leo_file>
