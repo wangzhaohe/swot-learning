@@ -547,8 +547,8 @@ Asciidoctor::DEFAULT_ATTRIBUTES['data-uri'] = ''
 
 enables the `data-uri` option in Asciidoctor's default attributes, which means **images will be converted to Base64 and embedded directly into the HTML** instead of being referenced by an external URL.
 
-[discrete]
-==== **Explanation**
+**Explanation**
+
 By default, Asciidoctor generates HTML with `&lt;img&gt;` tags that load images using file paths or URLs. For example:
 
 ```html
@@ -563,11 +563,11 @@ If the `data-uri` option is enabled, Asciidoctor will convert the image files in
 
 This approach reduces external requests and is suitable for:
 
-* **Single-file HTML (e.g., offline documents)**
-* **Better portability** (no concerns about image path issues)
+* Single-file HTML (e.g., offline documents)
+* Better portability (no concerns about image path issues)
 
-[discrete]
-==== **Equivalent Command-Line Option**
+**Equivalent Command-Line Option**
+
 This line of code is equivalent to running the following in the command line:
 
 ```console
@@ -581,21 +581,20 @@ Or setting it in the AsciiDoc document:
 :data-uri:
 ```
 
-[discrete]
-==== **Why Use `Asciidoctor::DEFAULT_ATTRIBUTES`?**
+**Why Use `Asciidoctor::DEFAULT_ATTRIBUTES`?**
+
 `Asciidoctor::DEFAULT_ATTRIBUTES` is the global default attribute configuration. Setting `data-uri` to an empty string `''` effectively **enables** this option. When Asciidoctor processes attributes:
 
 * If the attribute value is empty (`''`), it is treated as **enabled**
 * If the attribute does not exist, it is treated as **disabled**
 * If explicitly set as `data-uri=0` or `!data-uri`, it is **disabled**
 
-[discrete]
-==== **Summary**
+**Summary**
 
-* **Enabling `data-uri`** converts images to Base64 and embeds them in the HTML
-* **Improves document portability** by avoiding missing external images
-* **Suitable for offline HTML documents**
-* **Equivalent to the `-a data-uri` option**
+* Enabling `data-uri` converts images to Base64 and embeds them in the HTML
+* Improves document portability by avoiding missing external images
+* Suitable for offline HTML documents
+* Equivalent to the `-a data-uri` option
 
 If you do not want to embed images as Base64, you can remove this line of code or explicitly disable `data-uri`:
 
