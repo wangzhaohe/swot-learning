@@ -22,6 +22,11 @@
 <v t="swot.20250508220045.1"><vh>options.rb -&gt; asciidoctor config file</vh>
 <v t="swot.20250508220045.2"><vh>data-uri</vh></v>
 </v>
+<v t="swot.20250508224645.1"><vh>asciidoctor-diagram local drawing</vh>
+<v t="swot.20250508224817.1"><vh>plantuml</vh>
+<v t="swot.20250508225006.1"><vh>Salt -&gt; Draw the prototype diagram</vh></v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -591,6 +596,47 @@ If you do not want to embed images as Base64, you can remove this line of code o
 ```ruby
 Asciidoctor::DEFAULT_ATTRIBUTES.delete('data-uri')
 ```
+</t>
+<t tx="swot.20250508224645.1"></t>
+<t tx="swot.20250508224817.1">1. https://docs.asciidoctor.org/diagram-extension/latest/diagram_types/plantuml/
+2. https://rubygems.org/gems/asciidoctor-diagram-plantuml
+3. https://plantuml.com/zh/
+4. https://plantuml.com/
+
+安装 plantuml:
+
+    gem install asciidoctor-diagram-plantuml
+
+</t>
+<t tx="swot.20250508225006.1">.link:img/diagram-salt-2025-05-08-225243.png[common prototype]
+[plantuml, target=img/diagram-salt-2025-05-08-225243, format=png]
+....
+@startsalt
+scale 1.5
+{
+  Just plain text
+  [This is my button]
+  ()  Unchecked radio
+  (X) Checked radio
+  []  Unchecked box
+  [X] Checked box
+  "Enter text here   "
+  ^This is a droplist^
+}
+@endsalt
+....
+
+.link:img/diagram-salt-2025-05-08-225302.png[prototype in flow]
+[plantuml, target=img/diagram-salt-2025-05-08-225302, format=png]
+....
+@startuml
+start
+repeat :read data;
+  :generate diagrams;
+repeat while (\n{{\nsalt\n{^"Next step"\n  Do you want to continue? \n[Yes]|[No]\n}\n}}\n)
+stop
+@enduml
+....
 </t>
 </tnodes>
 </leo_file>

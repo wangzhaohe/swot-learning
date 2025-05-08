@@ -163,3 +163,47 @@ If you do not want to embed images as Base64, you can remove this line of code o
 Asciidoctor::DEFAULT_ATTRIBUTES.delete('data-uri')
 ```
 
+== asciidoctor-diagram local drawing
+
+
+=== plantuml
+1. https://docs.asciidoctor.org/diagram-extension/latest/diagram_types/plantuml/
+2. https://rubygems.org/gems/asciidoctor-diagram-plantuml
+3. https://plantuml.com/zh/
+4. https://plantuml.com/
+
+安装 plantuml:
+
+    gem install asciidoctor-diagram-plantuml
+
+==== Salt -> Draw the prototype diagram
+.link:img/diagram-salt-2025-05-08-225243.png[common prototype]
+[plantuml, target=img/diagram-salt-2025-05-08-225243, format=png]
+....
+@startsalt
+scale 1.5
+{
+  Just plain text
+  [This is my button]
+  ()  Unchecked radio
+  (X) Checked radio
+  []  Unchecked box
+  [X] Checked box
+  "Enter text here   "
+  ^This is a droplist^
+}
+@endsalt
+....
+
+.link:img/diagram-salt-2025-05-08-225302.png[prototype in flow]
+[plantuml, target=img/diagram-salt-2025-05-08-225302, format=png]
+....
+@startuml
+start
+repeat :read data;
+  :generate diagrams;
+repeat while (\n{{\nsalt\n{^"Next step"\n  Do you want to continue? \n[Yes]|[No]\n}\n}}\n)
+stop
+@enduml
+....
+
