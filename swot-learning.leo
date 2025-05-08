@@ -19,6 +19,9 @@
 <v t="swot.20250508105244.1"><vh>@adoc asciidoctor.adoc</vh>
 <v t="swot.20250508114609.1"><vh>Asciidoctor</vh>
 <v t="swot.20250508105234.1"><vh>asciidoctor-default.css -&gt; custom your export html</vh></v>
+<v t="swot.20250508220045.1"><vh>options.rb -&gt; asciidoctor config file</vh>
+<v t="swot.20250508220045.2"><vh>data-uri</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -467,6 +470,127 @@ digraph PetriNet {
 - **c 和 d 处**：进程 P3 在开始执行前，需要通过执行 P 操作来检查 S1 和 S2 的值是否大于 0。如果 S1 和 S2 的值都大于 0，表示 P1 和 P2 已经执行完毕，P3 可以开始执行。因此，c 处应填写 P(S1)，d 处应填写 P(S2)。
 
 - **e 和 f 处**：进程 P4 和 P5 在开始执行前，需要通过执行 P 操作来检查 S3 和 S4 的值是否大于 0。如果 S3 和 S4 的值都大于 0，表示 P3 已经执行完毕，P4 和 P5 可以开始执行。因此，e 处应填写 P(S3)，f 处应填写 P(S4)。
+</t>
+<t tx="swot.20250508220045.1">Purpose: It is unnecessary to change the Leo Editor source code to customize the Asciidoctor command used for generating HTML.
+
+Asciidoctor runs in a Ruby environment, and we occasionally need to pass extra parameters. Since Leo Editor uses fixed parameters in the vr3 plugin to generate HTML, and modifying its source code repeatedly isn’t ideal, we developed the following solution.
+
+.Find Ruby LOAD_PATH
+[source,console]
+----
+ruby -e 'puts $LOAD_PATH'
+
+/Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/site_ruby/2.7.0
+/Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/site_ruby/2.7.0/x86_64-darwin21
+/Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/site_ruby
+/Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/vendor_ruby/2.7.0
+/Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/vendor_ruby/2.7.0/x86_64-darwin21
+/Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/vendor_ruby
+/Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/2.7.0
+/Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/2.7.0/x86_64-darwin21
+----
+
+.nvim options.rb
+[source,ruby]
+----
+begin
+  require 'asciidoctor-diagram'
+rescue LoadError
+  warn 'asciidoctor-diagram is not installed'
+end
+
+# Not use now
+#begin
+#  require 'asciidoctor-kroki'
+#rescue LoadError
+#  warn 'asciidoctor-kroki is not installed'
+#end
+
+# use data-uri（same as -a data-uri）for embed images base64 string in html page
+# Asciidoctor::DEFAULT_ATTRIBUTES['data-uri'] = ''
+----
+
+.copy options.rb to site_ruby/2.7.0
+[source,console]
+----
+cp options.rb /Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/site_ruby/2.7.0
+----
+
+.Then leo-editor source code only use `-r options` will be ok
+[source,python]
+----
+command = f"{prog} {i_path} -o {o_path} -b html5 -r options"
+----
+
+[NOTE]
+====
+leo-editor source code `-r options` position: +
+unl://LeoPyRef.leo#Code--&gt;Core classes--&gt;@file leoMarkup.py--&gt;class MarkupCommands--&gt;markup.command_helper &amp; helpers--&gt;markup.run_asciidoctor
+====
+</t>
+<t tx="swot.20250508220045.2">This line of code:
+
+```ruby
+Asciidoctor::DEFAULT_ATTRIBUTES['data-uri'] = ''
+```
+
+enables the `data-uri` option in Asciidoctor's default attributes, which means **images will be converted to Base64 and embedded directly into the HTML** instead of being referenced by an external URL.
+
+[discrete]
+==== **Explanation**
+By default, Asciidoctor generates HTML with `&lt;img&gt;` tags that load images using file paths or URLs. For example:
+
+```html
+&lt;img src="images/example.png"&gt;
+```
+
+If the `data-uri` option is enabled, Asciidoctor will convert the image files into Base64 and embed them directly in the HTML, like this:
+
+```html
+&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAA..."&gt;
+```
+
+This approach reduces external requests and is suitable for:
+
+* **Single-file HTML (e.g., offline documents)**
+* **Better portability** (no concerns about image path issues)
+
+[discrete]
+==== **Equivalent Command-Line Option**
+This line of code is equivalent to running the following in the command line:
+
+```console
+asciidoctor -a data-uri myfile.adoc
+```
+
+Or setting it in the AsciiDoc document:
+
+```adoc
+:imagesdir: images
+:data-uri:
+```
+
+[discrete]
+==== **Why Use `Asciidoctor::DEFAULT_ATTRIBUTES`?**
+`Asciidoctor::DEFAULT_ATTRIBUTES` is the global default attribute configuration. Setting `data-uri` to an empty string `''` effectively **enables** this option. When Asciidoctor processes attributes:
+
+* If the attribute value is empty (`''`), it is treated as **enabled**
+* If the attribute does not exist, it is treated as **disabled**
+* If explicitly set as `data-uri=0` or `!data-uri`, it is **disabled**
+
+[discrete]
+==== **Summary**
+
+* **Enabling `data-uri`** converts images to Base64 and embeds them in the HTML
+* **Improves document portability** by avoiding missing external images
+* **Suitable for offline HTML documents**
+* **Equivalent to the `-a data-uri` option**
+
+If you do not want to embed images as Base64, you can remove this line of code or explicitly disable `data-uri`:
+
+```ruby
+Asciidoctor::DEFAULT_ATTRIBUTES.delete('data-uri')
+```
 </t>
 </tnodes>
 </leo_file>
