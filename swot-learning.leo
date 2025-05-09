@@ -42,6 +42,7 @@
 <v t="swot.20250509104746.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573732e"><vh>deployment</vh>
 <v t="swot.20250509104746.2"><vh>某官网部署图</vh></v>
 </v>
+<v t="swot.20250509111441.1"><vh>WBS (Work Breakdown Structure)</vh></v>
 <v t="swot.20250508232203.1"><vh>mindmap</vh></v>
 <v t="swot.20250508225006.1"><vh>Salt -&gt; Draw the prototype diagram</vh></v>
 <v t="swot.20250508232842.1"><vh>yaml</vh></v>
@@ -1311,6 +1312,25 @@ express -&gt; Webhook
 
 browser --&gt; Nginx
 @enduml
+....
+</t>
+<t tx="swot.20250509111441.1">.link:img/diagram-wbs-2025-05-09-111742.svg[wbs]
+[plantuml, target=img/diagram-wbs-2025-05-09-111742, format=svg]
+....
+@startwbs
+scale 1.2
+* Business Process Modelling WBS
+** Launch the project
+*** Complete Stakeholder Research
+*** Initial Implementation Plan
+** Design phase
+*** Model of AsIs Processes Completed
+**** Model of AsIs Processes Completed1
+**** Model of AsIs Processes Completed2
+*** Measure AsIs performance metrics
+*** Identify Quick Wins
+** Complete innovate phase
+@endwbs
 ....
 </t>
 </tnodes>
