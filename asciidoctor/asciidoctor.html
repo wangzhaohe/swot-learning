@@ -567,6 +567,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
+<li><a href="#_asciidoctor_kroki_server_drawing">asciidoctor-kroki server drawing</a></li>
 </ul>
 </div>
 </div>
@@ -1420,10 +1421,78 @@ python -m http.server 1919</pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_asciidoctor_kroki_server_drawing">asciidoctor-kroki server drawing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://github.com/asciidoctor/asciidoctor-kroki" class="bare">https://github.com/asciidoctor/asciidoctor-kroki</a></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ gem install asciidoctor-kroki
+$ asciidoctor -r asciidoctor-kroki doc.adoc</pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="https://kroki.io" class="bare">https://kroki.io</a> 可能需要网络好，不然会报</p>
+<div class="literalblock">
+<div class="content">
+<pre>[21597:34067:0202/000442.644492:ERROR:ssl_client_socket_impl.cc(982)] handshake failed; returned -1, SSL error code 1, net_error -101</pre>
+</div>
+</div>
+</li>
+<li>
+<p><a href="https://kroki.io" class="bare">https://kroki.io</a> 不能接受太大的 json 数据，会报错:</p>
+<div class="literalblock">
+<div class="content">
+<pre>414 Request-URI Too Large
+nginx/1.18.0 (Ubuntu) -&gt; 应该是 nginx 的限制，所以可以尝试将数据文件放在公网可以访问的网上来避免该问题（未测试）。</pre>
+</div>
+</div>
+</li>
+<li>
+<p>网上 kroki 的图片，保存日期不是永久，可能在某个时刻就不能访问了。</p>
+</li>
+<li>
+<p>所以还是在本地使用 docker 部署 kroki 服务比较好。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>本地部署我还没有研究，文档在这儿 <a href="https://docs.kroki.io/kroki/setup/install/" class="bare">https://docs.kroki.io/kroki/setup/install/</a></p>
+</li>
+<li>
+<p>本地部署 kroki 后，不用安装那么多包了，还是很爽的。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/vegalite_kroki1.png" alt="vegalite kroki1" width="104" height="240">
+</div>
+<div class="title">Figure 23. nvim doc.adoc</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-09 17:07:25 +0800
+Last updated 2025-05-09 17:20:48 +0800
 </div>
 </div>
 </body>

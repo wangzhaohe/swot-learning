@@ -1194,3 +1194,48 @@ Edit ~/.zshrc
 }
 ....
 
+== asciidoctor-kroki server drawing
+https://github.com/asciidoctor/asciidoctor-kroki
+
+    $ gem install asciidoctor-kroki
+    $ asciidoctor -r asciidoctor-kroki doc.adoc
+
+
+[WARNING]
+====
+1. https://kroki.io 可能需要网络好，不然会报
+
+    [21597:34067:0202/000442.644492:ERROR:ssl_client_socket_impl.cc(982)] handshake failed; returned -1, SSL error code 1, net_error -101
+
+2. https://kroki.io 不能接受太大的 json 数据，会报错:
+
+    414 Request-URI Too Large
+    nginx/1.18.0 (Ubuntu) -> 应该是 nginx 的限制，所以可以尝试将数据文件放在公网可以访问的网上来避免该问题（未测试）。
+
+3. 网上 kroki 的图片，保存日期不是永久，可能在某个时刻就不能访问了。
+
+4. 所以还是在本地使用 docker 部署 kroki 服务比较好。
+   * 本地部署我还没有研究，文档在这儿 https://docs.kroki.io/kroki/setup/install/
+   * 本地部署 kroki 后，不用安装那么多包了，还是很爽的。
+====
+
+
+.nvim doc.adoc
+[vegalite, target=img/vegalite_kroki1, format=png]
+....
+{
+  "data": {
+    "values": [
+      {"category": "A", "value": 28},
+      {"category": "B", "value": 55},
+      {"category": "C", "value": 43}
+    ]
+  },
+  "mark": "bar",
+  "encoding": {
+    "x": {"field": "category", "type": "nominal"},
+    "y": {"field": "value", "type": "quantitative"}
+  }
+}
+....
+
