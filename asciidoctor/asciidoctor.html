@@ -547,6 +547,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_gantt">gantt</a></li>
 <li><a href="#_json">json</a></li>
+<li><a href="#_component">component</a></li>
 <li><a href="#_mindmap">mindmap</a></li>
 <li><a href="#_salt_draw_the_prototype_diagram">Salt &#8594; Draw the prototype diagram</a></li>
 <li><a href="#_yaml">yaml</a></li>
@@ -848,12 +849,343 @@ include::data/diagram-json1.puml[]
 </div>
 </div>
 <div class="sect3">
+<h4 id="_component">component</h4>
+<div class="paragraph">
+<p><strong>Component diagrams</strong> use <strong>components</strong> and <strong>interfaces</strong> to represent the logical modules of software and their interaction interfaces.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-component-2025-05-09-095950.png" alt="diagram component 2025 05 09 095950" width="270" height="180">
+</div>
+</div>
+<div class="sect4">
+<h5 id="_why_is_the_interface_needed">Why is the interface needed?</h5>
+<div class="paragraph">
+<p>Q: Why introduce an interface when the frontend can just connect directly to the backend in the diagram? Isn’t it redundant?<br>
+问：上图中直接用前端连接后端就可以了，为什么还需要中间来个 interface？是多此一举吗？</p>
+</div>
+<div class="paragraph">
+<p>A: It’s not redundant, but rather a clearer way to express the system’s structure and separation of concerns.<br>
+答：不算是多此一举**，而是更清晰地表达系统的结构和职责分离。
+上图中直接用前端连接后端就可以了，为什么还需要中间来个 interface？是多次一举吗？</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>1. Why need interface？</strong></p>
+</div>
+<div class="paragraph">
+<p>In a component diagram, the interface defines the communication contract between components to clarify architecture.<br>
+在<strong>组件图（Component Diagram）</strong>中，<code>interface</code> 的作用是明确<strong>组件之间的通信契约</strong>，让架构更清晰，主要有以下几个原因：</p>
+</div>
+<div class="paragraph">
+<p><strong>Decoupling（解耦）</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If the Frontend depends directly on the Backend, it requires knowledge of the backend&#8217;s implementation.<br>
+如果 <code>Frontend</code> 直接依赖 <code>Backend</code>，说明 <code>Frontend</code> 需要知道 <code>Backend</code> 的具体实现。</p>
+</li>
+<li>
+<p>With API_Interface, the frontend only relies on the API contract and not on backend details.<br>
+<strong>引入 <code>API_Interface</code>（接口）后，前端只关心 API 规范，不依赖后端的具体实现</strong>，这样如果后端更换实现方式（如从 <code>Node.js</code> 换成 <code>Spring Boot</code>），前端无须修改。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Explicit Role（明确角色）</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The frontend cares about the APIs it needs, not which backend provides them.<br>
+<code>Frontend</code> 需要某些 API，它不关心 API 由哪个后端提供。</p>
+</li>
+<li>
+<p>The backend may expose different APIs, and interfaces help identify which are for frontend use.<br>
+<code>Backend</code> 可能有多个 API，对外暴露的是 <code>API_Interface</code>，这样可以清晰地区分哪些 API 是暴露给前端的，哪些是内部 API。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Extensibility（扩展性）</strong>：</p>
+</div>
+<div class="paragraph">
+<p>In future, if there are multiple backend versions like BackendV2, they can implement the same interface.<br>
+如果未来有多个后端实现，比如 <code>BackendV2</code>，它们都可以实现相同的 <code>API_Interface</code>，前端仍然可以无缝调用 API。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-component-2025-05-09-100211.png" alt="diagram component 2025 05 09 100211" width="468" height="180">
+</div>
+</div>
+<div class="paragraph">
+<p>Now the frontend can switch between BackendV1 and BackendV2 without modifying its code.<br>
+现在，前端可以在 <code>BackendV1</code> 和 <code>BackendV2</code> 之间自由切换，而无需修改自身代码。</p>
+</div>
+<div class="paragraph">
+<p><strong>2. When can you omit the interface?</strong> 什么时候可以省略 interface？</p>
+</div>
+<div class="paragraph">
+<p>If the system has only one backend and the API won’t change, you can connect Frontend &#8594; Backend directly.<br>
+如果你的系统<strong>只有一个后端实现，并且不会更换 API 结构</strong>，确实可以直接连接 <code>Frontend &#8594; Backend</code>。比如：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-component-2025-05-09-100245.png" alt="diagram component 2025 05 09 100245" width="318" height="58">
+</div>
+</div>
+<div class="paragraph">
+<p>However, this has poor scalability compared to using interfaces.<br>
+但是这种方式在系统扩展性上<strong>没有 <code>interface</code> 方案好</strong>，如果未来有多个后端实现或 API 结构变化，前端代码可能需要大改。</p>
+</div>
+<div class="paragraph">
+<p><strong>3. Best practices for component diagrams </strong> 组件图的最佳实践</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Small projects: If the frontend only talks to one backend, you can omit the interface.<br>
+小型项目：如果 <code>Frontend</code> 只与单个 <code>Backend</code> 交互，<strong>可以省略 <code>interface</code></strong>。</p>
+</li>
+<li>
+<p>Medium/large projects: If multiple backends or clear API boundaries exist, it’s better to use interface.<br>
+中大型项目：如果 API 由多个 <code>Backend</code> 提供，或 API 设计需要清晰的边界，<strong>建议使用 <code>interface</code></strong>。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_上图中的虚线和实线表示一样的含义">上图中的虚线和实线表示一样的含义？</h5>
+<div class="paragraph">
+<p>在 <strong>PlantUML 组件图（Component Diagram）</strong> 中，<strong>虚线（<code>..&gt;</code>）和实线（<code>--|&gt;</code>）的含义不同</strong>。</p>
+</div>
+<div class="paragraph">
+<p><strong>1. 虚线（<code>..&gt;</code>）</strong>
+<strong>表示“依赖关系”（Dependency）</strong>
+用于表示 <strong>一个组件使用或调用另一个组件</strong>，但它们<strong>不是强绑定</strong>关系。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-component-2025-05-09-100502.png" alt="diagram component 2025 05 09 100502" width="203" height="68">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>含义：</strong> <code>Frontend</code> 依赖 <code>API_Interface</code>，但 <code>Frontend</code> <strong>不一定知道 <code>API_Interface</code> 的实现细节</strong>。</p>
+</div>
+<div class="paragraph">
+<p><strong>2. 实线（<code>-&#8594;</code>）</strong>
+<strong>表示“实现关系”（Realization）</strong>
+用于表示 <strong>一个组件实现了某个接口</strong>（通常用于后端实现 API）。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-component-2025-05-09-100635.png" alt="diagram component 2025 05 09 100635" width="229" height="68">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>含义：</strong> <code>Backend</code> 提供 <code>API_Interface</code> 规范的实现。</p>
+</div>
+<div class="paragraph">
+<p><strong>3. 结合示例</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-component-2025-05-09-100733.png" alt="diagram component 2025 05 09 100733" width="365" height="68">
+</div>
+<div class="title">Figure 3. 完整的组件图</div>
+</div>
+<div class="paragraph">
+<p><strong>解释：</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>Frontend ..&gt; API_Interface</code>（虚线）：前端<strong>调用</strong> API，但不关心后端的具体实现。</p>
+</li>
+<li>
+<p><code>Backend --> API_Interface</code>（实线）：后端<strong>实现</strong> API 规范。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_组件图还可以使用_package">组件图还可以使用 package？</h5>
+<div class="paragraph">
+<p>在 <strong>组件图（Component Diagram）</strong> 中，<code>package</code> 用于<strong>组织组件</strong>，类似于 Java、Python 中的包（namespace）。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-componet-package.png" alt="diagram componet package" width="472" height="227">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>解释</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong><code>package "前端"</code></strong>：表示前端相关的组件，比如 Vue.js 和 UI 组件库。</p>
+</li>
+<li>
+<p><strong><code>package "后端"</code></strong>：表示后端的 API，使用 <code>interface</code> 定义 API 规范。</p>
+</li>
+<li>
+<p><strong><code>package "数据库"</code></strong>：表示数据库存储层。</p>
+</li>
+<li>
+<p><strong>前端（Vue.js）调用 API（虚线）</strong>，后端 API 实现接口（实线）。</p>
+</li>
+<li>
+<p><strong>API 连接 MySQL</strong>（数据存储）。后端 API 直接执行 SQL 查询，所以用实线。</p>
+</li>
+</ol>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>什么时候用 <code>package</code>？</strong></p>
+</div>
+<div class="paragraph">
+<p>✅ 需要<strong>分组</strong>组件时，比如：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>按照 <strong>前端 / 后端 / 数据库</strong> 组织组件。</p>
+</li>
+<li>
+<p>按照 <strong>微服务 / 模块</strong> 结构化展示。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>✅ 需要<strong>增强可读性</strong>，避免组件杂乱无章。如果你的系统有很多组件，<strong>用 <code>package</code> 可以让图更加清晰</strong>。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_组件图中的_component_类似软件开发中的什么">组件图中的 component 类似软件开发中的什么？</h5>
+<div class="paragraph">
+<p>在软件开发中，<strong>Component（组件）</strong> 类似于 <strong>模块化的软件单元</strong>，它通常对应于以下概念：</p>
+</div>
+<div class="paragraph">
+<p><strong>1. 模块（Module）</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>在前端：Vue 组件（<code>&lt;MyComponent /&gt;</code>）、React 组件、Nuxt 模块等。</p>
+</li>
+<li>
+<p>在后端：Express 路由模块、Spring Boot 服务模块等。</p>
+</li>
+<li>
+<p>在 Node.js：使用 <code>require</code> 或 <code>import</code> 导入的模块。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>2. 类（Class）</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>在面向对象编程（OOP）中，一个 <code>component</code> 可以对应一个 <code>class</code>，比如 <code>UserService</code>、<code>DatabaseConnector</code> 这样的类。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>3. 微服务（Microservice）</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>在微服务架构中，每个独立的微服务可以被看作一个组件，比如 <code>用户管理服务</code>、<code>订单处理服务</code> 等。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>4. 库（Library）或 SDK</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>例如 <code>Axios</code>（HTTP 请求库）、<code>Nuxt UI</code>（组件库），这些也可以用 <code>component</code> 表示它们的功能单元。</p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>总结</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>小范围</strong>：<code>component</code> 类似 <strong>前端组件</strong>、<strong>类</strong>、<strong>模块</strong>。</p>
+</li>
+<li>
+<p><strong>大范围</strong>：它也可以表示 <strong>微服务</strong> 或 <strong>系统的某个独立部分</strong>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>所以在 <code>PlantUML</code> 组件图中，<code>component</code> 主要是用来表示 <strong>可复用的软件单元</strong>，并展示它们之间的关系！</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_某官网展示端组件图_home">某官网展示端组件图 home</h5>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-comonent-dayu-home.png" alt="diagram comonent dayu home" width="791" height="837">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_某官网展示端组件图_app_js_clint_news_list_js">某官网展示端组件图 app.js &#8594; clint_news_list.js</h5>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-component-dayu1.png" alt="diagram component dayu1" width="668" height="378">
+</div>
+<div class="title">Figure 4. Express 展示端组件图</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_某官网展示端组件图_app_js_clint_news_detail_js">某官网展示端组件图 app.js &#8594; clint_news_detail.js</h5>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-component-dayu2.png" alt="diagram component dayu2" width="718" height="378">
+</div>
+<div class="title">Figure 5. Express 展示端组件图</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_某官网展示端组件图_app_js_other_routes">某官网展示端组件图 app.js &#8594; other routes</h5>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-component-dayu3.png" alt="diagram component dayu3" width="516" height="662">
+</div>
+<div class="title">Figure 6. Express 展示端组件图</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_某官网展示端组件图_app_js_directory">某官网展示端组件图 app.js &#8594; Directory</h5>
+<div class="paragraph">
+<p>在 app.js 中指定了一些要使用的路径文件。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-component-dayu4.png" alt="diagram component dayu4" width="591" height="329">
+</div>
+<div class="title">Figure 7. Express 展示端组件图</div>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_mindmap">mindmap</h4>
 <div class="imageblock">
 <div class="content">
 <img src="img/diagram-mindmap-2025-05-08-232219.png" alt="diagram mindmap 2025 05 08 232219" width="750" height="690">
 </div>
-<div class="title">Figure 3. <a href="img/diagram-mindmap-2025-05-08-232219.png">mindmap</a></div>
+<div class="title">Figure 8. <a href="img/diagram-mindmap-2025-05-08-232219.png">mindmap</a></div>
 </div>
 </div>
 <div class="sect3">
@@ -862,13 +1194,13 @@ include::data/diagram-json1.puml[]
 <div class="content">
 <img src="img/diagram-salt-2025-05-08-225243.png" alt="diagram salt 2025 05 08 225243" width="268" height="229">
 </div>
-<div class="title">Figure 4. <a href="img/diagram-salt-2025-05-08-225243.png">common prototype</a></div>
+<div class="title">Figure 9. <a href="img/diagram-salt-2025-05-08-225243.png">common prototype</a></div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/diagram-salt-2025-05-08-225302.png" alt="diagram salt 2025 05 08 225302" width="269" height="309">
 </div>
-<div class="title">Figure 5. <a href="img/diagram-salt-2025-05-08-225302.png">prototype in flow</a></div>
+<div class="title">Figure 10. <a href="img/diagram-salt-2025-05-08-225302.png">prototype in flow</a></div>
 </div>
 </div>
 <div class="sect3">
@@ -881,7 +1213,7 @@ include::data/diagram-json1.puml[]
 <div class="content">
 <img src="img/diagram-yaml-2025-05-08-232919.png" alt="diagram yaml 2025 05 08 232919" width="1110" height="341">
 </div>
-<div class="title">Figure 6. <a href="img/diagram-yaml-2025-05-08-232919.png">yaml</a></div>
+<div class="title">Figure 11. <a href="img/diagram-yaml-2025-05-08-232919.png">yaml</a></div>
 </div>
 </div>
 </div>
@@ -890,7 +1222,7 @@ include::data/diagram-json1.puml[]
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-09 07:24:47 +0800
+Last updated 2025-05-09 10:23:10 +0800
 </div>
 </div>
 </body>

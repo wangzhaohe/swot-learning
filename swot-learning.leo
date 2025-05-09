@@ -15,18 +15,29 @@
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 </v>
 </v>
-<v t="swot.20250508124711.1"><vh>@path asciidoctor</vh>
-<v t="swot.20250508105244.1"><vh>@adoc asciidoctor.adoc</vh>
-<v t="swot.20250508114609.1"><vh>Asciidoctor</vh>
+<v t="swot.20250508124711.1" descendentVnodeUnknownAttributes="7d7100580b000000302e302e302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573732e"><vh>@path asciidoctor</vh>
+<v t="swot.20250508105244.1" descendentVnodeUnknownAttributes="7d71005809000000302e302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573732e"><vh>@adoc asciidoctor.adoc</vh>
+<v t="swot.20250508114609.1" descendentVnodeUnknownAttributes="7d71005807000000302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573732e"><vh>Asciidoctor</vh>
 <v t="swot.20250508105234.1"><vh>asciidoctor-default.css -&gt; custom your export html</vh></v>
 <v t="swot.20250508220045.1"><vh>options.rb -&gt; asciidoctor config file</vh>
 <v t="swot.20250508220045.2"><vh>data-uri</vh></v>
 </v>
-<v t="swot.20250508224645.1"><vh>asciidoctor-diagram local drawing</vh>
-<v t="swot.20250508224817.1"><vh>plantuml</vh>
+<v t="swot.20250508224645.1" descendentVnodeUnknownAttributes="7d71005805000000302e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573732e"><vh>asciidoctor-diagram local drawing</vh>
+<v t="swot.20250508224817.1" descendentVnodeUnknownAttributes="7d71005803000000302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573732e"><vh>plantuml</vh>
 <v t="swot.20250508230637.1"><vh>gantt</vh></v>
 <v t="swot.20250508233908.1"><vh>json</vh>
 <v t="swot.20250508233908.2"><vh>@ignore-node #edit data/diagram-json1.puml</vh></v>
+</v>
+<v t="swot.20250509073027.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573732e"><vh>component</vh>
+<v t="swot.20250509073027.2"><vh>Why is the interface needed?</vh></v>
+<v t="swot.20250509073027.3"><vh>上图中的虚线和实线表示一样的含义？</vh></v>
+<v t="swot.20250509073027.4"><vh>组件图还可以使用 package？</vh></v>
+<v t="swot.20250509073027.5"><vh>组件图中的 component 类似软件开发中的什么？</vh></v>
+<v t="swot.20250509073027.6"><vh>某官网展示端组件图 home</vh></v>
+<v t="swot.20250509073027.7"><vh>某官网展示端组件图 app.js -&gt; clint_news_list.js</vh></v>
+<v t="swot.20250509073027.8"><vh>某官网展示端组件图 app.js -&gt; clint_news_detail.js</vh></v>
+<v t="swot.20250509073027.9"><vh>某官网展示端组件图 app.js -&gt; other routes</vh></v>
+<v t="swot.20250509073027.10"><vh>某官网展示端组件图 app.js -&gt; Directory</vh></v>
 </v>
 <v t="swot.20250508232203.1"><vh>mindmap</vh></v>
 <v t="swot.20250508225006.1"><vh>Salt -&gt; Draw the prototype diagram</vh></v>
@@ -825,5 +836,393 @@ include::data/diagram-json1.puml[]
   "spouse": null
 }
 @endjson</t>
+<t tx="swot.20250509073027.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032352d30322d32327103752e">**Component diagrams** use **components** and **interfaces** to represent the logical modules of software and their interaction interfaces.
+
+[plantuml, target=img/diagram-component-2025-05-09-095950, format=png]
+....
+@startuml
+component "Frontend" as Frontend
+component "Backend API" as Backend
+interface "API Interface" as API_Interface
+
+Frontend ..&gt; API_Interface
+Backend --|&gt; API_Interface
+@enduml
+....
+</t>
+<t tx="swot.20250509073027.10">@language asciidoc
+在 app.js 中指定了一些要使用的路径文件。
+
+.Express 展示端组件图
+[plantuml, target=img/diagram-component-2025-05-09-103145, format=png]
+....
+@startuml
+package app.js {
+
+    package Directory {
+        folder public {
+            file css
+            file img
+            file js
+        }
+        folder views {
+            file index.html
+        }
+        folder config {
+            file jwtSecretKey.js
+        }
+    }
+}
+@enduml
+....
+</t>
+<t tx="swot.20250509073027.2">Q: Why introduce an interface when the frontend can just connect directly to the backend in the diagram? Isn’t it redundant? +
+问：上图中直接用前端连接后端就可以了，为什么还需要中间来个 interface？是多此一举吗？
+
+A: It’s not redundant, but rather a clearer way to express the system’s structure and separation of concerns. +
+答：不算是多此一举**，而是更清晰地表达系统的结构和职责分离。
+上图中直接用前端连接后端就可以了，为什么还需要中间来个 interface？是多次一举吗？
+
+***
+
+**1. Why need interface？**
+
+In a component diagram, the interface defines the communication contract between components to clarify architecture. +
+在**组件图（Component Diagram）**中，`interface` 的作用是明确**组件之间的通信契约**，让架构更清晰，主要有以下几个原因：
+
+**Decoupling（解耦）**：
+
+- If the Frontend depends directly on the Backend, it requires knowledge of the backend's implementation. +
+如果 `Frontend` 直接依赖 `Backend`，说明 `Frontend` 需要知道 `Backend` 的具体实现。
+
+- With API_Interface, the frontend only relies on the API contract and not on backend details. +
+**引入 `API_Interface`（接口）后，前端只关心 API 规范，不依赖后端的具体实现**，这样如果后端更换实现方式（如从 `Node.js` 换成 `Spring Boot`），前端无须修改。
+
+**Explicit Role（明确角色）**：
+
+- The frontend cares about the APIs it needs, not which backend provides them. +
+  `Frontend` 需要某些 API，它不关心 API 由哪个后端提供。
+- The backend may expose different APIs, and interfaces help identify which are for frontend use. +
+  `Backend` 可能有多个 API，对外暴露的是 `API_Interface`，这样可以清晰地区分哪些 API 是暴露给前端的，哪些是内部 API。
+
+**Extensibility（扩展性）**：
+
+In future, if there are multiple backend versions like BackendV2, they can implement the same interface. +
+如果未来有多个后端实现，比如 `BackendV2`，它们都可以实现相同的 `API_Interface`，前端仍然可以无缝调用 API。
+
+[plantuml, target=img/diagram-component-2025-05-09-100211, format=png]
+....
+@startuml
+component "Frontend" as Frontend
+interface "API interface" as API_Interface
+component "Backend API v1" as BackendV1
+component "Backend API v2" as BackendV2
+
+Frontend ..&gt; API_Interface
+BackendV1 --&gt; API_Interface
+BackendV2 --&gt; API_Interface
+@enduml
+....
+
+Now the frontend can switch between BackendV1 and BackendV2 without modifying its code. +
+现在，前端可以在 `BackendV1` 和 `BackendV2` 之间自由切换，而无需修改自身代码。
+
+**2. When can you omit the interface?** 什么时候可以省略 interface？
+
+If the system has only one backend and the API won’t change, you can connect Frontend -&gt; Backend directly. +
+如果你的系统**只有一个后端实现，并且不会更换 API 结构**，确实可以直接连接 `Frontend -&gt; Backend`。比如：
+
+[plantuml, target=img/diagram-component-2025-05-09-100245, format=png]
+....
+component "Frontend" as Frontend
+component "Backend API" as Backend
+Frontend .&gt; Backend : Call API
+....
+
+However, this has poor scalability compared to using interfaces. +
+但是这种方式在系统扩展性上**没有 `interface` 方案好**，如果未来有多个后端实现或 API 结构变化，前端代码可能需要大改。
+
+
+**3. Best practices for component diagrams ** 组件图的最佳实践
+
+* Small projects: If the frontend only talks to one backend, you can omit the interface. +
+  小型项目：如果 `Frontend` 只与单个 `Backend` 交互，**可以省略 `interface`**。
+* Medium/large projects: If multiple backends or clear API boundaries exist, it’s better to use interface. +
+  中大型项目：如果 API 由多个 `Backend` 提供，或 API 设计需要清晰的边界，**建议使用 `interface`**。
+</t>
+<t tx="swot.20250509073027.3">@language asciidoc
+在 **PlantUML 组件图（Component Diagram）** 中，**虚线（`..&gt;`）和实线（`--|&gt;`）的含义不同**。
+
+**1. 虚线（`..&gt;`）**
+**表示“依赖关系”（Dependency）**
+用于表示 **一个组件使用或调用另一个组件**，但它们**不是强绑定**关系。
+
+[plantuml, target=img/diagram-component-2025-05-09-100502, format=png]
+....
+@startuml
+component "前端" as Frontend
+interface "API 接口" as API_Interface
+
+Frontend .&gt; API_Interface : 依赖 API
+@enduml
+....
+
+**含义：** `Frontend` 依赖 `API_Interface`，但 `Frontend` **不一定知道 `API_Interface` 的实现细节**。
+
+**2. 实线（`--&gt;`）**
+**表示“实现关系”（Realization）**
+用于表示 **一个组件实现了某个接口**（通常用于后端实现 API）。
+
+[plantuml, target=img/diagram-component-2025-05-09-100635, format=png]
+....
+@startuml
+interface "API 接口" as API_Interface
+component "后端 API" as Backend
+
+Backend -&gt; API_Interface : 实现 API
+@enduml
+....
+
+**含义：** `Backend` 提供 `API_Interface` 规范的实现。
+
+**3. 结合示例**
+
+.完整的组件图
+[plantuml, target=img/diagram-component-2025-05-09-100733, format=png]
+....
+@startuml
+component "前端" as Frontend
+interface "API 接口" as API_Interface
+component "后端 API" as Backend
+
+Frontend .&gt; API_Interface : 依赖 API
+API_Interface &lt;- Backend  : 实现 API
+@enduml
+....
+
+**解释：**
+
+1. `Frontend ..&gt; API_Interface`（虚线）：前端**调用** API，但不关心后端的具体实现。
+2. `pass:[Backend --&gt; API_Interface]`（实线）：后端**实现** API 规范。
+</t>
+<t tx="swot.20250509073027.4">在 **组件图（Component Diagram）** 中，`package` 用于**组织组件**，类似于 Java、Python 中的包（namespace）。
+
+[plantuml, target=img/diagram-componet-2025-05-09-103223, format=png]
+....
+@startuml
+package "前端" {
+  component "Vue.js 组件" as Vue
+  component "UI 组件库" as UI
+  Vue ..&gt; UI
+}
+
+package "后端" {
+  component "express.js API" as API
+  interface "API 接口" as API_Interface
+  API --&gt; API_Interface
+}
+
+package "数据库" {
+  database "MySQL"
+}
+
+Vue ..&gt; API_Interface
+API --&gt; MySQL
+@enduml
+....
+
+**解释**
+
+1. **`package "前端"`**：表示前端相关的组件，比如 Vue.js 和 UI 组件库。
+2. **`package "后端"`**：表示后端的 API，使用 `interface` 定义 API 规范。
+3. **`package "数据库"`**：表示数据库存储层。
+4. **前端（Vue.js）调用 API（虚线）**，后端 API 实现接口（实线）。
+5. **API 连接 MySQL**（数据存储）。后端 API 直接执行 SQL 查询，所以用实线。
+
+---
+
+**什么时候用 `package`？**
+
+✅ 需要**分组**组件时，比如：
+
+- 按照 **前端 / 后端 / 数据库** 组织组件。
+- 按照 **微服务 / 模块** 结构化展示。
+
+✅ 需要**增强可读性**，避免组件杂乱无章。如果你的系统有很多组件，**用 `package` 可以让图更加清晰**。
+</t>
+<t tx="swot.20250509073027.5">在软件开发中，**Component（组件）** 类似于 **模块化的软件单元**，它通常对应于以下概念：  
+
+**1. 模块（Module）**
+
+   - 在前端：Vue 组件（`&lt;MyComponent /&gt;`）、React 组件、Nuxt 模块等。
+   - 在后端：Express 路由模块、Spring Boot 服务模块等。
+   - 在 Node.js：使用 `require` 或 `import` 导入的模块。
+
+**2. 类（Class）**
+
+   - 在面向对象编程（OOP）中，一个 `component` 可以对应一个 `class`，比如 `UserService`、`DatabaseConnector` 这样的类。
+
+**3. 微服务（Microservice）**
+
+   - 在微服务架构中，每个独立的微服务可以被看作一个组件，比如 `用户管理服务`、`订单处理服务` 等。
+
+**4. 库（Library）或 SDK**
+
+   - 例如 `Axios`（HTTP 请求库）、`Nuxt UI`（组件库），这些也可以用 `component` 表示它们的功能单元。
+
+---
+
+**总结**
+
+- **小范围**：`component` 类似 **前端组件**、**类**、**模块**。
+- **大范围**：它也可以表示 **微服务** 或 **系统的某个独立部分**。
+
+所以在 `PlantUML` 组件图中，`component` 主要是用来表示 **可复用的软件单元**，并展示它们之间的关系！
+</t>
+<t tx="swot.20250509073027.6">@language asciidoc
+[plantuml, target=img/diagram-comonent-dayu-2025-05-09-103243, format=png]
+....
+@startuml
+'left to right direction
+
+file "HomePage /" as root
+file "router/clint_home.js" as home
+file "config/db.js" as db
+file "views/index.html" as index
+
+package "controllers/client_homeController.js" as homeCtl {
+    component "exports clientHome" as clientHome {
+        portout resp
+        interface "currentVisit"
+        interface "manySQLQuery" #Yellow
+        interface "manySQLResult"
+        interface "Menu"
+    }
+    interface "queryFromDatabase()" as queryFromDatabase
+    interface "generateMenu()" as generateMenu
+    interface "buildThirdLevelMenu()" as buildThirdLevelMenu
+    interface "generateMenu3()" as generateMenu3
+}
+
+root ..&gt; home
+home ..&gt; homeCtl
+
+manySQLResult ..&gt; generateMenu
+generateMenu .up.&gt; buildThirdLevelMenu
+generateMenu ..&gt; Menu
+
+manySQLResult ..&gt; generateMenu3
+generateMenu3 ..&gt; Menu
+
+manySQLQuery ..&gt; queryFromDatabase: 大量查询
+queryFromDatabase ..&gt; db: 获取数据
+queryFromDatabase ..&gt; manySQLResult
+manySQLResult ..&gt; currentVisit: 包含访问量
+currentVisit ..&gt; db: 保存访问量
+
+manySQLResult ..&gt; resp: 部分返回
+Menu ..&gt; resp
+resp ..&gt; index
+'index ..&gt; root
+
+@enduml
+....
+</t>
+<t tx="swot.20250509073027.7">@language asciidoc
+.Express 展示端组件图
+[plantuml, target=img/diagram-component-2025-05-09-102755, format=png]
+....
+@startuml
+
+package app.js {
+
+    package "router_1" {
+        component Industries_list
+        component Solutions_list
+        component Customization_list
+        component CompanyInformation_list
+        component NewsandEvents_list
+        component Support_list
+
+        file "router/clint_news_list.js" as news
+
+        Industries_list ..&gt; news
+        Solutions_list ..&gt; news
+        Customization_list ..&gt; news
+        CompanyInformation_list .up.&gt; news
+        NewsandEvents_list .up.&gt; news
+        Support_list .up.&gt; news
+    }
+}
+@enduml
+....
+</t>
+<t tx="swot.20250509073027.8">@language asciidoc
+.Express 展示端组件图
+[plantuml, target=img/diagram-component-2025-05-09-103024, format=png]
+....
+@startuml
+
+package app.js {
+
+    package "router_2" {
+        component Industries_detail
+        component Solutions_detail
+        component Customization_detail
+        component CompanyInformation_detail
+        component NewsandEvents_detail
+        component Support_detail
+
+        file "router/clint_news_detail.js" as news_detail
+
+        Industries_detail ..&gt; news_detail
+        Solutions_detail ..&gt; news_detail
+        Customization_detail ..&gt; news_detail
+        CompanyInformation_detail .up.&gt; news_detail
+        NewsandEvents_detail .up.&gt; news_detail
+        Support_detail .up.&gt; news_detail
+    }
+}
+@enduml
+....
+</t>
+<t tx="swot.20250509073027.9">@language asciidoc
+.Express 展示端组件图
+[plantuml, target=img/diagram-component-2025-05-09-103049, format=png]
+....
+@startuml
+left to right direction
+
+package app.js {
+
+    package "router_3" {
+        component product_list
+        component product_detail
+        component CoreBusiness_list
+        component search_list
+        component email_form
+        component cookies_form
+        component 404
+
+        file "router/clint_case_list.js" as case
+        file "router/clint_case_detail.js" as case_detail
+        file "router/clint_search_list.js" as search
+        file "route/clint_404" as fof
+        file "route/clint_email_form.js" as email
+        file "route/clint_cookies_form.js" as cookies
+
+        product_list ..&gt; case
+        product_detail ..&gt; case_detail
+        CoreBusiness_list ..&gt; case
+
+        search_list ..&gt; search
+        404 ..&gt; fof
+        email_form ..&gt; email
+        cookies_form ..&gt; cookies
+    }
+}
+@enduml
+....
+</t>
 </tnodes>
 </leo_file>
