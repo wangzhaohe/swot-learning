@@ -93,6 +93,7 @@
 <v t="swot.20250509173947.1"><vh>二叉树小根堆</vh></v>
 <v t="swot.20250509175116.1"><vh>二叉树遍历顺序</vh></v>
 <v t="swot.20250509175355.1"><vh>哈夫曼树(最优二叉树)</vh></v>
+<v t="swot.20250509180254.1"><vh>无向图顶点度数</vh></v>
 </v>
 </v>
 </v>
@@ -378,10 +379,12 @@ https://git-scm.com/downloads
 :source-highlighter: pygments
 :icons: font
 :scripts: cjk
+:stem: latexmath
 :toc:
 :toc: right
 :toc-title: Table of Contents
-:toclevels: 3</t>
+:toclevels: 3
+</t>
 <t tx="swot.20250508162652.1">
 ++++
 &lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
@@ -1912,6 +1915,35 @@ D 在中序中的位置中间，所以：
 所以有公式: ##总结点数 = 叶子结点数 + 内部结点数 = n+(n−1) = 2n−1##
 
 9 个顶点代入公式： 9 = 2n - 1 -&gt; n = 5
+</t>
+<t tx="swot.20250509180254.1">无向图中一个顶点的度是指图中与该顶点相邻接的顶点数。若无向图 G 中的顶点数为 n，边数为 e，则所有顶点的度数之和为（ ）
+
+* A n*e 
+* B n+e 
+* C 2n 
+* D 2e
+
+答案：D
+
+****
+
+定义：在无向图中，一个顶点的度数（Degree）是指与该顶点相连的边的数量。度数是描述顶点在图中连接程度的一个重要指标。
+
+这个题考查的是图论中无向图的一个基本性质：
+
+在一个无向图中，所有顶点的度数之和等于边数的两倍。
+
+原因解释：
+每条边连接两个顶点，因此会被两个顶点各“贡献一次”度数。所以总的度数是边数的两倍。
+
+设：
+
+* 顶点数为 n
+* 边数为 e
+* 公式中的 vi 指顶点
+
+则： stem:[\sum_{i=1}^{n} \deg(v_i) = 2e]
+****
 </t>
 </tnodes>
 </leo_file>
