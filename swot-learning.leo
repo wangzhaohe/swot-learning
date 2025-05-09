@@ -75,7 +75,7 @@
 <v t="swot.20250508160844.1"><vh>@path git</vh>
 <v t="swot.20250508161005.1"><vh>@adoc git.adoc</vh>
 <v t="swot.20250508161024.1"><vh>Git</vh>
-<v t="swot.20250508161032.1"><vh>git-filter-repo -&gt; delete file</vh></v>
+<v t="swot.20250508161032.1"><vh>git-filter-repo -&gt; delete file from all git commit</vh></v>
 </v>
 </v>
 </v>
@@ -321,6 +321,13 @@ If the key documents and main code can be combined and written only once, and pr
 ++++
 </t>
 <t tx="swot.20250508161032.1">https://github.com/newren/git-filter-repo
+
+Install:
+
+    git clone https://github.com/newren/git-filter-repo.git
+    cd git-filter-repo
+    pip install .
+    git-filter-repo --version
 
 To **delete a specific file from all commits in a Git repository**, you can use `git-filter-repo` which is a modern and faster replacement for `git filter-branch`.
 
