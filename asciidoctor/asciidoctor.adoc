@@ -917,3 +917,280 @@ Hello World!
 A31117013206375A
 ....
 
+=== vega & vegalite
+Install
+
+    npm install -g vega-cli vega-embed vega-lite vega-themes vega
+
+Edit ~/.zshrc
+
+    export PATH="$PATH:$(npm config get prefix)/bin"
+    export NODE_PATH=$(npm root -g)
+
+==== vegalite_example1 -> values embedded
+.link:img/vegalite_2025-05-09-165945.png[vegalite_example1]
+[vegalite, target=img/vegalite_2025-05-09-165945, format=png]
+....
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "A simple bar chart",
+  "data": {
+    "values": [
+      {"category": "A", "value": 28},
+      {"category": "B", "value": 55},
+      {"category": "C", "value": 43}
+    ]
+  },
+  "mark": "bar",
+  "encoding": {
+    "x": {"field": "category", "type": "nominal"},
+    "y": {"field": "value", "type": "quantitative"}
+  }
+}
+....
+
+==== vegalite_example2 -> values embedded
+.link:img/vegalite-2025-05-09-170329.png[vegalite_example2]
+[vegalite, target=img/vegalite-2025-05-09-170329, format=png]
+....
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "config": {"view": {"stroke": ""}},
+  "width": 800,
+  "height": 200,
+  "data": {
+    "values": [
+      {"country": "Great Britain", "animal": "cattle", "col": 3},
+      {"country": "Great Britain", "animal": "cattle", "col": 2},
+      {"country": "Great Britain", "animal": "cattle", "col": 1},
+      {"country": "Great Britain", "animal": "pigs", "col": 2},
+      {"country": "Great Britain", "animal": "pigs", "col": 1},
+      {"country": "Great Britain", "animal": "sheep", "col": 10},
+      {"country": "Great Britain", "animal": "sheep", "col": 9},
+      {"country": "Great Britain", "animal": "sheep", "col": 8},
+      {"country": "Great Britain", "animal": "sheep", "col": 7},
+      {"country": "Great Britain", "animal": "sheep", "col": 6},
+      {"country": "Great Britain", "animal": "sheep", "col": 5},
+      {"country": "Great Britain", "animal": "sheep", "col": 4},
+      {"country": "Great Britain", "animal": "sheep", "col": 3},
+      {"country": "Great Britain", "animal": "sheep", "col": 2},
+      {"country": "Great Britain", "animal": "sheep", "col": 1},
+      {"country": "United States", "animal": "cattle", "col": 9},
+      {"country": "United States", "animal": "cattle", "col": 8},
+      {"country": "United States", "animal": "cattle", "col": 7},
+      {"country": "United States", "animal": "cattle", "col": 6},
+      {"country": "United States", "animal": "cattle", "col": 5},
+      {"country": "United States", "animal": "cattle", "col": 4},
+      {"country": "United States", "animal": "cattle", "col": 3},
+      {"country": "United States", "animal": "cattle", "col": 2},
+      {"country": "United States", "animal": "cattle", "col": 1},
+      {"country": "United States", "animal": "pigs", "col": 6},
+      {"country": "United States", "animal": "pigs", "col": 5},
+      {"country": "United States", "animal": "pigs", "col": 4},
+      {"country": "United States", "animal": "pigs", "col": 3},
+      {"country": "United States", "animal": "pigs", "col": 2},
+      {"country": "United States", "animal": "pigs", "col": 1},
+      {"country": "United States", "animal": "sheep", "col": 7},
+      {"country": "United States", "animal": "sheep", "col": 6},
+      {"country": "United States", "animal": "sheep", "col": 5},
+      {"country": "United States", "animal": "sheep", "col": 4},
+      {"country": "United States", "animal": "sheep", "col": 3},
+      {"country": "United States", "animal": "sheep", "col": 2},
+      {"country": "United States", "animal": "sheep", "col": 1}
+    ]
+  },
+  "mark": {"type": "point", "filled": true},
+  "encoding": {
+    "x": {"field": "col", "type": "ordinal", "axis": null},
+    "y": {"field": "animal", "type": "ordinal", "axis": null},
+    "row": {"field": "country", "header": {"title": ""}},
+    "shape": {
+      "field": "animal",
+      "type": "nominal",
+      "scale": {
+        "domain": ["person", "cattle", "pigs", "sheep"],
+        "range": [
+          "M1.7 -1.7h-0.8c0.3 -0.2 0.6 -0.5 0.6 -0.9c0 -0.6 -0.4 -1 -1 -1c-0.6 0 -1 0.4 -1 1c0 0.4 0.2 0.7 0.6 0.9h-0.8c-0.4 0 -0.7 0.3 -0.7 0.6v1.9c0 0.3 0.3 0.6 0.6 0.6h0.2c0 0 0 0.1 0 0.1v1.9c0 0.3 0.2 0.6 0.3 0.6h1.3c0.2 0 0.3 -0.3 0.3 -0.6v-1.8c0 0 0 -0.1 0 -0.1h0.2c0.3 0 0.6 -0.3 0.6 -0.6v-2c0.2 -0.3 -0.1 -0.6 -0.4 -0.6z",
+          "M4 -2c0 0 0.9 -0.7 1.1 -0.8c0.1 -0.1 -0.1 0.5 -0.3 0.7c-0.2 0.2 1.1 1.1 1.1 1.2c0 0.2 -0.2 0.8 -0.4 0.7c-0.1 0 -0.8 -0.3 -1.3 -0.2c-0.5 0.1 -1.3 1.6 -1.5 2c-0.3 0.4 -0.6 0.4 -0.6 0.4c0 0.1 0.3 1.7 0.4 1.8c0.1 0.1 -0.4 0.1 -0.5 0c0 0 -0.6 -1.9 -0.6 -1.9c-0.1 0 -0.3 -0.1 -0.3 -0.1c0 0.1 -0.5 1.4 -0.4 1.6c0.1 0.2 0.1 0.3 0.1 0.3c0 0 -0.4 0 -0.4 0c0 0 -0.2 -0.1 -0.1 -0.3c0 -0.2 0.3 -1.7 0.3 -1.7c0 0 -2.8 -0.9 -2.9 -0.8c-0.2 0.1 -0.4 0.6 -0.4 1c0 0.4 0.5 1.9 0.5 1.9l-0.5 0l-0.6 -2l0 -0.6c0 0 -1 0.8 -1 1c0 0.2 -0.2 1.3 -0.2 1.3c0 0 0.3 0.3 0.2 0.3c0 0 -0.5 0 -0.5 0c0 0 -0.2 -0.2 -0.1 -0.4c0 -0.1 0.2 -1.6 0.2 -1.6c0 0 0.5 -0.4 0.5 -0.5c0 -0.1 0 -2.7 -0.2 -2.7c-0.1 0 -0.4 2 -0.4 2c0 0 0 0.2 -0.2 0.5c-0.1 0.4 -0.2 1.1 -0.2 1.1c0 0 -0.2 -0.1 -0.2 -0.2c0 -0.1 -0.1 -0.7 0 -0.7c0.1 -0.1 0.3 -0.8 0.4 -1.4c0 -0.6 0.2 -1.3 0.4 -1.5c0.1 -0.2 0.6 -0.4 0.6 -0.4z",
+          "M1.2 -2c0 0 0.7 0 1.2 0.5c0.5 0.5 0.4 0.6 0.5 0.6c0.1 0 0.7 0 0.8 0.1c0.1 0 0.2 0.2 0.2 0.2c0 0 -0.6 0.2 -0.6 0.3c0 0.1 0.4 0.9 0.6 0.9c0.1 0 0.6 0 0.6 0.1c0 0.1 0 0.7 -0.1 0.7c-0.1 0 -1.2 0.4 -1.5 0.5c-0.3 0.1 -1.1 0.5 -1.1 0.7c-0.1 0.2 0.4 1.2 0.4 1.2l-0.4 0c0 0 -0.4 -0.8 -0.4 -0.9c0 -0.1 -0.1 -0.3 -0.1 -0.3l-0.2 0l-0.5 1.3l-0.4 0c0 0 -0.1 -0.4 0 -0.6c0.1 -0.1 0.3 -0.6 0.3 -0.7c0 0 -0.8 0 -1.5 -0.1c-0.7 -0.1 -1.2 -0.3 -1.2 -0.2c0 0.1 -0.4 0.6 -0.5 0.6c0 0 0.3 0.9 0.3 0.9l-0.4 0c0 0 -0.4 -0.5 -0.4 -0.6c0 -0.1 -0.2 -0.6 -0.2 -0.5c0 0 -0.4 0.4 -0.6 0.4c-0.2 0.1 -0.4 0.1 -0.4 0.1c0 0 -0.1 0.6 -0.1 0.6l-0.5 0l0 -1c0 0 0.5 -0.4 0.5 -0.5c0 -0.1 -0.7 -1.2 -0.6 -1.4c0.1 -0.1 0.1 -1.1 0.1 -1.1c0 0 -0.2 0.1 -0.2 0.1c0 0 0 0.9 0 1c0 0.1 -0.2 0.3 -0.3 0.3c-0.1 0 0 -0.5 0 -0.9c0 -0.4 0 -0.4 0.2 -0.6c0.2 -0.2 0.6 -0.3 0.8 -0.8c0.3 -0.5 1 -0.6 1 -0.6z",
+          "M-4.1 -0.5c0.2 0 0.2 0.2 0.5 0.2c0.3 0 0.3 -0.2 0.5 -0.2c0.2 0 0.2 0.2 0.4 0.2c0.2 0 0.2 -0.2 0.5 -0.2c0.2 0 0.2 0.2 0.4 0.2c0.2 0 0.2 -0.2 0.4 -0.2c0.1 0 0.2 0.2 0.4 0.1c0.2 0 0.2 -0.2 0.4 -0.3c0.1 0 0.1 -0.1 0.4 0c0.3 0 0.3 -0.4 0.6 -0.4c0.3 0 0.6 -0.3 0.7 -0.2c0.1 0.1 1.4 1 1.3 1.4c-0.1 0.4 -0.3 0.3 -0.4 0.3c-0.1 0 -0.5 -0.4 -0.7 -0.2c-0.3 0.2 -0.1 0.4 -0.2 0.6c-0.1 0.1 -0.2 0.2 -0.3 0.4c0 0.2 0.1 0.3 0 0.5c-0.1 0.2 -0.3 0.2 -0.3 0.5c0 0.3 -0.2 0.3 -0.3 0.6c-0.1 0.2 0 0.3 -0.1 0.5c-0.1 0.2 -0.1 0.2 -0.2 0.3c-0.1 0.1 0.3 1.1 0.3 1.1l-0.3 0c0 0 -0.3 -0.9 -0.3 -1c0 -0.1 -0.1 -0.2 -0.3 -0.2c-0.2 0 -0.3 0.1 -0.4 0.4c0 0.3 -0.2 0.8 -0.2 0.8l-0.3 0l0.3 -1c0 0 0.1 -0.6 -0.2 -0.5c-0.3 0.1 -0.2 -0.1 -0.4 -0.1c-0.2 -0.1 -0.3 0.1 -0.4 0c-0.2 -0.1 -0.3 0.1 -0.5 0c-0.2 -0.1 -0.1 0 -0.3 0.3c-0.2 0.3 -0.4 0.3 -0.4 0.3l0.2 1.1l-0.3 0l-0.2 -1.1c0 0 -0.4 -0.6 -0.5 -0.4c-0.1 0.3 -0.1 0.4 -0.3 0.4c-0.1 -0.1 -0.2 1.1 -0.2 1.1l-0.3 0l0.2 -1.1c0 0 -0.3 -0.1 -0.3 -0.5c0 -0.3 0.1 -0.5 0.1 -0.7c0.1 -0.2 -0.1 -1 -0.2 -1.1c-0.1 -0.2 -0.2 -0.8 -0.2 -0.8c0 0 -0.1 -0.5 0.4 -0.8z"
+        ]
+      },
+      "legend": null
+    },
+    "color": {
+      "field": "animal",
+      "type": "nominal",
+      "legend": null,
+      "scale": {
+        "domain": ["person", "cattle", "pigs", "sheep"],
+        "range": [
+          "rgb(162,160,152)",
+          "rgb(194,81,64)",
+          "rgb(93,93,93)",
+          "rgb(91,131,149)"
+        ]
+      }
+    },
+    "opacity": {"value": 1},
+    "size": {"value": 200}
+  }
+}
+....
+
+==== vegalite_example3 -> local Web server supply data
+如果数据太大，不方便嵌入，可以用本地 Web 服务器：
+
+    # 数据文件放在 data 目录下，所以需要在 data 的上层目录运行下面命令
+    python -m http.server 1919
+
+
+.link:img/vegalite_2025-05-09-170423.png[vegalite_example3]
+[vegalite, target=img/vegalite_2025-05-09-170423, format=png]
+....
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "repeat": ["Horsepower", "Miles_per_Gallon", "Acceleration", "Displacement"],
+  "columns": 2,
+  "spec": {
+    "data": {"url": "http://localhost:1919/data/cars.json"},
+    "mark": "bar",
+    "encoding": {
+      "x": {"field": {"repeat": "repeat"}, "bin": true},
+      "y": {"aggregate": "count"},
+      "color": {"field": "Origin"}
+    }
+  }
+}
+....
+
+==== vega example1
+.link:img/vega-2025-05-09-170457.png[vega example1]
+[vega, target=img/vega-2025-05-09-170457, format=png]
+....
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "A basic grouped bar chart example.",
+  "width": 300,
+  "height": 240,
+  "padding": 5,
+
+  "data": [
+    {
+      "name": "table",
+      "values": [
+        {"category":"A", "position":0, "value":0.1},
+        {"category":"A", "position":1, "value":0.6},
+        {"category":"A", "position":2, "value":0.9},
+        {"category":"A", "position":3, "value":0.4},
+        {"category":"B", "position":0, "value":0.7},
+        {"category":"B", "position":1, "value":0.2},
+        {"category":"B", "position":2, "value":1.1},
+        {"category":"B", "position":3, "value":0.8},
+        {"category":"C", "position":0, "value":0.6},
+        {"category":"C", "position":1, "value":0.1},
+        {"category":"C", "position":2, "value":0.2},
+        {"category":"C", "position":3, "value":0.7}
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "yscale",
+      "type": "band",
+      "domain": {"data": "table", "field": "category"},
+      "range": "height",
+      "padding": 0.2
+    },
+    {
+      "name": "xscale",
+      "type": "linear",
+      "domain": {"data": "table", "field": "value"},
+      "range": "width",
+      "round": true,
+      "zero": true,
+      "nice": true
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": {"data": "table", "field": "position"},
+      "range": {"scheme": "category20"}
+    }
+  ],
+
+  "axes": [
+    {"orient": "left", "scale": "yscale", "tickSize": 0, "labelPadding": 4, "zindex": 1},
+    {"orient": "bottom", "scale": "xscale"}
+  ],
+
+  "marks": [
+    {
+      "type": "group",
+
+      "from": {
+        "facet": {
+          "data": "table",
+          "name": "facet",
+          "groupby": "category"
+        }
+      },
+
+      "encode": {
+        "enter": {
+          "y": {"scale": "yscale", "field": "category"}
+        }
+      },
+
+      "signals": [
+        {"name": "height", "update": "bandwidth('yscale')"}
+      ],
+
+      "scales": [
+        {
+          "name": "pos",
+          "type": "band",
+          "range": "height",
+          "domain": {"data": "facet", "field": "position"}
+        }
+      ],
+
+      "marks": [
+        {
+          "name": "bars",
+          "from": {"data": "facet"},
+          "type": "rect",
+          "encode": {
+            "enter": {
+              "y": {"scale": "pos", "field": "position"},
+              "height": {"scale": "pos", "band": 1},
+              "x": {"scale": "xscale", "field": "value"},
+              "x2": {"scale": "xscale", "value": 0},
+              "fill": {"scale": "color", "field": "position"}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "from": {"data": "bars"},
+          "encode": {
+            "enter": {
+              "x": {"field": "x2", "offset": -5},
+              "y": {"field": "y", "offset": {"field": "height", "mult": 0.5}},
+              "fill": [
+                {"test": "contrast('white', datum.fill) > contrast('black', datum.fill)", "value": "white"},
+                {"value": "black"}
+              ],
+              "align": {"value": "right"},
+              "baseline": {"value": "middle"},
+              "text": {"field": "datum.value"}
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+....
+
