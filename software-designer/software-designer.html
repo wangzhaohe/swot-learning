@@ -551,6 +551,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_校验码在osi的数据链路层">校验码（在OSI的数据链路层）</a>
 <ul class="sectlevel3">
 <li><a href="#_奇偶校验">奇偶校验</a></li>
+<li><a href="#_循环冗余校验码">循环冗余校验码‌</a></li>
 </ul>
 </li>
 </ul>
@@ -843,6 +844,94 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="paragraph">
 <p><a href="https://www.bilibili.com/video/BV1qp421D7B3" class="bare">https://www.bilibili.com/video/BV1qp421D7B3</a>  0:00 &#8594; 02:44</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_循环冗余校验码">循环冗余校验码‌</h4>
+<div class="paragraph">
+<p>给定待发送的数据为: 101001</p>
+</div>
+<div class="paragraph">
+<p>要求的校验码多项式为: \(G(x) = x^3 + x^2 + 1\)</p>
+</div>
+<hr>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>根据多项式确定 CRC 校验码位数</p>
+<div class="ulist">
+<ul>
+<li>
+<p>因为多项式最高次幂为 3，所以校验码位数为 3。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>数据左移校验码位数</p>
+<div class="ulist">
+<ul>
+<li>
+<p>数据补 3 个 0 为: 101001000</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>确定多项式的值</p>
+<div class="ulist">
+<ul>
+<li>
+<p>根据多项式确定
+\(G(x) = x^3 + x^2 + 1\) &#8594;
+\(1 \cdot x^3 + 1 \cdot x^2 + 0 \cdot x^1 + 1 \cdot x^0\)
+&#8594; 1101</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>计算 CRC 值（除法异或运算）</p>
+<div class="literalblock">
+<div class="content">
+<pre>1010 01000 ÷ 1101
+1101        (生成多项式)
+----
+01110 1000  (第一步 XOR 结果)
+ 1101
+ ----
+ 001110 00  (第二步 XOR 结果)
+   1101
+   -----
+   001100   (第三步 XOR 结果)
+     1101
+     ----
+     0001   (CRC 余数为 1，则 3 位校验位为 001)</pre>
+</div>
+</div>
+</li>
+<li>
+<p>生成发送数据 = 传输数据 + CRC校验码</p>
+<div class="ulist">
+<ul>
+<li>
+<p>101001+001 &#8594; 101001001</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<hr>
+<div class="paragraph">
+<p><a href="https://www.bilibili.com/video/BV1qp421D7B3" class="bare">https://www.bilibili.com/video/BV1qp421D7B3</a></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>从低到高举例 12:27 &#8594; end</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -1185,7 +1274,7 @@ A  B C  D</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-09 18:34:41 +0800
+Last updated 2025-05-09 18:42:45 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
