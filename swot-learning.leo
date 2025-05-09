@@ -48,6 +48,7 @@
 <v t="swot.20250508232842.1"><vh>yaml</vh></v>
 </v>
 <v t="swot.20250509113701.1"><vh>mermaid</vh></v>
+<v t="swot.20250509155424.1"><vh>Barcode</vh></v>
 </v>
 </v>
 </v>
@@ -1372,6 +1373,33 @@ sequenceDiagram
     Middleware-&gt;&gt;Middleware: 包装为标准格式
     Middleware-&gt;&gt;Client: 发送最终响应
 ....
+</t>
+<t tx="swot.20250509155424.1">https://docs.asciidoctor.org/diagram-extension/latest/diagram_types/barcode/
+
+Install:
+
+    gem install barby
+    gem install rqrcode
+    gem install chunky_png
+
+
+Barcdodes can be written codabar:A31117013206375A[target=img/codabar-2025-05-09-162333, format=png, height=15] inline or as blocks.
+link:img/codabar-2025-05-09-162333.png[Show codabar]
+
+
+.link:img/qrcode-2025-05-09-162345.png[Show qrcode]
+[qrcode, target=img/qrcode-2025-05-09-162345, format="png", xdim=4, foreground=#199, role="text-left"]
+....
+Hello World!
+....
+
+
+.link:img/code128-2025-05-09-162354.png[Show code128]
+[code128, target=img/code128-2025-05-09-162354, format="png", xdim=2, height=30, foreground=#199]
+....
+A31117013206375A
+....
+
 </t>
 </tnodes>
 </leo_file>
