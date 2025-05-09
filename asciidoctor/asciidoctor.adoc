@@ -359,7 +359,7 @@ API_Interface <- Backend  : 实现 API
 ===== 组件图还可以使用 package？
 在 **组件图（Component Diagram）** 中，`package` 用于**组织组件**，类似于 Java、Python 中的包（namespace）。
 
-[plantuml, target=img/diagram-componet-package, format=png]
+[plantuml, target=img/diagram-componet-2025-05-09-103223, format=png]
 ....
 @startuml
 package "前端" {
@@ -433,7 +433,7 @@ API --> MySQL
 所以在 `PlantUML` 组件图中，`component` 主要是用来表示 **可复用的软件单元**，并展示它们之间的关系！
 
 ===== 某官网展示端组件图 home
-[plantuml, target=img/diagram-comonent-dayu-home, format=png]
+[plantuml, target=img/diagram-comonent-dayu-2025-05-09-103243, format=png]
 ....
 @startuml
 'left to right direction
@@ -483,7 +483,7 @@ resp ..> index
 
 ===== 某官网展示端组件图 app.js -> clint_news_list.js
 .Express 展示端组件图
-[plantuml, target=img/diagram-component-dayu1, format=png]
+[plantuml, target=img/diagram-component-2025-05-09-102755, format=png]
 ....
 @startuml
 
@@ -512,7 +512,7 @@ package app.js {
 
 ===== 某官网展示端组件图 app.js -> clint_news_detail.js
 .Express 展示端组件图
-[plantuml, target=img/diagram-component-dayu2, format=png]
+[plantuml, target=img/diagram-component-2025-05-09-103024, format=png]
 ....
 @startuml
 
@@ -541,7 +541,7 @@ package app.js {
 
 ===== 某官网展示端组件图 app.js -> other routes
 .Express 展示端组件图
-[plantuml, target=img/diagram-component-dayu3, format=png]
+[plantuml, target=img/diagram-component-2025-05-09-103049, format=png]
 ....
 @startuml
 left to right direction
@@ -581,7 +581,7 @@ package app.js {
 在 app.js 中指定了一些要使用的路径文件。
 
 .Express 展示端组件图
-[plantuml, target=img/diagram-component-dayu4, format=png]
+[plantuml, target=img/diagram-component-2025-05-09-103145, format=png]
 ....
 @startuml
 package app.js {
@@ -600,6 +600,94 @@ package app.js {
         }
     }
 }
+@enduml
+....
+
+==== deployment
+部署图（Deployment Diagram） 使用 node 表示服务器或运行环境，database 表示数据库，artifact 表示可执行文件等。
+
+.link:img/diagram-deployment-2025-05-09-110113.png[deployment]
+[plantuml, target=img/diagram-deployment-2025-05-09-110113, format=png]
+....
+@startuml
+
+node "Nginx 服务器" {
+    component "Nginx"
+}
+
+node "Web 服务器" {
+    component "Node.js"
+    component "Express.js"
+}
+
+node "数据库服务器" {
+    database "MySQL"
+}
+
+node "前端客户端" {
+    component "Vue.js"
+}
+
+"Vue.js" ..> "Nginx" : 访问网站
+"Nginx" ..> "Node.js" : 反向代理
+"Node.js" ..> "MySQL" : 读写数据
+
+@enduml
+....
+
+====
+- `node "Web 服务器"`：表示一个物理服务器。
+    * 在UML部署图中，Node 通常表示硬件或硬件平台，或者是一个可以执行软件的物理设备。
+- `component "Node.js"`：表示在该服务器上运行的 Node.js 应用。
+- `database "MySQL"`：表示数据库服务器上的 MySQL 实例。
+- 组件之间用 `..>` 连接，表示访问或交互关系。
+====
+
+===== 某官网部署图
+.link:img/diagram-deployment-2025-05-09-110102.png[Official website deployment]
+[plantuml, target=img/diagram-deployment-2025-05-09-110102, format=png]
+....
+@startuml
+node "Ubuntu Linux" {
+
+    folder Webhook {
+        artifact "6 Language Front"
+        artifact "Admin"
+    }
+
+    package "Node.js 运行环境" {
+        package "Express Front" as express{
+            component "Express.js"
+            component "Templates"
+            "Templates" -> "Express.js": 强绑定
+        }
+        package "Nuxt Admin" as nuxt {
+            component "Vue.js"
+            component "Nitro.js"
+        }
+    }
+    component "Nginx"
+    database  "MySQL"
+
+    "Nginx" ..> "express": 反向代理
+    "Nginx" ..> "nuxt" : 反向代理
+
+    "Nitro.js" --> "MySQL"
+    "Express.js" --> "MySQL"
+
+    "Vue.js" .> "Nitro.js": restful
+    "Vue.js" ..> "Express.js": 访问部分api
+
+}
+
+cloud gitee
+component "浏览器" as browser
+
+Webhook --> gitee
+nuxt -> Webhook
+express -> Webhook
+
+browser --> Nginx
 @enduml
 ....
 
