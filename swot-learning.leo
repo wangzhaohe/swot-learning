@@ -47,6 +47,7 @@
 <v t="swot.20250508225006.1"><vh>Salt -&gt; Draw the prototype diagram</vh></v>
 <v t="swot.20250508232842.1"><vh>yaml</vh></v>
 </v>
+<v t="swot.20250509113701.1"><vh>mermaid</vh></v>
 </v>
 </v>
 </v>
@@ -1331,6 +1332,45 @@ scale 1.2
 *** Identify Quick Wins
 ** Complete innovate phase
 @endwbs
+....
+</t>
+<t tx="swot.20250509113701.1">https://mermaid.js.org/
+
+安装 mermaid-cli:
+
+    npm install -g @mermaid-js/mermaid-cli
+
+查看是否安装成功:
+
+    which mmdc  # 在 Linux/macOS 上
+    where mmdc  # 在 Windows 上
+
+
+.link:img/mermaid-2025-05-09-113732.png[Example1]
+[mermaid, target=img/mermaid-2025-05-09-113732, format=png]
+....
+graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+....
+
+
+.link:img/mermaid_2025-05-09-113741.png[Example2]
+[mermaid, target=img/mermaid_2025-05-09-113741, format=png]
+....
+sequenceDiagram
+    participant Client
+    participant Middleware
+    participant API Handler
+
+    Client-&gt;&gt;Middleware: 发起请求
+    Middleware-&gt;&gt;Middleware: 执行前置逻辑
+    Middleware-&gt;&gt;API Handler: 自动路由匹配
+    API Handler-&gt;&gt;Middleware: 返回原始数据
+    Middleware-&gt;&gt;Middleware: 包装为标准格式
+    Middleware-&gt;&gt;Client: 发送最终响应
 ....
 </t>
 </tnodes>
