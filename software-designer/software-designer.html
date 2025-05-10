@@ -577,6 +577,13 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_数据库">数据库</a>
 <ul class="sectlevel2">
 <li><a href="#_关系模式">关系模式</a></li>
+<li><a href="#_关系代数表达式">关系代数表达式</a>
+<ul class="sectlevel3">
+<li><a href="#_问题1">问题1</a></li>
+<li><a href="#_问题2">问题2</a></li>
+<li><a href="#_举一个具体例子">举一个具体例子‌</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_编程语言">编程语言</a>
@@ -2580,6 +2587,482 @@ R3（学生，时间，教室，课程 ），</pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_关系代数表达式">关系代数表达式</h3>
+<div class="paragraph">
+<p>给定关系 R(A，B，C，D) 和关系 S(A，D，E，F)</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>若对这两个关系进行自然连接运算 R▷◁S 后的属性列有（ ）个;</p>
+</li>
+<li>
+<p>关系代数表达式 σR.B&gt;S.F(R▷◁S) 与（ ）等价。</p>
+<div class="literalblock">
+<div class="content">
+<pre>A  σ2&gt;8(RxS)
+B  π1，2，3，4，7，8(σ1=5^2&gt;8^4=6(R×S)
+C  σ"2"&gt;"8"(RxS)
+D  π1，2，3，4，7，8(σ1=5^"2"&gt;"8"^4=6(RxS))</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>理解题目中的符号和概念‌</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>‌关系（表）的结构‌</p>
+<div class="ulist">
+<ul>
+<li>
+<p>R(A, B, C, D)‌：这是一个名为 R 的表，有 4 列（属性），分别是 A, B, C, D。</p>
+</li>
+<li>
+<p>S(A, D, E, F)‌：这是一个名为 S 的表，有 4 列（属性），分别是 A, D, E, F。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>‌自然连接（Natural Join, R▷◁S）‌</p>
+<div class="ulist">
+<ul>
+<li>
+<p>作用‌：将两个表按照‌相同的列名‌自动连接起来，并‌合并相同名称的列‌。</p>
+</li>
+<li>
+<p>规则‌：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>如果两个表有相同名称的列（这里是 A 和 D），则连接时只保留一份。</p>
+</li>
+<li>
+<p>最终结果的列是所有‌不重复的列‌的组合。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>举例‌：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>R 的列：A, B, C, D</p>
+</li>
+<li>
+<p>S 的列：A, D, E, F</p>
+</li>
+<li>
+<p><mark>自然连接后，A 和 D 只保留一份，所以结果是：A, B, C, D, E, F（共 6 列）。</mark></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>‌选择运算（σ）‌</p>
+<div class="ulist">
+<ul>
+<li>
+<p>作用‌：从表中筛选出满足条件的行（类似于 SQL 的 WHERE）。</p>
+</li>
+<li>
+<p>例如：σR.B &gt; S.F(R▷◁S) 表示从 R▷◁S 的结果中筛选出 R.B &gt; S.F 的行。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+希腊字母 σ（sigma） 的中文读音是 “西格玛”（拼音：xī gé mǎ）。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_问题1">问题1</h4>
+<div class="paragraph">
+<p>问题1‌：自然连接 R▷◁S 后有多少列？</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>我们已经知道：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>R 的列：A, B, C, D</p>
+</li>
+<li>
+<p>S 的列：A, D, E, F</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>自然连接会合并相同名称的列（A 和 D），所以结果是：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A, B, C, D, E, F（共 6 列）。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_问题2">问题2</h4>
+<div class="paragraph">
+<p>问题2‌：σR.B &gt; S.F(R▷◁S) 等价于哪个选项？</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>我们需要找到一个等价的关系代数表达式。</p>
+</li>
+<li>
+<p>题目给出的选项是：</p>
+<div class="literalblock">
+<div class="content">
+<pre>A: σ2&gt;8(R×S)
+B: π1,2,3,4,7,8(σ1=5∧2&gt;8∧4=6(R×S))
+C: σ"2"&gt;"8"(R×S)
+D: π1,2,3,4,7,8(σ1=5∧"2"&gt;"8"∧4=6(R×S))</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>关键点‌：</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>R×S 是‌笛卡尔积‌（Cartesian Product），即 R 和 S 的所有可能组合，会有 4 + 4 = 8 列：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>列顺序：R.A, R.B, R.C, R.D, S.A, S.D, S.E, S.F（即第1-8列）。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>自然连接 R▷◁S 实际上是：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>先做 R×S，</p>
+</li>
+<li>
+<p>然后筛选 R.A = S.A 且 R.D = S.D 的行（因为自然连接要求相同列的值相等），</p>
+</li>
+<li>
+<p>最后去掉重复的 A 和 D（即保留 R.A, R.B, R.C, R.D, S.E, S.F）。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>σR.B &gt; S.F(R▷◁S) 的意思是：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>在自然连接的结果中，筛选 R.B &gt; S.F 的行。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>如何用 R×S 表示？‌</strong> 我们需要：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>先做 R×S（8列）。</p>
+</li>
+<li>
+<p>筛选 R.A = S.A（即第1列 = 第5列）和 R.D = S.D（即第4列 = 第6列）。</p>
+</li>
+<li>
+<p>再筛选 R.B &gt; S.F（即第2列 &gt; 第8列）。</p>
+</li>
+<li>
+<p>最后投影需要的列（A, B, C, D, E, F，即第 1,2,3,4,7,8 列）。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>对应选项‌：</p>
+</div>
+<div class="paragraph">
+<p>π1,2,3,4,7,8(σ1=5∧2&gt;8∧4=6(R×S))（选项B）：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>1=5：R.A = S.A
+4=6：R.D = S.D
+2&gt;8：R.B &gt; S.F
+π1,2,3,4,7,8：保留 A, B, C, D, E, F。</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>为什么其他选项不对？‌</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A: 缺少 R.A = S.A 和 R.D = S.D 的条件。
+C: 引号错误（"2"&gt;"8" 是字符串比较，不是列号）。
+D: 引号错误（同C）。</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>第三步：总结答案‌</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>自然连接 R▷◁S 后有 ‌6列‌（A, B, C, D, E, F）。</p>
+</li>
+<li>
+<p>σR.B &gt; S.F(R▷◁S) 等价于 ‌选项B‌：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>π1,2,3,4,7,8(σ1=5∧2&gt;8∧4=6(R×S))。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_举一个具体例子">举一个具体例子‌</h4>
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<caption class="title">R 表：</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">D</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">30</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<caption class="title">S 表：</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">E</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">F</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">30</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>自然连接 R▷◁S 的结果‌：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>匹配 R.A = S.A 且 R.D = S.D：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>第1行：(1,5,10,20) 和 (1,20,100,3) → (1,5,10,20,100,3)</p>
+</li>
+<li>
+<p>第2行：(2,8,15,30) 和 (2,30,200,7) → (2,8,15,30,200,7)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>结果：</p>
+<table class="tableblock frame-all grid-all" style="width: 75%;">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">E</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">F</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">30</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>筛选 R.B &gt; S.F‌：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>第1行：5 &gt; 3 → 保留</p>
+</li>
+<li>
+<p>第2行：8 &gt; 7 → 保留</p>
+</li>
+<li>
+<p>结果和上面一样。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>用选项 B 的方式计算‌：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>先做 R×S（4 行 8 列）：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>第1行：(1,5,10,20,1,20,100,3)</p>
+</li>
+<li>
+<p>第2行：(1,5,10,20,2,30,200,7)</p>
+</li>
+<li>
+<p>第3行：(2,8,15,30,1,20,100,3)</p>
+</li>
+<li>
+<p>第4行：(2,8,15,30,2,30,200,7)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>筛选 1=5 且 4=6 且 2&gt;8：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>第1行：1=1 且 20=20 且 5&gt;3 → 保留</p>
+</li>
+<li>
+<p>第4行：2=2 且 30=30 且 8&gt;7 → 保留</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>投影 1,2,3,4,7,8：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>第1行：(1,5,10,20,100,3)</p>
+</li>
+<li>
+<p>第4行：(2,8,15,30,200,7)</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>结果和自然连接一致。</p>
+</div>
+<div class="paragraph">
+<p>最终答案‌</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>自然连接后的列数：‌6列‌</p>
+</li>
+<li>
+<p>等价的关系代数表达式：‌选项B‌</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -2673,7 +3156,7 @@ R3（学生，时间，教室，课程 ），</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-10 17:28:22 +0800
+Last updated 2025-05-10 17:53:46 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
