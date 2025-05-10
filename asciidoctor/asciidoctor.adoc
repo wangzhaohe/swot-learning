@@ -890,6 +890,47 @@ sequenceDiagram
     Middleware->>Client: 发送最终响应
 ....
 
+=== graphviz
+https://graphviz.org/download/
+
+Install:
+
+    brew install graphviz
+
+
+.state machine 状态机
+[graphviz, target="img/graphviz-2025-05-10-115048", format=svg]
+....
+digraph finite_state_machine {
+    rankdir=LR;
+    node [shape = doublecircle]; 2;
+    node [shape = circle];
+
+    0 -> 1 [label = "ε"];
+    1 -> 2;
+}
+....
+
+***
+
+.instruction pipeline 指令流水线
+[graphviz, target="img/graphviz-2025-05-10-120508", format=svg]
+....
+digraph pipeline {
+    rankdir=LR;
+    node [shape=box];
+    start [label="", width=0, height=0, shape=none];
+    end   [label="", width=0, height=0, shape=none];
+
+    start -> dt1 -> dt2 -> dt3 -> dt4 -> end;
+    start [label=""];
+    dt1 [label="Δt"];
+    dt2 [label="2Δt"];
+    dt3 [label="3Δt"];
+    dt4 [label="Δt"];
+}
+....
+
 === Barcode
 https://docs.asciidoctor.org/diagram-extension/latest/diagram_types/barcode/
 
