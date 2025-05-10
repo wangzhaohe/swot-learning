@@ -139,6 +139,7 @@
 <v t="swot.20250510203357.1"><vh>RIP 协议</vh>
 <v t="swot.20250510203357.2"><vh>Example</vh></v>
 </v>
+<v t="swot.20250510204058.1"><vh>BGP 协议</vh></v>
 </v>
 </v>
 <v t="swot.20250510130542.1"><vh>编程语言</vh>
@@ -3243,6 +3244,13 @@ image::img/rip-2025-05-10-203513.png[rip2,1024]
 // https://www.bilibili.com/video/BV1184y1k76S
 </t>
 <t tx="swot.20250510203357.2">image::img/rip-2025-05-10-203533.png[rip-example,1024]
+</t>
+<t tx="swot.20250510204058.1">实际上这是应用层协议，走 TCP
+
+https://www.bilibili.com/video/BV1xe411N7GP
+
+image::img/RIP_OSPF_BGP-2025-05-10-204201.png[bgp,1024]
+
 </t>
 </tnodes>
 </leo_file>
