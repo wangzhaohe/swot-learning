@@ -594,6 +594,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_example_2">Example</a></li>
 </ul>
 </li>
+<li><a href="#_网络层">网络层</a>
+<ul class="sectlevel3">
+<li><a href="#_ip_数据报分片">IP 数据报分片</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_编程语言">编程语言</a>
@@ -3375,6 +3380,374 @@ D: 引号错误（同C）。</pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_网络层">网络层</h3>
+<div class="sect3">
+<h4 id="_ip_数据报分片">IP 数据报分片</h4>
+<div class="imageblock">
+<div class="content">
+<img src="img/ip-data-2025-05-10-193237.png" alt="总体" width="840">
+</div>
+<div class="title">Figure 7. 总体:</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/ip-data-2025-05-10-193246.png" alt="细节" width="840">
+</div>
+<div class="title">Figure 8. 细节:</div>
+</div>
+<div class="paragraph">
+<p><a href="https://www.bilibili.com/video/BV1UM41167sP" class="bare">https://www.bilibili.com/video/BV1UM41167sP</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.bilibili.com/video/BV1Ce411N7Ph" class="bare">https://www.bilibili.com/video/BV1Ce411N7Ph</a></p>
+</div>
+<div class="sect4">
+<h5 id="_example1">Example1</h5>
+<div class="paragraph">
+<p>数据报总长度4000B</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/ip-data-2025-05-10-193257.png" alt="例题" width="840">
+</div>
+<div class="title">Figure 9. 例题</div>
+</div>
+<div class="paragraph">
+<p><a href="https://www.bilibili.com/video/BV1Ce411N7Ph" class="bare">https://www.bilibili.com/video/BV1Ce411N7Ph</a></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example2">Example2</h5>
+<h3 id="_ip_数据报分片的描述" class="discrete"><strong>IP 数据报分片的描述</strong></h3>
+<div class="paragraph">
+<p><strong>题目</strong>：假设一个 IP 数据报总长度为 4000 字节，要经过一段 MTU 为 1500 字节的链路，该 IP 数据报必须经过分片才能通过该链路。以下关于分片的描述中，正确的是（ ）</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A. 该原始 IP 数据报是 IPv6 数据报</p>
+</li>
+<li>
+<p>B. 分片后的数据报将在通过该链路后的路由器进行重组</p>
+</li>
+<li>
+<p>C. 数据报需分为三片，这三片的总长度为 4000 字节</p>
+</li>
+<li>
+<p>D. 分片中的最后一片，标志位 Flag 为 0，Offset 字段为 370</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>答案</strong>：D</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>解析</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A. 选项:</p>
+<div class="exampleblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>IPv6 数据报在设计上尽量避免分片。根据 IPv6 的协议规定，源端和目的端之间的链路必须能够支持至少1280字节的MTU（最大传输单元）。如果一个 IPv6 数据报的长度超过了链路的 MTU，那么在 IPv6 中，通常是由源端来处理分片问题，而不是像 IPv4 那样由中间路由器进行分片。而且，题目中提到的 4000 字节的IP数据报需要经过 MTU 为 1500 字节的链路进行分片，这种场景更符合 IPv4 的分片机制。</p>
+</li>
+<li>
+<p>IPv6 更倾向于使用路径MTU发现机制，即在数据报发送之前，通过探测路径上的最小MTU来避免分片。如果发现路径上的MTU小于数据报长度，IPv6会返回一个“分片需要但不允许分片”（Fragmentation Needed but Don&#8217;t Fragment was Set）的ICMPv6错误消息，而不是像IPv4那样直接进行分片。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>B. 选项也是错误的。</p>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>原因分析，在 IP 协议中，无论是 IPv4 还是 IPv6，分片和重组的机制都有明确的规定：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>IPv4分片和重组机制</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>在 IPv4 中，分片是由中间路由器完成的。当一个 IPv4 数据报的长度超过链路的 MTU 时，中间路由器会将其分割成多个较小的分片。</p>
+</li>
+<li>
+<p>重组则是在<strong>最终目的主机</strong>上完成的，而不是在中间路由器上。中间路由器只负责转发分片的数据报，不会对分片进行重组。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>IPv6 分片和重组机制</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>IPv6 尽量避免中间路由器进行分片。如果需要分片，通常是在<strong>源端</strong>进行分片。</p>
+</li>
+<li>
+<p>重组同样是在<strong>最终目的主机</strong>上完成的。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>因此，无论是 IPv4 还是 IPv6，分片后的数据报都是在<strong>最终目的主机</strong>上进行重组的，而不是在中间路由器上。</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>C. 分包后多了 2 个 20B，所以肯定大于 4000B</p>
+</li>
+<li>
+<p>D. 正确分析</p>
+<div class="exampleblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>数据报总长度为 4000 字节，IP首部通常为 20 字节，因此数据部分为 3980 字节。</p>
+</li>
+<li>
+<p>MTU为 1500 字节，减去 IP 首部后，每个分片的数据部分最大为 1480 字节。</p>
+</li>
+<li>
+<p>分片情况如下：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>第一片：20字节首部 + 1480字节数据 + 偏移 0</p>
+</li>
+<li>
+<p>第二片：20字节首部 + 1480字节数据 + 偏移 185 （1480/8=185）</p>
+</li>
+<li>
+<p>第三片：20字节首部 + 1020字节数据 + 偏移 370</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>最后一片的标志位 MF 为 0，表示这是最后一片。</p>
+</li>
+<li>
+<p>偏移量为 370，表示最后一片在原始数据报中的位置。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example3">Example3</h5>
+<h3 id="_ip数据报分片计算" class="discrete"><strong>IP数据报分片计算</strong></h3>
+<div class="paragraph">
+<p><strong>题目</strong>：假设一个IP数据报总长度为 3000 字节，要经过一段 MTU 为 1500 字节的链路，该 IP 数据报必须经过分片才能通过该链路。该原始 IP 数据报需被分成（ ）个片，若 IP 首部没有可选字段，则最后一个片首部中的 Offset 字段为（ ）。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A. 2</p>
+</li>
+<li>
+<p>B. 3</p>
+</li>
+<li>
+<p>C. 4</p>
+</li>
+<li>
+<p>D. 5</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>答案</strong>：B</p>
+</div>
+<div class="paragraph">
+<p><strong>Offset字段选项</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A. 370</p>
+</li>
+<li>
+<p>B. 740</p>
+</li>
+<li>
+<p>C. 1480</p>
+</li>
+<li>
+<p>D. 2960</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>答案</strong>：A</p>
+</div>
+<div class="paragraph">
+<p><strong>解析</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>数据报总长度为 3000 字节，IP 首部为 20 字节，数据部分为 2980 字节。</p>
+</li>
+<li>
+<p>每个分片的最大数据部分为 1480 字节（1500 - 20）。1480/8 能除浄</p>
+</li>
+<li>
+<p>分片情况如下：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>第一片：20字节首部 + 1480字节数据</p>
+</li>
+<li>
+<p>第二片：20字节首部 + 1480字节数据</p>
+</li>
+<li>
+<p>第三片：20字节首部 + 20字节数据</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>最后一片的偏移量为 370</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example4">Example4</h5>
+<h3 id="_ip_数据报分片字段的作用" class="discrete">IP 数据报分片字段的作用</h3>
+<div class="paragraph">
+<p><strong>题目</strong>：IP 数据报的分段和重装配要用到报文头部的（ ）个字段。其中，分片偏移字段（段偏置值）表示数的单位是（ ）字节；标记字段M标志（MF位）为 0 表示（ ）。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A. 1</p>
+</li>
+<li>
+<p>B. 2</p>
+</li>
+<li>
+<p>C. 3</p>
+</li>
+<li>
+<p>D. 4</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>答案</strong>：D</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A. 4</p>
+</li>
+<li>
+<p>B. 8</p>
+</li>
+<li>
+<p>C. 1</p>
+</li>
+<li>
+<p>D. 13</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>答案</strong>：B</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A. 不能分片</p>
+</li>
+<li>
+<p>B. 允许分片</p>
+</li>
+<li>
+<p>C. 之后还有分片</p>
+</li>
+<li>
+<p>D. 最后一个分片</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>答案</strong>：D</p>
+</div>
+<div class="paragraph">
+<p><strong>解析</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>分片需要使用 总长度、标识符、标志字段（MF位）、分片偏移字段共 4 个字段。具体解释参下面详解。</p>
+</li>
+<li>
+<p>分片偏移字段的单位是 8 字节。</p>
+</li>
+<li>
+<p>MF 位为 0 表示这是最后一个分片。</p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p>IP 数据报的分段与重装配涉及以下 ‌4 个关键字段‌：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>总长度（Total Length）‌，16 位字段，表示数据报首部与数据部分的总长度（单位为字节），用于分片后重组数据报‌。</p>
+</li>
+<li>
+<p>标识符（Identification）‌，16 位字段，唯一标识同一数据报的所有分片，确保重装时归属正确‌。</p>
+</li>
+<li>
+<p>标记字段（Flags）‌，3 位字段，包含：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MF（More Fragments）位‌：值为 0 时表示当前分片是最后一个分片，为 1 时表示后续还有分片‌。</p>
+</li>
+<li>
+<p>DF（Don’t Fragment）位‌：控制是否允许分片（值为 1 表示禁止分片）‌。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>分片偏移(Fragment Offset)，13 位字段，指示分片在原数据报中的相对位置，单位是 ‌8 字节‌（例如偏移值 1 对应实际位置 8 字节）‌。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>总结‌: 题目中“报文头部的字段数”明确为 ‌4 个‌（标识符、总长度、分片偏移、标记字段）。</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -3495,7 +3868,7 @@ D: 引号错误（同C）。</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-10 18:23:47 +0800
+Last updated 2025-05-10 19:35:49 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
