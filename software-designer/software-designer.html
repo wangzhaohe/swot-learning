@@ -569,6 +569,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel2">
 <li><a href="#_寻址单元数计算">寻址单元数计算</a></li>
 <li><a href="#_存储体系位示图_第几个字多少字">存储体系位示图 (第几个字)(多少字)</a></li>
+<li><a href="#_存储地址编号">存储地址编号</a></li>
 </ul>
 </li>
 </ul>
@@ -582,7 +583,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
     // 获取按钮和 div 元素
     const toggleButton = document.getElementById('toggleButton');
     const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
 
     // 添加点击事件监听器
     toggleButton.addEventListener('click', () => {
@@ -1985,12 +1986,158 @@ C（2²²）和D（2²¹）：无对应计算逻辑支持‌。</pre>
 </ul>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_存储地址编号">存储地址编号</h3>
+<div class="paragraph">
+<p>设用 2K×4 位的存储器芯片组成 16K×8 位的存储器（地址单元为 0000H~3FFFH，每个芯片的地址空间连续)，则地址单元 <strong>0B1FH</strong> 所在芯片的最小地址编号为（ ）。</p>
+</div>
+<div class="paragraph">
+<p><strong>A</strong> 0000H; <strong>B</strong> 0800H; <strong>C</strong> 2000H; <strong>D</strong> 2800H;</p>
+</div>
+<div class="paragraph">
+<p>先分析问题：</p>
+</div>
+<hr>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>什么是「2K×4位的芯片」？</p>
+<div class="ulist">
+<ul>
+<li>
+<p>「2K」表示有 <strong>2 × 1024 = 2048</strong> 个地址单元</p>
+</li>
+<li>
+<p>「4位」表示每个地址单元存的是 <strong>4位数据</strong>（半个字节）</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>我们要做一个「16K × 8位」的存储器</p>
+<div class="ulist">
+<ul>
+<li>
+<p>「16K」表示有 <strong>16 × 1024 = 16384</strong> 个地址单元</p>
+</li>
+<li>
+<p>每个地址要存 <strong>8 位数据</strong>（1 个字节）</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>怎么用小芯片拼出大存储器？</strong></p>
+</div>
+<div class="paragraph">
+<p>现在有很多个「2K × 4位」的小芯片。要拼成「16K × 8位」的存储器：</p>
+</div>
+<div class="paragraph">
+<p>第一步：数据宽度</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>每个芯片只有 4 位，但我们需要 8 位 → 所以 <strong>要用两个芯片拼起来</strong></p>
+</li>
+<li>
+<p>一个管高 4 位，一个管低 4 位，所以每个地址要用 <strong>2 个芯片</strong>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>第二步：地址数量</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>每个芯片能放 2K 个地址，但我们需要 16K 个地址，所以需要
+16K / 2K = <strong>8 组地址区间</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>每组地址，需要 2 个芯片（见上一步），所以总共是：<strong>8 组 × 2 个芯片 = 16 个芯片</strong>。</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>看看题目问什么？</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>地址单元 0B1FH（十六进制）是在哪个芯片中？这个芯片的起始地址是多少？</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>把 0B1F₁₆ 换成十进制 <code>0B1F₁₆ = 2847₁₀</code>，然后我们看一下每组芯片的地址范围是多大：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>每组是 2K 地址 → 2048 个地址</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>所以地址分组是这样的：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top">区块编号</th>
+<th class="tableblock halign-left valign-top">地址范围（十六进制）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0000H ~ 07FFH &#8594; (0000 ~ 2047)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0800H ~ 0FFFH &#8594; (2048 ~ 4095)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1000H ~ 17FFH &#8594; (4096 ~ 6143)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">……</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">……</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3800H ~ 3FFFH &#8594; (14335 ~ 16383)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>那 0B1F 属于哪组？</p>
+</div>
+<div class="paragraph">
+<p>看看 0B1F 在不在 0800H ~ 0FFFH 里？<br>
+是的！属于 <strong>第 1 组</strong>（编号为 1）</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>所以这个芯片的最小地址是：<strong>0800H</strong>，最后答案是：<strong>B. 0800H</strong>。</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-10 08:28:33 +0800
+Last updated 2025-05-10 11:07:53 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
