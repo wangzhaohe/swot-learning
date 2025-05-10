@@ -554,6 +554,14 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_无向图顶点度数">无向图顶点度数</a></li>
 </ul>
 </li>
+<li><a href="#_存储系统与寻址结构">存储系统与寻址结构</a>
+<ul class="sectlevel2">
+<li><a href="#_寻址单元数计算">寻址单元数计算</a></li>
+<li><a href="#_存储体系位示图_第几个字多少字">存储体系位示图 (第几个字)(多少字)</a></li>
+<li><a href="#_存储地址编号">存储地址编号</a></li>
+</ul>
+</li>
+<li><a href="#_指令流水线">指令流水线</a></li>
 <li><a href="#_操作系统">操作系统</a>
 <ul class="sectlevel2">
 <li><a href="#_进程同步与互斥pv_操作">进程同步与互斥（PV 操作）</a>
@@ -563,13 +571,6 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_example">Example</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a href="#_存储系统与寻址结构">存储系统与寻址结构</a>
-<ul class="sectlevel2">
-<li><a href="#_寻址单元数计算">寻址单元数计算</a></li>
-<li><a href="#_存储体系位示图_第几个字多少字">存储体系位示图 (第几个字)(多少字)</a></li>
-<li><a href="#_存储地址编号">存储地址编号</a></li>
 </ul>
 </li>
 </ul>
@@ -1584,174 +1585,6 @@ A  B C  D</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_操作系统">操作系统</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_进程同步与互斥pv_操作">进程同步与互斥（PV 操作）</h3>
-<div class="sect3">
-<h4 id="_前趋图">前趋图</h4>
-<div class="paragraph">
-<p>前趋图（Precedence Graph）是一种用于表示任务或进程之间执行顺序关系的图形表示方法。它通常用于项目管理、操作系统的进程调度、编译原理中的指令调度等领域，以帮助确定任务或进程的执行顺序和依赖关系。</p>
-</div>
-<div class="paragraph">
-<p>前趋图的特点：</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>节点（Vertices）</strong>：图中的每个节点代表一个任务或进程。</p>
-</li>
-<li>
-<p><strong>有向边（Directed Edges）</strong>：图中的边表示任务或进程之间的依赖关系。如果存在一条从节点 A 指向节点 B 的有向边，那么它表示任务 A 必须在任务 B 之前完成。</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>前趋图的作用：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>确定执行顺序</strong>：通过分析前趋图，可以确定哪些任务可以并行执行，哪些任务必须按顺序执行。</p>
-</li>
-<li>
-<p><strong>避免死锁</strong>：在操作系统中，前趋图可以帮助设计避免死锁的资源分配策略。</p>
-</li>
-<li>
-<p><strong>优化调度</strong>：在编译器设计中，前趋图可以帮助优化指令的执行顺序，提高程序的执行效率。</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>前趋图的示例：</p>
-</div>
-<div class="paragraph">
-<p>假设有四个任务 A、B、C、D，其中：
-- 任务 A 必须在任务 B 和 C 之前完成。
-- 任务 B 和 C 必须在任务 D 之前完成。</p>
-</div>
-<div class="paragraph">
-<p>前趋图可以表示为：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code><span></span>  A
-  │
-  ▼
-  B---C
-  │    │
-  ▼    ▼
-    D</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>在这个图中，A 是 B 和 C 的前趋，B 和 C 是 D 的前趋。</p>
-</div>
-<div class="paragraph">
-<p>在操作系统的进程调度中，前趋图可以帮助操作系统确定进程的执行顺序，确保系统资源的有效利用和进程的正确执行。</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_pv_操作">PV 操作</h4>
-<div class="paragraph">
-<p>PV操作是操作系统中用于进程同步与互斥的一种机制，由两部分组成：P操作（Proberen，荷兰语中的“测试”）和V操作（Verhogen，荷兰语中的“增加”）。这种机制通常与信号量（Semaphore）一起使用，信号量是一个整数变量，用于控制对共享资源的访问。</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>P操作（等待操作）</p>
-<div class="ulist">
-<ul>
-<li>
-<p>P操作用于申请资源。当一个进程需要访问共享资源时，它会执行P操作。如果信号量的值大于0，表示资源可用，信号量减1，进程继续执行。如果信号量的值为0，表示资源不可用，进程将被阻塞，直到信号量的值变为正数。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>V操作（释放操作）</p>
-<div class="ulist">
-<ul>
-<li>
-<p>V操作用于释放资源。当一个进程完成对共享资源的访问后，它会执行V操作。这会使信号量的值增加1。如果此时有其他进程因为资源不可用而被阻塞，那么V操作会唤醒其中一个阻塞的进程，使其可以继续执行。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>信号量的类型</p>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>整型信号量</strong>：信号量的值可以是任意整数，用于表示资源的数量。当信号量的值为0时，表示没有资源可用。</p>
-</li>
-<li>
-<p><strong>二进制信号量</strong>：信号量的值只能是0或1，用于实现互斥锁。0表示锁被占用，1表示锁可用。</p>
-</li>
-</ol>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>PV操作广泛应用于操作系统中的进程同步、互斥、死锁避免等领域。例如：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>进程同步</strong>：确保多个进程按照特定的顺序执行。</p>
-</li>
-<li>
-<p><strong>互斥访问</strong>：确保在任何时刻只有一个进程可以访问共享资源。</p>
-</li>
-<li>
-<p><strong>避免死锁</strong>：通过控制资源的分配和释放，避免系统进入死锁状态。</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>通过合理使用PV操作，可以有效地管理进程间的协作和资源共享，提高系统的稳定性和效率。</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_example">Example</h4>
-<div class="paragraph">
-<p>进程 P1、P2、P3、P4、P5 的 <a href="img/graphviz-pv-2025-05-08-193314.png">前趋图</a> 如下：</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="img/graphviz-pv-2025-05-08-193314.png" alt="graphviz pv 2025 05 08 193314" width="268" height="142">
-</div>
-</div>
-<div class="paragraph">
-<p>若用 PV 操作控制进程并发执行的过程，则需要设置 4 个信号量 S1、S2、S3、S4，且信号量初值都等于零。下面 <a href="img/graphviz-2025-05-08-194149.png">PV图</a> 中 a 和 b 应分别填写（），c 和 d 应分别填写（），e 和 f 应分别填写（）。</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="img/graphviz-2025-05-08-194149.png" alt="graphviz 2025 05 08 194149" width="467" height="296">
-</div>
-</div>
-<div class="paragraph">
-<p><strong>答案解析：</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>a 和 b 处</strong>：当 P1 和 P2 执行完毕后，它们需要通过执行 V 操作来增加信号量 S1 和 S2 的值，从而通知 P3 可以开始执行。因此，a 处应填写 V(S1)，b 处应填写 V(S2)。</p>
-</li>
-<li>
-<p><strong>c 和 d 处</strong>：进程 P3 在开始执行前，需要通过执行 P 操作来检查 S1 和 S2 的值是否大于 0。如果 S1 和 S2 的值都大于 0，表示 P1 和 P2 已经执行完毕，P3 可以开始执行。因此，c 处应填写 P(S1)，d 处应填写 P(S2)。</p>
-</li>
-<li>
-<p><strong>e 和 f 处</strong>：进程 P4 和 P5 在开始执行前，需要通过执行 P 操作来检查 S3 和 S4 的值是否大于 0。如果 S3 和 S4 的值都大于 0，表示 P3 已经执行完毕，P4 和 P5 可以开始执行。因此，e 处应填写 P(S3)，f 处应填写 P(S4)。</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="_存储系统与寻址结构">存储系统与寻址结构</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -2134,10 +1967,240 @@ C（2²²）和D（2²¹）：无对应计算逻辑支持‌。</pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_指令流水线">指令流水线</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>某指令流水线由 4 段组成，各段所需要的时间如下图所示。连续输入 8 条指令时的吞吐率(单位时间内流水线所完成的任务数或输出的结果数)为()</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/graphviz-2025-05-10-120508.svg" alt="graphviz 2025 05 10 120508" width="539" height="58">
+</div>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha">
+<li>
+<p>8/56Δt</p>
+</li>
+<li>
+<p>8/32Δt</p>
+</li>
+<li>
+<p>8/28Δt</p>
+</li>
+<li>
+<p>8/24Δt</p>
+</li>
+</ol>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>根据题目描述，某指令流水线由4段组成，各段所需时间分别为Δt、2Δt、3Δt、Δt。连续输入8条指令时的吞吐率计算如下：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>流水线周期‌：由最长段决定，即3Δt。</p>
+</li>
+<li>
+<p>总执行时间‌：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>第一条指令完成时间 = 各段时间和 = Δt + 2Δt + 3Δt + Δt = 7Δt。</p>
+</li>
+<li>
+<p>后续7条指令每间隔一个周期（3Δt）完成，因此<strong>总时间 = 7Δt + 7×3Δt = 28Δt</strong>。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>吞吐率‌：完成任务数（8条）除以总时间（28Δt），即 ‌8/28Δt‌。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>因此，正确答案为 ‌C‌。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_操作系统">操作系统</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_进程同步与互斥pv_操作">进程同步与互斥（PV 操作）</h3>
+<div class="sect3">
+<h4 id="_前趋图">前趋图</h4>
+<div class="paragraph">
+<p>前趋图（Precedence Graph）是一种用于表示任务或进程之间执行顺序关系的图形表示方法。它通常用于项目管理、操作系统的进程调度、编译原理中的指令调度等领域，以帮助确定任务或进程的执行顺序和依赖关系。</p>
+</div>
+<div class="paragraph">
+<p>前趋图的特点：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>节点（Vertices）</strong>：图中的每个节点代表一个任务或进程。</p>
+</li>
+<li>
+<p><strong>有向边（Directed Edges）</strong>：图中的边表示任务或进程之间的依赖关系。如果存在一条从节点 A 指向节点 B 的有向边，那么它表示任务 A 必须在任务 B 之前完成。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>前趋图的作用：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>确定执行顺序</strong>：通过分析前趋图，可以确定哪些任务可以并行执行，哪些任务必须按顺序执行。</p>
+</li>
+<li>
+<p><strong>避免死锁</strong>：在操作系统中，前趋图可以帮助设计避免死锁的资源分配策略。</p>
+</li>
+<li>
+<p><strong>优化调度</strong>：在编译器设计中，前趋图可以帮助优化指令的执行顺序，提高程序的执行效率。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>前趋图的示例：</p>
+</div>
+<div class="paragraph">
+<p>假设有四个任务 A、B、C、D，其中：
+- 任务 A 必须在任务 B 和 C 之前完成。
+- 任务 B 和 C 必须在任务 D 之前完成。</p>
+</div>
+<div class="paragraph">
+<p>前趋图可以表示为：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>  A
+  │
+  ▼
+  B---C
+  │    │
+  ▼    ▼
+    D</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在这个图中，A 是 B 和 C 的前趋，B 和 C 是 D 的前趋。</p>
+</div>
+<div class="paragraph">
+<p>在操作系统的进程调度中，前趋图可以帮助操作系统确定进程的执行顺序，确保系统资源的有效利用和进程的正确执行。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_pv_操作">PV 操作</h4>
+<div class="paragraph">
+<p>PV操作是操作系统中用于进程同步与互斥的一种机制，由两部分组成：P操作（Proberen，荷兰语中的“测试”）和V操作（Verhogen，荷兰语中的“增加”）。这种机制通常与信号量（Semaphore）一起使用，信号量是一个整数变量，用于控制对共享资源的访问。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>P操作（等待操作）</p>
+<div class="ulist">
+<ul>
+<li>
+<p>P操作用于申请资源。当一个进程需要访问共享资源时，它会执行P操作。如果信号量的值大于0，表示资源可用，信号量减1，进程继续执行。如果信号量的值为0，表示资源不可用，进程将被阻塞，直到信号量的值变为正数。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>V操作（释放操作）</p>
+<div class="ulist">
+<ul>
+<li>
+<p>V操作用于释放资源。当一个进程完成对共享资源的访问后，它会执行V操作。这会使信号量的值增加1。如果此时有其他进程因为资源不可用而被阻塞，那么V操作会唤醒其中一个阻塞的进程，使其可以继续执行。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>信号量的类型</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>整型信号量</strong>：信号量的值可以是任意整数，用于表示资源的数量。当信号量的值为0时，表示没有资源可用。</p>
+</li>
+<li>
+<p><strong>二进制信号量</strong>：信号量的值只能是0或1，用于实现互斥锁。0表示锁被占用，1表示锁可用。</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>PV操作广泛应用于操作系统中的进程同步、互斥、死锁避免等领域。例如：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>进程同步</strong>：确保多个进程按照特定的顺序执行。</p>
+</li>
+<li>
+<p><strong>互斥访问</strong>：确保在任何时刻只有一个进程可以访问共享资源。</p>
+</li>
+<li>
+<p><strong>避免死锁</strong>：通过控制资源的分配和释放，避免系统进入死锁状态。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>通过合理使用PV操作，可以有效地管理进程间的协作和资源共享，提高系统的稳定性和效率。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example">Example</h4>
+<div class="paragraph">
+<p>进程 P1、P2、P3、P4、P5 的 <a href="img/graphviz-pv-2025-05-08-193314.png">前趋图</a> 如下：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/graphviz-pv-2025-05-08-193314.png" alt="graphviz pv 2025 05 08 193314" width="268" height="142">
+</div>
+</div>
+<div class="paragraph">
+<p>若用 PV 操作控制进程并发执行的过程，则需要设置 4 个信号量 S1、S2、S3、S4，且信号量初值都等于零。下面 <a href="img/graphviz-2025-05-08-194149.png">PV图</a> 中 a 和 b 应分别填写（），c 和 d 应分别填写（），e 和 f 应分别填写（）。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/graphviz-2025-05-08-194149.png" alt="graphviz 2025 05 08 194149" width="467" height="296">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>答案解析：</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>a 和 b 处</strong>：当 P1 和 P2 执行完毕后，它们需要通过执行 V 操作来增加信号量 S1 和 S2 的值，从而通知 P3 可以开始执行。因此，a 处应填写 V(S1)，b 处应填写 V(S2)。</p>
+</li>
+<li>
+<p><strong>c 和 d 处</strong>：进程 P3 在开始执行前，需要通过执行 P 操作来检查 S1 和 S2 的值是否大于 0。如果 S1 和 S2 的值都大于 0，表示 P1 和 P2 已经执行完毕，P3 可以开始执行。因此，c 处应填写 P(S1)，d 处应填写 P(S2)。</p>
+</li>
+<li>
+<p><strong>e 和 f 处</strong>：进程 P4 和 P5 在开始执行前，需要通过执行 P 操作来检查 S3 和 S4 的值是否大于 0。如果 S3 和 S4 的值都大于 0，表示 P3 已经执行完毕，P4 和 P5 可以开始执行。因此，e 处应填写 P(S3)，f 处应填写 P(S4)。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-10 11:07:53 +0800
+Last updated 2025-05-10 12:28:40 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
