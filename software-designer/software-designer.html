@@ -598,6 +598,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_ip_数据报分片">IP 数据报分片</a></li>
 <li><a href="#_ip_地址分类">IP 地址分类</a></li>
+<li><a href="#_ip_地址特殊情况">IP 地址特殊情况</a></li>
 </ul>
 </li>
 </ul>
@@ -3782,6 +3783,90 @@ D: 引号错误（同C）。</pre>
 </ul>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_ip_地址特殊情况">IP 地址特殊情况</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">NetID 网络号</th>
+<th class="tableblock halign-left valign-top">HostID 主机号</th>
+<th class="tableblock halign-left valign-top">作为源地址发送</th>
+<th class="tableblock halign-left valign-top">作为目的地址接收</th>
+<th class="tableblock halign-left valign-top">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">全 0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">全 0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>在本网络内，表示本机</p>
+<div class="ulist">
+<ul>
+<li>
+<p>如尚未分配IP的设备，比如DHCP请求时<br></p>
+</li>
+<li>
+<p>webserver 启动时配置为 0.0.0.0 表示本机</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>在路由表中表示默认路由，意思是“所有未匹配的流量都应该走这个路由”</p>
+</li>
+</ol>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">全 0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">特定值</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">本网某个特定主机。如 0.0.0.5 表示“当前网络中的主机 5”  (<mark>现代网络不用了</mark>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">全 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">全 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">本网广播地址 255.255.255.255</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">特定值</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">全 0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">网络地址，表示一个网络</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">特定值</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">全 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">对特定网络所有主机广播地址</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">127</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">任何非全 0/1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">本地回环测试，回环地址</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -3903,7 +3988,7 @@ D: 引号错误（同C）。</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-10 19:38:59 +0800
+Last updated 2025-05-10 20:14:51 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
