@@ -405,7 +405,7 @@ https://git-scm.com/downloads
     // 获取按钮和 div 元素
     const toggleButton = document.getElementById('toggleButton');
     const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
 
     // 添加点击事件监听器
     toggleButton.addEventListener('click', () =&gt; {
