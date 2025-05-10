@@ -574,6 +574,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
+<li><a href="#_数据库">数据库</a>
+<ul class="sectlevel2">
+<li><a href="#_关系模式">关系模式</a></li>
+</ul>
+</li>
 <li><a href="#_编程语言">编程语言</a>
 <ul class="sectlevel2">
 <li><a href="#_c_语言">C 语言</a></li>
@@ -2254,6 +2259,330 @@ C（2²²）和D（2²¹）：无对应计算逻辑支持‌。</pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_数据库">数据库</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_关系模式">关系模式</h3>
+<div class="paragraph">
+<p>设有关系模式 R（课程，教师，学生，成绩，时间，教室），其中函数依赖集 F 如下：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>F＝{
+     课程 -&gt;-&gt; 教师，
+    (学生，课程) -&gt; 成绩，
+    (时间，教室) -&gt; 课程，
+    (时间，教师) -&gt; 教室，
+    (时间，学生) -&gt; 教室
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>问题：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>关系模式 R 的一个主键是 （1）</p>
+</li>
+<li>
+<p>R 规范化程度最高达到 （2）</p>
+</li>
+<li>
+<p>若将关系模式 R 分解为三个关系模式</p>
+<div class="literalblock">
+<div class="content">
+<pre>R1（课程，教师）
+R2（学生，课程，成绩）
+R3（学生，时间，教室，课程 ），</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>其中 R2 的规范化程度最高达到 （3） 。</p>
+</div>
+<hr>
+<h4 id="_该题目简化版为" class="discrete">该题目简化版为</h4>
+<div class="paragraph">
+<p>我们有一个表格 <code>R</code>，包含6个字段：
+‌<strong>课程、教师、学生、成绩、时间、教室</strong>‌，已知这些字段之间有如下关联规则（函数依赖）：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>一门课程可能对应多个教师（课程→→教师）</p>
+</li>
+<li>
+<p>学生+课程可以确定成绩（学生,课程→成绩）</p>
+</li>
+<li>
+<p>时间+教室可以确定课程（时间,教室→课程）</p>
+</li>
+<li>
+<p>时间+教师可以确定教室（时间,教师→教室）</p>
+</li>
+<li>
+<p>时间+学生可以确定教室（时间,学生→教室）</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>问题：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>‌<strong>主键是什么？</strong>‌</p>
+</li>
+<li>
+<p>‌<strong>这个表格设计最高满足第几范式（1NF/2NF/3NF/BCNF）？</strong>‌</p>
+</li>
+<li>
+<p>‌<strong>如果把表格拆成三个小表，其中 R2(学生,课程,成绩) 最高满足第几范式？</strong>‌</p>
+</li>
+</ol>
+</div>
+<hr>
+<h4 id="_第一步找主键问题1" class="discrete">第一步：找主键（问题1）</h4>
+<div class="paragraph">
+<p>‌<strong>主键</strong>‌ 是能唯一确定一行数据的最小字段组合。<strong>怎么找？</strong>‌
+尝试用最少的字段组合，看看能否推导出所有其他字段。</p>
+</div>
+<div class="paragraph">
+<p>‌<strong>候选组合：<code>(时间,学生)</code></strong>‌</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>已知 <code>时间+学生→教室</code>（规则5）</p>
+</li>
+<li>
+<p>已知 <code>时间+教室→课程</code>（规则3）→ 所以 <code>时间+学生→课程</code></p>
+</li>
+<li>
+<p>已知 <code>学生+课程→成绩</code>（规则2）→ 所以 <code>时间+学生→成绩</code></p>
+</li>
+<li>
+<p>课程 &#8594;&#8594; 教师（规则1，但教师是多值依赖，不影响主键）</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>✅ ‌<strong>结论</strong>‌：<code>(时间,学生)</code> 能推出所有字段，是主键。</p>
+</div>
+<hr>
+<h4 id="_第二步判断范式问题2" class="discrete">第二步：判断范式（问题2）</h4>
+<div class="paragraph">
+<p>‌<strong>范式升级路线</strong>‌：1NF → 2NF → 3NF → BCNF → 4NF
+我们逐步检查：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>‌<strong>1NF</strong>‌：表格没有重复列（比如没有“电话1,电话2”这种），每个字段都是不可再分的原子数据项，满足 ✅</p>
+</li>
+<li>
+<p>‌<strong>2NF</strong>‌：要求所有非主属性（成绩、教室、课程、教师）必须‌<strong>完全依赖</strong>‌主键（不能只依赖主键的一部分）。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>主键是 <code>(时间,学生)</code>，它由两个字段组成。</p>
+</li>
+<li>
+<p>检查是否有字段只依赖`时间`或只依赖`学生`？</p>
+</li>
+<li>
+<p><code>成绩`依赖</code>(学生,课程)<code>，而`课程`又依赖</code>(时间,学生)` → 间接完全依赖主键 ✅</p>
+</li>
+<li>
+<p><code>教室`直接依赖</code>(时间,学生)` ✅</p>
+</li>
+<li>
+<p><code>教师`依赖`课程</code>（多值依赖），但`课程`依赖主键 ✅</p>
+</li>
+<li>
+<p>满足2NF ✅</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>‌<strong>3NF</strong>‌：要求非主属性‌<strong>不能传递依赖</strong>‌主键（即不能有 A→B→C 这种链式依赖）。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>发现传递依赖：
+<code>(时间,学生)→教室</code>，且`(时间,教室)→课程` → 即 <code>(时间,学生)→教室→课程</code> ❌</p>
+</li>
+<li>
+<p>还有多值依赖 <code>课程→→教师</code> ❌</p>
+</li>
+<li>
+<p>‌<strong>不满足3NF</strong>‌，最高到2NF。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<hr>
+<h4 id="_第三步分解后的r2范式问题3" class="discrete">第三步：分解后的R2范式（问题3）</h4>
+<div class="paragraph">
+<p>分解后的小表 <code>R2(学生,课程,成绩)</code>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>‌<strong>函数依赖</strong>‌：<code>(学生,课程)→成绩</code></p>
+</li>
+<li>
+<p>‌<strong>主键</strong>‌：<code>(学生,课程)</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>检查范式：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>‌<strong>1NF</strong>‌：满足 ✅</p>
+</li>
+<li>
+<p>‌<strong>2NF</strong>‌：非主属性`成绩`完全依赖主键（没有部分依赖） ✅</p>
+</li>
+<li>
+<p>‌<strong>3NF</strong>‌：没有传递依赖（只有`(学生,课程)→成绩`一条直接依赖） ✅</p>
+</li>
+<li>
+<p>‌<strong>BCNF</strong>‌：所有依赖的左部都是候选键（这里依赖的左部`(学生,课程)`本身就是主键） ✅</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>✅ ‌<strong>R2最高满足BCNF</strong>‌。</p>
+</div>
+<hr>
+<h4 id="_最终答案" class="discrete">最终答案</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>主键：‌<strong>(时间,学生)</strong>‌</p>
+</li>
+<li>
+<p>原表R最高满足：‌<strong>2NF</strong>‌</p>
+</li>
+<li>
+<p>分解后的R2最高满足：‌<strong>BCNF</strong>‌</p>
+</li>
+</ol>
+</div>
+<hr>
+<h4 id="_举个实际例子" class="discrete">举个实际例子</h4>
+<div class="paragraph">
+<p>假设有一个选课表：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">时间</th>
+<th class="tableblock halign-left valign-top">学生</th>
+<th class="tableblock halign-left valign-top">教室</th>
+<th class="tableblock halign-left valign-top">课程</th>
+<th class="tableblock halign-left valign-top">教师</th>
+<th class="tableblock halign-left valign-top">成绩</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">周一9:00</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">101</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">数学</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">王老师</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">90</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">周一9:00</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">李四</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">101</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">数学</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">王老师</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">85</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p>‌<strong>主键</strong>‌：<code>(时间,学生)</code>（比如“周一9:00+张三”能唯一确定一行）</p>
+</li>
+<li>
+<p>‌<strong>问题</strong>‌：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>如果王老师换了，所有相关行都要修改（数据冗余）→ 不满足3NF</p>
+</li>
+<li>
+<p>拆成小表后（如R2只存学生-课程-成绩），冗余消失 → 满足BCNF</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+<h4 id="_你需要记住的套路" class="discrete">你需要记住的套路</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>‌<strong>找主键</strong>‌：从最小字段组合出发，尝试推导所有其他字段。</p>
+</li>
+<li>
+<p>‌<strong>判断范式</strong>‌：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>2NF：非主属性必须完全依赖主键</p>
+</li>
+<li>
+<p>3NF：不能有传递依赖</p>
+</li>
+<li>
+<p>BCNF：所有依赖的左部必须是候选键</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>‌<strong>多值依赖</strong>‌（→→）需 4NF 去解决，但题目中因传递依赖先卡在2NF。</p>
+</li>
+</ol>
+</div>
+<hr>
+<div class="paragraph">
+<p>该视频 1NF/2NF/3NF 讲得清楚 <a href="https://www.youtube.com/watch?v=rHiyuR2bElE" class="bare">https://www.youtube.com/watch?v=rHiyuR2bElE</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/Snipaste_2025-05-10_17-21-37.png" alt="1NF-2NF-3NF" width="520">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_编程语言">编程语言</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -2344,7 +2673,7 @@ C（2²²）和D（2²¹）：无对应计算逻辑支持‌。</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-10 13:15:46 +0800
+Last updated 2025-05-10 17:28:22 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
