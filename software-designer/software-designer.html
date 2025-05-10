@@ -552,6 +552,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_二叉树遍历顺序">二叉树遍历顺序</a></li>
 <li><a href="#_哈夫曼树最优二叉树">哈夫曼树(最优二叉树)</a></li>
 <li><a href="#_无向图顶点度数">无向图顶点度数</a></li>
+<li><a href="#_拓扑排序">拓扑排序</a></li>
 </ul>
 </li>
 <li><a href="#_状态转换机">状态转换机</a></li>
@@ -1624,6 +1625,53 @@ A  B C  D</pre>
 <p>则： \(\sum_{i=1}^{n} \deg(v_i) = 2e\)</p>
 </div>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_拓扑排序">拓扑排序</h3>
+<div class="paragraph">
+<p>（ ）是右图的合法拓扑序列。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/graphviz-2025-05-10-205110.svg" alt="graphviz 2025 05 10 205110" width="441" height="162">
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 654321
+B 123456
+C 563421
+D 564213</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>答案：A</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>本题考查数据结构的基础知识。</p>
+</div>
+<div class="paragraph">
+<p>拓扑排序是将AOV网中所有顶点排成一个线性序列的过程，并且该序列满足：若在AOV网中从顶点vi到vj有一条路径，则在该线性序列中，顶点vi必然在顶点vj之前。</p>
+</div>
+<div class="paragraph">
+<p>对AOV网进行拓扑排序的方法如下：</p>
+</div>
+<div class="paragraph">
+<p>(1)在AOV网中选择一个入度为零（没有前驱）的顶点且输出它；</p>
+</div>
+<div class="paragraph">
+<p>(2)从网中删除该顶点及与该顶点有关的所有边；</p>
+</div>
+<div class="paragraph">
+<p>(3)重复上述两步，直至网中不存在入度为零的顶点为止。</p>
+</div>
+<div class="paragraph">
+<p>本题中只有序列“6 5 4 3 2 1”可由上述过程导出。</p>
+</div>
+<div class="paragraph">
+<p>对有向图进行拓扑排序的结果会有两种情况：一种是所有顶点已输出，此时整个拓扑排序完成，说明网中不存在回路；另一种是尚有未输出的顶点，剩余的顶点均有前驱顶点，表明网中存在回路。</p>
 </div>
 </div>
 </div>
@@ -4055,7 +4103,7 @@ D: 引号错误（同C）。</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-10 20:42:38 +0800
+Last updated 2025-05-10 21:13:47 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
