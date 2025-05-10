@@ -136,6 +136,9 @@
 <v t="swot.20250510201445.1"><vh>IP 地址特殊情况</vh></v>
 <v t="swot.20250510201742.1"><vh>子网掩码计算子网号</vh></v>
 <v t="swot.20250510202838.1"><vh>IPv6 协议</vh></v>
+<v t="swot.20250510203357.1"><vh>RIP 协议</vh>
+<v t="swot.20250510203357.2"><vh>Example</vh></v>
+</v>
 </v>
 </v>
 <v t="swot.20250510130542.1"><vh>编程语言</vh>
@@ -3225,6 +3228,21 @@ image::img/ip-subnet-2025-05-10-201820.png[ip-subnet-mask, 1080]
 <t tx="swot.20250510202838.1">
 image::img/ip-v6-2025-05-10-202903.png[ipv6,1024]
 
+</t>
+<t tx="swot.20250510203357.1">RIP（Routing Information Protocol，路由信息协议）是一种内部网关协议（IGP），用于在小型或中等规模的自治系统（AS）内部的路由器之间交换路由信息。RIP 是最早被广泛使用的动态路由协议之一。
+
+实际上这是应用层协议，走 UDP
+
+RIP 报文最大为 20B * 25 + 4 = 504B
+
+image::img/rip-2025-05-10-203457.png[rip1,1024]
+
+image::img/rip-2025-05-10-203513.png[rip2,1024]
+
+
+// https://www.bilibili.com/video/BV1184y1k76S
+</t>
+<t tx="swot.20250510203357.2">image::img/rip-2025-05-10-203533.png[rip-example,1024]
 </t>
 </tnodes>
 </leo_file>
