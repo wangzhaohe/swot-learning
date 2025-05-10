@@ -98,6 +98,7 @@
 <v t="swot.20250509175355.1"><vh>哈夫曼树(最优二叉树)</vh></v>
 <v t="swot.20250509180254.1"><vh>无向图顶点度数</vh></v>
 </v>
+<v t="swot.20250510124842.1"><vh>状态转换机</vh></v>
 <v t="swot.20250509232901.1"><vh>存储系统与寻址结构</vh>
 <v t="swot.20250509232946.1"><vh>寻址单元数计算</vh></v>
 <v t="swot.20250509235804.1"><vh>存储体系位示图 (第几个字)(多少字)</vh></v>
@@ -2429,6 +2430,100 @@ digraph pipeline {
     dt2 [label="2Δt"];
     dt3 [label="3Δt"];
     dt4 [label="Δt"];
+}
+....
+</t>
+<t tx="swot.20250510124842.1">// 编译原理，上下有好几集 https://www.bilibili.com/video/BV1TQ4y1D7Vk
+
+下图所示为一个不确定有限自动机(NFA)的状态转换图，与该 NFA 等价的 DFA 是 ()
+
+.解析：NFA 正规集 0 (0|11*) 0 -&gt; *答案为 C*
+[graphviz, target="img/graphviz-2025-05-10-125143-NFA", format=svg]
+....
+digraph finite_state_machine {
+    rankdir=LR;
+    node [shape = doublecircle]; S5;
+    node [shape = circle];
+    start [label="", width=0, height=0, shape=none];
+
+    start -&gt; S0;
+    S0 -&gt; S1 [label = "0"];
+    S1 -&gt; S4 [label = "0"];
+    S1 -&gt; S2 [label = "ε"];
+    S2 -&gt; S3 [label = "1"];
+    S3 -&gt; S2 [label = "ε"];
+    S3 -&gt; S4 [label = "ε"];
+    S4 -&gt; S5 [label = "0"];
+}
+....
+
+IMPORTANT: DFA 不允许有 ε 空输入。
+
+.选项 A -&gt; 正规集为 01*0;
+[graphviz, target="img/graphviz-2025-05-10-125311-A", format=svg]
+....
+digraph finite_state_machine {
+    rankdir=LR;
+    node [shape=doublecircle, label=""]; End
+    node [shape = circle];
+    start [label="", width=0, height=0, shape=none];
+
+    start -&gt; S0;
+    S0 -&gt; S1  [label = "0"];
+    S1 -&gt; S1  [label = "1"];
+    S1 -&gt; End [label = "0"];
+}
+....
+
+.选项 B -&gt; 正规集为 001*0
+[graphviz, target="img/graphviz-2025-05-10-125444-B", format=svg]
+....
+digraph finite_state_machine {
+    rankdir=LR;
+    node [shape=doublecircle, label=""]; End
+    node [shape = circle];
+    start [label="", width=0, height=0, shape=none];
+
+    start -&gt; S0;
+    S0 -&gt; S1  [label = "0"];
+    S1 -&gt; S2  [label = "0"];
+    S2 -&gt; S2  [label = "1"];
+    S2 -&gt; End [label = "0"];
+}
+....
+
+.选项 C -&gt; 正规集为 0(0|11*)0
+[graphviz, target="img/graphviz-2025-05-10-125457-C", format=svg]
+....
+digraph finite_state_machine {
+    rankdir=LR;
+    node [shape=doublecircle, label=""]; End
+    node [shape = circle];
+    start [label="", width=0, height=0, shape=none];
+
+    start -&gt; S0;
+    S0 -&gt; S1  [label = "0"];
+    S1 -&gt; S2  [label = "0"];
+    S1 -&gt; S2  [label = "1"];
+    S2 -&gt; S2  [label = "1"];
+    S2 -&gt; End [label = "0"];
+}
+....
+
+.选项 D -》 正规集为 01*00
+[graphviz, target="img/graphviz-2025-05-10-125519-D", format=svg]
+....
+digraph finite_state_machine {
+    rankdir=LR;
+    node [shape=doublecircle, label=""]; End
+    node [shape = circle];
+    start [label="", width=0, height=0, shape=none];
+
+    start -&gt; S0;
+    S0 -&gt; S1  [label = "0"];
+    S1 -&gt; S2  [label = "0"];
+    S1 -&gt; S1  [label = "1"];
+    S2 -&gt; End [label = "0"];
 }
 ....
 </t>
