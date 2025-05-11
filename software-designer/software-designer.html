@@ -557,6 +557,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_拓扑排序">拓扑排序</a></li>
 </ul>
 </li>
+<li><a href="#_算法">算法</a>
+<ul class="sectlevel2">
+<li><a href="#_算法策略和时间复杂度">算法策略和时间复杂度</a></li>
+</ul>
+</li>
 <li><a href="#_状态转换机">状态转换机</a></li>
 <li><a href="#_存储系统与寻址结构">存储系统与寻址结构</a>
 <ul class="sectlevel2">
@@ -1850,6 +1855,83 @@ D 564213</pre>
 </div>
 <div class="paragraph">
 <p>对有向图进行拓扑排序的结果会有两种情况：一种是所有顶点已输出，此时整个拓扑排序完成，说明网中不存在回路；另一种是尚有未输出的顶点，剩余的顶点均有前驱顶点，表明网中存在回路。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_算法">算法</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_算法策略和时间复杂度">算法策略和时间复杂度</h3>
+<div class="paragraph">
+<p>某货车运输公司有一个中央仓库和n个运输目的地，每天要从中央仓库将货物运输到所有的运输目的地，到达每个运输目的地一次且仅一次，最后回到中央仓库。在两个地点i和j之间运输货物存在费用cij。为求解旅行费用总和最小的运输路径，设计如下算法：首先选择离中央仓库最近的运输目的地1，然后选择离运输目的地1最近的运输目的地2,……，每次在未访问过的运输目的地中选择离当前运输目的地最近的运输目的地，最后回到中央仓库。</p>
+</div>
+<div class="paragraph">
+<p>则该算法采用了（ ）算法设计策略，其时间复杂度为（ ）。</p>
+</div>
+<hr>
+<div class="ulist">
+<ul>
+<li>
+<p>分治（Divide and Conquer）：将问题分解为若干子问题，递归解决子问题后合并结果。这里没有明显的分解和合并过程。</p>
+</li>
+<li>
+<p>动态规划（Dynamic Programming）：将问题分解为重叠子问题，保存子问题的解以避免重复计算。这里没有保存子问题的解或利用重叠子问题的特性。</p>
+</li>
+<li>
+<p><mark>贪心（Greedy）：在每一步选择当前看起来最优的局部解，希望最终得到全局最优解。这里的“每次选择最近的未访问目的地”正是贪心策略的体现。</mark></p>
+</li>
+<li>
+<p>回溯（Backtracking）：通过尝试所有可能的解，并在发现当前路径不可能得到最优解时回溯。这里没有回溯的过程。</p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p>时间复杂度分析
+贪心的最近邻算法的时间复杂度可以如下分析：</p>
+</div>
+<div class="paragraph">
+<p>从中央仓库出发，选择最近的未访问目的地：需要比较n个目的地的距离，O(n)时间。</p>
+</div>
+<div class="paragraph">
+<p>从第一个目的地选择下一个最近的未访问目的地：需要比较n-1个目的地的距离，O(n)时间。</p>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>从第n-1个目的地选择最后一个未访问目的地：O(1)时间。</p>
+</div>
+<div class="paragraph">
+<p>最后返回中央仓库：O(1)时间。</p>
+</div>
+<div class="paragraph">
+<p>总的时间复杂度是：O(n) + O(n-1) + &#8230;&#8203; + O(1) = O(n^2)。</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>总结时间复杂度	含义	例子</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>O(1)	一次搞定	数组取元素 arr[0]</p>
+</li>
+<li>
+<p>O(log n)	每次砍掉一半数据	二分查找、平衡二叉树的查找</p>
+</li>
+<li>
+<p>O(n)	遍历所有数据	找最大值、线性查找</p>
+</li>
+<li>
+<p>O(n log n)	分治 + 每层处理 n 次	归并排序、快速排序</p>
+</li>
+<li>
+<p>O(n²)	双重循环	冒泡排序、最近邻贪心 TSP</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -4586,7 +4668,7 @@ D 24</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-11 18:16:21 +0800
+Last updated 2025-05-11 19:34:33 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
