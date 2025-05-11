@@ -549,6 +549,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_数据结构">数据结构</a>
 <ul class="sectlevel2">
+<li><a href="#_二叉排序树关键码序列">二叉排序树关键码序列</a></li>
 <li><a href="#_二叉树小根堆">二叉树小根堆</a></li>
 <li><a href="#_二叉树遍历顺序">二叉树遍历顺序</a></li>
 <li><a href="#_哈夫曼树最优二叉树">哈夫曼树(最优二叉树)</a></li>
@@ -559,6 +560,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_状态转换机">状态转换机</a></li>
 <li><a href="#_存储系统与寻址结构">存储系统与寻址结构</a>
 <ul class="sectlevel2">
+<li><a href="#_存储单元地址宽度">存储单元地址宽度</a></li>
 <li><a href="#_寻址单元数计算">寻址单元数计算</a></li>
 <li><a href="#_存储体系位示图_第几个字多少字">存储体系位示图 (第几个字)(多少字)</a></li>
 <li><a href="#_存储地址编号">存储地址编号</a></li>
@@ -615,6 +617,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_c_语言">C 语言</a></li>
 </ul>
 </li>
+<li><a href="#_软件测试">软件测试</a></li>
 <li><a href="#_uml_图">UML 图</a>
 <ul class="sectlevel2">
 <li><a href="#_类图符号">类图符号</a></li>
@@ -1345,6 +1348,135 @@ D 2^-15 ×（1-2^-10）</pre>
 <h2 id="_数据结构">数据结构</h2>
 <div class="sectionbody">
 <div class="sect2">
+<h3 id="_二叉排序树关键码序列">二叉排序树关键码序列</h3>
+<div class="paragraph">
+<p>可以构造出下图所示二叉排序树（二叉检索树、二叉查找树）的关键码序列是（ B ）。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-2025-05-11-164301.svg" alt="mermaid 2025 05 11 164301" width="294" height="317">
+</div>
+<div class="title">Figure 1. <a href="img/mermaid-2025-05-11-164301.svg">二叉排序树</a></div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 10 13 17 19 23 27 31 40 65 91
+B 23 40 91 17 19 10 31 65 27 13
+C 23 19 40 27 17 13 10 91 65 31
+D 27 31 40 65 91 13 10 17 23 19</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>要构造题目所示的二叉排序树，关键码序列需满足以下条件：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>根节点必须最先插入</strong>：根节点是23，因此任何以其他数字开头的序列（如选项A、D）均可排除。</p>
+</li>
+<li>
+<p><strong>父节点必须在子节点之前插入</strong>：每个子节点的位置由其父节点的值决定，因此父节点必须已存在于树中。</p>
+</li>
+<li>
+<p><strong>插入路径需符合树的层级关系</strong>：<mark>插入时需从根节点开始，逐层比较，最终定位到正确位置。</mark></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>选项B的插入过程分析</strong>：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 83.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">插入顺序</th>
+<th class="tableblock halign-left valign-top">插入逻辑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">23</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">作为根节点插入。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">40</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">与23比较，40&gt;23，成为23的右子节点。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">91</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">先与23比较，进入右子树，再与40比较，91&gt;40，成为40的右子节点。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">17</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">先与23比较，17&lt;23，成为23的左子节点。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">19</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">先与23比较，进入左子树，与17比较，19&gt;17，成为17的右子节点。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">先与23比较，进入左子树，与17比较，10&lt;17，成为17的左子节点。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">31</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">先与23比较，进入右子树，与40比较，31&lt;40，成为40的左子节点。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">65</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">先与23比较，进入右子树，与40比较，进入右子树，与91比较，65&lt;91，成为91的左子节点。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">27</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">先与23比较，进入右子树，与40比较，进入左子树，与31比较，27&lt;31，成为31的左子节点。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">13</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">先与23比较，进入左子树，与17比较，进入左子树，与10比较，13&gt;10，成为10的右子节点。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>为何有时与根节点比较，有时与父节点比较？</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>插入始终从根开始</strong>：每次插入新节点时，必须从根节点23开始逐层比较。例如，插入13时，虽然其父节点是10，但插入路径需经过23→17→10，最终确定13的位置。</p>
+</li>
+<li>
+<p><strong>路径依赖父节点顺序</strong>：父节点的插入顺序决定了子节点的比较路径。例如，插入27时，路径为23→40→31，因为31已插入，才能进一步比较27的位置。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>错误选项分析</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>选项C</strong>：插入顺序为23,19,40,27,17,13,10,91,65,31。</p>
+</li>
+<li>
+<p>插入19时，23的左子节点应为17，但19被错误地插入到左子树，导致后续17无法正确插入到23的左子树，结构混乱。</p>
+</li>
+<li>
+<p><strong>选项D</strong>：以27开头，根节点必须是23，因此排除。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>结论</strong>：选项 B 的插入顺序严格遵循二叉排序树的构造规则，每个节点的父节点均在其之前插入，且路径正确，最终形成题目所示的树结构。因此，正确答案为：</p>
+</div>
+<div class="paragraph">
+<p><strong>答案：B</strong></p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_二叉树小根堆">二叉树小根堆</h3>
 <div class="paragraph">
 <p>对于 n 个元素的关键字序列 { k1,k2, &#8230;&#8203;kn }，当且仅当满足关系 ki ≤ k2i 且 ki ≤ k2i+1 {i=1.2&#8230;&#8203;[n/2]} 时称其为小根堆(小顶堆)。</p>
@@ -1366,9 +1498,9 @@ D 16,40,25,53,39,55,45</pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/mermaid-2025-05-09-174131.svg" alt="mermaid 2025 05 09 174131" width="293" height="235">
+<img src="img/mermaid-2025-05-09-174131.svg" alt="mermaid 2025 05 09 174131" width="333" height="235">
 </div>
-<div class="title">Figure 1. <a href="img/mermaid-2025-05-09-174131.svg">D 16,40,25,53,39,55,45</a></div>
+<div class="title">Figure 2. <a href="img/mermaid-2025-05-09-174131.svg">D 16,40,25,53,39,55,45</a></div>
 </div>
 <div class="paragraph">
 <p><strong>答案为 D</strong></p>
@@ -1699,13 +1831,13 @@ D 564213</pre>
 <p>本题考查数据结构的基础知识。</p>
 </div>
 <div class="paragraph">
-<p>拓扑排序是将AOV网中所有顶点排成一个线性序列的过程，并且该序列满足：若在AOV网中从顶点vi到vj有一条路径，则在该线性序列中，顶点vi必然在顶点vj之前。</p>
+<p>拓扑排序是将AOV网中所有顶点排成一个线性序列的过程，并且该序列满足：若在 AOV 网中从顶点 vi 到 vj 有一条路径，则在该线性序列中，顶点 vi 必然在顶点 vj 之前。</p>
 </div>
 <div class="paragraph">
 <p>对AOV网进行拓扑排序的方法如下：</p>
 </div>
 <div class="paragraph">
-<p>(1)在AOV网中选择一个入度为零（没有前驱）的顶点且输出它；</p>
+<p>(1)在AOV网中选择一个 <mark>入度为零（没有前驱）的顶点</mark> 且输出它；</p>
 </div>
 <div class="paragraph">
 <p>(2)从网中删除该顶点及与该顶点有关的所有边；</p>
@@ -1732,7 +1864,7 @@ D 564213</pre>
 <div class="content">
 <img src="img/graphviz-2025-05-10-125143-NFA.svg" alt="graphviz 2025 05 10 125143 NFA" width="679" height="107">
 </div>
-<div class="title">Figure 2. 解析：NFA 正规集 0 (0|11*) 0 &#8594; <strong>答案为 C</strong></div>
+<div class="title">Figure 3. 解析：NFA 正规集 0 (0|11*) 0 &#8594; <strong>答案为 C</strong></div>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -1750,31 +1882,88 @@ DFA 不允许有 ε 空输入。
 <div class="content">
 <img src="img/graphviz-2025-05-10-125311-A.svg" alt="graphviz 2025 05 10 125311 A" width="329" height="107">
 </div>
-<div class="title">Figure 3. 选项 A &#8594; 正规集为 01*0;</div>
+<div class="title">Figure 4. 选项 A &#8594; 正规集为 01*0;</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/graphviz-2025-05-10-125444-B.svg" alt="graphviz 2025 05 10 125444 B" width="434" height="107">
 </div>
-<div class="title">Figure 4. 选项 B &#8594; 正规集为 001*0</div>
+<div class="title">Figure 5. 选项 B &#8594; 正规集为 001*0</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/graphviz-2025-05-10-125457-C.svg" alt="graphviz 2025 05 10 125457 C" width="434" height="107">
 </div>
-<div class="title">Figure 5. 选项 C &#8594; 正规集为 0(0|11*)0</div>
+<div class="title">Figure 6. 选项 C &#8594; 正规集为 0(0|11*)0</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/graphviz-2025-05-10-125519-D.svg" alt="graphviz 2025 05 10 125519 D" width="434" height="107">
 </div>
-<div class="title">Figure 6. 选项 D -》 正规集为 01*00</div>
+<div class="title">Figure 7. 选项 D -》 正规集为 01*00</div>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_存储系统与寻址结构">存储系统与寻址结构</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_存储单元地址宽度">存储单元地址宽度</h3>
+<div class="paragraph">
+<p>设有一个 <code>64K×32</code> 位的存储器（每个存储单元为 <code>32</code> 位），其存储单元的地址宽度为（ B ）。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 15
+B 16
+C 30
+D 32</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>详细解释</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>存储单元数量计算</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>"64K" 中的 "K" 表示 <strong>1024</strong>（即 \(2^{10}\)），所以：
+\(64K = 64 \times 1024\)</p>
+</li>
+<li>
+<p>而 \(64 = 2^6\)，\(1024 = 2^{10}\)，因此：
+\(64 \times 1024 = 2^6 \times 2^{10} = 2^{16}\)</p>
+</li>
+<li>
+<p>最终得到存储单元总数：
+\(64K = 65{,}536 = 2^{16}\)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>地址宽度计算</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>要寻址 \(2^{16}\) 个存储单元，需要的地址位数为：
+\(\log_2(2^{16}) = 16 \text{ 位}\)</p>
+</li>
+<li>
+<p>因此，<strong>地址宽度为 16 位</strong>。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>结论：通过指数运算可直接推导出，该存储器的 <strong>地址宽度是 16 位</strong>，正确答案为 <strong>B</strong>。</p>
+</div>
+</div>
 <div class="sect2">
 <h3 id="_寻址单元数计算">寻址单元数计算</h3>
 <div class="paragraph">
@@ -2369,9 +2558,17 @@ D 102ms</pre>
 <p>前趋图的示例：</p>
 </div>
 <div class="paragraph">
-<p>假设有四个任务 A、B、C、D，其中：
-- 任务 A 必须在任务 B 和 C 之前完成。
-- 任务 B 和 C 必须在任务 D 之前完成。</p>
+<p>假设有四个任务 A、B、C、D，其中：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>任务 A 必须在任务 B 和 C 之前完成。</p>
+</li>
+<li>
+<p>任务 B 和 C 必须在任务 D 之前完成。</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>前趋图可以表示为：</p>
@@ -2397,26 +2594,27 @@ D 102ms</pre>
 <div class="sect3">
 <h4 id="_pv_操作">PV 操作</h4>
 <div class="paragraph">
-<p>PV操作是操作系统中用于进程同步与互斥的一种机制，由两部分组成：P操作（Proberen，荷兰语中的“测试”）和V操作（Verhogen，荷兰语中的“增加”）。这种机制通常与信号量（Semaphore）一起使用，信号量是一个整数变量，用于控制对共享资源的访问。</p>
+<p>PV 操作是操作系统中用于进程同步与互斥的一种机制，由两部分组成：
+P 操作（Proberen，荷兰语中的“测试”）和 V 操作（Verhogen，荷兰语中的“增加”）。这种机制通常与信号量（Semaphore）一起使用，信号量是一个整数变量，用于控制对共享资源的访问。</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>P操作（等待操作）</p>
+<p>P 操作（等待操作）</p>
 <div class="ulist">
 <ul>
 <li>
-<p>P操作用于申请资源。当一个进程需要访问共享资源时，它会执行P操作。如果信号量的值大于0，表示资源可用，信号量减1，进程继续执行。如果信号量的值为0，表示资源不可用，进程将被阻塞，直到信号量的值变为正数。</p>
+<p>P 操作用于申请资源。当一个进程需要访问共享资源时，它会执行 P操作。如果信号量的值大于 0，表示资源可用，信号量减 1，进程继续执行。如果信号量的值为 0，表示资源不可用，进程将被阻塞，直到信号量的值变为正数。</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>V操作（释放操作）</p>
+<p>V 操作（释放操作）</p>
 <div class="ulist">
 <ul>
 <li>
-<p>V操作用于释放资源。当一个进程完成对共享资源的访问后，它会执行V操作。这会使信号量的值增加1。如果此时有其他进程因为资源不可用而被阻塞，那么V操作会唤醒其中一个阻塞的进程，使其可以继续执行。</p>
+<p>V 操作用于释放资源。当一个进程完成对共享资源的访问后，它会执行 V操作。这会使信号量的值增加 1。如果此时有其他进程因为资源不可用而被阻塞，那么 V 操作会唤醒其中一个阻塞的进程，使其可以继续执行。</p>
 </li>
 </ul>
 </div>
@@ -2426,10 +2624,10 @@ D 102ms</pre>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>整型信号量</strong>：信号量的值可以是任意整数，用于表示资源的数量。当信号量的值为0时，表示没有资源可用。</p>
+<p><strong>整型信号量</strong>：信号量的值可以是任意整数，用于表示资源的数量。当信号量的值为 0 时，表示没有资源可用。</p>
 </li>
 <li>
-<p><strong>二进制信号量</strong>：信号量的值只能是0或1，用于实现互斥锁。0表示锁被占用，1表示锁可用。</p>
+<p><strong>二进制信号量</strong>：信号量的值只能是 0 或 1，用于实现互斥锁。0 表示锁被占用，1 表示锁可用。</p>
 </li>
 </ol>
 </div>
@@ -2437,7 +2635,7 @@ D 102ms</pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>PV操作广泛应用于操作系统中的进程同步、互斥、死锁避免等领域。例如：</p>
+<p>PV 操作广泛应用于操作系统中的进程同步、互斥、死锁避免等领域。例如：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2453,7 +2651,7 @@ D 102ms</pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>通过合理使用PV操作，可以有效地管理进程间的协作和资源共享，提高系统的稳定性和效率。</p>
+<p>通过合理使用 PV 操作，可以有效地管理进程间的协作和资源共享，提高系统的稳定性和效率。</p>
 </div>
 </div>
 <div class="sect3">
@@ -2480,13 +2678,13 @@ D 102ms</pre>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>a 和 b 处</strong>：当 P1 和 P2 执行完毕后，它们需要通过执行 V 操作来增加信号量 S1 和 S2 的值，从而通知 P3 可以开始执行。因此，a 处应填写 V(S1)，b 处应填写 V(S2)。</p>
+<p><strong>a 和 b 处</strong>：当 P1 和 P2 执行完毕后，它们需要通过执行 V 操作来增加信号量 S1 和 S2 的值，从而通知 P3 可以开始执行。因此，<mark>a 处应填写 V(S1)，b 处应填写 V(S2)</mark>。</p>
 </li>
 <li>
-<p><strong>c 和 d 处</strong>：进程 P3 在开始执行前，需要通过执行 P 操作来检查 S1 和 S2 的值是否大于 0。如果 S1 和 S2 的值都大于 0，表示 P1 和 P2 已经执行完毕，P3 可以开始执行。因此，c 处应填写 P(S1)，d 处应填写 P(S2)。</p>
+<p><strong>c 和 d 处</strong>：进程 P3 在开始执行前，需要通过执行 P 操作来检查 S1 和 S2 的值是否大于 0。如果 S1 和 S2 的值都大于 0，表示 P1 和 P2 已经执行完毕，P3 可以开始执行。因此，<mark>c 处应填写 P(S1) 和 P(S2)</mark>，<mark>d 处应填写 V(S3) 和 V(S4)</mark>。</p>
 </li>
 <li>
-<p><strong>e 和 f 处</strong>：进程 P4 和 P5 在开始执行前，需要通过执行 P 操作来检查 S3 和 S4 的值是否大于 0。如果 S3 和 S4 的值都大于 0，表示 P3 已经执行完毕，P4 和 P5 可以开始执行。因此，e 处应填写 P(S3)，f 处应填写 P(S4)。</p>
+<p><strong>e 和 f 处</strong>：进程 P4 和 P5 在开始执行前，需要通过执行 P 操作来检查 S3 和 S4 的值是否大于 0。如果 S3 和 S4 的值都大于 0，表示 P3 已经执行完毕，P4 和 P5 可以开始执行。因此，<mark>e 处应填写 P(S3)，f 处应填写 P(S4)</mark>。</p>
 </li>
 </ul>
 </div>
@@ -3597,13 +3795,13 @@ D: 引号错误（同C）。</pre>
 <div class="content">
 <img src="img/ip-data-2025-05-10-193237.png" alt="总体" width="840">
 </div>
-<div class="title">Figure 7. 总体:</div>
+<div class="title">Figure 8. 总体:</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/ip-data-2025-05-10-193246.png" alt="细节" width="840">
 </div>
-<div class="title">Figure 8. 细节:</div>
+<div class="title">Figure 9. 细节:</div>
 </div>
 <div class="paragraph">
 <p><a href="https://www.bilibili.com/video/BV1UM41167sP" class="bare">https://www.bilibili.com/video/BV1UM41167sP</a></p>
@@ -3620,7 +3818,7 @@ D: 引号错误（同C）。</pre>
 <div class="content">
 <img src="img/ip-data-2025-05-10-193257.png" alt="例题" width="840">
 </div>
-<div class="title">Figure 9. 例题</div>
+<div class="title">Figure 10. 例题</div>
 </div>
 <div class="paragraph">
 <p><a href="https://www.bilibili.com/video/BV1Ce411N7Ph" class="bare">https://www.bilibili.com/video/BV1Ce411N7Ph</a></p>
@@ -4229,6 +4427,103 @@ D: 引号错误（同C）。</pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_软件测试">软件测试</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>对以下的程序伪代码（用缩进表示程序块）进行路径覆盖测试，至少需要（4）个测试用例。
+采用McCabe度量法计算其环路复杂度为（4）。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">输入</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">y</span><span class="tok-p">,</span> <span class="tok-n">z</span>
+<span class="tok-n">语句</span> <span class="tok-mi">1</span>
+<span class="tok-k">if</span> <span class="tok-n">x</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span><span class="tok-p">:</span>
+    <span class="tok-n">语句</span> <span class="tok-mi">2</span>
+    <span class="tok-k">if</span> <span class="tok-n">y</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span><span class="tok-p">:</span>
+        <span class="tok-n">语句</span> <span class="tok-mi">3</span>
+    <span class="tok-k">else</span><span class="tok-p">:</span>
+        <span class="tok-n">语句</span> <span class="tok-mi">4</span>
+<span class="tok-k">else</span><span class="tok-p">:</span>
+    <span class="tok-n">语句</span> <span class="tok-mi">5</span>
+    <span class="tok-k">if</span> <span class="tok-n">z</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span><span class="tok-p">:</span>
+        <span class="tok-n">语句</span> <span class="tok-mi">6</span>
+    <span class="tok-k">else</span><span class="tok-p">:</span>
+        <span class="tok-n">语句</span> <span class="tok-mi">7</span>
+<span class="tok-n">输出语句</span></code></pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>本题考查软件测试的相关知识，要求考生能够熟练掌握典型的白盒测试方法。路径覆盖就是设计若干个测试用例，运行被测程序，使得程序中每条路径至少运行一次。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/diagram-test-2025-05-11-125828.svg" alt="diagram test 2025 05 11 125828" width="310" height="481">
+</div>
+<div class="title">Figure 11. 画出上述伪代码的流程图如下：</div>
+</div>
+<div class="paragraph">
+<p>从图中很容易看出有四条路径：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>x &gt; 0 且 y &gt; 0（执行语句 1→2→3）</p>
+</li>
+<li>
+<p>x &gt; 0 且 y ≤ 0（执行语句 1→2→4）</p>
+</li>
+<li>
+<p>x ≤ 0 且 z &gt; 0（执行语句 1→5→6）</p>
+</li>
+<li>
+<p>x ≤ 0 且 z ≤ 0（执行语句 1→5→7）</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>因此设计 4 个测试用例分别运行上述四个路径即可满足路径覆盖。</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>数判定节点（推荐！）</strong></p>
+</div>
+<div class="paragraph">
+<p>公式：V(G)=判定节点数+1</p>
+</div>
+<div class="paragraph">
+<p>步骤：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>在代码中数出所有的 if、else if、while、for、case 等分支语句。</p>
+</li>
+<li>
+<p>每个分支语句算 1个判定节点。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>判定节点数 = 3（x&gt;0、y&gt;0、z&gt;0）</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>最后 +1 就是环路复杂度</p>
+<div class="ulist">
+<ul>
+<li>
+<p>V(G) = 3 + 1 = 4</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_uml_图">UML 图</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -4291,7 +4586,7 @@ D 24</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-11 11:57:44 +0800
+Last updated 2025-05-11 18:16:21 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
