@@ -149,8 +149,14 @@
 </v>
 <v t="swot.20250510175912.1"><vh>UML 图</vh>
 <v t="swot.20250510175912.2"><vh>类图符号</vh></v>
+<v t="swot.20250511103711.1"><vh>活动图</vh></v>
 </v>
 </v>
+</v>
+</v>
+<v t="swot.20250511104537.1"><vh>@path nuxt</vh>
+<v t="swot.20250511104555.1"><vh>Plan</vh>
+<v t="swot.20250511104602.1"><vh>How to test nuxt?</vh></v>
 </v>
 </v>
 </vnodes>
@@ -3320,5 +3326,51 @@ digraph AOV {
 
 NOTE: 这个题用到了负数的补码。
 </t>
+<t tx="swot.20250511103711.1">某软件项目的活动图如下图所示，其中顶点表示项目里程碑，连接顶点的边表示活动，边上的数字表示该活动所需的天数，则完成该项目的最少时间为（ ）天。活动BD最多可以晚（ ）天开始而不会影响整个项目的进度。
+
+[graphviz, target="img/graphviz_critical-path-2025-05-11-104921", format=svg]
+....
+digraph critical_path {
+    rankdir=LR;
+    node [shape = circle];
+
+    A -&gt; B [label = "2" color = "red"];
+    B -&gt; C [label = "3" color = "red"];
+    C -&gt; E [label = "5" color = "red"];
+    E -&gt; H [label = "2"];
+    H -&gt; L [label = "3"];
+
+    E -&gt; F [label = "3" color = "red"];
+    F -&gt; J [label = "2"];
+    J -&gt; L [label = "1"];
+
+    B -&gt; F [label = "4"];
+
+    F -&gt; I [label = "5" color = "red"];
+    I -&gt; K [label = "4" color = "red"];
+    K -&gt; L [label = "2" color = "red"];
+
+    B -&gt; D [label = "5"];
+    D -&gt; G [label = "3"];
+    G -&gt; I [label = "6"];
+}
+....
+
+
+    A 9
+    B 15
+    C 22
+    D 24
+
+---
+解析: 
+
+* 根据上图计算出关键路径为 A-B-C-E-F-I-K-L，其长度为 24，关键路径上的活动均为关键活动。
+
+* 活动BD不在关键路径上，包含该活动的最长路径为 A-B-D-G-I-K-L，其长度为 22，因此松弛时间为 2。
+</t>
+<t tx="swot.20250511104537.1"></t>
+<t tx="swot.20250511104555.1"></t>
+<t tx="swot.20250511104602.1"></t>
 </tnodes>
 </leo_file>

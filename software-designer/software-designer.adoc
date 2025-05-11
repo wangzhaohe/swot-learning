@@ -1676,3 +1676,47 @@ return;
 
 * 普通箭头/连线	关联	员工参与项目
 
+=== 活动图
+某软件项目的活动图如下图所示，其中顶点表示项目里程碑，连接顶点的边表示活动，边上的数字表示该活动所需的天数，则完成该项目的最少时间为（ ）天。活动BD最多可以晚（ ）天开始而不会影响整个项目的进度。
+
+[graphviz, target="img/graphviz_critical-path-2025-05-11-104921", format=svg]
+....
+digraph critical_path {
+    rankdir=LR;
+    node [shape = circle];
+
+    A -> B [label = "2" color = "red"];
+    B -> C [label = "3" color = "red"];
+    C -> E [label = "5" color = "red"];
+    E -> H [label = "2"];
+    H -> L [label = "3"];
+
+    E -> F [label = "3" color = "red"];
+    F -> J [label = "2"];
+    J -> L [label = "1"];
+
+    B -> F [label = "4"];
+
+    F -> I [label = "5" color = "red"];
+    I -> K [label = "4" color = "red"];
+    K -> L [label = "2" color = "red"];
+
+    B -> D [label = "5"];
+    D -> G [label = "3"];
+    G -> I [label = "6"];
+}
+....
+
+
+    A 9
+    B 15
+    C 22
+    D 24
+
+---
+解析: 
+
+* 根据上图计算出关键路径为 A-B-C-E-F-I-K-L，其长度为 24，关键路径上的活动均为关键活动。
+
+* 活动BD不在关键路径上，包含该活动的最长路径为 A-B-D-G-I-K-L，其长度为 22，因此松弛时间为 2。
+
