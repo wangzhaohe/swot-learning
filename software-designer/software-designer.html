@@ -562,6 +562,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_寻址单元数计算">寻址单元数计算</a></li>
 <li><a href="#_存储体系位示图_第几个字多少字">存储体系位示图 (第几个字)(多少字)</a></li>
 <li><a href="#_存储地址编号">存储地址编号</a></li>
+<li><a href="#_存储时间计算">存储时间计算</a></li>
 </ul>
 </li>
 <li><a href="#_指令流水线">指令流水线</a></li>
@@ -2150,6 +2151,115 @@ C（2²²）和D（2²¹）：无对应计算逻辑支持‌。</pre>
 <hr>
 <div class="paragraph">
 <p>所以这个芯片的最小地址是：<strong>0800H</strong>，最后答案是：<strong>B. 0800H</strong>。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_存储时间计算">存储时间计算</h3>
+<div class="paragraph">
+<p>在磁盘上存储数据的排列方式会影响 IO 服务的总时间。假设每个磁道被划分成 10 个物理块，每个物理块存放1个逻辑记录。逻辑记录R1,R2&#8230;&#8203;.R10存放在同一个磁道上，记录的排列顺序如下表所示。</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 8.3333%;">
+<col style="width: 8.3333%;">
+<col style="width: 8.3333%;">
+<col style="width: 8.3333%;">
+<col style="width: 8.3333%;">
+<col style="width: 8.3333%;">
+<col style="width: 8.3333%;">
+<col style="width: 8.3333%;">
+<col style="width: 8.3333%;">
+<col style="width: 8.3337%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">物理块数</th>
+<th class="tableblock halign-center valign-top">1</th>
+<th class="tableblock halign-center valign-top">2</th>
+<th class="tableblock halign-center valign-top">3</th>
+<th class="tableblock halign-center valign-top">4</th>
+<th class="tableblock halign-center valign-top">5</th>
+<th class="tableblock halign-center valign-top">6</th>
+<th class="tableblock halign-center valign-top">7</th>
+<th class="tableblock halign-center valign-top">8</th>
+<th class="tableblock halign-center valign-top">9</th>
+<th class="tableblock halign-center valign-top">10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">逻辑记录</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">R1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">R2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">R3</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">R4</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">R5</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">R6</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">R7</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">R8</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">R9</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">R10</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>假定磁盘的旋转速度为 10ms/周，磁头当前处在 R1 的开始处。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>若系统顺序处理这些记录，使用单缓冲区，每个记录处理时间为 2ms,则处理这 10个 记录的最长时间为（D）;</p>
+<div class="literalblock">
+<div class="content">
+<pre>A 30ms
+B 60ms
+C 94ms
+D 102ms</pre>
+</div>
+</div>
+</li>
+<li>
+<p>若对存储数据的排列顺序进行优化，处理10个记录的最少时间为（ ）。</p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>磁头当前处于 R1 处，读取出 R1 的时间为 10ms/10=1ms，然后的使用单缓冲区处理，花费 2ms。R1 处理完毕后磁头此时已处于 R4 处，若是顺序读和处理 R2 则需要再等待 8ms，R2 的读取与处理时间与 R1 相同，当 R2 处理完毕再读取 R3 仍然需要再等待 8ms&#8230;&#8203;&#8230;&#8203;依次类推，10 个记录读完处理完毕的时间一共是 102ms。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>计算：<strong>总时间 = 3ms（R1）+9×11ms（R2-R10）= 102ms</strong></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>若对存储数据的排列顺序进行优化，即在原先存放 R4 处，存放 R2，则十个记录的处理时间会缩短至 30ms。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>关键总结</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>读取时间</strong>：是物理块从磁头下方通过的时间（10ms/周 ÷ 10块 = 1ms/块）。</p>
+</li>
+<li>
+<p><strong>处理时间</strong>：是程序处理数据的时间（题目给定2ms），期间磁盘仍在旋转。</p>
+</li>
+<li>
+<p><strong>优化核心</strong>：通过重排数据，让“处理时间”对应的磁盘旋转刚好定位到下一个记录，避免等待。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>这样设计后，磁盘的物理特性（旋转延迟）被完全利用，实现了最短时间（30ms）。</p>
 </div>
 </div>
 </div>
@@ -4181,7 +4291,7 @@ D 24</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-11 11:15:42 +0800
+Last updated 2025-05-11 11:57:44 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
