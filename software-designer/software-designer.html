@@ -585,6 +585,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_example_信号量初值不等于_0">Example 信号量初值不等于 0</a></li>
 </ul>
 </li>
+<li><a href="#_资源分配图resource_allocation_graph_rag">资源分配图（Resource Allocation Graph, RAG）</a>
+<ul class="sectlevel3">
+<li><a href="#_example_阻塞节点和死锁">Example 阻塞节点和死锁</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_数据库">数据库</a>
@@ -2912,6 +2917,177 @@ D n、m</pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_资源分配图resource_allocation_graph_rag">资源分配图（Resource Allocation Graph, RAG）</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>用途</strong>：用于分析<strong>死锁</strong>。</p>
+</li>
+<li>
+<p><strong>核心概念</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>节点包括<strong>进程（P）</strong>和<strong>资源（R）</strong>。</p>
+</li>
+<li>
+<p>边表示<strong>资源请求</strong>或<strong>资源分配</strong>。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>目标</strong>：判断系统是否可能出现<strong>死锁</strong>。</p>
+</li>
+<li>
+<p><strong>关键点</strong>：循环等待是死锁的重要条件之一，图中若存在<strong>有向环</strong>，可能表示死锁（特别是在每种资源只有一个实例时）。</p>
+</li>
+</ul>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">与PV 操作（也称信号量机制）区别</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>用途</strong>：用于实现进程的<strong>互斥与同步</strong>。</p>
+</li>
+<li>
+<p><strong>核心概念</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>P 操作（也叫 wait 或 down）：请求资源或进入临界区。</p>
+</li>
+<li>
+<p>V 操作（也叫 signal 或 up）：释放资源或退出临界区。</p>
+</li>
+<li>
+<p>常用于解决<strong>临界区问题</strong>、<strong>生产者-消费者问题</strong>、<strong>读者-写者问题</strong>等。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>目标</strong>：确保进程之间不会出现<strong>竞态条件（race condition）</strong>，并实现正确的协作。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_阻塞节点和死锁">Example 阻塞节点和死锁</h4>
+<div class="paragraph">
+<p>进程资源图如图(a)和(b)所示，其中：图(a)中（B）; 图(b)中（C）。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/graphviz-2025-05-12-103138.svg" alt="graphviz 2025 05 12 103138" width="452" height="457">
+</div>
+<div class="title">Figure 8. 图 a</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>P → R：表示 “进程请求资源”</p>
+</li>
+<li>
+<p>R → P：表示 “资源分配给进程”</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A P1是非阻塞节点，P2是阻塞节点，所以该图不可以化简，是死锁的
+B P1、P2都是阻塞节点，所以该图不可以化简，是死锁的
+C P1、P2都是非阻塞节点，所以该图可以化简，是非死锁的
+D P1是阻塞节点，P2是非阻塞节点，所以该图不可以化简、是死锁的</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>分析图 a：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>因为 R1 资源只有 2 个，P2 申请该资源得不到满足，故进程 P2 是阻塞节点；</p>
+</li>
+<li>
+<p>同样 R2 资源只有 3 个，P1 申请该资源得不到满足，故进程 P1 也是阻塞节点。</p>
+</li>
+<li>
+<p>可见进程资源图（a）是死锁的，该图不可以化简。正确答案：B</p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="imageblock">
+<div class="content">
+<img src="img/graphviz-2025-05-12-112329.svg" alt="graphviz 2025 05 12 112329" width="490" height="538">
+</div>
+<div class="title">Figure 9. 图 b</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A P1、P2、P3都是非阻塞节点，该图可以化简，是非死锁的
+B P1、P2、P3都是阻塞节点，该图不可以化简，是死锁的
+C P2是阻塞节点，P1、P3是非阻塞节点，该图可以化简，是非死锁的
+D P1、P2是非阻塞节点，P3是阻塞节点，该图不可以化简，是死锁的。</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>分析图 b：</p>
+</div>
+<div class="paragraph">
+<p>因为 R2 资源有3个，已分配2个，P3申请1个R2资源可以得到满足（P1也可以），故进程P3可以运行完毕释放其占有的资源。
+这样可以使得P1、P3都变为非阻塞节点，得到所需资源运行完毕，因此，进程资源图（b）是可化简的。</p>
+</div>
+<div class="paragraph">
+<p>正确答案：C</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>关键点：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>阻塞节点是指一个进程申请的资源当前不可用，所以它必须等待。</p>
+</li>
+<li>
+<p>非阻塞节点是指一个进程可以立即获得它申请的所有资源，能够运行完成并释放资源。</p>
+</li>
+<li>
+<p>如果一个图可以逐步化简（即所有进程都能按某种顺序完成），那么就没有死锁。</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -4048,13 +4224,13 @@ D 逻辑设计和概念设计</pre>
 <div class="content">
 <img src="img/ip-data-2025-05-10-193237.png" alt="总体" width="840">
 </div>
-<div class="title">Figure 8. 总体:</div>
+<div class="title">Figure 10. 总体:</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/ip-data-2025-05-10-193246.png" alt="细节" width="840">
 </div>
-<div class="title">Figure 9. 细节:</div>
+<div class="title">Figure 11. 细节:</div>
 </div>
 <div class="paragraph">
 <p><a href="https://www.bilibili.com/video/BV1UM41167sP" class="bare">https://www.bilibili.com/video/BV1UM41167sP</a></p>
@@ -4071,7 +4247,7 @@ D 逻辑设计和概念设计</pre>
 <div class="content">
 <img src="img/ip-data-2025-05-10-193257.png" alt="例题" width="840">
 </div>
-<div class="title">Figure 10. 例题</div>
+<div class="title">Figure 12. 例题</div>
 </div>
 <div class="paragraph">
 <p><a href="https://www.bilibili.com/video/BV1Ce411N7Ph" class="bare">https://www.bilibili.com/video/BV1Ce411N7Ph</a></p>
@@ -4713,7 +4889,7 @@ D 逻辑设计和概念设计</pre>
 <div class="content">
 <img src="img/diagram-test-2025-05-11-125828.svg" alt="diagram test 2025 05 11 125828" width="310" height="481">
 </div>
-<div class="title">Figure 11. 画出上述伪代码的流程图如下：</div>
+<div class="title">Figure 13. 画出上述伪代码的流程图如下：</div>
 </div>
 <div class="paragraph">
 <p>从图中很容易看出有四条路径：</p>
@@ -4898,7 +5074,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-12 09:47:05 +0800
+Last updated 2025-05-12 12:33:48 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
