@@ -2924,10 +2924,10 @@ D 5</pre>
 </ol>
 </div>
 <div class="paragraph">
-<p>第一步：找出页面2不在内存，要换入内存，需要淘汰哪个页？</p>
+<p>找出页面2不在内存，要换入内存，需要淘汰哪个页？</p>
 </div>
 <div class="paragraph">
-<p>页面2不在内存（状态位为0），所以要换入。内存页框已满（页号0、3、4、5状态位都为1），需要淘汰一个页。</p>
+<p>页面 2 不在内存（状态位为0），所以要换入。内存页框已满（页号0、3、4、5状态位都为1），需要淘汰一个页。</p>
 </div>
 <div class="paragraph">
 <p>选择淘汰页的算法（常用是 NRU 或 Clock）</p>
@@ -3015,6 +3015,41 @@ D 12</pre>
 </div>
 </div>
 <hr>
+<div class="paragraph">
+<p>逻辑地址 3C18H → 页号、页内偏移，找出页帧号</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>采用页式管理，每页大小为 4K = 2¹² 字节（即页偏移是12位）</p>
+</li>
+<li>
+<p>所以逻辑地址的前几位是页号，低 12 位是页内偏移</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>将 3C18H 转成二进制：</p>
+</div>
+<div class="paragraph">
+<p>3C18H = 0011 1100 0001 1000（16位）</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>页号（高4位）：0011 = 3</p>
+</li>
+<li>
+<p>页内偏移（低12位）：1100 0001 1000</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>→ 所以是页号 3</p>
+</div>
+<div class="paragraph">
+<p>查页表中页号 3 的页帧号是 2 ✅</p>
+</div>
 </div>
 </div>
 </div>
@@ -5497,7 +5532,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-12 22:57:10 +0800
+Last updated 2025-05-12 23:00:58 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
