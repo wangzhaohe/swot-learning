@@ -573,6 +573,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_存储地址编号">存储地址编号</a></li>
 <li><a href="#_存储时间计算">存储时间计算</a></li>
 <li><a href="#_存储器分类方式">存储器分类方式</a></li>
+<li><a href="#_存储分页系统">存储分页系统</a></li>
 </ul>
 </li>
 <li><a href="#_指令流水线">指令流水线</a></li>
@@ -2648,6 +2649,153 @@ D 直接存储器</pre>
 </div>
 <div class="paragraph">
 <p>其他选项（A、B、D）均属于按寻址方式划分的存储器类型。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_存储分页系统">存储分页系统</h3>
+<div class="paragraph">
+<p>某计算机系统页面大小为4K，进程的页面变换表如下所示。若进程的逻辑地址为3C28H。该地址经过变换后，其物理地址应为（D）。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>页号      物理块号
+0           1
+1           3
+2           4
+3           6</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 2048H
+B 4096H
+C 4C28H
+D 6C28H</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>首先，我们需要明确几个关键概念：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>页面大小（Page Size）：这里是4K，即4096字节（因为1K = 1024字节）。</p>
+</li>
+<li>
+<p>逻辑地址（Logical Address）：由CPU生成的地址，分为页号和页内偏移量。</p>
+</li>
+<li>
+<p>页表（Page Table）：将逻辑页号映射到物理块号。</p>
+</li>
+<li>
+<p>物理地址（Physical Address）：由物理块号和页内偏移量组合而成。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>我们来一步步分析这道题。</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>已知信息：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>页面大小为 4K</strong>，即 <strong>每页大小 = 4KB = 2¹² = 4096 字节</strong>。</p>
+</li>
+<li>
+<p>所以逻辑地址的格式为：</p>
+<div class="literalblock">
+<div class="content">
+<pre>逻辑地址 = 页号 + 页内偏移量
+        = 高 4 位（页号） + 低 12 位（页内偏移）</pre>
+</div>
+</div>
+</li>
+<li>
+<p>页表如下：</p>
+<div class="literalblock">
+<div class="content">
+<pre>页号      物理块号
+0           1
+1           3
+2           4
+3           6</pre>
+</div>
+</div>
+</li>
+<li>
+<p>给定逻辑地址为：<code>3C28H</code></p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p>第一步：将逻辑地址转换为二进制</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>转为二进制：
+3C28H = 0011 1100 0010 1000（二进制）
+
+前 4 位：0011 → 页号 = 3
+后 12 位：1100 0010 1000 → 页内偏移 = 0xC28</code></pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>第二步：查表得知页号为 3，对应物理块号是 6</p>
+</div>
+<div class="paragraph">
+<p>每个物理块的大小也是 4K（4096 字节），所以：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>物理地址 = 物理块号 × 页大小 + 页内偏移
+        = 6 × 4096 + 0xC28</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>利用位运算的特性：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>4096 = 2¹²，所以 6 × 4096 = 6 &lt;&lt; 12（左移 12 位）。</p>
+</li>
+<li>
+<p>也就是：把 6 变成一个以 12 个零结尾的二进制数。</p>
+<div class="literalblock">
+<div class="content">
+<pre>6 × 4096 = 6 &lt;&lt; 12 = 0x6000</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>把偏移量直接加进去：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>偏移量是 0xC28，直接加到 0x6000：</p>
+<div class="literalblock">
+<div class="content">
+<pre>0x6000 + 0x0C28 = 0x6C28</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>✅ 答案：<strong>D. 6C28H</strong></p>
 </div>
 </div>
 </div>
@@ -5130,7 +5278,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-12 20:56:40 +0800
+Last updated 2025-05-12 21:47:30 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
