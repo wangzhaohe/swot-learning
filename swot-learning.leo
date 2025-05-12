@@ -119,7 +119,8 @@
 <v t="swot.20250508163140.1"><vh>进程同步与互斥（PV 操作）</vh>
 <v t="swot.20250508163626.1"><vh>前趋图</vh></v>
 <v t="swot.20250508164139.1"><vh>PV 操作</vh></v>
-<v t="swot.20250508192826.1"><vh>Example</vh></v>
+<v t="swot.20250508192826.1"><vh>Example 信号量初值等于 0</vh></v>
+<v t="swot.20250512073906.1"><vh>Example 信号量初值不等于 0</vh></v>
 </v>
 </v>
 <v t="swot.20250510131711.1" descendentVnodeUnknownAttributes="7d71005803000000302e3171017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d313071077573732e"><vh>数据库</vh>
@@ -162,6 +163,7 @@
 <v t="swot.20250511103711.1"><vh>活动图</vh></v>
 <v t="swot.20250511230628.1"><vh>用例图</vh></v>
 </v>
+<v t="swot.20250511233342.1"><vh>专业英语</vh></v>
 </v>
 </v>
 </v>
@@ -552,7 +554,7 @@ PV 操作广泛应用于操作系统中的进程同步、互斥、死锁避免�
 </t>
 <t tx="swot.20250508192826.1">进程 P1、P2、P3、P4、P5 的 link:img/graphviz-pv-2025-05-08-193314.png[前趋图] 如下：
 
-[graphviz, target="img/graphviz-pv-2025-05-08-193314", format=png]
+[graphviz, target="img/graphviz-pv-2025-05-08-193314", format=svg]
 ....
 digraph finite_state_machine {
     rankdir=LR;
@@ -2265,9 +2267,8 @@ element {
 
 2. ‌计算总位数‌
 
-存储器容量需转换为位数以便后续计算：
-
-16MB的位数‌ = 16 × 2²⁰字节 × 8位/字节 = 2²⁴ × 8位 = 2²⁷位‌。
+* 存储器容量需转换为位数以便后续计算：
+* 16MB的位数‌ = 16 × 2²⁰字节 × 8位/字节 = 2²⁴ × 8位 = 2²⁷位‌。
 
 3. ‌按半字寻址的单元数‌
 
@@ -3716,6 +3717,79 @@ UML 用例图的标准关系只有：
 
 因此，正确答案是：**A. 需求分析和逻辑设计**
 
+</t>
+<t tx="swot.20250511233342.1"></t>
+<t tx="swot.20250512073906.1">某企业的生产流水线上有2名工人 P1 和 P2，1名检验员 P3。
+
+1. P1 将初步加工的半成品放入半成品箱 B1；
+2. P2 从半成品箱 B1 取出继续加工，加工好的产品放入成品箱 B2；
+3. P3 从成品箱  B2 取出产品校验。
+
+假设 B1 可存放 n 件半成品，B2 可存放 m 件产品，并设置 6 个信号量 S1、S2、S3、S4、S5 和 S6，且 S3 和 S6 的初值都为 0。
+
+采用 PV 操作实现 P1、P2 和 P3 的同步模型如下图所示，S2、S4 的初值分别为（ ）。
+
+[graphviz, target="img/graphviz-2025-05-12-075618", format=svg]
+....
+digraph ProcessFlow {
+    rankdir=TB;
+    node [shape=box, style=rounded, fontname="Microsoft YaHei"];
+
+    subgraph cluster_P1 {
+        label="P1";
+        style=dashed;
+
+        P1_start [label="初步加工"];
+        P1_PS1_PS2 [label="P(S1) / P(S2)"];
+        P1_B1 [label="半成品 → B1"];
+        P1_V1 [label="V(S1) / V(S3)"];
+
+        P1_start -&gt; P1_PS1_PS2 -&gt; P1_B1 -&gt; P1_V1 -&gt; P1_start;
+    }
+
+    subgraph cluster_P2 {
+        label="P2";
+        style=dashed;
+
+        P2_PS1_PS3 [label="P(S1) / P(S3)"];
+        P2_getB1 [label="从 B1 取半成品"];
+        P2_VS1_VS2 [label="V(S1) / V(S2)"];
+        P2_continue [label="继续加工"];
+        P2_PS4_PS5 [label="P(S4) / P(S5)"];
+        P2_toB2 [label="产品 → B2"];
+        P2_V5 [label="V(S5) / V(S6)"];
+
+        P2_PS1_PS3 -&gt; P2_getB1 -&gt; P2_VS1_VS2 -&gt; P2_continue 
+                   -&gt; P2_PS4_PS5 -&gt; P2_toB2 -&gt; P2_V5 -&gt; P2_PS1_PS3;
+    }
+
+    subgraph cluster_P3 {
+        label="P3";
+        style=dashed;
+
+        P3_PS5_PS6 [label="P(S5) / P(S6)"];
+        P3_getB2 [label="从 B2 取产品"];
+        P3_V5 [label="V(S4) / V(S5)"];
+        P3_check [label="检验产品"];
+
+        P3_PS5_PS6 -&gt; P3_getB2 -&gt; P3_V5 -&gt; P3_check -&gt; P3_PS5_PS6;
+    }
+}
+....
+
+    A n、0
+    B m、0
+    C m、n
+    D n、m
+
+---
+
+分析：
+
+在本题中涉及到的信号量较多，所以先要分析应用场景中哪些地方可能涉及到互斥和同步，这样才能把问题分析清楚。从题目的描述可以了解到整个流程由3名不同的工人协作完成，先进行P1的处理，然后是P2，最后P3，这样要达到协作关系，要使用同步信号量。同时由于P1处理结果会存到B1中，P2再从B1取内容，在此B1不能同时既进入存操作，也进行取操作，这就涉及到互斥。结合配图可以看出：S1信号量是互斥信号量，它确保B1的使用是互斥使用；S5信号量针对B2起到同样的作用。
+
+
+当半成品放入 B1 时，S2 就会减一，且放入后不会得到释放，由此推断 S2 为 B1 箱子容量的信号量，同理可得出 S4 为箱子 B2 的容量的信号量。
 </t>
 </tnodes>
 </leo_file>

@@ -581,7 +581,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_前趋图">前趋图</a></li>
 <li><a href="#_pv_操作">PV 操作</a></li>
-<li><a href="#_example">Example</a></li>
+<li><a href="#_example_信号量初值等于_0">Example 信号量初值等于 0</a></li>
+<li><a href="#_example_信号量初值不等于_0">Example 信号量初值不等于 0</a></li>
 </ul>
 </li>
 </ul>
@@ -604,7 +605,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel2">
 <li><a href="#_osi_七层模型与_tcpip_四层模型">OSI 七层模型与 TCP/IP 四层模型</a>
 <ul class="sectlevel3">
-<li><a href="#_example_2">Example</a></li>
+<li><a href="#_example">Example</a></li>
 </ul>
 </li>
 <li><a href="#_网络层">网络层</a>
@@ -633,6 +634,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_用例图">用例图</a></li>
 </ul>
 </li>
+<li><a href="#_专业英语">专业英语</a></li>
 </ul>
 </div>
 </div>
@@ -2117,17 +2119,17 @@ D 2^21</pre>
 </li>
 <li>
 <p>‌计算总位数‌</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
+<div class="ulist">
+<ul>
+<li>
 <p>存储器容量需转换为位数以便后续计算：</p>
-</div>
-<div class="paragraph">
+</li>
+<li>
 <p>16MB的位数‌ = 16 × 2²⁰字节 × 8位/字节 = 2²⁴ × 8位 = 2²⁷位‌。</p>
+</li>
+</ul>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>‌按半字寻址的单元数‌</p>
 <div class="ulist">
@@ -2827,13 +2829,13 @@ P 操作（Proberen，荷兰语中的“测试”）和 V 操作（Verhogen，�
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example">Example</h4>
+<h4 id="_example_信号量初值等于_0">Example 信号量初值等于 0</h4>
 <div class="paragraph">
 <p>进程 P1、P2、P3、P4、P5 的 <a href="img/graphviz-pv-2025-05-08-193314.png">前趋图</a> 如下：</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/graphviz-pv-2025-05-08-193314.png" alt="graphviz pv 2025 05 08 193314" width="268" height="142">
+<img src="img/graphviz-pv-2025-05-08-193314.svg" alt="graphviz pv 2025 05 08 193314" width="267" height="140">
 </div>
 </div>
 <div class="paragraph">
@@ -2859,6 +2861,54 @@ P 操作（Proberen，荷兰语中的“测试”）和 V 操作（Verhogen，�
 <p><strong>e 和 f 处</strong>：进程 P4 和 P5 在开始执行前，需要通过执行 P 操作来检查 S3 和 S4 的值是否大于 0。如果 S3 和 S4 的值都大于 0，表示 P3 已经执行完毕，P4 和 P5 可以开始执行。因此，<mark>e 处应填写 P(S3)，f 处应填写 P(S4)</mark>。</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_信号量初值不等于_0">Example 信号量初值不等于 0</h4>
+<div class="paragraph">
+<p>某企业的生产流水线上有2名工人 P1 和 P2，1名检验员 P3。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>P1 将初步加工的半成品放入半成品箱 B1；</p>
+</li>
+<li>
+<p>P2 从半成品箱 B1 取出继续加工，加工好的产品放入成品箱 B2；</p>
+</li>
+<li>
+<p>P3 从成品箱  B2 取出产品校验。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>假设 B1 可存放 n 件半成品，B2 可存放 m 件产品，并设置 6 个信号量 S1、S2、S3、S4、S5 和 S6，且 S3 和 S6 的初值都为 0。</p>
+</div>
+<div class="paragraph">
+<p>采用 PV 操作实现 P1、P2 和 P3 的同步模型如下图所示，S2、S4 的初值分别为（ ）。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/graphviz-2025-05-12-075618.svg" alt="graphviz 2025 05 12 075618" width="611" height="706">
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A n、0
+B m、0
+C m、n
+D n、m</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>分析：</p>
+</div>
+<div class="paragraph">
+<p>在本题中涉及到的信号量较多，所以先要分析应用场景中哪些地方可能涉及到互斥和同步，这样才能把问题分析清楚。从题目的描述可以了解到整个流程由3名不同的工人协作完成，先进行P1的处理，然后是P2，最后P3，这样要达到协作关系，要使用同步信号量。同时由于P1处理结果会存到B1中，P2再从B1取内容，在此B1不能同时既进入存操作，也进行取操作，这就涉及到互斥。结合配图可以看出：S1信号量是互斥信号量，它确保B1的使用是互斥使用；S5信号量针对B2起到同样的作用。</p>
+</div>
+<div class="paragraph">
+<p>当半成品放入 B1 时，S2 就会减一，且放入后不会得到释放，由此推断 S2 为 B1 箱子容量的信号量，同理可得出 S4 为箱子 B2 的容量的信号量。</p>
 </div>
 </div>
 </div>
@@ -3801,7 +3851,7 @@ D 逻辑设计和概念设计</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_2">Example</h4>
+<h4 id="_example">Example</h4>
 <div class="paragraph">
 <p>好的，以下是一些关于OSI七层模型和TCP/IP四层模型的真题，适合软件设计师考试的难度：</p>
 </div>
@@ -4516,7 +4566,7 @@ D 逻辑设计和概念设计</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_3">Example</h5>
+<h5 id="_example_2">Example</h5>
 <div class="imageblock">
 <div class="content">
 <img src="img/rip-2025-05-10-203533.png" alt="rip-example" width="1024">
@@ -4839,10 +4889,16 @@ D call</pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_专业英语">专业英语</h2>
+<div class="sectionbody">
+
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-11 23:26:24 +0800
+Last updated 2025-05-12 09:47:05 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
