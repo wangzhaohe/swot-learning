@@ -553,7 +553,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_二叉排序树关键码序列">二叉排序树关键码序列</a></li>
 <li><a href="#_二叉树小根堆">二叉树小根堆</a></li>
 <li><a href="#_二叉树遍历顺序">二叉树遍历顺序</a></li>
-<li><a href="#_哈夫曼树最优二叉树">哈夫曼树(最优二叉树)</a></li>
+<li><a href="#_哈夫曼树最优二叉树公式">哈夫曼树(最优二叉树)公式</a></li>
+<li><a href="#_哈夫曼树编码">哈夫曼树编码</a></li>
 <li><a href="#_无向图顶点度数">无向图顶点度数</a></li>
 <li><a href="#_拓扑排序">拓扑排序</a></li>
 <li><a href="#_进栈出栈">进栈出栈</a></li>
@@ -1719,7 +1720,7 @@ C</code></pre>
 <hr>
 </div>
 <div class="sect2">
-<h3 id="_哈夫曼树最优二叉树">哈夫曼树(最优二叉树)</h3>
+<h3 id="_哈夫曼树最优二叉树公式">哈夫曼树(最优二叉树)公式</h3>
 <div class="paragraph">
 <p>若一棵哈夫曼(Huffman)树共有 9 个顶点，则其叶子结点的个数为（ ）。</p>
 </div>
@@ -1785,6 +1786,144 @@ A  B C  D</pre>
 </div>
 <div class="paragraph">
 <p>9 个顶点代入公式： 9 = 2n - 1 &#8594; n = 5</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_哈夫曼树编码">哈夫曼树编码</h3>
+<div class="paragraph">
+<p>已知字符集 {a,b,c,d,e,f}，若各字符出现的次数分别为 6,3,8,2,10,4，则对应字符集中各字符的哈夫曼编码可能为（A）。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 00，1011, 01, 1010, 11, 100
+B 11, 100, 110, 000 , 0010, 01
+C 10, 1011, 11, 0011, 00, 010
+D 0011, 10, 11, 0010, 01, 000</pre>
+</div>
+</div>
+<hr>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>初始节点</strong>：按权值升序排列为 d(2), b(3), f(4), a(6), c(8), e(10)。</p>
+</li>
+<li>
+<p><strong>合并最小节点</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>合并 d(2) 和 b(3) 成 5，队列变为 [f(4), 5, a(6), c(8), e(10)]。</p>
+</li>
+<li>
+<p>合并 f(4) 和 5 成 9，队列变为 [a(6), 9, c(8), e(10)]。</p>
+</li>
+<li>
+<p>合并 a(6) 和 c(8) 成 14，队列变为 [9, e(10), 14]。</p>
+</li>
+<li>
+<p>合并 9 和 e(10) 成 19，队列变为 [14, 19]。</p>
+</li>
+<li>
+<p>合并 14 和 19 成根节点 33。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/graphviz-2025-05-13-054235.svg" alt="graphviz 2025 05 13 054235" width="598" height="279">
+</div>
+<div class="title">Figure 3. 画出的树，可用边来推算出编码</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>编码规则</strong>：左分支为 0，右分支为 1。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>a</strong>：路径为根→左→左，编码 <strong>00</strong>。</p>
+</li>
+<li>
+<p><strong>c</strong>：路径为根→左→右，编码 <strong>01</strong>。</p>
+</li>
+<li>
+<p><strong>e</strong>：路径为根→右→右，编码 <strong>11</strong>。</p>
+</li>
+<li>
+<p><strong>f</strong>：路径为根→右→左→左，编码 <strong>100</strong>。</p>
+</li>
+<li>
+<p><strong>d</strong>：路径为根→右→左→右→左，编码 <strong>1010</strong>。</p>
+</li>
+<li>
+<p><strong>b</strong>：路径为根→右→左→右→右，编码 <strong>1011</strong>。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>选项 A 的编码与上述结果完全一致</strong>，且满足哈夫曼编码的最短加权路径性质（高频字符编码更短）。其他选项（如 B、C、D）中，存在高频字符编码过长或前缀冲突的问题，因此排除。</p>
+</div>
+<div class="paragraph">
+<p><strong>答案：A</strong></p>
+</div>
+<div class="paragraph">
+<p>哈夫曼编码原则回顾：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>频率越高，编码越短；频率越低，编码越长。</p>
+</li>
+<li>
+<p>没有一个编码是另一个编码的前缀（前缀码）。</p>
+</li>
+<li>
+<p>哈夫曼树是通过合并频率最小的两个节点，逐步构建出来的。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>分析选项 A：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>频率最高的是 e(10) 和 c(8)，它们的编码分别是 11 和 01（都是2位）✅</p>
+</li>
+<li>
+<p>a(6) 是 00（也是2位）✅</p>
+</li>
+<li>
+<p>f(4) 是 100（3位）✅</p>
+</li>
+<li>
+<p>b(3) 是 1011（4位），d(2) 是 1010（4位）✅</p>
+</li>
+<li>
+<p>没有任何编码是另一个编码的前缀 ✅</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>这完全符合哈夫曼编码的基本原则。</p>
+</div>
+<div class="paragraph">
+<p>其他选项简要分析：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>B：e 的编码是 0010（4位），但它频率最高，应是最短的 → 不合理 ❌</p>
+</li>
+<li>
+<p>C：b(3) 是 1011，d(2) 是 0011，但 a(6) 是 10，b 的编码比 a 还长，合理 ✅，但由于题目只选一项，A 更标准，A 是由树推算出来的。</p>
+</li>
+<li>
+<p>D：a(6) 的编码是 0011（4位），比 b(3) 的 10 还长 → 不合理 ❌</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -2017,7 +2156,7 @@ D 24</pre>
 <div class="content">
 <img src="img/graphviz-2025-05-10-125143-NFA.svg" alt="graphviz 2025 05 10 125143 NFA" width="679" height="107">
 </div>
-<div class="title">Figure 3. 解析：NFA 正规集 0 (0|11*) 0 &#8594; <strong>答案为 C</strong></div>
+<div class="title">Figure 4. 解析：NFA 正规集 0 (0|11*) 0 &#8594; <strong>答案为 C</strong></div>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -2035,25 +2174,25 @@ DFA 不允许有 ε 空输入。
 <div class="content">
 <img src="img/graphviz-2025-05-10-125311-A.svg" alt="graphviz 2025 05 10 125311 A" width="329" height="107">
 </div>
-<div class="title">Figure 4. 选项 A &#8594; 正规集为 01*0;</div>
+<div class="title">Figure 5. 选项 A &#8594; 正规集为 01*0;</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/graphviz-2025-05-10-125444-B.svg" alt="graphviz 2025 05 10 125444 B" width="434" height="107">
 </div>
-<div class="title">Figure 5. 选项 B &#8594; 正规集为 001*0</div>
+<div class="title">Figure 6. 选项 B &#8594; 正规集为 001*0</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/graphviz-2025-05-10-125457-C.svg" alt="graphviz 2025 05 10 125457 C" width="434" height="107">
 </div>
-<div class="title">Figure 6. 选项 C &#8594; 正规集为 0(0|11*)0</div>
+<div class="title">Figure 7. 选项 C &#8594; 正规集为 0(0|11*)0</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/graphviz-2025-05-10-125519-D.svg" alt="graphviz 2025 05 10 125519 D" width="434" height="107">
 </div>
-<div class="title">Figure 7. 选项 D -》 正规集为 01*00</div>
+<div class="title">Figure 8. 选项 D -》 正规集为 01*00</div>
 </div>
 </div>
 </div>
@@ -3407,7 +3546,7 @@ D n、m</pre>
 <div class="content">
 <img src="img/graphviz-2025-05-12-103138.svg" alt="graphviz 2025 05 12 103138" width="452" height="457">
 </div>
-<div class="title">Figure 8. 图 a</div>
+<div class="title">Figure 9. 图 a</div>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -3460,7 +3599,7 @@ D P1是阻塞节点，P2是非阻塞节点，所以该图不可以化简、是�
 <div class="content">
 <img src="img/graphviz-2025-05-12-112329.svg" alt="graphviz 2025 05 12 112329" width="490" height="538">
 </div>
-<div class="title">Figure 9. 图 b</div>
+<div class="title">Figure 10. 图 b</div>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -4646,13 +4785,13 @@ D 逻辑设计和概念设计</pre>
 <div class="content">
 <img src="img/ip-data-2025-05-10-193237.png" alt="总体" width="840">
 </div>
-<div class="title">Figure 10. 总体:</div>
+<div class="title">Figure 11. 总体:</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/ip-data-2025-05-10-193246.png" alt="细节" width="840">
 </div>
-<div class="title">Figure 11. 细节:</div>
+<div class="title">Figure 12. 细节:</div>
 </div>
 <div class="paragraph">
 <p><a href="https://www.bilibili.com/video/BV1UM41167sP" class="bare">https://www.bilibili.com/video/BV1UM41167sP</a></p>
@@ -4669,7 +4808,7 @@ D 逻辑设计和概念设计</pre>
 <div class="content">
 <img src="img/ip-data-2025-05-10-193257.png" alt="例题" width="840">
 </div>
-<div class="title">Figure 12. 例题</div>
+<div class="title">Figure 13. 例题</div>
 </div>
 <div class="paragraph">
 <p><a href="https://www.bilibili.com/video/BV1Ce411N7Ph" class="bare">https://www.bilibili.com/video/BV1Ce411N7Ph</a></p>
@@ -5311,7 +5450,7 @@ D 逻辑设计和概念设计</pre>
 <div class="content">
 <img src="img/diagram-test-2025-05-11-125828.svg" alt="diagram test 2025 05 11 125828" width="310" height="481">
 </div>
-<div class="title">Figure 13. 画出上述伪代码的流程图如下：</div>
+<div class="title">Figure 14. 画出上述伪代码的流程图如下：</div>
 </div>
 <div class="paragraph">
 <p>从图中很容易看出有四条路径：</p>
@@ -5532,7 +5671,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-12 23:00:58 +0800
+Last updated 2025-05-13 07:20:59 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
