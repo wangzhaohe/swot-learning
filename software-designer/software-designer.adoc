@@ -2712,6 +2712,55 @@ stop
 3. 最后 +1 就是环路复杂度
    * V(G) = 3 + 1 = 4
 
+=== Example McCabe度量法计算其环路复杂度
+采用McCabe度量法计算下图的环路复杂度为（C）。
+
+    A 2
+    B 3
+    C 4
+    D 5
+
+[plantuml, target=img/diagram-2025-05-13-155805, format=svg]
+....
+@startuml
+start
+
+repeat
+
+  if (i > 0) then (Y)
+    :语句1;
+  else (N)
+  endif
+
+  :i = 0;
+
+  if (n == 0) then (Y)
+    :语句2;
+  else (N)
+    :语句3;
+  endif
+
+repeat while (loop)
+
+@enduml
+....
+
+**数判定节点（推荐！）**
+
+公式：V(G) = 判定节点数 + 1
+
+步骤：
+
+1. 在代码中数出所有的 if、else if、while、for、case 等分支语句。
+
+2. 每个分支语句算 1个判定节点。
+   * 判定节点数 = 3（while、i>0、n==0）
+
+3. 最后 +1 就是环路复杂度
+   * V(G) = 3 + 1 = 4
+
+IMPORTANT: 该题有个 while 循环，容易被忽略！
+
 == 12 设计模式
 （A）设计模式将一个请求封装为一个对象，从而使得可以用不同的请求对客户进行参数化，对请求排队或记录请求日志，以及支持可撤销的操作。
 
