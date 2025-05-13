@@ -542,7 +542,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_奇偶校验">奇偶校验</a></li>
 <li><a href="#_循环冗余校验码crc校验">循环冗余校验码‌（CRC校验）</a></li>
-<li><a href="#_海明码">海明码</a></li>
+<li><a href="#_海明码">海明码</a>
+<ul class="sectlevel4">
+<li><a href="#_example1_计算海明码">Example1 计算海明码</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -624,12 +628,27 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_网络层">网络层</a>
 <ul class="sectlevel3">
-<li><a href="#_ip_数据报分片">IP 数据报分片</a></li>
+<li><a href="#_ip_数据报分片">IP 数据报分片</a>
+<ul class="sectlevel4">
+<li><a href="#_example1">Example1</a></li>
+<li><a href="#_example2">Example2</a></li>
+<li><a href="#_example3">Example3</a></li>
+<li><a href="#_example4">Example4</a></li>
+</ul>
+</li>
 <li><a href="#_ip_地址分类">IP 地址分类</a></li>
 <li><a href="#_ip_地址特殊情况">IP 地址特殊情况</a></li>
-<li><a href="#_子网掩码计算子网号">子网掩码计算子网号</a></li>
+<li><a href="#_子网掩码计算子网号">子网掩码计算子网号</a>
+<ul class="sectlevel4">
+<li><a href="#_子网数计算">子网数计算</a></li>
+</ul>
+</li>
 <li><a href="#_ipv6_协议">IPv6 协议</a></li>
-<li><a href="#_rip_协议">RIP 协议</a></li>
+<li><a href="#_rip_协议">RIP 协议</a>
+<ul class="sectlevel4">
+<li><a href="#_example_2">Example</a></li>
+</ul>
+</li>
 <li><a href="#_bgp_协议">BGP 协议</a></li>
 </ul>
 </li>
@@ -5272,6 +5291,111 @@ D 逻辑设计和概念设计</pre>
 <img src="img/ip-subnet-2025-05-10-201820.png" alt="ip-subnet-mask" width="1080">
 </div>
 </div>
+<div class="sect4">
+<h5 id="_子网数计算">子网数计算</h5>
+<div class="paragraph">
+<p>A类网络是很大的网络，每个A类网络中可以有（\(2^{24}\)）个网络地址。
+实际使用中必须把A类网络划分为子网，如果指定的子网掩码为255.255.192.0，则该网络被划分为（1024）个子网。</p>
+</div>
+<div class="paragraph">
+<p>解答:</p>
+</div>
+<div class="paragraph">
+<p>一、A类网络能有多少个网络地址？</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>IP地址分类背景</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A 类地址范围是：<code>0.0.0.0</code> 到 <code>126.255.255.255</code></p>
+</li>
+<li>
+<p>默认子网掩码是：<code>255.0.0.0</code>，即网络部分是 <strong>前8位</strong>，剩下的 <strong>24位用于主机地址</strong>。</p>
+</li>
+<li>
+<p>所以每个A类网络的格式是：<code>网络号.主机号.主机号.主机号</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>一个A类网络中的地址数：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>有24位可用于主机号 → 共有 \(2^{24}\) 个地址</p>
+</li>
+<li>
+<p>其中通常有两个地址是保留的（网络地址和广播地址），但这道题问的是“<strong>可以有多少个网络地址</strong>”，实际指的是<strong>地址空间的数量</strong>。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>二、如果子网掩码为255.255.192.0，该A类网络被划分为多少个子网？</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>255.255.192.0 转换为二进制：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>即：<code>11111111.11111111.11000000.00000000</code></p>
+</li>
+<li>
+<p>这是 <strong>前18位是网络位</strong>（8 位原始 + 新增 10 位子网位）</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>子网位数：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A类默认是 8 位网络号</p>
+</li>
+<li>
+<p>现在掩码变成了 18 位网络位 → 多出了 <strong>10位用于划分子网</strong></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>子网数计算：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>有10位子网位 → 子网数 = \(2^{10} = 1024\)</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>总结：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A类网络地址数: 24位主机位 → \(2^{24}\) 个主机地址</p>
+</li>
+<li>
+<p>子网掩码变化: 从8位网络位扩展到18位 → 有10位可用作子网划分</p>
+</li>
+<li>
+<p>可划分子网数: \(2^{10} = 1024\) 个子网</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_ipv6_协议">IPv6 协议</h4>
@@ -5671,7 +5795,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-13 07:20:59 +0800
+Last updated 2025-05-13 08:44:14 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
