@@ -174,7 +174,9 @@
 <v t="swot.20250510130542.1"><vh>10 编程语言</vh>
 <v t="swot.20250510130542.2"><vh>10.1 C 语言</vh></v>
 </v>
-<v t="swot.20250511123650.1"><vh>11 软件测试</vh></v>
+<v t="swot.20250511123650.1"><vh>11 软件测试</vh>
+<v t="swot.20250513155441.1"><vh>Example McCabe度量法计算其环路复杂度</vh></v>
+</v>
 <v t="swot.20250512205329.1"><vh>12 设计模式</vh></v>
 <v t="swot.20250510175912.1"><vh>13 UML 图</vh>
 <v t="swot.20250510175912.2"><vh>13.1 类图符号</vh></v>
@@ -4479,6 +4481,54 @@ image::img/queue_length.png[]
 
 由于队列中存储位置编号是在 0～M－1 之间循环的，Q.rear-Q.front 的结果有可能是负数，故在 Q.rear-Q.front基础上加上 M 可恢复为正数，而此正数有可能超出 0～M－1 的范围，故用整除，M 取余运算恢复一下，因此长度计算的式子为 (Q.rear-Q.front+M)%M。
 
+</t>
+<t tx="swot.20250513155441.1">采用McCabe度量法计算下图的环路复杂度为（C）。
+
+    A 2
+    B 3
+    C 4
+    D 5
+
+[plantuml, target=img/diagram-2025-05-13-155805, format=svg]
+....
+@startuml
+start
+
+repeat
+
+  if (i &gt; 0) then (Y)
+    :语句1;
+  else (N)
+  endif
+
+  :i = 0;
+
+  if (n == 0) then (Y)
+    :语句2;
+  else (N)
+    :语句3;
+  endif
+
+repeat while (loop)
+
+@enduml
+....
+
+**数判定节点（推荐！）**
+
+公式：V(G) = 判定节点数 + 1
+
+步骤：
+
+1. 在代码中数出所有的 if、else if、while、for、case 等分支语句。
+
+2. 每个分支语句算 1个判定节点。
+   * 判定节点数 = 3（while、i&gt;0、n==0）
+
+3. 最后 +1 就是环路复杂度
+   * V(G) = 3 + 1 = 4
+
+IMPORTANT: 该题有个 while 循环，容易被忽略！
 </t>
 </tnodes>
 </leo_file>
