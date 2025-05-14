@@ -630,7 +630,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_9_数据库">9 数据库</a>
 <ul class="sectlevel2">
-<li><a href="#_9_1_关系模式">9.1 关系模式</a></li>
+<li><a href="#_9_1_关系模式">9.1 关系模式</a>
+<ul class="sectlevel3">
+<li><a href="#_求候选码">求候选码</a></li>
+<li><a href="#_无损连接分解">无损连接分解</a></li>
+</ul>
+</li>
 <li><a href="#_9_2_关系代数表达式">9.2 关系代数表达式</a>
 <ul class="sectlevel3">
 <li><a href="#_9_2_1_问题1">9.2.1 问题1</a></li>
@@ -4968,6 +4973,179 @@ R3（学生，时间，教室，课程 ），</pre>
 <img src="img/Snipaste_2025-05-10_17-21-37.png" alt="1NF-2NF-3NF" width="520">
 </div>
 </div>
+<div class="sect3">
+<h4 id="_求候选码">求候选码</h4>
+<div class="paragraph">
+<p>关系模式R(U,F)，其中U=(W,X,Y,Z)，F={WX→Y,W→X,X,→Z,y→W}。
+关系模式R的候选码是（C），（ ）是无损连接并保持函数依赖的分解。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A ρ={R1(WY)，R2(XZ)}
+B ρ={R1(WZ)，R2(XY)}
+C ρ={R1(WXY)，R2(XZ)}
+D ρ={R1(WX)，R2(YZ)}</pre>
+</div>
+</div>
+<hr>
+</div>
+<div class="sect3">
+<h4 id="_无损连接分解">无损连接分解</h4>
+<div class="paragraph">
+<p>什么是无损连接分解？</p>
+</div>
+<div class="paragraph">
+<p><strong>一个关系 R 被分解成若干子关系（如 R1、R2），如果通过自然连接（JOIN）能</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>完全还原出原关系 R，</p>
+</li>
+<li>
+<p>且没有出现冗余或丢失信息，</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>就称为这个分解是 <strong>无损连接（Lossless Join）</strong>。</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>如何判断分解是否为无损连接？</p>
+</div>
+<div class="paragraph">
+<p>对两个子关系 <code>R1</code> 和 <code>R2</code>，只要满足以下 <strong>任意一条</strong>，就是无损连接：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong><code>R1 ∩ R2 → R1 - R2 ∈ F⁺</code></strong>
+<strong>或</strong>
+<strong><code>R1 ∩ R2 → R2 - R1 ∈ F⁺</code></strong></p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>说明：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>R1 ∩ R2</code>: 两个子关系的<strong>交集属性</strong></p>
+</li>
+<li>
+<p><code>R1 - R2</code>: <code>R1</code> 中独有的属性</p>
+</li>
+<li>
+<p><code>F⁺</code>: 函数依赖集合 <code>F</code> 的<strong>闭包</strong></p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p>判断步骤（口诀）：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>求交集</strong> <code>R1 ∩ R2</code></p>
+</li>
+<li>
+<p><strong>求差集</strong> <code>R1 - R2</code> 和 <code>R2 - R1</code></p>
+</li>
+<li>
+<p>判断交集属性能否推出任意一个差集（在 <code>F⁺</code> 中）</p>
+<div class="ulist">
+<ul>
+<li>
+<p>如果能推出 ⇒ ✅ 无损连接</p>
+</li>
+<li>
+<p>否则 ⇒ ❌ 有损连接</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<hr>
+<div class="paragraph">
+<p>小结一句话：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>只要两个表的交集属性能推出任意一边的差集，就一定是无损连接。</strong></p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p><strong>举例说明：</strong></p>
+</div>
+<div class="paragraph">
+<p>假设：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>原关系：R(A, B, C)</p>
+</li>
+<li>
+<p>函数依赖：F = { A → B }</p>
+</li>
+<li>
+<p>分解为：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>R1(A, B)</p>
+</li>
+<li>
+<p>R2(A, C)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>分析：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>R1 ∩ R2 = A</p>
+</li>
+<li>
+<p>R1 - R2 = B</p>
+</li>
+<li>
+<p>R2 - R1 = C</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>我们去判断：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A → B ∈ F⁺ ✅ 是的！所以满足第一条 ⇒ 无损连接！</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>即使：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A → C ❌ 不成立也无所谓！</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_9_2_关系代数表达式">9.2 关系代数表达式</h3>
@@ -6917,7 +7095,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-14 15:38:06 +0800
+Last updated 2025-05-14 19:06:49 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
