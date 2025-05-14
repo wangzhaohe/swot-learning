@@ -606,6 +606,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </li>
 <li><a href="#_5_9_存储磁盘块计算">5.9 存储磁盘块计算</a></li>
+<li><a href="#_5_10_存储磁盘读取文件时间计算">5.10 存储磁盘读取文件时间计算</a></li>
 </ul>
 </li>
 <li><a href="#_6_指令流水线">6 指令流水线</a></li>
@@ -4003,6 +4004,40 @@ D 114</pre>
 所以答案是 D 114</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_5_10_存储磁盘读取文件时间计算">5.10 存储磁盘读取文件时间计算</h3>
+<div class="paragraph">
+<p>某磁盘磁头从一个磁道移至另一个磁道需要 10ms。文件在磁盘上非连续存放，逻辑上相邻数据块的平均移动距离为 10 个磁道，每块的旋转延迟时间及传输时间分别为 100ms 和 2ms，则读取一个 100 块的文件需要（D）ms 时间。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 10200
+B 11000
+C 11200
+D 20200</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>本题考查操作系统中设备管理的基本知识。
+访问一个数据块的时间应为寻道时间加旋转延迟时间及传输时间。
+根据题意，每块的旋转延迟时间及传输时间共需 102ms，磁头从一个磁道移至另一个磁道需要 10ms，但逻辑上相邻数据块的平均距离为10个磁道，即读完一个数据块到下一个数据块寻道时间需要 100ms。
+通过上述分析，本题访问一个数据块的时间应为 202ms，而读取一个 100块的文件共需要 20200ms。</p>
+</div>
+<div class="paragraph">
+<p>如果以后再遇到类似题，可以用这个公式快速估算：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>总读取时间 = 块数 *（寻道时间 + 旋转延迟 + 传输时间）
+         = 100 * (10*10+100+2)
+         = 20200ms</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前提是：数据块非连续存储，所以每次都要重复这三步。</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -6690,7 +6725,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-14 11:51:41 +0800
+Last updated 2025-05-14 12:03:31 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
