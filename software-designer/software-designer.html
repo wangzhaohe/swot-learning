@@ -561,10 +561,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_2_6_哈夫曼树最优二叉树公式">2.6 哈夫曼树(最优二叉树)公式</a></li>
 <li><a href="#_2_7_哈夫曼树编码">2.7 哈夫曼树编码</a></li>
 <li><a href="#_2_8_无向图顶点度数之和">2.8 无向图顶点度数之和</a></li>
-<li><a href="#_2_9_某个度的节点数">2.9 某个度的节点数</a></li>
-<li><a href="#_2_10_拓扑排序">2.10 拓扑排序</a></li>
-<li><a href="#_2_11_进栈出栈">2.11 进栈出栈</a></li>
-<li><a href="#_2_12_队列长度">2.12 队列长度</a></li>
+<li><a href="#_2_9_有向图邻接矩阵">2.9 有向图邻接矩阵</a></li>
+<li><a href="#_2_10_某个度的节点数">2.10 某个度的节点数</a></li>
+<li><a href="#_2_11_拓扑排序">2.11 拓扑排序</a></li>
+<li><a href="#_2_12_进栈出栈">2.12 进栈出栈</a></li>
+<li><a href="#_2_13_队列长度">2.13 队列长度</a></li>
 </ul>
 </li>
 <li><a href="#_3_算法">3 算法</a>
@@ -632,8 +633,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel2">
 <li><a href="#_9_1_关系模式">9.1 关系模式</a>
 <ul class="sectlevel3">
-<li><a href="#_求候选键">求候选键</a></li>
-<li><a href="#_无损连接分解">无损连接分解</a></li>
+<li><a href="#_9_1_1_求候选键">9.1.1 求候选键</a></li>
+<li><a href="#_9_1_2_无损连接分解">9.1.2 无损连接分解</a></li>
 </ul>
 </li>
 <li><a href="#_9_2_关系代数表达式">9.2 关系代数表达式</a>
@@ -699,7 +700,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_14_1_类图符号">14.1 类图符号</a></li>
 <li><a href="#_14_2_活动图">14.2 活动图</a>
 <ul class="sectlevel3">
-<li><a href="#_复杂的例子">复杂的例子</a></li>
+<li><a href="#_14_2_1_复杂的例子">14.2.1 复杂的例子</a></li>
 </ul>
 </li>
 <li><a href="#_14_3_用例图">14.3 用例图</a></li>
@@ -2109,7 +2110,146 @@ D 0011, 10, 11, 0010, 01, 000</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_9_某个度的节点数">2.9 某个度的节点数</h3>
+<h3 id="_2_9_有向图邻接矩阵">2.9 有向图邻接矩阵</h3>
+<div class="paragraph">
+<p>对于如下所示的有向图，其邻接矩阵是一个（A）的矩阵。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/graphviz-2025-05-14-193037.svg" alt="graphviz 2025 05 14 193037" width="250" height="130">
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 5*5
+B 5*7
+C 7*5
+D 7*7</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>分析：<strong>邻接矩阵的定义：</strong></p>
+</div>
+<div class="paragraph">
+<p>对于一个有向图，邻接矩阵是一个 n × n 的矩阵，其中 n 是图中顶点的个数。<strong>所以答案是 A。</strong></p>
+</div>
+<div class="paragraph">
+<p>行和列都表示图中的顶点：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>行号表示“从哪个顶点出发”（起点）</p>
+</li>
+<li>
+<p>列号表示“到哪个顶点去”（终点）</p>
+</li>
+<li>
+<p>行列交点的值表示是否存在这样的边。如果存在从顶点 i 到顶点 j 的边，则 A[i][j] = 1，否则为 0。</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. 邻接矩阵（顶点 1 到 5）</caption>
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top"></th>
+<th class="tableblock halign-center valign-top">1</th>
+<th class="tableblock halign-center valign-top">2</th>
+<th class="tableblock halign-center valign-top">3</th>
+<th class="tableblock halign-center valign-top">4</th>
+<th class="tableblock halign-center valign-top">5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. 构造邻接表</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">顶点</th>
+<th class="tableblock halign-left valign-top">邻接点（即表结点）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2 → 3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4 → 5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">—（无）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">—（无）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_2_10_某个度的节点数">2.10 某个度的节点数</h3>
 <div class="paragraph">
 <p>在—棵度为 3 的树中，若有 2 个度为 3 的结点，有 1 个度为 2 的结点，则有（C）个度为 0 的结点。</p>
 </div>
@@ -2188,7 +2328,7 @@ D E F G H I</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_10_拓扑排序">2.10 拓扑排序</h3>
+<h3 id="_2_11_拓扑排序">2.11 拓扑排序</h3>
 <div class="paragraph">
 <p>（ ）是右图的合法拓扑序列。</p>
 </div>
@@ -2235,7 +2375,7 @@ D 564213</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_11_进栈出栈">2.11 进栈出栈</h3>
+<h3 id="_2_12_进栈出栈">2.12 进栈出栈</h3>
 <div class="paragraph">
 <p>若元素以a,b,c,d,e的顺序进入一个初始为空的栈中，每个元素进栈、出栈各1次，要求出栈的第一个元素为d，则合法的出栈序列共有 （4） 种。</p>
 </div>
@@ -2268,7 +2408,7 @@ D 24</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_12_队列长度">2.12 队列长度</h3>
+<h3 id="_2_13_队列长度">2.13 队列长度</h3>
 <div class="paragraph">
 <p>设某循环队列 Q 的定义中有 front 和 rear 两个域变量，其中，front 指示队头元素的位置，rear 指示队尾元素之后的位置，如下图所示。若该队列的容量为 M，则其长度为（D）。</p>
 </div>
@@ -4974,7 +5114,7 @@ R3（学生，时间，教室，课程 ），</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_求候选键">求候选键</h4>
+<h4 id="_9_1_1_求候选键">9.1.1 求候选键</h4>
 <h5 id="_数据库中的候选键candidate_key" class="discrete">数据库中的候选键（Candidate Key）</h5>
 <div class="paragraph">
 <p>在数据库中，<strong>候选键（Candidate Key）</strong> 是指在一个关系（表）中，能够唯一标识元组（记录）的属性或属性组合。</p>
@@ -5089,7 +5229,7 @@ R3（学生，时间，教室，课程 ），</pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_无损连接分解">无损连接分解</h4>
+<h4 id="_9_1_2_无损连接分解">9.1.2 无损连接分解</h4>
 <div class="paragraph">
 <p>什么是无损连接分解？</p>
 </div>
@@ -7087,7 +7227,7 @@ D 24</pre>
 </ul>
 </div>
 <div class="sect3">
-<h4 id="_复杂的例子">复杂的例子</h4>
+<h4 id="_14_2_1_复杂的例子">14.2.1 复杂的例子</h4>
 <div class="paragraph">
 <p>某工程的进度计划网络图如下，其中包含了 10 个节点，节点之间的箭线表示作业及其进度方向，箭线旁标注了作业所需的时间（单位：周）。设起始节点 A 的时间为0，则节点 E 的最早时间和最迟时间分别为（D）周。</p>
 </div>
@@ -7194,7 +7334,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-14 19:14:20 +0800
+Last updated 2025-05-14 19:57:29 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
