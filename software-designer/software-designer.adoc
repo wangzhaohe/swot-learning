@@ -3238,6 +3238,72 @@ digraph critical_path {
 
 * 活动BD不在关键路径上，包含该活动的最长路径为 A-B-D-G-I-K-L，其长度为 22，因此松弛时间为 2。
 
+==== 复杂的例子
+某工程的进度计划网络图如下，其中包含了 10 个节点，节点之间的箭线表示作业及其进度方向，箭线旁标注了作业所需的时间（单位：周）。设起始节点 A 的时间为0，则节点 E 的最早时间和最迟时间分别为（D）周。
+
+    A 9,19
+    B 9,18
+    C 15,17
+    D 15,16
+
+.如图所示
+[graphviz, target="img/graphviz_critical-path-2025-05-14-132756", format=svg]
+....
+digraph critical_path {
+    rankdir=LR;
+    node [shape = circle];
+    A[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    C[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    D[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    E[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    G[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    I[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    J[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    
+
+    A -> B [label = "7"];
+    A -> C [label = "5" color = "red"];
+    A -> D [label = "6"];
+
+    B -> E [label = "2"];
+    B -> D [label = "0"];
+    B -> F [label = "3"];
+
+    C -> D [label = "5" color = "red"];
+    C -> E [label = "4"];
+    C -> F [label = "7"];
+    C -> H [label = "8"];
+
+    D -> E [label = "5" color = "lightblue"];
+    D -> F [label = "5" color = "red"];
+
+    E -> G [label = "5" color = "lightblue"];
+    E -> I [label = "4"];
+    E -> H [label = "3"];
+
+    F -> G [label = "6" color = "red"];
+    F -> I [label = "5"];
+    F -> H [label = "3"];
+
+    G -> I [label = "2" color = "red"];
+    G -> J [label = "6"];
+
+    I -> J [label = "5" color = "red"];
+
+    H -> I [label = "1"];
+    H -> J [label = "7"];
+}
+....
+
+分析：关键路线是 ACDFGIJ，共 28 周。
+
+* 节点 E 的最早时间：找前面最长的路径为 *ACDE=15* (因为 E 要等最长的路径完成才能开始)
+
+* 节点 E 的最迟时间：E 后面最长的路径为 *EGIJ=12*，所以 E 要在第 12 周之前开始。
+  ** 总共是 28 周，所以 E 最晚要在第 *28 - 12 = 16* 周开始。
+
+所以答案是：D
+
 === 14.3 用例图
 现有两个用例 UC1 和 UC2，其中 UC2 是一个完整的用例，可被实例化，而 UC1 需要 UC2 中的事件流才可被实例化，且 UC1 指定了使用 UC2 的精确位置，则 UC1 和 UC2 间的关系是"（A）" 。
 
