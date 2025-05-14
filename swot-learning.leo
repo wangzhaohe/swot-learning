@@ -193,7 +193,9 @@
 <v t="swot.20250512205329.1"><vh>13 设计模式</vh></v>
 <v t="swot.20250510175912.1"><vh>14 UML 图</vh>
 <v t="swot.20250510175912.2"><vh>14.1 类图符号</vh></v>
-<v t="swot.20250511103711.1"><vh>14.2 活动图</vh></v>
+<v t="swot.20250511103711.1"><vh>14.2 活动图</vh>
+<v t="swot.20250514132317.1"><vh>复杂的例子</vh></v>
+</v>
 <v t="swot.20250511230628.1"><vh>14.3 用例图</vh></v>
 </v>
 <v t="swot.20250511233342.1"><vh>15 专业英语</vh></v>
@@ -4938,6 +4940,71 @@ stem:[
 ==== 正确答案
 
 *B. 第二种方法的加速比是 1.23，效果较好*
+</t>
+<t tx="swot.20250514132317.1">某工程的进度计划网络图如下，其中包含了 10 个节点，节点之间的箭线表示作业及其进度方向，箭线旁标注了作业所需的时间（单位：周）。设起始节点 A 的时间为0，则节点 E 的最早时间和最迟时间分别为（D）周。
+
+    A 9,19
+    B 9,18
+    C 15,17
+    D 15,16
+
+.如图所示
+[graphviz, target="img/graphviz_critical-path-2025-05-14-132756", format=svg]
+....
+digraph critical_path {
+    rankdir=LR;
+    node [shape = circle];
+    A[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    C[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    D[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    E[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    G[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    I[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    J[style = filled, fillcolor = "lightblue", fontcolor = "black"];
+    
+
+    A -&gt; B [label = "7"];
+    A -&gt; C [label = "5" color = "red"];
+    A -&gt; D [label = "6"];
+
+    B -&gt; E [label = "2"];
+    B -&gt; D [label = "0"];
+    B -&gt; F [label = "3"];
+
+    C -&gt; D [label = "5" color = "red"];
+    C -&gt; E [label = "4"];
+    C -&gt; F [label = "7"];
+    C -&gt; H [label = "8"];
+
+    D -&gt; E [label = "5" color = "lightblue"];
+    D -&gt; F [label = "5" color = "red"];
+
+    E -&gt; G [label = "5" color = "lightblue"];
+    E -&gt; I [label = "4"];
+    E -&gt; H [label = "3"];
+
+    F -&gt; G [label = "6" color = "red"];
+    F -&gt; I [label = "5"];
+    F -&gt; H [label = "3"];
+
+    G -&gt; I [label = "2" color = "red"];
+    G -&gt; J [label = "6"];
+
+    I -&gt; J [label = "5" color = "red"];
+
+    H -&gt; I [label = "1"];
+    H -&gt; J [label = "7"];
+}
+....
+
+分析：关键路线是 ACDFGIJ，共 28 周。
+
+* 节点 E 的最早时间：找前面最长的路径为 *ACDE=15* (因为 E 要等最长的路径完成才能开始)
+
+* 节点 E 的最迟时间：E 后面最长的路径为 *EGIJ=12*，所以 E 要在第 12 周之前开始。
+  ** 总共是 28 周，所以 E 最晚要在第 *28 - 12 = 16* 周开始。
+
+所以答案是：D
 </t>
 </tnodes>
 </leo_file>
