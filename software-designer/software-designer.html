@@ -610,6 +610,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_5_9_存储磁盘块计算">5.9 存储磁盘块计算</a></li>
 <li><a href="#_5_10_存储磁盘读取文件时间计算">5.10 存储磁盘读取文件时间计算</a></li>
+<li><a href="#_5_11_存储图片需光盘张数">5.11 存储图片需光盘张数</a></li>
 </ul>
 </li>
 <li><a href="#_6_指令流水线">6 指令流水线</a></li>
@@ -4379,6 +4380,65 @@ D 20200</pre>
 <p>前提是：数据块非连续存储，所以每次都要重复这三步。</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_5_11_存储图片需光盘张数">5.11 存储图片需光盘张数</h3>
+<div class="paragraph">
+<p>10000 张分辨率为 1024X768 的真彩（32位）图片刻录到DVD光盘上，假设每张光盘可以存放 4GB 的信息，则需要（B）张光盘。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 7
+B 8
+C 70
+D 71</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>图像数据大小与光盘数量计算（二进制单位），32位 指每个像素占用 32bit。</p>
+</div>
+<h4 id="_图像数据量计算方法" class="discrete">图像数据量计算方法</h4>
+<div class="paragraph">
+<p>每张图片的分辨率为 1024×768，色深为 32 位（即每像素 32 bit），共 10000 张图片。</p>
+</div>
+<div class="paragraph">
+<p>总数据量（以 bit 为单位）如下：</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[图像数据量：10000 × 1024 × 768 × 32\text{ bit}\]
+</div>
+</div>
+<h4 id="_光盘容量换算方式" class="discrete">光盘容量换算方式</h4>
+<div class="paragraph">
+<p>每张光盘容量为 4GB，其中：</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[1GB 为 2^{30} 字节（Byte），即 2^{30} × 8 bit\]
+</div>
+</div>
+<div class="paragraph">
+<p>所以每张光盘容量为：</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[4 × 2^{30} × 8 bit\]
+</div>
+</div>
+<h4 id="_所需光盘张数计算步骤" class="discrete">所需光盘张数计算步骤</h4>
+<div class="paragraph">
+<p>将图像总数据量除以单张光盘容量，得到：</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\frac{10000 × 1024 × 768 × 32}{4 × 2^{30} × 8} ≈ 7.3\]
+</div>
+</div>
+<div class="paragraph">
+<p>最终结果向上取整为：8 张光盘</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -7618,7 +7678,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-15 06:23:12 +0800
+Last updated 2025-05-15 06:52:21 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
