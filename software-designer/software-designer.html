@@ -632,7 +632,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel2">
 <li><a href="#_9_1_关系模式">9.1 关系模式</a>
 <ul class="sectlevel3">
-<li><a href="#_求候选码">求候选码</a></li>
+<li><a href="#_求候选键">求候选键</a></li>
 <li><a href="#_无损连接分解">无损连接分解</a></li>
 </ul>
 </li>
@@ -4974,20 +4974,119 @@ R3（学生，时间，教室，课程 ），</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_求候选码">求候选码</h4>
+<h4 id="_求候选键">求候选键</h4>
+<h5 id="_数据库中的候选键candidate_key" class="discrete">数据库中的候选键（Candidate Key）</h5>
 <div class="paragraph">
-<p>关系模式R(U,F)，其中U=(W,X,Y,Z)，F={WX→Y,W→X,X,→Z,y→W}。
-关系模式R的候选码是（C），（ ）是无损连接并保持函数依赖的分解。</p>
+<p>在数据库中，<strong>候选键（Candidate Key）</strong> 是指在一个关系（表）中，能够唯一标识元组（记录）的属性或属性组合。</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>A ρ={R1(WY)，R2(XZ)}
-B ρ={R1(WZ)，R2(XY)}
-C ρ={R1(WXY)，R2(XZ)}
-D ρ={R1(WX)，R2(YZ)}</pre>
+<h5 id="_候选键的两个重要特性" class="discrete">候选键的两个重要特性</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>唯一性（Uniqueness）</strong>
+能唯一标识一条记录，表中任意两个元组在该属性（组）上的值不相同。</p>
+</li>
+<li>
+<p><strong>最小性（Minimality）</strong>
+候选键不能再简化，即不能再去掉其中的任何一个属性，否则就不能保证唯一性。</p>
+</li>
+</ol>
 </div>
+<h5 id="_示例" class="discrete">示例</h5>
+<div class="paragraph">
+<p>假设有一个学生表 <code>Student</code>：</p>
 </div>
-<hr>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">学号（student_id）</th>
+<th class="tableblock halign-left valign-top">身份证号（id_card）</th>
+<th class="tableblock halign-left valign-top">姓名（name）</th>
+<th class="tableblock halign-left valign-top">电话号码（phone）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">123456789012345678</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">13800000001</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1002</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">234567890123456789</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">李四</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">13800000002</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>分析：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>student_id</code> 能唯一标识一个学生 → 是候选键。</p>
+</li>
+<li>
+<p><code>id_card</code> 也是唯一的 → 是候选键。</p>
+</li>
+<li>
+<p><code>name</code> 和 <code>phone</code> 单独都不唯一 → 不是候选键。</p>
+</li>
+<li>
+<p>如果 <code>name + phone</code> 组合能唯一标识学生，也可作为候选键（但通常不推荐）。</p>
+</li>
+</ul>
+</div>
+<h5 id="_候选键与主键的关系" class="discrete">候选键与主键的关系</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>主键（Primary Key）</strong> 是从候选键中选出来的一个，作为主要标识使用。</p>
+</li>
+<li>
+<p>一个表可以有多个候选键，但 <strong>只能有一个主键</strong>。</p>
+</li>
+</ul>
+</div>
+<h5 id="_小结" class="discrete">小结</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">概念</th>
+<th class="tableblock halign-left valign-top">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">候选键</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">能唯一标识记录，且不能再简化</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">主键</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">候选键中被选为主标识的那个</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">唯一性</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">所有记录的该键值都不相同</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">最小性</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">不能包含多余的属性</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_无损连接分解">无损连接分解</h4>
@@ -7095,7 +7194,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-14 19:06:49 +0800
+Last updated 2025-05-14 19:14:20 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
