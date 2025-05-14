@@ -113,6 +113,10 @@
 <v t="swot.20250513220926.1"><vh>python 插入排序--源代码</vh></v>
 <v t="swot.20250514103808.1"><vh>python 插入排序--活动图</vh></v>
 </v>
+<v t="swot.20250514110224.1"><vh>3.1.2 快速排序算法时间和空间复杂度</vh>
+<v t="swot.20250514111022.1"><vh>python 快速排序--源代码</vh></v>
+<v t="swot.20250514113757.1"><vh>python 快速排序--活动图</vh></v>
+</v>
 </v>
 <v t="swot.20250513184634.1"><vh>3.2 背包问题</vh></v>
 </v>
@@ -4687,6 +4691,123 @@ endwhile
 
 :Print "最终排序结果";
 stop
+@enduml
+....
+</t>
+<t tx="swot.20250514110224.1">对 n 个基本有序的整数进行排序，若采用快速排序算法，则时间和空间复杂度分别为（ ）。
+
+    A O(n2)和O(n)
+    B O(nlgn)和O(n)
+    C O(n2)和O(1)
+    D O(nlgn)和O(1)
+
+---
+
+快速排序的核心是 “分治法”（Divide and Conquer）：
+
+1. 选一个“基准”元素（pivot）。
+2. 把数组分成两个部分：
+    * 左边部分：所有小于 pivot 的元素。
+    * 右边部分：所有大于等于 pivot 的元素。
+3. 分别对左右两部分递归地进行排序。
+4. 把排序好的左边 + pivot + 排序好的右边合并起来。
+
+就是这样一步一步拆分成小问题，最后拼回一个有序的结果。
+
+[discrete]
+==== 示例演示
+
+对数组 `[5, 2, 4, 6, 1, 3]` 执行 quicksort，过程如下：
+
+. 第一次：pivot = 5
+  * 左边：[2, 4, 1, 3]
+  * 右边：[6]
+
+. 对左边 `[2, 4, 1, 3]` 执行 quicksort：
+  * pivot = 2
+  * 左边：[1]
+  * 右边：[4, 3]
+
+. 对 `[4, 3]` 执行 quicksort：
+  * pivot = 4
+  * 左边：[3]
+  * 右边：[]
+
+. 合并过程：
+[source]
+----
+[1] + [2] + [3, 4] = [1, 2, 3, 4]
+----
+
+. 最终结果：
+[source]
+----
+[1, 2, 3, 4] + [5] + [6] = [1, 2, 3, 4, 5, 6]
+----
+
+[discrete]
+==== 为什么叫“快速排序”？
+
+快速排序之所以叫“快速”，是因为它的平均性能非常优秀：
+
+* 平均时间复杂度：`O(n log n)`
+* 最坏情况：`O(n^2)`（当 pivot 选得很差时）
+
+它在大多数实际应用中比冒泡、选择、插入等排序算法快很多，因此得名“快速排序”。
+
+[discrete]
+==== 总结
+
+快速排序之所以能够排序成功，是因为它在每一步都将数据划分为两部分：
+* 小的元素在左边
+* 大的元素在右边
+
+通过递归地排序这两部分，最终拼出一个完整有序的结果。
+</t>
+<t tx="swot.20250514111022.1">@doc
+下面是用 Python 实现的 快速排序（Quicksort） 源代码，采用的是经典的递归方式：
+
+[source,python,]
+----
+@c
+@language python
+def quicksort(arr):
+    if len(arr) &lt;= 1:
+        return arr
+    pivot = arr[0]  # 选取第一个元素作为基准
+    left =  [x for x in arr[1:] if x &lt; pivot]     # 小于 pivot 的元素
+    right = [x for x in arr[1:] if x &gt;= pivot]    # 大于等于 pivot 的元素
+    return quicksort(left) + [pivot] + quicksort(right)
+
+nums = [5, 2, 4, 6, 1, 3]
+sorted_nums = quicksort(nums)
+print(sorted_nums)
+@doc
+----
+
+[discrete]
+=== </t>
+<t tx="swot.20250514113757.1">[plantuml, target=img/diagram-2025-05-14-113805, format=svg]
+....
+@startuml
+start
+
+:调用 quicksort(arr);
+
+if (arr 长度 &lt;= 1?) then (是)
+  :返回 arr;
+  stop
+else (否)
+  :pivot = arr[0];
+  :left = [x for x in arr[1:] if x &lt; pivot];
+  :right = [x for x in arr[1:] if x &gt;= pivot];
+
+  :对 left 递归执行 quicksort;
+  :对 right 递归执行 quicksort;
+
+  :返回 quicksort(left) + [pivot] + quicksort(right);
+  stop
+endif
 @enduml
 ....
 </t>
