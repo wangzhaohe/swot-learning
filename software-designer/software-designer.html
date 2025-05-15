@@ -613,6 +613,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_5_10_存储磁盘读取文件时间计算">5.10 存储磁盘读取文件时间计算</a></li>
 <li><a href="#_5_11_存储图片需光盘张数">5.11 存储图片需光盘张数</a></li>
 <li><a href="#_5_12_地址范围转字节数">5.12 地址范围转字节数</a></li>
+<li><a href="#_5_13_页式虚拟存储缺页中断分析">5.13 页式虚拟存储缺页中断分析</a></li>
 </ul>
 </li>
 <li><a href="#_6_指令流水线">6 指令流水线</a></li>
@@ -4509,6 +4510,203 @@ D 8</pre>
 <p>所以，192KB ÷ 64KB = 3（片芯片），这就是需要芯片的最少数量。</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_5_13_页式虚拟存储缺页中断分析">5.13 页式虚拟存储缺页中断分析</h3>
+<div class="paragraph">
+<p>假设一台按字节编址的 16 位计算机系统 (此信息在本题中未用到)，采用虚拟页式存储管理方案，页面大小为 2KB（2048 字节），系统中没有使用快表。某用户程序执行以下指令：</p>
+</div>
+<div class="paragraph">
+<p><code>MOVE data1, data2</code></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>MOVE</code> 是一个 4 字节指令。</p>
+</li>
+<li>
+<p><code>data1</code> 和 <code>data2</code> 是两个 32 位操作数（各占 4 字节）。</p>
+</li>
+<li>
+<p>地址分布如下：</p>
+</li>
+<li>
+<p><code>MOVE</code> 指令从地址 <code>2047</code> 开始</p>
+</li>
+<li>
+<p><code>data1</code> 从地址 <code>6143</code> 开始</p>
+</li>
+<li>
+<p><code>data2</code> 从地址 <code>10239</code> 开始</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>程序页表信息：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>仅页号为 <code>0</code> 的页面在内存中（状态位为 1）</p>
+</li>
+<li>
+<p>其他页均不在内存（状态位为 0）</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>页面编号的计算方式</strong></p>
+</div>
+<div class="paragraph">
+<p>由于页面大小为 2KB = 2048 字节 = 2^11，因此每个地址属于的页号可通过如下方式计算：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>页号 = 地址 ÷ 2048（在机器中等价于位操作：页号 = 地址 &gt;&gt; 11）</p>
+</li>
+<li>
+<p>页内偏移 = 地址 % 2048 (本题未用到)</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. 地址与页号的划分示例如下：</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">地址范围</th>
+<th class="tableblock halign-left valign-top">页号</th>
+<th class="tableblock halign-left valign-top">原始状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0 ~ 2047</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1 (开始只有0页号在内存中)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2048 ~ 4095</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4096 ~ 6143</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6144 ~ 8191</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8192 ~ 10239</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10240 ~ 12287</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>缺页中断分析</strong></p>
+</div>
+<div class="paragraph">
+<p>取指令：地址 2047~2050</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>地址 2047：页号 0（在内存）✅</p>
+</li>
+<li>
+<p>地址 2048、2049、2050：页号 1（不在内存）❌</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>→ 访问页号 1 时触发 1 次缺页中断</p>
+</div>
+<div class="paragraph">
+<p><strong>取指令缺页中断次数：1</strong></p>
+</div>
+<div class="paragraph">
+<p>取 data1 操作数：地址 6143~6146</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>地址 6143：页号 2（不在内存）❌</p>
+</li>
+<li>
+<p>地址 6144~6146：页号 3（不在内存）❌</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>→ 跨两个页：页号 2 和 3，各触发 1 次缺页中断</p>
+</div>
+<div class="paragraph">
+<p><strong>取 data1 缺页中断次数：2</strong></p>
+</div>
+<div class="paragraph">
+<p>取 data2 操作数：地址 10239~10242</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>地址 10239：页号 4（不在内存）❌</p>
+</li>
+<li>
+<p>地址 10240~10242：页号 5（不在内存）❌</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>→ 跨两个页：页号 4 和 5，各触发 1 次缺页中断</p>
+</div>
+<div class="paragraph">
+<p><strong>取 data2 缺页中断次数：2</strong></p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>最终结果</strong></p>
+</div>
+<div class="paragraph">
+<p>执行 <code>MOVE data1, data2</code> 指令将产生：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>总缺页中断次数：<strong>5</strong></p>
+</li>
+<li>
+<p>其中：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>取指令产生：<strong>1</strong> 次缺页中断</p>
+</li>
+<li>
+<p>取 data1 操作数产生：<strong>2</strong> 次缺页中断</p>
+</li>
+<li>
+<p>取 data2 操作数产生：<strong>2</strong> 次缺页中断</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -7644,7 +7842,7 @@ D (队长，12)</pre>
 </ul>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. 选项逐一分析</caption>
+<caption class="title">Table 4. 选项逐一分析</caption>
 <colgroup>
 <col style="width: 20%;">
 <col style="width: 80%;">
@@ -8009,7 +8207,7 @@ D 状态</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-15 15:12:36 +0800
+Last updated 2025-05-15 15:45:00 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
