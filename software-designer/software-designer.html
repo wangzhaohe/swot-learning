@@ -699,6 +699,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_12_软件测试">12 软件测试</a>
 <ul class="sectlevel2">
 <li><a href="#_12_1_example_mccabe度量法计算其环路复杂度">12.1 Example McCabe度量法计算其环路复杂度</a></li>
+<li><a href="#_12_3_等价类划分测">12.3 等价类划分测</a></li>
 </ul>
 </li>
 <li><a href="#_13_设计模式">13 设计模式</a></li>
@@ -7589,6 +7590,99 @@ D 5</pre>
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_12_3_等价类划分测">12.3 等价类划分测</h3>
+<div class="paragraph">
+<p>在某班级管理系统中，班级的班委有班长、副班长、学习委员和生活委员，且学生年龄在15\~25岁。若用等价类划分来进行相关测试，则（ ）不是好的测试用例。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A (队长，15)
+B (班长，20)
+C (班长，15)
+D (队长，12)</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>等价类划分测试题解析</p>
+</div>
+<div class="paragraph">
+<p>本题考查的是 <strong>等价类划分测试方法</strong>，该方法用于将输入条件分为有效和无效的等价类，以设计具有代表性的测试用例，从而提高测试效率。</p>
+</div>
+<div class="paragraph">
+<p>题设信息分析</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>班委职位限定为：<code>班长</code>、<code>副班长</code>、<code>学习委员</code>、<code>生活委员</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>→ 合法职位等价类为上述四个</p>
+</li>
+<li>
+<p>→ 其他职位（如`队长`）属于无效等价类</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>学生年龄限定为：`15~25`岁（含边界）</p>
+<div class="ulist">
+<ul>
+<li>
+<p>→ 有效等价类：15 ≤ 年龄 ≤ 25</p>
+</li>
+<li>
+<p>→ 无效等价类：年龄 &lt; 15 或 年龄 &gt; 25</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. 选项逐一分析</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">选项</th>
+<th class="tableblock halign-left valign-top">分析</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A. <code>(队长, 15)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">职位为无效等价类，年龄为有效边界值 → 组合合理，用于测试非法职位
+<em>→ 是一个有效的测试用例</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">B. <code>(班长, 20)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">职位与年龄均为有效等价类，属于正常输入
+<em>→ 是一个有效的测试用例</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C. <code>(班长, 15)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">职位有效，年龄处于边界值（15）
+<em>→ 是一个边界值测试用例，合理有效</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">D. <code>(队长, 12)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">职位和年龄均为无效等价类，无法判断失败原因
+<em>→ <strong>不是一个好的测试用例</strong></em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>正确答案：</strong> <code>D</code>
+因为选项 D 同时落在两个无效等价类中，不利于定位具体的错误来源，因此不是一个好的测试用例。</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -7915,7 +8009,7 @@ D 状态</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-15 14:57:04 +0800
+Last updated 2025-05-15 15:12:36 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
