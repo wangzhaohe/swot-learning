@@ -611,6 +611,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_5_9_存储磁盘块计算">5.9 存储磁盘块计算</a></li>
 <li><a href="#_5_10_存储磁盘读取文件时间计算">5.10 存储磁盘读取文件时间计算</a></li>
 <li><a href="#_5_11_存储图片需光盘张数">5.11 存储图片需光盘张数</a></li>
+<li><a href="#_5_12_地址范围转字节数">5.12 地址范围转字节数</a></li>
 </ul>
 </li>
 <li><a href="#_6_指令流水线">6 指令流水线</a></li>
@@ -4439,6 +4440,51 @@ D 71</pre>
 <p>最终结果向上取整为：8 张光盘</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_5_12_地址范围转字节数">5.12 地址范围转字节数</h3>
+<div class="paragraph">
+<p>内存按字节编址，地址从 A0000H 到 CFFFFH 的内存，共存（D）字节，若用存储容量为 64k×8bit 的存储器芯片构成该内存空间，至少需要（ ）片。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 80KB
+B 96KB
+C 160KB
+D 192KB</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 2
+B 3
+C 5
+D 8</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>从 A0000H 到 CFFFFH 有多少字节？你可以这样估算：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>起始 A0000H ≈ 第 10 个 64KB（A=10）</p>
+</li>
+<li>
+<p>结束 CFFFFH ≈ 第 13 个 64KB（C=12，因为地址从0开始数）</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>→ 总共跨了 3 × 64KB = 30000H = 192KB</p>
+</div>
+<div class="paragraph">
+<p>你要的总容量是 192KB，每片芯片容量是 64KB：</p>
+</div>
+<div class="paragraph">
+<p>所以，192KB ÷ 64KB = 3（片芯片），这就是需要芯片的最少数量。</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -7678,7 +7724,7 @@ D call</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-15 06:52:21 +0800
+Last updated 2025-05-15 08:40:20 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
