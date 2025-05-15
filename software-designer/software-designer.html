@@ -566,9 +566,10 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_2_11_某个度的节点数">2.11 某个度的节点数</a></li>
 <li><a href="#_2_12_拓扑排序">2.12 拓扑排序</a></li>
 <li><a href="#_2_13_进栈出栈">2.13 进栈出栈</a></li>
-<li><a href="#_2_14_队列长度">2.14 队列长度</a></li>
-<li><a href="#_2_15_线性探查法解决冲突构造哈希表">2.15 线性探查法解决冲突构造哈希表</a></li>
-<li><a href="#_2_16_三对角矩阵">2.16 三对角矩阵</a></li>
+<li><a href="#_2_14_栈的大小计算">2.14 栈的大小计算</a></li>
+<li><a href="#_2_15_队列长度">2.15 队列长度</a></li>
+<li><a href="#_2_16_线性探查法解决冲突构造哈希表">2.16 线性探查法解决冲突构造哈希表</a></li>
+<li><a href="#_2_17_三对角矩阵">2.17 三对角矩阵</a></li>
 </ul>
 </li>
 <li><a href="#_3_算法">3 算法</a>
@@ -690,7 +691,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </li>
 <li><a href="#_10_2_7_bgp_协议">10.2.7 BGP 协议</a></li>
-<li><a href="#_10_2_7_ip_确定主机范围">10.2.7 IP 确定主机范围</a></li>
+<li><a href="#_10_2_8_ip_确定主机范围">10.2.8 IP 确定主机范围</a></li>
 </ul>
 </li>
 </ul>
@@ -708,7 +709,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_13_设计模式">13 设计模式</a>
 <ul class="sectlevel2">
-<li><a href="#_软件过程模型">软件过程模型</a></li>
+<li><a href="#_13_1_软件过程模型">13.1 软件过程模型</a></li>
 </ul>
 </li>
 <li><a href="#_14_uml_图">14 UML 图</a>
@@ -2480,7 +2481,400 @@ D 24</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_14_队列长度">2.14 队列长度</h3>
+<h3 id="_2_14_栈的大小计算">2.14 栈的大小计算</h3>
+<div class="paragraph">
+<p>利用栈对算术表达式 10*(40-30/5)+20求值时，存放操作数的栈(初始为空)的容量至少为_（ ）_，才能满足暂存该表达式中的运算数或运算结果的要求。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 2
+B 3
+C 4
+D 5</pre>
+</div>
+</div>
+<hr>
+<h4 id="_初始理解题目" class="discrete">初始理解题目</h4>
+<div class="paragraph">
+<p>首先，我们需要明确题目在问什么。题目给出了一个算术表达式：<code>10*(40-30/5)+20</code>，并要求我们在利用栈（stack）来求值这个表达式时，存放操作数的栈（操作数栈）至少需要多大的容量。这里的“容量”指的是栈能够同时存放的操作数的最大数量。初始时栈是空的。</p>
+</div>
+<div class="paragraph">
+<p>选项有：A. 2，B. 3，C. 4，D. 5。</p>
+</div>
+<h4 id="_栈在表达式求值中的应用" class="discrete">栈在表达式求值中的应用</h4>
+<div class="paragraph">
+<p>在计算机科学中，栈常用于算术表达式的求值，尤其是使用“后缀表达式”（逆波兰表示法）或通过“中缀表达式”直接求值。通常，我们会使用两个栈：一个操作数栈（存放数字），一个运算符栈（存放运算符）。但本题只关注操作数栈的容量。</p>
+</div>
+<div class="paragraph">
+<p>在中缀表达式的求值过程中，我们通常会按照运算符的优先级和括号的顺序来计算。具体步骤如下：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>初始化两个栈：操作数栈和运算符栈。</p>
+</li>
+<li>
+<p>从左到右扫描表达式：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>遇到数字，压入操作数栈。</p>
+</li>
+<li>
+<p>遇到运算符：</p>
+</li>
+<li>
+<p>如果运算符栈为空，或栈顶是左括号，或当前运算符优先级高于栈顶运算符，则压入运算符栈。</p>
+</li>
+<li>
+<p>否则，从运算符栈弹出运算符，从操作数栈弹出相应数量的操作数进行计算，将结果压回操作数栈，然后继续比较当前运算符与新的栈顶运算符。</p>
+</li>
+<li>
+<p>遇到左括号，压入运算符栈。</p>
+</li>
+<li>
+<p>遇到右括号，不断弹出运算符栈的运算符并计算，直到遇到左括号，弹出左括号。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>表达式扫描完后，弹出运算符栈中所有运算符并计算。</p>
+</li>
+<li>
+<p>最后操作数栈中剩下的就是结果。</p>
+</li>
+</ol>
+</div>
+<h4 id="_应用到具体表达式" class="discrete">应用到具体表达式</h4>
+<div class="paragraph">
+<p>让我们一步一步地计算表达式 <code>10*(40-30/5)+20</code>，并跟踪操作数栈的最大使用量。</p>
+</div>
+<div class="paragraph">
+<p>表达式可以分解为以下 tokens（为了清晰，添加空格分隔）：
+<code>10 * ( 40 - 30 / 5 ) + 20</code></p>
+</div>
+<div class="paragraph">
+<p>我们逐步处理：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>初始：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>操作数栈: []</p>
+</li>
+<li>
+<p>运算符栈: []</p>
+</li>
+<li>
+<p>最大操作数栈大小: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>10</code>（数字）：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>压入操作数栈: [10]</p>
+</li>
+<li>
+<p>最大大小: max(0, 1) = 1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>*</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>运算符栈为空，压入 <code><strong></code>: ['</strong>']</p>
+</li>
+<li>
+<p>操作数栈: [10]</p>
+</li>
+<li>
+<p>最大大小: 1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>(</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>压入运算符栈: ['*', '(']</p>
+</li>
+<li>
+<p>操作数栈: [10]</p>
+</li>
+<li>
+<p>最大大小: 1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>40</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>压入操作数栈: [10, 40]</p>
+</li>
+<li>
+<p>最大大小: max(1, 2) = 2</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>-</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>栈顶是 <code>(</code>，压入 <code>-</code>: ['*', '(', '-']</p>
+</li>
+<li>
+<p>操作数栈: [10, 40]</p>
+</li>
+<li>
+<p>最大大小: 2</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>30</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>压入操作数栈: [10, 40, 30]</p>
+</li>
+<li>
+<p>最大大小: max(2, 3) = 3</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>/</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>栈顶是 <code>-</code>，<code>/</code> 优先级高于 <code>-</code>，压入 <code>/</code>: ['*', '(', '-', '/']</p>
+</li>
+<li>
+<p>操作数栈: [10, 40, 30]</p>
+</li>
+<li>
+<p>最大大小: 3</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>5</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>压入操作数栈: [10, 40, 30, 5]</p>
+</li>
+<li>
+<p>最大大小: max(3, 4) = 4</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>)</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>开始弹出并计算，直到 <code>(</code>：</p>
+</li>
+<li>
+<p>弹出 <code>/</code>，弹出 <code>5</code> 和 <code>30</code>，计算 <code>30 / 5 = 6</code>，压入 <code>6</code>:</p>
+</li>
+<li>
+<p>操作数栈: [10, 40, 6]</p>
+</li>
+<li>
+<p>最大大小: 4（之前达到过）</p>
+</li>
+<li>
+<p>弹出 <code>-</code>，弹出 <code>6</code> 和 <code>40</code>，计算 <code>40 - 6 = 34</code>，压入 <code>34</code>:</p>
+</li>
+<li>
+<p>操作数栈: [10, 34]</p>
+</li>
+<li>
+<p>最大大小: 4</p>
+</li>
+<li>
+<p>弹出 <code>(</code>:</p>
+</li>
+<li>
+<p>运算符栈: ['*']</p>
+</li>
+<li>
+<p>操作数栈: [10, 34]</p>
+</li>
+<li>
+<p>最大大小: 4</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>+</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>栈顶是 <code><strong></code>，<code>+</code> 优先级低于 <code></strong></code>，所以弹出 <code>*</code>，弹出 <code>34</code> 和 <code>10</code>，计算 <code>10 * 34 = 340</code>，压入 <code>340</code>:</p>
+</li>
+<li>
+<p>操作数栈: [340]</p>
+</li>
+<li>
+<p>最大大小: 4</p>
+</li>
+<li>
+<p>现在运算符栈为空，压入 ``: ['']</p>
+</li>
+<li>
+<p>操作数栈: [340]</p>
+</li>
+<li>
+<p>最大大小: 4</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>遇到 <code>20</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>压入操作数栈: [340, 20]</p>
+</li>
+<li>
+<p>最大大小: max(4, 2) = 4</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>表达式结束，弹出运算符栈中的 <code>+</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>弹出 <code>+</code>，弹出 <code>20</code> 和 <code>340</code>，计算 <code>340 + 20 = 360</code>，压入 <code>360</code>:</p>
+</li>
+<li>
+<p>操作数栈: [360]</p>
+</li>
+<li>
+<p>最大大小: 4</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<h4 id="_最大操作数栈大小的观察" class="discrete">最大操作数栈大小的观察</h4>
+<div class="paragraph">
+<p>在整个过程中，操作数栈的大小变化如下：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>[] (0)</p>
+</li>
+<li>
+<p>[10] (1)</p>
+</li>
+<li>
+<p>[10, 40] (2)</p>
+</li>
+<li>
+<p>[10, 40, 30] (3)</p>
+</li>
+<li>
+<p>[10, 40, 30, 5] (4) ← 最大值</p>
+</li>
+<li>
+<p>[10, 40, 6] (3)</p>
+</li>
+<li>
+<p>[10, 34] (2)</p>
+</li>
+<li>
+<p>[340] (1)</p>
+</li>
+<li>
+<p>[340, 20] (2)</p>
+</li>
+<li>
+<p>[360] (1)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>因此，操作数栈的最大大小是 4。</p>
+</div>
+<h4 id="_验证其他路径" class="discrete">验证其他路径</h4>
+<div class="paragraph">
+<p>为了确保没有更大的需求，让我们看看是否有其他操作顺序会导致更大的栈大小。关键在于嵌套的计算：</p>
+</div>
+<div class="paragraph">
+<p>在 <code>(40 - 30 / 5)</code> 部分：
+- <code>30 / 5</code> 需要 <code>30</code> 和 <code>5</code> 都在栈中，此时栈是 <code>[10, 40, 30, 5]</code>（大小4）。
+- 计算 <code>30 / 5</code> 后，栈变为 <code>[10, 40, 6]</code>（大小3）。
+- 然后 <code>40 - 6</code> 需要 <code>40</code> 和 <code>6</code> 在栈中（大小2）。</p>
+</div>
+<div class="paragraph">
+<p>没有其他部分需要同时存储更多的操作数。</p>
+</div>
+<h4 id="_排除其他选项" class="discrete">排除其他选项</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>A. 2：在 <code>30 / 5</code> 时需要 <code>30</code> 和 <code>5</code> 同时在栈中，此时栈中已经有 <code>10</code> 和 <code>40</code>，所以至少需要 4。</p>
+</li>
+<li>
+<p>B. 3：同样，<code>[10, 40, 30, 5]</code> 需要 4。</p>
+</li>
+<li>
+<p>D. 5：从未达到过 5。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>因此，正确答案是 C. 4。</p>
+</div>
+<h4 id="_可能的误区" class="discrete">可能的误区</h4>
+<div class="paragraph">
+<p>有时候可能会忽略括号内的计算对栈的影响。例如，可能会认为 <code>10</code> 和 <code>40</code> 是主要的，而忽略 <code>30</code> 和 <code>5</code> 的同时存在。因此，容易低估栈的最大需求。</p>
+</div>
+<div class="paragraph">
+<p>另外，可能会混淆操作数栈和运算符栈的大小。本题只问操作数栈，所以不需要考虑运算符栈的大小。</p>
+</div>
+<h4 id="_结论" class="discrete">结论</h4>
+<div class="paragraph">
+<p>通过逐步模拟表达式求值的过程，并跟踪操作数栈的大小变化，我们发现操作数栈的最大使用量是 4。因此，栈的容量至少需要为 4。</p>
+</div>
+<div class="paragraph">
+<p><strong>最终答案：C 4</strong></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_15_队列长度">2.15 队列长度</h3>
 <div class="paragraph">
 <p>设某循环队列 Q 的定义中有 front 和 rear 两个域变量，其中，front 指示队头元素的位置，rear 指示队尾元素之后的位置，如下图所示。若该队列的容量为 M，则其长度为（D）。</p>
 </div>
@@ -2508,7 +2902,7 @@ D (Q.rear-Q.front+M)%M</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_15_线性探查法解决冲突构造哈希表">2.15 线性探查法解决冲突构造哈希表</h3>
+<h3 id="_2_16_线性探查法解决冲突构造哈希表">2.16 线性探查法解决冲突构造哈希表</h3>
 <div class="paragraph">
 <p>设散列函数为 H（key）= key % 11，对于关键码序列（23，40，91，17，19，10，31，65，26），用线性探查法解决冲突构造的哈希表为（ ）。</p>
 </div>
@@ -2604,7 +2998,7 @@ D (Q.rear-Q.front+M)%M</pre>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_2_16_三对角矩阵">2.16 三对角矩阵</h3>
+<h3 id="_2_17_三对角矩阵">2.17 三对角矩阵</h3>
 <div class="paragraph">
 <p>将三对角矩阵 A[1…100][1&#8230;&#8203;100] 按行优先存入一维数组 B[1&#8230;&#8203;298] 中，A中元素 A[66][65] 在数组 B 中的位置k为（B）。</p>
 </div>
@@ -3411,7 +3805,7 @@ D 2GB</pre>
 <div class="paragraph">
 <p>因此，选项C的“512M”是正确的。</p>
 </div>
-<h4 id="_排除其他选项" class="discrete">排除其他选项</h4>
+<h4 id="_排除其他选项_2" class="discrete">排除其他选项</h4>
 <div class="paragraph">
 <p>让我们看看其他选项为什么不对：</p>
 </div>
@@ -4990,7 +5384,7 @@ D 第二种方法的加速比是1.22，效果较好</pre>
 </li>
 </ul>
 </div>
-<h4 id="_结论" class="discrete">结论</h4>
+<h4 id="_结论_2" class="discrete">结论</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -7631,7 +8025,7 @@ D 32</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_10_2_7_ip_确定主机范围">10.2.7 IP 确定主机范围</h4>
+<h4 id="_10_2_8_ip_确定主机范围">10.2.8 IP 确定主机范围</h4>
 <div class="paragraph">
 <p>IP 地址块 <code>155.32.80.192/26</code> 包含了（C）个主机地址，以下 IP 地址中，不属于这个网络的地址是（D）。</p>
 </div>
@@ -8146,7 +8540,7 @@ D 策略（Strategy）</pre>
 </ul>
 </div>
 <div class="sect2">
-<h3 id="_软件过程模型">软件过程模型</h3>
+<h3 id="_13_1_软件过程模型">13.1 软件过程模型</h3>
 <div class="paragraph">
 <p>在开发一个字处理软件时，首先快速发布了一个提供基本文件管理、编辑和文档生成功能的版本，接着发布提供更完善的编辑和文档生成功能的版本，最后发布提供拼写和语法检查功能的版本，这里采用了____过程模型。</p>
 </div>
@@ -8469,7 +8863,7 @@ D 状态</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-15 20:04:26 +0800
+Last updated 2025-05-15 22:40:25 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
