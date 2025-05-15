@@ -689,6 +689,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </li>
 <li><a href="#_10_2_7_bgp_协议">10.2.7 BGP 协议</a></li>
+<li><a href="#_10_2_7_ip_确定主机范围">10.2.7 IP 确定主机范围</a></li>
 </ul>
 </li>
 </ul>
@@ -7590,6 +7591,139 @@ D 32</pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_10_2_7_ip_确定主机范围">10.2.7 IP 确定主机范围</h4>
+<div class="paragraph">
+<p>IP 地址块 <code>155.32.80.192/26</code> 包含了（C）个主机地址，以下 IP 地址中，不属于这个网络的地址是（D）。</p>
+</div>
+<div class="paragraph">
+<p>主机数量选项：</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha">
+<li>
+<p>15</p>
+</li>
+<li>
+<p>32</p>
+</li>
+<li>
+<p>62</p>
+</li>
+<li>
+<p>64</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>待判断的 IP 地址选项：</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha">
+<li>
+<p>155.32.80.202</p>
+</li>
+<li>
+<p>155.32.80.195</p>
+</li>
+<li>
+<p>155.32.80.253</p>
+</li>
+<li>
+<p>155.32.80.191</p>
+</li>
+</ol>
+</div>
+<hr>
+<div class="paragraph">
+<p>第一步：确定子网的范围</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>IP 地址块：<code>155.32.80.192/26</code></p>
+</li>
+<li>
+<p>子网掩码：<code>/26</code> → <code>255.255.255.192</code> → 最后一个字节为 <code>11000000</code></p>
+</li>
+<li>
+<p>可用地址总数：2^(32 - 26) = 64</p>
+</li>
+<li>
+<p>网络地址：<code>155.32.80.192</code></p>
+</li>
+<li>
+<p>广播地址：<code>155.32.80.255</code></p>
+</li>
+<li>
+<p>可分配主机地址范围：<code>155.32.80.193</code> ～ <code>155.32.80.254</code></p>
+</li>
+<li>
+<p>可用主机地址数：64 - 2 = <code>62</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>因此，正确选项为：<code>C. 62</code></p>
+</div>
+<hr>
+<div class="paragraph">
+<p>第二步：判断给出的 IP 地址是否属于该子网</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">选项</th>
+<th class="tableblock halign-left valign-top">IP 地址</th>
+<th class="tableblock halign-left valign-top">是否属于 155.32.80.192/26？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">155.32.80.202</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">是，介于 193～254 之间</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">155.32.80.195</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">是，介于 193～254 之间</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">155.32.80.253</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">是，介于 193～254 之间</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">155.32.80.191</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">否，它属于前一子网（155.32.80.128/26）</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>因此，不属于该子网的 IP 是：<code>D. 155.32.80.191</code></p>
+</div>
+<hr>
+<div class="paragraph">
+<p>最终答案：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>主机数量正确选项：<code>C. 62</code></p>
+</li>
+<li>
+<p>不属于该网络的地址：<code>D. 155.32.80.191</code></p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -8262,7 +8396,7 @@ D 状态</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-15 16:09:51 +0800
+Last updated 2025-05-15 18:01:44 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
