@@ -589,8 +589,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_3_1_2_2_python_快速排序活动图">3.1.2.2 python 快速排序&#8212;&#8203;活动图</a></li>
 </ul>
 </li>
-<li><a href="#_3_1_3_猜排序算法">3.1.3 猜排序算法</a></li>
-<li><a href="#_3_1_4_根据代码求时间复杂度">3.1.4 根据代码求时间复杂度</a></li>
+<li><a href="#_3_1_3_快速排序初始排列">3.1.3 快速排序初始排列</a></li>
+<li><a href="#_3_1_4_猜排序算法">3.1.4 猜排序算法</a></li>
+<li><a href="#_3_1_5_根据代码求时间复杂度">3.1.5 根据代码求时间复杂度</a></li>
 </ul>
 </li>
 <li><a href="#_3_2_背包问题">3.2 背包问题</a></li>
@@ -626,7 +627,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_6_指令流水线">6 指令流水线</a>
 <ul class="sectlevel2">
-<li><a href="#_指令之扩展操作码">指令之扩展操作码</a></li>
+<li><a href="#_6_1_指令之扩展操作码">6.1 指令之扩展操作码</a></li>
 </ul>
 </li>
 <li><a href="#_7_程序优化加速比">7 程序优化加速比</a></li>
@@ -2324,11 +2325,11 @@ D 7*7</pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2 → 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2 和 3</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4 → 5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4 和 5</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
@@ -3221,14 +3222,14 @@ D O(n)和O(1)</pre>
 <div class="sect3">
 <h4 id="_3_1_2_快速排序算法时间和空间复杂度">3.1.2 快速排序算法时间和空间复杂度</h4>
 <div class="paragraph">
-<p>对 n 个基本有序的整数进行排序，若采用快速排序算法，则时间和空间复杂度分别为（ ）。</p>
+<p>对 n 个基本有序的整数进行排序，若采用快速排序算法，则时间和空间复杂度分别为（A）。</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>A O(n2)和O(n)
-B O(nlgn)和O(n)
-C O(n2)和O(1)
-D O(nlgn)和O(1)</pre>
+<pre>A O(n^2)和O(n)
+B O(nlogn)和O(n)
+C O(n^2)和O(1)
+D O(nlogn)和O(1)</pre>
 </div>
 </div>
 <hr>
@@ -3397,7 +3398,140 @@ D O(nlgn)和O(1)</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_3_1_3_猜排序算法">3.1.3 猜排序算法</h4>
+<h4 id="_3_1_3_快速排序初始排列">3.1.3 快速排序初始排列</h4>
+<div class="paragraph">
+<p>在快速排序过程中，需要设立基准元素并划分序列来进行排序，若序列由元素 {12,25,3,45,52,67,85} 构成，则初始排列为（ A），排序效率最高（令序列的第一个元素为基准元素）。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 45，12，3，25，67，52，85
+B 85，67，52，45，3，25，12
+C 12，25，3，45，52，67，85
+D 45，12，25，3，85，67，52</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>在快速排序（Quick Sort）中，选择“基准元素”（pivot）并将序列划分为左右两个子序列的效率对整体排序性能有显著影响。</p>
+</div>
+<div class="paragraph">
+<p>题目设定为</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>原始序列：{12, 25, 3, 45, 52, 67, 85}</p>
+</li>
+<li>
+<p>使用第一个元素为基准元素</p>
+</li>
+<li>
+<p>要求判断哪种初始排列下划分效率最高</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>快速排序的关键步骤（简化）：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>选定一个基准元素（pivot）。</p>
+</li>
+<li>
+<p>将序列划分为两个部分：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>左边：比基准元素小的数；</p>
+</li>
+<li>
+<p>右边：比基准元素大的数。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>对两部分递归地进行排序。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>对选项A进行分析：A: 45，12，3，25，67，52，85</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>以第一个元素 45 为基准。</p>
+</li>
+<li>
+<p>划分结果：</p>
+</li>
+<li>
+<p>小于 45 的部分：12，3，25 → 3 个元素</p>
+</li>
+<li>
+<p>大于 45 的部分：67，52，85 → 3 个元素</p>
+</li>
+<li>
+<p>划分非常均匀，是理想的情况。</p>
+</li>
+<li>
+<p>所以此时排序效率最高。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>对其他选项进行分析：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>B: 85，67，52，45，3，25，12</p>
+</li>
+<li>
+<p>以 85 为基准。</p>
+</li>
+<li>
+<p>小于 85 的有 6 个，大于的为 0 → 极不均匀 → 最差情况。</p>
+</li>
+<li>
+<p>C: 12，25，3，45，52，67，85</p>
+</li>
+<li>
+<p>以 12 为基准。</p>
+</li>
+<li>
+<p>小于 12 的为 0 个，大于的为 6 → 也是极不均匀。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>D: 45，12，25，3，85，67，52
+    * 同样以 45 为基准。
+    * 小于 45 的：12，25，3 → 3 个
+    * 大于 45 的：85，67，52 → 3 个
+    * 和 A 一样，也很均匀。</p>
+</div>
+<div class="paragraph">
+<p>但区别在于：选项A中的较小元素和较大元素分别在一侧，便于实现高效的原地划分操作，而 D 中较小和较大的元素是交错分布的，可能导致划分步骤变得复杂，效率略低。</p>
+</div>
+<div class="paragraph">
+<p>最终结论：答案是 A，因为：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>使用第一个元素为基准时，它能把数组划分为大小接近的两部分；</p>
+</li>
+<li>
+<p>快速排序在这种情况下效率最高（时间复杂度接近 O(n log n)）。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_3_1_4_猜排序算法">3.1.4 猜排序算法</h4>
 <div class="paragraph">
 <p>对一组数据 2,12,16,88,5,10 进行排序，如果前 3 趟排序结果如下：</p>
 </div>
@@ -3489,7 +3623,7 @@ D 基数排序</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_3_1_4_根据代码求时间复杂度">3.1.4 根据代码求时间复杂度</h4>
+<h4 id="_3_1_5_根据代码求时间复杂度">3.1.5 根据代码求时间复杂度</h4>
 <div class="paragraph">
 <p>设n是描述问题规模的非负整数，下面程序片段的时间复杂度是（A）。</p>
 </div>
@@ -5370,7 +5504,7 @@ D 8</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_指令之扩展操作码">指令之扩展操作码</h3>
+<h3 id="_6_1_指令之扩展操作码">6.1 指令之扩展操作码</h3>
 <div class="paragraph">
 <p>某计算机指令字长为 16 位，指令有双操作数、单操作数和无操作数 3 种格式，每个操作数字段均用 6 位二进制表示，该指令系统共 有 m 条（m&lt;16）双操作数指令，并存在无操作数指令。若采用扩展操作码技术，那么最多还可设计出（B）条单操作数指令。</p>
 </div>
@@ -9102,7 +9236,7 @@ D 状态</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-16 08:23:10 +0800
+Last updated 2025-05-16 12:10:26 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
