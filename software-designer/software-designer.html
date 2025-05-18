@@ -570,9 +570,15 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_2_15_拓扑排序">2.15 拓扑排序</a></li>
 <li><a href="#_2_16_进栈出栈">2.16 进栈出栈</a></li>
 <li><a href="#_2_17_栈的大小计算">2.17 栈的大小计算</a></li>
-<li><a href="#_2_18_队列长度">2.18 队列长度</a></li>
-<li><a href="#_2_19_线性探查法解决冲突构造哈希表">2.19 线性探查法解决冲突构造哈希表</a></li>
-<li><a href="#_2_20_三对角矩阵">2.20 三对角矩阵</a></li>
+<li><a href="#_2_18_两栈共享空间">2.18 两栈共享空间</a>
+<ul class="sectlevel3">
+<li><a href="#_2_18_1_先弄懂两个栈都空时_top1_1top2_n">2.18.1 先弄懂：两个栈都空时 top[1] = 1、top[2] = n</a></li>
+<li><a href="#_2_18_2_再弄懂栈1的底在_v1栈_2_的底在_vn">2.18.2 再弄懂：栈1的底在 V[1]，栈 2 的底在 V[n]</a></li>
+</ul>
+</li>
+<li><a href="#_2_19_队列长度">2.19 队列长度</a></li>
+<li><a href="#_2_20_线性探查法解决冲突构造哈希表">2.20 线性探查法解决冲突构造哈希表</a></li>
+<li><a href="#_2_21_三对角矩阵">2.21 三对角矩阵</a></li>
 </ul>
 </li>
 <li><a href="#_3_算法">3 算法</a>
@@ -2486,7 +2492,7 @@ D 36%</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>因此节省的存储空间大小为 \(300000 - 2.36x100000 = 64000\)</p>
+<p>因此节省的存储空间大小为 \(300000 - 2.36 \times 100000 = 64000\)</p>
 </div>
 <div class="paragraph">
 <p>因此节省的存储空间比例为 \(\frac{64000}{300000}=21\%\)</p>
@@ -2869,27 +2875,21 @@ D 24</pre>
 <div class="sect2">
 <h3 id="_2_17_栈的大小计算">2.17 栈的大小计算</h3>
 <div class="paragraph">
-<p>利用栈对算术表达式 10*(40-30/5)+20求值时，存放操作数的栈(初始为空)的容量至少为_（ ）_，才能满足暂存该表达式中的运算数或运算结果的要求。</p>
+<p>利用栈对算术表达式 \(10 \times (40-30/5)+20\) 求值时，存放操作数的栈(初始为空)的容量至少为（C ），才能满足暂存该表达式中的运算数或运算结果的要求。</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>A 2
-B 3
-C 4
-D 5</pre>
+<pre>A 2    B 3    C 4    D 5</pre>
 </div>
 </div>
 <hr>
 <h4 id="_初始理解题目" class="discrete">初始理解题目</h4>
 <div class="paragraph">
-<p>首先，我们需要明确题目在问什么。题目给出了一个算术表达式：<code>10*(40-30/5)+20</code>，并要求我们在利用栈（stack）来求值这个表达式时，存放操作数的栈（操作数栈）至少需要多大的容量。这里的“容量”指的是栈能够同时存放的操作数的最大数量。初始时栈是空的。</p>
-</div>
-<div class="paragraph">
-<p>选项有：A. 2，B. 3，C. 4，D. 5。</p>
+<p>题目给出了一个算术表达式：\(10 \times (40-30/5)+20\)，并要求我们在利用栈（stack）来求值这个表达式时，存放操作数的栈（操作数栈）至少需要多大的容量。这里的“容量”指的是栈能够同时存放的操作数的最大数量。初始时栈是空的。</p>
 </div>
 <h4 id="_栈在表达式求值中的应用" class="discrete">栈在表达式求值中的应用</h4>
 <div class="paragraph">
-<p>在计算机科学中，栈常用于算术表达式的求值，尤其是使用“后缀表达式”（逆波兰表示法）或通过“中缀表达式”直接求值。通常，我们会使用两个栈：一个操作数栈（存放数字），一个运算符栈（存放运算符）。但本题只关注操作数栈的容量。</p>
+<p>在计算机科学中，栈常用于算术表达式的求值，尤其是使用“后缀表达式”（逆波兰表示法）或通过“中缀表达式”直接求值。通常，我们会使用两个栈：一个操作数栈（存放数字），一个运算符栈（存放运算符）。<mark>但本题只关注操作数栈的容量</mark>。</p>
 </div>
 <div class="paragraph">
 <p>在中缀表达式的求值过程中，我们通常会按照运算符的优先级和括号的顺序来计算。具体步骤如下：</p>
@@ -2908,12 +2908,16 @@ D 5</pre>
 </li>
 <li>
 <p>遇到运算符：</p>
-</li>
+<div class="ulist">
+<ul>
 <li>
 <p>如果运算符栈为空，或栈顶是左括号，或当前运算符优先级高于栈顶运算符，则压入运算符栈。</p>
 </li>
 <li>
 <p>否则，从运算符栈弹出运算符，从操作数栈弹出相应数量的操作数进行计算，将结果压回操作数栈，然后继续比较当前运算符与新的栈顶运算符。</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p>遇到左括号，压入运算符栈。</p>
@@ -2932,243 +2936,169 @@ D 5</pre>
 </li>
 </ol>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+我们要看这期间，运算符栈最多被占用了多少个。
+</td>
+</tr>
+</table>
+</div>
 <h4 id="_应用到具体表达式" class="discrete">应用到具体表达式</h4>
 <div class="paragraph">
-<p>让我们一步一步地计算表达式 <code>10*(40-30/5)+20</code>，并跟踪操作数栈的最大使用量。</p>
-</div>
-<div class="paragraph">
-<p>表达式可以分解为以下 tokens（为了清晰，添加空格分隔）：
-<code>10 * ( 40 - 30 / 5 ) + 20</code></p>
-</div>
-<div class="paragraph">
-<p>我们逐步处理：</p>
+<p>让我们一步一步地计算表达式 \(10 \times (40-30/5)+20\)，并跟踪操作数栈的最大使用量。</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
 <p>初始：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>操作数栈: []</p>
-</li>
-<li>
-<p>运算符栈: []</p>
-</li>
-<li>
-<p>最大操作数栈大小: 0</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>操作数栈: []
+运算符栈: []
+最大操作数栈大小: 0</pre>
+</div>
 </div>
 </li>
 <li>
 <p>遇到 <code>10</code>（数字）：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>压入操作数栈: [10]</p>
-</li>
-<li>
-<p>最大大小: max(0, 1) = 1</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>压入操作数栈: [10]
+最大大小: max(0, 1) = 1</pre>
+</div>
 </div>
 </li>
 <li>
-<p>遇到 <code>*</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>运算符栈为空，压入 <code><strong></code>: ['</strong>']</p>
-</li>
-<li>
-<p>操作数栈: [10]</p>
-</li>
-<li>
-<p>最大大小: 1</p>
-</li>
-</ul>
+<p>遇到 x：</p>
+<div class="literalblock">
+<div class="content">
+<pre>运算符栈为空，压入 [x]
+操作数栈: [10]
+最大大小: 1</pre>
+</div>
 </div>
 </li>
 <li>
 <p>遇到 <code>(</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>压入运算符栈: ['*', '(']</p>
-</li>
-<li>
-<p>操作数栈: [10]</p>
-</li>
-<li>
-<p>最大大小: 1</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>压入运算符栈: [x, (]
+操作数栈: [10]
+最大大小: 1</pre>
+</div>
 </div>
 </li>
 <li>
 <p>遇到 <code>40</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>压入操作数栈: [10, 40]</p>
-</li>
-<li>
-<p>最大大小: max(1, 2) = 2</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>压入操作数栈: [10, 40]
+最大大小: max(1, 2) = 2</pre>
+</div>
 </div>
 </li>
 <li>
 <p>遇到 <code>-</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>栈顶是 <code>(</code>，压入 <code>-</code>: ['*', '(', '-']</p>
-</li>
-<li>
-<p>操作数栈: [10, 40]</p>
-</li>
-<li>
-<p>最大大小: 2</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>栈顶是 `(`，压入 `-`: [x, (, -]
+操作数栈: [10, 40]
+最大大小: 2</pre>
+</div>
 </div>
 </li>
 <li>
 <p>遇到 <code>30</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>压入操作数栈: [10, 40, 30]</p>
-</li>
-<li>
-<p>最大大小: max(2, 3) = 3</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>压入操作数栈: [10, 40, 30]
+最大大小: max(2, 3) = 3</pre>
+</div>
 </div>
 </li>
 <li>
 <p>遇到 <code>/</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>栈顶是 <code>-</code>，<code>/</code> 优先级高于 <code>-</code>，压入 <code>/</code>: ['*', '(', '-', '/']</p>
-</li>
-<li>
-<p>操作数栈: [10, 40, 30]</p>
-</li>
-<li>
-<p>最大大小: 3</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>栈顶是 `-`，`/` 优先级高于 `-`，压入 `/`: [x, (, -, /]
+操作数栈: [10, 40, 30]
+最大大小: 3</pre>
+</div>
 </div>
 </li>
 <li>
 <p>遇到 <code>5</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>压入操作数栈: [10, 40, 30, 5]</p>
-</li>
-<li>
-<p>最大大小: max(3, 4) = 4</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>压入操作数栈: [10, 40, 30, 5]
+最大大小: max(3, 4) = 4</pre>
+</div>
 </div>
 </li>
 <li>
-<p>遇到 <code>)</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>开始弹出并计算，直到 <code>(</code>：</p>
-</li>
-<li>
-<p>弹出 <code>/</code>，弹出 <code>5</code> 和 <code>30</code>，计算 <code>30 / 5 = 6</code>，压入 <code>6</code>:</p>
-</li>
-<li>
-<p>操作数栈: [10, 40, 6]</p>
-</li>
-<li>
-<p>最大大小: 4（之前达到过）</p>
-</li>
-<li>
-<p>弹出 <code>-</code>，弹出 <code>6</code> 和 <code>40</code>，计算 <code>40 - 6 = 34</code>，压入 <code>34</code>:</p>
-</li>
-<li>
-<p>操作数栈: [10, 34]</p>
-</li>
-<li>
-<p>最大大小: 4</p>
-</li>
-<li>
-<p>弹出 <code>(</code>:</p>
-</li>
-<li>
-<p>运算符栈: ['*']</p>
-</li>
-<li>
-<p>操作数栈: [10, 34]</p>
-</li>
-<li>
-<p>最大大小: 4</p>
-</li>
-</ul>
+<p>遇到 <code>)</code>：开始弹出并计算，直到 <code>(</code>：</p>
+<div class="literalblock">
+<div class="content">
+<pre>弹出 `/`，弹出 `5` 和 `30`，计算 `30 / 5 = 6`，压入 `6`:
+    操作数栈: [10, 40, 6]
+    最大大小: 4（之前达到过）</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>弹出 `-`，弹出 `6` 和 `40`，计算 `40 - 6 = 34`，压入 `34`:
+    操作数栈: [10, 34]
+    最大大小: 4</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>弹出 `(`:
+    运算符栈: [x]
+    操作数栈: [10, 34]
+    最大大小: 4</pre>
+</div>
 </div>
 </li>
 <li>
 <p>遇到 <code>+</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>栈顶是 <code><strong></code>，<code>+</code> 优先级低于 <code></strong></code>，所以弹出 <code>*</code>，弹出 <code>34</code> 和 <code>10</code>，计算 <code>10 * 34 = 340</code>，压入 <code>340</code>:</p>
-</li>
-<li>
-<p>操作数栈: [340]</p>
-</li>
-<li>
-<p>最大大小: 4</p>
-</li>
-<li>
-<p>现在运算符栈为空，压入 ``: ['']</p>
-</li>
-<li>
-<p>操作数栈: [340]</p>
-</li>
-<li>
-<p>最大大小: 4</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>栈顶是 `x`，`+` 优先级低于 `x`，所以弹出 `x`，弹出 `34` 和 `10`，计算 `10 * 34 = 340`，压入 `340`:
+   操作数栈: [340]
+   最大大小: 4</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>现在运算符栈为空，压入 `+`: ['+']
+操作数栈: [340]
+最大大小: 4</pre>
+</div>
 </div>
 </li>
 <li>
 <p>遇到 <code>20</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>压入操作数栈: [340, 20]</p>
-</li>
-<li>
-<p>最大大小: max(4, 2) = 4</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>压入操作数栈: [340, 20]
+最大大小: max(4, 2) = 4</pre>
+</div>
 </div>
 </li>
 <li>
 <p>表达式结束，弹出运算符栈中的 <code>+</code>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>弹出 <code>+</code>，弹出 <code>20</code> 和 <code>340</code>，计算 <code>340 + 20 = 360</code>，压入 <code>360</code>:</p>
-</li>
-<li>
-<p>操作数栈: [360]</p>
-</li>
-<li>
-<p>最大大小: 4</p>
-</li>
-</ul>
+<div class="literalblock">
+<div class="content">
+<pre>弹出 `+`，弹出 `20` 和 `340`，计算 `340 + 20 = 360`，压入 `360`:
+   操作数栈: [360]
+   最大大小: 4</pre>
+</div>
 </div>
 </li>
 </ol>
@@ -3192,7 +3122,7 @@ D 5</pre>
 <p>[10, 40, 30] (3)</p>
 </li>
 <li>
-<p>[10, 40, 30, 5] (4) ← 最大值</p>
+<p><mark>[10, 40, 30, 5] (4) ← 最大值</mark></p>
 </li>
 <li>
 <p>[10, 40, 6] (3)</p>
@@ -3212,17 +3142,27 @@ D 5</pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>因此，操作数栈的最大大小是 4。</p>
+<p>因此，操作数栈最大是 4。</p>
 </div>
 <h4 id="_验证其他路径" class="discrete">验证其他路径</h4>
 <div class="paragraph">
 <p>为了确保没有更大的需求，让我们看看是否有其他操作顺序会导致更大的栈大小。关键在于嵌套的计算：</p>
 </div>
 <div class="paragraph">
-<p>在 <code>(40 - 30 / 5)</code> 部分：
-- <code>30 / 5</code> 需要 <code>30</code> 和 <code>5</code> 都在栈中，此时栈是 <code>[10, 40, 30, 5]</code>（大小4）。
-- 计算 <code>30 / 5</code> 后，栈变为 <code>[10, 40, 6]</code>（大小3）。
-- 然后 <code>40 - 6</code> 需要 <code>40</code> 和 <code>6</code> 在栈中（大小2）。</p>
+<p>在 <code>(40 - 30 / 5)</code> 部分：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>30 / 5</code> 需要 <code>30</code> 和 <code>5</code> 都在栈中，此时栈是 <code>[10, 40, 30, 5]</code>（大小4）。</p>
+</li>
+<li>
+<p>计算 <code>30 / 5</code> 后，栈变为 <code>[10, 40, 6]</code>（大小3）。</p>
+</li>
+<li>
+<p>然后 <code>40 - 6</code> 需要 <code>40</code> 和 <code>6</code> 在栈中（大小2）。</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>没有其他部分需要同时存储更多的操作数。</p>
@@ -3251,16 +3191,407 @@ D 5</pre>
 <div class="paragraph">
 <p>另外，可能会混淆操作数栈和运算符栈的大小。本题只问操作数栈，所以不需要考虑运算符栈的大小。</p>
 </div>
-<h4 id="_结论" class="discrete">结论</h4>
+</div>
+<div class="sect2">
+<h3 id="_2_18_两栈共享空间">2.18 两栈共享空间</h3>
 <div class="paragraph">
-<p>通过逐步模拟表达式求值的过程，并跟踪操作数栈的大小变化，我们发现操作数栈的最大使用量是 4。因此，栈的容量至少需要为 4。</p>
+<p>若栈采用顺序存储方式，现有两栈共享空间 V[1..n], top[i] 代表 i (i=1,2) 个栈的栈顶(两个栈都空时 top[1] = 1、top[2] = n)，栈 1 的底在 V[1]，栈 2 的底在 V[n]，则栈满(即 n 个元素暂存在这两个栈)的条件是（ ）。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A top[1]= top[2]
+B top[1]+ top[2]==1
+C top[1]+ top[2]==n
+D top[1]- top[2]==1</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>读懂题：</strong></p>
+</div>
+<div class="sect3">
+<h4 id="_2_18_1_先弄懂两个栈都空时_top1_1top2_n">2.18.1 先弄懂：两个栈都空时 top[1] = 1、top[2] = n</h4>
+<div class="paragraph">
+<p>我们就以栈空时 top[1] = 1 来分析。</p>
 </div>
 <div class="paragraph">
-<p><strong>最终答案：C 4</strong></p>
+<p>在栈的顺序存储（数组实现）中，栈顶指针 top 的含义和初始化值取决于具体的实现方式。通常有两种常见的定义方式：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>top 指向栈顶元素：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>初始时栈为空，top 可以设置为 -1 或 0（取决于数组下标从 0 还是 1 开始）。</p>
+</li>
+<li>
+<p>例如：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>如果数组下标从 0 开始，初始 top = -1（表示无元素）。</p>
+</li>
+<li>
+<p>如果数组下标从 1 开始，初始 top = 0（表示无元素）。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>入栈时先移动 top，再赋值：top++; stack[top] = x。</p>
+</li>
+<li>
+<p>出栈时先取值，再移动 top：x = stack[top]; top--。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>top 指向栈顶元素的下一个位置（即“预指向”）：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>初始时栈为空，top 指向栈的起始位置（如 top = 0 或 top = 1）。</p>
+</li>
+<li>
+<p>例如：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>如果数组下标从 0 开始，初始 top = 0（表示栈空）。</p>
+</li>
+<li>
+<p>如果数组下标从 1 开始，初始 top = 1（表示栈空）。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>入栈时先赋值，再移动 top：stack[top] = x; top++。</p>
+</li>
+<li>
+<p>出栈时先移动 top，再取值：top--; x = stack[top]。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>本题的具体定义</strong></p>
+</div>
+<div class="paragraph">
+<p>题目中明确：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>栈1的底在 V[1]，初始时 top[1] = 1（栈空）。</p>
+</li>
+<li>
+<p>栈2的底在 V[n]，初始时 top[2] = n（栈空）。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>因此，本题采用的是 top 指向栈顶元素的下一个位置 的实现方式：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>栈1</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>初始 <code>top[1] = 1</code>（指向 <code>V[1]</code>，但 <code>V[1]</code> 尚未存储元素，表示栈空）。</p>
+</li>
+<li>
+<p>入栈操作：<code>V[top[1]] = x; top[1]++</code>。</p>
+</li>
+<li>
+<p>出栈操作：<code>top[1]--; x = V[top[1]]</code>。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>栈2</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>初始 <code>top[2] = n</code>（指向 <code>V[n]</code>，但 <code>V[n]</code> 尚未存储元素，表示栈空）。</p>
+</li>
+<li>
+<p>入栈操作：<code>V[top[2]] = x; top[2]--</code>（因为栈2向低地址增长）。</p>
+</li>
+<li>
+<p>出栈操作：<code>top[2]++; x = V[top[2]]</code>。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>为什么 <code>top[1] = 1</code> 表示栈空？</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>因为 <code>top[1]</code> 指向的是 <strong>下一个可以插入的位置</strong>，而不是当前栈顶元素的位置。</p>
+</li>
+<li>
+<p>初始时 <code>top[1] = 1</code>，表示下一个可以插入的位置是 <code>V[1]</code>，但 <code>V[1]</code> 尚未被占用，因此栈中无元素。</p>
+</li>
+<li>
+<p>如果栈中有元素，<code>top[1]</code> 会指向比实际栈顶元素高一个的位置。例如：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>插入一个元素 <code>x</code> 到栈1：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>V[1] = x; top[1]++</code> → <code>top[1] = 2</code>。</p>
+</li>
+<li>
+<p>此时栈顶元素是 <code>V[1]</code>，<code>top[1] = 2</code> 指向下一个空闲位置。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>再插入一个元素 <code>y</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>V[2] = y; top[1]++</code> → <code>top[1] = 3</code>。</p>
+</li>
+<li>
+<p>此时栈顶元素是 <code>V[2]</code>，<code>top[1] = 3</code> 指向下一个空闲位置。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>类比现实场景</strong></p>
+</div>
+<div class="paragraph">
+<p>可以类比书桌上的一摞书：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>top 指向的是“可以放下一本书的位置”，而不是“当前最上面的书”。</p>
+</li>
+<li>
+<p>初始时桌面上没有书（栈空），top 指向桌面的起始位置（top = 1）。</p>
+</li>
+<li>
+<p>放一本书后，top 移动到下一个空闲位置（top = 2），而实际最上面的书在位置 1。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>回到题目</strong></p>
+</div>
+<div class="paragraph">
+<p>题目中栈满的条件是 <code>top[1] - top[2] == 1</code>，因为：
+- 栈1从 <code>V[1]</code> 向高地址增长，<code>top[1]</code> 指向下一个空闲位置。
+- 栈2从 <code>V[n]</code> 向低地址增长，<code>top[2]</code> 指向下一个空闲位置。
+- 当 <code>top[1] - top[2] == 1</code> 时，表示两个栈的占用区域刚好连续接壤，且没有重叠或空隙，整个数组被占满。</p>
+</div>
+<div class="paragraph">
+<p><strong>总结</strong></p>
+</div>
+<div class="paragraph">
+<p>初始时 <code>top[1] = 1</code> 表示栈空，是因为：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>top[1]</code> 指向的是 <strong>下一个可插入的位置</strong>，而不是当前栈顶元素。</p>
+</li>
+<li>
+<p>初始时 <code>V[1]</code> 未被占用，因此栈中无元素。</p>
+</li>
+<li>
+<p>这是栈的一种常见实现方式（尤其是双栈共享空间时），目的是统一指针的语义。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>最终答案: <strong>D. top[1] - top[2] == 1</strong></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_18_2_再弄懂栈1的底在_v1栈_2_的底在_vn">2.18.2 再弄懂：栈1的底在 V[1]，栈 2 的底在 V[n]</h4>
+<div class="paragraph">
+<p>“栈1的底在 V[1]” 的含义</p>
+</div>
+<div class="paragraph">
+<p>在顺序存储的双栈共享空间问题中，<strong>“栈1的底在 V[1]”</strong> 表示：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>栈1的固定底部位置</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>栈1的<strong>最底层元素</strong>（即<strong>栈底</strong>）始终存储在数组 <code>V</code> 的第一个位置 <code>V[1]</code>。</p>
+</li>
+<li>
+<p>这意味着栈1的存储空间从 <code>V[1]</code> 开始，向数组的高地址方向（即 <code>V[2], V[3], &#8230;&#8203;, V[n]</code>）增长。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>栈1的增长方向</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>栈1的入栈操作（<code>push</code>）会使 <code>top[1]</code> <strong>增加</strong>（向 <code>V[n]</code> 方向移动）。</p>
+</li>
+<li>
+<p>栈1的出栈操作（<code>pop</code>）会使 <code>top[1]</code> <strong>减少</strong>（向 <code>V[1]</code> 方向移动）。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>栈1的初始状态（栈空）</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>初始时，栈1为空，<code>top[1] = 1</code>，表示栈顶指针指向 <code>V[1]</code>（但 <code>V[1]</code> 尚未存储有效数据）。</p>
+</li>
+<li>
+<p>当第一个元素入栈时，<code>V[1]</code> 被填充，<code>top[1]</code> 移动到 <code>V[2]</code>（指向下一个可插入位置）。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>类比现实场景</strong></p>
+</div>
+<div class="paragraph">
+<p>假设有一个书架（数组 <code>V</code>），两个栈分别从两端向中间摆放书籍：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>栈1</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>从书架的最左侧（<code>V[1]</code>）开始放书，<code>top[1]</code> 指向下一个可放书的位置。</p>
+</li>
+<li>
+<p>初始时没有书（栈空），<code>top[1] = 1</code>（指向第一个空位 <code>V[1]</code>）。</p>
+</li>
+<li>
+<p>放入一本书后，<code>top[1]</code> 移动到 <code>V[2]</code>（指向下一个空位）。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>栈2</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>从书架的最右侧（<code>V[n]</code>）开始放书，<code>top[2]</code> 指向下一个可放书的位置。</p>
+</li>
+<li>
+<p>初始时没有书（栈空），<code>top[2] = n</code>（指向第一个空位 <code>V[n]</code>）。</p>
+</li>
+<li>
+<p>放入一本书后，<code>top[2]</code> 移动到 <code>V[n-1]</code>（指向下一个空位）。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>为什么“栈1的底在 V[1]”是固定的？</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>栈的“底”是固定的，因为栈的存储空间是顺序的（数组实现），不能动态调整起始位置。</p>
+</li>
+<li>
+<p>栈1的所有操作（push/pop）都只能在 V[1] 到 top[1] 的范围内进行。</p>
+</li>
+<li>
+<p>栈2同理，其栈底固定在 V[n]，向 V[1] 方向增长。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>栈满的条件推导</strong></p>
+</div>
+<div class="paragraph">
+<p>当两个栈的栈顶指针相遇或交叉时，表示空间已满：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>栈1的 top[1] 指向下一个可插入位置（向高地址增长）。</p>
+</li>
+<li>
+<p>栈2的 top[2] 指向下一个可插入位置（向低地址增长）。</p>
+</li>
+<li>
+<p>栈满时：top[1] - 1（栈1的最后一个元素位置）和 top[2] + 1（栈2的最后一个元素位置）相邻。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>即 top[1] - 1 == top[2] 或 top[1] == top[2] + 1。</p>
+</li>
+<li>
+<p>题目中采用 top[1] - top[2] == 1 作为栈满条件（选项 D 正确）。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>总结</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>“栈1的底在 V[1]”</strong> 表示栈1的存储空间从 <code>V[1]</code> 开始，向高地址方向增长。</p>
+</li>
+<li>
+<p><strong>初始时 <code>top[1] = 1</code> 表示栈空</strong>，因为 <code>top[1]</code> 指向的是下一个可插入位置（而非当前栈顶元素）。</p>
+</li>
+<li>
+<p><strong>栈满的条件是 <code>top[1] - top[2] == 1</code></strong>（两个栈的栈顶指针相邻）。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>最终答案</strong> D. top[1] - top[2] == 1</p>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_18_队列长度">2.18 队列长度</h3>
+<h3 id="_2_19_队列长度">2.19 队列长度</h3>
 <div class="paragraph">
 <p>设某循环队列 Q 的定义中有 front 和 rear 两个域变量，其中，front 指示队头元素的位置，rear 指示队尾元素之后的位置，如下图所示。若该队列的容量为 M，则其长度为（D）。</p>
 </div>
@@ -3288,7 +3619,7 @@ D (Q.rear-Q.front+M)%M</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_19_线性探查法解决冲突构造哈希表">2.19 线性探查法解决冲突构造哈希表</h3>
+<h3 id="_2_20_线性探查法解决冲突构造哈希表">2.20 线性探查法解决冲突构造哈希表</h3>
 <div class="paragraph">
 <p>设散列函数为 H（key）= key % 11，对于关键码序列（23，40，91，17，19，10，31，65，26），用线性探查法解决冲突构造的哈希表为（ ）。</p>
 </div>
@@ -3384,7 +3715,7 @@ D (Q.rear-Q.front+M)%M</pre>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_2_20_三对角矩阵">2.20 三对角矩阵</h3>
+<h3 id="_2_21_三对角矩阵">2.21 三对角矩阵</h3>
 <div class="paragraph">
 <p>将三对角矩阵 A[1…100][1&#8230;&#8203;100] 按行优先存入一维数组 B[1&#8230;&#8203;298] 中，A中元素 A[66][65] 在数组 B 中的位置k为（B）。</p>
 </div>
@@ -6170,7 +6501,7 @@ D 第二种方法的加速比是1.22，效果较好</pre>
 </li>
 </ul>
 </div>
-<h4 id="_结论_2" class="discrete">结论</h4>
+<h4 id="_结论" class="discrete">结论</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -9649,7 +9980,7 @@ D 状态</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-17 14:27:12 +0800
+Last updated 2025-05-18 09:07:44 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
