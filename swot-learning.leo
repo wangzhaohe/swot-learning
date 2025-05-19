@@ -193,6 +193,9 @@
 <v t="swot.20250510175502.1"><vh>9.3 数据库模式</vh></v>
 <v t="swot.20250511232507.1"><vh>9.4 数据库设计</vh></v>
 <v t="swot.20250515105142.1"><vh>9.5 数据库锁</vh></v>
+<v t="swot.20250519092543.1"><vh>9.6 NOT EXISTS</vh>
+<v t="swot.20250520064315.1"><vh>如何理解该 SQL</vh></v>
+</v>
 </v>
 <v t="swot.20250510180235.1"><vh>10 网络模型</vh>
 <v t="swot.20250510180303.1"><vh>10.1 OSI 七层模型与 TCP/IP 四层模型</vh>
@@ -6671,6 +6674,124 @@ stem:[170 \times 512 \div 1024 = 87040 \div 1024 = 85 \text{KB}]
 stem:[28,900 \times 512 = 14796800 \text{ 字节}
 = \frac{14796800}{1024} = 14450 \text{ KB}
 ]
+
+</t>
+<t tx="swot.20250519092543.1">设供应商供应零件的关系模式为 SP(Sno，Pno，Qty)，其中 Sno 表示供应商号，Pno 表示零件号，Qty 表示零件数量。查询至少包含了供应商 “168” 所供应的全部零件的供应商号的 SQL 语句如下：
+
+IMPORTANT: 注意这是一张零件表
+
+[source,css]
+----
+SELECT Sno
+FROM SP SPX
+WHERE (空1)
+
+(
+  SELECT *
+  FROM SP SPY
+  WHERE (空2) AND NOT EXISTS (
+    SELECT *
+    FROM SP SPZ
+    WHERE (空3)
+  )
+);
+----
+
+***
+
+解：理解题意后要找的是：哪些供应商供应的零件，至少包含了供应商 168 所供应的所有零件？
+
+[source,css]
+----
+SELECT Sno FROM SP SPX
+    WHERE NOT EXISTS (
+        SELECT * FROM SP SPY
+            WHERE SPY.Sno = '168' AND NOT EXISTS (
+                SELECT * FROM SP SPZ
+                    WHERE SPZ.Sno = SPX.Sno
+                    AND SPZ.Pno = SPY.Pno
+                )
+    );
+----
+
+这种查询模式被称为"关系除法"，是SQL中解决"包含所有"这类问题的标准方法。它使用了双重否定(NOT EXISTS中嵌套NOT EXISTS)来表达"全部包含"的概念。
+
+</t>
+<t tx="swot.20250520064315.1">当子查询嵌套得很深时，如何调试、打印每一层的结果？
+
+解法思路总结：虽然不能直接在嵌套的 SQL 中“打印”每一层结果，但可以把子查询单独拎出来，用具体的值代入，然后逐层测试每一层子查询的结果。可以将其拆分为三层，每层都可以单独执行、理解。
+
+我们用一个简化的 SP 表作为例子：
+
+[caption=]
+[cols="1,1",options="header"]
+|===
+| Sno | Pno
+| 168 | A  
+| 168 | B  
+| S1  | A  
+| S1  | B  
+| S1  | C  
+| S2  | A  
+| S2  | C  
+|===
+
+**第一层：SPY（最简单）**
+
+    SELECT * FROM SP SPY WHERE SPY.Sno = '168';
+
+这会列出供应商 168 供应的所有零件。这一步用于获取“需要包含的全部零件清单”。
+
+
+**第二层：SPZ（检查某个供应商是否包含指定零件）**
+
+假设想测试 SPX.Sno = 'S1'，可以这样写：
+
+    SELECT * FROM SP SPZ WHERE SPZ.Sno = 'S1' AND SPZ.Pno = 'A';
+
+可以反复用不同的 Pno 测试：
+
+    SELECT * FROM SP SPZ WHERE SPZ.Sno = 'S1' AND SPZ.Pno = 'B';
+
+这两条 SQL 用来测试：S1 是否供应了零件 A 和 B。如果返回结果为空，就说明它没有供应这个零件。
+
+
+**第三层：完整的 SPY + SPZ 联动检查（某个供应商是否漏了168的某个零件）**
+
+    SELECT * FROM SP SPY WHERE SPY.Sno = '168' AND NOT EXISTS (
+    SELECT * FROM SP SPZ WHERE SPZ.Sno = 'S1'   -- 假设我们现在测试 S1
+                         AND SPZ.Pno = SPY.Pno
+    );
+
+这条 SQL 的含义是：找出供应商 168 的哪些零件 S1 没供应。
+
+* 如果这条查询结果是空的，说明 S1 拥有 168 所有的零件。
+* 如果这条查询结果不为空，说明 S1 缺少一些零件。
+
+
+**最外层：整个结构逐个测试**
+
+遍历所有供应商（Sno），一个一个代入上面这条 SQL：
+
+    -- 替换 SPZ.Sno = 'S1' 为 S2 ...
+    SELECT *
+    FROM SP SPY
+    WHERE SPY.Sno = '168'
+      AND NOT EXISTS (
+          SELECT * 
+          FROM SP SPZ
+          WHERE SPZ.Sno = 'S2'
+            AND SPZ.Pno = SPY.Pno
+      );
+
+* 如果返回结果为空 ⇒ S2 包含所有零件
+* 如果有返回 ⇒ S2 少某些零件
+
+**最后就是用 NOT EXISTS 取出相应的 Pno 了**
+
+    SELECT Pno FROM SP SPX WHERE NOT EXISTS (
+        -- 把上面的 SQL 放进来
+    )
 </t>
 </tnodes>
 </leo_file>
