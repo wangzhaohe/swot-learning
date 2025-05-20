@@ -656,6 +656,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_8_1_2_pv_操作">8.1.2 PV 操作</a></li>
 <li><a href="#_8_1_3_example_信号量初值等于_0">8.1.3 Example 信号量初值等于 0</a></li>
 <li><a href="#_8_1_4_example_信号量初值不等于_0">8.1.4 Example 信号量初值不等于 0</a></li>
+<li><a href="#_8_1_5_信号量s的取值范围">8.1.5 信号量S的取值范围</a></li>
 </ul>
 </li>
 <li><a href="#_8_2_资源分配图resource_allocation_graph_rag">8.2 资源分配图（Resource Allocation Graph, RAG）</a>
@@ -7170,6 +7171,64 @@ D n、m</pre>
 <p>当半成品放入 B1 时，S2 就会减一，且放入后不会得到释放，由此推断 S2 为 B1 箱子容量的信号量，同理可得出 S4 为箱子 B2 的容量的信号量。</p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_8_1_5_信号量s的取值范围">8.1.5 信号量S的取值范围</h4>
+<div class="paragraph">
+<p>假设系统有n (n≥5) 个进程共享资源R，且资源R的可用数为5。若采用PV操作，则相应的信号量S的取值范围应为（D）。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A -1~n-1
+B -5~5
+C -(n-1)~1
+D -(n-5)~5</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>本题中已知有 n 个进程共享 R 资源，且 R 资源的可用数为 5，故信号量 S 的初值应设为 5。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>当第1个进程申请资源时，信号量 S 减 1，即 S=4;</p>
+</li>
+<li>
+<p>当第2个进程申请资源时，信号量 S 减 1，即 S=3;</p>
+</li>
+<li>
+<p>当第3个进程申请资源时，信号量 S 减 1，即 S=2;</p>
+</li>
+<li>
+<p>当第4个进程申请资源时，信号量 S 减 1，即 S=1;</p>
+</li>
+<li>
+<p>当第5个进程申请资源时，信号量 S 减 1，即 S=0;</p>
+</li>
+<li>
+<p>当第6个进程申请资源时，信号量 S 减 1，即 S=-1 &#8230;&#8203;..</p>
+</li>
+<li>
+<p>当第n个进程申请资源时，信号量 S 减 1，即 S=-(n-5)。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>经上分析，信号量的取值范围应在-(n-5)~5。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+信号量可以为负值，负值表示等待资源的进程数。
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_8_2_资源分配图resource_allocation_graph_rag">8.2 资源分配图（Resource Allocation Graph, RAG）</h3>
@@ -10622,7 +10681,7 @@ D 状态</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-20 07:27:24 +0800
+Last updated 2025-05-20 08:19:08 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
