@@ -7044,6 +7044,71 @@ git worktree add ../v2.0-release v2.0
 * 所有 worktree 共享主仓库的 `.git` 数据，节省空间。
 * 每个 worktree 是独立的工作目录，可以单独执行 `git` 命令。
 </t>
-<t tx="swot.20250520181057.1"></t>
+<t tx="swot.20250520181057.1">Git Subtree 是 Git 中用于管理子项目的一种机制，它允许你将一个 Git 仓库作为另一个仓库的子目录，并能够独立地同步更新子项目。
+
+IMPORTANT: 用来在一个 leo 文件中管理多个小的项目案例。
+
+[discrete]
+==== 添加子项目
+
+将一个外部仓库添加为子项目：
+
+[source,shell]
+----
+git subtree add --prefix=&lt;子目录路径&gt; &lt;远程仓库地址&gt; &lt;分支名&gt; --squash
+----
+
+示例：
+
+[source,shell]
+----
+git subtree add --prefix=vendor/libfoo https://github.com/example/libfoo.git main --squash
+----
+
+[discrete]
+==== 提交子项目的更改
+
+将子项目中的更改推送到远程仓库：
+
+[source,shell]
+----
+git subtree push --prefix=&lt;子目录路径&gt; &lt;远程名称&gt; &lt;分支名&gt;
+----
+
+示例：
+
+[source,shell]
+----
+git subtree push --prefix=vendor/libfoo https://github.com/example/libfoo.git main
+----
+
+[discrete]
+==== 拉取子项目的更新
+
+从远程仓库拉取子项目的更新并合并到当前项目中：
+
+[source,shell]
+----
+git subtree pull --prefix=&lt;子目录路径&gt; &lt;远程仓库地址&gt; &lt;分支名&gt; --squash
+----
+
+示例：
+
+[source,shell]
+----
+git subtree pull --prefix=vendor/libfoo https://github.com/example/libfoo.git main --squash
+----
+
+.使用 squash 的意义
+[TIP]
+====
+`squash` 选项会将子项目的历史压缩为一次提交，保持主项目历史简洁。
+====
+
+[discrete]
+==== 子项目也可以单独开发
+
+可以在主项目中开发子项目的代码，然后使用 `git subtree push` 将其推送回原仓库，实现双向同步。
+</t>
 </tnodes>
 </leo_file>
