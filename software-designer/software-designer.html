@@ -615,6 +615,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_4_状态转换机">4 状态转换机</a>
 <ul class="sectlevel2">
 <li><a href="#_4_1_正规集识别字符种类个数">4.1 正规集识别字符种类个数</a></li>
+<li><a href="#_4_2_文法推导正规集">4.2 文法推导正规集</a></li>
 </ul>
 </li>
 <li><a href="#_5_存储系统与寻址结构">5 存储系统与寻址结构</a>
@@ -4951,6 +4952,137 @@ D 6</pre>
 <p>共 6 种字符。</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_4_2_文法推导正规集">4.2 文法推导正规集</h3>
+<div class="paragraph">
+<p>已知文法G: S&#8594;A0|B1，A&#8594;S1|1，B&#8594;S0|0，其中 S 是开始符号。从 S 出发可以推导出（C） 。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 所有由0构成的字符串
+B 所有由1构成的字符串
+C 某些0和1个数相等的字符串
+D 所有0和1个数不同的字符串</pre>
+</div>
+</div>
+<hr>
+<h4 id="_文法规则" class="discrete">文法规则</h4>
+<div class="literalblock">
+<div class="content">
+<pre>S → A0 | B1  <i class="conum" data-value="1"></i><b>(1)</b>
+A → S1 | 1   <i class="conum" data-value="2"></i><b>(2)</b>
+B → S0 | 0   <i class="conum" data-value="3"></i><b>(3)</b></pre>
+</div>
+</div>
+<h4 id="_关键推导步骤" class="discrete">关键推导步骤</h4>
+<div class="paragraph">
+<p><strong>基础推导</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>`S → A0 → 10` （0和1各1个）
+`S → B1 → 01` （0和1各1个）</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>递归展开示例</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>S → A0 → S10 → (A0)10 → 1010  <i class="conum" data-value="1"></i><b>(1)</b>
+S → B1 → S01 → (B1)01 → 0101  <i class="conum" data-value="2"></i><b>(2)</b></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+每次递归调用都会追加平衡的字符对（如 <code>0</code> 和 <code>1</code>）
+</td>
+</tr>
+</table>
+</div>
+<h4 id="_数目关系分析" class="discrete">数目关系分析</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">符号</th>
+<th class="tableblock halign-left valign-top">数量差特征</th>
+<th class="tableblock halign-left valign-top">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0的数量 = 1的数量</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">因每次展开都会补充对称字符（如A生成`1<code>时必跟</code>0`）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0比1少1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">由规则 &lt;2&gt; 的递归特性决定（<code>A→S1</code> 会传递差额）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0比1多1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">由规则 &lt;3&gt; 的递归特性决定（<code>B→S0</code> 会传递差额）</p></td>
+</tr>
+</tbody>
+</table>
+<h4 id="_选项验证" class="discrete">选项验证</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">选项</th>
+<th class="tableblock halign-left valign-top">结果</th>
+<th class="tableblock halign-left valign-top">分析</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A. 全0字符串</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">错误 ×</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">无法生成（所有推导必须同时包含0和1）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">B. 全1字符串</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">错误 ×</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">同上（必须混合0和1）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C. 某些0和1相等的字符串</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">正确 ✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">所有合法推导结果均满足 <code>n0 = n1</code>（如10, 01, 1010等）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">D. 所有数目不同的字符串</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">错误 ×</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">与文法特性矛盾（无法生成`n0 ≠ n1`的字符串）</p></td>
+</tr>
+</tbody>
+</table>
+<h4 id="_结论" class="discrete">结论</h4>
+<div class="paragraph">
+<p>正确答案为选项 <strong>C</strong></p>
+</div>
+<div class="paragraph">
+<p>该文法生成的语言是：
+<code>L(G) = { w | w ∈ {0,1}* 且 w中0与1的数量相等 }</code></p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -6929,7 +7061,7 @@ D 第二种方法的加速比是1.22，效果较好</pre>
 </li>
 </ul>
 </div>
-<h4 id="_结论" class="discrete">结论</h4>
+<h4 id="_结论_2" class="discrete">结论</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -10681,7 +10813,7 @@ D 状态</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-20 08:19:08 +0800
+Last updated 2025-05-20 10:41:35 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
