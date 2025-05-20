@@ -29,6 +29,103 @@
 </script>
 ++++
 
+== git worktree
+Git Worktree 是 Git 提供的一个强大功能，允许你在同一个仓库中同时检出多个分支，适合多任务开发、测试或部署等场景。
+
+IMPORTANT: 会用于测试多个不同的 nuxt3 功能模块。之前使用了 leo-editor，但是容易出现问题，比如 @file 文件被错误覆盖等等。
+
+[discrete]
+==== 添加新的 Worktree
+
+[source,shell]
+----
+git worktree add <path> <branch>
+----
+
+- `<path>`：新的工作目录位置。
+- `<branch>`：目标分支。若该分支不存在，可用 `-b` 选项创建。
+
+
+.新建一个 `feature-xyz` 的工作目录：
+[source,shell]
+----
+git worktree add ../feature-xyz feature-xyz
+----
+
+IMPORTANT: 注意这里的 `../` 很重要，即不和当前的代码在同一个目录下，因为会把当前的目录弄乱。
+
+
+.新建并基于 `origin/main` 分支创建 `feature-xyz` 分支：
+[source,shell]
+----
+git worktree add -b feature-xyz ../feature-xyz origin/main
+----
+
+[discrete]
+==== 查看所有 Worktree
+
+[source,shell]
+----
+git worktree list
+----
+
+输出示例：
+....
+/project/main         abcd123 [main]
+/project/feature-xyz  def4567 [feature-xyz]
+....
+
+
+[discrete]
+==== 移除 Worktree
+
+方式一（自动移除记录并删除目录）：
+
+[source,shell]
+----
+git worktree remove ../feature-xyz
+----
+
+方式二（手动删除后清理记录）：
+
+[source,shell]
+----
+rm -rf ../feature-xyz
+git worktree prune
+----
+
+[discrete]
+==== 使用场景
+
+.1)并行开发
+[source,shell]
+----
+git worktree add ../docs-update docs
+cd ../docs-update
+# 修改文档分支，主目录继续开发
+----
+
+.2)审核 Pull Request
+[source,shell]
+----
+git worktree add ../review-pr123 pr123
+----
+
+.3)构建多个版本
+----
+git worktree add ../v1.0-release v1.0
+git worktree add ../v2.0-release v2.0
+----
+
+注意事项
+
+* 每个分支只能同时存在于一个 worktree。
+* 所有 worktree 共享主仓库的 `.git` 数据，节省空间。
+* 每个 worktree 是独立的工作目录，可以单独执行 `git` 命令。
+
+== git subtree
+
+
 == git-filter-repo -> delete file from all git commit
 https://github.com/newren/git-filter-repo
 

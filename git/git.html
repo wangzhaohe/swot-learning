@@ -535,6 +535,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#_git_worktree">git worktree</a></li>
+<li><a href="#_git_subtree">git subtree</a></li>
 <li><a href="#_git_filter_repo_delete_file_from_all_git_commit">git-filter-repo &#8594; delete file from all git commit</a></li>
 </ul>
 </div>
@@ -560,6 +562,143 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
         }
     });
 </script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_git_worktree">git worktree</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Git Worktree 是 Git 提供的一个强大功能，允许你在同一个仓库中同时检出多个分支，适合多任务开发、测试或部署等场景。</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+会用于测试多个不同的 nuxt3 功能模块。之前使用了 leo-editor，但是容易出现问题，比如 @file 文件被错误覆盖等等。
+</td>
+</tr>
+</table>
+</div>
+<h4 id="_添加新的_worktree" class="discrete">添加新的 Worktree</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>worktree<span class="tok-w"> </span>add<span class="tok-w"> </span>&lt;path&gt;<span class="tok-w"> </span>&lt;branch&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;path&gt;</code>：新的工作目录位置。</p>
+</li>
+<li>
+<p><code>&lt;branch&gt;</code>：目标分支。若该分支不存在，可用 <code>-b</code> 选项创建。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">新建一个 <code>feature-xyz</code> 的工作目录：</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>worktree<span class="tok-w"> </span>add<span class="tok-w"> </span>../feature-xyz<span class="tok-w"> </span>feature-xyz</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+注意这里的 <code>../</code> 很重要，即不和当前的代码在同一个目录下，因为会把当前的目录弄乱。
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">新建并基于 <code>origin/main</code> 分支创建 <code>feature-xyz</code> 分支：</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>worktree<span class="tok-w"> </span>add<span class="tok-w"> </span>-b<span class="tok-w"> </span>feature-xyz<span class="tok-w"> </span>../feature-xyz<span class="tok-w"> </span>origin/main</code></pre>
+</div>
+</div>
+<h4 id="_查看所有_worktree" class="discrete">查看所有 Worktree</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>worktree<span class="tok-w"> </span>list</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>输出示例：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/project/main         abcd123 [main]
+/project/feature-xyz  def4567 [feature-xyz]</pre>
+</div>
+</div>
+<h4 id="_移除_worktree" class="discrete">移除 Worktree</h4>
+<div class="paragraph">
+<p>方式一（自动移除记录并删除目录）：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>worktree<span class="tok-w"> </span>remove<span class="tok-w"> </span>../feature-xyz</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>方式二（手动删除后清理记录）：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>rm<span class="tok-w"> </span>-rf<span class="tok-w"> </span>../feature-xyz
+git<span class="tok-w"> </span>worktree<span class="tok-w"> </span>prune</code></pre>
+</div>
+</div>
+<h4 id="_使用场景" class="discrete">使用场景</h4>
+<div class="listingblock">
+<div class="title">1)并行开发</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>worktree<span class="tok-w"> </span>add<span class="tok-w"> </span>../docs-update<span class="tok-w"> </span>docs
+<span class="tok-nb">cd</span><span class="tok-w"> </span>../docs-update
+<span class="tok-c1"># 修改文档分支，主目录继续开发</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">2)审核 Pull Request</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>worktree<span class="tok-w"> </span>add<span class="tok-w"> </span>../review-pr123<span class="tok-w"> </span>pr123</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">3)构建多个版本</div>
+<div class="content">
+<pre>git worktree add ../v1.0-release v1.0
+git worktree add ../v2.0-release v2.0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>注意事项</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>每个分支只能同时存在于一个 worktree。</p>
+</li>
+<li>
+<p>所有 worktree 共享主仓库的 <code>.git</code> 数据，节省空间。</p>
+</li>
+<li>
+<p>每个 worktree 是独立的工作目录，可以单独执行 <code>git</code> 命令。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_git_subtree">git subtree</h2>
+<div class="sectionbody">
+
 </div>
 </div>
 <div class="sect1">
@@ -635,7 +774,7 @@ git<span class="tok-w"> </span>push<span class="tok-w"> </span>--force<span clas
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-09 17:28:43 +0800
+Last updated 2025-05-20 18:25:24 +0800
 </div>
 </div>
 </body>
