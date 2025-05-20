@@ -698,7 +698,91 @@ git worktree add ../v2.0-release v2.0</pre>
 <div class="sect1">
 <h2 id="_git_subtree">git subtree</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>Git Subtree 是 Git 中用于管理子项目的一种机制，它允许你将一个 Git 仓库作为另一个仓库的子目录，并能够独立地同步更新子项目。</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+用来在一个 leo 文件中管理多个小的项目案例。
+</td>
+</tr>
+</table>
+</div>
+<h4 id="_添加子项目" class="discrete">添加子项目</h4>
+<div class="paragraph">
+<p>将一个外部仓库添加为子项目：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>subtree<span class="tok-w"> </span>add<span class="tok-w"> </span>--prefix<span class="tok-o">=</span>&lt;子目录路径&gt;<span class="tok-w"> </span>&lt;远程仓库地址&gt;<span class="tok-w"> </span>&lt;分支名&gt;<span class="tok-w"> </span>--squash</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>subtree<span class="tok-w"> </span>add<span class="tok-w"> </span>--prefix<span class="tok-o">=</span>vendor/libfoo<span class="tok-w"> </span>https://github.com/example/libfoo.git<span class="tok-w"> </span>main<span class="tok-w"> </span>--squash</code></pre>
+</div>
+</div>
+<h4 id="_提交子项目的更改" class="discrete">提交子项目的更改</h4>
+<div class="paragraph">
+<p>将子项目中的更改推送到远程仓库：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>subtree<span class="tok-w"> </span>push<span class="tok-w"> </span>--prefix<span class="tok-o">=</span>&lt;子目录路径&gt;<span class="tok-w"> </span>&lt;远程名称&gt;<span class="tok-w"> </span>&lt;分支名&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>subtree<span class="tok-w"> </span>push<span class="tok-w"> </span>--prefix<span class="tok-o">=</span>vendor/libfoo<span class="tok-w"> </span>https://github.com/example/libfoo.git<span class="tok-w"> </span>main</code></pre>
+</div>
+</div>
+<h4 id="_拉取子项目的更新" class="discrete">拉取子项目的更新</h4>
+<div class="paragraph">
+<p>从远程仓库拉取子项目的更新并合并到当前项目中：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>subtree<span class="tok-w"> </span>pull<span class="tok-w"> </span>--prefix<span class="tok-o">=</span>&lt;子目录路径&gt;<span class="tok-w"> </span>&lt;远程仓库地址&gt;<span class="tok-w"> </span>&lt;分支名&gt;<span class="tok-w"> </span>--squash</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>git<span class="tok-w"> </span>subtree<span class="tok-w"> </span>pull<span class="tok-w"> </span>--prefix<span class="tok-o">=</span>vendor/libfoo<span class="tok-w"> </span>https://github.com/example/libfoo.git<span class="tok-w"> </span>main<span class="tok-w"> </span>--squash</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">使用 squash 的意义</div>
+<div class="paragraph">
+<p><code>squash</code> 选项会将子项目的历史压缩为一次提交，保持主项目历史简洁。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<h4 id="_子项目也可以单独开发" class="discrete">子项目也可以单独开发</h4>
+<div class="paragraph">
+<p>可以在主项目中开发子项目的代码，然后使用 <code>git subtree push</code> 将其推送回原仓库，实现双向同步。</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -774,7 +858,7 @@ git<span class="tok-w"> </span>push<span class="tok-w"> </span>--force<span clas
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-20 18:25:24 +0800
+Last updated 2025-05-20 18:32:30 +0800
 </div>
 </div>
 </body>
