@@ -7,7 +7,7 @@
 <find_panel_settings/>
 <vnodes>
 <v t="swot.20250508123413.1"><vh>@adoc README.adoc</vh>
-<v t="swot.20250508123515.1"><vh>Record learning contents</vh>
+<v t="swot.20250508123515.1"><vh>learning contents</vh>
 <v t="swot.20250508125533.1"><vh>Read document</vh></v>
 <v t="swot.20250521172443.1"><vh>Learning Structure</vh></v>
 <v t="swot.20250508123848.1"><vh>Asciidoctor</vh></v>
@@ -7321,9 +7321,11 @@ https://github.com/nuxt/nuxt
 
 . .gitignore add each project.
 
-. each project is managed by it's own git.
+. Each project is managed by it's own git.
 
-. use `git worktree` to manage each project.
+. Each project use pnpm-workspace.yaml of monorepo.
+
+. Use `git worktree` to manage each project.
 
 </t>
 <t tx="swot.20250521181940.1">Add worktree nuxt3-layout
