@@ -7263,7 +7263,8 @@ Done in 3s
  › Start development server with pnpm run dev
 ....
 </t>
-<t tx="swot.20250521112440.1"></t>
+<t tx="swot.20250521112440.1">这是本来就有的 origin/main 分支。
+</t>
 <t tx="swot.20250521112958.1"></t>
 <t tx="swot.20250521144332.1">The Progressive Web Framework
 
@@ -7322,7 +7323,7 @@ https://github.com/nuxt/nuxt
 <t tx="swot.20250521181940.1">Add worktree nuxt3-layout
 
     git worktree add -b nuxt3-layout ../nuxt3-layout origin/main
-
+    git push -u origin nuxt3-layout
 </t>
 <t tx="swot.20250521194811.1">I like pug, so add it.
 
@@ -7399,27 +7400,19 @@ export default defineNuxtConfig({
 </t>
 <t tx="swot.20250521205725.19">'@element-plus/nuxt'
 </t>
-<t tx="swot.20250521205725.2">
-++++
-&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
-&lt;script&gt;
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
+<t tx="swot.20250521205725.2">Add worktree nuxt3-element-plus
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () =&gt; {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
-&lt;/script&gt;
-++++
+    git worktree add -b nuxt3-element-plus ../nuxt3-element-plus
+    git push -u origin nuxt3-element-plus
+
+[IMPORTANT]
+====
+一定要注意是从哪个分支创建的，实在不放心就直接指定分支来源吧。
+比如从 origin/nuxt3-layout 来创建新的 worktree
+
+    git worktree add -b nuxt3-element-plus ../nuxt3-element-plus origin/nuxt3-layout
+====
+
 </t>
 <t tx="swot.20250521205725.20">elementPlus: { /** Options */ },
 </t>
