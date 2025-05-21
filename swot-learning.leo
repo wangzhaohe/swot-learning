@@ -12,7 +12,21 @@
 <v t="swot.20250508123848.1"><vh>Asciidoctor</vh></v>
 <v t="swot.20250508161823.1"><vh>Git</vh></v>
 <v t="swot.20250508123546.1"><vh>LEO-Editor</vh></v>
+<v t="swot.20250521144332.1"><vh>Nuxt3</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
+</v>
+</v>
+<v t="swot.20250511104537.1"><vh>@path nuxt/nuxt3</vh>
+<v t="swot.20250511104555.1"><vh>Plan</vh>
+<v t="swot.20250511104602.1"><vh>How to test nuxt?</vh></v>
+</v>
+<v t="swot.20250521145258.1"><vh>@adoc nuxt3.adoc</vh>
+<v t="swot.20250521112440.1"><vh>@path nuxt3-basic</vh>
+<v t="swot.20250520190119.1"><vh>Create a new project</vh></v>
+<v t="swot.20250521112958.1"><vh>Setting nuxt.config.ts</vh>
+<v t="swot.20250521114411.1"><vh>@file nuxt.config.ts</vh></v>
+</v>
+</v>
 </v>
 </v>
 <v t="swot.20250508124711.1" descendentVnodeUnknownAttributes="7d710028580b000000302e302e302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573580b000000302e302e302e322e302e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30322d3232710e75735809000000302e302e302e322e34710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30312d3330711575735807000000302e302e302e3371167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30322d3032711c7573752e"><vh>@path asciidoctor</vh>
@@ -251,11 +265,6 @@
 <v t="swot.20250514212913.1"><vh>15 信息安全</vh></v>
 <v t="swot.20250511233342.1"><vh>16 专业英语</vh></v>
 </v>
-</v>
-</v>
-<v t="swot.20250511104537.1"><vh>@path nuxt</vh>
-<v t="swot.20250511104555.1"><vh>Plan</vh>
-<v t="swot.20250511104602.1"><vh>How to test nuxt?</vh></v>
 </v>
 </v>
 </vnodes>
@@ -7110,5 +7119,130 @@ git subtree pull --prefix=vendor/libfoo https://github.com/example/libfoo.git ma
 
 可以在主项目中开发子项目的代码，然后使用 `git subtree push` 将其推送回原仓库，实现双向同步。
 </t>
+<t tx="swot.20250520190119.1">https://nuxt.com/docs/getting-started/installation#new-project
+
+Prepare Directory
+
+    mkdir -p nuxt/nuxt3
+
+IMPORTANT: nuxt3-basic 作为最基本的项目目录，后面会使用 `git worktree` 把不同分支的目录放在 nuxt3目录下，它们和 nuxt3-basic 在同级目录下。这样后面再有 nuxt4 的项目，也可以放在 nuxt 目录下，和 nuxt3 目录平行放置。
+
+
+Create a new nuxt3 project
+
+    cd nuxt/nuxt3
+    pnpm create nuxt nuxt3-basic
+
+
+.Install some recommended library
+....
+&gt; pnpm create nuxt nuxt3-basic
+
+        .d$b.
+       i$$A$$L  .d$b
+     .$$F` `$$L.$$A$$.
+    j$$'    `4$$:` `$$.
+   j$$'     .4$:    `$$.
+  j$$`     .$$:      `4$L
+ :$$:____.d$$:  _____.:$$:
+ `4$$$$$$$$P` .i$$$$$$$$P`
+
+ℹ Welcome to Nuxt!                                                                                                                                nuxi 11:13:07 AM
+ℹ Creating a new project in nuxt3-basic.                                                                                                          nuxi 11:13:07 AM
+
+✔ Which package manager would you like to use?
+pnpm
+◐ Installing dependencies...                                                                                                                       nuxi 11:13:09 AM
+ WARN  9 deprecated subdependencies found: @types/parse-path@7.1.0, are-we-there-yet@2.0.0, gauge@3.0.2, glob@7.2.3, glob@8.1.0, inflight@1.0.6, node-domexception@1.0.0, npmlog@5.0.1, rimraf@3.0.2
+Packages: +763
+
+Progress: resolved 836, reused 757, downloaded 11, added 763, done
+
+&gt; nuxt-app@ postinstall /Users/swot/swot-learning/nuxt/nuxt3/nuxt3-basic
+&gt; nuxt prepare
+
+✔ Types generated in .nuxt                                                                                                                        nuxi 11:13:21 AM
+
+dependencies:
++ nuxt 3.17.4
++ vue 3.5.14
++ vue-router 4.5.1
+
+Done in 11.6s
+✔ Installation completed.                                                                                                                         nuxi 11:13:21 AM
+
+✔ Initialize git repository?
+Yes
+ℹ Initializing git repository...                                                                                                                  nuxi 11:13:25 AM
+
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint:
+hint: 	git config --global init.defaultBranch &lt;name&gt;
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint: 	git branch -m &lt;name&gt;
+Initialized empty Git repository in /Users/swot/swot-learning/nuxt/nuxt3/nuxt3-basic/.git/
+
+✔ Would you like to install any of the official modules?
+@nuxt/eslint – Project-aware, easy-to-use, extensible and future-proof ESLint integration, @nuxt/fonts – Add custom web fonts with performance in mind, @nuxt/icon –
+Icon module for Nuxt with 200,000+ ready to use icons from Iconify, @nuxt/image – Add images with progressive processing, lazy-loading, resizing and providers
+support, @nuxt/scripts – Add 3rd-party scripts without sacrificing performance, @nuxt/ui – The Intuitive UI Library powered by Reka UI and Tailwind CSS
+ℹ Resolved @nuxt/icon, @nuxt/image, @nuxt/scripts, @nuxt/ui, @nuxt/fonts, @nuxt/eslint, adding modules...                                         nuxi 11:16:40 AM
+ℹ Installing @nuxt/icon@1.13.0, @nuxt/image@1.10.0, @nuxt/scripts@0.11.7, @nuxt/ui@3.1.2, @nuxt/fonts@0.11.4, @nuxt/eslint@1.4.1 as dependencies  nuxi 11:16:40 AM
+ WARN  9 deprecated subdependencies found: @types/parse-path@7.1.0, are-we-there-yet@2.0.0, gauge@3.0.2, glob@7.2.3, glob@8.1.0, inflight@1.0.6, node-domexception@1.0.0, npmlog@5.0.1, rimraf@3.0.2
+Packages: +271
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 1129, reused 1022, downloaded 3, added 271, done
+
+dependencies:
++ @nuxt/eslint 1.4.1
++ @nuxt/fonts 0.11.4
++ @nuxt/icon 1.13.0
++ @nuxt/image 1.10.0
++ @nuxt/scripts 0.11.7
++ @nuxt/ui 3.1.2
+
+Done in 19.8s
+ WARN  9 deprecated subdependencies found: @types/parse-path@7.1.0, are-we-there-yet@2.0.0, gauge@3.0.2, glob@7.2.3, glob@8.1.0, inflight@1.0.6, node-domexception@1.0.0, npmlog@5.0.1, rimraf@3.0.2
+Already up to date
+Progress: resolved 1129, reused 1025, downloaded 0, added 0, done
+
+dependencies:
++ @unhead/vue ^2.0.3
++ eslint ^9.0.0
++ typescript ^5.6.3
+
+Done in 3s
+ℹ Adding @nuxt/icon to the modules                                                                                                                nuxi 11:17:03 AM
+ℹ Adding @nuxt/image to the modules                                                                                                               nuxi 11:17:03 AM
+ℹ Adding @nuxt/scripts to the modules                                                                                                             nuxi 11:17:03 AM
+ℹ Adding @nuxt/ui to the modules                                                                                                                  nuxi 11:17:03 AM
+ℹ Adding @nuxt/fonts to the modules                                                                                                               nuxi 11:17:03 AM
+ℹ Adding @nuxt/eslint to the modules                                                                                                              nuxi 11:17:03 AM
+✔ ESLint config file created at /Users/swot/swot-learning/nuxt/nuxt3/nuxt3-basic/eslint.config.mjs                                                     11:17:05 AM
+ℹ If you have .eslintrc or .eslintignore files, you might want to migrate them to the new config file                                                  11:17:05 AM
+ℹ Nuxt Icon server bundle mode is set to local                                                                                                         11:17:05 AM
+✔ Types generated in nuxt3-basic/.nuxt                                                                                                            nuxi 11:17:08 AM
+                                                                                                                                                   nuxi 11:17:08 AM
+✨ Nuxt project has been created with the v3 template. Next steps:
+ › cd nuxt3-basic                                                                                                                                  nuxi 11:17:08 AM
+ › Start development server with pnpm run dev
+....
+</t>
+<t tx="swot.20250521112440.1"></t>
+<t tx="swot.20250521112958.1"></t>
+<t tx="swot.20250521144332.1">The Progressive Web Framework
+
+xref:nuxt/nuxt3/nuxt3.adoc[ Read Nuxt3 learning Notes ]
+
+https://nuxt.com/
+
+https://github.com/nuxt/nuxt
+</t>
+<t tx="swot.20250521145258.1"></t>
 </tnodes>
 </leo_file>
