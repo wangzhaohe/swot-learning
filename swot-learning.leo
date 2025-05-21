@@ -39,19 +39,10 @@
 </v>
 <v t="swot.20250521205725.2"><vh>@path nuxt3-element-plus</vh>
 <v t="swot.20250521205725.3"><vh>Install</vh></v>
-<v t="swot.20250521205725.4"><vh>#file nuxt.config.ts</vh>
-<v t="swot.20250521205725.5"><vh>&lt;&lt; 配置模块 element plus &gt;&gt;</vh></v>
-<v t="swot.20250521205725.6"><vh>&lt;&lt; 配置 element plus 选项 &gt;&gt;</vh></v>
-</v>
-<v t="swot.20250521205725.7"><vh>#file pages/elementPlus.vue</vh>
-<v t="swot.20250521205725.8"><vh>template</vh></v>
-<v t="swot.20250521205725.9"><vh>script</vh></v>
-</v>
-<v t="swot.20250521205725.10"><vh>element-plus 支持中文</vh>
-<v t="swot.20250521205725.11"><vh>#file app.vue</vh>
-<v t="swot.20250521205725.12"><vh>template</vh></v>
-<v t="swot.20250521205725.13"><vh>script</vh></v>
-</v>
+<v t="swot.20250521114411.1"></v>
+<v t="swot.20250521205725.7"><vh>@file pages/elementPlus.vue</vh></v>
+<v t="swot.20250521205725.10"><vh>element-plus I18N support</vh>
+<v t="swot.20250521205725.11"><vh>@file app.vue</vh></v>
 </v>
 <v t="swot.20250521205725.14"><vh>报错或警告处理</vh>
 <v t="swot.20250521205725.15"><vh>dayjs/dayjs.min.js does not provide an export named 'default'</vh></v>
@@ -7341,29 +7332,6 @@ https://github.com/nuxt/nuxt
 <t tx="swot.20250521205725.10">https://element-plus.org/zh-CN/guide/i18n.html#configprovider
 
 ConfigProvider 方式
-
-
-</t>
-<t tx="swot.20250521205725.11">@doc
-配置 element-plus 支持中文
-@c
-@others
-@language javascript
-</t>
-<t tx="swot.20250521205725.12">@language javascript
-&lt;template lang="pug"&gt;
-    NuxtLayout
-        //- elementUI plus 支持中文
-        el-config-provider(:locale="zhCn")
-            NuxtPage
-&lt;/template&gt;
-</t>
-<t tx="swot.20250521205725.13">@language typescript
-&lt;script setup lang="ts"&gt;
-
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
-
-&lt;/script&gt;
 </t>
 <t tx="swot.20250521205725.14"></t>
 <t tx="swot.20250521205725.15">@language asciidoc
@@ -7468,42 +7436,6 @@ pnpm i element-plus @element-plus/nuxt -D
 ----
 
 NOTE: -D 可以作为开发依赖，因为在 build 时会自动收集相关信息
-</t>
-<t tx="swot.20250521205725.4">@language typescript
-// https://nuxt.com/docs/api/configuration/nuxt-config
-export default defineNuxtConfig({
-    compatibilityDate: '2024-11-01',
-    devtools: { enabled: true },
-    modules: [
-      &lt;&lt; 配置模块 element plus &gt;&gt;
-    ],
-    &lt;&lt; 配置 element plus 选项 &gt;&gt;
-})
-</t>
-<t tx="swot.20250521205725.5">'@element-plus/nuxt'
-</t>
-<t tx="swot.20250521205725.6">elementPlus: { /** Options */ },
-</t>
-<t tx="swot.20250521205725.7">@doc
-@c
-@others
-@language javascript
-</t>
-<t tx="swot.20250521205725.8">&lt;template lang="pug"&gt;
-    div
-        el-button(@click="ElMessage('hello')") button
-
-        ElButton(:icon="ElIconEditPen" type="success") button
-
-        LazyElButton(type="warning") lazy button
-
-        el-icon
-            ElIconDeleteFilled
-&lt;/template&gt;
-</t>
-<t tx="swot.20250521205725.9">&lt;script setup lang="ts"&gt;
-
-&lt;/script&gt;
 </t>
 </tnodes>
 </leo_file>
