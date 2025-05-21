@@ -23,11 +23,45 @@
 </v>
 <v t="swot.20250521145258.1"><vh>@adoc nuxt3.adoc</vh>
 <v t="swot.20250521152152.1"><vh>Nuxt Notes</vh>
+<v t="swot.20250521214125.1"><vh>@edit pnpm-workspace.yaml</vh></v>
 <v t="swot.20250521112440.1"><vh>@path nuxt3-basic</vh>
 <v t="swot.20250521155715.1"><vh>github link</vh></v>
 <v t="swot.20250520190119.1"><vh>Create a new project</vh></v>
+<v t="swot.20250521194811.1"><vh>install packages</vh></v>
 <v t="swot.20250521112958.1"><vh>Setting nuxt.config.ts</vh>
 <v t="swot.20250521114411.1"><vh>@file nuxt.config.ts</vh></v>
+</v>
+</v>
+<v t="swot.20250521181940.1"><vh>@path nuxt3-layout</vh>
+<v t="swot.20250521195421.1"><vh>entry file</vh>
+<v t="swot.20250521194704.1"><vh>@edit app.vue</vh></v>
+</v>
+</v>
+<v t="swot.20250521205725.2"><vh>@path nuxt3-element-plus</vh>
+<v t="swot.20250521205725.3"><vh>Install</vh></v>
+<v t="swot.20250521205725.4"><vh>#file nuxt.config.ts</vh>
+<v t="swot.20250521205725.5"><vh>&lt;&lt; 配置模块 element plus &gt;&gt;</vh></v>
+<v t="swot.20250521205725.6"><vh>&lt;&lt; 配置 element plus 选项 &gt;&gt;</vh></v>
+</v>
+<v t="swot.20250521205725.7"><vh>#file pages/elementPlus.vue</vh>
+<v t="swot.20250521205725.8"><vh>template</vh></v>
+<v t="swot.20250521205725.9"><vh>script</vh></v>
+</v>
+<v t="swot.20250521205725.10"><vh>element-plus 支持中文</vh>
+<v t="swot.20250521205725.11"><vh>#file app.vue</vh>
+<v t="swot.20250521205725.12"><vh>template</vh></v>
+<v t="swot.20250521205725.13"><vh>script</vh></v>
+</v>
+</v>
+<v t="swot.20250521205725.14"><vh>报错或警告处理</vh>
+<v t="swot.20250521205725.15"><vh>dayjs/dayjs.min.js does not provide an export named 'default'</vh></v>
+<v t="swot.20250521205725.16"><vh>Extraneous non-props attributes (data-v-inspector) were passed to component</vh>
+<v t="swot.20250521205725.17"><vh>#file nuxt.config.ts</vh>
+<v t="swot.20250521205725.18"><vh>&lt;&lt; devtools &gt;&gt;</vh></v>
+<v t="swot.20250521205725.19"><vh>&lt;&lt; 配置模块 element plus &gt;&gt;</vh></v>
+<v t="swot.20250521205725.20"><vh>&lt;&lt; 配置 element plus 选项 &gt;&gt;</vh></v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -7291,6 +7325,183 @@ https://github.com/nuxt/nuxt
 
 . use `git worktree` to manage each project.
 
+</t>
+<t tx="swot.20250521181940.1">Add worktree nuxt3-layout
+
+    git worktree add -b nuxt3-layout ../nuxt3-layout origin/main
+
+</t>
+<t tx="swot.20250521194811.1">I like pug, so add it.
+
+    pnpm add pug
+</t>
+<t tx="swot.20250521195421.1"></t>
+<t tx="swot.20250521205725.10">https://element-plus.org/zh-CN/guide/i18n.html#configprovider
+
+ConfigProvider 方式
+
+
+</t>
+<t tx="swot.20250521205725.11">@doc
+配置 element-plus 支持中文
+@c
+@others
+@language javascript
+</t>
+<t tx="swot.20250521205725.12">@language javascript
+&lt;template lang="pug"&gt;
+    NuxtLayout
+        //- elementUI plus 支持中文
+        el-config-provider(:locale="zhCn")
+            NuxtPage
+&lt;/template&gt;
+</t>
+<t tx="swot.20250521205725.13">@language typescript
+&lt;script setup lang="ts"&gt;
+
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+
+&lt;/script&gt;
+</t>
+<t tx="swot.20250521205725.14"></t>
+<t tx="swot.20250521205725.15">@language asciidoc
+这是安装命令: 
+pnpm i element-plus @element-plus/nuxt -D
+
+
+在安装完 element-plus 后报错:
+
+.报错提示
+....
+[Bug Report] [All] Uncaught SyntaxError: The requested module '/_nuxt/node_modules/dayjs/dayjs.min.js?v=391d0c11' does not provide an export named 'default' (at picker2.mjs?v=391d0c11:2:8)
+....
+
+
+在网上查找解决方法为：
+https://github.com/element-plus/element-plus/issues/8165
+
+实际解决方法为: pnpm install dayjs
+</t>
+<t tx="swot.20250521205725.16">@language asciidoc
+https://github.com/element-plus/element-plus/issues/18213
+
+@language xml
+&lt;NuxtLayout&gt;
+    &lt;!-- elementUI plus 支持中文 --&gt;
+    &lt;el-config-provider :locale="zhCn"&gt;
+        &lt;NuxtPage /&gt;
+    &lt;/el-config-provider&gt;
+&lt;/NuxtLayout&gt;
+
+
+如上面 element-plus 设置中文后，如果在页面(pages/)中再使用组件，则会报警告如下:
+
+&gt; WARN  [Vue warn]: Extraneous non-props attributes (data-v-inspector) were passed to component but could not be automatically inherited because component renders fragment or text or teleport root nodes. 
+  at &lt;ElConfigProvider locale= { name: 'zh-cn',
+  el:
+
+
+解决方法：在 nuxt.config.ts 中临时禁用 componentInspector 功能
+
+@language java
+export default defineNuxtConfig({
+  devtools: {
+    componentInspector: false
+  },
+})
+
+</t>
+<t tx="swot.20250521205725.17">@language typescript
+// https://nuxt.com/docs/api/configuration/nuxt-config
+export default defineNuxtConfig({
+    compatibilityDate: '2024-11-01',
+    &lt;&lt; devtools &gt;&gt;
+    modules: [
+      &lt;&lt; 配置模块 element plus &gt;&gt;
+    ],
+    &lt;&lt; 配置 element plus 选项 &gt;&gt;
+})
+</t>
+<t tx="swot.20250521205725.18">devtools: {
+    enabled: true,
+    componentInspector: false
+},
+</t>
+<t tx="swot.20250521205725.19">'@element-plus/nuxt'
+</t>
+<t tx="swot.20250521205725.2">
+++++
+&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'none';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20250521205725.20">elementPlus: { /** Options */ },
+</t>
+<t tx="swot.20250521205725.3">@language asciidoc
+Video: https://www.bilibili.com/video/BV1G14y1z7KF/?spm_id_from=333.337.search-card.all.click&amp;vd_source=392e2829ea8e40de989be86888026747[安装和使用Element Plus组件库] | 
+https://www.bilibili.com/video/BV1pd4y1W7eX/?spm_id_from=333.788&amp;vd_source=392e2829ea8e40de989be86888026747[水哥澎湃]
+
+文档: https://nuxt.com/modules/element-plus?[官网详细安装说明]
+
+.安装命令
+[source,sql]
+----
+pnpm i element-plus @element-plus/nuxt -D
+----
+
+NOTE: -D 可以作为开发依赖，因为在 build 时会自动收集相关信息
+</t>
+<t tx="swot.20250521205725.4">@language typescript
+// https://nuxt.com/docs/api/configuration/nuxt-config
+export default defineNuxtConfig({
+    compatibilityDate: '2024-11-01',
+    devtools: { enabled: true },
+    modules: [
+      &lt;&lt; 配置模块 element plus &gt;&gt;
+    ],
+    &lt;&lt; 配置 element plus 选项 &gt;&gt;
+})
+</t>
+<t tx="swot.20250521205725.5">'@element-plus/nuxt'
+</t>
+<t tx="swot.20250521205725.6">elementPlus: { /** Options */ },
+</t>
+<t tx="swot.20250521205725.7">@doc
+@c
+@others
+@language javascript
+</t>
+<t tx="swot.20250521205725.8">&lt;template lang="pug"&gt;
+    div
+        el-button(@click="ElMessage('hello')") button
+
+        ElButton(:icon="ElIconEditPen" type="success") button
+
+        LazyElButton(type="warning") lazy button
+
+        el-icon
+            ElIconDeleteFilled
+&lt;/template&gt;
+</t>
+<t tx="swot.20250521205725.9">&lt;script setup lang="ts"&gt;
+
+&lt;/script&gt;
 </t>
 </tnodes>
 </leo_file>
