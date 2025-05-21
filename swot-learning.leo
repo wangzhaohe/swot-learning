@@ -9,6 +9,7 @@
 <v t="swot.20250508123413.1"><vh>@adoc README.adoc</vh>
 <v t="swot.20250508123515.1"><vh>Record learning contents</vh>
 <v t="swot.20250508125533.1"><vh>Read document</vh></v>
+<v t="swot.20250521172443.1"><vh>Learning Structure</vh></v>
 <v t="swot.20250508123848.1"><vh>Asciidoctor</vh></v>
 <v t="swot.20250508161823.1"><vh>Git</vh></v>
 <v t="swot.20250508123546.1"><vh>LEO-Editor</vh></v>
@@ -7279,6 +7280,17 @@ https://github.com/nuxt/nuxt
 ++++
 </t>
 <t tx="swot.20250521155715.1">https://github.com/wangzhaohe/nuxt3-basic.git
+</t>
+<t tx="swot.20250521172443.1">. Use leo-editor's swot-learning.leo file to manage outlined knowledge.
+
+. swot-learning.leo is managed by git.
+
+. .gitignore add each project.
+
+. each project is managed by it's own git.
+
+. use `git worktree` to manage each project.
+
 </t>
 </tnodes>
 </leo_file>
