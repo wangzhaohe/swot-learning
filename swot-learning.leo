@@ -267,6 +267,7 @@
 </v>
 </v>
 </v>
+<v t="swot.20250521151644.1"><vh>@edit .gitignore</vh></v>
 </vnodes>
 <tnodes>
 <t tx="swot.20250508105043.2"></t>
