@@ -21,10 +21,13 @@
 <v t="swot.20250511104602.1"><vh>How to test nuxt?</vh></v>
 </v>
 <v t="swot.20250521145258.1"><vh>@adoc nuxt3.adoc</vh>
+<v t="swot.20250521152152.1"><vh>Nuxt Notes</vh>
 <v t="swot.20250521112440.1"><vh>@path nuxt3-basic</vh>
+<v t="swot.20250521155715.1"><vh>github link</vh></v>
 <v t="swot.20250520190119.1"><vh>Create a new project</vh></v>
 <v t="swot.20250521112958.1"><vh>Setting nuxt.config.ts</vh>
 <v t="swot.20250521114411.1"><vh>@file nuxt.config.ts</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -7244,6 +7247,38 @@ https://nuxt.com/
 
 https://github.com/nuxt/nuxt
 </t>
-<t tx="swot.20250521145258.1"></t>
+<t tx="swot.20250521145258.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 4</t>
+<t tx="swot.20250521152152.1">
+++++
+&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20250521155715.1">https://github.com/wangzhaohe/nuxt3-basic.git
+</t>
 </tnodes>
 </leo_file>
