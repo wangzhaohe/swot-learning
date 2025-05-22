@@ -58,10 +58,10 @@
 <v t="swot.20250522073435.2"><vh>@path nuxt3-tailwindcss</vh>
 <v t="swot.20250522073435.3"><vh>Some Urls</vh></v>
 <v t="swot.20250522073435.4"><vh>VSCode plugins</vh></v>
-<v t="swot.20250522073435.5"><vh>Install and Use tailwindcss</vh>
+<v t="swot.20250522125304.1"><vh>Install</vh></v>
 <v t="swot.20250522084410.1"><vh>@file nuxt.config.ts</vh></v>
+<v t="swot.20250522125539.1"><vh>@file assets/css/main.css</vh></v>
 <v t="swot.20250522073435.6"><vh>@file pages/easy_example.vue</vh></v>
-</v>
 </v>
 </v>
 </v>
@@ -7446,11 +7446,12 @@ NOTE: -D 可以作为开发依赖，因为在 build 时会自动收集相关信�
     git push -u origin nuxt3-tailwindcss
 </t>
 <t tx="swot.20250522073435.3">https://nuxt.com/modules/tailwindcss
+目前我没有使用该 @nuxtjs/tailwindcss（集成的是 tailwindcss3），因为 NuxtUI 集成了 tailwindcss4，就不用再单独安装了。
 
 Official Website: https://tailwindcss.com/blog
 
 中文网: https://tailwind.nodejs.cn/docs/installation +
-中文网的版本是 3.4 2025-02-14 08:09:50
+中文网的版本默认是 4.1 2025-05-22 12:50:32
 
 基于 tailwind 开发的 UI https://flowbite.com/ +
 感觉很强
@@ -7464,66 +7465,29 @@ https://www.bilibili.com/video/BV1f2zqYCE84 +
 https://github.com/emmanuelbakare/Mastering-Tailwind-CSS-with-Project-Examples +
 感觉这个课程挺适合我的，坚持看完了，英语听力长了。
 </t>
-<t tx="swot.20250522073435.4">1. Tailwind CSS IntelliSense (vscode 的智能提示，需要配置如下)
-* 在项目的根目录 `.vscode/settings.json` 中添加以下内容
-+
+<t tx="swot.20250522073435.4">vscode install plugin: Tailwind CSS IntelliSense (vscode 的智能提示，需要配置如下)
+
+.在项目的根目录 `.vscode/settings.json` 中添加以下内容
 [source,json]
 ----
 {
-	"nuxt.isNuxtApp": true,
-	"files.associations": {
-		"*.css": "tailwindcss"
-	},
-	"editor.quickSuggestions": {
-		"strings": true
-	},
-	"tailwindCSS.experimental.configFile": "tailwind.config.ts",
-	"tailwindCSS.classAttributes": [
-		"class",
-		"className",
-		"ngClass",
-		"ui"
-	],
-	"tailwindCSS.experimental.classRegex": [
-		["ui:\\s*{([^)]*)\\s*}", "[\"'`]([^\"'`]*).*?[\"'`]"],
-		["/\\*\\s?ui\\s?\\*/\\s*{([^;]*)}", ":\\s*[\"'`]([^\"'`]*).*?[\"'`]"]
-	]
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.classAttributes": ["class", "ui"],
+  "tailwindCSS.experimental.classRegex": [
+    ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ]
 }
 ----
-* 在使用 nuxt3 时，需要在项目根目录下创建一个空的 tailwind.config.ts 文件，让 vscode 可以找到它的存在就可以了。
-
-
-2. Tailwind Snippets
-
-
-3. Live Server
-   * 一直都在用的插件
-
 </t>
-<t tx="swot.20250522073435.5">@language asciidoc
-官网 https://nuxt.com/modules/tailwindcss
-. 安装 tailwindcss 模块，默认安装的是 @nuxtjs/tailwindcss": "6.14.0" 对应于 tailwindcss@3.4.17  2025-05-22 08:32:14
+<t tx="swot.20250522125304.1">https://ui.nuxt.com/getting-started/installation/nuxt
 
-    npx nuxi@latest module add tailwindcss
-        or
-    pnpm add --save-dev @nuxtjs/tailwindcss
+使用 NuxtUI 的安装配置就可以了。
 
-
-. nuxt.config.ts 增加配置
-+
-[source,javascript]
-----
-export default defineNuxtConfig({
-  modules: [
-    '@nuxtjs/tailwindcss'
-  ]
-})
-----
-
-
-. 启动项目
-
-    pnpm run dev
 </t>
 </tnodes>
 </leo_file>
