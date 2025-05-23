@@ -143,10 +143,14 @@
 </v>
 </v>
 <v t="swot.20250523083936.1"><vh>@path nuxt3-component</vh>
-<v t="swot.20250523084009.1"><vh>Web Footer 页脚开发</vh>
 <v t="swot.20250522125539.1"></v>
+<v t="swot.20250523084009.1"><vh>Web Footer 页脚开发</vh>
 <v t="swot.20250523151308.1"><vh>@file pages/footer.vue</vh></v>
 <v t="swot.20250523151314.1"><vh>@file components/Footer.vue</vh></v>
+</v>
+<v t="swot.20250523171018.1"><vh>Web CookieConsent 许可页面开发</vh>
+<v t="swot.20250523171023.1"><vh>@file pages/cookie.vue</vh></v>
+<v t="swot.20250523171027.1"><vh>@file components/CookieConsent.vue</vh></v>
 </v>
 </v>
 </v>
@@ -7605,8 +7609,12 @@ image::img/alibaba_puhui.png[,960]
     git worktree add -b nuxt3-component ../nuxt3-component origin/nuxt3-tailwindcss
 
     // 修改之后提交代码
-    git push -u origin nuxt3-tailwindcss
+    git push -u origin nuxt3-component
 </t>
 <t tx="swot.20250523084009.1"></t>
+<t tx="swot.20250523171018.1">有 CookieConsent 的参考页面
+
+. https://www.qlik.com/us/pricing/data-integration-products-pricing
+</t>
 </tnodes>
 </leo_file>
