@@ -17,55 +17,6 @@
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 </v>
 </v>
-<v t="swot.20250511104537.1"><vh>@path nuxt/nuxt3</vh>
-<v t="swot.20250511104555.1"><vh>Plan</vh>
-<v t="swot.20250511104602.1"><vh>How to test nuxt?</vh></v>
-</v>
-<v t="swot.20250521145258.1"><vh>@adoc nuxt3.adoc</vh>
-<v t="swot.20250521152152.1"><vh>Nuxt Notes</vh>
-<v t="swot.20250521214125.1"><vh>@edit pnpm-workspace.yaml</vh></v>
-<v t="swot.20250521112440.1"><vh>@path nuxt3-basic</vh>
-<v t="swot.20250521155715.1"><vh>github link</vh></v>
-<v t="swot.20250520190119.1"><vh>Create a new project</vh></v>
-<v t="swot.20250521194811.1"><vh>install packages</vh></v>
-<v t="swot.20250521112958.1"><vh>Setting nuxt.config.ts</vh>
-<v t="swot.20250522084241.1"><vh>@file nuxt.config.ts</vh></v>
-</v>
-</v>
-<v t="swot.20250521181940.1"><vh>@path nuxt3-layout</vh>
-<v t="swot.20250521195421.1"><vh>entry file</vh>
-<v t="swot.20250521194704.1"><vh>@edit app.vue</vh></v>
-</v>
-</v>
-<v t="swot.20250521205725.2"><vh>@path nuxt3-element-plus</vh>
-<v t="swot.20250521205725.3"><vh>Install</vh></v>
-<v t="swot.20250522084400.1"><vh>@file nuxt.config.ts</vh></v>
-<v t="swot.20250521205725.7"><vh>@file pages/elementPlus.vue</vh></v>
-<v t="swot.20250521205725.10"><vh>element-plus I18N support</vh>
-<v t="swot.20250521205725.11"><vh>@file app.vue</vh></v>
-</v>
-<v t="swot.20250521205725.14"><vh>报错或警告处理</vh>
-<v t="swot.20250521205725.15"><vh>dayjs/dayjs.min.js does not provide an export named 'default'</vh></v>
-<v t="swot.20250521205725.16"><vh>Extraneous non-props attributes (data-v-inspector) were passed to component</vh>
-<v t="swot.20250521205725.17"><vh>#file nuxt.config.ts</vh>
-<v t="swot.20250521205725.18"><vh>&lt;&lt; devtools &gt;&gt;</vh></v>
-<v t="swot.20250521205725.19"><vh>&lt;&lt; 配置模块 element plus &gt;&gt;</vh></v>
-<v t="swot.20250521205725.20"><vh>&lt;&lt; 配置 element plus 选项 &gt;&gt;</vh></v>
-</v>
-</v>
-</v>
-</v>
-<v t="swot.20250522073435.2"><vh>@path nuxt3-tailwindcss</vh>
-<v t="swot.20250522073435.3"><vh>Some Urls</vh></v>
-<v t="swot.20250522073435.4"><vh>VSCode plugins</vh></v>
-<v t="swot.20250522125304.1"><vh>Install</vh></v>
-<v t="swot.20250522084410.1"><vh>@file nuxt.config.ts</vh></v>
-<v t="swot.20250522125539.1"><vh>@file assets/css/main.css</vh></v>
-<v t="swot.20250522073435.6"><vh>@file pages/easy_example.vue</vh></v>
-</v>
-</v>
-</v>
-</v>
 <v t="swot.20250508124711.1" descendentVnodeUnknownAttributes="7d710028580b000000302e302e302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573580b000000302e302e302e322e302e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30322d3232710e75735809000000302e302e302e322e34710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30312d3330711575735807000000302e302e302e3371167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30322d3032711c7573752e"><vh>@path asciidoctor</vh>
 <v t="swot.20250508105244.1" descendentVnodeUnknownAttributes="7d7100285809000000302e302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d3232710775735809000000302e302e322e302e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30322d3232710e75735807000000302e302e322e34710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30312d3330711575735805000000302e302e3371167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30322d3032711c7573752e"><vh>@adoc asciidoctor.adoc</vh>
 <v t="swot.20250508114609.1" descendentVnodeUnknownAttributes="7d7100285807000000302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d3232710775735807000000302e322e302e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30322d3232710e75735805000000302e322e34710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30312d3330711575735803000000302e3371167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30322d3032711c7573752e"><vh>Asciidoctor</vh>
@@ -130,6 +81,74 @@
 <v t="swot.20250520181051.1"><vh>git worktree</vh></v>
 <v t="swot.20250520181057.1"><vh>git subtree</vh></v>
 <v t="swot.20250508161032.1"><vh>git-filter-repo -&gt; delete file from all git commit</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20250511104537.1"><vh>@path nuxt/nuxt3</vh>
+<v t="swot.20250511104555.1"><vh>Plan</vh>
+<v t="swot.20250511104602.1"><vh>How to test nuxt?</vh></v>
+</v>
+<v t="swot.20250521145258.1"><vh>@adoc nuxt3.adoc</vh>
+<v t="swot.20250521152152.1"><vh>Nuxt Notes</vh>
+<v t="swot.20250521214125.1"><vh>@edit pnpm-workspace.yaml</vh></v>
+<v t="swot.20250521112440.1"><vh>@path nuxt3-basic</vh>
+<v t="swot.20250521155715.1"><vh>github link</vh></v>
+<v t="swot.20250520190119.1"><vh>Create a new project</vh></v>
+<v t="swot.20250521194811.1"><vh>install packages</vh></v>
+<v t="swot.20250521112958.1"><vh>Setting nuxt.config.ts</vh>
+<v t="swot.20250522084241.1"><vh>@file nuxt.config.ts</vh></v>
+</v>
+</v>
+<v t="swot.20250521181940.1"><vh>@path nuxt3-layout</vh>
+<v t="swot.20250521195421.1"><vh>entry file</vh>
+<v t="swot.20250521194704.1"><vh>@edit app.vue</vh></v>
+</v>
+</v>
+<v t="swot.20250521205725.2"><vh>@path nuxt3-element-plus</vh>
+<v t="swot.20250521205725.3"><vh>Install</vh></v>
+<v t="swot.20250522084400.1"><vh>@file nuxt.config.ts</vh></v>
+<v t="swot.20250521205725.7"><vh>@file pages/elementPlus.vue</vh></v>
+<v t="swot.20250521205725.10"><vh>element-plus I18N support</vh>
+<v t="swot.20250521205725.11"><vh>@file app.vue</vh></v>
+</v>
+<v t="swot.20250521205725.14"><vh>报错或警告处理</vh>
+<v t="swot.20250521205725.15"><vh>dayjs/dayjs.min.js does not provide an export named 'default'</vh></v>
+<v t="swot.20250521205725.16"><vh>Extraneous non-props attributes (data-v-inspector) were passed to component</vh>
+<v t="swot.20250521205725.17"><vh>#file nuxt.config.ts</vh>
+<v t="swot.20250521205725.18"><vh>&lt;&lt; devtools &gt;&gt;</vh></v>
+<v t="swot.20250521205725.19"><vh>&lt;&lt; 配置模块 element plus &gt;&gt;</vh></v>
+<v t="swot.20250521205725.20"><vh>&lt;&lt; 配置 element plus 选项 &gt;&gt;</vh></v>
+</v>
+</v>
+</v>
+</v>
+<v t="swot.20250522073435.2"><vh>@path nuxt3-tailwindcss</vh>
+<v t="swot.20250522073435.3"><vh>Some Urls</vh></v>
+<v t="swot.20250522073435.4"><vh>VSCode plugins</vh></v>
+<v t="swot.20250522125304.1"><vh>Install</vh></v>
+<v t="swot.20250522084410.1"><vh>@file nuxt.config.ts</vh></v>
+<v t="swot.20250522125539.1"><vh>@file assets/css/main.css</vh></v>
+<v t="swot.20250522073435.6"><vh>@file pages/easy_example.vue</vh></v>
+</v>
+<v t="swot.20250522210521.1"><vh>@path nuxt3-font</vh>
+<v t="swot.20250522210518.1"><vh>Nuxt3 字体引用《阿里巴巴普惠体》</vh>
+<v t="swot.20250522210518.2"><vh>安装字体</vh>
+<v t="swot.20250522213957.1"><vh>@file assets/css/main.css</vh></v>
+<v t="swot.20250522210741.1"><vh>@file assets/css/main.scss</vh></v>
+<v t="swot.20250521114411.1"><vh>@file nuxt.config.ts</vh></v>
+</v>
+<v t="swot.20250522210518.6"><vh>使用字体</vh>
+<v t="swot.20250522210755.1"><vh>@file pages/tailwind/font_example.vue</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20250523083936.1"><vh>@path nuxt3-component</vh>
+<v t="swot.20250523084009.1"><vh>Web Footer 页脚开发</vh>
+<v t="swot.20250522125539.1"></v>
+<v t="swot.20250523151308.1"><vh>@file pages/footer.vue</vh></v>
+<v t="swot.20250523151314.1"><vh>@file components/Footer.vue</vh></v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -7547,5 +7566,47 @@ https://github.com/emmanuelbakare/Mastering-Tailwind-CSS-with-Project-Examples +
 90H = 1001 0000B，补码为：1001 0000 则原码为 1111 0000，其中最高位代表符号位，1110000 代表数值，即-112，2X=-112，所以 X=-56。
 
 </t>
+<t tx="swot.20250522210518.1"></t>
+<t tx="swot.20250522210518.2">官网: https://www.iconfont.cn/fonts/detail?cnid=adI1E7HF7yme
+
+1. 字体最好使用 .woff2 字体，很小，加载快。将字体放入 `public/fonts/` 目录下。
++
+[source,console]
+----
+tree public/fonts                                         
+public/fonts
+├── PuHuiTi-Thin.woff
+└── PuHuiTi-Thin.woff2
+----
++
+.阿里巴巴普惠字体2.0 下载子集是 .woff&amp;.woff2 字体，且下载的只是在 input 框中输入的字
+image::img/alibaba_puhui.png[,960]
+
+
+2. 配置 main.scss 引入字体《阿里巴巴普惠体》
+
+3. 配置 nuxt.config.ts 全局加载 main.scss 文件
+
+</t>
+<t tx="swot.20250522210518.6"></t>
+<t tx="swot.20250522210521.1">Add worktree nuxt3-font
+
+    cd nuxt3-basic
+
+    git worktree add -b nuxt3-font ../nuxt3-font origin/nuxt3-layout
+
+    // 修改之后提交代码
+    git push -u origin nuxt3-font
+</t>
+<t tx="swot.20250523083936.1">Add worktree nuxt3-component
+
+    cd nuxt3-basic
+
+    git worktree add -b nuxt3-component ../nuxt3-component origin/nuxt3-tailwindcss
+
+    // 修改之后提交代码
+    git push -u origin nuxt3-tailwindcss
+</t>
+<t tx="swot.20250523084009.1"></t>
 </tnodes>
 </leo_file>
