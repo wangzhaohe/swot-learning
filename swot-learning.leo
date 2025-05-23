@@ -1985,6 +1985,8 @@ Edit ~/.zshrc
 [k_i \le k_{2i} \ \text{且} \ k_i \le k_{2i+1} \ \{ i = 1, 2, \ldots, \left\lfloor \frac{n}{2} \right\rfloor \}]
 ++++
 
+TIP: 就到 n/2，因为再往后取就没有数来对比了。
+ 
 以下序列中，（ ）不是小根堆(小顶堆)。
 
     A 16,25,40,55,30,50,45
