@@ -1,0 +1,101 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3
+
+= Q_and_A
+
+++++
+<button id="toggleButton">Table of Contents</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== Nuxt3
+
+
+=== utils vs composables?
+Nuxt 3 中 composables/ 与 utils/ 的区别与用法整理
+
+.概览对比
+[cols="1,2,3,4", options="header"]
+|===
+|目录
+|是否自动导入
+|推荐用途
+|说明
+
+|composables/
+|✅ 是
+|组合式逻辑（响应式状态）
+|封装使用 Vue/Nuxt API 的函数，如 `useFetch`、`ref`、`useState` 等。适合响应式和生命周期相关逻辑。
+
+|utils/
+|✅ 是（Nuxt 3.5+）
+|通用工具函数
+|封装纯函数，不依赖 Vue/Nuxt 上下文。适合处理字符串、日期、数学计算等通用逻辑。
+|===
+
+.composables 示例
+[source,javascript]
+----
+export function useUser(userId: string) {
+  return useFetch(`/api/users/${userId}`)
+}
+----
+
+.自动导入使用示例：
+[source,javascript]
+----
+const { data, pending, error } = useUser('abc123')
+----
+
+.utils 示例
+[source,javascript]
+----
+export function formatDate(date: Date): string {
+  return date.toISOString().split('T')[0]
+}
+----
+
+.自动导入使用示例（Nuxt 3.5+）：
+[source,javascript]
+----
+const today = formatDate(new Date())
+----
+
+.使用场景对比
+[cols="1,1", options="header"]
+|===
+|适合放在 composables/
+|适合放在 utils/
+
+|需要响应式状态逻辑：如 `useAuth()`、`useTheme()`、`useXxxFetch()`
+|纯函数：如 `formatDate()`、`slugify()`、`trimText()`
+
+|依赖 Vue/Nuxt API，如 `useRoute()`、`useHead()`、`useAsyncData()`
+|无任何 Vue/Nuxt 上下文依赖的逻辑
+
+|与组件或页面状态紧密相关
+|可在任何 JS 环境中
+|===
+
