@@ -17,6 +17,19 @@
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 </v>
 </v>
+<v t="swot.20250524213031.1"><vh>@path Q_and_A</vh>
+<v t="swot.20250524210117.1"><vh>@adoc Q_and_A.adoc</vh>
+<v t="swot.20250524214956.1"><vh>Q_and_A</vh>
+<v t="swot.20250524210138.1"><vh>Nuxt3</vh>
+<v t="swot.20250524210146.1"><vh>utils vs composables?</vh></v>
+<v t="swot.20250524210230.1"><vh>@ignore-node app.config.ts vs nuxt.config.ts?</vh></v>
+</v>
+<v t="swot.20250524210625.1"><vh>@ignore-tree Vue3</vh>
+<v t="swot.20250524210629.1"><vh>ref vs reactive？</vh></v>
+</v>
+</v>
+</v>
+</v>
 <v t="swot.20250508124711.1" descendentVnodeUnknownAttributes="7d710028580b000000302e302e302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573580b000000302e302e302e322e302e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30322d3232710e75735809000000302e302e302e322e34710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30312d3330711575735807000000302e302e302e3371167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30322d3032711c7573752e"><vh>@path asciidoctor</vh>
 <v t="swot.20250508105244.1" descendentVnodeUnknownAttributes="7d7100285809000000302e302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d3232710775735809000000302e302e322e302e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30322d3232710e75735807000000302e302e322e34710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30312d3330711575735805000000302e302e3371167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30322d3032711c7573752e"><vh>@adoc asciidoctor.adoc</vh>
 <v t="swot.20250508114609.1" descendentVnodeUnknownAttributes="7d7100285807000000302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d3232710775735807000000302e322e302e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30322d3232710e75735805000000302e322e34710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30312d3330711575735803000000302e3371167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30322d3032711c7573752e"><vh>Asciidoctor</vh>
@@ -7671,6 +7684,107 @@ image::img/alibaba_puhui.png[,960]
 <t tx="swot.20250523171018.1">有 CookieConsent 的参考页面
 
 . https://www.qlik.com/us/pricing/data-integration-products-pricing
+</t>
+<t tx="swot.20250524210117.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3</t>
+<t tx="swot.20250524210138.1"></t>
+<t tx="swot.20250524210146.1">Nuxt 3 中 composables/ 与 utils/ 的区别与用法整理
+
+.概览对比
+[cols="1,2,3,4", options="header"]
+|===
+|目录
+|是否自动导入
+|推荐用途
+|说明
+
+|composables/
+|✅ 是
+|组合式逻辑（响应式状态）
+|封装使用 Vue/Nuxt API 的函数，如 `useFetch`、`ref`、`useState` 等。适合响应式和生命周期相关逻辑。
+
+|utils/
+|✅ 是（Nuxt 3.5+）
+|通用工具函数
+|封装纯函数，不依赖 Vue/Nuxt 上下文。适合处理字符串、日期、数学计算等通用逻辑。
+|===
+
+.composables 示例
+[source,javascript]
+----
+export function useUser(userId: string) {
+  return useFetch(`/api/users/${userId}`)
+}
+----
+
+.自动导入使用示例：
+[source,javascript]
+----
+const { data, pending, error } = useUser('abc123')
+----
+
+.utils 示例
+[source,javascript]
+----
+export function formatDate(date: Date): string {
+  return date.toISOString().split('T')[0]
+}
+----
+
+.自动导入使用示例（Nuxt 3.5+）：
+[source,javascript]
+----
+const today = formatDate(new Date())
+----
+
+.使用场景对比
+[cols="1,1", options="header"]
+|===
+|适合放在 composables/
+|适合放在 utils/
+
+|需要响应式状态逻辑：如 `useAuth()`、`useTheme()`、`useXxxFetch()`
+|纯函数：如 `formatDate()`、`slugify()`、`trimText()`
+
+|依赖 Vue/Nuxt API，如 `useRoute()`、`useHead()`、`useAsyncData()`
+|无任何 Vue/Nuxt 上下文依赖的逻辑
+
+|与组件或页面状态紧密相关
+|可在任何 JS 环境中
+|===
+</t>
+<t tx="swot.20250524210230.1"></t>
+<t tx="swot.20250524210625.1"></t>
+<t tx="swot.20250524210629.1"></t>
+<t tx="swot.20250524213031.1"></t>
+<t tx="swot.20250524214956.1">
+++++
+&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
 </t>
 </tnodes>
 </leo_file>
