@@ -22,7 +22,7 @@
 <v t="swot.20250524214956.1"><vh>Q_and_A</vh>
 <v t="swot.20250524210138.1"><vh>Nuxt3</vh>
 <v t="swot.20250524210146.1"><vh>utils vs composables?</vh></v>
-<v t="swot.20250524210230.1"><vh>@ignore-node app.config.ts vs nuxt.config.ts?</vh></v>
+<v t="swot.20250524210230.1"><vh>app.config.ts vs nuxt.config.ts?</vh></v>
 </v>
 <v t="swot.20250524210625.1"><vh>@ignore-tree Vue3</vh>
 <v t="swot.20250524210629.1"><vh>ref vs reactive？</vh></v>
@@ -140,7 +140,7 @@
 <v t="swot.20250522073435.4"><vh>VSCode plugins</vh></v>
 <v t="swot.20250522125304.1"><vh>Install</vh></v>
 <v t="swot.20250522084410.1"><vh>@file nuxt.config.ts</vh></v>
-<v t="swot.20250522125539.1"><vh>@file assets/css/main.css</vh></v>
+<v t="swot.20250526153924.1"><vh>@file assets/css/main.css</vh></v>
 <v t="swot.20250522073435.6"><vh>@file pages/easy_example.vue</vh></v>
 </v>
 <v t="swot.20250522210521.1"><vh>@path nuxt3-font</vh>
@@ -156,7 +156,7 @@
 </v>
 </v>
 <v t="swot.20250523083936.1"><vh>@path nuxt3-component</vh>
-<v t="swot.20250522125539.1"></v>
+<v t="swot.20250526154252.1"><vh>@file assets/css/main.css</vh></v>
 <v t="swot.20250523084009.1"><vh>Web Footer 页脚开发</vh>
 <v t="swot.20250523151308.1"><vh>@file pages/footer.vue</vh></v>
 <v t="swot.20250523151314.1"><vh>@file components/Footer.vue</vh></v>
@@ -7760,7 +7760,9 @@ const today = formatDate(new Date())
 |可在任何 JS 环境中
 |===
 </t>
-<t tx="swot.20250524210230.1"></t>
+<t tx="swot.20250524210230.1">https://nuxt.com/docs/getting-started/configuration#runtimeconfig-vs-appconfig
+
+</t>
 <t tx="swot.20250524210625.1"></t>
 <t tx="swot.20250524210629.1"></t>
 <t tx="swot.20250524213031.1"></t>
