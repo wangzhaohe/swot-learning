@@ -25,7 +25,10 @@
 <v t="swot.20250524210230.1"><vh>app.config.ts vs nuxt.config.ts?</vh></v>
 </v>
 <v t="swot.20250528071453.1"><vh>Web</vh>
-<v t="swot.20250528071457.1"><vh>Postman body 上传数据方式有什么不同？</vh></v>
+<v t="swot.20250528071457.1"><vh>Postman body 3种上传数据方式有什么不同？</vh></v>
+<v t="swot.20250528073829.1"><vh>httpie  body 3种上传数据方式如何使用？</vh></v>
+<v t="swot.20250528074016.1"><vh>postman 如何查看已发送的数据</vh></v>
+<v t="swot.20250528074031.1"><vh>httpie 如何查看已发送的数据</vh></v>
 </v>
 <v t="swot.20250524210625.1"><vh>@ignore-tree Vue3</vh>
 <v t="swot.20250524210629.1"><vh>ref vs reactive？</vh></v>
@@ -8242,5 +8245,106 @@ Could not locate the bindings file. Tried:
 |===
 
 </t>
+<t tx="swot.20250528073829.1">[discrete]
+==== 1. multipart/form-data 上传文件（form-data）
+
+[source,shell]
+----
+http -f POST https://example.com/upload name=ChatGPT file@./image.png
+----
+
+说明：
+
+- 使用 `-f` 参数启用 `multipart/form-data`
+- `name=ChatGPT` 是普通字段
+- `file@./image.png` 表示上传文件
+
+.自动设置的请求头：
+[source,text]
+----
+Content-Type: multipart/form-data; boundary=...
+----
+
+常用于表单上传或文件上传接口。
+
+[discrete]
+==== 2. application/x-www-form-urlencoded 提交表单数据
+
+[source,shell]
+----
+http --form POST https://example.com/login username=admin password=123456
+----
+
+说明：
+
+- 使用 `--form` 参数启用 `x-www-form-urlencoded`
+- 所有字段以 `key=value` 格式发送
+
+.自动设置的请求头：
+[source,text]
+----
+Content-Type: application/x-www-form-urlencoded
+----
+
+适用于传统 Web 表单提交（如登录、注册等）。
+
+[discrete]
+==== 3. application/json 提交 JSON 数据
+
+默认情况下，不加 `-f` 或 `--form`，HTTPie 自动使用 JSON：
+
+[source,shell]
+----
+http POST https://example.com/api name=ChatGPT role=assistant
+----
+
+.也可以显式指定请求头：
+[source,shell]
+----
+http POST https://example.com/api Content-Type:application/json name=ChatGPT role=assistant
+----
+
+发送的数据将被自动序列化为 JSON：
+
+[source,json]
+----
+{
+  "name": "ChatGPT",
+  "role": "assistant"
+}
+----
+
+.自动设置的请求头：
+[source,text]
+----
+Content-Type: application/json
+----
+
+适用于现代前后端分离的 API 接口。
+
+[discrete]
+==== 三种格式对比表
+
+[cols="1,2,1", options="header"]
+|===
+| 格式
+| 示例命令
+| Content-Type
+
+| form-data
+| `http -f POST URL key=value file@file`
+| multipart/form-data
+
+| x-www-form-urlencoded
+| `http --form POST URL key=value`
+| application/x-www-form-urlencoded
+
+| JSON
+| `http POST URL key=value`
+| application/json
+|===
+</t>
+<t tx="swot.20250528074016.1"></t>
+<t tx="swot.20250528074031.1"></t>
 </tnodes>
 </leo_file>
