@@ -97,12 +97,12 @@
 </v>
 </v>
 </v>
-<v t="swot.20250511104537.1"><vh>@path nuxt/nuxt3</vh>
+<v t="swot.20250511104537.1" descendentVnodeUnknownAttributes="7d7100285809000000302e312e302e382e3671017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d3237710775735809000000302e312e302e382e3871087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30342d3237710e7573752e"><vh>@path nuxt/nuxt3</vh>
 <v t="swot.20250511104555.1"><vh>Plan</vh>
 <v t="swot.20250511104602.1"><vh>How to test nuxt?</vh></v>
 </v>
-<v t="swot.20250521145258.1"><vh>@adoc nuxt3.adoc</vh>
-<v t="swot.20250521152152.1"><vh>Nuxt Notes</vh>
+<v t="swot.20250521145258.1" descendentVnodeUnknownAttributes="7d7100285807000000302e302e382e3671017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d3237710775735807000000302e302e382e3871087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30342d3237710e7573752e"><vh>@adoc nuxt3.adoc</vh>
+<v t="swot.20250521152152.1" descendentVnodeUnknownAttributes="7d7100285805000000302e382e3671017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d3237710775735805000000302e382e3871087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30342d3237710e7573752e"><vh>Nuxt Notes</vh>
 <v t="swot.20250521214125.1"><vh>@edit pnpm-workspace.yaml</vh></v>
 <v t="swot.20250521112440.1"><vh>@path nuxt3-basic</vh>
 <v t="swot.20250521155715.1"><vh>github link</vh></v>
@@ -177,6 +177,19 @@
 <v t="swot.20250527094846.1"><vh>@file pages/test-sitemap1.vue</vh></v>
 <v t="swot.20250527095056.1"><vh>@file pages/test-sitemap2.vue</vh></v>
 </v>
+</v>
+<v t="swot.20250527111518.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3671017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d3237710775735803000000302e3871087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30342d3237710e7573752e"><vh>@path nuxt3-sqlite</vh>
+<v t="swot.20250527112248.1"><vh>Install knex &amp; sqlite3</vh></v>
+<v t="swot.20250527112425.1"><vh>@file knexfile.js</vh></v>
+<v t="swot.20250527164127.1"><vh>@file migrations/20250527164201_create_users_table.js</vh></v>
+<v t="swot.20250527171946.1"><vh>报错处理: Could not locate the bindings file</vh>
+<v t="swot.20250527172139.1"><vh>处理方式: pnpm run build-release</vh></v>
+</v>
+<v t="swot.20250527181421.1"><vh>@file data/seeds/01_users.js</vh></v>
+<v t="swot.20250527181548.1"><vh>@file nuxt.config.ts</vh></v>
+<v t="swot.20250527181251.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d323771077573732e"><vh>@file shared/types/user.d.ts</vh></v>
+<v t="swot.20250527181843.1"><vh>@file server/utils/db.ts</vh></v>
+<v t="swot.20250527182106.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d323771077573732e"><vh>@file server/api/users/index.get.ts</vh></v>
 </v>
 </v>
 </v>
@@ -8043,6 +8056,48 @@ https://nuxtseo.com/docs/sitemap/guides/dynamic-urls#_2-create-your-own-endpoint
             '/api/__sitemap__/urls',
         ]
     },
+</t>
+<t tx="swot.20250527111518.1">Add worktree nuxt3-sqlite
+
+    cd nuxt3-basic
+
+    git worktree add -b nuxt3-sqlite ../nuxt3-sqlite origin/main
+
+    // 修改之后提交代码
+    git push -u origin nuxt3-sqlite
+</t>
+<t tx="swot.20250527112248.1">在 Nuxt3 项目中使用 `Knex.js` 连接 `SQLite` 数据库是完全可行的，尤其适合轻量级项目或本地开发。
+
+    // pnpm add knex sqlite3   sqlite3 需要编译，很麻烦
+    pnpm add knex better-sqlite3
+</t>
+<t tx="swot.20250527171946.1">.执行命令报错 knex migrate:latest
+....
+Using environment: development
+Could not locate the bindings file. Tried:
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/build/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/build/Debug/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/build/Release/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/out/Debug/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/Debug/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/out/Release/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/Release/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/build/default/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/compiled/20.12.1/darwin/x64/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/addon-build/release/install-root/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/addon-build/debug/install-root/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/addon-build/default/install-root/better_sqlite3.node
+ → /Users/swot/swot-learning/nuxt/nuxt3/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3/lib/binding/node-v115-darwin-x64/better_sqlite3.node
+....
+</t>
+<t tx="swot.20250527172139.1">参考来源: https://github.com/WiseLibs/better-sqlite3/issues/146#issuecomment-2813283542
+
+&gt; I had no build folder in node_modules/better-sqlite3. I got it working by going into node_modules/better-sqlite3 and running pnpm run build-release. Now I have a build folder and the error is gone.
+
+所以执行如下命令就好了
+
+    cd node_modules/better-sqlite3
+    pnpm run build-release
 </t>
 </tnodes>
 </leo_file>
