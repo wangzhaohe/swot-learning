@@ -102,3 +102,70 @@ const today = formatDate(new Date())
 === app.config.ts vs nuxt.config.ts?
 https://nuxt.com/docs/getting-started/configuration#runtimeconfig-vs-appconfig
 
+== Web
+
+
+=== Postman body 上传数据方式有什么不同？
+[discrete]
+=== Postman Body 数据传递方式总结
+
+在 Postman 中发送请求时，`Body` 部分常用的三种数据格式包括：
+
+[discrete]
+==== 1. form-data
+
+- Content-Type: `multipart/form-data`
+- 用途：
+  * 多用于表单数据提交
+  * 支持上传文件
+- 数据结构：键值对，每个字段单独处理
+- 使用场景：带文件的表单上传（如头像）
+
+[discrete]
+==== 2. x-www-form-urlencoded
+
+- Content-Type: `application/x-www-form-urlencoded`
+- 用途：
+  * 传统 Web 表单提交方式
+  * 不支持文件，仅传普通键值对
+- 数据结构：`key1=value1&key2=value2` 形式
+- 使用场景：简单表单提交，如登录表单
+
+[discrete]
+==== 3. raw - JSON
+
+- Content-Type: `application/json`
+- 用途：
+  * RESTful 接口推荐格式
+  * 支持嵌套结构（对象、数组等）
+- 数据结构：纯 JSON 格式
+- 使用场景：现代前后端分离架构的接口交互
+
+.对比表格
+[cols="2,2,1,1,2", options="header"]
+|===
+| 类型
+| Content-Type
+| 支持文件
+| 支持结构化
+| 常见使用场景
+
+| form-data
+| multipart/form-data
+| 是
+| 否
+| 表单提交、文件上传
+
+| x-www-form-urlencoded
+| application/x-www-form-urlencoded
+| 否
+| 否
+| 登录、注册等传统表单
+
+| raw - JSON
+| application/json
+| 否
+| 是
+| 前后端交互的 API 接口
+|===
+
