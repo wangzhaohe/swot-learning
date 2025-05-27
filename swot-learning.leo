@@ -166,6 +166,18 @@
 <v t="swot.20250523171027.1"><vh>@file components/CookieConsent.vue</vh></v>
 </v>
 </v>
+<v t="swot.20250526234255.1"><vh>@path nuxt3-sitemap</vh>
+<v t="swot.20250527002101.1"><vh>静态书写 sitemap -&gt; 需要手动更新内容</vh>
+<v t="swot.20250527062943.1"><vh>#@edit public/sitemap.xml</vh></v>
+<v t="swot.20250527062947.1"><vh>#@edit public/sitemap.xsl</vh></v>
+</v>
+<v t="swot.20250527063027.1"><vh>动态生成 sitemap</vh>
+<v t="swot.20250527064512.1"><vh>@file nuxt.config.ts</vh></v>
+<v t="swot.20250527095653.1"><vh>@file app.vue</vh></v>
+<v t="swot.20250527094846.1"><vh>@file pages/test-sitemap1.vue</vh></v>
+<v t="swot.20250527095056.1"><vh>@file pages/test-sitemap2.vue</vh></v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -7787,6 +7799,250 @@ const today = formatDate(new Date())
     });
 &lt;/script&gt;
 ++++
+</t>
+<t tx="swot.20250526234255.1">Add worktree nuxt3-sitemap
+
+    cd nuxt3-basic
+
+    git worktree add -b nuxt3-sitemap ../nuxt3-sitemap origin/main
+
+    // 修改之后提交代码
+    git push -u origin nuxt3-sitemap
+</t>
+<t tx="swot.20250527002101.1">在 Nuxt 中，sitemap.xml 和 sitemap.xsl 文件应该放在 `public/` 目录下。
+
+`public/` 目录用于存放网站的静态资源，这些文件会在根目录下直接提供服务，并且在构建过程中不会被修改。这非常适合那些需要保持原始文件名的文件（如 `robots.txt`）或不太可能更改的文件（如 `favicon.ico`）。
+
+目录结构示例：
+```
+-| public/
+---| favicon.ico
+---| sitemap.xml
+---| sitemap.xsl
+---| robots.txt
+```
+
+这些文件将直接在您的网站根目录下可访问，例如：`https://yoursite.com/sitemap.xml`。
+
+[Nuxt 文档 - public 目录](https://nuxt.com/docs/guide/directory-structure/public)
+
+*如果您使用 `@nuxtjs/sitemap` 模块来自动生成站点地图，那么您不需要手动创建这些文件，因为模块会自动生成并放置在正确的位置。*
+
+如果您使用 Nuxt 4 的新目录结构，`public/` 目录仍然是位于项目根目录下，而不是在 `app/` 目录内。
+</t>
+<t tx="swot.20250527062943.1">@language xml
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="http://localhost:3000/sitemap.xsl"?&gt;
+&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
+	&lt;url&gt;
+		&lt;loc&gt;https://www.swotpp.com/sitemap_addl.xml&lt;/loc&gt;
+	&lt;/url&gt;
+	&lt;url&gt;
+		&lt;loc&gt;https://www.swotpp.com/sitemap_post_1.xml&lt;/loc&gt;
+		&lt;priority&gt;0.9&lt;/priority&gt;
+		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
+	&lt;/url&gt;
+	&lt;url&gt;
+		&lt;loc&gt;https://www.swotpp.com/sitemap_post_2.xml&lt;/loc&gt;
+		&lt;priority&gt;0.9&lt;/priority&gt;
+		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
+	&lt;/url&gt;
+	&lt;url&gt;
+		&lt;loc&gt;https://www.swotpp.com/sitemap_page.xml&lt;/loc&gt;
+		&lt;priority&gt;0.9&lt;/priority&gt;
+		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
+	&lt;/url&gt;
+	&lt;url&gt;
+		&lt;loc&gt;https://www.swotpp.com/sitemap_news.xml&lt;/loc&gt;
+		&lt;priority&gt;0.9&lt;/priority&gt;
+		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
+	&lt;/url&gt;
+	&lt;url&gt;
+		&lt;loc&gt;https://www.swotpp.com/sitemap_project.xml&lt;/loc&gt;
+		&lt;priority&gt;0.9&lt;/priority&gt;
+		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
+	&lt;/url&gt;
+	&lt;url&gt;
+		&lt;loc&gt;https://www.swotpp.com/sitemap_category.xml&lt;/loc&gt;
+		&lt;priority&gt;0.8&lt;/priority&gt;
+		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
+	&lt;/url&gt;
+	&lt;url&gt;
+		&lt;loc&gt;https://www.swotpp.com/sitemap_post_tag.xml&lt;/loc&gt;
+		&lt;priority&gt;0.8&lt;/priority&gt;
+		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
+	&lt;/url&gt;
+	&lt;url&gt;
+		&lt;loc&gt;https://www.swotpp.com/sitemap_project_catalog.xml&lt;/loc&gt;
+		&lt;priority&gt;0.8&lt;/priority&gt;
+		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
+	&lt;/url&gt;
+&lt;/urlset&gt;&lt;!-- permalink_structure ends with slash (/) but REQUEST_URI does not end with slash (/) --&gt;
+</t>
+<t tx="swot.20250527062947.1">@language xsl
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xsl:stylesheet version="2.0" 
+                xmlns:html="http://www.w3.org/TR/REC-html40"
+				xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+                xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+  &lt;xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes"/&gt;
+  &lt;xsl:template match="/"&gt;
+	&lt;xsl:variable name="fileType"&gt;
+	        &lt;xsl:choose&gt;
+			  &lt;xsl:when test="//sitemap:url"&gt;Sitemap&lt;/xsl:when&gt;
+			  &lt;xsl:otherwise&gt;SitemapIndex&lt;/xsl:otherwise&gt;
+	        &lt;/xsl:choose&gt;      
+	&lt;/xsl:variable&gt;
+    &lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+    &lt;head&gt;
+    	&lt;title&gt;
+				&lt;xsl:choose&gt;&lt;xsl:when test="$fileType='Sitemap'"&gt;Sitemap&lt;/xsl:when&gt;
+				&lt;xsl:otherwise&gt;Sitemap Index&lt;/xsl:otherwise&gt;
+				&lt;/xsl:choose&gt;
+		&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;
+    &lt;style type="text/css"&gt;
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 68.5%;
+}
+table {
+	border: none;
+	border-collapse: collapse;
+}
+table { font-size:1em; width:75% }
+th {  text-align:left; 	padding:5px }
+tr.stripe { background-color:#f7f7f7; }
+&lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    &lt;div id="content"&gt;
+    &lt;h1&gt;XML Sitemap&lt;/h1&gt;
+    &lt;div&gt;
+      &lt;p&gt;&lt;xsl:choose&gt;
+				&lt;xsl:when test="$fileType='Sitemap'"&gt;
+						  This sitemap contains &lt;xsl:value-of select="count(sitemap:urlset/sitemap:url)"&gt;&lt;/xsl:value-of&gt; URLs&lt;/xsl:when&gt;
+					  &lt;xsl:otherwise&gt;This sitemap index contains &lt;xsl:value-of select="count(sitemap:sitemapindex/sitemap:sitemap)"&gt;&lt;/xsl:value-of&gt; sitemaps&lt;/xsl:otherwise&gt;
+		&lt;/xsl:choose&gt;&lt;/p&gt;
+    &lt;/div&gt;
+	&lt;xsl:choose&gt;
+			&lt;xsl:when test="$fileType='Sitemap'"&gt;
+				&lt;xsl:call-template name="sitemapTable"/&gt;&lt;/xsl:when&gt;
+		      &lt;xsl:otherwise&gt;&lt;xsl:call-template name="siteindexTable"/&gt;&lt;/xsl:otherwise&gt;
+	&lt;/xsl:choose&gt;
+    
+                  &lt;/div&gt;
+    		&lt;/body&gt;
+    &lt;/html&gt;
+  &lt;/xsl:template&gt;
+  &lt;xsl:template name="siteindexTable"&gt;
+       &lt;table cellpadding="3"&gt;
+						&lt;thead&gt;
+							&lt;tr&gt;
+								&lt;th width="50%"&gt;URL&lt;/th&gt;
+								&lt;th&gt;LastChange&lt;/th&gt;
+							&lt;/tr&gt;
+						&lt;/thead&gt;
+						&lt;tbody&gt;
+							&lt;xsl:variable name="lower" select="'abcdefghijklmnopqrstuvwxyz'"/&gt;
+							&lt;xsl:variable name="upper" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/&gt;
+							&lt;xsl:for-each select="sitemap:sitemapindex/sitemap:sitemap"&gt;
+								&lt;tr&gt;
+									&lt;xsl:if test="position() mod 2 != 1"&gt;
+									&lt;xsl:attribute name="class"&gt;stripe&lt;/xsl:attribute&gt;
+									&lt;/xsl:if&gt;
+									&lt;td&gt;
+										&lt;xsl:variable name="itemURL"&gt;
+											&lt;xsl:value-of select="sitemap:loc"/&gt;
+										&lt;/xsl:variable&gt;
+										&lt;a href="{$itemURL}"&gt;
+											&lt;xsl:value-of select="sitemap:loc"/&gt;
+										&lt;/a&gt;
+									&lt;/td&gt;
+									&lt;td&gt;
+										&lt;xsl:value-of select="concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)))"/&gt;
+									&lt;/td&gt;
+								&lt;/tr&gt;
+							&lt;/xsl:for-each&gt;
+						&lt;/tbody&gt;
+					&lt;/table&gt;
+  &lt;/xsl:template&gt;
+  &lt;xsl:template name="sitemapTable"&gt;
+	&lt;table cellpadding="3"&gt;
+						&lt;thead&gt;
+							&lt;tr&gt;
+								&lt;th width="50%"&gt;URL&lt;/th&gt;
+								&lt;th&gt;Priority&lt;/th&gt;
+								&lt;th&gt;Change Frequency&lt;/th&gt;
+								&lt;th&gt;LastChange&lt;/th&gt;
+							&lt;/tr&gt;
+						&lt;/thead&gt;
+						&lt;tbody&gt;
+							&lt;xsl:variable name="lower" select="'abcdefghijklmnopqrstuvwxyz'"/&gt;
+							&lt;xsl:variable name="upper" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/&gt;
+							&lt;xsl:for-each select="sitemap:urlset/sitemap:url"&gt;
+								&lt;tr&gt;
+									&lt;xsl:if test="position() mod 2 != 1"&gt;
+									&lt;xsl:attribute name="class"&gt;stripe&lt;/xsl:attribute&gt;
+									&lt;/xsl:if&gt;
+									&lt;td&gt;
+										&lt;xsl:variable name="itemURL"&gt;
+											&lt;xsl:value-of select="sitemap:loc"/&gt;
+										&lt;/xsl:variable&gt;
+										&lt;a href="{$itemURL}"&gt;
+											&lt;xsl:value-of select="sitemap:loc"/&gt;
+										&lt;/a&gt;
+									&lt;/td&gt;
+									&lt;td&gt;
+										&lt;xsl:if test="string(number(sitemap:priority))!='NaN'"&gt;
+											&lt;xsl:value-of select="concat(sitemap:priority*100,'%')"/&gt;
+										&lt;/xsl:if&gt;
+									&lt;/td&gt;
+									&lt;td&gt;
+										&lt;xsl:value-of select="concat(translate(substring(sitemap:changefreq, 1, 1),concat($lower, $upper),concat($upper, $lower)),substring(sitemap:changefreq, 2))"/&gt;
+									&lt;/td&gt;
+									&lt;td&gt;
+										&lt;xsl:value-of select="concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)))"/&gt;
+									&lt;/td&gt;
+								&lt;/tr&gt;
+							&lt;/xsl:for-each&gt;
+						&lt;/tbody&gt;
+					&lt;/table&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;
+</t>
+<t tx="swot.20250527063027.1">@language asciidoc
+V7.3.0 https://nuxtseo.com/docs/sitemap/getting-started/installation
+
+.install
+[source,console]
+----
+pnpm i @nuxtjs/sitemap
+----
+
+.vim nuxt.config.ts
+[source,javascript]
+----
+export default defineNuxtConfig({
+  modules: [
+    '@nuxtjs/sitemap',
+  ],
+})
+----
+
+visit result: http://localhost:3000/sitemap.xml
+
+***
+
+目前是静态的, 动态网站则需使用 sources，参考
+https://nuxtseo.com/docs/sitemap/guides/dynamic-urls#_2-create-your-own-endpoint
+
+    sitemap: {
+        sources: [
+            '/api/__sitemap__/urls',
+        ]
+    },
 </t>
 </tnodes>
 </leo_file>
