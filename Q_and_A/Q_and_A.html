@@ -545,8 +545,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel2">
 <li><a href="#_postman_body_3种上传数据方式有什么不同">Postman body 3种上传数据方式有什么不同？</a></li>
 <li><a href="#_httpie_body_3种上传数据方式如何使用">httpie  body 3种上传数据方式如何使用？</a></li>
+<li><a href="#_httpie_如何查看已发送的数据">httpie  如何查看已发送的数据</a></li>
 <li><a href="#_postman_如何查看已发送的数据">postman 如何查看已发送的数据</a></li>
-<li><a href="#_httpie_如何查看已发送的数据">httpie 如何查看已发送的数据</a></li>
 </ul>
 </li>
 </ul>
@@ -941,11 +941,90 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </table>
 </div>
 <div class="sect2">
-<h3 id="_postman_如何查看已发送的数据">postman 如何查看已发送的数据</h3>
+<h3 id="_httpie_如何查看已发送的数据">httpie  如何查看已发送的数据</h3>
+<div class="paragraph">
+<p>可以使用 <code>--print</code> 参数来控制 HTTPie 显示请求和响应的哪些部分。</p>
+</div>
+<h4 id="_显示请求和响应的全部内容" class="discrete">显示请求和响应的全部内容</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>http<span class="tok-w"> </span>--print<span class="tok-o">=</span>HBhb<span class="tok-w"> </span>POST<span class="tok-w"> </span>https://example.com/api<span class="tok-w"> </span><span class="tok-nv">name</span><span class="tok-o">=</span>ChatGPT</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>说明：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>H</code>：请求头（Request headers）</p>
+</li>
+<li>
+<p><code>B</code>：请求体（Request body）</p>
+</li>
+<li>
+<p><code>h</code>：响应头（Response headers）</p>
+</li>
+<li>
+<p><code>b</code>：响应体（Response body）</p>
+</li>
+</ul>
+</div>
+<h4 id="_只查看发送的请求不显示响应" class="discrete">只查看发送的请求（不显示响应）</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>http<span class="tok-w"> </span>--print<span class="tok-o">=</span>HB<span class="tok-w"> </span>POST<span class="tok-w"> </span>https://example.com/api<span class="tok-w"> </span><span class="tok-nv">name</span><span class="tok-o">=</span>ChatGPT</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这将显示：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>请求头</p>
+</li>
+<li>
+<p>请求体</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>不会显示响应部分。</p>
+</div>
+<h4 id="_示例输出请求部分" class="discrete">示例输出（请求部分）</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>POST /api HTTP/1.1
+Accept: application/json, */*
+Content-Type: application/json
+User-Agent: HTTPie/3.0.0
 
+{
+    &quot;name&quot;: &quot;ChatGPT&quot;
+}</code></pre>
+</div>
+</div>
+<h4 id="_仅调试请求而不发送" class="discrete">仅调试请求而不发送</h4>
+<div class="paragraph">
+<p>使用 <code>--offline</code> 模拟请求但不发送，可用于本地调试：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>http<span class="tok-w"> </span>--offline<span class="tok-w"> </span>--print<span class="tok-o">=</span>HB<span class="tok-w"> </span>POST<span class="tok-w"> </span>https://example.com/api<span class="tok-w"> </span><span class="tok-nv">name</span><span class="tok-o">=</span>ChatGPT</code></pre>
+</div>
+</div>
+<h4 id="_快捷选项" class="discrete">快捷选项</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>--verbose</code> 或 <code>-v</code> 相当于 <code>--print=HhBb</code>，即显示完整请求和响应内容。</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_httpie_如何查看已发送的数据">httpie 如何查看已发送的数据</h3>
+<h3 id="_postman_如何查看已发送的数据">postman 如何查看已发送的数据</h3>
 
 </div>
 </div>
@@ -953,7 +1032,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-28 07:46:39 +0800
+Last updated 2025-05-28 07:54:59 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -269,9 +269,65 @@ Content-Type: application/json
 | application/json
 |===
 
+=== httpie  如何查看已发送的数据
+可以使用 `--print` 参数来控制 HTTPie 显示请求和响应的哪些部分。
+
+[discrete]
+==== 显示请求和响应的全部内容
+
+```bash
+http --print=HBhb POST https://example.com/api name=ChatGPT
+```
+
+说明：
+
+* `H`：请求头（Request headers）
+* `B`：请求体（Request body）
+* `h`：响应头（Response headers）
+* `b`：响应体（Response body）
+
+[discrete]
+==== 只查看发送的请求（不显示响应）
+
+```bash
+http --print=HB POST https://example.com/api name=ChatGPT
+```
+
+这将显示：
+
+* 请求头
+* 请求体
+
+不会显示响应部分。
+
+[discrete]
+==== 示例输出（请求部分）
+
+```text
+POST /api HTTP/1.1
+Accept: application/json, */*
+Content-Type: application/json
+User-Agent: HTTPie/3.0.0
+
+{
+    "name": "ChatGPT"
+}
+```
+
+[discrete]
+==== 仅调试请求而不发送
+
+使用 `--offline` 模拟请求但不发送，可用于本地调试：
+
+```bash
+http --offline --print=HB POST https://example.com/api name=ChatGPT
+```
+
+[discrete]
+==== 快捷选项
+
+* `--verbose` 或 `-v` 相当于 `--print=HhBb`，即显示完整请求和响应内容。
+
 === postman 如何查看已发送的数据
-
-
-=== httpie 如何查看已发送的数据
 
 

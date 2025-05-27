@@ -27,8 +27,8 @@
 <v t="swot.20250528071453.1"><vh>Web</vh>
 <v t="swot.20250528071457.1"><vh>Postman body 3种上传数据方式有什么不同？</vh></v>
 <v t="swot.20250528073829.1"><vh>httpie  body 3种上传数据方式如何使用？</vh></v>
+<v t="swot.20250528074031.1"><vh>httpie  如何查看已发送的数据</vh></v>
 <v t="swot.20250528074016.1"><vh>postman 如何查看已发送的数据</vh></v>
-<v t="swot.20250528074031.1"><vh>httpie 如何查看已发送的数据</vh></v>
 </v>
 <v t="swot.20250524210625.1"><vh>@ignore-tree Vue3</vh>
 <v t="swot.20250524210629.1"><vh>ref vs reactive？</vh></v>
@@ -8345,6 +8345,63 @@ Content-Type: application/json
 |===
 </t>
 <t tx="swot.20250528074016.1"></t>
-<t tx="swot.20250528074031.1"></t>
+<t tx="swot.20250528074031.1">可以使用 `--print` 参数来控制 HTTPie 显示请求和响应的哪些部分。
+
+[discrete]
+==== 显示请求和响应的全部内容
+
+```bash
+http --print=HBhb POST https://example.com/api name=ChatGPT
+```
+
+说明：
+
+* `H`：请求头（Request headers）
+* `B`：请求体（Request body）
+* `h`：响应头（Response headers）
+* `b`：响应体（Response body）
+
+[discrete]
+==== 只查看发送的请求（不显示响应）
+
+```bash
+http --print=HB POST https://example.com/api name=ChatGPT
+```
+
+这将显示：
+
+* 请求头
+* 请求体
+
+不会显示响应部分。
+
+[discrete]
+==== 示例输出（请求部分）
+
+```text
+POST /api HTTP/1.1
+Accept: application/json, */*
+Content-Type: application/json
+User-Agent: HTTPie/3.0.0
+
+{
+    "name": "ChatGPT"
+}
+```
+
+[discrete]
+==== 仅调试请求而不发送
+
+使用 `--offline` 模拟请求但不发送，可用于本地调试：
+
+```bash
+http --offline --print=HB POST https://example.com/api name=ChatGPT
+```
+
+[discrete]
+==== 快捷选项
+
+* `--verbose` 或 `-v` 相当于 `--print=HhBb`，即显示完整请求和响应内容。
+</t>
 </tnodes>
 </leo_file>
