@@ -550,9 +550,7 @@ div(class="text-3xl text-white bg-green-500 p-6 rounded shadow")
 Add worktree nuxt3-font
 
     cd nuxt3-basic
-
     git worktree add -b nuxt3-font ../nuxt3-font origin/nuxt3-layout
-
     // 修改之后提交代码
     git push -u origin nuxt3-font
 
@@ -581,6 +579,8 @@ image::img/alibaba_puhui.png[,960]
 3. 配置 nuxt.config.ts 全局加载 main.scss 文件
 
 ===== @file assets/css/main.css
+[source,scss]
+----
 /* sass 不支持 @import 了 */
 @import "tailwindcss";
 @import "@nuxt/ui";
@@ -598,11 +598,14 @@ image::img/alibaba_puhui.png[,960]
 @theme {
     --font-sans: "PuHuiTi-Thin", sans-serif;
 }
+----
 
 ===== @file assets/css/main.scss
 
 
-====== reset browser default css
+====== reset browser default css -> 若用 tailwindcss 则不用设置默认值
+[source,scss]
+----
 * {
     box-sizing: border-box;
     padding: 0;
@@ -621,6 +624,7 @@ a {
 ul, ol {
     list-style: none;
 }
+----
 
 ===== @file nuxt.config.ts
 [source,javascript,]
@@ -661,10 +665,13 @@ ui: {
 ----
 
 ====== 2 全局加载 css 文件 -- new
+[source,typescript]
+----
 css: [
     "~/assets/css/main.scss",
     "~/assets/css/main.css",
 ],
+----
 
 ==== 使用字体
 
