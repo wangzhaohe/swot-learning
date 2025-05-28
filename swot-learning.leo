@@ -117,9 +117,9 @@
 <v t="swot.20250522084241.1"><vh>@file nuxt.config.ts</vh></v>
 </v>
 <v t="swot.20250521181940.1"><vh>@path nuxt3-layout</vh>
-<v t="swot.20250521195421.1"><vh>entry file</vh>
-<v t="swot.20250521194704.1"><vh>@edit app.vue</vh></v>
-</v>
+<v t="swot.20250528153604.1"><vh>github link</vh></v>
+<v t="swot.20250528153849.1"><vh>pug 语法介绍</vh></v>
+<v t="swot.20250521194704.1"><vh>@file app.vue</vh></v>
 </v>
 <v t="swot.20250521205725.2"><vh>@path nuxt3-element-plus</vh>
 <v t="swot.20250521205725.3"><vh>Install</vh></v>
@@ -7494,7 +7494,6 @@ https://github.com/nuxt/nuxt
 
     pnpm add pug
 </t>
-<t tx="swot.20250521195421.1"></t>
 <t tx="swot.20250521205725.10">https://element-plus.org/zh-CN/guide/i18n.html#configprovider
 
 ConfigProvider 方式
@@ -8647,5 +8646,15 @@ date: Wed, 28 May 2025 07:13:23 GMT
 ....
 </t>
 <t tx="swot.20250528151437.1"></t>
+<t tx="swot.20250528153604.1">https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-layout
+</t>
+<t tx="swot.20250528153849.1">模板使用了 pug 格式，优点是不用再写结束标签了。以缩进作为层级，类似于 python 语言。
+
+https://pugjs.org/api/getting-started.html
+
+安装 pug
+
+    pnpm add -D pug
+</t>
 </tnodes>
 </leo_file>
