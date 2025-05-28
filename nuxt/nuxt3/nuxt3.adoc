@@ -308,6 +308,8 @@ ui: {
 
 
 ==== template
+[source,typescript]
+----
 <template lang="pug">
 div
     el-button(@click="ElMessage('hello')") button
@@ -328,11 +330,15 @@ div
     el-table.mb-1(:data="[]")
     el-pagination(:total="100")
 </template>
+----
 
 ==== script
+[source,typescript]
+----
 <script setup lang="ts">
     const date = ref('')
 </script>
+----
 
 === element-plus I18N support
 https://element-plus.org/zh-CN/guide/i18n.html#configprovider
@@ -343,6 +349,8 @@ ConfigProvider 方式
 
 
 ===== template
+[source,typescript]
+----
 <template lang="pug">
 NuxtLayout
     div
@@ -352,8 +360,11 @@ NuxtLayout
         el-config-provider(:locale="locale")
             NuxtPage
 </template>
+----
 
 ===== script
+[source,typescript]
+----
 <script setup lang="ts">
 
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
@@ -371,14 +382,15 @@ const toggle = () => {
 }
 
 </script>
+----
 
 === 报错或警告处理
 
 
 ==== dayjs/dayjs.min.js does not provide an export named 'default'
-这是安装命令: 
-pnpm i element-plus @element-plus/nuxt -D
+这是安装命令:
 
+    pnpm i element-plus @element-plus/nuxt -D
 
 在安装完 element-plus 后报错:
 
@@ -396,13 +408,14 @@ https://github.com/element-plus/element-plus/issues/8165
 ==== Extraneous non-props attributes (data-v-inspector) were passed to component
 https://github.com/element-plus/element-plus/issues/18213
 
+```xml
 <NuxtLayout>
     <!-- elementUI plus 支持中文 -->
     <el-config-provider :locale="zhCn">
         <NuxtPage />
     </el-config-provider>
 </NuxtLayout>
-
+```
 
 如上面 element-plus 设置中文后，如果在页面(pages/)中再使用组件，则会报警告如下:
 
@@ -411,36 +424,16 @@ https://github.com/element-plus/element-plus/issues/18213
   el:
 
 
-解决方法：在 nuxt.config.ts 中临时禁用 componentInspector 功能
+##解决方法：在 nuxt.config.ts 中临时禁用 componentInspector 功能##
 
+```javascript
 export default defineNuxtConfig({
   devtools: {
+    enabled: true,
     componentInspector: false
   },
 })
-
-===== #file nuxt.config.ts
-// https://nuxt.com/docs/api/configuration/nuxt-config
-export default defineNuxtConfig({
-    compatibilityDate: '2024-11-01',
-    << devtools >>
-    modules: [
-      << 配置模块 element plus >>
-    ],
-    << 配置 element plus 选项 >>
-})
-
-====== << devtools >>
-devtools: {
-    enabled: true,
-    componentInspector: false
-},
-
-====== << 配置模块 element plus >>
-'@element-plus/nuxt'
-
-====== << 配置 element plus 选项 >>
-elementPlus: { /** Options */ },
+```
 
 == @path nuxt3-tailwindcss
 Add worktree nuxt3-tailwindcss
