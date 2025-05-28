@@ -7703,9 +7703,7 @@ image::img/alibaba_puhui.png[,960]
 <t tx="swot.20250522210521.1">Add worktree nuxt3-font
 
     cd nuxt3-basic
-
     git worktree add -b nuxt3-font ../nuxt3-font origin/nuxt3-layout
-
     // 修改之后提交代码
     git push -u origin nuxt3-font
 </t>

@@ -1464,17 +1464,9 @@ git push -u origin nuxt3-tailwindcss</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>cd nuxt3-basic</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>git worktree add -b nuxt3-font ../nuxt3-font origin/nuxt3-layout</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// 修改之后提交代码
+<pre>cd nuxt3-basic
+git worktree add -b nuxt3-font ../nuxt3-font origin/nuxt3-layout
+// 修改之后提交代码
 git push -u origin nuxt3-font</pre>
 </div>
 </div>
@@ -1514,58 +1506,53 @@ git push -u origin nuxt3-font</pre>
 </div>
 <div class="sect4">
 <h5 id="_file_assetscssmain_css_2">@file assets/css/main.css</h5>
-<div class="paragraph">
-<p>/* sass 不支持 @import 了 */
-@import "tailwindcss";
-@import "@nuxt/ui";</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-cm">/* sass 不支持 @import 了 */</span>
+<span class="tok-k">@import</span><span class="tok-w"> </span><span class="tok-s2">&quot;tailwindcss&quot;</span><span class="tok-p">;</span>
+<span class="tok-k">@import</span><span class="tok-w"> </span><span class="tok-s2">&quot;@nuxt/ui&quot;</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/* 引入字体《阿里巴巴普惠体》 -- new */</span>
+<span class="tok-k">@font-face</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">font-family</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;PuHuiTi-Thin&quot;</span><span class="tok-o">;</span>
+<span class="tok-w">    </span><span class="tok-nt">src</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">url</span><span class="tok-o">(</span><span class="tok-s2">&quot;/fonts/PuHuiTi-Thin.woff2&quot;</span><span class="tok-o">)</span><span class="tok-w"> </span><span class="tok-nt">format</span><span class="tok-o">(</span><span class="tok-s2">&quot;woff2&quot;</span><span class="tok-o">),</span>
+<span class="tok-w">         </span><span class="tok-nt">url</span><span class="tok-o">(</span><span class="tok-s2">&quot;/fonts/PuHuiTi-Thin.woff&quot;</span><span class="tok-o">)</span><span class="tok-w"> </span><span class="tok-nt">format</span><span class="tok-o">(</span><span class="tok-s2">&quot;woff&quot;</span><span class="tok-o">);</span>
+<span class="tok-w">    </span><span class="tok-nt">font-weight</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">250</span><span class="tok-o">;</span>
+<span class="tok-w">    </span><span class="tok-nt">font-display</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">swap</span><span class="tok-o">;</span>
+<span class="tok-p">}</span>
+
+<span class="tok-cm">/* tailwind 工具类来使用指定的字体，会被全局使用 */</span>
+<span class="tok-k">@theme</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">--font-sans</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;PuHuiTi-Thin&quot;</span><span class="tok-o">,</span><span class="tok-w"> </span><span class="tok-nt">sans-serif</span><span class="tok-o">;</span>
+<span class="tok-p">}</span></code></pre>
 </div>
-<div class="paragraph">
-<p>/* 引入字体《阿里巴巴普惠体》&#8201;&#8212;&#8201;new */
-@font-face {
-    font-family: "PuHuiTi-Thin";
-    src: url("/fonts/PuHuiTi-Thin.woff2") format("woff2"),
-         url("/fonts/PuHuiTi-Thin.woff") format("woff");
-    font-weight: 250;
-    font-display: swap;
-}</p>
-</div>
-<div class="paragraph">
-<p>/* tailwind 工具类来使用指定的字体，会被全局使用 */
-@theme {
-    --font-sans: "PuHuiTi-Thin", sans-serif;
-}</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_file_assetscssmain_scss">@file assets/css/main.scss</h5>
 <div class="sect5">
-<h6 id="_reset_browser_default_css">reset browser default css</h6>
-<div class="ulist">
-<ul>
-<li>
-<p>{
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-}</p>
-</li>
-</ul>
+<h6 id="_reset_browser_default_css_若用_tailwindcss_则不用设置默认值">reset browser default css &#8594; 若用 tailwindcss 则不用设置默认值</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">box-sizing</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">border-box</span><span class="tok-o">;</span>
+<span class="tok-w">    </span><span class="tok-nt">padding</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">0</span><span class="tok-o">;</span>
+<span class="tok-w">    </span><span class="tok-nt">margin</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">0</span><span class="tok-o">;</span>
+<span class="tok-p">}</span>
+
+<span class="tok-nt">html</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">font-size</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">62</span><span class="tok-nc">.5</span><span class="tok-err">%</span><span class="tok-o">;</span>
+<span class="tok-p">}</span>
+
+<span class="tok-nt">a</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">text-decoration</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">none</span><span class="tok-o">;</span>
+<span class="tok-w">    </span><span class="tok-nt">display</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">inline-block</span><span class="tok-o">;</span>
+<span class="tok-p">}</span>
+
+<span class="tok-nt">ul</span><span class="tok-o">,</span><span class="tok-w"> </span><span class="tok-nt">ol</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">list-style</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">none</span><span class="tok-o">;</span>
+<span class="tok-p">}</span></code></pre>
 </div>
-<div class="paragraph">
-<p>html {
-    font-size: 62.5%;
-}</p>
-</div>
-<div class="paragraph">
-<p>a {
-    text-decoration: none;
-    display: inline-block;
-}</p>
-</div>
-<div class="paragraph">
-<p>ul, ol {
-    list-style: none;
-}</p>
 </div>
 </div>
 </div>
@@ -1612,11 +1599,13 @@ git push -u origin nuxt3-font</pre>
 </div>
 <div class="sect5">
 <h6 id="_2_全局加载_css_文件new">2 全局加载 css 文件&#8201;&#8212;&#8201;new</h6>
-<div class="paragraph">
-<p>css: [
-    "~/assets/css/main.scss",
-    "~/assets/css/main.css",
-],</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-nx">css</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">[</span>
+<span class="tok-w">    </span><span class="tok-s2">&quot;~/assets/css/main.scss&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-s2">&quot;~/assets/css/main.css&quot;</span><span class="tok-p">,</span>
+<span class="tok-p">],</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -3541,7 +3530,7 @@ date: Wed, 28 May 2025 07:04:59 GMT
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-28 16:05:19 +0800
+Last updated 2025-05-28 16:15:55 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
