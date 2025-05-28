@@ -546,6 +546,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_http_body_3_种上传数据方式有什么不同">http   body 3 种上传数据方式有什么不同？</a></li>
 <li><a href="#_httpie_body_3_种上传数据方式如何使用">httpie body 3 种上传数据方式如何使用？</a></li>
 <li><a href="#_httpie_如何显示请求和响应部分的数据">httpie 如何显示请求和响应部分的数据</a></li>
+<li><a href="#_超强的命令行工具使用">超强的命令行工具使用</a></li>
 </ul>
 </li>
 </ul>
@@ -815,7 +816,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <h4 id="_1_multipartform_data_上传文件form_data" class="discrete">1. multipart/form-data 上传文件（form-data）</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="shell"><span></span>http<span class="tok-w"> </span>-f<span class="tok-w"> </span>POST<span class="tok-w"> </span>https://example.com/upload<span class="tok-w"> </span><span class="tok-nv">name</span><span class="tok-o">=</span>ChatGPT<span class="tok-w"> </span>file@./image.png</code></pre>
+<pre class="pygments highlight"><code data-lang="shell"><span></span>http<span class="tok-w"> </span>--form<span class="tok-w"> </span>POST<span class="tok-w"> </span>https://example.com/upload<span class="tok-w"> </span><span class="tok-nv">name</span><span class="tok-o">=</span>ChatGPT<span class="tok-w"> </span>file@./image.png</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -824,7 +825,20 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="ulist">
 <ul>
 <li>
-<p>使用 <code>-f</code> 参数启用 <code>multipart/form-data</code></p>
+<p>使用 <code>-f --form</code> 参数</p>
+<div class="ulist">
+<ul>
+<li>
+<p>如果传入了文件就是 <code>multipart/form-data</code></p>
+</li>
+<li>
+<p>否则是 application/x-www-form-urlencoded</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>使用 <code>--multipart</code> 参数则始终是 <code>multipart/form-data</code></p>
 </li>
 <li>
 <p><code>name=ChatGPT</code> 是普通字段</p>
@@ -845,6 +859,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <h4 id="_2_applicationx_www_form_urlencoded_提交表单数据" class="discrete">2. application/x-www-form-urlencoded 提交表单数据</h4>
 <div class="listingblock">
+<div class="title">使用 -f 或 --form</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="shell"><span></span>http<span class="tok-w"> </span>--form<span class="tok-w"> </span>POST<span class="tok-w"> </span>https://example.com/login<span class="tok-w"> </span><span class="tok-nv">username</span><span class="tok-o">=</span>admin<span class="tok-w"> </span><span class="tok-nv">password</span><span class="tok-o">=</span><span class="tok-m">123456</span></code></pre>
 </div>
@@ -923,7 +938,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">form-data</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>http -f POST URL key=value file@file</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>http --form POST URL key=value file@file</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">multipart/form-data</p></td>
 </tr>
 <tr>
@@ -1022,12 +1037,18 @@ User-Agent: HTTPie/3.0.0
 </ul>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_超强的命令行工具使用">超强的命令行工具使用</h3>
+<div class="paragraph">
+<p>用的是哪个工具？去 nvim .zshrc 看看</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-28 08:00:41 +0800
+Last updated 2025-05-28 10:42:39 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
