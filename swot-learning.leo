@@ -8018,9 +8018,7 @@ https://nuxtseo.com/docs/sitemap/guides/dynamic-urls#_2-create-your-own-endpoint
 <t tx="swot.20250527111518.1">Add worktree nuxt3-sqlite
 
     cd nuxt3-basic
-
     git worktree add -b nuxt3-sqlite ../nuxt3-sqlite origin/main
-
     // 修改之后提交代码
     git push -u origin nuxt3-sqlite
 </t>

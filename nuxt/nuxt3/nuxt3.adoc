@@ -1267,9 +1267,7 @@ ui: {
 Add worktree nuxt3-sqlite
 
     cd nuxt3-basic
-
     git worktree add -b nuxt3-sqlite ../nuxt3-sqlite origin/main
-
     // 修改之后提交代码
     git push -u origin nuxt3-sqlite
 
@@ -1280,6 +1278,8 @@ Add worktree nuxt3-sqlite
     pnpm add knex better-sqlite3
 
 === @file knexfile.js
+[source,typescript]
+----
 import betterSqlite3 from 'better-sqlite3';
 
 const shared = {
@@ -1314,6 +1314,8 @@ export default {
     production
 };
 
+----
+
 ==== doc
 1. 生成 knexfile.js 配置文件
    * 执行 `knex init` 生成一个 knexfile.js 配置文件，用于定义数据库连接信息。
@@ -1334,6 +1336,8 @@ export default {
         # 查看数据库中已经生成了表 users
 
 === @file migrations/20250527164201_create_users_table.js
+[source,typescript]
+----
 export const up = function(knex) {
     return knex.schema.createTable('users', (table) => {
         table.increments('id').primary()
@@ -1346,6 +1350,7 @@ export const up = function(knex) {
 export const down = function(knex) {
 	  return knex.schema.dropTable('users')
 };
+----
 
 执行 knex migrate:latest
 
@@ -1385,6 +1390,13 @@ Could not locate the bindings file. Tried:
     pnpm run build-release
 
 === @file data/seeds/01_users.js
+操作命令
+
+    knex seed:run 执行所有
+    knex seed:run --specific 01_users.js 执行单个
+
+[source,typescript]
+----
 export async function seed(knex) {
 
     await knex('users').del();
@@ -1398,10 +1410,7 @@ export async function seed(knex) {
         { id: 3, username: 'User3', password: '123456', created_at: now, updated_at: now }
     ]);
 }
-
-knex seed:run 执行所有
-
-knex seed:run --specific 01_users.js 执行单个
+----
 
 === @file nuxt.config.ts
 [source,javascript,]
@@ -1444,6 +1453,8 @@ ui: {
 ----
 
 ==== 2 nitro 支持顶层 await
+[source,typescript]
+----
 nitro: {
     esbuild: {
         options: {
@@ -1451,7 +1462,7 @@ nitro: {
         },
     }
 },
-
+----
 
 In server/utils/db.ts:
 
@@ -1460,6 +1471,8 @@ In server/utils/db.ts:
 要想支持这种顶层 await，则需要配置 es2022
 
 === @file shared/types/user.d.ts
+[source,typescript]
+----
 // 可以自己定义 User 接口
 export interface User {
     id: number
@@ -1468,8 +1481,13 @@ export interface User {
     created_at: string
     updated_at: string
 }
+----
 
 === @file server/utils/db.ts
+Get database config from knexfile.js.
+
+[source,typescript]
+----
 import knex from 'knex';
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path';
@@ -1481,15 +1499,17 @@ const knexfile = await import(knexfilePath);
 const env = (process.env.NODE_ENV || 'development') as keyof typeof knexfile.default;
 
 export default knex(knexfile.default[env]);
-
-Get database config from knexfile.js.
+----
 
 === @file server/api/users/index.get.ts
+[source,typescript]
+----
 // 比如你想查询 `users` 表：
 export default defineEventHandler(async (event) => {
     const users = await db<User>('users').select('*')
     return users
 })
+----
 
 == @path nuxt3-slug
 Add worktree nuxt3-slug
