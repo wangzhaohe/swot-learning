@@ -2309,17 +2309,9 @@ git push -u origin nuxt3-sitemap</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>cd nuxt3-basic</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>git worktree add -b nuxt3-sqlite ../nuxt3-sqlite origin/main</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// 修改之后提交代码
+<pre>cd nuxt3-basic
+git worktree add -b nuxt3-sqlite ../nuxt3-sqlite origin/main
+// 修改之后提交代码
 git push -u origin nuxt3-sqlite</pre>
 </div>
 </div>
@@ -2337,43 +2329,42 @@ pnpm add knex better-sqlite3</pre>
 </div>
 <div class="sect2">
 <h3 id="_file_knexfile_js">@file knexfile.js</h3>
-<div class="paragraph">
-<p>import betterSqlite3 from 'better-sqlite3';</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">betterSqlite3</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;better-sqlite3&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">shared</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">client</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;better-sqlite3&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">driver</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">betterSqlite3</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">useNullAsDefault</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">true</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">migrations</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">directory</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;./migrations&#39;</span>
+<span class="tok-w">    </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-nx">seeds</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">directory</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;./data/seeds&#39;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">};</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">development</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-p">...</span><span class="tok-nx">shared</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">connection</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">filename</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;./data/dev.sqlite&#39;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">};</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">production</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-p">...</span><span class="tok-nx">shared</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">connection</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">filename</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;./data/prod.sqlite&#39;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">};</span>
+
+<span class="tok-c1">// CLI 要求使用默认导出方式</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">development</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">production</span>
+<span class="tok-p">};</span></code></pre>
 </div>
-<div class="paragraph">
-<p>const shared = {
-    client: 'better-sqlite3',
-    driver: betterSqlite3,
-    useNullAsDefault: true,
-    migrations: {
-        directory: './migrations'
-    },
-    seeds: {
-        directory: './data/seeds'
-    }
-};</p>
-</div>
-<div class="paragraph">
-<p>const development = {
-    &#8230;&#8203;shared,
-    connection: {
-        filename: './data/dev.sqlite'
-    }
-};</p>
-</div>
-<div class="paragraph">
-<p>const production = {
-    &#8230;&#8203;shared,
-    connection: {
-        filename: './data/prod.sqlite'
-    }
-};</p>
-</div>
-<div class="paragraph">
-<p>export default {
-    development,
-    production
-};</p>
 </div>
 <div class="sect3">
 <h4 id="_doc">doc</h4>
@@ -2426,20 +2417,21 @@ knex migrate:latest
 </div>
 <div class="sect2">
 <h3 id="_file_migrations20250527164201_create_users_table_js">@file migrations/20250527164201_create_users_table.js</h3>
-<div class="paragraph">
-<p>export const up = function(knex) {
-    return knex.schema.createTable('users', (table) &#8658; {
-        table.increments('id').primary()
-        table.string('username').notNullable().unique()
-        table.string('password').notNullable()
-        table.timestamps()  // 自动创建 <code>created_at</code> 和 <code>updated_at</code>
-    })
-};</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">up</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">knex</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">.</span><span class="tok-nx">schema</span><span class="tok-p">.</span><span class="tok-nx">createTable</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">table</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">table</span><span class="tok-p">.</span><span class="tok-nx">increments</span><span class="tok-p">(</span><span class="tok-s1">&#39;id&#39;</span><span class="tok-p">).</span><span class="tok-nx">primary</span><span class="tok-p">()</span>
+<span class="tok-w">        </span><span class="tok-nx">table</span><span class="tok-p">.</span><span class="tok-kt">string</span><span class="tok-p">(</span><span class="tok-s1">&#39;username&#39;</span><span class="tok-p">).</span><span class="tok-nx">notNullable</span><span class="tok-p">().</span><span class="tok-nx">unique</span><span class="tok-p">()</span>
+<span class="tok-w">        </span><span class="tok-nx">table</span><span class="tok-p">.</span><span class="tok-kt">string</span><span class="tok-p">(</span><span class="tok-s1">&#39;password&#39;</span><span class="tok-p">).</span><span class="tok-nx">notNullable</span><span class="tok-p">()</span>
+<span class="tok-w">        </span><span class="tok-nx">table</span><span class="tok-p">.</span><span class="tok-nx">timestamps</span><span class="tok-p">()</span><span class="tok-w">  </span><span class="tok-c1">// 自动创建 `created_at` 和 `updated_at`</span>
+<span class="tok-w">    </span><span class="tok-p">})</span>
+<span class="tok-p">};</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">down</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">knex</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">	  </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">.</span><span class="tok-nx">schema</span><span class="tok-p">.</span><span class="tok-nx">dropTable</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">)</span>
+<span class="tok-p">};</span></code></pre>
 </div>
-<div class="paragraph">
-<p>export const down = function(knex) {
-	  return knex.schema.dropTable('users')
-};</p>
 </div>
 <div class="paragraph">
 <p>执行 knex migrate:latest</p>
@@ -2502,34 +2494,30 @@ pnpm run build-release</pre>
 <div class="sect2">
 <h3 id="_file_dataseeds01_users_js">@file data/seeds/01_users.js</h3>
 <div class="paragraph">
-<p>export async function seed(knex) {</p>
+<p>操作命令</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>await knex('users').del();</pre>
+<pre>knex seed:run 执行所有
+knex seed:run --specific 01_users.js 执行单个</pre>
 </div>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>// const now = new Date().toISOString();  // 使用服务器时间
-const now = knex.fn.now(); // 使用数据库当前时间</pre>
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">seed</span><span class="tok-p">(</span><span class="tok-nx">knex</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">del</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// const now = new Date().toISOString();  // 使用服务器时间</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">now</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">.</span><span class="tok-nx">fn</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 使用数据库当前时间</span>
+
+<span class="tok-w">    </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">insert</span><span class="tok-p">([</span>
+<span class="tok-w">        </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;User1&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;123456&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;User2&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;123456&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;User3&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;123456&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-w"> </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">]);</span>
+<span class="tok-p">}</span></code></pre>
 </div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    await knex('users').insert([
-        { id: 1, username: 'User1', password: '123456', created_at: now, updated_at: now },
-        { id: 2, username: 'User2', password: '123456', created_at: now, updated_at: now },
-        { id: 3, username: 'User3', password: '123456', created_at: now, updated_at: now }
-    ]);
-}</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>knex seed:run 执行所有</p>
-</div>
-<div class="paragraph">
-<p>knex seed:run --specific 01_users.js 执行单个</p>
 </div>
 </div>
 <div class="sect2">
@@ -2577,14 +2565,16 @@ const now = knex.fn.now(); // 使用数据库当前时间</pre>
 </div>
 <div class="sect3">
 <h4 id="_2_nitro_支持顶层_await">2 nitro 支持顶层 await</h4>
-<div class="paragraph">
-<p>nitro: {
-    esbuild: {
-        options: {
-            target: 'es2022', // 支持顶层 await
-        },
-    }
-},</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-nx">nitro</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">esbuild</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">options</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">target</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;es2022&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-c1">// 支持顶层 await</span>
+<span class="tok-w">        </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">},</span></code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>In server/utils/db.ts:</p>
@@ -2601,43 +2591,50 @@ const now = knex.fn.now(); // 使用数据库当前时间</pre>
 </div>
 <div class="sect2">
 <h3 id="_file_sharedtypesuser_d_ts">@file shared/types/user.d.ts</h3>
-<div class="paragraph">
-<p>export interface User {
-    id: number
-    username: string
-    password: string
-    created_at: string
-    updated_at: string
-}</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-c1">// 可以自己定义 User 接口</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">interface</span><span class="tok-w"> </span><span class="tok-nx">User</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">number</span>
+<span class="tok-w">    </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span>
+<span class="tok-w">    </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span>
+<span class="tok-w">    </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span>
+<span class="tok-w">    </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span>
+<span class="tok-p">}</span></code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_file_serverutilsdb_ts">@file server/utils/db.ts</h3>
 <div class="paragraph">
-<p>import knex from 'knex';
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path';</p>
-</div>
-<div class="paragraph">
-<p>const currentDir = dirname(fileURLToPath(import.meta.url));
-const knexfilePath = join(currentDir, '../../knexfile.js');
-const knexfile = await import(knexfilePath);
-const env = (process.env.NODE_ENV || 'development') as keyof typeof knexfile.default;</p>
-</div>
-<div class="paragraph">
-<p>export default knex(knexfile.default[env]);</p>
-</div>
-<div class="paragraph">
 <p>Get database config from knexfile.js.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;knex&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">fileURLToPath</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;url&#39;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">dirname</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">join</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;path&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">currentDir</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">dirname</span><span class="tok-p">(</span><span class="tok-nx">fileURLToPath</span><span class="tok-p">(</span><span class="tok-k">import</span><span class="tok-p">.</span><span class="tok-nx">meta</span><span class="tok-p">.</span><span class="tok-nx">url</span><span class="tok-p">));</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">knexfilePath</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">join</span><span class="tok-p">(</span><span class="tok-nx">currentDir</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;../../knexfile.js&#39;</span><span class="tok-p">);</span>
+<span class="tok-c1">// 注意 es2022 才支持顶层 await</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">knexfile</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-k">import</span><span class="tok-p">(</span><span class="tok-nx">knexfilePath</span><span class="tok-p">);</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">env</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">env</span><span class="tok-p">.</span><span class="tok-nx">NODE_ENV</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-s1">&#39;development&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">keyof</span><span class="tok-w"> </span><span class="tok-ow">typeof</span><span class="tok-w"> </span><span class="tok-nx">knexfile</span><span class="tok-p">.</span><span class="tok-k">default</span><span class="tok-p">;</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">(</span><span class="tok-nx">knexfile</span><span class="tok-p">.</span><span class="tok-k">default</span><span class="tok-p">[</span><span class="tok-nx">env</span><span class="tok-p">]);</span></code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_file_serverapiusersindex_get_ts">@file server/api/users/index.get.ts</h3>
-<div class="paragraph">
-<p>export default defineEventHandler(async (event) &#8658; {
-    const users = await db&lt;User&gt;('users').select('*')
-    return users
-})</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-c1">// 比如你想查询 `users` 表：</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">(</span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">users</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">db</span><span class="tok-o">&lt;</span><span class="tok-nx">User</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">select</span><span class="tok-p">(</span><span class="tok-s1">&#39;*&#39;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">users</span>
+<span class="tok-p">})</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -3367,7 +3364,7 @@ date: Wed, 28 May 2025 07:04:59 GMT
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-28 17:06:05 +0800
+Last updated 2025-05-28 17:14:44 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
