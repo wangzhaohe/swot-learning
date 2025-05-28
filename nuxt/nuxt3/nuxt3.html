@@ -697,14 +697,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_path_nuxt3_slug">@path nuxt3-slug</a>
 <ul class="sectlevel2">
-<li><a href="#_how_to_use_slug">How to use Slug</a>
-<ul class="sectlevel3">
 <li><a href="#_例子说明">例子说明</a></li>
 <li><a href="#_创建迁移表并执行迁移">创建迁移表并执行迁移</a></li>
 <li><a href="#_file_migrations20250527190502_add_slug_to_users_js">@file migrations/20250527190502_add_slug_to_users.js</a></li>
 <li><a href="#_file_sharedtypesuser_d_ts_2">@file shared/types/user.d.ts</a></li>
 <li><a href="#_file_pagesusersslug_vue">@file pages/users/[slug].vue</a>
-<ul class="sectlevel4">
+<ul class="sectlevel3">
 <li><a href="#_template_5">template</a></li>
 <li><a href="#_script_5">script</a></li>
 </ul>
@@ -714,8 +712,6 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_serverapiusersidid_put_ts">@file server/api/users/id/[id].put.ts</a></li>
 <li><a href="#_file_serverapiusersgenerate_missing_slugs_post_ts">@file server/api/users/generate-missing-slugs.post.ts</a></li>
 <li><a href="#_file_serverapiusersindex_get_ts_2">@file server/api/users/index.get.ts</a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li><a href="#_path_nuxt3_server">@path nuxt3-server</a>
@@ -2647,42 +2643,14 @@ knex seed:run --specific 01_users.js 执行单个</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>cd nuxt3-sqlite</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>git worktree add -b nuxt3-slug ../nuxt3-slug</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// 修改之后提交代码
+<pre>cd nuxt3-sqlite
+git worktree add -b nuxt3-slug ../nuxt3-slug
+// 修改之后提交代码
 git push -u origin nuxt3-slug</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_to_use_slug">How to use Slug</h3>
-<button id="toggleButton">Table of Contents</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
-
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
-</script>
-<div class="sect3">
-<h4 id="_例子说明">例子说明</h4>
+<h3 id="_例子说明">例子说明</h3>
 <div class="paragraph">
 <p>下面使用 users 表作为 slug 入门例子。</p>
 </div>
@@ -2693,8 +2661,8 @@ git push -u origin nuxt3-slug</pre>
 <p>我们只是作为一个 Example 来演示 slug 的使用。</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_创建迁移表并执行迁移">创建迁移表并执行迁移</h4>
+<div class="sect2">
+<h3 id="_创建迁移表并执行迁移">创建迁移表并执行迁移</h3>
 <div class="paragraph">
 <p>为前面已经创建的 users 表增加字段 slug</p>
 </div>
@@ -2720,128 +2688,129 @@ git push -u origin nuxt3-slug</pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_file_migrations20250527190502_add_slug_to_users_js">@file migrations/20250527190502_add_slug_to_users.js</h4>
-<div class="paragraph">
-<p>export const up = function(knex) {
-    return knex.schema.table('users', (table) &#8658; {
-        table.string('slug').unique();  // 添加 slug 字段并设置唯一
-    });
-};</p>
-</div>
-<div class="paragraph">
-<p>export const down = function(knex) {
-    return knex.schema.table('users', (table) &#8658; {
-        table.dropColumn('slug');  // 回滚时移除
-    });
-};</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_file_sharedtypesuser_d_ts_2">@file shared/types/user.d.ts</h4>
-<div class="paragraph">
-<p>export interface User {
-    id: number
-    username: string
-    password: string
-    slug: string  // 添加 slug 字段
-    created_at: string
-    updated_at: string
-}</p>
+<div class="sect2">
+<h3 id="_file_migrations20250527190502_add_slug_to_users_js">@file migrations/20250527190502_add_slug_to_users.js</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">up</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">knex</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">.</span><span class="tok-nx">schema</span><span class="tok-p">.</span><span class="tok-nx">table</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">table</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">table</span><span class="tok-p">.</span><span class="tok-kt">string</span><span class="tok-p">(</span><span class="tok-s1">&#39;slug&#39;</span><span class="tok-p">).</span><span class="tok-nx">unique</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 添加 slug 字段并设置唯一</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-p">};</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">down</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">knex</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">.</span><span class="tok-nx">schema</span><span class="tok-p">.</span><span class="tok-nx">table</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">table</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">table</span><span class="tok-p">.</span><span class="tok-nx">dropColumn</span><span class="tok-p">(</span><span class="tok-s1">&#39;slug&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 回滚时移除</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-p">};</span></code></pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_file_pagesusersslug_vue">@file pages/users/[slug].vue</h4>
+</div>
+<div class="sect2">
+<h3 id="_file_sharedtypesuser_d_ts_2">@file shared/types/user.d.ts</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-c1">// 更新 User 接口，添加 slug 字段</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">interface</span><span class="tok-w"> </span><span class="tok-nx">User</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">number</span>
+<span class="tok-w">    </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span>
+<span class="tok-w">    </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span>
+<span class="tok-w">    </span><span class="tok-nx">slug</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span><span class="tok-w">  </span><span class="tok-c1">// 添加 slug 字段</span>
+<span class="tok-w">    </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span>
+<span class="tok-w">    </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_pagesusersslug_vue">@file pages/users/[slug].vue</h3>
 <div class="paragraph">
 <p>在动态路由中使用 slug</p>
 </div>
-<div class="sect4">
-<h5 id="_template_5">template</h5>
-<div class="paragraph">
-<p>&lt;template lang="pug"&gt;
-ul
-    li(v-for="item in user" :key="index")
-        | {{ item }}
-&lt;/template&gt;</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_script_5">script</h5>
-<div class="paragraph">
-<p>&lt;script setup lang="ts"&gt;</p>
-</div>
-<div class="paragraph">
-<p>const route = useRoute();
-const slug = route.params.slug;</p>
-</div>
-<div class="paragraph">
-<p>const { data: user } = await useFetch(<code>/api/users/${slug}</code>);</p>
-</div>
-<div class="paragraph">
-<p>&lt;/script&gt;</p>
+<div class="sect3">
+<h4 id="_template_5">template</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">template</span><span class="tok-w"> </span><span class="tok-nx">lang</span><span class="tok-o">=</span><span class="tok-s2">&quot;pug&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-nx">ul</span>
+<span class="tok-w">    </span><span class="tok-nx">li</span><span class="tok-p">(</span><span class="tok-nx">v</span><span class="tok-o">-</span><span class="tok-k">for</span><span class="tok-o">=</span><span class="tok-s2">&quot;item in user&quot;</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-nx">key</span><span class="tok-o">=</span><span class="tok-s2">&quot;index&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{{</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">}}</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/template&gt;</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_serverapiusersslug_get_ts">@file server/api/users/[slug].get.ts</h4>
-<div class="paragraph">
-<p>import type { User } from '~/types/user'</p>
-</div>
-<div class="paragraph">
-<p>export default defineEventHandler(async (event) &#8658; {
-    const slug = getRouterParam(event, 'slug');
-    const user = await db&lt;User&gt;('users').where({ slug }).first();</p>
-</div>
-<div class="literalblock">
+<h4 id="_script_5">script</h4>
+<div class="listingblock">
 <div class="content">
-<pre>    if (!user) {
-        throw createError({
-            statusCode: 404,
-            statusMessage: 'User not found'
-        });
-    }
-    return user;
-});</pre>
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-w"> </span><span class="tok-nx">setup</span><span class="tok-w"> </span><span class="tok-nx">lang</span><span class="tok-o">=</span><span class="tok-s2">&quot;ts&quot;</span><span class="tok-o">&gt;</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">route</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useRoute</span><span class="tok-p">();</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">slug</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">route</span><span class="tok-p">.</span><span class="tok-nx">params</span><span class="tok-p">.</span><span class="tok-nx">slug</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 通过 slug 获取用户数据</span>
+<span class="tok-c1">// eslint-disable-next-line @typescript-eslint/no-unused-vars</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">user</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">useFetch</span><span class="tok-p">(</span><span class="tok-sb">`/api/users/</span><span class="tok-si">${</span><span class="tok-nx">slug</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span>
+
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span></code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_serverapiusersslug_get_ts">@file server/api/users/[slug].get.ts</h3>
 <div class="paragraph">
 <p>http :3000/api/users/user1-b53304f3</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_file_serverapiusersindex_post_ts">@file server/api/users/index.post.ts</h4>
-<div class="paragraph">
-<p>import { v4 as uuidv4 } from 'uuid';
-import bcrypt from 'bcryptjs';</p>
-</div>
-<div class="paragraph">
-<p>export default defineEventHandler(async (event) &#8658; {</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>const body = await readBody(event);
-const hashedPassword = await bcrypt.hash(body.password, 10);
-const slug = `${body.username.toLowerCase().replace(/\s+/g, '-')}-${(uuidv4()).substring(0, 8)}`;</pre>
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-c1">// get user by slug</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-kr">type</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">User</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;~/types/user&#39;</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">(</span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">slug</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">getRouterParam</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;slug&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">user</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">db</span><span class="tok-o">&lt;</span><span class="tok-nx">User</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">where</span><span class="tok-p">({</span><span class="tok-w"> </span><span class="tok-nx">slug</span><span class="tok-w"> </span><span class="tok-p">}).</span><span class="tok-nx">first</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">user</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-nx">createError</span><span class="tok-p">({</span>
+<span class="tok-w">            </span><span class="tok-nx">statusCode</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">404</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">statusMessage</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;User not found&#39;</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">user</span><span class="tok-p">;</span>
+<span class="tok-p">});</span></code></pre>
 </div>
 </div>
-<div class="literalblock">
+</div>
+<div class="sect2">
+<h3 id="_file_serverapiusersindex_post_ts">@file server/api/users/index.post.ts</h3>
+<div class="listingblock">
 <div class="content">
-<pre>// body 中有 username 和 password，不要指定这样的字段，直接使用 body 即可
-const user = await db&lt;User&gt;('users').insert({
-    ...body,
-    password: hashedPassword,
-    // 这里的 slug 是 uuidv4 的前 8 位
-    // 这里的 slug 是 username 的小写字母和 - 连接起来
-    slug: slug,
-    created_at: db.fn.now(),
-    updated_at: db.fn.now()
-}).returning('*');</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    return user[0];
-});</pre>
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-c1">// Add slug and hash password when create user</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">v4</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">uuidv4</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;uuid&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">bcrypt</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;bcryptjs&#39;</span><span class="tok-p">;</span>
+
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">(</span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">body</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">readBody</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">hashedPassword</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">bcrypt</span><span class="tok-p">.</span><span class="tok-nx">hash</span><span class="tok-p">(</span><span class="tok-nx">body</span><span class="tok-p">.</span><span class="tok-nx">password</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">slug</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">body</span><span class="tok-p">.</span><span class="tok-nx">username</span><span class="tok-p">.</span><span class="tok-nx">toLowerCase</span><span class="tok-p">().</span><span class="tok-nx">replace</span><span class="tok-p">(</span><span class="tok-sr">/\s+/g</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;-&#39;</span><span class="tok-p">)</span><span class="tok-si">}</span><span class="tok-sb">-</span><span class="tok-si">${</span><span class="tok-p">(</span><span class="tok-nx">uuidv4</span><span class="tok-p">()).</span><span class="tok-nx">substring</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">8</span><span class="tok-p">)</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// body 中有 username 和 password，不要指定这样的字段，直接使用 body 即可</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">user</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">db</span><span class="tok-o">&lt;</span><span class="tok-nx">User</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">insert</span><span class="tok-p">({</span>
+<span class="tok-w">        </span><span class="tok-p">...</span><span class="tok-nx">body</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">hashedPassword</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-c1">// 这里的 slug 是 uuidv4 的前 8 位</span>
+<span class="tok-w">        </span><span class="tok-c1">// 这里的 slug 是 username 的小写字母和 - 连接起来</span>
+<span class="tok-w">        </span><span class="tok-nx">slug</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">slug</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">db.fn.now</span><span class="tok-p">(),</span>
+<span class="tok-w">        </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">db.fn.now</span><span class="tok-p">()</span>
+<span class="tok-w">    </span><span class="tok-p">}).</span><span class="tok-nx">returning</span><span class="tok-p">(</span><span class="tok-s1">&#39;*&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">user</span><span class="tok-p">[</span><span class="tok-mf">0</span><span class="tok-p">];</span>
+<span class="tok-p">});</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2854,128 +2823,108 @@ const user = await db&lt;User&gt;('users').insert({
 <p>http --offline POST :3000/api/users username=Swot password=123</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_file_serverapiusersidid_put_ts">@file server/api/users/id/[id].put.ts</h4>
-<div class="paragraph">
-<p>import { v4 as uuidv4 } from 'uuid';
-import type { User } from '~/types/user'</p>
-</div>
-<div class="paragraph">
-<p>export default defineEventHandler(async (event) &#8658; {</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>const userId = getRouterParam(event, 'id');
-const body = await readBody(event);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if (!userId) {
-    throw createError({
-        statusCode: 400,
-        statusMessage: 'Invalid user ID'
-    });
-}
-const currentUser = await db&lt;User&gt;('users').where('id', userId).first();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if (!currentUser) {
-    throw createError({
-        statusCode: 404,
-        statusMessage: 'User not found'
-    });
-}
-// 准备更新数据
-const updatedData: { username: string; updated_at: string; slug?: string } = {
-    username: body.username,  // 这个字段根据实际情况修改，因为用户名可能不允许修改
-    updated_at: new Date().toISOString()
-};
-// 检查用户是否已有 slug，如果没有则生成一个
-if (!currentUser.slug) {
-    const nameSlug = body.username.toLowerCase().replace(/\s+/g, '-');
-    const uuidPart = uuidv4().substring(0, 8);
-    updatedData.slug = `${nameSlug}-${uuidPart}`;
-}
-// 更新用户信息
-const updatedUser = await db&lt;User&gt;('users')
-    .where('id', userId)
-    .update(updatedData)
-    .returning('*');</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    return updatedUser[0];
-});</pre>
-</div>
-</div>
+<div class="sect2">
+<h3 id="_file_serverapiusersidid_put_ts">@file server/api/users/id/[id].put.ts</h3>
 <div class="paragraph">
 <p>http put :3000/api/users/id/5 username=swotpp</p>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_file_serverapiusersgenerate_missing_slugs_post_ts">@file server/api/users/generate-missing-slugs.post.ts</h4>
-<div class="paragraph">
-<p>import { v4 as uuidv4 } from 'uuid'
-import type { User } from '~/types/user'</p>
-</div>
-<div class="paragraph">
-<p>export default defineEventHandler(async (event) &#8658; {
-    try {
-        // 查找所有没有 slug 的用户
-        const usersWithoutSlug = await db('users')
-            .whereNull('slug')
-            .select('*')</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>let updatedCount = 0</pre>
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-c1">// 更新用户，如果没有 slug 则增加 slug</span>
+<span class="tok-c1">// 此路由多加了一个 /id/，就是为了 /api/users/[slug].get.ts 区分开</span>
+
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">v4</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">uuidv4</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;uuid&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-kr">type</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">User</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;~/types/user&#39;</span>
+
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">(</span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">userId</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">getRouterParam</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;id&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">body</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">readBody</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">userId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-nx">createError</span><span class="tok-p">({</span>
+<span class="tok-w">            </span><span class="tok-nx">statusCode</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">400</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">statusMessage</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;Invalid user ID&#39;</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">currentUser</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">db</span><span class="tok-o">&lt;</span><span class="tok-nx">User</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">where</span><span class="tok-p">(</span><span class="tok-s1">&#39;id&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">userId</span><span class="tok-p">).</span><span class="tok-nx">first</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">currentUser</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-nx">createError</span><span class="tok-p">({</span>
+<span class="tok-w">            </span><span class="tok-nx">statusCode</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">404</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">statusMessage</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;User not found&#39;</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 准备更新数据</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">updatedData</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">slug?</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">string</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">body.username</span><span class="tok-p">,</span><span class="tok-w">  </span><span class="tok-c1">// 这个字段根据实际情况修改，因为用户名可能不允许修改</span>
+<span class="tok-w">        </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">new</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">().</span><span class="tok-nx">toISOString</span><span class="tok-p">()</span>
+<span class="tok-w">    </span><span class="tok-p">};</span>
+<span class="tok-w">    </span><span class="tok-c1">// 检查用户是否已有 slug，如果没有则生成一个</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">currentUser</span><span class="tok-p">.</span><span class="tok-nx">slug</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">nameSlug</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">body</span><span class="tok-p">.</span><span class="tok-nx">username</span><span class="tok-p">.</span><span class="tok-nx">toLowerCase</span><span class="tok-p">().</span><span class="tok-nx">replace</span><span class="tok-p">(</span><span class="tok-sr">/\s+/g</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;-&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">uuidPart</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">uuidv4</span><span class="tok-p">().</span><span class="tok-nx">substring</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">8</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">updatedData</span><span class="tok-p">.</span><span class="tok-nx">slug</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">nameSlug</span><span class="tok-si">}</span><span class="tok-sb">-</span><span class="tok-si">${</span><span class="tok-nx">uuidPart</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 更新用户信息</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">updatedUser</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">db</span><span class="tok-o">&lt;</span><span class="tok-nx">User</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nx">where</span><span class="tok-p">(</span><span class="tok-s1">&#39;id&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">userId</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nx">update</span><span class="tok-p">(</span><span class="tok-nx">updatedData</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nx">returning</span><span class="tok-p">(</span><span class="tok-s1">&#39;*&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">updatedUser</span><span class="tok-p">[</span><span class="tok-mf">0</span><span class="tok-p">];</span>
+<span class="tok-p">});</span></code></pre>
 </div>
 </div>
-<div class="literalblock">
+</div>
+<div class="sect2">
+<h3 id="_file_serverapiusersgenerate_missing_slugs_post_ts">@file server/api/users/generate-missing-slugs.post.ts</h3>
+<div class="listingblock">
 <div class="content">
-<pre>// 为每个用户更新一个生成的 UUID 前8位作为 slug
-for (const user of usersWithoutSlug) {
-    const nameSlug = user.username.toLowerCase().replace(/\s+/g, '-');
-    const uuidPart = uuidv4().substring(0, 8);  // UUID 只取前8位
-    const slug = `${nameSlug}-${uuidPart}`;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// 更新用户的 slug
-await db&lt;User&gt;('users')
-    .where({ id: user.id })
-    .update({
-        slug,
-        updated_at: new Date().toISOString()
-    })</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    updatedCount++
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>        return {
-            success: true,
-            message: `已为 ${updatedCount} 个用户更新了新的 UUID slug`,
-            updatedCount
-        }
-    } catch (error) {
-        throw createError({
-            statusCode: 500,
-            statusMessage: '生成 slug 失败',
-            data: error
-        })
-    }
-})</pre>
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-c1">// Add slug for all users</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">v4</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">uuidv4</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;uuid&#39;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-kr">type</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">User</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;~/types/user&#39;</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">(</span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 查找所有没有 slug 的用户</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">usersWithoutSlug</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">db</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-nx">whereNull</span><span class="tok-p">(</span><span class="tok-s1">&#39;slug&#39;</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-nx">select</span><span class="tok-p">(</span><span class="tok-s1">&#39;*&#39;</span><span class="tok-p">)</span>
+
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">updatedCount</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 为每个用户更新一个生成的 UUID 前8位作为 slug</span>
+<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">user</span><span class="tok-w"> </span><span class="tok-k">of</span><span class="tok-w"> </span><span class="tok-nx">usersWithoutSlug</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">nameSlug</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">user</span><span class="tok-p">.</span><span class="tok-nx">username</span><span class="tok-p">.</span><span class="tok-nx">toLowerCase</span><span class="tok-p">().</span><span class="tok-nx">replace</span><span class="tok-p">(</span><span class="tok-sr">/\s+/g</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;-&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">uuidPart</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">uuidv4</span><span class="tok-p">().</span><span class="tok-nx">substring</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">8</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// UUID 只取前8位</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">slug</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">nameSlug</span><span class="tok-si">}</span><span class="tok-sb">-</span><span class="tok-si">${</span><span class="tok-nx">uuidPart</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">;</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 更新用户的 slug</span>
+<span class="tok-w">            </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">db</span><span class="tok-o">&lt;</span><span class="tok-nx">User</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">)</span>
+<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-nx">where</span><span class="tok-p">({</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">user.id</span><span class="tok-w"> </span><span class="tok-p">})</span>
+<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-nx">update</span><span class="tok-p">({</span>
+<span class="tok-w">                    </span><span class="tok-nx">slug</span><span class="tok-p">,</span>
+<span class="tok-w">                    </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">new</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">().</span><span class="tok-nx">toISOString</span><span class="tok-p">()</span>
+<span class="tok-w">                </span><span class="tok-p">})</span>
+
+<span class="tok-w">            </span><span class="tok-nx">updatedCount</span><span class="tok-o">++</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">success</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">true</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">message</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-sb">`已为 </span><span class="tok-si">${</span><span class="tok-nx">updatedCount</span><span class="tok-si">}</span><span class="tok-sb"> 个用户更新了新的 UUID slug`</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">updatedCount</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">error</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-nx">createError</span><span class="tok-p">({</span>
+<span class="tok-w">            </span><span class="tok-nx">statusCode</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">500</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">statusMessage</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;生成 slug 失败&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">data</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">error</span>
+<span class="tok-w">        </span><span class="tok-p">})</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">})</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2991,16 +2940,18 @@ await db&lt;User&gt;('users')
 <p>因此，尽管技术上可以使用 GET，但保持为 POST 可能更符合 API 设计最佳实践，因为这个操作会修改数据库状态。</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_file_serverapiusersindex_get_ts_2">@file server/api/users/index.get.ts</h4>
-<div class="paragraph">
-<p>export default defineEventHandler(async (event) &#8658; {
-    const users = await db&lt;User&gt;('users').select('*')
-    return users
-})</p>
-</div>
+<div class="sect2">
+<h3 id="_file_serverapiusersindex_get_ts_2">@file server/api/users/index.get.ts</h3>
 <div class="paragraph">
 <p>http :3000/api/users</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-c1">// 比如你想查询 `users` 表：</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">(</span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">users</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">db</span><span class="tok-o">&lt;</span><span class="tok-nx">User</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">select</span><span class="tok-p">(</span><span class="tok-s1">&#39;*&#39;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">users</span>
+<span class="tok-p">})</span></code></pre>
 </div>
 </div>
 </div>
@@ -3364,7 +3315,7 @@ date: Wed, 28 May 2025 07:04:59 GMT
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-28 17:14:44 +0800
+Last updated 2025-05-28 17:24:43 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
