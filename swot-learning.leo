@@ -111,13 +111,11 @@
 <v t="swot.20250521152152.1" descendentVnodeUnknownAttributes="7d7100285805000000302e382e3671017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d3237710775735805000000302e382e3871087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30342d3237710e75735805000000302e392e33710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30342d3237711575735805000000302e392e3671167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30352d3031711c75735805000000302e392e39711d7d711e5808000000616e6e6f74617465711f7d71202858080000007072696f7269747971214d0f27580a000000707269736574646174657122580a000000323032352d30342d323771237573752e"><vh>Nuxt Notes</vh>
 <v t="swot.20250521214125.1"><vh>@file pnpm-workspace.yaml</vh></v>
 <v t="swot.20250521112440.1"><vh>@path nuxt3-basic</vh>
-<v t="swot.20250521155715.1"><vh>github link</vh></v>
 <v t="swot.20250520190119.1"><vh>Create a new project</vh></v>
 <v t="swot.20250521194811.1"><vh>install packages</vh></v>
 <v t="swot.20250522084241.1"><vh>@file nuxt.config.ts</vh></v>
 </v>
 <v t="swot.20250521181940.1"><vh>@path nuxt3-layout</vh>
-<v t="swot.20250528153604.1"><vh>github link</vh></v>
 <v t="swot.20250528153849.1"><vh>pug 语法介绍</vh></v>
 <v t="swot.20250521194704.1"><vh>@file app.vue</vh></v>
 </v>
@@ -7422,6 +7420,8 @@ Done in 3s
 ....
 </t>
 <t tx="swot.20250521112440.1">这是本来就有的 origin/main 分支。
+
+https://github.com/wangzhaohe/nuxt3-basic.git
 </t>
 <t tx="swot.20250521144332.1">The Progressive Web Framework
 
@@ -7462,8 +7462,6 @@ https://github.com/nuxt/nuxt
 &lt;/script&gt;
 ++++
 </t>
-<t tx="swot.20250521155715.1">https://github.com/wangzhaohe/nuxt3-basic.git
-</t>
 <t tx="swot.20250521172443.1">. Use leo-editor's swot-learning.leo file to manage outlined knowledge.
 
 . swot-learning.leo is managed by git.
@@ -7481,6 +7479,8 @@ https://github.com/nuxt/nuxt
 
     git worktree add -b nuxt3-layout ../nuxt3-layout origin/main
     git push -u origin nuxt3-layout
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-layout
 </t>
 <t tx="swot.20250521194811.1">I like pug, so add it.
 
@@ -7553,6 +7553,7 @@ export default defineNuxtConfig({
     git worktree add -b nuxt3-element-plus ../nuxt3-element-plus origin/nuxt3-layout
 ====
 
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-element-plus
 </t>
 <t tx="swot.20250521205725.3">@language asciidoc
 Video: https://www.bilibili.com/video/BV1G14y1z7KF/?spm_id_from=333.337.search-card.all.click&amp;vd_source=392e2829ea8e40de989be86888026747[安装和使用Element Plus组件库] | 
@@ -7574,6 +7575,8 @@ NOTE: -D 可以作为开发依赖，因为在 build 时会自动收集相关信�
     git worktree add -b nuxt3-tailwindcss ../nuxt3-tailwindcss origin/nuxt3-layout
     // 修改之后提交代码
     git push -u origin nuxt3-tailwindcss
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-tailwindcss
 </t>
 <t tx="swot.20250522073435.3">https://nuxt.com/modules/tailwindcss
 目前我没有使用该 @nuxtjs/tailwindcss（集成的是 tailwindcss3），因为 NuxtUI 集成了 tailwindcss4，就不用再单独安装了。
@@ -7704,6 +7707,8 @@ image::img/alibaba_puhui.png[,960]
     git worktree add -b nuxt3-font ../nuxt3-font origin/nuxt3-layout
     // 修改之后提交代码
     git push -u origin nuxt3-font
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-font
 </t>
 <t tx="swot.20250523083936.1">Add worktree nuxt3-component
 
@@ -7711,6 +7716,8 @@ image::img/alibaba_puhui.png[,960]
     git worktree add -b nuxt3-component ../nuxt3-component origin/nuxt3-tailwindcss
     // 修改之后提交代码
     git push -u origin nuxt3-component
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-component
 </t>
 <t tx="swot.20250523084009.1"></t>
 <t tx="swot.20250523171018.1">有 CookieConsent 的参考页面
@@ -7826,6 +7833,8 @@ const today = formatDate(new Date())
     git worktree add -b nuxt3-sitemap ../nuxt3-sitemap origin/main
     // 修改之后提交代码
     git push -u origin nuxt3-sitemap
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-sitemap
 </t>
 <t tx="swot.20250527002101.1">在 Nuxt 中，sitemap.xml 和 sitemap.xsl 文件应该放在 `public/` 目录下。
 
@@ -8019,6 +8028,8 @@ https://nuxtseo.com/docs/sitemap/guides/dynamic-urls#_2-create-your-own-endpoint
     git worktree add -b nuxt3-sqlite ../nuxt3-sqlite origin/main
     // 修改之后提交代码
     git push -u origin nuxt3-sqlite
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-sqlite
 </t>
 <t tx="swot.20250527112248.1">在 Nuxt3 项目中使用 `Knex.js` 连接 `SQLite` 数据库是完全可行的，尤其适合轻量级项目或本地开发。
 
@@ -8059,6 +8070,8 @@ Could not locate the bindings file. Tried:
     git worktree add -b nuxt3-slug ../nuxt3-slug
     // 修改之后提交代码
     git push -u origin nuxt3-slug
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-slug
 </t>
 <t tx="swot.20250527190349.3">@doc
 下面使用 users 表作为 slug 入门例子。
@@ -8312,6 +8325,8 @@ http --offline --print=HB POST https://example.com/api name=ChatGPT
     git worktree add -b nuxt3-server ../nuxt3-server origin/main
     // 修改之后提交代码
     git push -u origin nuxt3-server
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-server
 </t>
 <t tx="swot.20250528091128.1">用的是哪个工具？去 nvim .zshrc 看看
 
@@ -8539,8 +8554,6 @@ date: Wed, 28 May 2025 07:13:23 GMT
 ....
 </t>
 <t tx="swot.20250528151437.1"></t>
-<t tx="swot.20250528153604.1">https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-layout
-</t>
 <t tx="swot.20250528153849.1">模板使用了 pug 格式，优点是不用再写结束标签了。以缩进作为层级，类似于 python 语言。
 
 https://pugjs.org/api/getting-started.html
