@@ -166,8 +166,8 @@
 </v>
 <v t="swot.20250526234255.1"><vh>@path nuxt3-sitemap</vh>
 <v t="swot.20250527002101.1"><vh>静态书写 sitemap -&gt; 需要手动更新内容</vh>
-<v t="swot.20250527062943.1"><vh>#@edit public/sitemap.xml</vh></v>
-<v t="swot.20250527062947.1"><vh>#@edit public/sitemap.xsl</vh></v>
+<v t="swot.20250527062943.1"><vh>@file public/sitemap.xml</vh></v>
+<v t="swot.20250527062947.1"><vh>@ignore-node #@edit public/sitemap.xsl</vh></v>
 </v>
 <v t="swot.20250527063027.1"><vh>动态生成 sitemap</vh>
 <v t="swot.20250527064512.1"><vh>@file nuxt.config.ts</vh></v>
@@ -7825,9 +7825,7 @@ const today = formatDate(new Date())
 <t tx="swot.20250526234255.1">Add worktree nuxt3-sitemap
 
     cd nuxt3-basic
-
     git worktree add -b nuxt3-sitemap ../nuxt3-sitemap origin/main
-
     // 修改之后提交代码
     git push -u origin nuxt3-sitemap
 </t>
@@ -7851,55 +7849,6 @@ const today = formatDate(new Date())
 *如果您使用 `@nuxtjs/sitemap` 模块来自动生成站点地图，那么您不需要手动创建这些文件，因为模块会自动生成并放置在正确的位置。*
 
 如果您使用 Nuxt 4 的新目录结构，`public/` 目录仍然是位于项目根目录下，而不是在 `app/` 目录内。
-</t>
-<t tx="swot.20250527062943.1">@language xml
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;?xml-stylesheet type="text/xsl" href="http://localhost:3000/sitemap.xsl"?&gt;
-&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
-	&lt;url&gt;
-		&lt;loc&gt;https://www.swotpp.com/sitemap_addl.xml&lt;/loc&gt;
-	&lt;/url&gt;
-	&lt;url&gt;
-		&lt;loc&gt;https://www.swotpp.com/sitemap_post_1.xml&lt;/loc&gt;
-		&lt;priority&gt;0.9&lt;/priority&gt;
-		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
-	&lt;/url&gt;
-	&lt;url&gt;
-		&lt;loc&gt;https://www.swotpp.com/sitemap_post_2.xml&lt;/loc&gt;
-		&lt;priority&gt;0.9&lt;/priority&gt;
-		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
-	&lt;/url&gt;
-	&lt;url&gt;
-		&lt;loc&gt;https://www.swotpp.com/sitemap_page.xml&lt;/loc&gt;
-		&lt;priority&gt;0.9&lt;/priority&gt;
-		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
-	&lt;/url&gt;
-	&lt;url&gt;
-		&lt;loc&gt;https://www.swotpp.com/sitemap_news.xml&lt;/loc&gt;
-		&lt;priority&gt;0.9&lt;/priority&gt;
-		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
-	&lt;/url&gt;
-	&lt;url&gt;
-		&lt;loc&gt;https://www.swotpp.com/sitemap_project.xml&lt;/loc&gt;
-		&lt;priority&gt;0.9&lt;/priority&gt;
-		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
-	&lt;/url&gt;
-	&lt;url&gt;
-		&lt;loc&gt;https://www.swotpp.com/sitemap_category.xml&lt;/loc&gt;
-		&lt;priority&gt;0.8&lt;/priority&gt;
-		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
-	&lt;/url&gt;
-	&lt;url&gt;
-		&lt;loc&gt;https://www.swotpp.com/sitemap_post_tag.xml&lt;/loc&gt;
-		&lt;priority&gt;0.8&lt;/priority&gt;
-		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
-	&lt;/url&gt;
-	&lt;url&gt;
-		&lt;loc&gt;https://www.swotpp.com/sitemap_project_catalog.xml&lt;/loc&gt;
-		&lt;priority&gt;0.8&lt;/priority&gt;
-		&lt;changefreq&gt;weekly&lt;/changefreq&gt;
-	&lt;/url&gt;
-&lt;/urlset&gt;&lt;!-- permalink_structure ends with slash (/) but REQUEST_URI does not end with slash (/) --&gt;
 </t>
 <t tx="swot.20250527062947.1">@language xsl
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
