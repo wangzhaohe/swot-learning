@@ -7615,6 +7615,8 @@ https://github.com/emmanuelbakare/Mastering-Tailwind-CSS-with-Project-Examples +
   ]
 }
 ----
+
+ref: https://ui.nuxt.com/getting-started/installation/nuxt#import-tailwind-css-and-nuxt-ui-in-your-css
 </t>
 <t tx="swot.20250522125304.1">https://ui.nuxt.com/getting-started/installation/nuxt
 
