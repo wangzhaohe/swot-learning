@@ -130,13 +130,7 @@
 </v>
 <v t="swot.20250521205725.14"><vh>报错或警告处理</vh>
 <v t="swot.20250521205725.15"><vh>dayjs/dayjs.min.js does not provide an export named 'default'</vh></v>
-<v t="swot.20250521205725.16"><vh>Extraneous non-props attributes (data-v-inspector) were passed to component</vh>
-<v t="swot.20250521205725.17"><vh>#file nuxt.config.ts</vh>
-<v t="swot.20250521205725.18"><vh>&lt;&lt; devtools &gt;&gt;</vh></v>
-<v t="swot.20250521205725.19"><vh>&lt;&lt; 配置模块 element plus &gt;&gt;</vh></v>
-<v t="swot.20250521205725.20"><vh>&lt;&lt; 配置 element plus 选项 &gt;&gt;</vh></v>
-</v>
-</v>
+<v t="swot.20250521205725.16"><vh>Extraneous non-props attributes (data-v-inspector) were passed to component</vh></v>
 </v>
 </v>
 <v t="swot.20250522073435.2"><vh>@path nuxt3-tailwindcss</vh>
@@ -7500,9 +7494,9 @@ ConfigProvider 方式
 </t>
 <t tx="swot.20250521205725.14"></t>
 <t tx="swot.20250521205725.15">@language asciidoc
-这是安装命令: 
-pnpm i element-plus @element-plus/nuxt -D
+这是安装命令:
 
+    pnpm i element-plus @element-plus/nuxt -D
 
 在安装完 element-plus 后报错:
 
@@ -7520,14 +7514,14 @@ https://github.com/element-plus/element-plus/issues/8165
 <t tx="swot.20250521205725.16">@language asciidoc
 https://github.com/element-plus/element-plus/issues/18213
 
-@language xml
+```xml
 &lt;NuxtLayout&gt;
     &lt;!-- elementUI plus 支持中文 --&gt;
     &lt;el-config-provider :locale="zhCn"&gt;
         &lt;NuxtPage /&gt;
     &lt;/el-config-provider&gt;
 &lt;/NuxtLayout&gt;
-
+```
 
 如上面 element-plus 设置中文后，如果在页面(pages/)中再使用组件，则会报警告如下:
 
@@ -7536,33 +7530,17 @@ https://github.com/element-plus/element-plus/issues/18213
   el:
 
 
-解决方法：在 nuxt.config.ts 中临时禁用 componentInspector 功能
+##解决方法：在 nuxt.config.ts 中临时禁用 componentInspector 功能##
 
-@language java
+@language javascript
+```javascript
 export default defineNuxtConfig({
   devtools: {
+    enabled: true,
     componentInspector: false
   },
 })
-
-</t>
-<t tx="swot.20250521205725.17">@language typescript
-// https://nuxt.com/docs/api/configuration/nuxt-config
-export default defineNuxtConfig({
-    compatibilityDate: '2024-11-01',
-    &lt;&lt; devtools &gt;&gt;
-    modules: [
-      &lt;&lt; 配置模块 element plus &gt;&gt;
-    ],
-    &lt;&lt; 配置 element plus 选项 &gt;&gt;
-})
-</t>
-<t tx="swot.20250521205725.18">devtools: {
-    enabled: true,
-    componentInspector: false
-},
-</t>
-<t tx="swot.20250521205725.19">'@element-plus/nuxt'
+```
 </t>
 <t tx="swot.20250521205725.2">Add worktree nuxt3-element-plus
 
@@ -7577,8 +7555,6 @@ export default defineNuxtConfig({
     git worktree add -b nuxt3-element-plus ../nuxt3-element-plus origin/nuxt3-layout
 ====
 
-</t>
-<t tx="swot.20250521205725.20">elementPlus: { /** Options */ },
 </t>
 <t tx="swot.20250521205725.3">@language asciidoc
 Video: https://www.bilibili.com/video/BV1G14y1z7KF/?spm_id_from=333.337.search-card.all.click&amp;vd_source=392e2829ea8e40de989be86888026747[安装和使用Element Plus组件库] | 
