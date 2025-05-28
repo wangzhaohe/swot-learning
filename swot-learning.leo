@@ -25,10 +25,9 @@
 <v t="swot.20250524210230.1"><vh>app.config.ts vs nuxt.config.ts?</vh></v>
 </v>
 <v t="swot.20250528071453.1"><vh>Web</vh>
-<v t="swot.20250528071457.1"><vh>Postman body 3种上传数据方式有什么不同？</vh></v>
-<v t="swot.20250528073829.1"><vh>httpie  body 3种上传数据方式如何使用？</vh></v>
-<v t="swot.20250528074031.1"><vh>httpie  如何查看已发送的数据</vh></v>
-<v t="swot.20250528074016.1"><vh>postman 如何查看已发送的数据</vh></v>
+<v t="swot.20250528071457.1"><vh>http   body 3 种上传数据方式有什么不同？</vh></v>
+<v t="swot.20250528073829.1"><vh>httpie body 3 种上传数据方式如何使用？</vh></v>
+<v t="swot.20250528074031.1"><vh>httpie 如何显示请求和响应部分的数据</vh></v>
 </v>
 <v t="swot.20250524210625.1"><vh>@ignore-tree Vue3</vh>
 <v t="swot.20250524210629.1"><vh>ref vs reactive？</vh></v>
@@ -8344,7 +8343,6 @@ Content-Type: application/json
 | application/json
 |===
 </t>
-<t tx="swot.20250528074016.1"></t>
 <t tx="swot.20250528074031.1">可以使用 `--print` 参数来控制 HTTPie 显示请求和响应的哪些部分。
 
 [discrete]
