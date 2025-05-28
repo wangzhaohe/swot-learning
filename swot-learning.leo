@@ -28,6 +28,7 @@
 <v t="swot.20250528071457.1"><vh>http   body 3 种上传数据方式有什么不同？</vh></v>
 <v t="swot.20250528073829.1"><vh>httpie body 3 种上传数据方式如何使用？</vh></v>
 <v t="swot.20250528074031.1"><vh>httpie 如何显示请求和响应部分的数据</vh></v>
+<v t="swot.20250528091128.1"><vh>超强的命令行工具使用</vh></v>
 </v>
 <v t="swot.20250524210625.1"><vh>@ignore-tree Vue3</vh>
 <v t="swot.20250524210629.1"><vh>ref vs reactive？</vh></v>
@@ -210,6 +211,18 @@
 <v t="swot.20250527222331.1"><vh>@file server/api/users/generate-missing-slugs.post.ts</vh></v>
 <v t="swot.20250527223001.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d323771077573732e"><vh>@file server/api/users/index.get.ts</vh></v>
 </v>
+</v>
+</v>
+<v t="swot.20250528090941.1"><vh>@path nuxt3-server</vh>
+<v t="swot.20250528091411.1"><vh>获取 body 数据</vh>
+<v t="swot.20250528091441.1"><vh>multipart/form-data</vh>
+<v t="swot.20250528093514.1"><vh>前端代码</vh></v>
+<v t="swot.20250528093522.1"><vh>后端代码</vh>
+<v t="swot.20250528093710.1"><vh>@file server/api/handle-form-data.ts</vh></v>
+</v>
+</v>
+<v t="swot.20250528091447.1"><vh>x-www-form-urlencoded</vh></v>
+<v t="swot.20250528091447.2"><vh>raw - JSON</vh></v>
 </v>
 </v>
 </v>
@@ -8249,12 +8262,15 @@ Could not locate the bindings file. Tried:
 
 [source,shell]
 ----
-http -f POST https://example.com/upload name=ChatGPT file@./image.png
+http --form POST https://example.com/upload name=ChatGPT file@./image.png
 ----
 
 说明：
 
-- 使用 `-f` 参数启用 `multipart/form-data`
+- 使用 `-f --form` 参数
+    * 如果传入了文件就是 `multipart/form-data`
+    * 否则是 application/x-www-form-urlencoded
+- 使用 `--multipart` 参数则始终是 `multipart/form-data`
 - `name=ChatGPT` 是普通字段
 - `file@./image.png` 表示上传文件
 
@@ -8269,6 +8285,7 @@ Content-Type: multipart/form-data; boundary=...
 [discrete]
 ==== 2. application/x-www-form-urlencoded 提交表单数据
 
+.使用 -f 或 --form
 [source,shell]
 ----
 http --form POST https://example.com/login username=admin password=123456
@@ -8331,7 +8348,7 @@ Content-Type: application/json
 | Content-Type
 
 | form-data
-| `http -f POST URL key=value file@file`
+| `http --form POST URL key=value file@file`
 | multipart/form-data
 
 | x-www-form-urlencoded
@@ -8401,5 +8418,23 @@ http --offline --print=HB POST https://example.com/api name=ChatGPT
 
 * `--verbose` 或 `-v` 相当于 `--print=HhBb`，即显示完整请求和响应内容。
 </t>
+<t tx="swot.20250528090941.1">Add worktree nuxt3-server
+
+    cd nuxt3-basic
+
+    git worktree add -b nuxt3-server ../nuxt3-server origin/main
+
+    // 修改之后提交代码
+    git push -u origin nuxt3-server
+</t>
+<t tx="swot.20250528091128.1">用的是哪个工具？去 nvim .zshrc 看看
+
+</t>
+<t tx="swot.20250528091411.1"></t>
+<t tx="swot.20250528091441.1"></t>
+<t tx="swot.20250528091447.1"></t>
+<t tx="swot.20250528091447.2"></t>
+<t tx="swot.20250528093514.1"></t>
+<t tx="swot.20250528093522.1"></t>
 </tnodes>
 </leo_file>
