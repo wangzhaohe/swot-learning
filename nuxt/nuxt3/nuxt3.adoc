@@ -1515,43 +1515,18 @@ export default defineEventHandler(async (event) => {
 Add worktree nuxt3-slug
 
     cd nuxt3-sqlite
-
     git worktree add -b nuxt3-slug ../nuxt3-slug
-
     // 修改之后提交代码
     git push -u origin nuxt3-slug
 
-=== How to use Slug
-
-++++
-<button id="toggleButton">Table of Contents</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
-
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
-</script>
-++++
-
-==== 例子说明
+=== 例子说明
 下面使用 users 表作为 slug 入门例子。
 
 一般情况 users 表中的 username 字段没有空格分隔，因为用户名不允许有空格。
 
 我们只是作为一个 Example 来演示 slug 的使用。
 
-==== 创建迁移表并执行迁移
+=== 创建迁移表并执行迁移
 为前面已经创建的 users 表增加字段 slug
 
     knex migrate:make add_slug_to_users
@@ -1564,7 +1539,9 @@ Add worktree nuxt3-slug
 
     knex migrate:status
 
-==== @file migrations/20250527190502_add_slug_to_users.js
+=== @file migrations/20250527190502_add_slug_to_users.js
+[source,typescript]
+----
 export const up = function(knex) {
     return knex.schema.table('users', (table) => {
         table.string('slug').unique();  // 添加 slug 字段并设置唯一
@@ -1576,8 +1553,11 @@ export const down = function(knex) {
         table.dropColumn('slug');  // 回滚时移除
     });
 };
+----
 
-==== @file shared/types/user.d.ts
+=== @file shared/types/user.d.ts
+[source,typescript]
+----
 // 更新 User 接口，添加 slug 字段
 
 export interface User {
@@ -1588,18 +1568,24 @@ export interface User {
     created_at: string
     updated_at: string
 }
+----
 
-==== @file pages/users/[slug].vue
+=== @file pages/users/[slug].vue
 在动态路由中使用 slug
 
-===== template
+==== template
+[source,typescript]
+----
 <template lang="pug">
 ul
     li(v-for="item in user" :key="index")
         | {{ item }}
 </template>
+----
 
-===== script
+==== script
+[source,typescript]
+----
 <script setup lang="ts">
 
 const route = useRoute();
@@ -1610,8 +1596,13 @@ const slug = route.params.slug;
 const { data: user } = await useFetch(`/api/users/${slug}`);
 
 </script>
+----
 
-==== @file server/api/users/[slug].get.ts
+=== @file server/api/users/[slug].get.ts
+http :3000/api/users/user1-b53304f3
+
+[source,typescript]
+----
 // get user by slug
 import type { User } from '~/types/user'
 
@@ -1627,10 +1618,11 @@ export default defineEventHandler(async (event) => {
     }
     return user;
 });
+----
 
-http :3000/api/users/user1-b53304f3
-
-==== @file server/api/users/index.post.ts
+=== @file server/api/users/index.post.ts
+[source,typescript]
+----
 // Add slug and hash password when create user
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
@@ -1655,7 +1647,7 @@ export default defineEventHandler(async (event) => {
 
     return user[0];
 });
-
+----
 
 const now = db.fn.now();  // 使用数据库当前时间，但是格式与 ISOString 不一样，但仍然是 UTC 时间。
 
@@ -1663,7 +1655,11 @@ http POST :3000/api/users username=Swot password=123
 
 http --offline POST :3000/api/users username=Swot password=123
 
-==== @file server/api/users/id/[id].put.ts
+=== @file server/api/users/id/[id].put.ts
+http put :3000/api/users/id/5 username=swotpp
+
+[source,typescript]
+----
 // 更新用户，如果没有 slug 则增加 slug
 // 此路由多加了一个 /id/，就是为了 /api/users/[slug].get.ts 区分开
 
@@ -1709,10 +1705,11 @@ export default defineEventHandler(async (event) => {
 
     return updatedUser[0];
 });
+----
 
-http put :3000/api/users/id/5 username=swotpp
-
-==== @file server/api/users/generate-missing-slugs.post.ts
+=== @file server/api/users/generate-missing-slugs.post.ts
+[source,typescript]
+----
 // Add slug for all users
 import { v4 as uuidv4 } from 'uuid'
 import type { User } from '~/types/user'
@@ -1756,6 +1753,7 @@ export default defineEventHandler(async (event) => {
         })
     }
 })
+----
 
 值得注意的是，虽然这个 api 不接收请求体数据，但它确实修改了数据库状态。
 
@@ -1765,14 +1763,17 @@ GET 请求应该是幂等的（多次调用不会产生不同结果）。
 
 因此，尽管技术上可以使用 GET，但保持为 POST 可能更符合 API 设计最佳实践，因为这个操作会修改数据库状态。
 
-==== @file server/api/users/index.get.ts
+=== @file server/api/users/index.get.ts
+http :3000/api/users
+
+[source,typescript]
+----
 // 比如你想查询 `users` 表：
 export default defineEventHandler(async (event) => {
     const users = await db<User>('users').select('*')
     return users
 })
-
-http :3000/api/users
+----
 
 == @path nuxt3-server
 Add worktree nuxt3-server
