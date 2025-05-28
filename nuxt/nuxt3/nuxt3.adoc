@@ -44,6 +44,7 @@ packages:
   - 'nuxt3-sqlite'
   - 'nuxt3-slug'
   - 'nuxt3-server'
+  - 'nuxt3-i18n'
 
 ----
 
@@ -2101,4 +2102,160 @@ date: Wed, 28 May 2025 07:04:59 GMT
     "message": "Form data received"
 }
 ....
+
+== @path nuxt3-i18n
+Add worktree nuxt3-i18n
+
+    cd nuxt3-basic
+    git worktree add -b nuxt3-i18n ../nuxt3-i18n origin/nuxt3-layout
+    // 修改之后提交代码
+    git push -u origin nuxt3-i18n
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-i18n
+
+Install i18n
+
+    cd nuxt3-i18n
+    pnpm add @nuxtjs/i18n
+
+=== @file nuxt.config.ts
+[source,javascript,]
+----
+// https://nuxt.com/docs/api/configuration/nuxt-config
+export default defineNuxtConfig({
+    compatibilityDate: '2025-05-15',
+    devtools: { enabled: true },
+
+    modules: [
+      '@nuxt/icon',
+      '@nuxt/image',
+      '@nuxt/scripts',
+      '@nuxt/ui',
+      '@nuxt/fonts',
+      '@nuxt/eslint',
+      '@nuxtjs/i18n',  // new
+    ],
+    @others
+});
+----
+
+==== 1 关闭默认的 google 访问设置
+[source,javascript,]
+----
+/* 因为默认会使用 google 的字体和图标，
+   但是 node.js 不会走代理，可能访问不到 google 网站
+*/
+
+// @nuxt/fonts 不使用 google fonts
+fonts: {
+    provider: 'none', // 禁用默认字体提供商（如 Google Fonts）
+},
+
+// Nuxt UI 就不会再尝试加载 Google Fonts
+ui: {
+    fonts: false
+},
+----
+
+==== 2 i18n
+[source,typescript]
+----
+i18n: {
+    defaultLocale: 'en',
+    locales: [
+        { code: 'en', name: 'English', file: 'en.json' },
+        { code: 'zh', name: '中文',     file: 'zh.json' },
+        { code: 'ru', name: 'русский язык', file: 'ru.json' }
+    ],
+    bundle: {
+        optimizeTranslationDirective: false
+    }
+},
+----
+
+=== @file pages/i18n-test-1.vue
+
+
+==== template
+[source,typescript]
+----
+<template lang="pug">
+div
+    button(
+        v-for="locale in locales"
+        class="i18n-button"
+        @click="setLocale(locale.code)"
+    )
+        | {{ locale.name }}
+
+    h1
+        | {{ $t('welcome') }}
+
+    div
+        //- 方式一：使用相对路径
+        NuxtLink(to="about") about1 | 
+        //- 方式二：使用绝对路径
+        NuxtLink(:to="localePath('/about')") about2
+    hr
+    div 详细内容参: 
+        a(href="https://i18n.nuxtjs.org/docs/getting-started/usage")
+            | https://i18n.nuxtjs.org/docs/getting-started/usage
+    div 参考版本为: v9.5.1
+</template>
+----
+
+==== script
+[source,typescript]
+----
+<script setup lang="ts">
+    const { locales, setLocale } = useI18n();
+    const localePath = useLocalePath();
+</script>
+----
+
+==== style
+[source,scss]
+----
+<style lang="scss" scoped>
+
+.i18n-button {
+    margin-right: 5px;
+}
+
+</style>
+----
+
+=== @file pages/about.vue
+
+
+==== template
+[source,typescript]
+----
+<template lang="pug">
+div About Page
+</template>
+----
+
+==== script
+[source,typescript]
+----
+<script setup lang="ts">
+
+</script>
+----
+
+=== @edit i18n/locales/en.json
+{
+    "welcome": "Welcome"
+}
+
+=== @edit i18n/locales/zh.json
+{
+    "welcome": "欢迎"
+}
+
+=== @edit i18n/locales/ru.json
+{
+    "welcome": "Добро пожаловать"
+}
 

@@ -218,6 +218,14 @@
 </v>
 </v>
 </v>
+<v t="swot.20250528182428.1"><vh>@path nuxt3-i18n</vh>
+<v t="swot.20250528191054.1"><vh>@file nuxt.config.ts</vh></v>
+<v t="swot.20250528193211.1"><vh>@file pages/i18n-test-1.vue</vh></v>
+<v t="swot.20250528213504.2"><vh>@file pages/about.vue</vh></v>
+<v t="swot.20250528182428.9"><vh>@edit i18n/locales/en.json</vh></v>
+<v t="swot.20250528182428.10"><vh>@edit i18n/locales/zh.json</vh></v>
+<v t="swot.20250528182428.11"><vh>@edit i18n/locales/ru.json</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -8561,6 +8569,20 @@ https://pugjs.org/api/getting-started.html
 安装 pug
 
     pnpm add -D pug
+</t>
+<t tx="swot.20250528182428.1">Add worktree nuxt3-i18n
+
+    cd nuxt3-basic
+    git worktree add -b nuxt3-i18n ../nuxt3-i18n origin/nuxt3-layout
+    // 修改之后提交代码
+    git push -u origin nuxt3-i18n
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-i18n
+
+Install i18n
+
+    cd nuxt3-i18n
+    pnpm add @nuxtjs/i18n
 </t>
 </tnodes>
 </leo_file>

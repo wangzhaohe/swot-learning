@@ -741,6 +741,32 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
+<li><a href="#_path_nuxt3_i18n">@path nuxt3-i18n</a>
+<ul class="sectlevel2">
+<li><a href="#_file_nuxt_config_ts_7">@file nuxt.config.ts</a>
+<ul class="sectlevel3">
+<li><a href="#_1_关闭默认的_google_访问设置_7">1 关闭默认的 google 访问设置</a></li>
+<li><a href="#_2_i18n">2 i18n</a></li>
+</ul>
+</li>
+<li><a href="#_file_pagesi18n_test_1_vue">@file pages/i18n-test-1.vue</a>
+<ul class="sectlevel3">
+<li><a href="#_template_6">template</a></li>
+<li><a href="#_script_6">script</a></li>
+<li><a href="#_style">style</a></li>
+</ul>
+</li>
+<li><a href="#_file_pagesabout_vue">@file pages/about.vue</a>
+<ul class="sectlevel3">
+<li><a href="#_template_7">template</a></li>
+<li><a href="#_script_7">script</a></li>
+</ul>
+</li>
+<li><a href="#_edit_i18nlocalesen_json">@edit i18n/locales/en.json</a></li>
+<li><a href="#_edit_i18nlocaleszh_json">@edit i18n/locales/zh.json</a></li>
+<li><a href="#_edit_i18nlocalesru_json">@edit i18n/locales/ru.json</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -782,7 +808,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&#39;nuxt3-sitemap&#39;</span>
 <span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&#39;nuxt3-sqlite&#39;</span>
 <span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&#39;nuxt3-slug&#39;</span>
-<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&#39;nuxt3-server&#39;</span></code></pre>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&#39;nuxt3-server&#39;</span>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&#39;nuxt3-i18n&#39;</span></code></pre>
 </div>
 </div>
 </div>
@@ -3320,10 +3347,204 @@ date: Wed, 28 May 2025 07:04:59 GMT
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_path_nuxt3_i18n">@path nuxt3-i18n</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add worktree nuxt3-i18n</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>cd nuxt3-basic
+git worktree add -b nuxt3-i18n ../nuxt3-i18n origin/nuxt3-layout
+// 修改之后提交代码
+git push -u origin nuxt3-i18n</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-i18n" class="bare">https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-i18n</a></p>
+</div>
+<div class="paragraph">
+<p>Install i18n</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>cd nuxt3-i18n
+pnpm add @nuxtjs/i18n</pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_nuxt_config_ts_7">@file nuxt.config.ts</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// https://nuxt.com/docs/api/configuration/nuxt-config</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineNuxtConfig</span><span class="tok-p">({</span>
+<span class="tok-w">    </span><span class="tok-nx">compatibilityDate</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;2025-05-15&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">devtools</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">enabled</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-w"> </span><span class="tok-p">},</span>
+
+<span class="tok-w">    </span><span class="tok-nx">modules</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">[</span>
+<span class="tok-w">      </span><span class="tok-s1">&#39;@nuxt/icon&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-s1">&#39;@nuxt/image&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-s1">&#39;@nuxt/scripts&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-s1">&#39;@nuxt/ui&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-s1">&#39;@nuxt/fonts&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-s1">&#39;@nuxt/eslint&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-s1">&#39;@nuxtjs/i18n&#39;</span><span class="tok-p">,</span><span class="tok-w">  </span><span class="tok-c1">// new</span>
+<span class="tok-w">    </span><span class="tok-p">],</span>
+<span class="tok-w">    </span><span class="tok-err">@</span><span class="tok-nx">others</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_1_关闭默认的_google_访问设置_7">1 关闭默认的 google 访问设置</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/* 因为默认会使用 google 的字体和图标，</span>
+<span class="tok-cm">   但是 node.js 不会走代理，可能访问不到 google 网站</span>
+<span class="tok-cm">*/</span>
+
+<span class="tok-c1">// @nuxt/fonts 不使用 google fonts</span>
+<span class="tok-nx">fonts</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">provider</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;none&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-c1">// 禁用默认字体提供商（如 Google Fonts）</span>
+<span class="tok-p">},</span>
+
+<span class="tok-c1">// Nuxt UI 就不会再尝试加载 Google Fonts</span>
+<span class="tok-nx">ui</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">fonts</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">false</span>
+<span class="tok-p">},</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_i18n">2 i18n</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-nx">i18n</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">defaultLocale</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;en&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">locales</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">[</span>
+<span class="tok-w">        </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">code</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;en&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;English&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">file</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;en.json&#39;</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">code</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;zh&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;中文&#39;</span><span class="tok-p">,</span><span class="tok-w">     </span><span class="tok-nx">file</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;zh.json&#39;</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">code</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;ru&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;русский язык&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">file</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;ru.json&#39;</span><span class="tok-w"> </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">],</span>
+<span class="tok-w">    </span><span class="tok-nx">bundle</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">optimizeTranslationDirective</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">false</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">},</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_pagesi18n_test_1_vue">@file pages/i18n-test-1.vue</h3>
+<div class="sect3">
+<h4 id="_template_6">template</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">template</span><span class="tok-w"> </span><span class="tok-nx">lang</span><span class="tok-o">=</span><span class="tok-s2">&quot;pug&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-nx">div</span>
+<span class="tok-w">    </span><span class="tok-nx">button</span><span class="tok-p">(</span>
+<span class="tok-w">        </span><span class="tok-nx">v</span><span class="tok-o">-</span><span class="tok-k">for</span><span class="tok-o">=</span><span class="tok-s2">&quot;locale in locales&quot;</span>
+<span class="tok-w">        </span><span class="tok-kd">class</span><span class="tok-o">=</span><span class="tok-s2">&quot;i18n-button&quot;</span>
+<span class="tok-w">        </span><span class="tok-kd">@click</span><span class="tok-o">=</span><span class="tok-s2">&quot;setLocale(locale.code)&quot;</span>
+<span class="tok-w">    </span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{{</span><span class="tok-w"> </span><span class="tok-nx">locale</span><span class="tok-p">.</span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-p">}}</span>
+
+<span class="tok-w">    </span><span class="tok-nx">h1</span>
+<span class="tok-w">        </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{{</span><span class="tok-w"> </span><span class="tok-nx">$t</span><span class="tok-p">(</span><span class="tok-s1">&#39;welcome&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">}}</span>
+
+<span class="tok-w">    </span><span class="tok-nx">div</span>
+<span class="tok-w">        </span><span class="tok-c1">//- 方式一：使用相对路径</span>
+<span class="tok-w">        </span><span class="tok-nx">NuxtLink</span><span class="tok-p">(</span><span class="tok-nx">to</span><span class="tok-o">=</span><span class="tok-s2">&quot;about&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-nx">about1</span><span class="tok-w"> </span><span class="tok-o">|</span>
+<span class="tok-w">        </span><span class="tok-c1">//- 方式二：使用绝对路径</span>
+<span class="tok-w">        </span><span class="tok-nx">NuxtLink</span><span class="tok-p">(</span><span class="tok-o">:</span><span class="tok-nx">to</span><span class="tok-o">=</span><span class="tok-s2">&quot;localePath(&#39;/about&#39;)&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-nx">about2</span>
+<span class="tok-w">    </span><span class="tok-nx">hr</span>
+<span class="tok-w">    </span><span class="tok-nx">div</span><span class="tok-w"> </span><span class="tok-nx">详细内容参</span><span class="tok-o">:</span>
+<span class="tok-w">        </span><span class="tok-kt">a</span><span class="tok-p">(</span><span class="tok-nx">href</span><span class="tok-o">=</span><span class="tok-s2">&quot;https://i18n.nuxtjs.org/docs/getting-started/usage&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">https</span><span class="tok-o">:</span><span class="tok-c1">//i18n.nuxtjs.org/docs/getting-started/usage</span>
+<span class="tok-w">    </span><span class="tok-nx">div</span><span class="tok-w"> </span><span class="tok-nx">参考版本为</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">v9.5.1</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/template&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_script_6">script</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-w"> </span><span class="tok-nx">setup</span><span class="tok-w"> </span><span class="tok-nx">lang</span><span class="tok-o">=</span><span class="tok-s2">&quot;ts&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">locales</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">setLocale</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useI18n</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">localePath</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useLocalePath</span><span class="tok-p">();</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_style">style</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">style</span><span class="tok-w"> </span><span class="tok-nt">lang</span><span class="tok-o">=</span><span class="tok-s2">&quot;scss&quot;</span><span class="tok-w"> </span><span class="tok-nt">scoped</span><span class="tok-o">&gt;</span>
+
+<span class="tok-nc">.i18n-button</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">margin-right</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">5px</span><span class="tok-o">;</span>
+<span class="tok-p">}</span>
+
+<span class="tok-o">&lt;/</span><span class="tok-nt">style</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_pagesabout_vue">@file pages/about.vue</h3>
+<div class="sect3">
+<h4 id="_template_7">template</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">template</span><span class="tok-w"> </span><span class="tok-nx">lang</span><span class="tok-o">=</span><span class="tok-s2">&quot;pug&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-nx">div</span><span class="tok-w"> </span><span class="tok-nx">About</span><span class="tok-w"> </span><span class="tok-nx">Page</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/template&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_script_7">script</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-w"> </span><span class="tok-nx">setup</span><span class="tok-w"> </span><span class="tok-nx">lang</span><span class="tok-o">=</span><span class="tok-s2">&quot;ts&quot;</span><span class="tok-o">&gt;</span>
+
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_edit_i18nlocalesen_json">@edit i18n/locales/en.json</h3>
+<div class="paragraph">
+<p>{
+    "welcome": "Welcome"
+}</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_edit_i18nlocaleszh_json">@edit i18n/locales/zh.json</h3>
+<div class="paragraph">
+<p>{
+    "welcome": "欢迎"
+}</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_edit_i18nlocalesru_json">@edit i18n/locales/ru.json</h3>
+<div class="paragraph">
+<p>{
+    "welcome": "Добро пожаловать"
+}</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-28 17:34:43 +0800
+Last updated 2025-05-28 21:42:22 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
