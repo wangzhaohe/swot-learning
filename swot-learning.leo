@@ -8309,9 +8309,7 @@ http --offline --print=HB POST https://example.com/api name=ChatGPT
 <t tx="swot.20250528090941.1">Add worktree nuxt3-server
 
     cd nuxt3-basic
-
     git worktree add -b nuxt3-server ../nuxt3-server origin/main
-
     // 修改之后提交代码
     git push -u origin nuxt3-server
 </t>
