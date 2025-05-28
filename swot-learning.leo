@@ -7710,9 +7710,7 @@ image::img/alibaba_puhui.png[,960]
 <t tx="swot.20250523083936.1">Add worktree nuxt3-component
 
     cd nuxt3-basic
-
     git worktree add -b nuxt3-component ../nuxt3-component origin/nuxt3-tailwindcss
-
     // 修改之后提交代码
     git push -u origin nuxt3-component
 </t>
