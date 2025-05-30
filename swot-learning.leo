@@ -8750,7 +8750,7 @@ Install casl
 }
 </t>
 <t tx="swot.20250530111037.1">@language asciidoc
-[plantuml, target=img/diagram-datetimExample, format=svg]
+[plantuml, target=img/diagram-2025-05-30-233449, format=svg]
 ....
 @startuml
 skinparam componentStyle rectangle
