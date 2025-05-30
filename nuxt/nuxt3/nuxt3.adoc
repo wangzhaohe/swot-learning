@@ -45,6 +45,7 @@ packages:
   - 'nuxt3-slug'
   - 'nuxt3-server'
   - 'nuxt3-i18n'
+  - 'nuxt3-casl'
 
 ----
 
@@ -2258,4 +2259,934 @@ div About Page
 {
     "welcome": "Добро пожаловать"
 }
+
+== @path nuxt3-casl
+Add worktree nuxt3-casl
+
+    cd nuxt3-slug
+    git worktree add -b nuxt3-casl ../nuxt3-casl origin/nuxt3-slug
+    // 修改之后提交代码
+    git push -u origin nuxt3-casl
+
+https://github.com/wangzhaohe/nuxt3-basic/tree/nuxt3-casl
+
+Install casl
+
+    cd nuxt3-casl
+    pnpm add @casl/ability
+
+=== Roles with persisted permissions
+原始文档: https://casl.js.org/v6/en/cookbook/roles-with-persisted-permissions
+
+原始代码: https://github.com/stalniy/casl-persisted-permissions-example
+
+TIP: github 例子好久没有更新了，自己更新了一下。
+
+* 后端的 RBAC(Role based access control) 实现，不同角色的多用户登录后使用。
+
+* 在这篇文章中，使用 knex 操作数据库，很棒的库！
+
+=== Authentication & Authorization 函数调用组件图
+[plantuml, target=img/diagram-datetimExample, format=svg]
+....
+@startuml
+skinparam componentStyle rectangle
+
+database "sqlite3" {
+  frame "roles" {
+    [permissions]
+  }
+}
+
+actor Browser
+
+package "shared" {
+    [utils/appAbility.ts]
+}
+
+package "Frontend (Nuxt3)" {
+  package "pages" {
+    [login.vue]
+    note left of [login.vue]
+      const form = reactive({
+        username: "wzh",
+        password: "123",
+      });
+    end note
+  }
+  package "composables" {
+    [stores.ts]
+    [clientFetch.ts]
+  }
+  package "middleware" {
+    [auth-middleware]
+  }
+}
+
+package "Backend (Server API)" {
+    package "api" {
+      [login.post.ts]
+      [users/index.post.ts]
+    }
+    package "utils" {
+      [agordo.ts]
+      [permissions.ts]
+    }
+    [middleware/auth.ts]
+}
+
+Browser --> [auth-middleware] : submit \n login form
+[auth-middleware] --> [login.vue]
+[login.vue] --> [stores.ts] : authenticateUser(form)
+
+[clientFetch.ts] --> [stores.ts] : { token } =\n useAuthStore()
+[stores.ts] --> [clientFetch.ts] : clientFetch()
+[clientFetch.ts] --> [middleware/auth.ts]
+
+[middleware/auth.ts] ..> [agordo.ts]: need_token?
+[middleware/auth.ts] --> [login.post.ts] : need_token\nfalse
+[middleware/auth.ts] --> [users/index.post.ts] : need_token true \n ability
+[stores.ts] ..> Browser : auto \n persist save
+[stores.ts] <.. Browser : auto \n persist read
+
+[users/index.post.ts] ..> [permissions.ts] : checkPermission\n(ability,action,subject)
+[middleware/auth.ts] ..> [permissions] : user.permissions
+[middleware/auth.ts] ..> [utils/appAbility.ts] : createAbility
+@enduml
+....
+
+=== pnpm 基本命令
+[source,console]
+----
+// 安装包
+pnpm i
+
+// 查看迁移状态
+pnpm run migration.status
+    or
+knex migrate:status
+----
+
+.result
+....
+Using environment: development
+Found 2 Completed Migration file/files.
+20250527164201_create_users_table.js
+20250527190502_add_slug_to_users.js
+Found 4 Pending Migration file/files.
+20250528222910_create_roles_table.js
+20250528222920_change_users_table.js
+20250528222930_create_articles_table.js
+20250528222940_add_status_to_users.js
+....
+
+NOTE: 有未迁移的文件，执行 `pnpm run migrate` 即可
+
+[source,console]
+----
+// 生成迁移文件: 注意新版本 knex 生成 ES6 语法代码，与现在的例子一样了
+pnpm run migration.new your-table-name
+    or
+knex migrate:make your-table-name
+
+// 生成数据库表
+pnpm run migrate
+    or
+knex migrate:latest
+
+// 生成种子文件、生成数据库表数据
+pnpm run seed.new
+    or
+knex seed:make
+
+pnpm run seed
+    or
+knex seed:run
+
+// 执行程序
+pnpm run start
+    or
+ts-node src/run.ts
+
+// 允许普通用户创建管理员级别的文章
+pnpm run allowMembersToCreateAnyArticle
+    or
+ts-node src/updateMemberRole.ts
+
+// 运行验证一下
+pnpm run start
+    or
+ts-node src/run.ts
+----
+
+=== 数据库迁移文件以及初始数据
+
+
+==== @file migrations/20250527164201_create_users_table.js
+[source,typescript]
+----
+export const up = function(knex) {
+    return knex.schema.createTable('users', (table) => {
+        table.increments('id').primary()
+        table.string('username').notNullable().unique()
+        table.string('password').notNullable()
+        table.timestamps()  // 自动创建 `created_at` 和 `updated_at`
+    })
+};
+
+export const down = function(knex) {
+	  return knex.schema.dropTable('users')
+};
+----
+
+执行 knex migrate:latest
+
+table.timestamps() 会在数据库中生成字段：
+
+    created_at DATETIME
+    updated_at DATETIME
+
+==== @file migrations/20250527190502_add_slug_to_users.js
+[source,typescript]
+----
+export const up = function(knex) {
+    return knex.schema.table('users', (table) => {
+        table.string('slug').unique();  // 添加 slug 字段并设置唯一
+    });
+};
+
+export const down = function(knex) {
+    return knex.schema.table('users', (table) => {
+        table.dropColumn('slug');  // 回滚时移除
+    });
+};
+----
+
+==== @file migrations/20250528222910_create_roles_table.js
+[source,typescript]
+----
+export const up = function(knex) {
+    return knex.schema
+        .createTable('roles', (table) => {        // roloj
+            table.increments('id');
+            table.string('name', 255).notNullable();
+            table.json('permissions').notNullable();
+        });
+};
+
+export const down = function(knex) {
+    return knex.schema.dropTable('roles');
+};
+----
+
+[source,console]
+----
+pnpm run migrate 映射了下面的命令，参 package.json
+knex migrate:latest 功能同上
+
+knex migrate:rollback  # 回滚最后一次迁移
+knex migrate:rollback --all  # 回滚所有迁移（慎用！）
+----
+
+==== @file migrations/20250528222920_change_users_table.js
+[source,typescript]
+----
+export const up = function(knex) {
+    return knex.schema.table('users', (table) => {
+        table.integer('roleId').unsigned();  // roleId 默认无值
+        table.foreign('roleId').references('id').inTable('roles');
+    });
+};
+
+export const down = function(knex) {
+    return knex.schema.table('users', (table) => {
+        table.dropForeign('roleId'); // 先移除外键
+        table.dropColumn('roleId');  // 再删除字段
+    });
+};
+----
+
+[source,console]
+----
+pnpm run migrate 映射了下面的命令，参 package.json
+knex migrate:latest 功能同上
+
+knex migrate:rollback  # 回滚最后一次迁移
+knex migrate:rollback --all  # 回滚所有迁移（慎用！）
+----
+
+==== @file migrations/20250528222930_create_articles_table.js
+[source,typescript]
+----
+export const up = function(knex) {
+    return knex.schema
+        .createTable('articles', (table) => {     // artikoloj
+            table.increments('id');
+            table.string('title', 255).notNullable();
+            table.string('description').notNullable();
+            table.integer('authorId').unsigned().notNullable();
+
+            table.foreign('authorId').references('id').inTable('users');
+        });
+};
+
+export const down = function(knex) {
+    return knex.schema.dropTable('articles');
+};
+----
+
+==== @file migrations/20250528222940_add_status_to_users.js
+[source,typescript]
+----
+export const up = function(knex) {
+    return knex.schema.table('users', (table) => {
+        // 增加是否启用字段 status，默认值为 active
+        // table.enu('status', ['active', 'inactive'])
+             // .defaultTo('active'); // sqlite3 不支持 enum
+        table.string('status')
+             .defaultTo('active')
+             .checkIn(['active', 'inactive']);
+    });
+};
+
+export const down = function(knex) {
+    return knex.schema.table('users', (table) => {
+        table.dropColumn('status');  // 回滚时移除 status 字段
+    });
+};
+
+// knex migrate:latest
+----
+
+==== @file data/seeds/01_roles_users_articles.js
+[source,typescript]
+----
+import bcrypt from 'bcryptjs';
+
+export async function seed(knex) {
+    @others
+};
+----
+
+生成种子文件:
+
+  pnpm run seed.new 02_roles_users_articles
+  对应命令为:
+  knex seed:make 02_roles_users_articles
+
+执行种子文件:
+
+  pnpm run seed  // 执行所有种子文件们
+  pnpm run seed --specific 02_roles_users_articles.js  // 执行特定种子文件
+  knex seed:run --specific 02_roles_users_articles.js  // 同上
+
+===== delete data
+[source,typescript]
+----
+await Promise.all([
+    knex('articles').del(),  // articles use users
+    knex('users').del(),     // users use roles
+    knex('roles').del()      // so roles last deleted
+]);
+----
+
+Delete data from users & roles & articles tables.
+
+NOTE: 这个要看实际应用了，追加数据则不用 del 表中的内容。
+
+===== insert roles data
+[source,typescript]
+----
+await knex('roles').insert([
+    {
+        id: 1,                         // <1>
+        name: 'admin',  // 超级管理员
+        permissions: JSON.stringify([  // <2>
+            { action: 'manage', subject: 'all' }
+        ])
+    },
+    {
+        id: 2,                         // <1>
+        name: 'member',  // 会员用户
+        permissions: JSON.stringify([  // <2>
+            { action: 'read', subject: 'Article' },
+            { action: 'manage', subject: 'Article', conditions: { authorId: '${user.id}' }  // <3>
+            }
+        ])
+    },
+    {
+        id: 3,                         // <1>
+        name: 'normal',  // 普通用户
+        permissions: JSON.stringify([  // <2>
+            { action: 'read', subject: 'Article' }
+        ])
+    }
+])
+----
+
+<1> 上面代码不指定 id 也是可以的，但是下面的代码在插入用户时使用了指定死的 roleId。所以这里还是指定 user 的 id 为 1 和 2 为好，以免数据库自增 id 后对应不上了。
+<2> permissions 为文本字符串
+<3> 怎么解释这个模板字符串？ 后面有源码
+
+===== insert users data
+[source,typescript]
+----
+// const now = new Date().toISOString();  // 使用服务器当前时间
+const now = knex.fn.now();                // 使用数据库当前时间
+const hashedPassword = await bcrypt.hash("123456", 10);
+
+await knex('users').insert([
+    { id: 1, username: 'admin' , password: hashedPassword, created_at: now, updated_at: now, roleId: 1 },
+    { id: 2, username: 'author', password: hashedPassword, created_at: now, updated_at: now, roleId: 2 },
+    { id: 3, username: 'swot'  , password: hashedPassword, created_at: now, updated_at: now, roleId: 3 },
+]);
+----
+
+上面代码不指定 id 也是可以的。因为表 users id 是自增的。
+
+===== articles 的数据在下面的代码中插入
+
+
+=== 前后端共享工具和类型
+
+
+==== @file shared/utils/appAbility.ts
+[source,typescript]
+----
+import { createMongoAbility, type MongoAbility, type RawRuleOf, type ForcedSubject } from '@casl/ability'
+
+export const actions = [ 'manage', 'create', 'read', 'update', 'delete' ] as const  // <1>
+export const subjects = [ 'Article', 'User', 'all'] as const     // <1>
+
+export type Abilities = [
+    typeof actions[number],
+    typeof subjects[number] | ForcedSubject<Exclude<typeof subjects[number], 'all'>>
+];
+
+export type AppAbility = MongoAbility<Abilities>
+
+// 前面都是铺垫哈，这才是创建能力的函数
+export const createAbility = (rules: RawRuleOf<AppAbility>[]) => createMongoAbility<AppAbility>(rules);
+
+----
+
+<1> 目前 actions & subjects 是写死在程序里的，有必要在数据库中创建表写成活的吗？
+
+===== Questions
+. 后面的 as const 是为了让 TypeScript 知道这些是固定值（不是普通字符串数组）。
+  * 不写 as const 会怎么样？
+    ** 写了可以在后面直接定下来具体类型
+
+. import { createMongoAbility, MongoAbility, RawRuleOf, ForcedSubject } from '@casl/ability';
+  * 用的是 sqlite3 database，为什么这里是 Mongo?
+    ** 意思是支持 mongo 那样的语法查询
+
+. 不使用 ts 就没有这么麻烦了吧？
+  * 对吗？
+    ** 对的
+
+. 具体解释一下这个类型
+  * 直接定义范围
+
+    export type Abilities = [
+      typeof actions[number],
+      typeof subjects[number] | ForcedSubject<...>
+    ];
+
+. export type AppAbility = MongoAbility<Abilities>
+  * 这又是干啥的？
+    ** 定义个类型拥有 MongoAbility 的功能
+
+==== @file shared/types/user.d.ts
+[source,typescript]
+----
+import type { RawRuleOf } from '@casl/ability';
+import type { AppAbility } from '../utils/appAbility';
+
+export interface User {
+    id         : number;
+    username   : string;
+    password   : string;
+    created_at : string;
+    updated_at : string;
+    slug       : string;
+    roleId     : string;                   // new added
+    permissions: RawRuleOf<AppAbility>[];  // new added
+}
+----
+
+permissions: RawRuleOf<AppAbility>[] -> users 表中没有 permissions 字段，不要去对应表字段。
+
+在后端服务中会用到此处定义的接口
+
+=== 后端工具
+
+
+==== @file server/utils/findUserBy.ts
+[source,typescript]
+----
+export async function findUserBy(where: Partial<Record<keyof User, any>>)
+                                            : Promise<User | undefined> {
+    const result = await db<User>('users')  // <1>
+        .innerJoin('roles', 'users.roleId', 'roles.id')
+        .select('users.id', 'users.username', 'roles.permissions', { role: 'roles.name' })  // <2>
+        .where(function () {
+            for (const key in where) {
+                this.andWhere(
+                    `users.${key}`,
+                    where[key as keyof typeof where]
+                )
+            }
+        })
+        .first()
+
+    if (!result) {
+        return undefined
+    }
+    const { permissions, ...user } = result  // <1>
+    console.log('2025-05-30-214139 user:', user);
+    user.permissions = interpolate(permissions, { user })   // <3>
+
+    return user
+}
+----
+
+<1> 将 permissions 单独提出来（后面要用），其它值放入 user 对象中。
++
+* [red]##此处还需要理解一下 db<User>('users') 是如被调用的？？？##
+
+<2> 将 name 重命名为 role，这样返回的值不会被误认为是 user.name（但实际上也没有 user.name）
++
+* 注意不要选择 password 字段
+
+<3> 返回的 user 中有增加 user.permissions，所以 User interface 中增加了 permissions
++
+* 注意 user 表中（不是 User interface）只有 id/email/role/password 4 个字段。
+
+==== @file server/utils/interpolate.ts
+[source,typescript]
+----
+import get from 'lodash/get'
+
+export default (template: string, vars: object) => {
+
+    return JSON.parse(template, (_, rawValue) => {  // 忽略 key，用 _ 代替
+
+        if (rawValue[0] !== '$')
+            return rawValue
+
+        const name = rawValue.slice(2, -1)  // ${user.id} -> user.id
+        const value = get(vars, name)
+
+        if (typeof value === 'undefined')
+            throw new ReferenceError(`Variable ${name} is not defined`)
+
+        return value
+    });
+};
+----
+
+该函数只是个模板字符串的替换函数，在 JSON.parse 函数中从左到右，从里到外，一层一层进行判断。
+
+==== @file server/utils/permissions.ts
+[source,typescript]
+----
+import type { AnyAbility, SubjectType } from '@casl/ability';
+import { ForbiddenError } from '@casl/ability';
+
+export function checkPermission(ability: AnyAbility,
+                                action: typeof actions[number],
+                                subject: SubjectType) {
+    if (!actions.includes(action)) {  // 运行时校验 action 是否在允许范围
+        throw createError({ statusCode: 400, statusMessage: `Unknown action: ${action}`});
+    }
+    try {
+        ForbiddenError.from(ability).throwUnlessCan(action, subject);
+    }
+    catch (error) {
+        if (error instanceof ForbiddenError) {
+            const subjectType = typeof subject === 'string' ? subject : subject.constructor.name;
+            throw createError({ statusCode: 403, statusMessage: `Forbidden: Cannot ${action} on ${subjectType}`});
+        }
+        throw error;  // if not ForbiddenError then throw it.
+    }
+}
+----
+
+==== @file server/utils/agordo.ts
+[source,typescript]
+----
+export default {
+    /*
+    << 创建JWT安全秘钥 >>
+    */
+
+    // 应该考虑将重要的配置用系统变量来保存
+    jwtSecretKey: 'lS4SOQtSSo1PXKcVgtH1',  // 前面使用 python 创建的密钥
+
+    // 不需要进行 token 验证的 url，因为匹配第一个就会停止，所以大范围的 url 往后放
+    URL_WHITE_LIST: [
+        "/api/auth/login",
+        // "/api/_content/",   // pnpm run build 时会测试服务器，之前安装了 content 模块导致的
+        // "/api/uploads?action=config&&noCache=",     // UEditor 获取配置
+    ]
+};
+----
+
+===== << 创建JWT安全秘钥 >>
+[source,python]
+----
+import secrets
+secret_key = secrets.token_urlsafe(15)
+print("Generated JWT Secret Key:", secret_key)
+
+# 生成一个长度为 20 的 URL 安全密钥
+# token_urlsafe 的长度是基于字节的，每 3 个字节生成 4 个字符，加上可能的填充字符
+# 为了确保长度为 20，可以指定字节数，15 字节生成 20 个字符
+----
+
+比如结果为：lS4SOQtSSo1PXKcVgtH1
+
+=== 后端中间件
+
+
+==== @file server/middleware/auth.ts
+[source,typescript]
+----
+import jwt from "jsonwebtoken";
+
+export default defineEventHandler(async (event) => {
+
+    let need_token = true;  // 默认所有 url 都需要检测 token
+
+    /* 发现此处功能强大：前后端的 url 都可以被截获 */
+    console.log('getRequestURL: ' + getRequestURL(event));  // 包含域名
+    const current_url = getRequestURL(event).pathname;
+
+    if (current_url.includes('/api/')) {  // 目前只判断后端 api 路由，前端路由先不判断
+        for (const url of agordo.URL_WHITE_LIST) {
+            if (current_url.includes(url)) {
+                need_token = false;
+                break;
+            }
+        }
+        if (need_token === true) {        // 验证 token 是否有效
+            @others
+        }
+    }
+})
+----
+
+server middleware 不用返回值，要么通过，要么抛出异常
+
+authorization: Bearer xxxxxx
+
+===== 1 !authorization -- Missing token
+[source,typescript]
+----
+const authorization = getRequestHeader(event, 'authorization');
+console.log('authorization:', authorization);
+
+if (!authorization || !authorization.startsWith('Bearer ')) {
+    throw createError({
+        statusCode: 401,
+        statusMessage: 'Missing token'
+    });
+}
+----
+
+===== 2 !userInfo      -- Invalid token
+[source,typescript]
+----
+let userInfo: any;
+try {
+    userInfo = jwt.verify(  // userInfo 是 JWT payload
+        authorization!.split('Bearer ')[1],
+        agordo.jwtSecretKey
+    );
+    console.log('userInfo:', userInfo);
+}
+catch (error) {  // 会被 composables/clientFetch.ts 捕获
+    console.log('2025-05-01 23:09:05 error:', error);
+    throw createError({
+        statusCode: 401,
+        statusMessage: 'Invalid token'
+    });
+}
+----
+
+===== 3 !roleId        -- ability = null
+[source,typescript]
+----
+if (!userInfo.roleId){
+    event.context.ability = null;
+}
+----
+
+===== 4 !user          -- user not found
+[source,typescript]
+----
+const user = await findUserBy({ id: userInfo.id });
+console.log('user:', user);
+
+if (!user) {
+    throw createError({
+        statusCode: 401,
+        statusMessage: 'User not found'
+    });
+}
+----
+
+===== 5 !ability       -- permissions error
+[source,typescript]
+----
+try {
+    const ability = createAbility(user!.permissions);
+    console.log('ability:', ability);
+    event.context.user = user;
+    event.context.ability = ability;
+}
+catch (error) {
+    console.log('2025-05-01 23:09:36 error:', error);
+    throw createError({
+        statusCode: 403,
+        statusMessage: 'Get permissions error'
+    });
+}
+----
+
+=== 后端 api
+
+
+==== @file server/api/auth/login.post.ts
+Use httpie test:
+
+    http :3000/api/auth/login nomo=admin pasvoto=123456
+    http :3000/api/auth/login nomo=author pasvoto=123456
+    http :3000/api/auth/login nomo=swot pasvoto=123456
+
+[source,typescript]
+----
+import z from "zod";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+interface IKorpo {  // I 指 interface
+    nomo    : string;
+    pasvorto: string;
+}
+
+export default defineEventHandler<{body: IKorpo}>(async (evento) => {
+
+    // 打印看下 contentType 是什么：兼容对象和 Headers 实例两种情况
+    let contentType: string | undefined;
+    if (typeof evento.headers.get === 'function') {
+        console.log('Using Headers.get() method');
+        contentType = evento.headers.get('content-type') || undefined;
+    } else {
+        contentType = (evento.headers['content-type'] as string) || undefined;
+    }
+    console.log('Content-Type:', contentType);
+
+    @others
+});
+----
+
+===== readBody
+[source,typescript]
+----
+const korpo = await readBody(evento);
+console.log('korpo:', korpo);
+----
+
+korpo 结构
+
+    korpo: {
+        nomo: 'admin',
+        pasvoto: 'xxxyyy'
+    }
+
+readBody 可自动处理 POST 请求中的：
+
+* x-www-form-urlencoded
+* json
+
+===== zodParse 400
+[source,typescript]
+----
+// 可以使用 zod 进行更加严格的校验
+const rezulto = z
+    .object({
+        nomo:    z.string().min(3),
+        pasvoto: z.string().min(3),
+    })
+    .safeParse(korpo);
+
+// 用户上传数据格式不正确
+if (!rezulto.success) {
+    throw createError({
+        statusCode: 400,
+        statusMessage: 'Bad request',
+    });
+}
+----
+
+rezulto 结构
+
+    rezulto: {
+        success: true,
+        data: {
+            nomo: 'admin',
+            pasvoto: '输入的密码'
+        }
+    }
+
+===== getUser 401
+[source,typescript]
+----
+const uzantoElektu = await db("users")
+     .where("username", rezulto.data.nomo)
+     .where("status", "active");  // 启用状态
+
+// 未找到用户
+if (!uzantoElektu.length) {
+    throw createError({
+        statusCode: 401,
+        statusMessage: 'User not found'
+    });
+}
+----
+
+===== check password 401
+[source,typescript]
+----
+const isMatch = await bcrypt.compare(
+    rezulto.data.pasvoto,
+    uzantoElektu[0].password
+);
+
+if (!isMatch) {
+    throw createError({
+        statusCode: 401,
+        statusMessage: 'Unauthorized'
+    });
+}
+----
+
+用 bcrypt.compare() 异步方法来对 明文密码 和 加密密码 进行比较的，这是 bcrypt 提供的标准用法。
+
+它会使用内部算法：
+
+1. 从加密后的密码中提取 盐值 和加密强度。
+2. 用这个盐值和用户输入的明文密码再次进行加密。
+3. 比较新加密的结果与原始加密密码是否一致。
+
+如果一致，返回 true，否则返回 false。
+
+===== create token
+[source,typescript]
+----
+const uzanto = {
+    ...uzantoElektu[0],
+    password: ''  // 去掉密码
+}
+
+const token = jwt.sign(
+    uzanto,
+    agordo.jwtSecretKey, {
+        expiresIn: '7d',
+        // expiresIn: '1m',  // only for test
+    }
+);
+----
+
+uzantoElektu 结构
+
+    uzantoElektu: [{
+        id: 1,
+        username: 'admin',
+        password: '$2a$10$mVE51pJNC3sR0gA6yR49U.X.vKCzQtwMCexsqRNC.yQTn9LXI00PW',
+        email: '',
+        roleId: 1,
+        avatar: null,
+        nickname: null,
+        introduction: null,
+        status: 1,
+        created_at: 2024-08-02T12:39:34.000Z,
+        updated_at: 2024-08-02T12:39:34.000Z
+    }]
+
+token Example
+
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsInBhc3N3b3JkIjoiIiwiZW1haWwiOiIiLCJyb2xlSWQiOjEsImF2YXRhciI6bnVsbCwibmlja25hbWUiOm51bGwsImludHJvZHVjdGlvbiI6bnVsbCwic3RhdHVzIjoxLCJjcmVhdGVkX2F0IjoiMjAyNC0wOC0wMlQxMjozOTozNC4wMDBaIiwidXBkYXRlZF9hdCI6IjIwMjQtMDgtMDJUMTI6Mzk6MzQuMDAwWiIsImlhdCI6MTc0MTg0OTM4MSwiZXhwIjoxNzQyNDU0MTgxfQ.tcmfoWOF-Ya0lfaa5GP2b-acbbAucMNfVcyvGbtMDeY
+
+===== return token
+[source,typescript]
+----
+return {
+    code: 0,
+    msg: 'Login successful',
+    data: {
+       ...uzanto,
+       token: 'Bearer ' + token
+    }
+};
+----
+
+==== @file server/api/users/index.get.ts
+test
+
+    http :3000/api/users Authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsInBhc3N3b3JkIjoiIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDUtMzAgMTI6MzY6NTQiLCJ1cGRhdGVkX2F0IjoiMjAyNS0wNS0zMCAxMjozNjo1NCIsInNsdWciOm51bGwsInJvbGVJZCI6MSwic3RhdHVzIjoiYWN0aXZlIiwiaWF0IjoxNzQ4NjA4OTE0LCJleHAiOjE3NDkyMTM3MTR9.abIsKVZAa1_2fRLaoYkMUH8SYkohKmujQxRK2sq6rEI"
+
+[source,typescript]
+----
+export default defineEventHandler(async (event) => {
+    const { ability } = event.context;
+    checkPermission(ability, 'read', 'User');    // 读表 Users 权限
+
+    const users = await db<User>('users').select('*');
+    return users;
+})
+----
+
+==== @file server/api/users/index.post.ts
+test
+
+    http POST :3000/api/users Authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsInBhc3N3b3JkIjoiIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDUtMzAgMTI6MzY6NTQiLCJ1cGRhdGVkX2F0IjoiMjAyNS0wNS0zMCAxMjozNjo1NCIsInNsdWciOm51bGwsInJvbGVJZCI6MSwic3RhdHVzIjoiYWN0aXZlIiwiaWF0IjoxNzQ4NjA4OTE0LCJleHAiOjE3NDkyMTM3MTR9.abIsKVZAa1_2fRLaoYkMUH8SYkohKmujQxRK2sq6rEI" username=river password=123456
+
+[source,typescript]
+----
+import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcryptjs';
+
+export default defineEventHandler(async (event) =>
+{
+    const { ability } = event.context;
+    checkPermission(ability, 'create', 'User');
+
+    const body = await readBody(event);
+    const hashedPassword = await bcrypt.hash(body.password, 10);
+    const slug = `${body.username.toLowerCase().replace(/\s+/g, '-')}-${(uuidv4()).substring(0,8)}`;
+    const role = await db('roles').select('id').where('name', 'normal').first();
+
+    if (!role)
+        throw createError({statusCode: 400,statusMessage: 'Role normal not found'});
+
+    const [user] = await db<User>('users')
+      .insert({
+          username: body.username,
+          password: hashedPassword,
+          slug,
+          roleId: role.id,
+          created_at: db.fn.now(),  // 使用数据库当前时间，虽格式与 ISOString 不同，但仍是 UTC 时间
+          updated_at: db.fn.now(),  // 所以需要注意显示格式的转换问题
+      })
+      .returning('*');  // if SQLite < 3.35，这一行不能用
+                        // SELECT SQLITE_VERSION();  查看版本: 3.45.3
+    return user;
+});
+----
+
+==== 此处您还可以写 Article 的 api，我省略了
+
 
