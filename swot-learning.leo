@@ -238,7 +238,9 @@
 <v t="swot.20250528223030.1"><vh>@file migrations/20250528222920_change_users_table.js</vh></v>
 <v t="swot.20250528223034.1"><vh>@file migrations/20250528222930_create_articles_table.js</vh></v>
 <v t="swot.20250528223039.1"><vh>@file migrations/20250528222940_add_status_to_users.js</vh></v>
-<v t="swot.20250528215755.7"><vh>@file data/seeds/01_roles_users_articles.js</vh></v>
+<v t="swot.20250528215755.7"><vh>@file data/seeds/000_delete_tables.js</vh></v>
+<v t="swot.20250531092450.1"><vh>@file data/seeds/100_users.js</vh></v>
+<v t="swot.20250531092921.1"><vh>@file data/seeds/101_roles.js</vh></v>
 </v>
 <v t="swot.20250530202305.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d333071077573732e"><vh>前后端共享工具和类型</vh>
 <v t="swot.20250528215755.12" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d333071077573732e"><vh>@file shared/utils/appAbility.ts</vh></v>
