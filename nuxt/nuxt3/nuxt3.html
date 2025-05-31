@@ -781,16 +781,16 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_migrations20250528222930_create_articles_table_js">@file migrations/20250528222930_create_articles_table.js</a></li>
 <li><a href="#_file_migrations20250528222940_add_status_to_users_js">@file migrations/20250528222940_add_status_to_users.js</a></li>
 <li><a href="#_file_dataseeds000_delete_tables_js">@file data/seeds/000_delete_tables.js</a></li>
-<li><a href="#_file_dataseeds100_users_js">@file data/seeds/100_users.js</a>
+<li><a href="#_file_dataseeds100_roles_js">@file data/seeds/100_roles.js</a>
 <ul class="sectlevel4">
 <li><a href="#_delete_data">delete data</a></li>
-<li><a href="#_insert_users_data">insert users data</a></li>
+<li><a href="#_insert_roles_data">insert roles data</a></li>
 </ul>
 </li>
-<li><a href="#_file_dataseeds101_roles_js">@file data/seeds/101_roles.js</a>
+<li><a href="#_file_dataseeds101_users_js">@file data/seeds/101_users.js</a>
 <ul class="sectlevel4">
 <li><a href="#_delete_data_2">delete data</a></li>
-<li><a href="#_insert_roles_data">insert roles data</a></li>
+<li><a href="#_insert_users_data">insert users data</a></li>
 </ul>
 </li>
 </ul>
@@ -4062,83 +4062,7 @@ knex seed:run --specific 000_delete_tables.js  // 同上</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_dataseeds100_users_js">@file data/seeds/100_users.js</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">bcrypt</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;bcryptjs&#39;</span><span class="tok-p">;</span>
-
-<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">seed</span><span class="tok-p">(</span><span class="tok-nx">knex</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">@others</span>
-<span class="tok-p">};</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>生成种子文件:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>pnpm run seed.new 02_roles_users_articles
-对应命令为:
-knex seed:make 02_roles_users_articles</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>执行种子文件:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>pnpm run seed  // 执行所有种子文件们
-pnpm run seed --specific 100_users.js  // 执行特定种子文件
-knex seed:run --specific 100_users.js  // 同上</pre>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_delete_data">delete data</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nb">Promise</span><span class="tok-p">.</span><span class="tok-nx">all</span><span class="tok-p">([</span>
-<span class="tok-w">    </span><span class="tok-nx">knex</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">del</span><span class="tok-p">(),</span><span class="tok-w">     </span><span class="tok-c1">// users use roles</span>
-<span class="tok-p">]);</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Delete data from users &amp; roles &amp; articles tables.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-这个要看实际应用了，追加数据则不用 del 表中的内容。
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_insert_users_data">insert users data</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-c1">// const now = new Date().toISOString();  // 使用服务器当前时间</span>
-<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">now</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">.</span><span class="tok-nx">fn</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">();</span><span class="tok-w">                </span><span class="tok-c1">// 使用数据库当前时间</span>
-<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">hashedPassword</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">bcrypt</span><span class="tok-p">.</span><span class="tok-nx">hash</span><span class="tok-p">(</span><span class="tok-s2">&quot;123456&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">);</span>
-
-<span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">insert</span><span class="tok-p">([</span>
-<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;admin&#39;</span><span class="tok-w"> </span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">hashedPassword</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">roleId</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">1</span><span class="tok-w"> </span><span class="tok-p">},</span>
-<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;author&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">hashedPassword</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">roleId</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">2</span><span class="tok-w"> </span><span class="tok-p">},</span>
-<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;swot&#39;</span><span class="tok-w">  </span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">hashedPassword</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">roleId</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">3</span><span class="tok-w"> </span><span class="tok-p">},</span>
-<span class="tok-p">]);</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>上面代码不指定 id 也是可以的。因为表 users id 是自增的。</p>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_file_dataseeds101_roles_js">@file data/seeds/101_roles.js</h4>
+<h4 id="_file_dataseeds100_roles_js">@file data/seeds/100_roles.js</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">bcrypt</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;bcryptjs&#39;</span><span class="tok-p">;</span>
@@ -4169,7 +4093,7 @@ knex seed:run --specific 101_roles.js  // 同上</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_delete_data_2">delete data</h5>
+<h5 id="_delete_data">delete data</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nb">Promise</span><span class="tok-p">.</span><span class="tok-nx">all</span><span class="tok-p">([</span>
@@ -4239,6 +4163,82 @@ knex seed:run --specific 101_roles.js  // 同上</pre>
 <td>怎么解释这个模板字符串？ 后面有源码</td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_dataseeds101_users_js">@file data/seeds/101_users.js</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">bcrypt</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;bcryptjs&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">seed</span><span class="tok-p">(</span><span class="tok-nx">knex</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">@others</span>
+<span class="tok-p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>生成种子文件:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>pnpm run seed.new 02_roles_users_articles
+对应命令为:
+knex seed:make 02_roles_users_articles</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>执行种子文件:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>pnpm run seed  // 执行所有种子文件们
+pnpm run seed --specific 100_users.js  // 执行特定种子文件
+knex seed:run --specific 100_users.js  // 同上</pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_delete_data_2">delete data</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nb">Promise</span><span class="tok-p">.</span><span class="tok-nx">all</span><span class="tok-p">([</span>
+<span class="tok-w">    </span><span class="tok-nx">knex</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">del</span><span class="tok-p">(),</span><span class="tok-w">     </span><span class="tok-c1">// users use roles</span>
+<span class="tok-p">]);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Delete data from users &amp; roles &amp; articles tables.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+这个要看实际应用了，追加数据则不用 del 表中的内容。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_insert_users_data">insert users data</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><span></span><span class="tok-c1">// const now = new Date().toISOString();  // 使用服务器当前时间</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">now</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">.</span><span class="tok-nx">fn</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">();</span><span class="tok-w">                </span><span class="tok-c1">// 使用数据库当前时间</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">hashedPassword</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">bcrypt</span><span class="tok-p">.</span><span class="tok-nx">hash</span><span class="tok-p">(</span><span class="tok-s2">&quot;123456&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">);</span>
+
+<span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">knex</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">).</span><span class="tok-nx">insert</span><span class="tok-p">([</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;admin&#39;</span><span class="tok-w"> </span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">hashedPassword</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">roleId</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">1</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;author&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">hashedPassword</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">roleId</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">2</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">username</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;swot&#39;</span><span class="tok-w">  </span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">password</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">hashedPassword</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">created_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">updated_at</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">now</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">roleId</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">3</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-p">]);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>上面代码不指定 id 也是可以的。因为表 users id 是自增的。</p>
 </div>
 </div>
 </div>
@@ -4988,7 +4988,7 @@ http :3000/api/auth/login nomo=swot pasvoto=123456</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-31 10:14:08 +0800
+Last updated 2025-05-31 10:53:04 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
