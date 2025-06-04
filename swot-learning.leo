@@ -29,6 +29,8 @@
 <v t="swot.20250528073829.1"><vh>httpie body 3 种上传数据方式如何使用？</vh></v>
 <v t="swot.20250528074031.1"><vh>httpie 如何显示请求和响应部分的数据</vh></v>
 <v t="swot.20250602081407.1"><vh>Web 配色网站哪个好用？</vh></v>
+<v t="swot.20250604113830.1"><vh>css</vh></v>
+<v t="swot.20250604115240.1"><vh>Web 新框架</vh></v>
 </v>
 <v t="swot.20250524210625.1"><vh>@ignore-tree Vue3</vh>
 <v t="swot.20250524210629.1"><vh>ref vs reactive？</vh></v>
@@ -8826,6 +8828,21 @@ Browser --&gt; [auth-middleware] : submit \n login form
 <t tx="swot.20250530224614.1"></t>
 <t tx="swot.20250602081407.1">https://mycolor.space/
 这个配色网站很棒，还支持 3-color-gradient
+</t>
+<t tx="swot.20250604113830.1">css汇总： https://github.com/dbohdan/classless-css
+
+Pico.css 好不好？
+
+* https://github.com/picocss/pico
+* https://picocss.com/
+
+
+</t>
+<t tx="swot.20250604115240.1">1. Svelte: 不用虚拟 dom，比 react 更好写。
+
+2. Web Component: 代表有 Lit。
+
+3. htmx: 原始风
 </t>
 </tnodes>
 </leo_file>
