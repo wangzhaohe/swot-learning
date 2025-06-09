@@ -89,9 +89,8 @@
 <v t="swot.20250508134351.1"><vh>Learning Leo</vh>
 <v t="swot.20250508134253.1"><vh>Install leo-editor from source</vh></v>
 <v t="swot.20250508154257.1"><vh>Teaching by leo-editor</vh>
-<v t="swot.20250508154257.2"><vh>write document</vh></v>
 <v t="swot.20250508154257.3"><vh>write code</vh></v>
-<v t="swot.20250508154257.4"><vh>show content</vh></v>
+<v t="swot.20250508154257.2"><vh>write document</vh></v>
 </v>
 </v>
 </v>
@@ -629,16 +628,6 @@ If these comments in the code could be formatted like an article, the effect wou
 在编写代码时，往往需要加入很多说明文字，经常采用的方式是直接在代码里写单行注释或者大量块注释。
 
 如果代码里的这些注释能够有像文章一样的排版体现，效果就会好很多。
-</t>
-<t tx="swot.20250508154257.4">@language asciidoc
-When presenting, making more use of ppt can achieve paginated display of each knowledge node.
-
-If the key documents and main code can be combined and written only once, and presented in the form of nodes, the purpose of integrating the documents, code and presentation can be achieved.
-
-
-在演示时多采用 ppt，可以实现每个知识节点的分页显示。
-
-如果能够将重点文档和主要代码结合在一起且只写一次，以节点的方式呈现出来，则能达到文档、代码、演示合一的目的。
 </t>
 <t tx="swot.20250508160844.1"></t>
 <t tx="swot.20250508161005.1">@language asciidoc
