@@ -92,6 +92,7 @@
 <v t="swot.20250508154257.3"><vh>write code</vh></v>
 <v t="swot.20250508154257.2"><vh>write document</vh></v>
 </v>
+<v t="swot.20250609210130.1"><vh>Nav Search -- 搜索功能</vh></v>
 </v>
 </v>
 </v>
@@ -8832,6 +8833,21 @@ Pico.css 好不好？
 2. Web Component: 代表有 Lit。
 
 3. htmx: 原始风
+</t>
+<t tx="swot.20250609210130.1">Leo Editor 的 Nav（“Nav” 标签页）搜索功能是支持正则表达式的，不过需要借助 leo's QuickSearch 插件，你需要确保已加载此插件。
+以下是详情：
+
+1. 确保在 Leo &gt; Plugins 配置中已启用 quicksearch.py 插件。
+
+2. 切换到 Nav 标签页（通常在 Log 窗口）。
+
+3. 输入搜索内容：
+
+* 普通搜索：例如 todo* 使用通配符；
+* 正则搜索：例如 r:^def\s+\w+ 查找以 def 开头的函数定义；
+* 不区分大小写：使用 r:(?i)pattern。
+
+回车执行搜索
 </t>
 </tnodes>
 </leo_file>
