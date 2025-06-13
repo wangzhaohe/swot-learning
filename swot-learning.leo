@@ -32,6 +32,9 @@
 <v t="swot.20250604113830.1"><vh>css</vh></v>
 <v t="swot.20250604115240.1"><vh>Web 新框架</vh></v>
 </v>
+<v t="swot.20250613103138.1"><vh>Chrome</vh>
+<v t="swot.20250613103144.1"><vh>打开开发者控制台模式的快捷键是什么？</vh></v>
+</v>
 <v t="swot.20250524210625.1"><vh>@ignore-tree Vue3</vh>
 <v t="swot.20250524210629.1"><vh>ref vs reactive？</vh></v>
 </v>
@@ -8848,6 +8851,11 @@ Pico.css 好不好？
 * 不区分大小写：使用 r:(?i)pattern。
 
 回车执行搜索
+</t>
+<t tx="swot.20250613103138.1"></t>
+<t tx="swot.20250613103144.1">macOS: Cmd + Option + J 直接打开到 Console 面板
+
+Windows/Linux: Ctrl + Shift + J 直接打开到 Console 面板
 </t>
 </tnodes>
 </leo_file>
