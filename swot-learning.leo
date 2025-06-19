@@ -8675,6 +8675,8 @@ pnpm run start
     or
 ts-node src/run.ts
 
+////
+// 在从之前的例子中移过来后，没有写下面的两个文件，不能这么测试。
 // 允许普通用户创建管理员级别的文章
 pnpm run allowMembersToCreateAnyArticle
     or
@@ -8685,6 +8687,7 @@ pnpm run start
     or
 ts-node src/run.ts
 ----
+////
 </t>
 <t tx="swot.20250528215800.1">Add worktree nuxt3-casl
 
