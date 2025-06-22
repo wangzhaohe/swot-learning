@@ -8774,6 +8774,7 @@ package "Frontend (Nuxt3)" {
         password: "123",
       });
     end note
+    [index.vue]
   }
   package "composables" {
     [stores.ts]
@@ -8797,7 +8798,8 @@ package "Backend (Server API)" {
 }
 
 Browser --&gt; [auth-middleware] : submit \n login form
-[auth-middleware] --&gt; [login.vue]: token 重定向
+[auth-middleware] --&gt; [login.vue]: 无 token 重定向
+[auth-middleware] --&gt; [index.vue]: 有 token 重定向
 [login.vue] --&gt; [stores.ts] : authenticateUser(form)
 
 [clientFetch.ts] --&gt; [stores.ts] : { token } =\n useAuthStore()
