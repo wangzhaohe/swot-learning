@@ -2313,6 +2313,7 @@ package "Frontend (Nuxt3)" {
         password: "123",
       });
     end note
+    [index.vue]
   }
   package "composables" {
     [stores.ts]
@@ -2336,7 +2337,8 @@ package "Backend (Server API)" {
 }
 
 Browser --> [auth-middleware] : submit \n login form
-[auth-middleware] --> [login.vue]
+[auth-middleware] --> [login.vue]: 无 token 重定向
+[auth-middleware] --> [index.vue]: 有 token 重定向
 [login.vue] --> [stores.ts] : authenticateUser(form)
 
 [clientFetch.ts] --> [stores.ts] : { token } =\n useAuthStore()
@@ -2407,7 +2409,10 @@ knex seed:run
 pnpm run start
     or
 ts-node src/run.ts
+----
 
+////
+// 在从之前的例子中移过来后，没有写下面的两个文件，不能这么测试。
 // 允许普通用户创建管理员级别的文章
 pnpm run allowMembersToCreateAnyArticle
     or
@@ -2417,7 +2422,7 @@ ts-node src/updateMemberRole.ts
 pnpm run start
     or
 ts-node src/run.ts
-----
+////
 
 === 数据库迁移文件以及初始数据
 
@@ -2848,24 +2853,19 @@ export async function findUserBy(where: Partial<Record<keyof User, any>>)
                                             : Promise<User | undefined> {
     const result = await db<User>('users')  // <1>
         .innerJoin('roles', 'users.roleId', 'roles.id')
-        .select('users.id', 'users.username', 'roles.permissions', { role: 'roles.name' })  // <2>
+        .select('users.id', 'users.username',
+                'roles.permissions', { role: 'roles.name' })  // <2>
         .where(function () {
             for (const key in where) {
-                this.andWhere(
-                    `users.${key}`,
-                    where[key as keyof typeof where]
-                )
+                this.andWhere(`users.${key}`, where[key as keyof typeof where])
             }
         })
         .first()
-
-    if (!result) {
-        return undefined
-    }
+    if (!result)
+        return undefined;
     const { permissions, ...user } = result  // <1>
     console.log('2025-05-30-214139 user:', user);
     user.permissions = interpolate(permissions, { user })   // <3>
-
     return user
 }
 ----
@@ -3308,4 +3308,72 @@ export default defineEventHandler(async (event) =>
 
 ==== 此处您还可以写 Article 的 api，我省略了
 
+
+=== 前端权限判断方案
+需求如下：
+
+没有路由权限的用户**不能访问该路由**，要么直接不跳转，要么自动跳转到别的页面（比如 403/首页/登录页）。
+
+**最佳实践**  
+
+在 Nuxt3 + CASL 场景下，推荐用“路由守卫”或“中间件”来做权限拦截，而不是只靠页面内容隐藏。
+
+==== 方案一：用 Nuxt3 中间件做权限拦截
+1. **在页面 meta 里声明权限需求**: +
+   在 `app/pages/users/index.vue` 里加：
++
+```ts
+definePageMeta({
+   title: '用户',
+   requiredAbility: { action: 'read', subject: 'users' }
+})
+```
+
+2. **在全局中间件里做拦截**: +
+   修改 `app/middleware/auth-middleware.global.ts`，大致如下（伪代码，需根据你的实际 $ability 获取方式调整）：
++
+```ts
+export default defineNuxtRouteMiddleware((to, from) => {
+   const nuxtApp = useNuxtApp();
+   const ability = nuxtApp.$ability; // 你插件里 provide 的
+
+   // 读取页面 meta 里的 requiredAbility
+   const required = to.meta.requiredAbility;
+   if (required && !ability.can(required.action, required.subject)) {
+       // 没权限，重定向到 403 或首页
+       return navigateTo('/403'); // 或 '/login' 或 '/'
+   }
+});
+```
+
+3. **新建 403 页面（可选）** +
+新建 `app/pages/403.vue`，内容随意。
+
+==== 方案二：在跳转前判断权限
+如果是通过按钮/菜单跳转，可以在跳转前判断权限，不让跳转：
+
+```ts
+const nuxtApp = useNuxtApp();
+
+if (nuxtApp.$ability.can('read', 'users')) {
+    navigateTo('/users');
+} else {
+    ElMessage.error('无权限访问');
+}
+```
+
+NOTE: 但这种方式只能防止“主动点击”，不能防止用户手动输入 URL。
+
+==== 方案三：隐藏菜单+中间件双保险
+
+- 菜单|按钮 不显示无权限项（你已经做了）。需要把例子放过来。
+
+- 路由中间件兜底，防止用户手动输入 URL。
+
+==== 总结
+- **只用 `<Can>` 隐藏内容体验不好，建议用 Nuxt3 中间件做路由级权限拦截。**
+
+- 推荐在页面 meta 里声明权限需求，在全局中间件里统一判断。
+
+- 没权限时自动跳转到 403 或首页，用户体验更好。
 

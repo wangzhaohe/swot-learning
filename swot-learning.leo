@@ -95,7 +95,7 @@
 <v t="swot.20250508154257.3"><vh>write code</vh></v>
 <v t="swot.20250508154257.2"><vh>write document</vh></v>
 </v>
-<v t="swot.20250609210130.1"><vh>Nav Search -- 搜索功能</vh></v>
+<v t="swot.20250609210130.1"><vh>Nav Search</vh></v>
 </v>
 </v>
 </v>
@@ -265,6 +265,12 @@
 <v t="swot.20250529100255.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d333071077573732e"><vh>@file server/api/users/index.get.ts</vh></v>
 <v t="swot.20250529100259.1"><vh>@file server/api/users/index.post.ts</vh></v>
 <v t="swot.20250530224614.1"><vh>此处您还可以写 Article 的 api，我省略了</vh></v>
+</v>
+<v t="swot.20250715075203.1"><vh>前端权限判断方案</vh>
+<v t="swot.20250715075655.1"><vh>方案一：用 Nuxt3 中间件做权限拦截</vh></v>
+<v t="swot.20250715075712.1"><vh>方案二：在跳转前判断权限</vh></v>
+<v t="swot.20250715075722.1"><vh>方案三：隐藏菜单+中间件双保险</vh></v>
+<v t="swot.20250715075745.1"><vh>总结</vh></v>
 </v>
 </v>
 </v>
@@ -8674,6 +8680,7 @@ knex seed:run
 pnpm run start
     or
 ts-node src/run.ts
+----
 
 ////
 // 在从之前的例子中移过来后，没有写下面的两个文件，不能这么测试。
@@ -8686,7 +8693,6 @@ ts-node src/updateMemberRole.ts
 pnpm run start
     or
 ts-node src/run.ts
-----
 ////
 </t>
 <t tx="swot.20250528215800.1">Add worktree nuxt3-casl
@@ -8861,6 +8867,70 @@ Pico.css 好不好？
 <t tx="swot.20250613103144.1">macOS: Cmd + Option + J 直接打开到 Console 面板
 
 Windows/Linux: Ctrl + Shift + J 直接打开到 Console 面板
+</t>
+<t tx="swot.20250715075203.1">@language asciidoc
+需求如下：
+
+没有路由权限的用户**不能访问该路由**，要么直接不跳转，要么自动跳转到别的页面（比如 403/首页/登录页）。
+
+**最佳实践**  
+
+在 Nuxt3 + CASL 场景下，推荐用“路由守卫”或“中间件”来做权限拦截，而不是只靠页面内容隐藏。
+</t>
+<t tx="swot.20250715075655.1">1. **在页面 meta 里声明权限需求**: +
+   在 `app/pages/users/index.vue` 里加：
++
+```ts
+definePageMeta({
+   title: '用户',
+   requiredAbility: { action: 'read', subject: 'users' }
+})
+```
+
+2. **在全局中间件里做拦截**: +
+   修改 `app/middleware/auth-middleware.global.ts`，大致如下（伪代码，需根据你的实际 $ability 获取方式调整）：
++
+```ts
+export default defineNuxtRouteMiddleware((to, from) =&gt; {
+   const nuxtApp = useNuxtApp();
+   const ability = nuxtApp.$ability; // 你插件里 provide 的
+
+   // 读取页面 meta 里的 requiredAbility
+   const required = to.meta.requiredAbility;
+   if (required &amp;&amp; !ability.can(required.action, required.subject)) {
+       // 没权限，重定向到 403 或首页
+       return navigateTo('/403'); // 或 '/login' 或 '/'
+   }
+});
+```
+
+3. **新建 403 页面（可选）** +
+新建 `app/pages/403.vue`，内容随意。
+</t>
+<t tx="swot.20250715075712.1">如果是通过按钮/菜单跳转，可以在跳转前判断权限，不让跳转：
+
+```ts
+const nuxtApp = useNuxtApp();
+
+if (nuxtApp.$ability.can('read', 'users')) {
+    navigateTo('/users');
+} else {
+    ElMessage.error('无权限访问');
+}
+```
+
+NOTE: 但这种方式只能防止“主动点击”，不能防止用户手动输入 URL。
+</t>
+<t tx="swot.20250715075722.1">
+- 菜单|按钮 不显示无权限项（你已经做了）。需要把例子放过来。
+
+- 路由中间件兜底，防止用户手动输入 URL。
+</t>
+<t tx="swot.20250715075745.1">- **只用 `&lt;Can&gt;` 隐藏内容体验不好，建议用 Nuxt3 中间件做路由级权限拦截。**
+
+- 推荐在页面 meta 里声明权限需求，在全局中间件里统一判断。
+
+- 没权限时自动跳转到 403 或首页，用户体验更好。
 </t>
 </tnodes>
 </leo_file>

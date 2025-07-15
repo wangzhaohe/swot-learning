@@ -847,6 +847,14 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_此处您还可以写_article_的_api我省略了">此处您还可以写 Article 的 api，我省略了</a></li>
 </ul>
 </li>
+<li><a href="#_前端权限判断方案">前端权限判断方案</a>
+<ul class="sectlevel3">
+<li><a href="#_方案一用_nuxt3_中间件做权限拦截">方案一：用 Nuxt3 中间件做权限拦截</a></li>
+<li><a href="#_方案二在跳转前判断权限">方案二：在跳转前判断权限</a></li>
+<li><a href="#_方案三隐藏菜单中间件双保险">方案三：隐藏菜单+中间件双保险</a></li>
+<li><a href="#_总结_2">总结</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -3685,7 +3693,7 @@ github 例子好久没有更新了，自己更新了一下。
 <h3 id="_authentication_authorization_函数调用组件图">Authentication &amp; Authorization 函数调用组件图</h3>
 <div class="imageblock">
 <div class="content">
-<img src="img/diagram-2025-05-30-233449.svg" alt="diagram 2025 05 30 233449" width="917" height="1147">
+<img src="img/diagram-2025-05-30-233449.svg" alt="diagram 2025 05 30 233449" width="916" height="1166">
 </div>
 </div>
 </div>
@@ -3750,16 +3758,6 @@ Found 4 Pending Migration file/files.
 <span class="tok-go">knex seed:run</span>
 
 <span class="tok-go">// 执行程序</span>
-<span class="tok-go">pnpm run start</span>
-<span class="tok-go">    or</span>
-<span class="tok-go">ts-node src/run.ts</span>
-
-<span class="tok-go">// 允许普通用户创建管理员级别的文章</span>
-<span class="tok-go">pnpm run allowMembersToCreateAnyArticle</span>
-<span class="tok-go">    or</span>
-<span class="tok-go">ts-node src/updateMemberRole.ts</span>
-
-<span class="tok-go">// 运行验证一下</span>
 <span class="tok-go">pnpm run start</span>
 <span class="tok-go">    or</span>
 <span class="tok-go">ts-node src/run.ts</span></code></pre>
@@ -4403,24 +4401,19 @@ knex seed:run --specific 100_users.js  // 同上</pre>
 <span class="tok-w">                                            </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Promise</span><span class="tok-o">&lt;</span><span class="tok-nx">User</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-kc">undefined</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">db</span><span class="tok-o">&lt;</span><span class="tok-nx">User</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">)</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nx">innerJoin</span><span class="tok-p">(</span><span class="tok-s1">&#39;roles&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;users.roleId&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;roles.id&#39;</span><span class="tok-p">)</span>
-<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nx">select</span><span class="tok-p">(</span><span class="tok-s1">&#39;users.id&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;users.username&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;roles.permissions&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">role</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;roles.name&#39;</span><span class="tok-w"> </span><span class="tok-p">})</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nx">select</span><span class="tok-p">(</span><span class="tok-s1">&#39;users.id&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;users.username&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">                </span><span class="tok-s1">&#39;roles.permissions&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">role</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;roles.name&#39;</span><span class="tok-w"> </span><span class="tok-p">})</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nx">where</span><span class="tok-p">(</span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">key</span><span class="tok-w"> </span><span class="tok-ow">in</span><span class="tok-w"> </span><span class="tok-nx">where</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">andWhere</span><span class="tok-p">(</span>
-<span class="tok-w">                    </span><span class="tok-sb">`users.</span><span class="tok-si">${</span><span class="tok-nx">key</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">,</span>
-<span class="tok-w">                    </span><span class="tok-nx">where</span><span class="tok-p">[</span><span class="tok-nx">key</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">keyof</span><span class="tok-w"> </span><span class="tok-ow">typeof</span><span class="tok-w"> </span><span class="tok-nx">where</span><span class="tok-p">]</span>
-<span class="tok-w">                </span><span class="tok-p">)</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">andWhere</span><span class="tok-p">(</span><span class="tok-sb">`users.</span><span class="tok-si">${</span><span class="tok-nx">key</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">where</span><span class="tok-p">[</span><span class="tok-nx">key</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">keyof</span><span class="tok-w"> </span><span class="tok-ow">typeof</span><span class="tok-w"> </span><span class="tok-nx">where</span><span class="tok-p">])</span>
 <span class="tok-w">            </span><span class="tok-p">}</span>
 <span class="tok-w">        </span><span class="tok-p">})</span>
 <span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nx">first</span><span class="tok-p">()</span>
-
-<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">result</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">undefined</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">result</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">undefined</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">permissions</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">...</span><span class="tok-nx">user</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">result</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;2025-05-30-214139 user:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">user</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-nx">user</span><span class="tok-p">.</span><span class="tok-nx">permissions</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">interpolate</span><span class="tok-p">(</span><span class="tok-nx">permissions</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">user</span><span class="tok-w"> </span><span class="tok-p">})</span><span class="tok-w">   </span><i class="conum" data-value="3"></i><b>(3)</b>
-
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">user</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -4982,12 +4975,127 @@ http :3000/api/auth/login nomo=normal1 pasvoto=123456</pre>
 
 </div>
 </div>
+<div class="sect2">
+<h3 id="_前端权限判断方案">前端权限判断方案</h3>
+<div class="paragraph">
+<p>需求如下：</p>
+</div>
+<div class="paragraph">
+<p>没有路由权限的用户<strong>不能访问该路由</strong>，要么直接不跳转，要么自动跳转到别的页面（比如 403/首页/登录页）。</p>
+</div>
+<div class="paragraph">
+<p><strong>最佳实践</strong></p>
+</div>
+<div class="paragraph">
+<p>在 Nuxt3 + CASL 场景下，推荐用“路由守卫”或“中间件”来做权限拦截，而不是只靠页面内容隐藏。</p>
+</div>
+<div class="sect3">
+<h4 id="_方案一用_nuxt3_中间件做权限拦截">方案一：用 Nuxt3 中间件做权限拦截</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>在页面 meta 里声明权限需求</strong>:<br>
+在 <code>app/pages/users/index.vue</code> 里加：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="ts"><span></span><span class="tok-nx">definePageMeta</span><span class="tok-p">({</span>
+<span class="tok-w">   </span><span class="tok-nx">title</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;用户&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">   </span><span class="tok-nx">requiredAbility</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">action</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;read&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">subject</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;users&#39;</span><span class="tok-w"> </span><span class="tok-p">}</span>
+<span class="tok-p">})</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>在全局中间件里做拦截</strong>:<br>
+修改 <code>app/middleware/auth-middleware.global.ts</code>，大致如下（伪代码，需根据你的实际 $ability 获取方式调整）：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="ts"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineNuxtRouteMiddleware</span><span class="tok-p">((</span><span class="tok-nx">to</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">   </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">nuxtApp</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useNuxtApp</span><span class="tok-p">();</span>
+<span class="tok-w">   </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">ability</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">nuxtApp</span><span class="tok-p">.</span><span class="tok-nx">$ability</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 你插件里 provide 的</span>
+
+<span class="tok-w">   </span><span class="tok-c1">// 读取页面 meta 里的 requiredAbility</span>
+<span class="tok-w">   </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">required</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">to</span><span class="tok-p">.</span><span class="tok-nx">meta</span><span class="tok-p">.</span><span class="tok-nx">requiredAbility</span><span class="tok-p">;</span>
+<span class="tok-w">   </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">required</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-o">!</span><span class="tok-nx">ability</span><span class="tok-p">.</span><span class="tok-nx">can</span><span class="tok-p">(</span><span class="tok-nx">required</span><span class="tok-p">.</span><span class="tok-nx">action</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">required</span><span class="tok-p">.</span><span class="tok-nx">subject</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">       </span><span class="tok-c1">// 没权限，重定向到 403 或首页</span>
+<span class="tok-w">       </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">navigateTo</span><span class="tok-p">(</span><span class="tok-s1">&#39;/403&#39;</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 或 &#39;/login&#39; 或 &#39;/&#39;</span>
+<span class="tok-w">   </span><span class="tok-p">}</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>新建 403 页面（可选）</strong><br>
+新建 <code>app/pages/403.vue</code>，内容随意。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_方案二在跳转前判断权限">方案二：在跳转前判断权限</h4>
+<div class="paragraph">
+<p>如果是通过按钮/菜单跳转，可以在跳转前判断权限，不让跳转：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="ts"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">nuxtApp</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useNuxtApp</span><span class="tok-p">();</span>
+
+<span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">nuxtApp</span><span class="tok-p">.</span><span class="tok-nx">$ability</span><span class="tok-p">.</span><span class="tok-nx">can</span><span class="tok-p">(</span><span class="tok-s1">&#39;read&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;users&#39;</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">navigateTo</span><span class="tok-p">(</span><span class="tok-s1">&#39;/users&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">ElMessage</span><span class="tok-p">.</span><span class="tok-nx">error</span><span class="tok-p">(</span><span class="tok-s1">&#39;无权限访问&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+但这种方式只能防止“主动点击”，不能防止用户手动输入 URL。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_方案三隐藏菜单中间件双保险">方案三：隐藏菜单+中间件双保险</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>菜单|按钮 不显示无权限项（你已经做了）。需要把例子放过来。</p>
+</li>
+<li>
+<p>路由中间件兜底，防止用户手动输入 URL。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_总结_2">总结</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>只用 <code>&lt;Can&gt;</code> 隐藏内容体验不好，建议用 Nuxt3 中间件做路由级权限拦截。</strong></p>
+</li>
+<li>
+<p>推荐在页面 meta 里声明权限需求，在全局中间件里统一判断。</p>
+</li>
+<li>
+<p>没权限时自动跳转到 403 或首页，用户体验更好。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-31 11:23:48 +0800
+Last updated 2025-07-15 08:21:33 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
