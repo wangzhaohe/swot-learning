@@ -17,6 +17,53 @@
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 </v>
 </v>
+<v t="swot.20250906075341.1"><vh>@path docker</vh>
+<v t="swot.20250906075354.1"><vh>@adoc docker.adoc</vh>
+<v t="swot.20250906075409.1"><vh>Learning Docker</vh>
+<v t="swot.20250906082625.1"><vh>Introduction Docker</vh></v>
+<v t="swot.20250906075427.1"><vh>Install Docker</vh></v>
+<v t="swot.20250906084634.1"><vh>Pull &amp; Run Redis</vh></v>
+<v t="swot.20250906093952.1"><vh>Commit &amp; Save &amp; Load &amp; Run 把 redis 容器做成离线镜像包发给学生</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20250906101555.1"><vh>@path redis</vh></v>
+<v t="swot.20250810113519.1" descendentVnodeUnknownAttributes="7d7100580b000000302e302e302e322e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>@path SpringBoot</vh>
+<v t="swot.20250810155048.1" descendentVnodeUnknownAttributes="7d71005809000000302e302e322e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>@adoc SpringBoot.adoc</vh>
+<v t="swot.20250810155157.1" descendentVnodeUnknownAttributes="7d71005807000000302e322e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>Learning SpingBoot 叶良课程整理了一点儿，感觉有点乱 2025-08-14</vh>
+<v t="swot.20250810113539.1"><vh>spring 介绍</vh></v>
+<v t="swot.20250810155614.1"><vh>小知识</vh>
+<v t="swot.20250810143002.1"><vh>maven 刷新按钮功能</vh></v>
+</v>
+<v t="swot.20250810134056.1" descendentVnodeUnknownAttributes="7d71005805000000302e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>@path spring-boot-learn-20250810</vh>
+<v t="swot.20250810164552.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>基本功能测试</vh>
+<v t="swot.20250810145633.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>@file src/main/java/com/swotpp/springbootlearn20250810/controller/HelloController.java</vh></v>
+</v>
+<v t="swot.20250810164620.1"><vh>分层测试</vh>
+<v t="swot.20250810161239.1"><vh>@file src/main/java/com/swotpp/springbootlearn20250810/entity/User.java</vh></v>
+<v t="swot.20250810163916.1"><vh>@file src/main/java/com/swotpp/springbootlearn20250810/service/UserService.java</vh></v>
+<v t="swot.20250810164416.1"><vh>@file src/main/java/com/swotpp/springbootlearn20250810/controller/UserController.java</vh></v>
+</v>
+<v t="swot.20250810164646.1"><vh>MyBatis</vh>
+<v t="swot.20250810174444.1"><vh>newHeadline</vh></v>
+</v>
+</v>
+</v>
+</v>
+</v>
+<v t="swot.20250811154633.1"><vh>@path threejs</vh>
+<v t="swot.20250812085446.1"><vh>@adoc Three.js.adoc</vh>
+<v t="swot.20250812085536.1"><vh>Three.js</vh>
+<v t="swot.20250812084836.1"><vh>MeshXxxMaterial 对比</vh></v>
+<v t="swot.20250811160652.1"><vh>pbr 物理的渲染材质网站</vh>
+<v t="swot.20250812210640.1"><vh>use download pbr</vh>
+<v t="swot.20250812210658.1"><vh>@file pbr_example/light-sofa.html</vh></v>
+<v t="swot.20250812215237.1"><vh>@file pbr_example/light-sofa_低功耗.html</vh></v>
+</v>
+</v>
+</v>
+</v>
+</v>
 <v t="swot.20250524213031.1"><vh>@path Q_and_A</vh>
 <v t="swot.20250524210117.1"><vh>@adoc Q_and_A.adoc</vh>
 <v t="swot.20250524214956.1"><vh>Q_and_A</vh>
@@ -91,11 +138,13 @@
 <v t="swot.20250508134307.1"><vh>@adoc leo-editor.adoc</vh>
 <v t="swot.20250508134351.1"><vh>Learning Leo</vh>
 <v t="swot.20250508134253.1"><vh>Install leo-editor from source</vh></v>
+<v t="swot.20250609210130.1"><vh>Nav Search</vh></v>
 <v t="swot.20250508154257.1"><vh>Teaching by leo-editor</vh>
 <v t="swot.20250508154257.3"><vh>write code</vh></v>
 <v t="swot.20250508154257.2"><vh>write document</vh></v>
 </v>
-<v t="swot.20250609210130.1"><vh>Nav Search</vh></v>
+<v t="swot.20250831095539.1"><vh>基于 x86 的库如何在 macos arm 架构下运行</vh></v>
+<v t="swot.20250831100251.1"><vh>列操作模式 rectangle</vh></v>
 </v>
 </v>
 </v>
@@ -282,7 +331,7 @@
 </v>
 <v t="swot.20250508162519.1" descendentVnodeUnknownAttributes="7d71005809000000302e302e302e382e3171017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d313071077573732e"><vh>@path software-designer</vh>
 <v t="swot.20250508162628.1" descendentVnodeUnknownAttributes="7d71005807000000302e302e382e3171017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d313071077573732e"><vh>@adoc software-designer.adoc</vh>
-<v t="swot.20250508162652.1" descendentVnodeUnknownAttributes="7d71005805000000302e382e3171017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d313071077573732e"><vh>软件设计师例题精讲</vh>
+<v t="swot.20250508162652.1" descendentVnodeUnknownAttributes="7d71005805000000302e382e3171017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d313071077573732e"><vh>软件设计师例题精讲上午</vh>
 <v t="swot.20250509183134.1"><vh>1 数据表示</vh>
 <v t="swot.20250522173932.1"><vh>1.1 原码反码补码移码</vh>
 <v t="swot.20250522174032.1"><vh>根据补码计算真值</vh></v>
@@ -452,6 +501,11 @@
 </v>
 <v t="swot.20250514212913.1"><vh>15 信息安全</vh></v>
 <v t="swot.20250511233342.1"><vh>16 专业英语</vh></v>
+</v>
+<v t="swot.20250812113455.1"><vh>软件设计师例题精讲下午</vh>
+<v t="swot.20250812113515.1"><vh>第一题：数据流图</vh>
+<v t="swot.20250812113624.1"><vh>如何保持数据流图平衡 -- 背下来</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -7367,6 +7421,7 @@ Create a new nuxt3 project
 
     cd nuxt/nuxt3
     pnpm create nuxt nuxt3-basic
+    # pnpm create nuxt@latest &lt;project-name&gt;
 
 
 .Install some recommended library
@@ -8853,6 +8908,7 @@ Pico.css 好不好？
 3. htmx: 原始风
 </t>
 <t tx="swot.20250609210130.1">Leo Editor 的 Nav（“Nav” 标签页）搜索功能是支持正则表达式的，不过需要借助 leo's QuickSearch 插件，你需要确保已加载此插件。
+
 以下是详情：
 
 1. 确保在 Leo &gt; Plugins 配置中已启用 quicksearch.py 插件。
@@ -8943,5 +8999,341 @@ NOTE: 但这种方式只能防止“主动点击”，不能防止用户手动�
 </t>
 <t tx="swot.20250721131156.1">输入 vbase-3-set... Vue Single File Component，可以生成 Vue3 模板。
 </t>
+<t tx="swot.20250810113519.1"></t>
+<t tx="swot.20250810113539.1">官网介绍 https://spring.io/
+
+项目介绍 https://spring.io/projects
+
+Spring Boot 介绍 https://spring.io/projects/spring-boot
+
+创建 Spring Boot 项目 3 版本 https://start.spring.io/
+
+创建 Spring Boot 项目 2 版本 https://start.aliyun.com/
+
+* Project: Maven
+* Language: java
+* SpringBoot: 2.7
+* Group: com.xxx 自己命名
+* 打包方式: jar
+* java版本: 8
+* Dependencies: mysql Driver、Spring Web、lombok（方便创建实体类）
+</t>
+<t tx="swot.20250810134056.1"></t>
+<t tx="swot.20250810143002.1">@language asciidoc
+
+image::img/maven_refresh_button.png[refresh,640]
+
+* 左边刷新按钮（圆形箭头图标）：
+这个按钮通常用于刷新整个Maven项目。点击这个按钮会触发Maven重新解析项目的pom.xml文件，重新下载所有依赖项，并更新项目的依赖树。这个操作相当于执行了 `Maven的mvn clean install` 命令，确保项目的所有依赖都是最新的，并且本地仓库中的依赖是完整的。
+
+* 右边刷新按钮（两个箭头组成的圆形图标）：
+这个按钮可能用于刷新Maven依赖树视图。点击这个按钮会更新IDE中显示的依赖树，确保显示的依赖信息与pom.xml文件中定义的一致。这个操作不会重新下载依赖项，只是更新IDE中的显示内容。
+</t>
+<t tx="swot.20250810155048.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3</t>
+<t tx="swot.20250810155157.1">
+++++
+&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20250810155614.1"></t>
+<t tx="swot.20250810164552.1"></t>
+<t tx="swot.20250810164620.1"></t>
+<t tx="swot.20250810164646.1">@language asciidoc
+官网 https://mybatis.org/mybatis-3/zh_CN/index.html
+
+查jar包依赖网站 https://mvnrepository.com/
+
+.加入 pom.xml 文件的 &lt;dependencies&gt; 中
+[source,scss]
+----
+@language xml
+&lt;!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;3.0.3&lt;/version&gt;
+&lt;/dependency&gt;
+----
+</t>
+<t tx="swot.20250810174444.1"></t>
+<t tx="swot.20250811154633.1"></t>
+<t tx="swot.20250811160652.1">PBR 是 Physically-Based Rendering 的缩写，中文通常翻译为“基于物理的渲染”。
+
+材质资源网站 https://freepbr.com/pbr-tutorials-resources/
+
+这个网站（freepbr.com）是一个专门提供免费PBR（Physically-Based Rendering，基于物理的渲染）材质资源的平台。
+
+商业用途需要支付一点点儿授权费用（16$ 2025-08-12 09:05:38）
+</t>
+<t tx="swot.20250812084836.1">1. **MeshBasicMaterial**
+- **光照响应**：**不响应任何光照**（没有阴影、没有高光）。
+- **用途**：用于简单着色、贴图，或调试。
+- **性能**：**最快**。
+- **示例**：纯色物体、UI 元素、背景。
+
+2. **MeshLambertMaterial**
+- **光照响应**：支持 **漫反射（Diffuse）**，但 **不支持镜面反射**（无高光）。
+- **特点**：适合 **哑光材质**，如纸张、墙壁。
+- **性能**：中等，比 Basic 慢，比 Phong 快。
+- **限制**：不支持镜面高光（specular highlights）。
+
+3. **MeshPhongMaterial**
+- **光照响应**：支持 **漫反射 + 镜面反射（高光）**。
+- **特点**：适合 **有光泽的物体**，如塑料、金属。
+- **性能**：比 Lambert 慢，但效果更真实。
+- **高光控制**：可以通过 `shininess` 调整高光强度。
+
+4. **MeshStandardMaterial**
+- **光照响应**：使用 **PBR（基于物理的渲染）**。
+- **特点**：更真实，支持 **金属度（metalness）** 和 **粗糙度（roughness）**。
+- **性能**：比 Phong 慢，但效果更现代。
+- **用途**：现代 3D 应用、游戏、产品展示。
+
+5. **MeshPhysicalMaterial**
+- **光照响应**：是 **MeshStandardMaterial 的扩展**。
+- **额外特性**：
+  - **清漆层（clearcoat）**：模拟汽车漆、清漆。
+  - **透射（transmission）**：模拟玻璃、水。
+  - **更复杂的反射模型**。
+- **性能**：**最慢**，但效果最逼真。
+- **用途**：高端渲染、汽车、玻璃、液体等。
+
+---
+
+[caption=]
+.总结对比表：
+[cols="2,1,1,1,1,1",options="header"]
+|===
+| 材质类型 | 光照模型 | 高光  | 金属/粗糙度 | 性能  | 典型用途
+| MeshBasicMaterial | 无   | ❌   | ❌   | 快   | 纯色、UI、背景
+| MeshLambertMaterial | Lambert | ❌   | ❌   | 中   | 哑光表面（墙、纸）
+| MeshPhongMaterial | Phong | ✅   | ❌   | 中   | 塑料、低光泽金属
+| MeshStandardMaterial | PBR | ✅   | ✅   | 慢   | 现代材质、游戏
+| MeshPhysicalMaterial | 高级 PBR | ✅   | ✅ + 扩展 | 最慢  | 高端渲染、玻璃、车漆
+|===
+
+简单记忆法：
+
+- **Basic**：无光照，最快。
+- **Lambert**：哑光，无高光。
+- **Phong**：有高光，像塑料。
+- **Standard**：PBR，现代标准。
+- **Physical**：PBR+，最逼真。
+</t>
+<t tx="swot.20250812085446.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3</t>
+<t tx="swot.20250812085536.1">
+++++
+&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20250812113455.1"></t>
+<t tx="swot.20250812113515.1"></t>
+<t tx="swot.20250812113624.1">问：用 200 字以内文字，说明建模时如何保持数据流图平衡？
+
+答：
+
+1. 父图中加工的输入输出数据流必须与子图中的输入输出数据流在数量上和名字上相同；
+2. 父图中的一个输入（输出）数据流对应子图中的几个输入（输出）数据流；
+3. 而子图中组成这些数据流的数据项全体正好是父图中的这一条数据流。
+</t>
+<t tx="swot.20250812210640.1"></t>
+<t tx="swot.20250831095539.1">@language asciidoc
+如果在 arm64 的 MacOS 下不能运行 leo-editor，可以试试下面的方法。
+
+怎么样在 M1|M2 Mac终端中快速切换 arm64 或 x86 架构
+https://aibi8.com/news/3140.html
+
+在 M1|M2|M3 Mac上，可以使用 arch 命令在终端中快速切换架构。
+
+要从 ARM64 切换到 x86 架构，请在终端中输入以下命令：
+
+    arch -x86_64 zsh
+
+此命令将在当前终端会话中切换到 x86_64 架构，以便可以在 M1|M2|M3 MacOS 上运行只适用于 x86 架构的应用程序。
+
+要从 x86 切换回 ARM64 架构，请在终端中输入以下命令：
+
+    arch -arm64 zsh
+
+这将在当前终端会话中切换回 ARM64 架构。请注意，只有 M1|M2|M# MacOS 支持 ARM64 架构。
+
+</t>
+<t tx="swot.20250831100251.1">The following is from LeoDocs.leo. Selecting some text with mouse or keyboard arrow key, then between the first cursor and the end cursor is the columns that being selected.
+
+------
+
+.. _`Emacs rectangle commands`: http://www.gnu.org/software/emacs/manual/html_node/emacs/Rectangles.html
+
+The following commands emulate the `Emacs rectangle commands`_::
+
+```
+rectangle-clear
+rectangle-delete
+
+rectangle-open
+rectangle-close
+
+rectangle-kill
+rectangle-yank
+
+rectangle-string
+```
+
+Given::
+
+```
+I'm really glad the docs are being updated. I know that's a
+monumental task. I only use a fraction of Leo's commands, mostly
+because I don't even know what they're supposed to accomplish. A few
+examples:
+```
+
+Placing the cursor immediately before the first "I", holding shift and moving it to immediately before the word`examples` selects a zero width rectangle from the beginning to the end of the selection (zero width because the selection starts and ends in the same column. Then running `rectangle-string [largo]&lt;space&gt;&lt;enter&gt;` yields::
+
+....
+[largo] I'm really glad the docs are being updated. I know that's a
+[largo] monumental task. I only use a fraction of Leo's commands, mostly
+[largo] because I don't even know what they're supposed to accomplish. A few
+[largo] examples:
+....
+</t>
+<t tx="swot.20250906075341.1"></t>
+<t tx="swot.20250906075354.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3</t>
+<t tx="swot.20250906075409.1">
+++++
+&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20250906075427.1">@language asciidoc
+* Linux Install docker
++
+https://docs.docker.com/engine/install/
+
+
+* Windows &amp; Macos Install docker
++
+https://www.docker.com/get-started/
++
+image::img/dockerdesktop_install.png[]
+
+</t>
+<t tx="swot.20250906082625.1">@language asciidoc
+Docker 是一个“**一次打包、随处运行**”的轻量级容器引擎，它把应用和依赖打成一个镜像，秒级启动、隔离运行，解决“我机器上能跑，别人机器上不能跑”的环境不一致问题。
+
+</t>
+<t tx="swot.20250906084634.1">@language asciidoc
+.docker_pull_redis
+image::img/docker_pull_redis.png[]
+
+.docker_run_redis
+image::img/docker_run_redis.png[]
+
+.docker_container_redis
+image::img/docker_container_redis.png[]
+
+.docker_container_redis_exec
+image::img/docker_container_redis_exec.png[]
+
+</t>
+<t tx="swot.20250906093952.1">@language asciidoc
+1. 把正在跑的容器打成镜像
+
+    docker commit redis_8 redis_8-with-data:2025
+
+2. 导出为单个 tar 文件（几百 MB 到几 GB 不等）
+
+    docker save -o redis_8-with-data.tar redis_8-with-data:2025
+
+3. 学生导入镜像
+
+    docker load -i redis_8-with-data.tar
+
+4. 直接运行（端口、卷都不用再配）
+
+    docker run -d --name my-redis -p 6379:6379 redis_8-with-data:2025
+
+
+[NOTE]
+====
+1. 镜像文件较大，可先用 gzip redis-with-data.tar 压缩再传。
+2. 如果数据还在内存、没触发过 SAVE/BGSAVE，先手动执行一次 SAVE，再 commit，否则镜像里可能没数据。
+====
+</t>
+<t tx="swot.20250906101555.1"></t>
 </tnodes>
 </leo_file>

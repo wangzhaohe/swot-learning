@@ -1,0 +1,84 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3
+
+= Learning Docker
+
+++++
+<button id="toggleButton">Table of Contents</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== Introduction Docker
+Docker 是一个“**一次打包、随处运行**”的轻量级容器引擎，它把应用和依赖打成一个镜像，秒级启动、隔离运行，解决“我机器上能跑，别人机器上不能跑”的环境不一致问题。
+
+== Install Docker
+* Linux Install docker
++
+https://docs.docker.com/engine/install/
+
+
+* Windows & Macos Install docker
++
+https://www.docker.com/get-started/
++
+image::img/dockerdesktop_install.png[]
+
+== Pull & Run Redis
+.docker_pull_redis
+image::img/docker_pull_redis.png[]
+
+.docker_run_redis
+image::img/docker_run_redis.png[]
+
+.docker_container_redis
+image::img/docker_container_redis.png[]
+
+.docker_container_redis_exec
+image::img/docker_container_redis_exec.png[]
+
+== Commit & Save & Load & Run 把 redis 容器做成离线镜像包发给学生
+1. 把正在跑的容器打成镜像
+
+    docker commit redis_8 redis_8-with-data:2025
+
+2. 导出为单个 tar 文件（几百 MB 到几 GB 不等）
+
+    docker save -o redis_8-with-data.tar redis_8-with-data:2025
+
+3. 学生导入镜像
+
+    docker load -i redis_8-with-data.tar
+
+4. 直接运行（端口、卷都不用再配）
+
+    docker run -d --name my-redis -p 6379:6379 redis_8-with-data:2025
+
+
+[NOTE]
+====
+1. 镜像文件较大，可先用 gzip redis-with-data.tar 压缩再传。
+2. 如果数据还在内存、没触发过 SAVE/BGSAVE，先手动执行一次 SAVE，再 commit，否则镜像里可能没数据。
+====
+
