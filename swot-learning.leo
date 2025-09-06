@@ -27,7 +27,28 @@
 </v>
 </v>
 </v>
-<v t="swot.20250906101555.1"><vh>@path redis</vh></v>
+<v t="swot.20250906101555.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d333171077573732e"><vh>@path redis</vh>
+<v t="swot.20250906102110.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d333171077573732e"><vh>@adoc Redis.adoc</vh>
+<v t="swot.20250906102110.2"><vh>Redis 速览</vh>
+<v t="swot.20250906102110.3"><vh>1 简介</vh></v>
+<v t="swot.20250906102110.4"><vh>2 五大核心特性</vh></v>
+<v t="swot.20250906102110.5"><vh>3 安装方式</vh></v>
+<v t="swot.20250906102110.6"><vh>4 连接 Redis 的几种方式</vh></v>
+<v t="swot.20250906102110.7"><vh>5 最常用的 20 条命令</vh></v>
+<v t="swot.20250906102110.8"><vh>6 一分钟体验</vh></v>
+<v t="swot.20250906102110.9"><vh>7 Redis 新手厨房：30 道命令边做边学</vh>
+<v t="swot.20250906102110.10"><vh>7.1 String 类型 4 例（最简单的“键-值”）</vh></v>
+<v t="swot.20250906102110.11"><vh>7.2 Hash 类型 5 例（“对象”缓存）</vh></v>
+<v t="swot.20250906102110.12"><vh>7.3 List 类型 7 例（队列 / 栈）</vh></v>
+<v t="swot.20250906102110.13"><vh>7.4 Set 类型 4 例（去重 / 抽奖）</vh></v>
+<v t="swot.20250906102110.14"><vh>7.5 Sorted Set 类型 5 例（排行榜）</vh></v>
+<v t="swot.20250906102110.15"><vh>7.6 Key 生命周期 3 例</vh></v>
+<v t="swot.20250906102110.16"><vh>7.7 服务器 / 调试 6 例</vh></v>
+<v t="swot.20250906102110.17"><vh>7.8 结语</vh></v>
+</v>
+</v>
+</v>
+</v>
 <v t="swot.20250810113519.1" descendentVnodeUnknownAttributes="7d7100580b000000302e302e302e322e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>@path SpringBoot</vh>
 <v t="swot.20250810155048.1" descendentVnodeUnknownAttributes="7d71005809000000302e302e322e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>@adoc SpringBoot.adoc</vh>
 <v t="swot.20250810155157.1" descendentVnodeUnknownAttributes="7d71005807000000302e322e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>Learning SpingBoot 叶良课程整理了一点儿，感觉有点乱 2025-08-14</vh>
@@ -9303,12 +9324,17 @@ image::img/docker_pull_redis.png[]
 .docker_run_redis
 image::img/docker_run_redis.png[]
 
+.docker_run_port
+image::img/docker_run_port.png[,600]
+
 .docker_container_redis
 image::img/docker_container_redis.png[]
 
 .docker_container_redis_exec
 image::img/docker_container_redis_exec.png[]
 
+在宿主机测试连接到 redis 服务器::
+redis-cli
 </t>
 <t tx="swot.20250906093952.1">@language asciidoc
 1. 把正在跑的容器打成镜像
@@ -9335,5 +9361,506 @@ image::img/docker_container_redis_exec.png[]
 ====
 </t>
 <t tx="swot.20250906101555.1"></t>
+<t tx="swot.20250906102110.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032352d30382d33317103752e">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3</t>
+<t tx="swot.20250906102110.10">@language asciidoc
+.验证码
+[source,redis]
+----
+&gt; SET mobile:code:13800138000 123456 NX EX 300
+OK
+----
+**解释**  
+`SET` 是“存值”；`NX`（Not eXists）只有当手机号没验证码时才成功，**用来做分布式锁或防重复发送**；`EX 300` 让它 300 秒后自动消失，**省得手删**。
+
+[source,redis]
+----
+&gt; GET mobile:code:13800138000
+"123456"
+----
+**解释**  
+`GET` 把刚才的值拿回来，双引号说明它是字符串。300s 后就没值了。
+
+
+.统计 PV/点赞数
+[source,redis]
+----
+&gt; INCR api:count
+(integer) 1
+&gt; INCR api:count
+(integer) 2
+----
+**解释**  
+`INCR` 把值当成“数字”原子地加 1，**多人同时调用也不会算错**，常用来统计 PV/点赞数。
+
+
+.设置多值
+[source,redis]
+----
+&gt; MSET user:1:name Lucy user:1:age 22
+OK
+&gt; MGET user:1:name user:1:age
+1) "Lucy"
+2) "22"
+----
+**解释**  
+`MSET` / `MGET` 一次存/取多个键，**减少网络往返**，省流量也更快。
+
+
+.追加内容
+[source,redis]
+----
+&gt; APPEND user:1:name " (VIP)"
+(integer) 10
+&gt; GET user:1:name
+"Lucy (VIP)"
+----
+**解释**  
+`APPEND` 把字符串直接拼在后面，**返回的是新长度** 10 -&gt; Lucy 4 + 空格1 + (VIP)5
+</t>
+<t tx="swot.20250906102110.11">@language asciidoc
+
+[source,redis]
+----
+HSET product:1001 name "iPhone15" price 7999 stock 100
+(integer) 3
+----
+**解释**  
+`HSET` 一次存 3 个“字段-值”到 `product:1001` 这个 Hash 表里，**比存 JSON 字符串更省内存且可单独改字段**。
+
+[source,redis]
+----
+HGET product:1001 price
+"7999"
+----
+**解释**  
+`HGET` 只拿价格字段，**不用把整个对象取出来再解析**。
+
+[source,redis]
+----
+HINCRBY product:1001 stock -1
+(integer) 99
+----
+**解释**  
+原子地把库存减 1，**返回剩余库存**。高并发下也不会出现“超卖”。
+
+[source,redis]
+----
+HGETALL product:1001
+1) "name"
+2) "iPhone15"
+3) "price"
+4) "7999"
+5) "stock"
+6) "99"
+----
+**解释**  
+`HGETALL` 把整张 Hash 一次性拉回，**顺序是“字段 值 字段 值 …”**。
+
+[source,redis]
+----
+HMSET product:1002 name "AirPods" price 1299
+OK
+----
+**解释**  
+`HMSET` 一次存多个字段，**和 HSET 功能一样**（Redis 4+ 已合并，但老代码常见）。
+</t>
+<t tx="swot.20250906102110.12">.查看 List 内容（不弹出）
+[source,redis]
+----
+LRANGE tasks 0 -1
+(empty array)
+----
+* 0 -1 表示查看整个列表
+* 0 2 表示前 3 个元素
+
+
+.查看 List 两端元素（不弹出）
+[source,redis]
+----
+LINDEX mylist 0      # 查看第一个元素
+LINDEX mylist -1     # 查看最后一个元素
+----
+
+
+.LPUSH 从“左侧”塞进两条任务，**像栈一样后进先出**。
+[source,redis]
+----
+LPUSH tasks email-job sms-job
+(integer) 2
+----
+
+.RPUSH 从“右侧”追加，**形成“左进右出”就是队列**。
+[source,redis]
+----
+RPUSH tasks push-job
+(integer) 3
+----
+
+.LLEN 看当前队列长度，**常用来做监控报警**。
+[source,redis]
+----
+LLEN tasks
+(integer) 3
+----
+
+.LPOP 把最左边的任务弹出来，**FIFO 队列的消费者就这么写**
+[source,redis]
+----
+LPOP tasks
+"sms-job"
+----
+
+.BRPOP 阻塞地等 5 秒，**有数据就立即弹出，没数据就空等**；
+[source,redis]
+----
+BRPOP tasks 5
+1) "tasks"   // &lt;1&gt;
+2) "push-job"
+----
+
+&lt;1&gt; 返回值先给队列名再给元素，**用来实现“简单消息队列”**。
++
+* 如果 5 秒内 tasks 列表有元素，就立即返回并弹出最左边的一个；
+* 超时返回 nil。
+</t>
+<t tx="swot.20250906102110.13">@language asciidoc
+.SADD 往集合里加用户 ID，**重复元素自动忽略**，所以只增加了 2 个。
+[source,redis]
+----
+SADD lucky:u1001 u123 u456 u123
+(integer) 2
+----
+
+
+.SMEMBERS 列出所有成员，**无序**。
+[source,redis]
+----
+SMEMBERS lucky:u1001
+1) "u123"
+2) "u456"
+----
+
+.SCARD 返回集合大小，**用来告诉你“已报名人数”**。
+[source,redis]
+----
+SCARD lucky:u1001
+(integer) 2
+----
+
+.SPOP 随机弹 1 个，**做抽奖最方便**：谁被弹出谁中奖。
+[source,redis]
+----
+SPOP lucky:u1001
+"u456"
+----
+</t>
+<t tx="swot.20250906102110.14">@language asciidoc
+.ZADD 把“分数 成员”成对写进去，**分数可重复，成员唯一**。
+[source,redis]
+----
+ZADD rank:score 100 user:1 90 user:2 100 user:3
+(integer) 3
+----
+
+
+.按“分数高低”取前 3 名，`WITHSCORES` 把分数一起带出来，**排行榜页面直接渲染**。
+[source,redis]
+----
+127.0.0.1:6379&gt; ZRANGE rank:score 0 2 WITHSCORES
+1) "user:2"
+2) "90"
+3) "user:1"
+4) "100"
+5) "user:3"
+6) "100"
+
+127.0.0.1:6379&gt; ZREVRANGE rank:score 0 2 WITHSCORES
+1) "user:3"
+2) "100"
+3) "user:1"
+4) "100"
+5) "user:2"
+6) "90"
+----
+* ZRANGE 先按分数正排，分数相同再按成员名升序排。
+* ZREVRANGE 把整条链表整体翻转再输出（不会再对 user:x 字典序二次排序）。
+
+
+.ZINCRBY 给 user:2 加 5 分，**返回新分数 95**，原子操作不怕并发。
+[source,redis]
+----
+ZINCRBY rank:score 5 user:2
+"95"
+----
+
+
+.ZRANK 按“分数从低→高”排名，取单个成员，**返回下标从 0 开始**；若要高分在前用 `ZREVRANK`。
+[source,redis]
+----
+ZRANK rank:score user:2
+(integer) 0
+----
+
+
+.把“最低分段”的那 1 个人踢掉，**清理垫底用户**。
+[source,redis]
+----
+ZREMRANGEBYRANK rank:score 0 0
+(integer) 1
+----
+</t>
+<t tx="swot.20250906102110.15">@language asciidoc
+
+[source,redis]
+----
+SET session:abc "uid=9527" EX 1800
+OK
+----
+**解释**  
+`EX 1800` 让会话半小时后自己消失，**省得手删，秒变“自动登出”**。
+
+[source,redis]
+----
+TTL session:abc
+(integer) 1795
+----
+**解释**  
+`TTL` 告诉你“还剩多少秒活”，**-2 表示已死，-1 表示永不过期**。
+
+[source,redis]
+----
+PERSIST session:abc
+(integer) 1
+----
+**解释**  
+`PERSIST` 取消过期时间，**1 表示成功，0 表示本来就没过期时间或 key 不存在**。
+
+====
+比如实际应用中可以处理 `token abcdef...` 的过期时间。
+====
+</t>
+<t tx="swot.20250906102110.16">@language asciidoc
+
+[source,redis]
+----
+DBSIZE
+(integer) 42
+----
+**解释**  
+`DBSIZE` 当前库一共有 42 个 key，**做监控面板很方便**。
+
+[source,redis]
+----
+INFO memory
+# Memory
+used_memory_human:1.23M
+----
+**解释**  
+`INFO memory` 只看内存，**used_memory_human 给人类看的单位**。
+
+[source,redis]
+----
+SLOWLOG GET 3
+1) 1) (integer) 200
+   2) (integer) 1680000000
+   3) (integer) 10503
+   4) 1) "KEYS"
+      2) "*"
+----
+**解释**  
+
+* `SLOWLOG` 列出最慢 3 条命令，**第 3 字段 10503 表示用了 10.5 毫秒**；
+* 生产环境建议在 redis.conf 中加 `slowlog-log-slower-than 1000`，记录所有耗时超过 1 毫秒的命令。
+
+[source,redis]
+----
+MONITOR
+OK
+----
+**解释**  
+
+* `MONITOR` 实时打印所有请求，**调试用，线上勿长开**，会拖慢性能。退出客户端
+* MONITOR 不是 Redis 的服务配置，只要退出执行它的客户端连接，就算“关闭”了。
+
+
+[source,redis]
+----
+CONFIG GET maxmemory
+1) "maxmemory"
+2) "0"
+----
+**解释**  
+
+* `CONFIG GET` 查看运行配置，**0 表示没设内存上限**；
+* 可动态 `CONFIG SET maxmemory 100mb`。
+
+[source,redis]
+----
+FLUSHALL
+OK
+----
+**解释**
+
+* `FLUSHALL` 清空所有库，**危险！** 
+* 建议改名或设 `rename-command FLUSHALL ""` 禁止线上执行。
+</t>
+<t tx="swot.20250906102110.17">@language asciidoc
+把上面命令一条一条敲完，你对 Redis 的 **String/Hash/List/Set/Zset/Key/Server** 六大模块就全摸过一遍了。  
+
+**记得：**
+
+1. 线上禁用 `KEYS *` 和 `FLUSHALL`。
+2. 内存设置 `maxmemory` + 淘汰策略 `allkeys-lru`。
+3. 慢查询定期看，**超过 1 ms 就要关注**。
+</t>
+<t tx="swot.20250906102110.2">
+++++
+&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20250906102110.3">Redis（Remote Dictionary Server）是一个开源的 **内存数据结构存储系统**，常用作数据库、缓存与消息队列。
+
+它支持丰富的数据类型，提供微秒级响应，并可通过持久化、主从、哨兵与集群等机制保证高可用与水平扩展。
+
+</t>
+<t tx="swot.20250906102110.4">. **纯内存访问**：单线程模型，Qps 可达 10w+。
+
+. **丰富的数据结构**：String / Hash / List / Set / SortedSet / Bitmap / HyperLogLog / Stream。
+
+. **原子操作 &amp; Lua 脚本**：单线程串行执行，支持事务（MULTI/EXEC）与 Lua 自定义逻辑。
+
+. **高可用 &amp; 扩展**：
+  **主从复制** • **哨兵 Sentinel** • **Cluster 分片（16384 槽）**
+
+. **持久化双策略**：
+  **RDB**（快照，快速恢复） • **AOF**（追加日志，更高安全） • 可混合使用。
+</t>
+<t tx="swot.20250906102110.5">[cols="1,2a",options="header"]
+|===
+|平台 |一键步骤
+
+|Windows
+|1. 下载社区版 MSI https://github.com/microsoftarchive/redis/releases +
+2. 双击安装 → 勾选“加入 PATH” → 完成 +
+3. 启动 `redis-server.exe` 与 `redis-cli.exe`
+
+|Linux（Ubuntu/Debian）
+|[source,bash]
+----
+sudo apt update &amp;&amp; sudo apt install redis-server
+sudo systemctl enable --now redis-server
+redis-cli ping   # 返回 PONG 即成功
+----
+
+|macOS
+|[source,bash]
+----
+brew install redis
+brew services start redis
+redis-cli ping
+----
+|===
+
+TIP: 我们还可以使用 docker 来运行 redis
+</t>
+<t tx="swot.20250906102110.6">1) 命令行交互::
+  `redis-cli [-h host -p port -a password]`
+
+2) 官方 GUI::
+  RedisInsight（跨平台，可视化查询、慢日志、监控）
+
+3)各语言客户端（TCP 协议，默认 6379）::
++
+====
+* Python: `redis-py`
+* Java: `Jedis` / `Lettuce`
+* Go: `go-redis`
+* Node: `ioredis`
+====
+
+4) SpringBoot 集成::
+  `spring-boot-starter-data-redis` + `RedisTemplate`
+
+</t>
+<t tx="swot.20250906102110.7">[cols="1,3",options="header"]
+|===
+|类型 |速查表
+
+|键 Key
+|`DEL` `EXISTS` `EXPIRE` `TTL` `KEYS pattern`
+
+|String
+|`SET` `GET` `MSET` `MGET` `INCR`
+
+|Hash
+|`HSET` `HGET` `HGETALL` `HLEN` `HDEL`
+
+|List
+|`LPUSH` `RPOP` `LRANGE` `LLEN` `LTRIM`
+
+|Set
+|`SADD` `SMEMBERS` `SISMEMBER` `SCARD` `SINTER`
+
+|SortedSet
+|`ZADD` `ZRANGE` `ZREVRANK` `ZSCORE` `ZCARD`
+
+|服务器
+|`PING` `INFO` `FLUSHALL` `SAVE` `BGSAVE`
+|===
+
+</t>
+<t tx="swot.20250906102110.8">[source,console]
+----
+redis-cli
+
+127.0.0.1:6379&gt; SET site redis.io
+OK
+
+127.0.0.1:6379&gt; GET site
+"redis.io"
+
+127.0.0.1:6379&gt; EXPIRE site 60
+(integer) 1
+
+127.0.0.1:6379&gt; TTL site
+(integer) 58
+----
+</t>
+<t tx="swot.20250906102110.9">@language asciidoc
+// 统一提示块样式
+.新手 Tips
+[TIP]
+====
+* 返回结果中的 `(integer) 1` 表示 Redis 告诉你“影响了 1 条数据”。
+* `OK` 就是“成功”；
+* `(nil)` 就是“没查到，空的”。
+====
+
+</t>
 </tnodes>
 </leo_file>
