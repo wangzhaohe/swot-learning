@@ -65,6 +65,23 @@ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
     python launchLeo.py
 
+== Nav Search
+Leo Editor 的 Nav（“Nav” 标签页）搜索功能是支持正则表达式的，不过需要借助 leo's QuickSearch 插件，你需要确保已加载此插件。
+
+以下是详情：
+
+1. 确保在 Leo > Plugins 配置中已启用 quicksearch.py 插件。
+
+2. 切换到 Nav 标签页（通常在 Log 窗口）。
+
+3. 输入搜索内容：
+
+* 普通搜索：例如 todo* 使用通配符；
+* 正则搜索：例如 r:^def\s+\w+ 查找以 def 开头的函数定义；
+* 不区分大小写：使用 r:(?i)pattern。
+
+回车执行搜索
+
 == Teaching by leo-editor
 
 
@@ -92,19 +109,63 @@ Therefore, if a method could be devised to write the source code concurrently wi
 
 所以如果能够在编写文档的同时编写源代码，将会节省大量重复劳动的时间。
 
-== Nav Search -- 搜索功能
-Leo Editor 的 Nav（“Nav” 标签页）搜索功能是支持正则表达式的，不过需要借助 leo's QuickSearch 插件，你需要确保已加载此插件。
-以下是详情：
+== 基于 x86 的库如何在 macos arm 架构下运行
+如果在 arm64 的 MacOS 下不能运行 leo-editor，可以试试下面的方法。
 
-1. 确保在 Leo > Plugins 配置中已启用 quicksearch.py 插件。
+怎么样在 M1|M2 Mac终端中快速切换 arm64 或 x86 架构
+https://aibi8.com/news/3140.html
 
-2. 切换到 Nav 标签页（通常在 Log 窗口）。
+在 M1|M2|M3 Mac上，可以使用 arch 命令在终端中快速切换架构。
 
-3. 输入搜索内容：
+要从 ARM64 切换到 x86 架构，请在终端中输入以下命令：
 
-* 普通搜索：例如 todo* 使用通配符；
-* 正则搜索：例如 r:^def\s+\w+ 查找以 def 开头的函数定义；
-* 不区分大小写：使用 r:(?i)pattern。
+    arch -x86_64 zsh
 
-回车执行搜索
+此命令将在当前终端会话中切换到 x86_64 架构，以便可以在 M1|M2|M3 MacOS 上运行只适用于 x86 架构的应用程序。
+
+要从 x86 切换回 ARM64 架构，请在终端中输入以下命令：
+
+    arch -arm64 zsh
+
+这将在当前终端会话中切换回 ARM64 架构。请注意，只有 M1|M2|M# MacOS 支持 ARM64 架构。
+
+== 列操作模式 rectangle
+The following is from LeoDocs.leo. Selecting some text with mouse or keyboard arrow key, then between the first cursor and the end cursor is the columns that being selected.
+
+------
+
+.. _`Emacs rectangle commands`: http://www.gnu.org/software/emacs/manual/html_node/emacs/Rectangles.html
+
+The following commands emulate the `Emacs rectangle commands`_::
+
+```
+rectangle-clear
+rectangle-delete
+
+rectangle-open
+rectangle-close
+
+rectangle-kill
+rectangle-yank
+
+rectangle-string
+```
+
+Given::
+
+```
+I'm really glad the docs are being updated. I know that's a
+monumental task. I only use a fraction of Leo's commands, mostly
+because I don't even know what they're supposed to accomplish. A few
+examples:
+```
+
+Placing the cursor immediately before the first "I", holding shift and moving it to immediately before the word`examples` selects a zero width rectangle from the beginning to the end of the selection (zero width because the selection starts and ends in the same column. Then running `rectangle-string [largo]<space><enter>` yields::
+
+....
+[largo] I'm really glad the docs are being updated. I know that's a
+[largo] monumental task. I only use a fraction of Leo's commands, mostly
+[largo] because I don't even know what they're supposed to accomplish. A few
+[largo] examples:
+....
 
