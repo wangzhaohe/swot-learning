@@ -49,29 +49,6 @@
 </v>
 </v>
 </v>
-<v t="swot.20250810113519.1" descendentVnodeUnknownAttributes="7d7100580b000000302e302e302e322e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>@path SpringBoot</vh>
-<v t="swot.20250810155048.1" descendentVnodeUnknownAttributes="7d71005809000000302e302e322e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>@adoc SpringBoot.adoc</vh>
-<v t="swot.20250810155157.1" descendentVnodeUnknownAttributes="7d71005807000000302e322e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>Learning SpingBoot 叶良课程整理了一点儿，感觉有点乱 2025-08-14</vh>
-<v t="swot.20250810113539.1"><vh>spring 介绍</vh></v>
-<v t="swot.20250810155614.1"><vh>小知识</vh>
-<v t="swot.20250810143002.1"><vh>maven 刷新按钮功能</vh></v>
-</v>
-<v t="swot.20250810134056.1" descendentVnodeUnknownAttributes="7d71005805000000302e302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>@path spring-boot-learn-20250810</vh>
-<v t="swot.20250810164552.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>基本功能测试</vh>
-<v t="swot.20250810145633.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741da26155fed261f73732e"><vh>@file src/main/java/com/swotpp/springbootlearn20250810/controller/HelloController.java</vh></v>
-</v>
-<v t="swot.20250810164620.1"><vh>分层测试</vh>
-<v t="swot.20250810161239.1"><vh>@file src/main/java/com/swotpp/springbootlearn20250810/entity/User.java</vh></v>
-<v t="swot.20250810163916.1"><vh>@file src/main/java/com/swotpp/springbootlearn20250810/service/UserService.java</vh></v>
-<v t="swot.20250810164416.1"><vh>@file src/main/java/com/swotpp/springbootlearn20250810/controller/UserController.java</vh></v>
-</v>
-<v t="swot.20250810164646.1"><vh>MyBatis</vh>
-<v t="swot.20250810174444.1"><vh>newHeadline</vh></v>
-</v>
-</v>
-</v>
-</v>
-</v>
 <v t="swot.20250811154633.1"><vh>@path threejs</vh>
 <v t="swot.20250812085446.1"><vh>@adoc Three.js.adoc</vh>
 <v t="swot.20250812085536.1"><vh>Three.js</vh>
@@ -9020,88 +8997,6 @@ NOTE: 但这种方式只能防止“主动点击”，不能防止用户手动�
 </t>
 <t tx="swot.20250721131156.1">输入 vbase-3-set... Vue Single File Component，可以生成 Vue3 模板。
 </t>
-<t tx="swot.20250810113519.1"></t>
-<t tx="swot.20250810113539.1">官网介绍 https://spring.io/
-
-项目介绍 https://spring.io/projects
-
-Spring Boot 介绍 https://spring.io/projects/spring-boot
-
-创建 Spring Boot 项目 3 版本 https://start.spring.io/
-
-创建 Spring Boot 项目 2 版本 https://start.aliyun.com/
-
-* Project: Maven
-* Language: java
-* SpringBoot: 2.7
-* Group: com.xxx 自己命名
-* 打包方式: jar
-* java版本: 8
-* Dependencies: mysql Driver、Spring Web、lombok（方便创建实体类）
-</t>
-<t tx="swot.20250810134056.1"></t>
-<t tx="swot.20250810143002.1">@language asciidoc
-
-image::img/maven_refresh_button.png[refresh,640]
-
-* 左边刷新按钮（圆形箭头图标）：
-这个按钮通常用于刷新整个Maven项目。点击这个按钮会触发Maven重新解析项目的pom.xml文件，重新下载所有依赖项，并更新项目的依赖树。这个操作相当于执行了 `Maven的mvn clean install` 命令，确保项目的所有依赖都是最新的，并且本地仓库中的依赖是完整的。
-
-* 右边刷新按钮（两个箭头组成的圆形图标）：
-这个按钮可能用于刷新Maven依赖树视图。点击这个按钮会更新IDE中显示的依赖树，确保显示的依赖信息与pom.xml文件中定义的一致。这个操作不会重新下载依赖项，只是更新IDE中的显示内容。
-</t>
-<t tx="swot.20250810155048.1">@language asciidoc
-:source-highlighter: pygments
-:icons: font
-:scripts: cjk
-:stem: latexmath
-:toc:
-:toc: right
-:toc-title: Table of Contents
-:toclevels: 3</t>
-<t tx="swot.20250810155157.1">
-++++
-&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
-&lt;script&gt;
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
-
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () =&gt; {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
-&lt;/script&gt;
-++++
-</t>
-<t tx="swot.20250810155614.1"></t>
-<t tx="swot.20250810164552.1"></t>
-<t tx="swot.20250810164620.1"></t>
-<t tx="swot.20250810164646.1">@language asciidoc
-官网 https://mybatis.org/mybatis-3/zh_CN/index.html
-
-查jar包依赖网站 https://mvnrepository.com/
-
-.加入 pom.xml 文件的 &lt;dependencies&gt; 中
-[source,scss]
-----
-@language xml
-&lt;!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
-    &lt;version&gt;3.0.3&lt;/version&gt;
-&lt;/dependency&gt;
-----
-</t>
-<t tx="swot.20250810174444.1"></t>
 <t tx="swot.20250811154633.1"></t>
 <t tx="swot.20250811160652.1">PBR 是 Physically-Based Rendering 的缩写，中文通常翻译为“基于物理的渲染”。
 
@@ -9333,6 +9228,8 @@ image::img/docker_container_redis.png[]
 .docker_container_redis_exec
 image::img/docker_container_redis_exec.png[]
 
+NOTE: save 落盘只是为了给学生发送已经有数据的容器打包。
+
 在宿主机测试连接到 redis 服务器::
 redis-cli
 </t>
@@ -9356,7 +9253,7 @@ redis-cli
 
 [NOTE]
 ====
-1. 镜像文件较大，可先用 gzip redis-with-data.tar 压缩再传。
+1. 镜像文件较大，可先用 gzip redis-with-data.tar 压缩再传。压缩后的文件大小，要看镜像内容的实际情况。
 2. 如果数据还在内存、没触发过 SAVE/BGSAVE，先手动执行一次 SAVE，再 commit，否则镜像里可能没数据。
 ====
 </t>
@@ -9845,11 +9742,13 @@ OK
 "redis.io"
 
 127.0.0.1:6379&gt; EXPIRE site 60
-(integer) 1
+(integer) 1    # &lt;.&gt;
 
 127.0.0.1:6379&gt; TTL site
 (integer) 58
 ----
+
+&lt;1&gt; 表示命令执行成功，并且键 site 存在，且成功设置了 60 秒的过期时间。
 </t>
 <t tx="swot.20250906102110.9">@language asciidoc
 // 统一提示块样式
