@@ -547,7 +547,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_7_2_hash_类型_5_例对象缓存">7.2 Hash 类型 5 例（“对象”缓存）</a></li>
 <li><a href="#_7_3_list_类型_7_例队列_栈">7.3 List 类型 7 例（队列 / 栈）</a></li>
 <li><a href="#_7_4_set_类型_4_例去重_抽奖">7.4 Set 类型 4 例（去重 / 抽奖）</a></li>
-<li><a href="#_7_5_sorted_set_类型_5_例排行榜">7.5 Sorted Set 类型 5 例（排行榜）</a></li>
+<li><a href="#_7_5_sorted_set_类型_6_例排行榜">7.5 Sorted Set 类型 6 例（排行榜）</a></li>
 <li><a href="#_7_6_key_生命周期_3_例">7.6 Key 生命周期 3 例</a></li>
 <li><a href="#_7_7_服务器_调试_6_例">7.7 服务器 / 调试 6 例</a></li>
 <li><a href="#_7_8_结语">7.8 结语</a></li>
@@ -1068,7 +1068,7 @@ LINDEX mylist -1     # 查看最后一个元素</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_7_5_sorted_set_类型_5_例排行榜">7.5 Sorted Set 类型 5 例（排行榜）</h3>
+<h3 id="_7_5_sorted_set_类型_6_例排行榜">7.5 Sorted Set 类型 6 例（排行榜）</h3>
 <div class="listingblock">
 <div class="title">ZADD 把“分数 成员”成对写进去，<strong>分数可重复，成员唯一</strong>。</div>
 <div class="content">
@@ -1077,7 +1077,7 @@ LINDEX mylist -1     # 查看最后一个元素</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">按“分数高低”取前 3 名，<code>WITHSCORES</code> 把分数一起带出来，<strong>排行榜页面直接渲染</strong>。</div>
+<div class="title">按“分数值升序”取前 3 名，<code>WITHSCORES</code> 把分数一起带出来，<strong>排行榜页面直接渲染</strong>。</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="redis"><span></span>127.0.0.1:6379&gt; ZRANGE rank:score 0 2 WITHSCORES
 1) &quot;user:2&quot;
@@ -1125,6 +1125,12 @@ LINDEX mylist -1     # 查看最后一个元素</code></pre>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="redis"><span></span>ZREMRANGEBYRANK rank:score 0 0
 (integer) 1</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">移除排名第 0, 1, 2 的成员（即排名最低的前 3 名）。</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="redis"><span></span>ZREMRANGEBYRANK rank:score 0 2</code></pre>
 </div>
 </div>
 </div>
@@ -1300,7 +1306,7 @@ OK</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-08 15:20:41 +0800
+Last updated 2025-09-09 09:00:38 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

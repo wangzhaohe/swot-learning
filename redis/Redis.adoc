@@ -346,7 +346,7 @@ SPOP lucky:u1001
 "u456"
 ----
 
-=== 7.5 Sorted Set 类型 5 例（排行榜）
+=== 7.5 Sorted Set 类型 6 例（排行榜）
 .ZADD 把“分数 成员”成对写进去，**分数可重复，成员唯一**。
 [source,redis]
 ----
@@ -355,7 +355,7 @@ ZADD rank:score 100 user:1 90 user:2 100 user:3
 ----
 
 
-.按“分数高低”取前 3 名，`WITHSCORES` 把分数一起带出来，**排行榜页面直接渲染**。
+.按“分数值升序”取前 3 名，`WITHSCORES` 把分数一起带出来，**排行榜页面直接渲染**。
 [source,redis]
 ----
 127.0.0.1:6379> ZRANGE rank:score 0 2 WITHSCORES
@@ -399,6 +399,13 @@ ZRANK rank:score user:2
 ----
 ZREMRANGEBYRANK rank:score 0 0
 (integer) 1
+----
+
+
+.移除排名第 0, 1, 2 的成员（即排名最低的前 3 名）。
+[source,redis]
+----
+ZREMRANGEBYRANK rank:score 0 2
 ----
 
 === 7.6 Key 生命周期 3 例

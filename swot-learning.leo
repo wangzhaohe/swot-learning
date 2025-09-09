@@ -41,7 +41,7 @@
 <v t="swot.20250906102110.11"><vh>7.2 Hash 类型 5 例（“对象”缓存）</vh></v>
 <v t="swot.20250906102110.12"><vh>7.3 List 类型 7 例（队列 / 栈）</vh></v>
 <v t="swot.20250906102110.13"><vh>7.4 Set 类型 4 例（去重 / 抽奖）</vh></v>
-<v t="swot.20250906102110.14"><vh>7.5 Sorted Set 类型 5 例（排行榜）</vh></v>
+<v t="swot.20250906102110.14"><vh>7.5 Sorted Set 类型 6 例（排行榜）</vh></v>
 <v t="swot.20250906102110.15"><vh>7.6 Key 生命周期 3 例</vh></v>
 <v t="swot.20250906102110.16"><vh>7.7 服务器 / 调试 6 例</vh></v>
 <v t="swot.20250906102110.17"><vh>7.8 结语</vh></v>
@@ -9468,7 +9468,7 @@ ZADD rank:score 100 user:1 90 user:2 100 user:3
 ----
 
 
-.按“分数高低”取前 3 名，`WITHSCORES` 把分数一起带出来，**排行榜页面直接渲染**。
+.按“分数值升序”取前 3 名，`WITHSCORES` 把分数一起带出来，**排行榜页面直接渲染**。
 [source,redis]
 ----
 127.0.0.1:6379&gt; ZRANGE rank:score 0 2 WITHSCORES
@@ -9513,6 +9513,14 @@ ZRANK rank:score user:2
 ZREMRANGEBYRANK rank:score 0 0
 (integer) 1
 ----
+
+
+.移除排名第 0, 1, 2 的成员（即排名最低的前 3 名）。
+[source,redis]
+----
+ZREMRANGEBYRANK rank:score 0 2
+----
+
 </t>
 <t tx="swot.20250906102110.15">@language asciidoc
 
