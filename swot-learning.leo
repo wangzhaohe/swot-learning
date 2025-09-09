@@ -9618,7 +9618,7 @@ OK
 * 建议改名或设 `rename-command FLUSHALL ""` 禁止线上执行。
 </t>
 <t tx="swot.20250906102110.17">@language asciidoc
-把上面命令一条一条敲完，你对 Redis 的 **String/Hash/List/Set/Zset/Key/Server** 六大模块就全摸过一遍了。  
+把上面命令一条一条敲完，你对 Redis 的 **String/Hash/List/Set/Zset** 五大模块就全摸过一遍了。  
 
 **记得：**
 
