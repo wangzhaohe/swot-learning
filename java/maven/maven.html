@@ -1,0 +1,3260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Maven</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:30em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+/* table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7} */
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#9e9e9e}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+
+/* 自定义输出 HTML 样式 */
+/* 固定按钮在左上角 */
+#toggleButton {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    /*background-color: lightgrey;*/
+    color: #AB2C21;
+    border: none;
+    /*padding: 6px 10px;*/
+    cursor: pointer;
+}
+/*#toc.toc2{width:40em}*/
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:85em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+
+body.toc2.toc-right {
+    padding-left: 0;
+    padding-right: 0em;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+pre.pygments .hll { background-color: #ffffcc }
+pre.pygments { background: #f8f8f8; }
+pre.pygments .tok-c { color: #3D7B7B; font-style: italic } /* Comment */
+pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
+pre.pygments .tok-k { color: #008000; font-weight: bold } /* Keyword */
+pre.pygments .tok-o { color: #666666 } /* Operator */
+pre.pygments .tok-ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+pre.pygments .tok-cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+pre.pygments .tok-cp { color: #9C6500 } /* Comment.Preproc */
+pre.pygments .tok-cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+pre.pygments .tok-c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+pre.pygments .tok-cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
+pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
+pre.pygments .tok-ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+pre.pygments .tok-gr { color: #E40000 } /* Generic.Error */
+pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
+pre.pygments .tok-gi { color: #008400 } /* Generic.Inserted */
+pre.pygments .tok-go { color: #717171 } /* Generic.Output */
+pre.pygments .tok-gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
+pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+pre.pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
+pre.pygments .tok-kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+pre.pygments .tok-kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+pre.pygments .tok-kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+pre.pygments .tok-kp { color: #008000 } /* Keyword.Pseudo */
+pre.pygments .tok-kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+pre.pygments .tok-kt { color: #B00040 } /* Keyword.Type */
+pre.pygments .tok-m { color: #666666 } /* Literal.Number */
+pre.pygments .tok-s { color: #BA2121 } /* Literal.String */
+pre.pygments .tok-na { color: #687822 } /* Name.Attribute */
+pre.pygments .tok-nb { color: #008000 } /* Name.Builtin */
+pre.pygments .tok-nc { color: #0000FF; font-weight: bold } /* Name.Class */
+pre.pygments .tok-no { color: #880000 } /* Name.Constant */
+pre.pygments .tok-nd { color: #AA22FF } /* Name.Decorator */
+pre.pygments .tok-ni { color: #717171; font-weight: bold } /* Name.Entity */
+pre.pygments .tok-ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+pre.pygments .tok-nf { color: #0000FF } /* Name.Function */
+pre.pygments .tok-nl { color: #767600 } /* Name.Label */
+pre.pygments .tok-nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+pre.pygments .tok-nt { color: #008000; font-weight: bold } /* Name.Tag */
+pre.pygments .tok-nv { color: #19177C } /* Name.Variable */
+pre.pygments .tok-ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+pre.pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
+pre.pygments .tok-mb { color: #666666 } /* Literal.Number.Bin */
+pre.pygments .tok-mf { color: #666666 } /* Literal.Number.Float */
+pre.pygments .tok-mh { color: #666666 } /* Literal.Number.Hex */
+pre.pygments .tok-mi { color: #666666 } /* Literal.Number.Integer */
+pre.pygments .tok-mo { color: #666666 } /* Literal.Number.Oct */
+pre.pygments .tok-sa { color: #BA2121 } /* Literal.String.Affix */
+pre.pygments .tok-sb { color: #BA2121 } /* Literal.String.Backtick */
+pre.pygments .tok-sc { color: #BA2121 } /* Literal.String.Char */
+pre.pygments .tok-dl { color: #BA2121 } /* Literal.String.Delimiter */
+pre.pygments .tok-sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+pre.pygments .tok-s2 { color: #BA2121 } /* Literal.String.Double */
+pre.pygments .tok-se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+pre.pygments .tok-sh { color: #BA2121 } /* Literal.String.Heredoc */
+pre.pygments .tok-si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+pre.pygments .tok-sx { color: #008000 } /* Literal.String.Other */
+pre.pygments .tok-sr { color: #A45A77 } /* Literal.String.Regex */
+pre.pygments .tok-s1 { color: #BA2121 } /* Literal.String.Single */
+pre.pygments .tok-ss { color: #19177C } /* Literal.String.Symbol */
+pre.pygments .tok-bp { color: #008000 } /* Name.Builtin.Pseudo */
+pre.pygments .tok-fm { color: #0000FF } /* Name.Function.Magic */
+pre.pygments .tok-vc { color: #19177C } /* Name.Variable.Class */
+pre.pygments .tok-vg { color: #19177C } /* Name.Variable.Global */
+pre.pygments .tok-vi { color: #19177C } /* Name.Variable.Instance */
+pre.pygments .tok-vm { color: #19177C } /* Name.Variable.Magic */
+pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body class="article toc2 toc-right">
+<div id="header">
+<h1>Maven</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">目录</div>
+<ul class="sectlevel1">
+<li><a href="#_maven_介绍">Maven 介绍</a></li>
+<li><a href="#_maven_下载安装">Maven 下载安装</a>
+<ul class="sectlevel2">
+<li><a href="#_windows_设置环境变量">Windows 设置环境变量</a></li>
+</ul>
+</li>
+<li><a href="#_maven_仓库">Maven 仓库</a></li>
+<li><a href="#_maven_本地仓库_confsettings_xml">Maven 本地仓库 conf/settings.xml</a></li>
+<li><a href="#_maven_镜像仓库_confsettings_xml">Maven 镜像仓库 conf/settings.xml</a></li>
+<li><a href="#_maven_项目使用_idea">Maven 项目使用 IDEA</a>
+<ul class="sectlevel2">
+<li><a href="#_idea_设置_maven_全局环境">IDEA 设置 Maven 全局环境</a></li>
+<li><a href="#_idea_创建_maven_项目">IDEA 创建 Maven 项目</a></li>
+<li><a href="#_idea_打开_maven_项目">IDEA 打开 Maven 项目</a></li>
+</ul>
+</li>
+<li><a href="#_maven_项目结构">Maven 项目结构</a>
+<ul class="sectlevel2">
+<li><a href="#_pom_xml_核心配置文件内容示例">pom.xml 核心配置文件内容示例</a></li>
+</ul>
+</li>
+<li><a href="#_maven_坐标">Maven 坐标</a></li>
+<li><a href="#_maven_坐标引入成功测试_test">Maven 坐标引入成功测试 test</a></li>
+<li><a href="#_maven_坐标依赖传递特性">Maven 坐标依赖传递特性</a></li>
+<li><a href="#_maven_坐标排除依赖">Maven 坐标排除依赖</a></li>
+<li><a href="#_maven_坐标依赖范围">Maven 坐标依赖范围</a>
+<ul class="sectlevel2">
+<li><a href="#_依赖范围说明">依赖范围说明</a></li>
+</ul>
+</li>
+<li><a href="#_maven_生命周期">Maven 生命周期</a></li>
+<li><a href="#_maven_内置插件介绍">Maven 内置插件介绍</a></li>
+<li><a href="#_maven_高级学完_spring_boot_再来">Maven 高级&#8201;&#8212;&#8201;学完 spring boot 再来</a>
+<ul class="sectlevel2">
+<li><a href="#_分模块设计">分模块设计</a>
+<ul class="sectlevel3">
+<li><a href="#_先预览一下创建好的_maven_模块结构">先预览一下创建好的 maven 模块结构</a></li>
+<li><a href="#_创建空的_maven_项目">创建空的 maven 项目</a></li>
+<li><a href="#_复制之前的_general_manager_项目">复制之前的 general-manager 项目</a></li>
+<li><a href="#_创建_maven_模块_general_pojo">创建 maven 模块 general-pojo</a></li>
+<li><a href="#_创建_maven_模块_general_utils">创建 maven 模块 general-utils</a></li>
+<li><a href="#_在模块_general_manager_的_pom_xml_中引入新建的两个模块">在模块 general-manager 的 pom.xml 中引入新建的两个模块</a></li>
+</ul>
+</li>
+<li><a href="#_继承关系">继承关系</a>
+<ul class="sectlevel3">
+<li><a href="#_创建父模块接着上面分模块设计继续操作">创建父模块（接着上面分模块设计继续操作）</a></li>
+<li><a href="#_在子模块的_pom_xml_文件中配置继承关系">在子模块的 pom.xml 文件中，配置继承关系</a></li>
+</ul>
+</li>
+<li><a href="#_父模块版本锁定">父模块版本锁定</a>
+<ul class="sectlevel3">
+<li><a href="#_file_module_designmaven_general_managergeneral_parentpom_xml_2">file &#8594; module-design/maven-general-manager/general-parent/pom.xml</a></li>
+<li><a href="#_file_module_designmaven_general_managergeneral_utilspom_xml_2">file &#8594; module-design/maven-general-manager/general-utils/pom.xml</a></li>
+</ul>
+</li>
+<li><a href="#_父模块中引用依赖的自定义版本属性">父模块中引用依赖的自定义版本属性</a>
+<ul class="sectlevel3">
+<li><a href="#_file_module_designmaven_general_managergeneral_parentpom_xml_3">file &#8594; module-design/maven-general-manager/general-parent/pom.xml</a></li>
+</ul>
+</li>
+<li><a href="#_面试题_dependencymanagement_与_dependencies的区别是什么">面试题: &lt;dependencyManagement&gt; 与 &lt;dependencies&gt;的区别是什么?</a></li>
+<li><a href="#_聚合模块">聚合模块</a>
+<ul class="sectlevel3">
+<li><a href="#_file_module_designmaven_general_managergeneral_parentpom_xml_4">file &#8594; module-design/maven-general-manager/general-parent/pom.xml</a></li>
+</ul>
+</li>
+<li><a href="#_面试题_继承与聚合的区分">面试题: 继承与聚合的区分</a></li>
+<li><a href="#_私服_nexus_公司自己搭建的_maven_依赖服务器">私服 nexus &#8594; 公司自己搭建的 maven 依赖服务器</a>
+<ul class="sectlevel3">
+<li><a href="#_nexus_安装与运行">nexus 安装与运行</a></li>
+<li><a href="#_nexus_预置的仓库repository说明">Nexus 预置的仓库（Repository）说明</a></li>
+<li><a href="#_使用私服进行依赖的上传与下载">使用私服进行依赖的上传与下载</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<button id="toggleButton">Table of Contents</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_介绍">Maven 介绍</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Maven 是用于管理和构建 java 项目的工具，它基于项目对象模型(POM - Project Object Model)的概念，通过一小段描述信息 (pom.xml文件) 来管理项目的构建。</strong></p>
+</div>
+<div class="paragraph">
+<p>官网: <a href="http://maven.apache.org" class="bare">http://maven.apache.org</a></p>
+</div>
+<div class="paragraph">
+<p>maven 功能：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>依赖管理</p>
+<div class="ulist">
+<ul>
+<li>
+<p>方便快捷的管理项目的资源(jar包)，避免版本冲突问题。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>统一项目结构</p>
+<div class="ulist">
+<ul>
+<li>
+<p>固定的目录结构（参创建项目后的目录结构）。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>项目构建</p>
+<div class="ulist">
+<ul>
+<li>
+<p>标准跨平台（Linux、Windows、MacOS）的自动化项目构建方式。</p>
+</li>
+<li>
+<p>主要阶段: 清理，编译，测试，打包，发布。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_下载安装">Maven 下载安装</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>下载: <a href="https://maven.apache.org/download.cgi" class="bare">https://maven.apache.org/download.cgi</a></p>
+</div>
+<div class="paragraph">
+<p>安装: <a href="https://maven.apache.org/install.html" class="bare">https://maven.apache.org/install.html</a></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>下载 bin 二进制压缩包，如 apache-maven-3.9.9-bin.tar.gz</p>
+</li>
+<li>
+<p>解压 bin 二进制压缩包 <code>tar xzvf apache-maven-3.9.9-bin.tar.gz</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>注意解压路径不要包含特殊字符，如中文、空格等等，因为可能会遇到无法预料的问题。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>依赖 Java，需要配置 JAVA_HOME (参 Java 安装)</p>
+</li>
+<li>
+<p>设置 Maven 自身的运行环境，需要配置 MAVEN_HOME (现在已经不是必须的了，有些老的库会使用 MAVEN_HOME，还是配置上吧)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>设置环境变量 MAVEN_HOME 为: <code>您的目录路径/apache-maven-3.9.9</code></p>
+</li>
+<li>
+<p>编辑环境变量 PATH</p>
+<div class="ulist">
+<ul>
+<li>
+<p>注意 Windows 系统为增加 <code>%MAVEN_HOME%\bin</code>，参考下面 Windows 的安装说明。</p>
+<div class="listingblock">
+<div class="title">vim ~/.zshrc</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span><span class="tok-nb">export</span><span class="tok-w"> </span><span class="tok-nv">MAVEN_HOME</span><span class="tok-o">=</span>/Users/swot/soft/apache-maven-3.9.9
+<span class="tok-nb">export</span><span class="tok-w"> </span><span class="tok-nv">PATH</span><span class="tok-o">=</span><span class="tok-nv">$MAVEN_HOME</span>/bin:<span class="tok-nv">$PATH</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">生效配置(或者重新打开终端窗口也可以生效配置)</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">source ~/.zshrc</span></code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>检测 Maven 是否安装好</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">mvn -v</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+解压路径不要有中文
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_windows_设置环境变量">Windows 设置环境变量</h3>
+<div class="paragraph">
+<p>此电脑 右键 -&#8594; 高级系统设置 -&#8594; 高级 -&#8594; 环境变量</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha">
+<li>
+<p>在系统变量处新建一个变量 MAVEN_HOME</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_home.png" alt="maven home" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>在 Path 中进行配置</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_path.png" alt="maven path" width="800">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_仓库">Maven 仓库</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>仓库：用于存储资源，包含各种 jar 包</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>中央仓库: 在国外 Maven 的服务器上</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://repo1.maven.org/maven2/" class="bare">https://repo1.maven.org/maven2/</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>私服仓库: 在公司自己部署的服务器上(可选)</p>
+</li>
+<li>
+<p>本地仓库: 在开发者的机器上</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>开发时获取 jar 包的顺序:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>开发机器的本地仓库 &#8594; 私服仓库(可选) &#8594; 中央仓库</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_本地仓库_confsettings_xml">Maven 本地仓库 conf/settings.xml</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>配置文件: 您的 maven 安装目录/conf/settings.xml</p>
+</div>
+<div class="paragraph">
+<p>配置本地仓库位置:<br>
+&lt;localRepository&gt;/Users/swot/maven/repository&lt;/localRepository&gt;</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_镜像仓库_confsettings_xml">Maven 镜像仓库 conf/settings.xml</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maven 的中央仓库是 <code>&lt;url&gt;<a href="https://repo.maven.apache.org/maven2&lt;/url&gt" class="bare">https://repo.maven.apache.org/maven2&lt;/url&gt</a>;</code></p>
+</div>
+<div class="paragraph">
+<p>因为是在国外会相对慢一些，所以需要配置一个国内的镜像仓库。</p>
+</div>
+<div class="paragraph">
+<p>打开 maven 的配置文件（windows机器一般在 maven 安装目录的 conf/settings.xml），在&lt;mirrors&gt;&lt;/mirrors&gt;标签中添加mirror子节点：</p>
+</div>
+<div class="paragraph">
+<p>配置文件: conf/settings.xml</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;mirror&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;id&gt;</span>alimaven<span class="tok-nt">&lt;/id&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;mirrorOf&gt;</span>central<span class="tok-nt">&lt;/mirrorOf&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;name&gt;</span>阿里云公共仓库<span class="tok-nt">&lt;/name&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;url&gt;</span>https://maven.aliyun.com/repository/public<span class="tok-nt">&lt;/url&gt;</span>
+<span class="tok-nt">&lt;/mirror&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_项目使用_idea">Maven 项目使用 IDEA</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_idea_设置_maven_全局环境">IDEA 设置 Maven 全局环境</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>选择 IDEA 中 File -&#8594; close project</p>
+<div class="ulist">
+<ul>
+<li>
+<p>如果打开了项目，请关闭项目</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>IDEA 主界面点击 Customize -&#8594; All settings</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/all_settings.png" alt="all settings" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>打开 All settings , 选择 Build,Execution,Deployment -&#8594; Build Tools -&#8594;
+Maven (或者在顶端搜索 maven 也行)</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_global.png" alt="maven global" width="960">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_idea_创建_maven_项目">IDEA 创建 Maven 项目</h3>
+<div class="paragraph">
+<p>不同版本的 IDEA 可能略有差别，这是 2024 社区版本的 IDEA。</p>
+</div>
+<div class="paragraph">
+<p><strong>方式1: 推荐</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_project_create0.png" alt="maven project create0" width="960">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_project_create1.png" alt="maven project create1" width="960">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>方式2: 了解即可</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_project_create2.png" alt="maven project create2" width="960">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_idea_打开_maven_项目">IDEA 打开 Maven 项目</h3>
+<div class="paragraph">
+<p>用途：打开已创建的 Maven 项目</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>在 IDEA 中点击 File，选择 Open</p>
+</li>
+<li>
+<p>选择 Maven 工程 (二选一)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>方式一: 选择工程目录</p>
+</li>
+<li>
+<p>方式二: 选择工程的 pom.xml 文件</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>配置 Maven 环境 (重要)</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>检查 JDK 版本</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_check_jdk.png" alt="maven check jdk">
+</div>
+</div>
+</li>
+<li>
+<p>检查 Maven 版本 &#8594; File(MacOS 是 InteliJ IDEA) &#8594; Settings</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_env.png" alt="maven env">
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_项目结构">Maven 项目结构</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maven 项目主要目录列出如下：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>src 目录</p>
+<div class="ulist">
+<ul>
+<li>
+<p>main &#8594; 实际项目资源</p>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="red">java &#8594; java源代码目录，在此写代码</span></p>
+</li>
+<li>
+<p>resources &#8594; 配置文件目录</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>test &#8594; 测试项目资源</p>
+<div class="ulist">
+<ul>
+<li>
+<p>java &#8594; java 测试代码目录</p>
+</li>
+<li>
+<p>resources &#8594; 测试配置文件目录，可以不要该目录</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>pom.xml &#8594; 核心配置文件</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pom_xml_核心配置文件内容示例">pom.xml 核心配置文件内容示例</h3>
+<div class="paragraph">
+<p>下面是 Maven 项目创建时默认生成的 pom.xml 文件</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="tok-nt">&lt;project</span><span class="tok-w"> </span><span class="tok-na">xmlns=</span><span class="tok-s">&quot;http://maven.apache.org/POM/4.0.0&quot;</span>
+<span class="tok-w">         </span><span class="tok-na">xmlns:xsi=</span><span class="tok-s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+<span class="tok-w">         </span><span class="tok-na">xsi:schemaLocation=</span><span class="tok-s">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="tok-nt">&gt;</span>
+<span class="tok-w">    </span><span class="tok-cm">&lt;!-- Maven uses this to validate the POM file&#39;s structure. Do not change it --&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;modelVersion&gt;</span>4.0.0<span class="tok-nt">&lt;/modelVersion&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">&lt;!-- 定义该 Maven 项目本身的坐标 --&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;groupId&gt;</span>com.tjise<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;artifactId&gt;</span>maven-demo1<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="tok-nt">&lt;/version&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-nt">&lt;properties&gt;</span>
+<span class="tok-w">        </span><span class="tok-cm">&lt;!-- 表示使用 Java 8 的语法来编译代码 --&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;maven.compiler.source&gt;</span>8<span class="tok-nt">&lt;/maven.compiler.source&gt;</span>
+<span class="tok-w">        </span><span class="tok-cm">&lt;!-- 表示生成的字节码将与 Java 8 兼容（即它将在运行 Java 8 或更高版本的 JVM 上运行） --&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;maven.compiler.target&gt;</span>8<span class="tok-nt">&lt;/maven.compiler.target&gt;</span>
+<span class="tok-w">        </span><span class="tok-cm">&lt;!-- 全局设置 UTF-8，所以在 maven 的编译、执行等插件中不用再设置了 --&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="tok-nt">&lt;/project.build.sourceEncoding&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/properties&gt;</span>
+<span class="tok-nt">&lt;/project&gt;</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_坐标">Maven 坐标</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maven 中的坐标用于描述仓库中资源(jar包)的位置，使用坐标来定义项目本身的坐标或引入项目中需要的依赖的坐标。</p>
+</div>
+<div class="paragraph">
+<p>Maven 坐标主要组成:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>groupld:    定义项目隶属组织名称(通常是域名反写，例如: org.mybatis)</p>
+</li>
+<li>
+<p>artifactld: 定义项目名称(通常是模块名称，例如 order-service, goods-service)</p>
+</li>
+<li>
+<p>version:    定义项目版本号，SNAPSHOT 翻译中文为快照的意思，指的是正在开发的版本。</p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p>在 pom.xml 中定义项目本身的坐标：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;groupId&gt;</span>com.tjise<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-nt">&lt;artifactId&gt;</span>maven-demo1<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="tok-nt">&lt;/version&gt;</span></code></pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>在 pom.xml 中引入第三方库的坐标：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;dependencies&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>org.projectlombok<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>lombok<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>1.18.30<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>junit<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>junit<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>4.12<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;scope&gt;</span>test<span class="tok-nt">&lt;/scope&gt;</span><span class="tok-w">  </span><span class="tok-cm">&lt;!-- 属于依赖范围，先别管 --&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+
+<span class="tok-nt">&lt;/dependencies&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+您可以放入 pom.xml 文件中试试效果如下  &#8594; <mark>刷新 Maven</mark> 后会引入 lombok 的 jar 包。
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock thumb">
+<div class="content">
+<img src="img/maven_dependency.png" alt="maven dependency">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_refresh_button.png" alt="refresh" width="640">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>左边刷新按钮（圆形箭头图标）：
+这个按钮通常用于刷新整个Maven项目。点击这个按钮会触发Maven重新解析项目的 pom.xml 文件，重新下载所有依赖项，并更新项目的依赖树。这个操作相当于执行了 Maven 的 <code>mvn clean install</code> 命令，确保项目的所有依赖都是最新的，并且本地仓库中的依赖是完整的。</p>
+</li>
+<li>
+<p>右边刷新按钮（两个箭头组成的圆形图标）：
+这个按钮可能用于刷新 Maven 依赖树视图。点击这个按钮会更新 IDE 中显示的依赖树，确保显示的依赖信息与 pom.xml 文件中定义的一致。这个操作不会重新下载依赖项，只是更新 IDE 中的显示内容。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p></p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">常用坐标网站</div>
+<div class="paragraph">
+<p>国外查找坐标网站: <a href="https://mvnrepository.com/" class="bare">https://mvnrepository.com/</a></p>
+</div>
+<div class="paragraph">
+<p>国内查找坐标网站: <a href="https://mvn.coderead.cn/" class="bare">https://mvn.coderead.cn/</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_坐标引入成功测试_test">Maven 坐标引入成功测试 test</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>在 maven 项目的 <code>src/test/java/</code> 下创建一个包，如 com.tjise</p>
+</li>
+<li>
+<p>在包 com.tjise 下创建测试类 MavenTest.java <span class="red"><strong>(注意测试类要以 Test 结尾，这样 maven 的 test 插件才能找到该测试类)</strong></span>，否则只能手动在 IDEA 中点击单个类的测试按钮了。可以看下面的截图。</p>
+</li>
+<li>
+<p>MavenTest.java 内容如下：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.junit.Test</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">MavenTest</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Test</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">show</span><span class="tok-p">(){</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;hello maven&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>在 IDEA 中运行测试该类，成功则说明 junit 坐标是引入成功的。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>点击 IDEA 测试类的运行按钮，可以正常运行该测试类。</p>
+</li>
+<li>
+<p>点击 IDEA Maven &#8594; Lifecycle &#8594; test 后，不会运行 MavenTry 测试类。</p>
+</li>
+<li>
+<p>点击 IDEA Probems 中会提示测试类 MavenTry 命名没有以 Test 结尾。</p>
+</li>
+</ul>
+</div>
+<div class="exampleblock">
+<div class="title">Example 1. 测试类名没有以 Test 结尾的截图</div>
+<div class="content">
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_test.png" alt="maven test">
+</div>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_坐标依赖传递特性">Maven 坐标依赖传递特性</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>以 pom.xml 中只引入了 junit 为例:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;groupId&gt;</span>junit<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;artifactId&gt;</span>junit<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;version&gt;</span>4.12<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;scope&gt;</span>test<span class="tok-nt">&lt;/scope&gt;</span><span class="tok-w">  </span>属于依赖范围，先别管
+<span class="tok-nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在刷新 Maven 后，可以看见 junit 还引入了 hamcrest-core 依赖。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_dependency_transfer.png" alt="maven dependency transfer">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>可以这样理解：以后我们可以直接使用被间接依赖的 jar 包，这就是依赖的传递特性。</strong></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_坐标排除依赖">Maven 坐标排除依赖</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>排除依赖指主动断开依赖的资源，被排除的资源无需指定版本。在实际项目开发中，如无特殊需求，不用排除依赖。此处只是一个演示。</p>
+</div>
+<div class="paragraph">
+<p>比如想排除 junit 中的 hamcrest-core 依赖，可以使用 &lt;exclusions&gt; 指定如下：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;groupId&gt;</span>junit<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;artifactId&gt;</span>junit<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;version&gt;</span>4.12<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;scope&gt;</span>test<span class="tok-nt">&lt;/scope&gt;</span>
+<span class="hll"><span class="tok-w">    </span><span class="tok-nt">&lt;exclusions&gt;</span>
+</span><span class="hll"><span class="tok-w">        </span><span class="tok-nt">&lt;exclusion&gt;</span>
+</span><span class="hll"><span class="tok-w">            </span><span class="tok-nt">&lt;groupId&gt;</span>org.hamcrest<span class="tok-nt">&lt;/groupId&gt;</span>
+</span><span class="hll"><span class="tok-w">            </span><span class="tok-nt">&lt;artifactId&gt;</span>hamcrest-core<span class="tok-nt">&lt;/artifactId&gt;</span>
+</span><span class="hll"><span class="tok-w">        </span><span class="tok-nt">&lt;/exclusion&gt;</span>
+</span><span class="hll"><span class="tok-w">    </span><span class="tok-nt">&lt;/exclusions&gt;</span>
+</span><span class="tok-nt">&lt;/dependency&gt;</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_dependency_exclusions.png" alt="maven dependency exclusions">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_坐标依赖范围">Maven 坐标依赖范围</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>比如在 pom.xml 文件中，将 junit 的 scope 设置为 test，如下：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-o">&lt;</span><span class="tok-n">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-n">groupId</span><span class="tok-o">&gt;</span><span class="tok-n">junit</span><span class="tok-o">&lt;/</span><span class="tok-n">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-n">artifactId</span><span class="tok-o">&gt;</span><span class="tok-n">junit</span><span class="tok-o">&lt;/</span><span class="tok-n">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-n">version</span><span class="tok-o">&gt;</span><span class="tok-mf">4.12</span><span class="tok-o">&lt;/</span><span class="tok-n">version</span><span class="tok-o">&gt;</span>
+<span class="hll"><span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-n">scope</span><span class="tok-o">&gt;</span><span class="tok-n">test</span><span class="tok-o">&lt;/</span><span class="tok-n">scope</span><span class="tok-o">&gt;</span>
+</span><span class="tok-o">&lt;/</span><span class="tok-n">dependency</span><span class="tok-o">&gt;</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>那么在 <strong>src/main/java/com/tjise/Main.java</strong> 中就不能用 junit 了，@Test 会在 IDEA中报红色不能用，提示 Cannot resolve symbol 'Test'。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Main</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Hello world!&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 报错不能用 junit: Cannot resolve symbol &#39;Test&#39;</span>
+<span class="tok-w">    </span><span class="tok-nd">@Test</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">showSomeThing</span><span class="tok-p">(){}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>但是在 <code>src/test/java/com/tjise/MavenTest.java</code> 中是可以使用 @Test 的。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.junit.Test</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">MavenTest</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 可以使用 junit</span>
+<span class="tok-w">    </span><span class="tok-nd">@Test</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">show</span><span class="tok-p">(){</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;hello maven&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_依赖范围说明">依赖范围说明</h3>
+<div class="paragraph">
+<p>依赖的 jar 包，默认情况下，可以在任何地方使用（main 和 test）。可以在 pom.xml 中通过 &lt;scope&gt;&#8230;&#8203;&lt;/scope&gt; 设置其作用范围。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>主程序范围有效。(main 目录内)</p>
+</li>
+<li>
+<p>测试程序范围有效。(test 目录内)</p>
+</li>
+<li>
+<p>是否参与打包运行。(package 指令范围内)</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">scope 取值范围</caption>
+<colgroup>
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">scope值</th>
+<th class="tableblock halign-left valign-top">主程序</th>
+<th class="tableblock halign-left valign-top">测试程序</th>
+<th class="tableblock halign-left valign-top">打包(运行)</th>
+<th class="tableblock halign-left valign-top">范例</th>
+<th class="tableblock halign-left valign-top">场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">compile(默认)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">log4j</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">在三种场景都需要</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">junit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">只在测试时才需要</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">provided</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">servlet-api</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">比如打 war 包，Web 容器（如 Tomcat）会在运行时提供 servlet-api</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">runtime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8201;&#8212;&#8201;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">jdbc 数据库驱动</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">只在运行时需要</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+scope runtime 指主程序（编译时）只需要依赖 JDBC 接口（属于 java.sql 包），而运行时才需要具体的实现（即数据库驱动 Jar 包）。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_生命周期">Maven 生命周期</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>在 Maven 中，生命周期指的是项目的构建过程，这个过程由一系列<strong>阶段（phases）</strong>组成，Maven 自动帮你执行这些阶段来完成构建操作。</p>
+</div>
+<div class="paragraph">
+<p>Maven 的生命周期主要分为三个核心部分：</p>
+</div>
+<h3 id="_1_clean_生命周期" class="discrete">1. <strong><code>clean</code> 生命周期</strong>：</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>目的</strong>：清理项目的构建结果。</p>
+</li>
+<li>
+<p><strong>阶段</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>pre-clean</code>：在清理之前要做的工作。</p>
+</li>
+<li>
+<p><code class="red">clean</code>：删除上一次构建生成的所有文件（如 <code>target/</code> 目录下的文件）。</p>
+</li>
+<li>
+<p><code>post-clean</code>：在清理之后要做的工作。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>作用</strong>：当你执行 <code>mvn clean</code> 时，它会删除之前构建生成的所有文件，确保下一次构建从干净的状态开始。</p>
+</li>
+</ul>
+</div>
+<h3 id="_2_default_生命周期也叫构建生命周期" class="discrete">2. <strong><code>default</code> 生命周期</strong>（也叫构建生命周期）：</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>目的</strong>：负责项目的构建、测试、打包等一系列步骤。</p>
+</li>
+<li>
+<p><strong>阶段</strong>：最重要的部分，包含了 Maven 实际构建项目的核心步骤。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>validate</code>：验证项目结构是否正确，检查所有必要信息是否可用。</p>
+</li>
+<li>
+<p><code class="red">compile</code>：编译项目的源代码（位于 <code>src/main/java</code> 到 target 目录下）。</p>
+</li>
+<li>
+<p><code class="red">test</code>：运行测试代码（位于 <code>src/test/java</code>），确保代码功能正常。</p>
+</li>
+<li>
+<p><code class="red">package</code>：打包编译后的代码成 JAR 或 WAR 文件。</p>
+</li>
+<li>
+<p><code>verify</code>：运行任何集成测试，确保包的质量。</p>
+</li>
+<li>
+<p><code class="red">install</code>：将打包后的项目安装到本地 Maven 仓库中，方便其他项目依赖。</p>
+</li>
+<li>
+<p><code>deploy</code>：将最终的构建发布到远程 Maven 仓库中（一般指 maven 私服），供他人使用。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>作用</strong>：这是项目从开发、编译、测试、打包到部署的完整流程。通常你只要执行 <code>mvn package</code>，Maven 会自动完成 <code>validate</code> 到 <code>package</code> 之间所有必要的步骤。</p>
+</li>
+</ul>
+</div>
+<h3 id="_3_site_生命周期_了解即可" class="discrete">3. <strong><code>site</code> 生命周期</strong>： &#8594; 了解即可</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>目的</strong>：为项目生成站点文档。</p>
+</li>
+<li>
+<p><strong>阶段</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>pre-site</code>：在生成站点之前的准备工作。</p>
+</li>
+<li>
+<p><code>site</code>：为项目生成站点文档。</p>
+</li>
+<li>
+<p><code>post-site</code>：在生成站点之后执行的工作。</p>
+</li>
+<li>
+<p><code>site-deploy</code>：将生成的站点文档发布到服务器上，供浏览。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>作用</strong>：为项目生成一个静态站点文档，通常用于项目的描述、API 文档、测试结果等。</p>
+</li>
+</ul>
+</div>
+<h3 id="_总结" class="discrete">总结</h3>
+<div class="paragraph">
+<p>Maven 的生命周期由这三个核心部分组成，它们帮助你自动管理项目的不同构建步骤：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong><code>clean</code> 生命周期</strong>：清理上一次构建的结果。</p>
+</li>
+<li>
+<p><strong><code>default</code> 生命周期</strong>：完成项目从编译、测试到打包、安装的全过程。</p>
+</li>
+<li>
+<p><strong><code>site</code> 生命周期</strong>：生成项目文档。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>这三个生命周期每个都有自己的作用域，可以独立运行或结合使用。最常用的是 <code>default</code> 生命周期，它包含了大多数开发流程中需要的步骤。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_内置插件介绍">Maven 内置插件介绍</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Maven 插件与生命周期命令对应关系如下图：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>如 test 对应插件 surefire</p>
+</li>
+<li>
+<p>如 package 对应插件 jar</p>
+</li>
+<li>
+<p>其他的名字是相同的，一一对应。</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_plugin.png" alt="maven plugin" width="800">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_高级学完_spring_boot_再来">Maven 高级&#8201;&#8212;&#8201;学完 spring boot 再来</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_分模块设计">分模块设计</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">什么是分模块设计? </dt>
+<dd>
+<p>将项目按照功能拆分成若干个子模块。</p>
+</dd>
+<dt class="hdlist1">为什么要分模块设计?</dt>
+<dd>
+<p>方便项目的管理维护、扩展，也方便模块间的相互调用，资源共享。</p>
+</dd>
+<dt class="hdlist1">注意事项: </dt>
+<dd>
+<p>分模块设计需要先针对模块功能进行设计，再进行编码。不会先将工程开发完毕，然后进行拆分。</p>
+</dd>
+</dl>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_module_design.png" alt="maven module design" width="800">
+</div>
+</div>
+<div class="paragraph">
+<p>我们以之前完成的单模块项目 general-manager 为例进行拆分操作。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>把 pojo 拆分成一个模块，如叫 general-pojo。</p>
+</li>
+<li>
+<p>把 utils 拆分成一个模块，如叫 general-utils。</p>
+</li>
+<li>
+<p>原模块 general-manager 依然存在（少了上面两个模块），它使用 pom.xml 来引用上面拆分出去的两个模块。</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_先预览一下创建好的_maven_模块结构">先预览一下创建好的 maven 模块结构</h4>
+<div class="paragraph">
+<p>要在项目 maven-gereral-manager 下一共创建 3 个模块，如下图所示：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_module_structure.png" alt="maven module structure">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_创建空的_maven_项目">创建空的 maven 项目</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>先创建一个 maven 项目。（module-design 是自己创建的一个目录，没有特别的意义）</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_create_new_project.png" alt="maven create new project" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>再删除默认创建的模块，使新创建的项目为空项目。IDEA File 菜单选择 Project Structure&#8230;&#8203;</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_delete_default_module.png" alt="maven delete default module" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>删除无用的文件和目录，如 src、pom.xml、.gitignore 等等。</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+重新启动 IDEA，否则新导入的模块名称会乱，可能成为项目的名称。比如导入了 general-manager 模块，最后模块名称变成了项目的名称 maven-general-manager。这是不对的哟！
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_复制之前的_general_manager_项目">复制之前的 general-manager 项目</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>找到之前开发的项目，复制到目录 maven-general-manager 中。</p>
+</li>
+<li>
+<p>打开 IDEA file 菜单选择 Project Structure&#8230;&#8203;，选择 Modules，再点击 + 号选择 Import Module，导入刚刚复制的 general-manager 项目。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>可以选择 general-manager 目录。</p>
+</li>
+<li>
+<p>也可选择 general-manager 目录下的 pom.xml 文件。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_import_module.png" alt="maven import module" width="800">
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>运行项目，应该可以正常启动。然后可以使用 postman 或者运行前端项目进行测试一下。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>下面创建两个模块 general-pojo 和 general-utils 进行演示。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_创建_maven_模块_general_pojo">创建 maven 模块 general-pojo</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>打开 IDEA file 菜单选择 Project Structure&#8230;&#8203;，选择 Modules，再点击 + 号选择 New Module。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_create_module_general-pojo.png" alt="maven create module general pojo" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>在 general/src/main/java 下创建包 com.tjise</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_general-pojo_create_package_com.tjise.png" alt="maven general pojo create package com.tjise" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>将 general-manager 中的 pojo 目录剪切后粘贴到 general-pojo 中。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_cut_paste_pojo.png" alt="maven cut paste pojo" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>因为缺少 lombok 依赖，代码报错如下</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_missing_lombok.png" alt="maven missing lombok" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>在 pom.xml 中导入 lombok 依赖（注意要写上版本，否则无法加载）</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven-general-pojo_add_lombok.png" alt="maven general pojo add lombok">
+</div>
+</div>
+</li>
+<li>
+<p>检查因缺少 lombok 依赖而报错的代码，正常了。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_missing_lombok_ok.png" alt="maven missing lombok ok">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_创建_maven_模块_general_utils">创建 maven 模块 general-utils</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>打开 IDEA file 菜单选择 Project Structure&#8230;&#8203;，选择 Modules，再点击 + 号选择 New Module。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_create_module_general-utils.png" alt="maven create module general utils" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>在 general/src/main/java 下创建包 com.tjise</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_general-utils_create_package_com.tjise.png" alt="maven general utils create package com.tjise" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>将 general-manager 中的 utils 目录剪切后粘贴到 general-utils 中。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_cut_paste_utils.png" alt="maven cut paste utils" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>因为缺少一些依赖，代码中有会好多报错，如下：</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_missing_dependences.png" alt="maven missing dependences">
+</div>
+</div>
+</li>
+<li>
+<p>在 pom.xml 中导入相应依赖，刷新后正常。（如果不行，指定相应版本试一下）</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;dependencies&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>org.springframework.boot<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>2.7.18<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>org.projectlombok<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>lombok<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>1.18.30<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;optional&gt;</span>true<span class="tok-nt">&lt;/optional&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>com.aliyun.oss<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>aliyun-sdk-oss<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>3.17.4<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>io.jsonwebtoken<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>jjwt-api<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>0.12.6<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">&lt;!-- 实现层: 运行时必需 --&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>io.jsonwebtoken<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>jjwt-impl<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>0.12.6<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;scope&gt;</span>runtime<span class="tok-nt">&lt;/scope&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">&lt;!-- JSON 序列化支持: 运行时必需 --&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>io.jsonwebtoken<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>jjwt-jackson<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>0.12.6<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;scope&gt;</span>runtime<span class="tok-nt">&lt;/scope&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+<span class="tok-nt">&lt;/dependencies&gt;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>检查因缺少相应依赖而报错的代码，都正常了。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_missing_dependences_ok.png" alt="maven missing dependences ok">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_在模块_general_manager_的_pom_xml_中引入新建的两个模块">在模块 general-manager 的 pom.xml 中引入新建的两个模块</h4>
+<div class="sect4">
+<h5 id="_general_pojo">general-pojo</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;groupId&gt;</span>com.tjise<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;artifactId&gt;</span>general-pojo<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_general_utils">general-utils</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;dependency&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;groupId&gt;</span>com.tjise<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;artifactId&gt;</span>general-utils<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="tok-nt">&lt;/version&gt;</span>
+<span class="tok-nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_继承关系">继承关系</h3>
+<div class="paragraph">
+<p>现在三个模块中都有相同的依赖，如 lombok，可以抽取到父模块的 pom.xml 中，只有一份即可。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>概念：继承描述的是两个工程间的关系，与 java 中的继承相似，子工程可以继承父工程中依赖。</p>
+</li>
+<li>
+<p>作用：简化依赖配置、统一管理依赖。</p>
+</li>
+<li>
+<p>实现：&lt;parent&gt; &#8230;&#8203; &lt;/parent&gt;</p>
+</li>
+</ul>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>jar：普通 maven 模块和 springboot 项目打包都是 jar 包（内嵌 tomcat 运行）。</p>
+</li>
+<li>
+<p>war：普通 web 程序打包，需要部署在外部的 tomcat 服务器中运行（现在很少用了）。</p>
+</li>
+<li>
+<p>pom：父工程或聚合工程，该模块不写代码，仅进行依赖管理。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_创建父模块接着上面分模块设计继续操作">创建父模块（接着上面分模块设计继续操作）</h4>
+<div class="paragraph">
+<p>创建 maven 模块 general-parent ，该工程为父工程，设置打包方式 pom (默认 jar)。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>打开 IDEA file 菜单选择 Project Structure&#8230;&#8203;，选择 Modules，再点击 + 号选择 New Module。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_create_parent_module.png" alt="maven create parent module" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>在父模块删除不需要的 general-parent/src 目录。</p>
+</li>
+<li>
+<p>在父模块的 pom.xml 增加 &lt;packaging&gt;pom&lt;/packaging&gt;</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="_file_module_designmaven_general_managergeneral_parentpom_xml">file &#8594; module-design/maven-general-manager/general-parent/pom.xml</h5>
+<div class="sect5">
+<h6 id="_1_packaging_指定该父模块打包方式为_pom">1) packaging 指定该父模块打包方式为 pom</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;packaging&gt;</span>pom<span class="tok-nt">&lt;/packaging&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_2_parent_指定该模块的父模块依赖_spring_boot_默认的_parent">2) parent 指定该模块的父模块依赖 Spring Boot 默认的 &lt;parent&gt;</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-parent</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">2</span><span class="tok-nc">.7.18</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">relativePath</span><span class="tok-o">/&gt;</span><span class="tok-w"> </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">lookup</span><span class="tok-w"> </span><span class="tok-nt">parent</span><span class="tok-w"> </span><span class="tok-nt">from</span><span class="tok-w"> </span><span class="tok-nt">repository</span><span class="tok-w"> </span><span class="tok-nt">指从本地仓库查找父模块--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_3_dependency_配置各个子模块共有的依赖子模块会自动继承父模块的依赖">3) dependency 配置各个子模块共有的依赖（子模块会自动继承父模块的依赖）</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.projectlombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">lombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.18.30</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span><span class="tok-nt">true</span><span class="tok-o">&lt;/</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_在子模块的_pom_xml_文件中配置继承关系">在子模块的 pom.xml 文件中，配置继承关系</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+下面三个子模块中多余的 &lt;groupId&gt; 坐标可以删除，因为都已经在它们的 &lt;parent&gt; 坐标中指定了。
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">可以删除 &lt;groupId&gt;</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">在 &lt;parent&gt; 中已经指定 &lt;groupId&gt; 了</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">general-parent</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.0-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">relativePath</span><span class="tok-o">&gt;</span><span class="tok-nc">..</span><span class="tok-o">/</span><span class="tok-nt">general-parent</span><span class="tok-o">/</span><span class="tok-nt">pom</span><span class="tok-nc">.xml</span><span class="tok-o">&lt;/</span><span class="tok-nt">relativePath</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+relativePath 指定父模块的 pom 文件的相对位置（如果不指定，将从本地仓库/远程仓库查找该模块）。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_file_module_designmaven_general_managergeneral_managerpom_xml">file &#8594; module-design/maven-general-manager/general-manager/pom.xml</h5>
+<div class="sect5">
+<h6 id="_parent_self">parent &amp; self</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">general-parent</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.0-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">relativePath</span><span class="tok-o">&gt;</span><span class="tok-nc">..</span><span class="tok-o">/</span><span class="tok-nt">general-parent</span><span class="tok-o">/</span><span class="tok-nt">pom</span><span class="tok-nc">.xml</span><span class="tok-o">&lt;/</span><span class="tok-nt">relativePath</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+
+<span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">可以删除</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">general-manager</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">0</span><span class="tok-nc">.0.1-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">name</span><span class="tok-o">&gt;</span><span class="tok-nt">general-manager</span><span class="tok-o">&lt;/</span><span class="tok-nt">name</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_module_designmaven_general_managergeneral_pojopom_xml">file &#8594; module-design/maven-general-manager/general-pojo/pom.xml</h5>
+<div class="sect5">
+<h6 id="_parent_self_2">parent &amp; self</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">general-parent</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.0-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">relativePath</span><span class="tok-o">&gt;</span><span class="tok-nc">..</span><span class="tok-o">/</span><span class="tok-nt">general-parent</span><span class="tok-o">/</span><span class="tok-nt">pom</span><span class="tok-nc">.xml</span><span class="tok-o">&lt;/</span><span class="tok-nt">relativePath</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+
+<span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">可以删除</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">general-pojo</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.0-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_module_designmaven_general_managergeneral_utilspom_xml">file &#8594; module-design/maven-general-manager/general-utils/pom.xml</h5>
+<div class="sect5">
+<h6 id="_parent_self_3">parent &amp; self</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">general-parent</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.0-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">relativePath</span><span class="tok-o">&gt;</span><span class="tok-nc">..</span><span class="tok-o">/</span><span class="tok-nt">general-parent</span><span class="tok-o">/</span><span class="tok-nt">pom</span><span class="tok-nc">.xml</span><span class="tok-o">&lt;/</span><span class="tok-nt">relativePath</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+
+<span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">可以删除</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">general-utils</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.0-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_父模块版本锁定">父模块版本锁定</h3>
+<div class="paragraph">
+<p>在 maven 中，可以在父模块的 pom 文件中通过 &lt;dependencyManagement&gt; 来统一管理<strong>依赖版本</strong>。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+子模块引入依赖时，无需指定 &lt;version&gt; 版本号，父模块统一管理。<strong>变更依赖版本号</strong>，只需在父模块中统一变更。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+&lt;dependencyManagement&gt; 只是对版本进行管理，没有继承关系！如果想要继承，参上节内容。
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_dependencyManagement.png" alt="maven dependencyManagement">
+</div>
+</div>
+<div class="paragraph">
+<p>下面是变更的代码例子。</p>
+</div>
+<div class="sect3">
+<h4 id="_file_module_designmaven_general_managergeneral_parentpom_xml_2">file &#8594; module-design/maven-general-manager/general-parent/pom.xml</h4>
+<div class="sect4">
+<h5 id="_dependencymanagement_在此父模块中指定依赖版本">dependencyManagement &#8594; 在此父模块中指定依赖版本</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-web</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">2</span><span class="tok-nc">.7.18</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.aliyun.oss</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">aliyun-sdk-oss</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">3</span><span class="tok-nc">.17.4</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-api</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">0</span><span class="tok-nc">.12.6</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">实现层</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">运行时必需</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-impl</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">0</span><span class="tok-nc">.12.6</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">runtime</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">JSON</span><span class="tok-w"> </span><span class="tok-nt">序列化支持</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">运行时必需</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-jackson</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">0</span><span class="tok-nc">.12.6</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">runtime</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_module_designmaven_general_managergeneral_utilspom_xml_2">file &#8594; module-design/maven-general-manager/general-utils/pom.xml</h4>
+<div class="sect4">
+<h5 id="_dependencies">&lt;dependencies&gt;</h5>
+<div class="paragraph">
+<p>该子模块中依赖的具体版本号已经去掉了，maven 会自动引用父模块 &lt;dependencyManagement&gt; 定义好的依赖版本。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-web</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.aliyun.oss</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">aliyun-sdk-oss</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-api</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">实现层</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">运行时必需</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-impl</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">runtime</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">JSON</span><span class="tok-w"> </span><span class="tok-nt">序列化支持</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">运行时必需</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-jackson</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">runtime</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_父模块中引用依赖的自定义版本属性">父模块中引用依赖的自定义版本属性</h3>
+<div class="paragraph">
+<p>为了方便在一个地方对所有的依赖版本号进行更改，可以在父组件 pom.xml 的 &lt;properties&gt; 坐标中自定义依赖版本号变量。然后在父模块中相应需要版本号的地方引用该变量即可。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_self_define_version_variable.png" alt="maven self define version variable">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_module_designmaven_general_managergeneral_parentpom_xml_3">file &#8594; module-design/maven-general-manager/general-parent/pom.xml</h4>
+<div class="sect4">
+<h5 id="_properties_在此自定义依赖版本变量来统一管理依赖版本号">properties &#8594; 在此自定义依赖版本变量来统一管理依赖版本号</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">maven</span><span class="tok-nc">.compiler.source</span><span class="tok-o">&gt;</span><span class="tok-nt">8</span><span class="tok-o">&lt;/</span><span class="tok-nt">maven</span><span class="tok-nc">.compiler.source</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">maven</span><span class="tok-nc">.compiler.target</span><span class="tok-o">&gt;</span><span class="tok-nt">8</span><span class="tok-o">&lt;/</span><span class="tok-nt">maven</span><span class="tok-nc">.compiler.target</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">project</span><span class="tok-nc">.build.sourceEncoding</span><span class="tok-o">&gt;</span><span class="tok-nt">UTF-8</span><span class="tok-o">&lt;/</span><span class="tok-nt">project</span><span class="tok-nc">.build.sourceEncoding</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">变量名是自定义的</span><span class="tok-err">，</span><span class="tok-nt">如</span><span class="tok-w"> </span><span class="tok-nt">lombok</span><span class="tok-nc">.version</span><span class="tok-err">，</span><span class="tok-nt">这儿为了演示只定义了两个变量</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">lombok</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.18.30</span><span class="tok-o">&lt;/</span><span class="tok-nt">lombok</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">oss</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span><span class="tok-nt">3</span><span class="tok-nc">.17.4</span><span class="tok-o">&lt;/</span><span class="tok-nt">oss</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_dependency_在此引用自定义的依赖版本变量">dependency &#8594; 在此引用自定义的依赖版本变量</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.projectlombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">lombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">引用自定义版本号变量</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-err">$</span><span class="tok-p">{</span><span class="tok-nt">lombok</span><span class="tok-nc">.version</span><span class="tok-p">}</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span><span class="tok-nt">true</span><span class="tok-o">&lt;/</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_dependencymanagement_在此引用自定义的依赖版本变量">dependencyManagement &#8594; 在此引用自定义的依赖版本变量</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-web</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">2</span><span class="tok-nc">.7.18</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.aliyun.oss</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">aliyun-sdk-oss</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-err">$</span><span class="tok-p">{</span><span class="tok-nt">oss</span><span class="tok-nc">.version</span><span class="tok-p">}</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-api</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">0</span><span class="tok-nc">.12.6</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">实现层</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">运行时必需</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-impl</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">0</span><span class="tok-nc">.12.6</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">runtime</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">JSON</span><span class="tok-w"> </span><span class="tok-nt">序列化支持</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">运行时必需</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-jackson</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">0</span><span class="tok-nc">.12.6</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">runtime</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_面试题_dependencymanagement_与_dependencies的区别是什么">面试题: &lt;dependencyManagement&gt; 与 &lt;dependencies&gt;的区别是什么?</h3>
+<div class="paragraph">
+<p>&lt;dependencies&gt; 是直接依赖，在父模块配置了依赖，子模块会直接继承下来。</p>
+</div>
+<div class="paragraph">
+<p>&lt;dependencyManagement&gt; 是统一管理依赖版本，不会直接依赖，还需要在子模块中引入所需依赖(无需指定版本)。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_聚合模块">聚合模块</h3>
+<div class="paragraph">
+<p>目前存在的问题：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>general-manager 依赖于两个模块，分别是 general-pojo 和 general-utils。</p>
+</li>
+<li>
+<p>如果直接对 general-manager 模块进行 package 打包会报错。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_package_no_dependence_jar.png" alt="maven package no dependence jar">
+</div>
+</div>
+</li>
+<li>
+<p>如果分别对 general-pojo 和 general-utils 进行 install（装到本地仓库了，如有兴趣可以试下 install 操作），则 general-manager 模块可以 package 打包构建成功。若模块很多，则操作会很麻烦。</p>
+</li>
+<li>
+<p>引入聚合模块功能可解决此问题。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>聚合：将多个模块组织成一个整体，同时进行项目的构建。</p>
+</li>
+<li>
+<p>聚合模块：一个不具有业务功能的“空”模块（有且只有一个 pom.xml 文件）</p>
+</li>
+<li>
+<p>作用：快速构建项目（无需根据依赖关系手动构建，直接在聚合模块上构建即可）</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+直接使用前面的父模块即可，因为它只有一个 pom.xml 文件，符合条件。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_file_module_designmaven_general_managergeneral_parentpom_xml_4">file &#8594; module-design/maven-general-manager/general-parent/pom.xml</h4>
+<div class="sect4">
+<h5 id="_modules_配置聚合模块的子模块">modules &#8594; 配置聚合模块的子模块</h5>
+<div class="paragraph">
+<p>maven 中可以通过 &lt;modules&gt; 设置当前聚合模块所包含的子模块名称。聚合模块中所包含的模块，在构建时，会自动根据模块间的依赖关系设置构建顺序，与模块的配置书写位置无关。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">这三个</span><span class="tok-w"> </span><span class="tok-nt">module</span><span class="tok-w"> </span><span class="tok-nt">的书写顺序没有关系</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">modules</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">module</span><span class="tok-o">&gt;</span><span class="tok-nc">..</span><span class="tok-o">/</span><span class="tok-nt">general-manager</span><span class="tok-o">&lt;/</span><span class="tok-nt">module</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">module</span><span class="tok-o">&gt;</span><span class="tok-nc">..</span><span class="tok-o">/</span><span class="tok-nt">general-pojo</span><span class="tok-o">&lt;/</span><span class="tok-nt">module</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">module</span><span class="tok-o">&gt;</span><span class="tok-nc">..</span><span class="tok-o">/</span><span class="tok-nt">general-utils</span><span class="tok-o">&lt;/</span><span class="tok-nt">module</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">modules</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>此时使用 maven package 可以进行打包构建了。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_modules_package_success.png" alt="maven modules package success">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_面试题_继承与聚合的区分">面试题: 继承与聚合的区分</h3>
+<div class="paragraph">
+<p>作用</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>聚合用于快速构建项目。</p>
+</li>
+<li>
+<p>继承用于简化依赖配置、统一管理依赖。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>相同点：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>聚合与继承的 pom.xml 文件打包方式均为 pom，可以将继承和聚合设置为同一个模块。</p>
+</li>
+<li>
+<p>聚合与继承均属于设计型模块，并无实际的模块内容。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>不同点：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>聚合是在父模块中配置关系，聚合可以感知到参与聚合的模块有哪些。</p>
+</li>
+<li>
+<p>继承是在子模块中配置关系，父模块无法感知哪些子模块继承了自己。</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+需要参考上面知识点仔细品味！
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_私服_nexus_公司自己搭建的_maven_依赖服务器">私服 nexus &#8594; 公司自己搭建的 maven 依赖服务器</h3>
+<div class="paragraph">
+<p>私服是一种特殊的远程仓库，它是架设在局域网内的仓库服务，用来代理位于外部的中央仓库，用于解决团队内部的资源共享与资源同步问题。</p>
+</div>
+<div class="paragraph">
+<p>依赖查找顺序：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>本地仓库（开发者电脑）</p>
+</li>
+<li>
+<p>私服（公司内部服务器）</p>
+</li>
+<li>
+<p>中央仓库（全球唯一）</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_nexus_introduce.png" alt="maven nexus introduce" width="800">
+</div>
+<div class="title">Figure 1. 私服架构示意图</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+私服在企业项目开发中，公司只需要一台即可（无需我们自己搭建，会使用即可）。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_nexus_安装与运行">nexus 安装与运行</h4>
+<div class="paragraph">
+<p>nexus 下载地址: <a href="https://www.sonatype.com/thanks/repo-community-edition" class="bare">https://www.sonatype.com/thanks/repo-community-edition</a></p>
+</div>
+<div class="paragraph">
+<p>比如下载的是 nexus-3.83.0-08-mac-x86_64.tar.gz，解压后运行:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">cd nexus-3.83.0-08-mac-x86_64/nexus-3.83.0-08/bin</span>
+<span class="tok-go">./nexus start  # 无信息输出方式启动</span>
+<span class="tok-go">./nexus run    # 有信息输出方式启动</span>
+<span class="tok-go">./nexus stop   # 停止服务</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>浏览器访问 <a href="http://localhost:8081" class="bare">http://localhost:8081</a></p>
+</div>
+<div class="literalblock">
+<div class="title">admin 用户密码存放位置</div>
+<div class="content">
+<pre>Your admin user password is located in
+/Users/swot/soft/nexus-3.83.0-08-mac-x86_64/sonatype-work/nexus3/admin.password on the server.</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+登录后让改密码，我已经把密码改成了 123456。改完密码后 admin.password 文件就被删除了。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_nexus_预置的仓库repository说明">Nexus 预置的仓库（Repository）说明</h4>
+<div class="paragraph">
+<p>这些都是 Nexus 预置的仓库（Repository），按用途可以分三类：代理仓库、托管仓库和仓库组。</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">仓库名</th>
+<th class="tableblock halign-left valign-top">类型</th>
+<th class="tableblock halign-left valign-top">作用说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>maven-central</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">代理仓库（Proxy）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">代理 Maven 中央仓库。你下载的依赖如果本地没有，就会通过它去 Maven Central 拉取并缓存下来。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>maven-public</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">仓库组（Group）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">把 maven-central、maven-releases、maven-snapshots 等统一聚合到一个地址对外发布。让客户端只需要配置这一个 URL 即可获取所有 Maven 依赖。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>maven-releases</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">托管仓库（Hosted）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">存放自己项目发布的正式版本（release）。执行 <code>mvn deploy</code> 时，如果是 release 版本（不带 <code>-SNAPSHOT</code>），就会部署到这里。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>maven-snapshots</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">托管仓库（Hosted）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">存放自己项目的快照版本（snapshot）。开发过程中每次 <code>mvn deploy</code> 的 <code>-SNAPSHOT</code> 版本都会放进来。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>nuget.org-proxy</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">代理仓库（Proxy）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">代理官方 NuGet 源，给 .NET/C# 项目拉取包。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>nuget-hosted</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">托管仓库（Hosted）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">存放自己打包并发布的 NuGet 包。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>nuget-group</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">仓库组（Group）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">把 nuget.org-proxy 和 nuget-hosted 聚合成一个地址，客户端只需要配置这一个即可同时获取官方包和自己内部包。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>日常使用要点</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Maven 项目</strong>：在 <code>settings.xml</code> 或 <code>pom.xml</code> 里把 <code>&lt;mirror&gt;</code> 或 <code>&lt;repository&gt;</code> 指向 <strong>maven-public</strong> 即可。</p>
+</li>
+<li>
+<p><strong>NuGet 项目</strong>：在 Visual Studio 或 <code>nuget.config</code> 里把源指向 <strong>nuget-group</strong> 即可。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>一句话总结：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>-proxy</code> 是帮你去外网“代购”的仓库；</p>
+</li>
+<li>
+<p><code>-hosted</code> 是你自己“生产”的仓库；</p>
+</li>
+<li>
+<p><code>-group</code> 是把上面两类“打包”成一个入口，使用最方便。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_使用私服进行依赖的上传与下载">使用私服进行依赖的上传与下载</h4>
+<div class="sect4">
+<h5 id="_maven_原始配置备份">Maven 原始配置备份</h5>
+<div class="sect5">
+<h6 id="_file_usersswotsoftapache_maven_3_9_9confsettings_xml">@file /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml</h6>
+<div class="paragraph">
+<p>&lt;!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http://www.apache.org/licenses/LICENSE-2.0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-&#8594;</p>
+</div>
+<div class="paragraph">
+<p>&lt;!--
+ | This is the configuration file for Maven. It can be specified at two levels:
+ |
+ |  1. User Level. This settings.xml file provides configuration for a single user,
+ |                 and is normally provided in ${user.home}/.m2/settings.xml.
+ |
+ |                 NOTE: This location can be overridden with the CLI option:
+ |
+ |                 -s /path/to/user/settings.xml
+ |
+ |  2. Global Level. This settings.xml file provides configuration for all Maven
+ |                 users on a machine (assuming they&#8217;re all using the same Maven
+ |                 installation). It&#8217;s normally provided in
+ |                 ${maven.conf}/settings.xml.
+ |
+ |                 NOTE: This location can be overridden with the CLI option:
+ |
+ |                 -gs /path/to/global/settings.xml
+ |
+ | The sections in this sample file are intended to give you a running start at
+ | getting the most out of your Maven installation. Where appropriate, the default
+ | values (values used when the setting is not specified) are provided.
+ |
+ |-&#8594;
+&lt;settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 <a href="https://maven.apache.org/xsd/settings-1.2.0.xsd"&gt" class="bare">https://maven.apache.org/xsd/settings-1.2.0.xsd"&gt</a>;
+  &lt;!-- localRepository
+   | The path to the local repository maven will use to store artifacts.
+   |
+   | Default: ${user.home}/.m2/repository
+  &lt;localRepository&gt;/path/to/local/repo&lt;/localRepository&gt;
+  -&#8594;
+  &lt;localRepository&gt;/Users/swot/maven/repository&lt;/localRepository&gt;</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!-- interactiveMode
+ | This will determine whether maven prompts you when it needs input. If set to false,
+ | maven will use a sensible default value, perhaps based on some other setting, for
+ | the parameter in question.
+ |
+ | Default: true
+&lt;interactiveMode&gt;true&lt;/interactiveMode&gt;
+--&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!-- offline
+ | Determines whether maven should attempt to connect to the network when executing a build.
+ | This will have an effect on artifact downloads, artifact deployment, and others.
+ |
+ | Default: false
+&lt;offline&gt;false&lt;/offline&gt;
+--&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!-- pluginGroups
+ | This is a list of additional group identifiers that will be searched when resolving plugins by their prefix, i.e.
+ | when invoking a command line like "mvn prefix:goal". Maven will automatically add the group identifiers
+ | "org.apache.maven.plugins" and "org.codehaus.mojo" if these are not already contained in the list.
+ |--&gt;
+&lt;pluginGroups&gt;
+  &lt;!-- pluginGroup
+   | Specifies a further group identifier to use for plugin lookup.
+  &lt;pluginGroup&gt;com.your.plugins&lt;/pluginGroup&gt;
+  --&gt;
+&lt;/pluginGroups&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!-- TODO Since when can proxies be selected as depicted? --&gt;
+&lt;!-- proxies
+ | This is a list of proxies which can be used on this machine to connect to the network.
+ | Unless otherwise specified (by system property or command-line switch), the first proxy
+ | specification in this list marked as active will be used.
+ |--&gt;
+&lt;proxies&gt;
+  &lt;!-- proxy
+   | Specification for one proxy, to be used in connecting to the network.
+   |
+  &lt;proxy&gt;
+    &lt;id&gt;optional&lt;/id&gt;
+    &lt;active&gt;true&lt;/active&gt;
+    &lt;protocol&gt;http&lt;/protocol&gt;
+    &lt;username&gt;proxyuser&lt;/username&gt;
+    &lt;password&gt;proxypass&lt;/password&gt;
+    &lt;host&gt;proxy.host.net&lt;/host&gt;
+    &lt;port&gt;80&lt;/port&gt;
+    &lt;nonProxyHosts&gt;local.net|some.host.com&lt;/nonProxyHosts&gt;
+  &lt;/proxy&gt;
+  --&gt;
+&lt;/proxies&gt;
+@others
+&lt;!-- profiles
+ | This is a list of profiles which can be activated in a variety of ways, and which can modify
+ | the build process. Profiles provided in the settings.xml are intended to provide local machine-
+ | specific paths and repository locations which allow the build to work in the local environment.
+ |
+ | For example, if you have an integration testing plugin - like cactus - that needs to know where
+ | your Tomcat instance is installed, you can provide a variable here such that the variable is
+ | dereferenced during the build process to configure the cactus plugin.
+ |
+ | As noted above, profiles can be activated in a variety of ways. One way - the activeProfiles
+ | section of this document (settings.xml) - will be discussed later. Another way essentially
+ | relies on the detection of a property, either matching a particular value for the property,
+ | or merely testing its existence. Profiles can also be activated by JDK version prefix, where a
+ | value of '1.4' might activate a profile when the build is executed on a JDK version of '1.4.2_07'.
+ | Finally, the list of active profiles can be specified directly from the command line.
+ |
+ | NOTE: For profiles defined in the settings.xml, you are restricted to specifying only artifact
+ |       repositories, plugin repositories, and free-form properties to be used as configuration
+ |       variables for plugins in the POM.
+ |
+ |--&gt;
+&lt;profiles&gt;
+  &lt;!-- profile
+   | Specifies a set of introductions to the build process, to be activated using one or more of the
+   | mechanisms described above. For inheritance purposes, and to activate profiles via &lt;activatedProfiles/&gt;
+   | or the command line, profiles have to have an ID that is unique.
+   |
+   | An encouraged best practice for profile identification is to use a consistent naming convention
+   | for profiles, such as 'env-dev', 'env-test', 'env-production', 'user-jdcasey', 'user-brett', etc.
+   | This will make it more intuitive to understand what the set of introduced profiles is attempting
+   | to accomplish, particularly when you only have a list of profile id's for debug.
+   |
+   | This profile example uses the JDK version to trigger activation, and provides a JDK-specific repo.
+  &lt;profile&gt;
+    &lt;id&gt;jdk-1.4&lt;/id&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;activation&gt;
+  &lt;jdk&gt;1.4&lt;/jdk&gt;
+&lt;/activation&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  &lt;repositories&gt;
+    &lt;repository&gt;
+      &lt;id&gt;jdk14&lt;/id&gt;
+      &lt;name&gt;Repository for JDK 1.4 builds&lt;/name&gt;
+      &lt;url&gt;http://www.myhost.com/maven/jdk14&lt;/url&gt;
+      &lt;layout&gt;default&lt;/layout&gt;
+      &lt;snapshotPolicy&gt;always&lt;/snapshotPolicy&gt;
+    &lt;/repository&gt;
+  &lt;/repositories&gt;
+&lt;/profile&gt;
+--&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!--
+ | Here is another profile, activated by the property 'target-env' with a value of 'dev', which
+ | provides a specific path to the Tomcat instance. To use this, your plugin configuration might
+ | hypothetically look like:
+ |
+ | ...
+ | &lt;plugin&gt;
+ |   &lt;groupId&gt;org.myco.myplugins&lt;/groupId&gt;
+ |   &lt;artifactId&gt;myplugin&lt;/artifactId&gt;
+ |
+ |   &lt;configuration&gt;
+ |     &lt;tomcatLocation&gt;${tomcatPath}&lt;/tomcatLocation&gt;
+ |   &lt;/configuration&gt;
+ | &lt;/plugin&gt;
+ | ...
+ |
+ | NOTE: If you just wanted to inject this configuration whenever someone set 'target-env' to
+ |       anything, you could just leave off the &lt;value/&gt; inside the activation-property.
+ |
+&lt;profile&gt;
+  &lt;id&gt;env-dev&lt;/id&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;activation&gt;
+  &lt;property&gt;
+    &lt;name&gt;target-env&lt;/name&gt;
+    &lt;value&gt;dev&lt;/value&gt;
+  &lt;/property&gt;
+&lt;/activation&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    &lt;properties&gt;
+      &lt;tomcatPath&gt;/path/to/tomcat/instance&lt;/tomcatPath&gt;
+    &lt;/properties&gt;
+  &lt;/profile&gt;
+  --&gt;
+&lt;/profiles&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  &lt;!-- activeProfiles
+   | List of profiles that are active for all builds.
+   |
+  &lt;activeProfiles&gt;
+    &lt;activeProfile&gt;alwaysActiveProfile&lt;/activeProfile&gt;
+    &lt;activeProfile&gt;anotherAlwaysActiveProfile&lt;/activeProfile&gt;
+  &lt;/activeProfiles&gt;
+  --&gt;
+&lt;/settings&gt;</pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_servers_配置用户名和密码">servers 配置用户名和密码</h6>
+<div class="paragraph">
+<p>&lt;!-- servers
+ | This is a list of authentication profiles, keyed by the server-id used within the system.
+ | Authentication profiles can be used whenever maven must make a connection to a remote server.
+ |-&#8594;
+&lt;servers&gt;
+  &lt;!-- server
+   | Specifies the authentication information to use when connecting to a particular server, identified by
+   | a unique name within the system (referred to by the 'id' attribute below).
+   |
+   | NOTE: You should either specify username/password OR privateKey/passphrase, since these pairings are
+   |       used together.
+   |
+  &lt;server&gt;
+    &lt;id&gt;deploymentRepo&lt;/id&gt;
+    &lt;username&gt;repouser&lt;/username&gt;
+    &lt;password&gt;repopwd&lt;/password&gt;
+  &lt;/server&gt;
+  -&#8594;</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>  &lt;!-- Another sample, using keys to authenticate.
+  &lt;server&gt;
+    &lt;id&gt;siteServer&lt;/id&gt;
+    &lt;privateKey&gt;/path/to/private/key&lt;/privateKey&gt;
+    &lt;passphrase&gt;optional; leave empty if not used.&lt;/passphrase&gt;
+  &lt;/server&gt;
+  --&gt;
+&lt;/servers&gt;</pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_mirrors_注释阿里私服_配置公司私服">mirrors 注释阿里私服 配置公司私服</h6>
+<div class="paragraph">
+<p>&lt;!-- mirrors
+ | This is a list of mirrors to be used in downloading artifacts from remote repositories.
+ |
+ | It works like this: a POM may declare a repository to use in resolving certain artifacts.
+ | However, this repository may have problems with heavy traffic at times, so people have mirrored
+ | it to several places.
+ |
+ | That repository definition will have a unique id, so we can create a mirror reference for that
+ | repository, to be used as an alternate download site. The mirror site will be the preferred
+ | server for that repository.
+ |-&#8594;
+&lt;mirrors&gt;
+  &lt;!-- mirror
+   | Specifies a repository mirror site to use instead of a given repository. The repository that
+   | this mirror serves has an ID that matches the mirrorOf element of this mirror. IDs are used
+   | for inheritance and direct lookup purposes, and must be unique across the set of mirrors.
+   |
+  &lt;mirror&gt;
+   -&#8594;
+  &lt;mirror&gt;
+      &lt;id&gt;alimaven&lt;/id&gt;
+      &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
+      &lt;name&gt;阿里云公共仓库&lt;/name&gt;
+      &lt;url&gt;<a href="https://maven.aliyun.com/repository/public&lt;/url&gt" class="bare">https://maven.aliyun.com/repository/public&lt;/url&gt</a>;
+  &lt;/mirror&gt;
+&lt;/mirrors&gt;</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_maven_配置_nexus">Maven 配置 Nexus</h5>
+<div class="sect5">
+<h6 id="_servers_配置用户名和密码_2">servers 配置用户名和密码</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">servers</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">server</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-nt">maven-public</span><span class="tok-o">&lt;/</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">username</span><span class="tok-o">&gt;</span><span class="tok-nt">admin</span><span class="tok-o">&lt;/</span><span class="tok-nt">username</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">password</span><span class="tok-o">&gt;</span><span class="tok-nt">123456</span><span class="tok-o">&lt;/</span><span class="tok-nt">password</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">server</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">server</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-nt">maven-releases</span><span class="tok-o">&lt;/</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">username</span><span class="tok-o">&gt;</span><span class="tok-nt">admin</span><span class="tok-o">&lt;/</span><span class="tok-nt">username</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">password</span><span class="tok-o">&gt;</span><span class="tok-nt">123456</span><span class="tok-o">&lt;/</span><span class="tok-nt">password</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">server</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">server</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-nt">maven-snapshots</span><span class="tok-o">&lt;/</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">username</span><span class="tok-o">&gt;</span><span class="tok-nt">admin</span><span class="tok-o">&lt;/</span><span class="tok-nt">username</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">password</span><span class="tok-o">&gt;</span><span class="tok-nt">123456</span><span class="tok-o">&lt;/</span><span class="tok-nt">password</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">server</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">servers</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_mirrors_注释阿里私服_配置公司私服_2">mirrors 注释阿里私服 配置公司私服</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">mirrors</span><span class="tok-o">&gt;</span>
+<span class="tok-w">  </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">mirror</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-nt">alimaven</span><span class="tok-o">&lt;/</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">mirrorOf</span><span class="tok-o">&gt;</span><span class="tok-nt">central</span><span class="tok-o">&lt;/</span><span class="tok-nt">mirrorOf</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">name</span><span class="tok-o">&gt;</span><span class="tok-nt">阿里云公共仓库</span><span class="tok-o">&lt;/</span><span class="tok-nt">name</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span><span class="tok-nt">https</span><span class="tok-nd">:</span><span class="tok-o">//</span><span class="tok-nt">maven</span><span class="tok-nc">.aliyun.com</span><span class="tok-o">/</span><span class="tok-nt">repository</span><span class="tok-o">/</span><span class="tok-nt">public</span><span class="tok-o">&lt;/</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">  </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;/</span><span class="tok-nt">mirror</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">  </span><span class="tok-o">&lt;</span><span class="tok-nt">mirror</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">因为</span><span class="tok-w"> </span><span class="tok-nt">maven-public</span><span class="tok-w"> </span><span class="tok-nt">是</span><span class="tok-w"> </span><span class="tok-nt">Group</span><span class="tok-err">，</span><span class="tok-nt">所以只配置它就可以了</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-nt">maven-public</span><span class="tok-o">&lt;/</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">mirrorOf</span><span class="tok-o">&gt;*&lt;/</span><span class="tok-nt">mirrorOf</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">*,!</span><span class="tok-nt">central</span><span class="tok-w"> </span><span class="tok-nt">就是给官方仓库开绿灯</span><span class="tok-err">，</span><span class="tok-nt">让插件请求绕开私服</span><span class="tok-err">，</span><span class="tok-nt">避免找不到插件而失败</span><span class="tok-err">；</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">同时保留私服对其它仓库的代理功能</span><span class="tok-err">，</span><span class="tok-nt">兼顾速度与可用性</span><span class="tok-err">。</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;</span><span class="tok-nt">mirrorOf</span><span class="tok-o">&gt;*,!</span><span class="tok-nt">central</span><span class="tok-o">&lt;/</span><span class="tok-nt">mirrorOf</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span><span class="tok-nt">http</span><span class="tok-nd">:</span><span class="tok-o">//</span><span class="tok-nt">localhost</span><span class="tok-nd">:8081</span><span class="tok-o">/</span><span class="tok-nt">repository</span><span class="tok-o">/</span><span class="tok-nt">maven-public</span><span class="tok-o">/&lt;/</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span>
+<span class="tok-w">  </span><span class="tok-o">&lt;/</span><span class="tok-nt">mirror</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">mirrors</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_profiles_支持项目部署">profiles 支持项目部署</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">profiles</span><span class="tok-o">&gt;</span>
+<span class="tok-w">  </span><span class="tok-o">&lt;</span><span class="tok-nt">profile</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-nt">allow-snapshots</span><span class="tok-o">&lt;/</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;</span><span class="tok-nt">activation</span><span class="tok-o">&gt;</span>
+<span class="tok-w">          </span><span class="tok-o">&lt;</span><span class="tok-nt">activeByDefault</span><span class="tok-o">&gt;</span><span class="tok-nt">true</span><span class="tok-o">&lt;/</span><span class="tok-nt">activeByDefault</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;/</span><span class="tok-nt">activation</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;</span><span class="tok-nt">repositories</span><span class="tok-o">&gt;</span>
+<span class="tok-w">          </span><span class="tok-o">&lt;</span><span class="tok-nt">repository</span><span class="tok-o">&gt;</span>
+<span class="tok-w">              </span><span class="tok-o">&lt;</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-nt">maven-public</span><span class="tok-o">&lt;/</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span>
+<span class="tok-w">              </span><span class="tok-o">&lt;</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span><span class="tok-nt">http</span><span class="tok-nd">:</span><span class="tok-o">//</span><span class="tok-nt">localhost</span><span class="tok-nd">:8081</span><span class="tok-o">/</span><span class="tok-nt">repository</span><span class="tok-o">/</span><span class="tok-nt">maven-public</span><span class="tok-o">/&lt;/</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span>
+<span class="tok-w">              </span><span class="tok-o">&lt;</span><span class="tok-nt">releases</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                  </span><span class="tok-o">&lt;</span><span class="tok-nt">enabled</span><span class="tok-o">&gt;</span><span class="tok-nt">true</span><span class="tok-o">&lt;/</span><span class="tok-nt">enabled</span><span class="tok-o">&gt;</span>
+<span class="tok-w">              </span><span class="tok-o">&lt;/</span><span class="tok-nt">releases</span><span class="tok-o">&gt;</span>
+<span class="tok-w">              </span><span class="tok-o">&lt;</span><span class="tok-nt">snapshots</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                  </span><span class="tok-o">&lt;</span><span class="tok-nt">enabled</span><span class="tok-o">&gt;</span><span class="tok-nt">true</span><span class="tok-o">&lt;/</span><span class="tok-nt">enabled</span><span class="tok-o">&gt;</span>
+<span class="tok-w">              </span><span class="tok-o">&lt;/</span><span class="tok-nt">snapshots</span><span class="tok-o">&gt;</span>
+<span class="tok-w">          </span><span class="tok-o">&lt;/</span><span class="tok-nt">repository</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;/</span><span class="tok-nt">repositories</span><span class="tok-o">&gt;</span>
+<span class="tok-w">  </span><span class="tok-o">&lt;/</span><span class="tok-nt">profile</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">profiles</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_maven_聚合父模块配置项目发布到私服">Maven 聚合父模块配置项目发布到私服</h5>
+<div class="sect5">
+<h6 id="_file_module_designmaven_general_managergeneral_parentpom_xml_5">file &#8594; module-design/maven-general-manager/general-parent/pom.xml</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_distributionmanagement_配置项目发布到私服">distributionManagement 配置项目发布到私服</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">distributionManagement</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">release版本的发布地址</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">repository</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-nt">maven-releases</span><span class="tok-o">&lt;/</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span><span class="tok-nt">http</span><span class="tok-nd">:</span><span class="tok-o">//</span><span class="tok-nt">localhost</span><span class="tok-nd">:8081</span><span class="tok-o">/</span><span class="tok-nt">repository</span><span class="tok-o">/</span><span class="tok-nt">maven-releases</span><span class="tok-o">/&lt;/</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">repository</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">snapshot版本的发布地址</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">snapshotRepository</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-nt">maven-snapshots</span><span class="tok-o">&lt;/</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span><span class="tok-nt">http</span><span class="tok-nd">:</span><span class="tok-o">//</span><span class="tok-nt">localhost</span><span class="tok-nd">:8081</span><span class="tok-o">/</span><span class="tok-nt">repository</span><span class="tok-o">/</span><span class="tok-nt">maven-snapshots</span><span class="tok-o">/&lt;/</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">snapshotRepository</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">distributionManagement</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_测试发布项目">测试发布项目</h5>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+不要演示了，网络不好时，总是下载依赖不成功！！！
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>删除本地仓库中的 org 目录，为了避免和私服的仓库冲突。</p>
+</li>
+<li>
+<p>刷新 maven。</p>
+</li>
+<li>
+<p>运行 <code>mvn clean install -U</code> 安装到本地仓库。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>报错就多试几次</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>运行 Maven 的 deploy 将 jar 包发布到私服的 maven-snapshots。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>因为聚合父模块 pom.xml 中写了 <code>&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">发布时建议跳过单元测试</div>
+<div class="paragraph">
+<p>跳过测试执行（但仍会编译测试代码）</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn deploy -DskipTests</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>或者跳过整个测试阶段（不编译也不执行测试）</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn deploy -Dmaven.test.skip=true</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>deploy 成功后，可以在私服中看到 jar 包上传成功了。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/maven_deploy_success.png" alt="deploy-success">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-09-09 14:25:41 +0800
+</div>
+</div>
+</body>
+</html>
