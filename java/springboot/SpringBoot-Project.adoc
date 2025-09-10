@@ -1,0 +1,5240 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+
+// 参考视频：黑马程序员-轩哥
+// https://space.bilibili.com/1809189461/lists/1710866?type=season
+
+= @path spring-boot-ketang/general-manager
+
+
+== Spring Boot 综合项目案例
+
+++++
+<button id="toggleButton">目录</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+=== 案例准备工作
+使用 https://start.spring.io/ 创建 Spring Boot 工程 (后面会将该工程作为模块导入到整体项目 spring-boot-ketang 中)，如下所示。
+
+注：给工程命名为 general-manager ，在创建工程时选择对应的起步依赖 web, mybatis, mysql, lombok。
+
+image::img/general_manager_spring_initializr.png[]
+
+*下面引用之前学过的文档内容，请注意项目名称更改为 general-manager 即可*
+
+.Spring Boot 项目元数据字段解释
+[%collapsible]
+====
+在 Spring Boot 项目创建过程中，这些概念确实容易混淆。让我来详细解释它们的区别和作用：
+
+[discrete]
+==== 1. Group ID
+
+* **作用**：通常是组织或公司的唯一标识符
+* **命名规范**：采用反向域名约定（如 `com.example`）
+* **示例**：`com.company.project`、`org.springframework`
+
+[discrete]
+==== 2. Artifact ID
+
+* **作用**：项目在组织内的唯一标识符
+* **命名规范**：通常是项目名称，使用小写字母和连字符
+* **示例**：`my-web-app`、`user-service`、`spring-boot-demo`
+
+[discrete]
+==== 3. Name
+
+* **作用**：项目的可读名称，用于显示目的
+* **特点**：可以包含空格和特殊字符
+* **示例**：`My Web Application`、`用户服务`、`Spring Boot Demo Project`
+
+[discrete]
+==== 4. Package Name
+
+* **作用**：Java项目的根包名
+* **命名规范**：通常基于Group ID，遵循Java包命名约定
+* **示例**：`com.example.myproject`、`com.company.app`
+
+[discrete]
+==== 实际应用示例
+
+假设你要创建一个电商项目的用户服务模块：
+
+```
+Group:     com.ecommerce.platform
+Artifact:  user-service
+Name:      User Management Service
+Package:   com.ecommerce.platform.userservice
+```
+
+[discrete]
+==== 关系总结
+
+* **Group ID + Artifact ID** 组合必须唯一，类似Maven坐标
+* **Package Name** 通常基于Group ID，但需要符合Java包命名规则
+* **Name** 是面向用户的友好显示名称
+
+这些信息在项目生成后会体现在 file:///Users/swot/swot-learn/java/springboot/spring-boot-ketang/general-manager/pom.xml[pom.xml]（Maven）配置文件中。
+====
+
+=== 导入自己创建的 Spring Boot 模块
+1. 解压下载的 Spring Boot 代码，如 general-manager.zip，可以发现就是一个 Maven 模块的目录结构。
+
+2. 使用 IDEA 导入 general-manager 模块
+
+* 进入 File -> Project Structure 对话框，选择 Modules
+* 点击 `+` 号，选择要导入的模块目录，如 general-manager
++
+image::img/import_module_0.png[,400]
+
+3. 在导入时有两个选项：
+
+* Create module from existing sources（从现有源创建模块）用于导入没有使用构建工具如 maven 的项目
+* Import module from external model（从外部模型导入模块）用于导入使用构建工具如 maven 创建的项目。因为我们是用 maven 来管理代码的，所以选择 `Import module from external model`
++
+[.thumb]
+image::img/import_module_1.png[,640]
+
+4. 然后会看见 IDEA 自动安装了依赖。
+
+5. 更改 general-manager 中的 pom.xml 文件中的 Spring Boot 和 JDK 版本号。
++
+[source,xml,linenums,highlight=4;8]
+----
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.7.18</version>
+    <relativePath/> <!-- lookup parent from repository -->
+</parent>
+<properties>
+    <java.version>1.8</java.version>
+</properties>
+----
+
+=== 检查所有依赖版本
+.将 mbatis 依赖的版本调整为支持 JDK1.8，然后刷新 Maven。
+[source,xml,linenums,highlight=4;9]
+----
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>2.3.0</version>
+</dependency>
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter-test</artifactId>
+    <version>2.3.0</version>
+    <scope>test</scope>
+</dependency>
+----
+
+=== 编写 application.properties
+[source,properties,linenums]
+----
+# 配置文件行最后不能有空格
+spring.application.name=general-manager
+
+
+# --- 数据库 ---
+# 驱动类名称
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+# 数据库连接的 url
+spring.datasource.url=jdbc:mysql://localhost:3306/general_manager
+# 连接数据库的用户名
+spring.datasource.username=root
+# 连接数据库的密码
+spring.datasource.password=root
+
+# --- mybatis ---
+# 指定mybatis输出日志的位置, 输出控制台
+mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+#开启驼峰命名自动映射，即从经典数据库列名 a_column 映射到经典 Java 属性 名 aColumn。
+mybatis.configuration.map-underscore-to-camel-case=true
+----
+
+=== 创建数据库 general_manager
+创建一个名为 `general_manager` 的 MySQL 数据库，并设置字符集为 `utf8` 和排序规则为 `utf8_general_ci`，可以使用以下 SQL 语句：
+
+```sql
+CREATE DATABASE general_manager
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+```
+
+这条语句会创建一个新的数据库，确保它支持 UTF-8 字符集并使用 `utf8_general_ci` 的排序规则。
+
+=== 创建数据库表 dept 并插入数据
+[source,sql,linenums]
+----
+-- 创建部门表
+create table dept(
+    id int unsigned primary key auto_increment comment '主键ID',
+    name varchar(10) not null unique comment '部门名称',
+    create_time datetime not null comment '创建时间',
+    update_time datetime not null comment '修改时间'
+) comment '部门表';
+
+-- 插入记录
+insert into dept (id, name, create_time, update_time)
+            values(1,'学工部',now(),now()),
+                  (2,'教研部',now(),now()),
+                  (3,'咨询部',now(),now()),
+                  (4,'就业部',now(),now()),
+                  (5,'人事部',now(),now());
+----
+
+=== 创建数据库表 emp  并插入数据
+[source,sql,linenums]
+----
+-- 创建员工表(带约束)
+create table emp (
+  id          int unsigned primary key auto_increment comment 'ID',
+  username    varchar(20) not null unique comment '用户名',
+  password    varchar(32) default '123456' comment '密码',
+  name        varchar(10) not null comment '姓名',
+  gender      tinyint unsigned not null comment '性别, 说明: 1 男, 2 女',
+  image       varchar(300) comment '图像',
+  job         tinyint unsigned comment '职位, 说明: 1 班主任,2 讲师, 3 学工主管, 4 教研主管, 5 咨询师',
+  entrydate   date comment '入职时间',
+  dept_id     int unsigned comment '部门ID',
+  create_time datetime not null comment '创建时间',
+  update_time datetime not null comment '修改时间'
+) comment '员工表';
+
+-- 插入记录
+INSERT INTO emp
+	(id, username, password, name, gender, image, job, entrydate,dept_id, create_time, update_time) VALUES
+	(1,'jinyong','123456','金庸',1,'1.jpg',4,'2000-01-01',2,now(),now()),
+	(2,'zhangwuji','123456','张无忌',1,'2.jpg',2,'2015-01-01',2,now(),now()),
+	(3,'yangxiao','123456','杨逍',1,'3.jpg',2,'2008-05-01',2,now(),now()),
+	(4,'weiyixiao','123456','韦一笑',1,'4.jpg',2,'2007-01-01',2,now(),now()),
+	(5,'changyuchun','123456','常遇春',1,'5.jpg',2,'2012-12-05',2,now(),now()),
+	(6,'xiaozhao','123456','小昭',2,'6.jpg',3,'2013-09-05',1,now(),now()),
+	(7,'jixiaofu','123456','纪晓芙',2,'7.jpg',1,'2005-08-01',1,now(),now()),
+	(8,'zhouzhiruo','123456','周芷若',2,'8.jpg',1,'2014-11-09',1,now(),now()),
+	(9,'dingminjun','123456','丁敏君',2,'9.jpg',1,'2011-03-11',1,now(),now()),
+	(10,'zhaomin','123456','赵敏',2,'10.jpg',1,'2013-09-05',1,now(),now()),
+	(11,'luzhangke','123456','鹿杖客',1,'11.jpg',5,'2007-02-01',3,now(),now()),
+	(12,'hebiweng','123456','鹤笔翁',1,'12.jpg',5,'2008-08-18',3,now(),now()),
+	(13,'fangdongbai','123456','方东白',1,'13.jpg',5,'2012-11-01',3,now(),now()),
+	(14,'zhangsanfeng','123456','张三丰',1,'14.jpg',2,'2002-08-01',2,now(),now()),
+	(15,'yulianzhou','123456','俞莲舟',1,'15.jpg',2,'2011-05-01',2,now(),now()),
+	(16,'songyuanqiao','123456','宋远桥',1,'16.jpg',2,'2007-01-01',2,now(),now()),
+	(17,'chenyouliang','123456','陈友谅',1,'17.jpg',NULL,'2015-03-21',NULL,now(),now());
+----
+
+=== 创建数据库表 dept 对应实体类
+.src/main/java/com/tjise/pojo/Dept.java
+[source,java,linenums]
+----
+package com.tjise.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Dept {
+    private Integer id;
+    private String name;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+}
+----
+
+=== 创建数据库表 emp  对应的实体类
+.src/main/java/com/tjise/pojo/emp.java
+[source,java,linenums]
+----
+package com.tjise.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Emp {
+    private Integer id;
+    private String username;
+    private String password;
+    private String name;
+    private Short gender;
+    private String image;
+    private Short job;
+    private LocalDate entrydate;
+    private Integer deptId;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+}
+----
+
+=== 创建统一响应结果实体类 Result
+.src/main/java/com/tjise/pojo/Result.java
+[source,java,linenums]
+----
+package com.tjise.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Result {
+    private Integer code;  // 响应码, 1 代码成功; 0 代表失败
+    private String  msg;   // 响应码描述字符串
+    private Object  data;  // 返回的数据
+    
+    // 增删改 成功响应 没有返回数据 null
+    public static Result success() {
+        return new Result(1, "success", null);
+    }
+
+    // 查询 成功响应 有返回数据 data
+    public static Result success(Object data) {
+        return new Result(1, "success", data);
+    }
+
+    // 失败响应
+    public static Result error(String msg) {
+        return new Result(0, msg, null);
+    }
+}
+----
+
+=== 准备对应的三层架构包 Controller Service Mapper
+
+
+==== 部门三层架构
+
+
+===== 原始 DeptController
+.src/main/java/com/tjise/controller/DeptController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DeptController {
+}
+----
+
+===== 原始 DeptService
+.src/main/java/com/tjise/service/DeptService.java
+[source,java,linenums]
+----
+package com.tjise.service;
+
+public interface DeptService {
+}
+----
+
+===== 原始 DeptServiceImpl
+.src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+[source,java,linenums]
+----
+package com.tjise.service.impl;
+
+import com.tjise.service.DeptService;
+
+
+@Service  // 把该类的对象交给 IOC 容器管理
+public class DeptServiceImpl implements DeptService {
+}
+----
+
+===== 原始 DeptMapper
+.src/main/java/com/tjise/mapper/DeptMapper.java
+[source,java,linenums]
+----
+package com.tjise.mapper;
+
+
+@Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
+public interface DeptMapper {
+}
+----
+
+==== 员工三层架构 
+
+
+===== EmpController
+.src/main/java/com/tjise/controller/EmpController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class EmpController {
+
+}
+----
+
+===== EmpService
+.src/main/java/com/tjise/service/EmpService.java
+[source,java,linenums]
+----
+package com.tjise.service;
+
+public interface EmpService {
+}
+----
+
+===== EmpServiceImpl
+.src/main/java/com/tjise/service/EmpServiceImpl.java
+[source,java,linenums]
+----
+package com.tjise.service;
+
+import org.springframework.stereotype.Service;
+
+@Service  // 把该类的对象交给 IOC 容器管理
+public class EmpServiceImpl implements EmpService {
+}
+----
+
+===== EmpMapper
+.src/main/java/com/tjise/mapper/EmpMapper.java
+[source,java,linenums]
+----
+package com.tjise.mapper;
+
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface EmpMapper {
+}
+----
+
+=== Restful 风格介绍
+RESTful 风格的网站开发遵循 **REST（Representational State Transfer）** 架构风格，旨在构建可扩展的、基于网络的系统。REST 主要通过 HTTP 协议来传输资源，并使用其标准方法（如 GET、POST、PUT、DELETE 等）来执行操作。
+
+RESTful API 使用标准的 HTTP 方法来操作资源，每个方法具有特定的语义：
+
+* GET: 用于读取资源数据（不会更改资源状态）。
+    ** 示例1：`GET /users` 获取所有用户
+    ** 示例2: `GET /users/123` 获取 ID 为 123 的用户。
+
+* POST: 创建新的资源。
+    ** 示例：`POST /users` 创建一个新用户。
+
+* PUT: 更新现有资源，通常是替换资源的全部内容。
+    ** 示例：`PUT /users/123` 更新 ID 为 123 的用户数据。
+
+* PATCH: 局部更新资源。
+    ** 示例：`PATCH /users/123` 更新 ID 为 123 的用户的部分信息。
+
+* DELETE: 删除资源。
+    ** 示例：`DELETE /users/123` 删除 ID 为 123 的用户。
+
+[NOTE]
+====
+* 上述行为是风格，是约定方式，约定不是规范，可以打破，所以称为 RESTful 风格，而不是 RESTful 规范。
+* 描述模块的功能通常使用复数，也就是加s的格式来描述，表示此类资源，而非单个资源。如：depts、emps、users、books 等等。
+====
+
+=== API 接口文档的书写
+API 接口文档主要由项目的主导者来书写，可以是后端开发人员，也可以是前端开发人员。
+
+=== 启动前端准备联调
+. 进入前端项目路径: `cd vue-admin-template-master`
+
+. 确定本地 Node.js 版本: `node -v` -> v16.20.2
+
+. 安装项目依赖: `npm install`
+
+. 启动前端项目: `npm run dev`
+
+. 浏览器访问地址: `http://localhost:9528/#/system/dept` 可以看到部门列表页面
+
+[.thumb]
+image::img/dept_list.png[]
+
+=== 部门管理
+
+
+==== 查询部门列表
+查询部门的全部数据（由于部门数据比较少，不考虑分页）
+
+1. 基本信息
+* 请求路径：/depts
+* 请求方式：GET
+* 接口描述：该接口用于部门列表数据查询
+
+2. 请求参数: 无
+
+3. 响应数据
+* 参数格式：application/json
+* 参数说明
++
+[cols="1,1,1,3",options="header",stripes=even]
+|===
+| 参数名         | 类型      | 是否必须 | 备注
+| code           | number    | 必须     | 响应码，1 代表成功，0 代表失败
+| msg            | string    | 非必须   | 提示信息
+| data           | object[ ] | 非必须   | 返回的数据
+| \|- id         | number    | 非必须   | id
+| \|- name       | string    | 非必须   | 部门名称
+| \|- createTime | string    | 非必须   | 创建时间
+| \|- updateTime | string    | 非必须   | 修改时间
+|===
+
+* 响应数据样例：
++
+```json
+{
+  "code": 1,
+  "msg": "success",
+  "data": [
+    {
+      "id": 1,
+      "name": "学工部",
+      "createTime": "2022-09-01T23:06:29",
+      "updateTime": "2022-09-01T23:06:29"
+    },
+    {
+      "id": 2,
+      "name": "教研部",
+      "createTime": "2022-09-01T23:06:29",
+      "updateTime": "2022-09-01T23:06:29"
+    }
+  ]
+}
+```
+
+开发流程
+
+image::img/develope_flow.png[]
+
+测试接口: 使用 postman GET 方法测试 http://localhost:8080/depts
+
+测试接口: 使用浏览器测试 http://localhost:9528/#/system/dept
+
+===== DeptController  -> 处理请求
+.src/main/java/com/tjise/controller/DeptController.java
+[source,java,linenums]
+----
+@RestController
+public class DeptController {
+
+    @Autowired        // DI 注入 IOC 容器中的 DeptService Bean 对象，默认名称为 deptService
+    private DeptService deptService;
+
+//  @RequestMapping("/depts")                                        // 所有方法都可以请求
+//  @RequestMapping(value = "/depts", method = {RequestMethod.GET})  // 完整写法
+    @GetMapping("/depts")                                            // 更加简洁的方式
+    public Result selectAllDept(){
+        List<Dept> deptList = deptService.selectAllDept();
+        return Result.success(deptList);
+    }
+}
+----
+
+===== DeptService     -> 接口
+定义该接口目的是为了用类的多态实现 controller 层左边解耦。
+
+.src/main/java/com/tjise/service/DeptService.java
+[source,java,linenums]
+----
+public interface DeptService {
+    public abstract List<Dept> selectAllDept();
+}
+----
+
+===== DeptServiceImpl -> 实现接口
+.src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+[source,java,linenums]
+----
+@Service  // 把该类的对象交给 IOC 容器管理
+public class DeptServiceImpl implements DeptService {
+
+    // DI 注入 DeptMapper 实现类对象给变量 deptMapper
+    @Autowired
+    private DeptMapper deptMapper;
+
+    @Override
+    public List<Dept> selectAllDept() {
+        List<Dept> deptList = deptMapper.selectAllDept();
+        return deptList;
+    }
+}
+----
+
+===== DeptMapper      -> 数据库
+.src/main/java/com/tjise/mapper/DeptMapper.java
+[source,java,linenums]
+----
+@Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
+public interface DeptMapper {
+    @Select("select * from dept")
+    public abstract List<Dept> selectAllDept();
+}
+----
+
+==== 删除单个部门
+1. 基本信息
+
+* 请求路径：/depts/{id}
+* 请求方式：DELETE
+* 接口描述：该接口用于根据ID删除部门数据
+
+
+2. 请求参数
+
+* 参数格式：路径参数
+* 参数说明：
++
+[cols="1,1,1,3",options="header"]
+|===
+| 参数名  | 类型    | 是否必须 | 备注
+| id     | number | 必须     | 部门ID
+|===
+
+* 请求参数样例：`/depts/1` (删除 id=1 的记录)
+
+3. 响应数据
+
+参数格式：application/json
+
+参数说明
++
+[cols="1,1,1,3",options="header",stripes=even]
+|===
+| 参数名 | 类型   | 是否必须 | 备注
+
+| code   | number | 必须     | 响应码，1 代表成功，0 代表失败
+| msg    | string | 非必须   | 提示信息    
+| data   | object | 非必须   | 返回的数据
+|===
+
+响应数据样例：
+
+```json
+{
+    "code":1,
+    "msg":"success",
+    "data":null
+}
+```
+
+.开发流程
+image::img/dept_delete.png[开发流程,960]
+
+测试接口: 使用 postman DELETE 方法测试 http://localhost:8080/depts/5
+
+查看数据库中是否删除了相应 id 的记录。
+
+===== DeptController  -> 处理请求
+.src/main/java/com/tjise/controller/DeptController.java
+[source,java,linenums]
+----
+@DeleteMapping("/depts/{id}")  // 路径参数
+public Result deleteDeptById(@PathVariable Integer id){
+    // 调用 service 层去删除数据库记录
+    deptService.deleteDeptById(id);
+    return Result.success();
+}
+----
+
+===== DeptService     -> 接口
+定义该接口目的是为了用类的多态实现 controller 层左边解耦。
+
+.src/main/java/com/tjise/service/DeptService.java
+[source,java,linenums]
+----
+// 该抽象方法无返回值，只传入要删除记录的数据库 id 即可
+public abstract void deleteDeptById(Integer id);
+----
+
+===== DeptServiceImpl -> 实现接口
+.src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+[source,java,linenums]
+----
+@Override
+public void deleteDeptById(Integer id) {
+    // 方法调用不用写类型 Integer
+    deptMapper.deleteDeptById(id);
+}
+----
+
+===== DeptMapper      -> 数据库
+.src/main/java/com/tjise/mapper/DeptMapper.java
+[source,java,linenums]
+----
+@Delete("delete from dept where id=#{id}")
+public abstract void deleteDeptById(Integer id);
+----
+
+==== 新增部门
+1. 基本信息
+
+* 请求路径：/depts
+* 请求方式：POST
+* 接口描述：该接口用于添加部门数据
+
+
+2. 请求参数
+* 格式：application/json
+* 参数说明：
++
+[cols="1,1,1,3",options="header"]
+|===
+| 参数名  | 类型     | 是否必须 | 备注     
+| name   | string  | 必须     | 部门名称 
+|===
+
+* 请求参数样例：
++
+```json
+{
+	"name": "教研部"
+}
+```
+
+3. 响应数据
+
+* 参数格式：application/json
+* 参数说明：
++
+[cols="1,1,1,3",options="header"]
+|===
+| 参数名 | 类型   | 是否必须 | 备注                           
+| code   | number | 必须     | 响应码，1 代表成功，0 代表失败
+| msg    | string | 非必须   | 提示信息                     
+| data   | object | 非必须   | 返回的数据
+|===
+
+* 响应数据样例：
++
+```json
+{
+    "code":1,
+    "msg":"success",
+    "data":null
+}
+```
+
+测试接口: 使用 postman POST 方法测试 http://localhost:8080/depts 查看数据库是否有新增记录。
+
+在前端新增部门，查看数据库是否有新增记录。
+
+===== DeptController  -> 处理请求
+.src/main/java/com/tjise/controller/DeptController.java
+[source,java,linenums]
+----
+@PostMapping("/depts")
+public Result insertDept(@RequestBody Dept dept){
+    // 调用 service 层去删除数据库记录
+    deptService.insertDept(dept);
+    return Result.success();
+}
+----
+
+===== DeptService     -> 接口
+定义该接口目的是为了用类的多态实现 controller 层左边解耦。
+
+.src/main/java/com/tjise/service/DeptService.java
+[source,java,linenums]
+----
+public abstract void insertDept(Dept dept);
+----
+
+===== DeptServiceImpl -> 实现接口
+数据库表 dept 字段 对应的 java 实体类中有 4 个属性
+
+```java
+public class Dept {
+    private Integer id;
+    private String name;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+}
+```
+
+* id 是数据库自增长字段
+* name 是前端传送来的
+* createTime 需要后端指定
+* updateTime 需要后端指定
+
+.src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+[source,java,linenums]
+----
+@Override
+public void insertDept(Dept dept) {
+    // 指定 createTime & updateTime
+    dept.setCreateTime(LocalDateTime.now());
+    dept.setUpdateTime(LocalDateTime.now());
+    // 方法调用不用写类型 Dept
+    deptMapper.insertDept(dept);
+}
+----
+
+===== DeptMapper      -> 数据库
+.src/main/java/com/tjise/mapper/DeptMapper.java
+[source,java,linenums]
+----
+@Insert("INSERT INTO dept (name, create_time, update_time) " + 
+        "VALUES (#{name}, #{createTime}, #{updateTime})")
+public abstract void insertDept(Dept dept);
+----
+
+==== 注解优化
+前面 controller/DeptController.java 文件的方法注解中有重复的字符串 "/depts"，现抽取到类的注解中，以减少重复的字符串。
+
+
+.三行代码中都有 /depts
+[source,java]
+----
+@GetMapping("/depts")
+public Result selectAllDept() {...}
+
+@DeleteMapping("/depts/{id}")
+public Result deleteDeptById(@PathVariable Integer id) {...}
+
+@PostMapping("/depts")
+public Result insertDept(@RequestBody Dept dept) {...}
+----
+
+
+.抽取到类的注解上精减代码
+[source,java]
+----
+@RequestMapping("/depts")       // 抽取到类的注解上
+public class DeptController {
+
+    @GetMapping
+    public Result selectAllDept() {...}
+
+    @DeleteMapping("/{id}")
+    public Result deleteDeptById(@PathVariable Integer id) {...}
+
+    @PostMapping
+    public Result insertDept(@RequestBody Dept dept) {...}
+}
+----
+
+NOTE: 一个完整的请求路径，应该是类上的 @RequestMapping 的 value 属性 + 方法上的 @RequestMapping 的 value 属性。
+
+注解优化后再次使用 postman 或者浏览器进行测试，依然是正常的。
+
+===== #file src/main/java/com/tjise/controller/DeptController.java
+[source,java,linenums,highlight=13;19;29;39]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Dept;
+import com.tjise.pojo.Result;
+import com.tjise.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
+@RestController
+@RequestMapping("/depts")                         // 抽取到类的注解上
+public class DeptController {
+    // DI 注入 IOC 容器中的 DeptService Bean 对象，默认名称为 deptService
+    @Autowired
+    private DeptService deptService;
+
+    @GetMapping
+    public Result selectAllDept() {
+
+        // 调用 service 层
+        List<Dept> deptList = deptService.selectAllDept();
+
+        // 把数据封装成统一的响应格式进行返回
+        return Result.success(deptList);
+    }
+
+    @DeleteMapping("/{id}")
+    public Result deleteDeptById(@PathVariable Integer id) {
+
+        // 调用 service 层
+        deptService.deleteDeptById(id);
+
+        // 把数据封装成统一的响应格式进行返回
+        return Result.success();
+    }
+
+    @PostMapping
+    public Result insertDept(@RequestBody Dept dept) {
+    
+        // 前端传入 JSON 数据 { "name": "人事部" }，打印封装的数据只有 name，如下
+        // Dept(id=null, name=人事部, createTime=null, updateTime=null)
+        // System.out.println(dept);
+        
+        // 调用 service 层
+        deptService.insertDept(dept);
+
+        // 把数据封装成统一的响应格式进行返回
+        return Result.success();
+    }   
+}
+----
+
+==== 获取单个部门
+1. 基本信息
+
+* 请求路径：/depts/{id}
+* 请求方式：GET
+* 接口描述：该接口用于根据ID查询部门数据
+
+2. 请求参数
+
+* 参数格式：路径参数
++
+[caption=]
+.参数说明：
+[cols="1,1,1,1",options="header"]
+|===
+| 参数名 | 类型     | 是否必须 | 备注
+| id  | number | 必须   | 部门ID
+|===
++
+请求参数样例：
++
+```
+/depts/1
+```
+
+3. 响应数据
+
+* 参数格式：application/json
++
+[caption=]
+.参数说明
+[cols="1,1,1,1",options="header",stripes=even]
+|===
+| 参数名            | 类型     | 是否必须 | 备注
+| code           | number | 必须   | 响应码，1 代表成功，0 代表失败
+| msg            | string | 非必须  | 提示信息
+| data           | object | 非必须  | 返回的数据
+| \|- id         | number | 非必须  | id
+| \|- name       | string | 非必须  | 部门名称
+| \|- createTime | string | 非必须  | 创建时间
+| \|- updateTime | string | 非必须  | 修改时间
+|===
+
+* 响应数据样例：
++
+```json
+{
+  "code": 1,
+  "msg": "success",
+  "data": {
+    "id": 1,
+    "name": "学工部",
+    "createTime": "2022-09-01T23:06:29",
+    "updateTime": "2022-09-01T23:06:29"
+  }
+}
+```
+
+===== DeptController  -> 处理请求
+[source,java,linenums]
+----
+@GetMapping("/{id}")
+public Result getDeptById(@PathVariable Integer id){
+    Dept dept = deptService.getDeptById(id);
+    return Result.success(dept);
+}
+----
+
+===== DeptService     -> 接口
+[source,java,linenums]
+----
+public abstract Dept getDeptById(Integer id);
+----
+
+===== DeptServiceImpl -> 实现接口
+[source,java,linenums]
+----
+@Override
+public Dept getDeptById(Integer id) {
+    Dept dept = deptMapper.getDeptById(id);
+    return dept;
+}
+----
+
+===== DeptMapper      -> 数据库
+[source,java,linenums]
+----
+@Select("select * from dept where id = #{id}")
+public abstract Dept getDeptById(Integer id);
+----
+
+==== 修改部门
+1. 基本信息
+
+* 请求路径：/depts/{id}
+* 请求方式：GET
+* 接口描述：该接口用于根据ID查询部门数据
+
+2. 请求参数
+
+* 参数格式：路径参数
+* 参数说明：
++
+[caption=]
+[cols="1,1,1,1",options="header"]
+|===
+| 参数名 | 类型     | 是否必须 | 备注
+| id    | number  | 必须     | 部门ID
+|===
+* 请求参数样例：
++
+```
+/depts/1
+```
+
+3. 响应数据
+
+* 参数格式：application/json
+* 参数说明：
++
+[caption=]
+[cols="1,1,1,1",options="header"]
+|===
+| 参数名 | 类型     | 是否必须 | 备注
+| id    | number  | 必须     | 部门ID
+| 参数名            | 类型     | 是否必须 | 备注                
+| code           | number | 必须   | 响应码，1 代表成功，0 代表失败
+| msg            | string | 非必须  | 提示信息              
+| data           | object | 非必须  | 返回的数据           
+| \|- id         | number | 非必须  | id               
+| \|- name       | string | 非必须  | 部门名称              
+| \|- createTime | string | 非必须  | 创建时间              
+| \|- updateTime | string | 非必须  | 修改时间              
+|===
+
+* 响应数据样例：
++
+```json
+{
+  "code": 1,
+  "msg": "success",
+  "data": {
+    "id": 1,
+    "name": "学工部",
+    "createTime": "2022-09-01T23:06:29",
+    "updateTime": "2022-09-01T23:06:29"
+  }
+}
+```
+
+===== DeptController  -> 处理请求
+[source,java,linenums]
+----
+@PutMapping
+public Result updateDept(@RequestBody Dept dept) {
+    deptService.updateDept(dept);
+    return Result.success();
+}
+----
+
+===== DeptService     -> 接口
+[source,java,linenums]
+----
+public abstract void updateDept(Dept dept);
+----
+
+===== DeptServiceImpl -> 实现接口
+[source,java,linenums]
+----
+@Override
+public void updateDept(Dept dept) {
+    // 补全属性
+    dept.setUpdateTime(LocalDateTime.now());
+    deptMapper.updateDept(dept);
+}
+----
+
+===== DeptMapper      -> 数据库
+[source,java,linenums]
+----
+@Update("update dept set name = #{name}, update_time=#{updateTime} where id=#{id}")
+public abstract void updateDept(Dept dept);
+----
+
+=== 员工管理
+
+
+==== 查询员工列表
+查询员工的全部数据（由于员工数据比较多，需要分页显示）
+
+1. 基本信息
+
+* 请求路径：/emps
+* 请求方式：GET
+* 接口描述：该接口用于员工列表数据的 #条件分页查询#
+
+2. 请求参数
+
+* 参数格式：queryString
+* 参数说明：
++
+[cols="1,1,1,3",options="header",stripes=even]
+|===
+| 参数名称 | 是否必须   | 示例        | 备注                                  
+| name     | 否       | 张         | 姓名                                 
+| gender   | 否       | 1          | 性别 , 1 男 , 2 女                   
+| begin    | 否       | 2010-01-01 | 范围匹配的开始时间(入职日期)            
+| end      | 否       | 2020-01-01 | 范围匹配的结束时间(入职日期)            
+| page     | 是       | 1          | 分页查询的页码，如果未指定，默认为1      
+| pageSize | 是       | 10         | 分页查询的每页记录数，如果未指定，默认为10
+|===
+* GET 请求数据样例：
++
+```shell
+http://localhost:8080/emps?name=张&gender=1&begin=2007-09-01&end=2022-09-01&page=1&pageSize=10
+```
+3. 响应数据
+
+* 参数格式：application/json
+* 参数说明：
++
+[cols="1,1,1,1,3,1",options="header",stripes=even]
+|===
+| 名称              | 类型      | 是否必须 | 默认值 | 备注                      | 其他信息
+| code             | number    | 必须     |        | 响应码, 1 成功 , 0 失败   |
+| msg              | string    | 非必须   |        | 提示信息                 |
+| data             | object    | 必须     |        | 返回的数据               |
+| \|- total        | number    | 必须     |        | 总记录数                 |
+| \|- rows         | object [] | 必须     |        | 数据列表                 | item 类型: object
+| \|-- id         | number    | 非必须   |        | id                      |
+| \|-- username   | string    | 非必须   |        | 用户名                   |
+| \|-- name       | string    | 非必须   |        | 姓名                     |
+| \|-- password   | string    | 非必须   |        | 密码                     |
+| \|-- entrydate  | string    | 非必须   |        | 入职日期                  |
+| \|-- gender     | number    | 非必须   |        | 性别 , 1 男 ; 2 女        |
+| \|-- image      | string    | 非必须   |        | 图像                     |
+| \|-- job        | number    | 非必须   |        | 职位, 说明: 1 班主任,2 讲师, 3 学工主管, 4 教研主管, 5 咨询师 |
+| \|-- deptId     | number    | 非必须   |        | 部门id                   |
+| \|-- createTime | string    | 非必须   |        | 创建时间                  |
+| \|-- updateTime | string    | 非必须   |        | 更新时间                  |
+|===
+
+* 响应数据样例：
++
+[source,json,]
+----
+{
+  "code": 1,
+  "msg": "success",
+  "data": {
+    "total": 2,
+    "rows": [
+       {
+        "id": 1,
+        "username": "jinyong",
+        "password": "123456",
+        "name": "金庸",
+        "gender": 1,
+        "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2022-09-02-00-27-53B.jpg",
+        "job": 2,
+        "entrydate": "2015-01-01",
+        "deptId": 2,
+        "createTime": "2022-09-01T23:06:30",
+        "updateTime": "2022-09-02T00:29:04"
+      },
+      {
+        "id": 2,
+        "username": "zhangwuji",
+        "password": "123456",
+        "name": "张无忌",
+        "gender": 1,
+        "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2022-09-02-00-27-53B.jpg",
+        "job": 2,
+        "entrydate": "2015-01-01",
+        "deptId": 2,
+        "createTime": "2022-09-01T23:06:30",
+        "updateTime": "2022-09-02T00:29:04"
+      }
+    ]
+  }
+}
+----
+
+===== 先实现分页查询
+分析实现分页查询的逻辑如下。
+
+前端传递给后端的参数
+
+* 当前页码: page
+* 每页展示记录数: pageSize
+
+后端给前端返回的数据
+
+* 总记录数: total (前端用来计算总页数)
+* 数据列表: rows
+  ** `select * from emp limit 起始索引, 每页记录数`
+  ** 起始索引 = (页码 - 1) * 每页记录数
+
+***
+
+.写个类 class PageBean 封装 total 和 rows
+[source,java]
+----
+@Data
+public class PageBean {
+    private long total;      // 总记录数 select count(*) from emp;
+    private List<Emp> rows;  // 当前页数据列表 select * from emp limit ?,?;
+}
+----
+
+* 返回 Result 对象给前端
++
+[source,java,]
+----
+Result.success(pageBean);
+----
+
+.开发流程
+image::img/emp_list_flow.png[,1000]
+
+* 测试接口: 使用 postman GET 方法测试 http://localhost:8080/emps?page=2&pageSize=5
+* 测试接口: 使用 postman GET 方法测试 http://localhost:8080/emps
+* 测试接口: 使用浏览器测试 http://localhost:9528/#/system/emp
+
+====== PageBean      -> 实体类封装数据返回给前端
+.PageBean 是封装分页查询之后的数据，会返回给前端
+[source,java,linenums]
+----
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PageBean {
+    private long total;  // 总记录数 select count(*) from emp;
+    private List rows;   // 当前页数据列表 select * from emp limit ?,?;
+}
+----
+
+====== EmpController -> 处理请求
+* 分页查询，先不考虑条件查询。
+* @RequestParam(default) 设置默认值
+* 若不设默认值，且前端又没传递参数 page 和 pageSize，则在 service 层对 page 做运算时会报空值异常(NullPointerException)。
+
+[source,java,linenums]
+----
+@GetMapping
+public Result selectPage(@RequestParam(defaultValue = "1") Integer page,
+                         @RequestParam(defaultValue = "10") Integer pageSize) {
+    PageBean pageBean = empService.selectPage(page, pageSize);
+    return Result.success(pageBean);
+}
+----
+
+====== EmpService    -> 接口
+[source,java,linenums]
+----
+PageBean selectPage(Integer page, Integer pageSize);
+----
+
+====== EmpServiceImpl-> 实现接口
+获取总记录数和当前页数据，封装成 PageBean 返回。
+
+[source,java,linenums]
+----
+@Override
+public PageBean selectPage(Integer page, Integer pageSize) {
+
+    // 获取总记录数
+    Long total = empMapper.selectCount();
+
+    // 获取当前页数据
+    int offset = (page - 1) * pageSize;  // <1>
+    List<Emp> empList = empMapper.selectPage(offset, pageSize);
+
+    // 封装成 PageBean
+    PageBean pageBean = new PageBean(total, empList);
+    return pageBean;
+}
+----
+
+<1> 在 controller 层对 page 设置了默认值，所以即使前端没传递 page 和 pageSize，此处也不会报 NullPointerException。
+
+====== EmpMapper     -> 数据库
+[source,java,linenums]
+----
+// 查询记录总数
+@Select("select count(*) from emp")
+public abstract Long selectCount();
+
+// 查询分页数据
+@Select("select * from emp LIMIT #{offset}, #{pageSize}")
+public abstract List<Emp> selectPage(int offset, Integer pageSize);
+----
+
+===== 分页插件 PageHelper
+当数据量大时, 所有的业务模块，只要涉及到分页 , 都需要指定上述的固定步骤，而且代码繁琐。
+
+所以 MyBatis 提供了分页插件 PageHelper https://pagehelper.github.io/
+
+PageHelper 分页插件支持任何复杂的单表、多表分页。
+
+.使用 PageHelper 开发流程
+image::img/pagehelper_flow.png[]
+
+====== pom.xml 增加依赖 pagehelper
+```xml
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+    <version>1.4.2</version>
+</dependency>
+```
+
+====== EmpServiceImpl-> 实现接口
+[source,java,linenums]
+----
+// 设置分页查询参数 pageNum: 页码, pageSize: 每页显示数量
+PageHelper.startPage(page, pageSize);   // 紧跟着的第一个select方法会被分页
+List<Emp> empList = empMapper.list();   // 执行查询  // <.>
+Page<Emp> p = (Page<Emp>) empList;      // 获取分页结果，将 empList 转成 Page 类型
+
+// 封装成 PageBean 对象返回
+return new PageBean(p.getTotal(), p.getResult());
+----
+
+<1> PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
+
+====== EmpMapper     -> 数据库
+[source,java,linenums]
+----
+/* 下面两个查询都不要了
+// 查询记录总数
+@Select("select count(*) from emp")
+public abstract Long selectCount();
+
+// 查询分页
+@Select("SELECT * from emp LIMIT #{offset}, #{pageSize}")
+public abstract List<Emp> selectPage(Integer offset, Integer pageSize);
+*/
+
+// 使用 PageHelper 后查询语句更简单
+@Select("select * from emp")
+public abstract List<Emp> list();
+----
+
+===== 再实现多条件分页查询
+条件分页查询流程
+
+image::img/condition_page_flow.png[]
+
+====== EmpController -> 处理请求
+.多条件分页查询
+[source,java,linenums]
+----
+/* @RequestParam(default) 设置默认值
+   若不设默认值，且前端又没传递参数 page 和 pageSize
+   则在 service 层对 page 做运算时会报空值异常(NullPointerException) */
+@GetMapping
+public Result selectPage(
+        @RequestParam(defaultValue="1")  Integer page,
+        @RequestParam(defaultValue="10") Integer pageSize,
+        String name,
+        Short gender,
+        @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+        @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
+{
+    // 打印一下看是否可以取到前端传递的参数，也可以使用 debug 模式查看
+    System.out.printf(
+        "page=%s, pageSize=%s, name=%s, gender=%s, begin=%s, end=%s%n",
+         page, pageSize, name, gender, begin, end);
+
+    PageBean pageBean = empService.selectPage(page, pageSize, name, gender, begin, end);
+    return Result.success(pageBean);
+}
+----
+
+====== EmpService    -> 接口
+[source,java,linenums]
+----
+public abstract PageBean selectPage(
+                Integer page,
+                Integer pageSize,
+                String name,
+                Short gender,
+                LocalDate begin,
+                LocalDate end);
+----
+
+====== EmpServiceImpl-> 实现接口
+[source,java,linenums]
+----
+@Override
+public PageBean selectPage(Integer page,
+                           Integer pageSize,
+                           String name,
+                           Short gender,
+                           LocalDate begin,
+                           LocalDate end)
+{
+    // 设置分页查询参数 pageNum: 页码, pageSize: 每页显示数量
+    PageHelper.startPage(page, pageSize);   // 紧跟着的第一个select方法会被分页
+    List<Emp> empList = empMapper.list(name, gender, begin, end);   // 执行查询
+    Page<Emp> p = (Page<Emp>) empList;      // 获取分页结果，将 empList 转成 Page 类型
+
+    // 封装成 PageBean 对象返回
+    return new PageBean(p.getTotal(), p.getResult());
+}
+----
+
+====== EmpMapper     -> 数据库
+[source,java,linenums]
+----
+// 使用 PageHelper 并配合条件查询，使用 xml 动态 sql 来实现
+public abstract List<Emp> list(
+        String name,
+        Short gender,
+        LocalDate begin,
+        LocalDate end
+);
+----
+
+====== EmpMapper.xml -> 动态SQL
+----
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+  <select id="list" resultType="com.tjise.pojo.Emp">
+        select * from emp
+        <where>
+            <if test="name != null">
+                name like concat('%', #{name}, '%')
+            </if>
+
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+
+            <if test="begin != null and end != null">
+                and entrydate between #{begin} and #{end}
+            </if>
+        </where>
+        order by update_time desc
+  </select>
+
+</mapper>
+----
+
+===== 测试查询员工列表
+测试查询员工列表 api，假设本地服务端口为 8080，上下文路径为 /emps
+
+1. 不传 page 和 pageSize，验证默认值：*预期：page=1，pageSize=10*
++
+```bash
+http :8080/emps
+```
+  
+2. 只传 page：*预期：page=2，pageSize=10*
++
+```bash
+http :8080/emps page==2
+```
+  
+3. 只传 pageSize：*预期：page=1，pageSize=5*
++
+```bash
+http :8080/emps pageSize==5
+```
+  
+4. 同时指定 page 和 pageSize：*预期：page=3，pageSize=20*
++
+```bash
+http :8080/emps page==3 pageSize==20
+```
+
+5. 把参数放在 URL 路径里（这样写也是可以的）
++  
+```bash
+http :8080/emps?page=4&pageSize=15
+```
+
+6. 如果想看完整响应头，可加 `-v`
++
+```bash
+http -v :8080/emps page==2 pageSize==5
+```
+
+==== 删除员工(单个和多个删除功能合一)
+批量删除员工包含删除一条和多条记录的功能。
+
+1. 基本信息
+
+* 请求路径：/emps/{ids}
+* 请求方式：DELETE
+* 接口描述：该接口用于批量删除员工的数据信息
+
+2. 请求参数
+
+* 参数格式：路径参数
+* 参数说明：
++
+[cols="1*5",options="header",stripes=even]
+|===
+| 参数名 | 类型       | 示例  | 是否必须 | 备注         
+| ids    | 数组 array | 1,2,3 | 必须     | 员工的id数组
+|===
+
+* 请求参数样例： `/emps/1,2,3`
+
+
+3. 响应数据
+
+* 参数格式：application/json
+* 参数说明：
++
+[cols="1*4,3",options="header",stripes=even]
+|===
+| 参数名 | 类型     | 是否必须 | 备注                           
+| code   | number | 必须     | 响应码，1 代表成功，0 代表失败
+| msg    | string | 非必须   | 提示信息  
+| data   | object | 非必须   | 返回的数据
+|===
+
+* 响应数据样例：
++
+```json
+{
+    "code":1,
+    "msg":"success",
+    "data":null
+}
+```
+
+4. 删除员工开发流程
++
+[.thumb]
+image::img/delete_emp_flow.png[,1024]
+
+===== 删除员工 EmpController
+[source,java,linenums]
+----
+@DeleteMapping("/{ids}")
+public Result deleteEmp(@PathVariable List<Integer> ids) {
+    empService.deleteEmpByIds(ids);
+    return Result.success();
+}
+----
+
+===== 删除员工 EmpService
+[source,java,linenums]
+----
+void deleteEmpByIds(List<Integer> ids);
+----
+
+===== 删除员工 EmpServiceImpl
+[source,java,linenums]
+----
+@Override
+public void deleteEmpByIds(List<Integer> ids) {
+    empMapper.deleteEmpByIds(ids);
+}
+----
+
+===== 删除员工 EmpMapper
+[source,java,linenums]
+----
+public abstract void deleteEmpByIds(List<Integer> ids);
+----
+
+===== 删除员工 EmpMapper.xml
+sql: delete from emp where id in (1, 2, 3);
+
+
+```
+<delete id="deleteEmpByIds">
+    delete from emp where id in
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">
+        #{id}
+    </foreach>
+</delete>
+```
+
+==== 新增员工
+1. 基本信息
+
+* 请求路径：/emps
+* 请求方式：POST
+* 接口描述：该接口用于添加员工的信息
+
+2. 请求参数
+
+* 参数格式：application/json
+* 参数说明：
++
+[cols="1,1,1,3",options="header",stripes=even]
+|===
+| 名称      | 类型   | 是否必须 | 备注
+| username  | string | 必须     | 用户名
+| name      | string | 必须     | 姓名
+| gender    | number | 必须     | 性别, 说明: 1 男, 2 女
+| image     | string | 非必须   | 图像
+| deptId    | number | 非必须   | 部门id
+| entrydate | string | 非必须   | 入职日期
+| job       | number | 非必须   | 职位, 说明: 1 班主任,2 讲师, 3 学工主管, 4 教研主管, 5 咨询师
+|===
+
+* 请求数据样例：
++
+```json
+{
+  "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2022-09-03-07-37-38222.jpg",
+  "username": "linpingzhi",
+  "name": "林平之",
+  "gender": 1,
+  "job": 1,
+  "entrydate": "2022-09-18",
+  "deptId": 1
+}
+```
+3. 响应数据
+
+* 参数格式：application/json
+* 参数说明：
++
+[cols="1,1,1,3",options="header",stripes=even]
+|===
+| 参数名 | 类型   | 是否必须 | 备注
+| code   | number | 必须     | 响应码，1 代表成功，0 代表失败
+| msg    | string | 非必须   | 提示信息
+| data   | object | 非必须   | 返回的数据
+|===
+
+* 响应数据样例：
++
+```json
+{
+    "code":1,
+    "msg":"success",
+    "data":null
+}
+```
+
+===== 新增员工 EmpController
+[source,java,linenums]
+----
+@PostMapping
+public Result insertEmp(@RequestBody Emp emp){
+    empService.insertEmp(emp);
+    return Result.success();
+}
+----
+
+===== 新增员工 EmpService
+[source,java,linenums]
+----
+void insertEmp(Emp emp);
+----
+
+===== 新增员工 EmpServiceImpl
+[source,java,linenums]
+----
+@Override
+public void insertEmp(Emp emp){
+    // 补全属性
+    emp.setCreateTime(LocalDateTime.now());
+    emp.setUpdateTime(LocalDateTime.now());
+    empMapper.insertEmp(emp);
+}
+----
+
+===== 新增员工 EmpMapper
+[source,java,linenums]
+----
+@Insert("insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time) " +
+        "values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entryDate}, #{deptId}, #{createTime}, #{updateTime})")
+public abstract void insertEmp(Emp emp);
+----
+
+==== 文件上传员工头像
+
+
+===== 文件上传接口信息描述
+1. 基本信息
+
+* 请求路径：/upload
+* 请求方式：POST
+* 接口描述：上传图片接口
+
+2. 请求参数
+
+* 参数格式：multipart/form-data 这种格式可以上传文件
+* 参数说明：
++
+[cols="1,1,1,1,1",options="header"]
+|===
+| 参数名称 | 参数类型 | 是否必须 | 示例 | 备注
+| image    | file     | 是   | N/A  | N/A
+|===
+
+3. 响应数据
+
+* 参数格式：application/json
+* 参数说明：
++
+[cols="1,1,1,3",options="header"]
+|===
+| 参数名 | 类型   | 是否必须 | 备注                           
+| code   | number | 必须     | 响应码，1 代表成功，0 代表失败 
+| msg    | string | 非必须   | 提示信息                       
+| data   | object | 非必须   | 返回的数据，上传图片的访问路径，前端根据此路径 URL 显示图片
+|===
+
+* 响应数据样例
++
+[source,json]
+----
+{
+    "code": 1,
+    "msg": "success",
+    "data": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2022-09-02-00-27-0400.jpg"
+}
+----
+
+===== 文件上传至本地开发目录
+在 Spring Boot 中接收前端上传的图片并存储在可以通过 URL 访问的目录下。
+
+通常 ##不要## 将图片存储在 `src/main/resources/static` 目录下。这是因为 Spring Boot 默认会在重新编译后才能将 static 目录下的文件作为静态资源提供。也就是说需要重新启动开发环境才能在浏览器中访问上传的资源文件。这样在开发时很不方便，还有在服务器上部署以后，客户端上传的文件也不能实时更新。
+
+下面将前端上传的资源存储在指定的目录 UPLOAD_DIR 下，并且使用前缀 uploads 进行访问。
+
+===== file -> src/main/java/com/tjise/controller/UploadController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Result;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
+
+@RestController
+public class UploadController {
+
+    // mkdir uploads
+    private static final String UPLOAD_DIR = "/Users/swot/swot-learn/java/springboot/spring-boot-ketang/general-manager/uploads/";
+
+    @PostMapping("/upload")
+    public Result upload(@RequestParam("image") MultipartFile image) throws IOException {
+        String filename = image.getOriginalFilename();  // 获取上传的文件名
+        String[] names = filename.split("\\.");         // 以点切割文件名
+        // \\. 中的第一个 \ 是为了让 Java 编译器理解这是一个反斜杠
+        // \\. 中的第二个 \ 则是在正则表达式中表示字面量的点
+        String extName = names[names.length - 1];       // 获取文件扩展名
+        UUID randomString = UUID.randomUUID();
+        String randomFilename  = randomString + "." + extName;
+        image.transferTo(new File(UPLOAD_DIR, randomFilename));
+        // 前缀 uploads 参后面配置内容
+        return Result.success("http://localhost:8080/uploads/" + randomFilename);
+    }
+}
+----
+
+===== 文件上传目录映射
+要想实现上述功能，还需要定义一个 spring 的配置类，来指定将哪个目录映射成哪个前缀。
+如在 config 包中书写实现接口 WebMvcConfigurer 的类 MyMvcConfig.java。
+
+创建 config 包: `mkdir config`
+
+下面代码中的 `MyMvcConfig` 之所以会被“自动注册”，是因为它被放在 **启动类所在的包或其子包** 里（`com.tjise` 或其子包），Spring Boot 启动时会自动扫描到它的 `@Configuration`，进而把它里面对 `WebMvcConfigurer` 的实现（`addResourceHandlers`）合并进 Spring MVC 的全局配置。
+
+详细过程如下：
+
+1. 你项目的主启动类（`@SpringBootApplication`）通常长这样：
++
+```java
+  @SpringBootApplication   // 里面包含 @ComponentScan
+  public class Application {
+      public static void main(String[] args) {
+          SpringApplication.run(Application.class, args);
+      }
+  }
+```
++  
+默认 `@SpringBootApplication` 的 `@ComponentScan` 从该类所在包（`com.tjise.xxx`）开始，向下递归扫描所有子包。
+  
+2. `MyMvcConfig` 的包名是 `com.tjise.config`，恰好是启动类所在包的**子包**，所以被扫描到。
+  
+3. 扫描到后发现这个类上有 `@Configuration`，于是被注册为 Spring 容器里的一个 **配置 Bean**。
+  
+4. Spring Boot 在容器初始化阶段，会拿到**所有**实现了 `WebMvcConfigurer` 接口的 Bean，依次调用它们的回调方法（`addResourceHandlers`、`addViewControllers`…），把各个配置“叠加”到最终的 Spring MVC 配置中。
+  
+5. 最终，`/uploads/**` → 本地磁盘目录 的映射就生效了。
+  
+因此：  
+
+* 只要你没改 `@SpringBootApplication` 的扫描路径，也没在启动类上加额外的 `@ComponentScan(excludeFilters=...)`，放在 `com.tjise.config` 里的 `MyMvcConfig` 天然就会被自动注册。  
+
+* 如果你把 `MyMvcConfig` 放到和启动类**平级或更外层**的包，例如 `com.other.config`，而又没手动 `@ComponentScan("com.other")`，就不会被扫描到。
+
+===== file -> src/main/java/com/tjise/config/MyMvcConfig.java
+[source,java]
+----
+package com.tjise.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+// 此注解表明该类是 Spring 配置类。Spring 会自动扫描并注册该类，使其可以作为应用上下文的一部分。
+@Configuration
+public class MyMvcConfig implements WebMvcConfigurer {
+    // WebMvcConfigurer 是一个接口，允许用户自定义 Spring MVC 的配置。通过实现这个接口，你可以覆盖默认配置或添加自定义配置。
+
+    // 配置虚拟路径映射访问
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // 映射图片保存地址
+        registry.addResourceHandler("/uploads/**")  // 增加 url 前缀
+                .addResourceLocations("file:/Users/swot/swot-learn/java/springboot/spring-boot-ketang/general-manager/uploads/");  // 获取图片的路径
+    }
+}
+----
+
+===== 测试图片上传功能
+1. 运行后台服务程序
+
+2. 使用 postman 或者在网页中测试图片上传
+
+===== 文件上传大小限制
+上传文件默认大小为 1M (1048576 bytes)，如果上传超限，则会报错:
+....
+org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException: The field image exceeds its maximum permitted size of 1048576 bytes.
+....
+
+在文件 src/main/resources/application.properties 中加入配置信息
+
+[source,properties]
+----
+#指定单个文件上传的大小，默认为 1M
+spring.servlet.multipart.max-file-size=10MB
+
+#指定单次请求上传文件的总大小
+spring.servlet.multipart.max-request-size=100MB
+----
+
+==== 文件上传至阿里云 OSS
+
+
+===== 阿里云 OSS 简介
+​阿里云对象存储服务（Object Storage Service，简称OSS）为您提供基于网络的数据存取服务。使用OSS，您可以通过网络随时存储和调用包括文本、图片、音频和视频等在内的各种非结构化数据文件。
+
+阿里云OSS将数据文件以对象（object）的形式上传到存储空间（bucket）中。
+
+​您可以进行以下操作：
+
+- 创建一个或者多个存储空间，向每个存储空间中添加一个或多个文件。
+- 通过获取已上传文件的地址进行文件的分享和下载。
+- 通过修改存储空间或文件的属性或元信息来设置相应的访问权限。
+- 在阿里云管理控制台执行基本和高级OSS任务。
+- 使用阿里云开发工具包或直接在应用程序中进行 RESTful API 调用执行基本和高级 OSS 任务
+
+===== 阿里云 OSS 开通
+. 打开 https://www.aliyun.com/ ，申请阿里云账号并完成实名认证。
+
+. 充值（有试用流量）
+
+. 开通OSS: 登录阿里云官网。将鼠标移至产品找到并单击对象存储OSS打开OSS产品详情页面。在OSS产品详情页中的单击立即开通。开通服务后，在OSS产品详情页面单击管理控制台直接进入OSS管理控制台界面。您也可以单击位于官网首页右上方菜单栏的控制台，进入阿里云管理控制台首页，然后单击左侧的对象存储OSS菜单进入 https://oss.console.aliyun.com/overview[OSS管理控制台界面]。
+
+. 创建存储空间
+* 新建Bucket，自己命名 ，读写权限为**公共读**
++
+[.thumb]
+image::img/aliyun_oss_create_bucket0.png[]
++
+[.thumb]
+image::img/aliyun_oss_create_bucket1.png[,1000]
+
+===== 获取访问密钥
+在阿里云右上角主帐号下拉菜单中，可以操作访问密钥 AccessKey
+
+[.thumb]
+image::img/oss_AccessKey.png[]
+
+===== 引入阿里云 OSS 依赖
+https://help.aliyun.com/document_detail/32009.html?spm=a2c4g.11186623.6.919.7c264562C2Fjfs[参考文档官方]
+创建测试工程，引入依赖
+
+```xml
+<dependency>
+    <groupId>com.aliyun.oss</groupId>
+    <artifactId>aliyun-sdk-oss</artifactId>
+    <version>3.15.1</version>
+</dependency>
+```
+
+===== OSS 明文文本密钥测试本地文件上传 -- 也叫静态凭证（仅用于测试环境）
+https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#bd4a905a056cr[静态凭证 2025-08-14 16:10:58]
+
+====== 下面是有 main 函数使用 OSSClientBuilder.create() 方式测试 -- 最新方式
+
+
+====== file -> src/test/java/com/tjise/AkDemoTest.java
+[source,java]
+----
+<< import >>
+
+public class AkDemoTest {
+    public static void main(String[] args) throws Exception {
+        @others
+    }
+}
+----
+
+====== << import >>
+[source,java]
+----
+package com.tjise;
+
+import org.junit.jupiter.api.Test;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+import com.aliyun.oss.ClientException;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.OSSException;
+import com.aliyun.oss.ClientBuilderConfiguration;
+import com.aliyun.oss.common.auth.CredentialsProvider;
+import com.aliyun.oss.common.auth.DefaultCredentialProvider;
+import com.aliyun.oss.common.comm.SignVersion;
+----
+
+====== 上传配置
+[source,java]
+----
+// Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
+String endpoint = "https://oss-cn-beijing.aliyuncs.com";
+String region = "cn-beijing";
+
+// 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
+// 在阿里云控制台左上角帐号下拉菜单中点击 「AccessKey管理」获取密钥
+String accessKeyId = "[REMOVED]";
+String accessKeySecret = "[REMOVED]";
+
+// 填写Bucket名称，例如examplebucket。
+String bucketName = "swot-learn";
+
+// 填写Object完整路径，完整路径中不能包含Bucket名称，例如 exampledir/exampleobject.txt。
+String objectName = "xian_ni_01.jpg";
+
+// 填写本地文件的完整路径，例如D:\\localpath\\examplefile.txt。
+// 如果未指定本地路径，则默认从示例程序所属项目对应本地路径中上传文件流。
+String filePath= "/Users/swot/Downloads/xianni/1.jpg";
+
+// 使用DefaultCredentialProvider方法直接设置AK和SK
+CredentialsProvider credentialsProvider = new DefaultCredentialProvider(accessKeyId, accessKeySecret);
+
+// 使用credentialsProvider初始化客户端
+ClientBuilderConfiguration clientBuilderConfiguration = new ClientBuilderConfiguration();
+// 显式声明使用 V4 签名算法
+clientBuilderConfiguration.setSignatureVersion(SignVersion.V4);  
+// 创建OSSClient实例。
+// 当OSSClient实例不再使用时，调用shutdown方法以释放资源。
+OSS ossClient = OSSClientBuilder.create()
+    .endpoint(endpoint)
+    .credentialsProvider(credentialsProvider)
+    .clientConfiguration(clientBuilderConfiguration)
+    .region(region)
+    .build();
+----
+
+====== 开始上传
+[source,java]
+----
+try {
+    InputStream inputStream = new FileInputStream(filePath);
+    // 创建PutObject请求。
+    ossClient.putObject(bucketName, objectName, inputStream);
+} catch (OSSException oe) {
+    System.out.println("Caught an OSSException, which means your request made it to OSS, "
+            + "but was rejected with an error response for some reason.");
+    System.out.println("Error Message:" + oe.getErrorMessage());
+    System.out.println("Error Code:" + oe.getErrorCode());
+    System.out.println("Request ID:" + oe.getRequestId());
+    System.out.println("Host ID:" + oe.getHostId());
+} catch (Exception ce) {
+    System.out.println("Caught an ClientException, which means the client encountered "
+            + "a serious internal problem while trying to communicate with OSS, "
+            + "such as not being able to access the network.");
+    System.out.println("Error Message:" + ce.getMessage());
+} finally {
+    if (ossClient != null) {
+        ossClient.shutdown();
+    }
+}
+----
+
+====== 下面是有 @Test 注解使用 OSSClientBuilder().build() 方式测试
+
+
+====== file -> src/test/java/com/tjise/AliOssTest.java
+[source,java]
+----
+<< import >>
+
+public class AliOssTest {
+    @Test
+    public void testOss(){
+        @others
+    }
+}
+----
+
+====== << import >>
+[source,java]
+----
+package com.tjise;
+
+import org.junit.jupiter.api.Test;
+import com.aliyun.oss.ClientException;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.OSSException;
+import java.io.FileInputStream;
+import java.io.InputStream;
+----
+
+====== 上传配置
+[source,java]
+----
+// Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
+String endpoint = "https://oss-cn-beijing.aliyuncs.com";
+
+// 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
+// 在阿里云控制台左上角帐号下拉菜单中点击 「AccessKey管理」获取密钥
+String accessKeyId = "[REMOVED]";
+String accessKeySecret = "[REMOVED]";
+
+// 填写Bucket名称，例如examplebucket。
+String bucketName = "swot-learn";
+
+// 填写Object完整路径，完整路径中不能包含Bucket名称，例如 exampledir/exampleobject.txt。
+String objectName = "xian_ni_01.jpg";
+
+// 填写本地文件的完整路径，例如D:\\localpath\\examplefile.txt。
+// 如果未指定本地路径，则默认从示例程序所属项目对应本地路径中上传文件流。
+String filePath= "/Users/swot/Downloads/xianni/1.jpg";
+
+// 创建OSSClient实例。
+OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+----
+
+====== 开始上传
+[source,java]
+----
+try {
+    InputStream inputStream = new FileInputStream(filePath);
+    // 创建PutObject请求。
+    ossClient.putObject(bucketName, objectName, inputStream);
+} catch (OSSException oe) {
+    System.out.println("Caught an OSSException, which means your request made it to OSS, "
+            + "but was rejected with an error response for some reason.");
+    System.out.println("Error Message:" + oe.getErrorMessage());
+    System.out.println("Error Code:" + oe.getErrorCode());
+    System.out.println("Request ID:" + oe.getRequestId());
+    System.out.println("Host ID:" + oe.getHostId());
+} catch (Exception ce) {
+    System.out.println("Caught an ClientException, which means the client encountered "
+            + "a serious internal problem while trying to communicate with OSS, "
+            + "such as not being able to access the network.");
+    System.out.println("Error Message:" + ce.getMessage());
+} finally {
+    if (ossClient != null) {
+        ossClient.shutdown();
+    }
+}
+----
+
+===== OSS 环境变量密钥测试本地文件上传（适用于生产环境使用环境变量的情况）
+https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#9c8e8849706wp[配置访问凭证]
+在操作系统中导出两个环境变量，分别是:
+
+```shell
+# 设置阿里云 OSS 这是 macos 的设置，其他操作系统参考上面官方文档
+export OSS_ACCESS_KEY_ID=""[REMOVED]
+export OSS_ACCESS_KEY_SECRET=""[REMOVED]
+
+echo $OSS_ACCESS_KEY_ID
+echo $OSS_ACCESS_KEY_SECRET
+```
+
+====== file -> src/test/java/com/tjise/AliOssEnvTest.java
+[source,java]
+----
+package com.tjise;
+
+import com.aliyun.oss.*;
+import com.aliyun.oss.common.auth.*;
+import com.aliyun.oss.common.comm.SignVersion;
+import com.aliyun.oss.model.PutObjectRequest;
+import com.aliyun.oss.model.PutObjectResult;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+public class AliOssEnvTest {
+    public static void main(String[] args) throws Exception {
+        // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
+        String endpoint = "https://oss-cn-beijing.aliyuncs.com";
+        // 从环境变量中获取访问凭证。运行本代码示例之前，请确保已设置环境变量 OSS_ACCESS_KEY_ID 和OSS_ACCESS_KEY_SECRET。
+        EnvironmentVariableCredentialsProvider credentialsProvider = CredentialsProviderFactory.newEnvironmentVariableCredentialsProvider();
+        // 填写Bucket名称，例如examplebucket。
+        String bucketName = "swot-learn";
+        // 填写Object完整路径，完整路径中不能包含Bucket名称，例如exampledir/exampleobject.txt。
+        String objectName = "xian_ni_03.jpg";
+        // 填写本地文件的完整路径，例如D:\\localpath\\examplefile.txt。
+        // 如果未指定本地路径，则默认从示例程序所属项目对应本地路径中上传文件流。
+        String filePath= "/Users/swot/Downloads/xianni/2.jpg";
+        // 填写Bucket所在地域。以华东1（杭州）为例，Region填写为cn-hangzhou。
+        String region = "cn-beijing";
+        
+        // 创建OSSClient实例。
+        ClientBuilderConfiguration clientBuilderConfiguration = new ClientBuilderConfiguration();
+        clientBuilderConfiguration.setSignatureVersion(SignVersion.V4);
+        
+        OSS ossClient = OSSClientBuilder.create()
+            .endpoint(endpoint)
+            .credentialsProvider(credentialsProvider)
+            .clientConfiguration(clientBuilderConfiguration)
+            .region(region)               
+            .build();
+
+        try {
+            InputStream inputStream = new FileInputStream(filePath);
+            // 创建PutObjectRequest对象。
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, inputStream);
+            // 创建PutObject请求。
+            PutObjectResult result = ossClient.putObject(putObjectRequest);
+        } catch (OSSException oe) {
+            System.out.println("Caught an OSSException, which means your request made it to OSS, "
+                    + "but was rejected with an error response for some reason.");
+            System.out.println("Error Message:" + oe.getErrorMessage());
+            System.out.println("Error Code:" + oe.getErrorCode());
+            System.out.println("Request ID:" + oe.getRequestId());
+            System.out.println("Host ID:" + oe.getHostId());
+        } catch (ClientException ce) {
+            System.out.println("Caught an ClientException, which means the client encountered "
+                    + "a serious internal problem while trying to communicate with OSS, "
+                    + "such as not being able to access the network.");
+            System.out.println("Error Message:" + ce.getMessage());
+        } finally {
+            if (ossClient != null) {
+                ossClient.shutdown();
+            }
+        }
+    }
+} 
+----
+
+===== OSS 封装工具类
+upload 是非静态方法，需要类的对象去调用。可以将 IOC 控制反转容器中的 bean 对象去做 DI 依赖注入对象后，来调用 upload 方法。
+
+.详细解释，先把概念拆成三块。
+[%collapsible]
+====
+1. 非静态方法
++
+```java
+AliOSSUtils utils = new AliOSSUtils();
+String url = utils.upload(file);   // 必须 new 一个对象才能用 upload
+```
++
+如果方法声明成 `static`，就可以 `AliOSSUtils.upload(file)`，但这里没有 `static`，所以只能“用对象去调用”。
+  
+2. IOC/DI  
++
+在 Spring 里，类上加了 `@Component`，Spring 会把它放进 IOC 容器（一个“对象池”）。
++
+```java
+@Autowired          // 依赖注入
+private AliOSSUtils aliOSSUtils;   // Spring 把容器里的那个对象塞进来
+```
++
+这一步就叫 **DI（Dependency Injection）**，你不用自己 `new`，Spring 帮你把对象准备好并注入到需要它的地方。
+  
+3. 三者关系
+- upload 不是 static，所以**一定**要某个实例才能调用。
+- 这个实例从哪里来？可以让 Spring 帮你管理——先让 Spring 把 `AliOSSUtils` 变成 bean（IOC），再在需要的地方 `@Autowired` 进来（DI）。
+- 注入进来以后，直接 `aliOSSUtils.upload(...)` 就能用。
+
+一句话总结： +
+因为 `upload` 不是静态的，所以我们得先拿到一个 `AliOSSUtils` 对象；最方便的办法就是让 Spring 容器生成并注入这个对象，然后调用它的 `upload` 方法。
+====
+
+====== file -> src/main/java/com/tjise/utils/AliOSSUtils.java
+[source,java]
+----
+package com.tjise.utils;
+
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import lombok.Data;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+// 阿里云 OSS 工具类
+// 放入IOC 容器中，不属于 控制层@Controller、业务层@Service、持久层@Repository，所以就用 @Component 吧
+@Component
+@Data
+public class AliOSSUtils {
+    // 这儿的参数是写死的，后面再解决
+    private String endpoint = "https://oss-cn-beijing.aliyuncs.com";
+    private String accessKeyId = "[REMOVED]";
+    private String accessKeySecret = "[REMOVED]";
+    private String bucketName = "swot-learn";
+
+    // 实现上传图片到OSS
+    public String upload(MultipartFile multipartFile) throws IOException {
+        // 获取上传的文件的输入流
+        InputStream inputStream = multipartFile.getInputStream();
+
+        // 避免文件覆盖
+        String fileName = LocalDateTime.now().format(
+            DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")) + multipartFile.getOriginalFilename();
+
+        //上传文件到 OSS（没有使用 region，还是老的方式，建议使用新方式 create，不使用 build）
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        ossClient.putObject(bucketName, fileName, inputStream);
+
+        //文件访问路径
+        String url = endpoint.split("//")[0] + "//" + bucketName + "." + endpoint.split("//")[1] + "/" + fileName;
+        ossClient.shutdown();  // 关闭 ossClient
+        return url;            // 把上传到 oss 的路径返回
+    }
+}
+----
+
+===== OSS 封装工具类的使用 -> 重写图片上传控制类
+使用 http 测试上传图片: +
+http -f POST http://localhost:8080/upload image@/Users/swot/Downloads/uifaces-cartoon-image-8.jpg
+
+.图片上传成功
+....
+HTTP/1.1 200
+Connection: keep-alive
+Content-Type: application/json
+Date: Thu, 14 Aug 2025 14:09:22 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+{
+    "code": 1,
+    "data": "https://swot-learn.oss-cn-beijing.aliyuncs.com/2025-08-14-22-09-21uifaces-cartoon-image-8.jpg",
+    "msg": "success"
+}
+....
+
+测试图片是否可以访问：仅检查图片信息（不下载） +
+http --headers HEAD "https://swot-learn.oss-cn-beijing.aliyuncs.com/2025-08-14-22-09-21uifaces-cartoon-image-8.jpg"
+
+....
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Connection: keep-alive
+Content-Disposition: attachment
+Content-Length: 67981
+Content-MD5: g3/DB4SnghE4ej6NRAnAdQ==
+Content-Type: image/jpeg
+Date: Thu, 14 Aug 2025 14:12:41 GMT
+ETag: "837FC30784A78211387A3E8D4409C075"
+Last-Modified: Thu, 14 Aug 2025 14:09:22 GMT
+Server: AliyunOSS
+x-oss-ec: 0048-00000104
+x-oss-force-download: true
+x-oss-hash-crc64ecma: 18445195312415737345
+x-oss-object-type: Normal
+x-oss-request-id: 689DEED90AD0713530AB2907
+x-oss-server-time: 18
+x-oss-storage-class: Standard
+....
+
+====== file -> src/main/java/com/tjise/controller/UploadController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Result;
+import com.tjise.utils.AliOSSUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+
+
+@RestController
+public class UploadController {
+
+    // DI 注入阿里云 OSS AliOSSUtils 的对象
+    @Autowired
+    private AliOSSUtils aliOSSUtils;
+
+    @PostMapping("/upload")
+    public Result upload(@RequestParam("image") MultipartFile image) throws IOException {
+        // 把图片直接上传到阿里云 OSS 服务中
+        String url = aliOSSUtils.upload(image);
+        // 返回 url 地址给前端
+        return Result.success(url);
+    }
+}
+----
+
+===== 使用 @Value 注解从配置文件引入阿里云 OSS 参数
+1. 在配置文件 application.properties 中增加 4个 aliyun.oss.xxx
+
+2. 为了不用在 AliOSSUtils.java 文件中硬编码配置，给 AliOssUtils 中的私有变量加 @Value 注解，以读取 application.properties 中的配置。
+
+3. 测试上传
+
+http -f POST http://localhost:8080/upload image@/Users/swot/Downloads/uifaces-cartoon-image-8.jpg
+
+====== file -> src/main/resources/application.properties
+[source,properties,linenums]
+----
+# 配置文件行最后不能有空格
+spring.application.name=general-manager
+
+# --- 数据库 ---
+# 驱动类名称
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+# 数据库连接的 url
+spring.datasource.url=jdbc:mysql://localhost:3306/general_manager
+# 连接数据库的用户名
+spring.datasource.username=root
+# 连接数据库的密码
+spring.datasource.password=root
+
+# --- mybatis ---
+# 指定mybatis输出日志的位置, 输出控制台
+mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+#开启驼峰命名自动映射，即从经典数据库列名 a_column 映射到经典 Java 属性 名 aColumn。
+mybatis.configuration.map-underscore-to-camel-case=true
+
+# --- 文件上传大小 ---
+#指定单个文件上传的大小，默认为 1M
+spring.servlet.multipart.max-file-size=10MB
+#指定单次请求上传文件的总大小
+spring.servlet.multipart.max-request-size=100MB
+----
+
+====== 新增阿里云 OSS 参数
+[source,python]
+----
+# 在封装的工具类 AliOSSUtils.java 中，与之对应引用为 @Vaule("${aliyun.oss.endpoint}")
+aliyun.oss.endpoint=https://oss-cn-beijing.aliyuncs.com
+aliyun.oss.accessKeyId=[REMOVED]
+aliyun.oss.accessKeySecret=[REMOVED]
+aliyun.oss.bucketName=swot-learn
+----
+
+====== file -> src/main/java/com/tjise/utils/AliOSSUtils.java
+[source,java,linenums]
+----
+package com.tjise.utils;
+
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * 阿里云 OSS 工具类
+ */
+ 
+// 放入IOC 容器中，不属于 控制层@Controller、业务层@Service、持久层@Repository，所以就用 @Component 吧
+@Component
+public class AliOSSUtils {
+    @others
+    /**
+     * 实现上传图片到OSS
+     */
+    public String upload(MultipartFile multipartFile) throws IOException {
+        // 获取上传的文件的输入流
+        InputStream inputStream = multipartFile.getInputStream();
+
+        // 避免文件覆盖
+        String fileName = LocalDateTime.now().format(
+            DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")) + multipartFile.getOriginalFilename();
+
+        //上传文件到 OSS（没有使用 region，还是老的方式，建议使用新方式 create，不使用 build）
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        ossClient.putObject(bucketName, fileName, inputStream);
+
+        //文件访问路径
+        String url = endpoint.split("//")[0] + "//" + bucketName + "." + endpoint.split("//")[1] + "/" + fileName;
+        // 关闭ossClient
+        ossClient.shutdown();
+        return url;// 把上传到oss的路径返回
+    }
+}
+----
+
+====== 原来下面 4 个参数值是写死的，现在使用 @Value 读取配置
+// @Value 注解通常用于外部配置的属性注入，具体用法为： @Value("${配置文件中的key}")
+@Value("${aliyun.oss.endpoint}")
+private String endpoint;
+
+@Value("${aliyun.oss.accessKeyId}")
+private String accessKeyId;
+
+@Value("${aliyun.oss.accessKeySecret}")
+private String accessKeySecret;
+
+@Value("${aliyun.oss.bucketName}")
+private String bucketName;
+
+===== application.yml/application.yaml 配置文件(推荐替换 application.properties 配置文件)
+yml 文件语法
+
+* 大小写敏感
+* 值前边必须有空格，作为分隔符
+* 使用缩进表示层级关系，缩进时，不允许使用Tab键，只能用空格（idea中会自动将Tab转换为空格）
+* 缩进的空格数目不重要，只要相同层级的元素左侧对齐即可
+* # 表示注释，从这个字符一直到行尾，都会被解析器忽略
+
+.对象/Map集合
+[source,yml]
+----
+user:
+   name: zhangsan
+   age: 18
+   password: 123456
+----
+
+.数组/List/Set集合
+[source,yml]
+----
+hobby:
+    - java
+    - game
+    - sport
+----
+
+====== file -> src/main/resources/application.yml
+[source,yaml,linenums]
+----
+spring:
+    application:
+        name: mybatis_quickstart-crud
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/tjise
+        username: root
+        password: root
+    servlet:
+        multipart:                  # 上传文件
+            max-file-size: 10MB     # 指定单个文件上传的大小
+            max-request-size: 100MB  # 指定单次请求上传文件的总大小
+
+mybatis:
+    configuration:
+        # 指定mybatis输出日志的位置, 输出控制台
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+        #开启驼峰命名自动映射，即从经典数据库列名 a_column 映射到经典 Java 属性 名 aColumn
+        map-underscore-to-camel-case: true
+
+# --- 阿里云 OSS ---
+# 与之对应引用为 @Vaule("${aliyun.oss.endpoint}")
+# noinspection undefined
+aliyun:
+    oss:
+        endpoint: "https://oss-cn-beijing.aliyuncs.com"
+        accessKeyId: "[REMOVED]"
+        accessKeySecret: "[REMOVED]"
+        bucketName: "swot-learn"
+----
+
+===== 每个属性都写 @Value 太麻烦了，使用 @ConfigurationProperties 直接匹配配置文件中的键
+
+
+====== file -> src/main/java/com/tjise/utils/AliOSSUtils.java
+[source,java]
+----
+package com.tjise.utils;
+
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+// 阿里云 OSS 工具类
+// 放入IOC 容器中，不属于 控制层 @Controller、业务层 @Service、持久层 @Repository，所以就用 @Component 吧
+@Component
+@ConfigurationProperties(prefix = "aliyun.oss")
+@Data  // 内部需要使用 setter 来设置属性值，所以要使用 lombok 来自动生成 setter
+public class AliOSSUtils {
+
+    private String endpoint;
+    private String accessKeyId;
+    private String accessKeySecret;
+    private String bucketName;
+
+    // 实现上传图片到OSS
+    public String upload(MultipartFile multipartFile) throws IOException {
+        // 获取上传的文件的输入流
+        InputStream inputStream = multipartFile.getInputStream();
+
+        // 避免文件覆盖
+        String fileName = LocalDateTime.now().format(
+            DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")) + multipartFile.getOriginalFilename();
+
+        //上传文件到 OSS
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        ossClient.putObject(bucketName, fileName, inputStream);
+
+        //文件访问路径
+        String url = endpoint.split("//")[0] + "//" + bucketName + "." + endpoint.split("//")[1] + "/" + fileName;
+        ossClient.shutdown();  // 关闭 ossClient
+        return url;            // 把上传到 oss 的路径返回
+    }
+}
+----
+
+===== 抽出一个类来解决多个类可能会共用相同属性问题
+
+
+====== file -> src/main/java/com/tjise/utils/AliOSSUtilsProperties.java
+假如还有几个别的类也想使用这 4 个属性该怎么办呢？所以最好再新建一个类用来存储这些需要被共用的配置属性。
+用 @Component 将类的对象放到控制反转 IOC 容器中。
+[source,java]
+----
+package com.tjise.utils;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+@Component
+@ConfigurationProperties(prefix="aliyun.oss")
+@Data
+public class AliOSSUtilsProperties {
+    // 下面属性值的内容会从配置文件中被自动获取到
+    private String endpoint;
+    private String accessKeyId;
+    private String accessKeySecret;
+    private String bucketName;
+}
+----
+
+====== file -> src/main/java/com/tjise/utils/AliOSSUtils.java
+[source,java]
+----
+package com.tjise.utils;
+
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+// 阿里云 OSS 工具类
+// 放入IOC 容器中，不属于 控制层 @Controller、业务层 @Service、持久层 @Repository，所以就用 @Component 吧
+@Component
+@ConfigurationProperties(prefix = "aliyun.oss")
+@Data  // 内部需要使用 setter 来设置属性值，所以要使用 lombok 来自动生成 setter
+public class AliOSSUtils {
+
+    @Autowired
+    private AliOSSUtilsProperties aliOSSUtilsProperties;
+
+    // 实现上传图片到OSS
+    public String upload(MultipartFile multipartFile) throws IOException {
+        // 获取上传的文件的输入流
+        InputStream inputStream = multipartFile.getInputStream();
+
+        // 避免文件覆盖
+        String fileName = LocalDateTime.now().format(
+            DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")) + multipartFile.getOriginalFilename();
+
+        //上传文件到 OSS
+        OSS ossClient = new OSSClientBuilder().build(
+            aliOSSUtilsProperties.getEndpoint(),
+            aliOSSUtilsProperties.getAccessKeyId(),
+            aliOSSUtilsProperties.getAccessKeySecret()
+        );
+        ossClient.putObject(
+            aliOSSUtilsProperties.getBucketName(),
+            fileName,
+            inputStream
+        );
+
+        //文件访问路径
+        String url = aliOSSUtilsProperties.getEndpoint().split("//")[0] + "//" +
+                     aliOSSUtilsProperties.getBucketName() + "." +
+                     aliOSSUtilsProperties.getEndpoint().split("//")[1] + "/" + fileName;
+        ossClient.shutdown();  // 关闭 ossClient
+        return url;            // 把上传到 oss 的路径返回
+    }
+}
+----
+
+==== 查询单个员工
+根据ID查询基本信息
+
+* 请求路径：/emps/{id}
+* 请求方式：GET
+* 接口描述：该接口用于根据主键ID查询员工的信息
+
+请求参数格式：路径参数
+
+[caption=]
+.参数说明：
+[cols="1,1,1,1",options="header"]
+|===
+| 参数名 | 类型     | 是否必须 | 备注
+| id    | number  | 必须     | 部门ID
+|===
+
+请求参数样例：`/emps/1`
+
+响应数据
+
+参数格式：application/json
+
+[caption=]
+.参数说明
+[cols="1,1,1,1,3",options="header",stripes=even]
+|===
+| 名称             | 类型     | 是否必须 | 默认值 | 备注
+| code           | number | 必须   |     | 响应码, 1 成功 , 0 失败
+| msg            | string | 非必须  |     | 提示信息
+| data           | object | 必须   |     | 返回的数据
+| \|- id         | number | 非必须  |     | id
+| \|- username   | string | 非必须  |     | 用户名
+| \|- name       | string | 非必须  |     | 姓名
+| \|- password   | string | 非必须  |     | 密码
+| \|- entrydate  | string | 非必须  |     | 入职日期
+| \|- gender     | number | 非必须  |     | 性别 , 1 男 ; 2 女
+| \|- image      | string | 非必须  |     | 图像
+| \|- job        | number | 非必须  |     | 职位, 说明: 1 班主任,2 讲师, 3 学工主管, 4 教研主管, 5 咨询师
+| \|- deptId     | number | 非必须  |     | 部门id
+| \|- createTime | string | 非必须  |     | 创建时间
+| \|- updateTime | string | 非必须  |     | 更新时间
+|===
+
+.响应数据样例
+```json
+{
+  "code": 1,
+  "msg": "success",
+  "data": {
+    "id": 2,
+    "username": "zhangwuji",
+    "password": "123456",
+    "name": "张无忌",
+    "gender": 1,
+    "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2022-09-02-00-27-53B.jpg",
+    "job": 2,
+    "entrydate": "2015-01-01",
+    "deptId": 2,
+    "createTime": "2022-09-01T23:06:30",
+    "updateTime": "2022-09-02T00:29:04"
+  }
+}
+```
+
+===== 查询单个员工 EmpController
+[source,java]
+----
+@GetMapping("/{id}")
+// @PathVariable 获取路径参数
+public Result getEmpById(@PathVariable Integer id) {
+    Emp emp = empService.getEmpById(id);
+    return Result.success(emp);
+}
+----
+
+测试
+
+http -v :8080/emps/20
+
+===== 查询单个员工 EmpService
+[source,java]
+----
+public abstract Emp getEmpById(Integer id);
+----
+
+===== 查询单个员工 EmpServiceImpl
+[source,java]
+----
+public Emp getEmpById(Integer id) {
+    Emp emp = empMapper.getEmpById(id);
+    return emp;
+}
+----
+
+===== 查询单个员工 EmpMapper
+[source,java]
+----
+@Select("select * from emp where id = #{id}")
+public abstract Emp getEmpById(Integer id);
+----
+
+==== 修改单个员工
+基本信息
+
+* 请求路径：/emps
+* 请求方式：PUT
+* 接口描述：该接口用于修改员工的数据信息
+
+请求参数格式：application/json
+
+[caption=]
+.参数说明
+[cols="1,1,1,2",options="header",stripes=even]
+|===
+| 名称        | 类型     | 是否必须 | 备注
+| id        | number | 必须   | id
+| username  | string | 必须   | 用户名
+| name      | string | 必须   | 姓名
+| gender    | number | 必须   | 性别, 说明: 1 男, 2 女
+| image     | string | 非必须  | 图像
+| deptId    | number | 非必须  | 部门id
+| entrydate | string | 非必须  | 入职日期
+| job       | number | 非必须  | 职位, 说明: 1 班主任,2 讲师, 3 学工主管, 4 教研主管, 5 咨询师
+|===
+
+
+.请求数据样例
+```json
+{
+  "id": 1,
+  "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2022-09-03-07-37-38222.jpg",
+  "username": "linpingzhi",
+  "name": "林平之",
+  "gender": 1,
+  "job": 1,
+  "entrydate": "2022-09-18",
+  "deptId": 1
+}
+```
+
+响应数据格式：application/json
+
+[caption=]
+.参数说明
+[cols="1,1,1,3",options="header"]
+|===
+| 参数名  | 类型     | 是否必须 | 备注
+| code | number | 必须       | 响应码，1 代表成功，0 代表失败
+| msg  | string | 非必须     | 提示信息
+| data | object | 非必须     | 返回的数据
+|===
+
+响应数据样例：
+
+```json
+{
+    "code":1,
+    "msg":"success",
+    "data":null
+}
+```
+
+===== 修改单个员工 EmpController
+[source,java]
+----
+@PutMapping
+public Result updateEmp(@RequestBody Emp emp){
+    empService.updateEmp(emp);
+    return Result.success();
+}
+----
+
+===== 修改单个员工 EmpService
+[source,java]
+----
+public abstract void updateEmp(Emp emp);
+----
+
+===== 修改单个员工 EmpServiceImpl
+[source,java]
+----
+// emp 封装了要修改的数据
+public void updateEmp(Emp emp) {
+    // 在前端提交的表单中没有更新时间，所以需要后台来补充此属性
+    emp.setUpdateTime(LocalDateTime.now());
+    empMapper.updateEmp(emp);
+}
+----
+
+===== 修改单个员工 EmpMapper
+[source,java]
+----
+// 因为要判断值是否为空，所以要用到动态 SQL 了
+public void updateEmp(Emp emp);
+----
+
+===== 修改单个员工 EmpMapper.xml
+```
+<!-- id 绑定方法名 -->
+<update id="updateEmp">
+    UPDATE emp
+    <!-- 自动加 set，自动去除多余的逗号 -->
+    <set>
+        <!--                             数据库字段名    Emp 成员变量名 -->
+        <if test = "username!=null">     username    = #{username}  , </if>
+        <if test = "name != null">       name        = #{name}      , </if>
+        <if test = "gender != null">     gender      = #{gender}    , </if>
+        <if test = "image != null">      image       = #{image}     , </if>
+        <if test = "job != null">        job         = #{job}       , </if>
+        <if test = "entrydate != null">  entrydate   = #{entrydate} , </if>
+        <if test = "deptId != null">     dept_id     = #{deptId}    , </if>
+        <if test = "updateTime != null"> update_time = #{updateTime}  </if>
+    </set>
+    WHERE id = #{id}
+</update>
+```
+
+=== 登录校验
+
+
+==== api 登录文档
+[discrete]
+===== 基本信息
+
+[horizontal]
+请求路径:: `/login`
+请求方式:: `POST`
+接口描述:: 该接口用于员工登录 Tlias 智能学习辅助系统，登录完毕后，系统下发 JWT 令牌。
+
+[discrete]
+===== 请求参数
+
+*参数格式*： `application/json`
+
+.参数说明
+[cols="1,1,1,3", options="header"]
+|===
+| 名称     | 类型   | 是否必须 | 备注
+| username | string | 必须     | 用户名
+| password | string | 必须     | 密码
+|===
+
+.请求数据样例
+[source,json]
+----
+{
+    "username": "jinyong",
+    "password": "123456"
+}
+----
+
+[discrete]
+===== 响应数据
+
+*参数格式*： `application/json`
+
+.参数说明
+[cols="1,1,1,1,3,1", options="header"]
+|===
+| 名称 | 类型   | 是否必须 | 默认值 | 备注                          | 其他信息
+| code | number | 必须     |        | 响应码，1 成功；0 失败       |
+| msg  | string | 非必须   |        | 提示信息                    |
+| data | string | 必须     |        | 返回的数据，JWT 令牌         |
+|===
+
+.响应数据样例
+[source,json]
+----
+{
+  "code": 1,
+  "msg": "success",
+  "data": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoi6YeR5bq4IiwiaWQiOjEsInVzZXJuYW1lIjoiamlueW9uZyIsImV4cCI6MTY2MjIwNzA0OH0.KkUc_CXJZJ8Dd063eImx4H9Ojfrr6XMJ-yVzaWCVZCo"
+}
+----
+
+[discrete]
+===== 备注说明
+
+用户登录成功后，系统会自动下发 JWT 令牌，然后在后续的每次请求中，都需要在请求头（header）中携带到服务端，请求头的名称为 `token`，值为登录时下发的 JWT 令牌。
+
+如果检测到用户未登录，则会返回如下固定错误信息：
+
+[source,json]
+----
+{
+    "code": 0,
+    "msg": "NOT_LOGIN",
+    "data": null
+}
+----
+
+==== httpie 测试
+成功测试: +
+http -v :8080/login username=limuwan password=123456
+
+失败测试: +
+http -v :8080/login username=xxxxxx password=123456
+
+==== 创建后端登录代码
+
+
+===== file -> src/main/java/com/tjise/controller/LoginController.java
+[source,java]
+----
+@RestController
+public class LoginController {
+    @Autowired
+    private EmpService empService;
+
+    @PostMapping("/login")
+    public Result login(@RequestBody Emp emp) {
+        Emp e = empService.login(emp);  // 去数据库验证
+        return e == null
+                    ? Result.error("用户名或密码有误")
+                    : Result.success();
+    }
+}
+----
+
+===== file -> src/main/java/com/tjise/service/EmpService.java
+
+
+====== login 新增
+[source,java]
+----
+Emp login(Emp emp);
+----
+
+===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== 员工登录功能 login -> 新增
+* @param emp 包含用户输入的用户名和密码的 Emp 对象
+
+[source,java]
+----
+@Override
+public Emp login(Emp emp) {
+    Emp e = empMapper.login(emp);
+    return e;
+}
+----
+
+===== file -> src/main/java/com/tjise/mapper/EmpMapper.java
+
+
+====== EmpMapper
+[source,java,linenums]
+----
+@Mapper
+public interface EmpMapper {
+    @others
+    /*
+    @Select("select count(*) from emp")
+    Long selectCount();
+
+    @Select("select * from emp LIMIT #{offset}, #{pageSize}")
+    List<Emp> selectPage(int offset, Integer pageSize);
+    */
+}
+----
+
+====== login
+.同时查询用户名和密码，返回结果。
+[source,java]
+----
+@Select("select * from emp where username=#{username} and password=#{password}")
+Emp login(Emp emp);
+----
+
+==== JWT 简介
+JSON Web Token（JWT）是一个开放的行业标准（RFC 7519），它定义了一种简洁的、自包含的协议格式，用于在通信双方传递json对象，传递的信息经过数字签名可以被验证和信任。
+
+* 官网： https://jwt.io/
+* 标准： https://tools.ietf.org/html/rfc7519
+
+.JWT 示例内容
+....
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30
+....
+
+各部分解析:
+
+* 第一部分：Header(头）， 作用：记录令牌类型、签名算法等。 例如：{"alg":"HS256","type","JWT}
+* 第二部分：Payload(有效载荷），作用：携带一些用户信息及过期时间等。 例如：{“id":"1","username":“Tom"}
+* 第三部分：Signature(签名），作用：防止Token被篡改、确保安全性。 理解：计算出来的签名，一个字符串
+
+==== pom.xml 新增依赖 JWT
+参考网址: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api/0.12.6
+
+[source,scss]
+----
+<!-- 接口层: 编译时需要 -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.12.6</version>
+</dependency>
+
+<!-- 实现层: 运行时必需 -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.12.6</version>
+    <scope>runtime</scope>
+</dependency>
+
+<!-- JSON 序列化支持: 运行时必需 -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.12.6</version>
+    <scope>runtime</scope>
+</dependency>
+----
+
+==== 测试 JWT 的创建与解析
+
+
+===== file -> src/test/java/com/tjise/JWTTest.java
+
+
+[source,java]
+----
+public class JWTTest {
+    @others
+}
+----
+
+====== generateJwt() 测试创建 JWT
+[source,java]
+----
+@Test
+public void generateJwt() {
+
+    // 1. 准备自定义声明（要加入 jwt 的内容）
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("id", 1);
+    claims.put("username", "limuwan");
+
+    // 2. 生成足够长度的密钥（≥256 bit），推荐盐为 32 字节
+    //    32字节的密钥长度正好是256位，符合“≥256 bit”的安全要求
+    SecretKey key = Keys.hmacShaKeyFor("12345678901234567890123456789012".getBytes());
+
+    // 3. 构建并签名 JWT（0.12.x 写法）
+    String jwt = Jwts.builder()
+            .signWith(key, Jwts.SIG.HS256)                    // 先密钥，再算法
+            .claims(claims)                                   // 设置自定义数据
+           // .expiration(new Date(System.currentTimeMillis() + 12 * 3600 * 1000)) // 12h 过期
+           // .expiration(new Date(System.currentTimeMillis() - 1000)) // 负 1s 马上过期
+            .expiration(new Date(System.currentTimeMillis() + 60 * 1000)) // 1min 过期
+            .compact();  // 生成令牌
+    System.out.println(jwt);
+}
+----
+
+====== parseJwt() 测试解析 JWT
+[source,java]
+----
+@Test
+public void parseJwt() {
+    // 1. 生成/准备好与签发端一致的密钥
+    SecretKey key = Keys.hmacShaKeyFor("12345678901234567890123456789012".getBytes());
+    try {
+        // 2. 创建线程安全的 JwtParser
+        JwtParser parser = Jwts.parser()
+                .verifyWith(key)   // 指定验证密钥
+                .build();
+
+        // 3. 解析 generateJwt() 生成的 JWT 并返回载荷
+        Jws<Claims> jws = parser.parseSignedClaims("eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJsaW11d2FuIiwiZXhwIjoxNzU1MzM5OTczfQ.2uL_v-lYN_SpOxNTlQN8LRVrRtWgThsTZ2RaJFx7Dak");
+        Claims payload = jws.getPayload();// 就是以前版本的 getBody() 方法
+        System.out.println(payload);
+
+    } catch (ExpiredJwtException e) {
+        throw new RuntimeException("Token 已过期", e);
+    } catch (MalformedJwtException e) {
+        throw new RuntimeException("Token 格式错误", e);
+    } catch (JwtException e) {
+        throw new RuntimeException("Token 验证失败", e);
+    }
+}
+----
+
+==== 封装 JWT 类
+
+
+===== file -> src/main/java/com/tjise/utils/JwtUtils.java
+
+
+====== public class JwtUtils
+[source,java]
+----
+public class JwtUtils {
+
+    private static SecretKey key = Keys.hmacShaKeyFor(
+            "12345678901234567890123456789012".getBytes());
+
+    public static Long expire = 1000L * 10;          // 10s , 测试用
+    // public static Long expire = - 1000L           // 负 1s 马上过期
+    // public static Long expire = 12 * 3600 * 1000L // 12h 过期
+    @others
+}
+----
+
+====== generateJwt 生成JWT令牌
+* @param claims JWT第二部分负载 payload 中存储的内容
+
+[source,java]
+----
+public static String generateJwt(Map<String, Object> claims) {
+    String jwt = Jwts.builder()
+            .signWith(key, Jwts.SIG.HS256)                    // 先密钥，再算法
+            .claims(claims)                                   // 设置自定义数据
+            .expiration(new Date(System.currentTimeMillis() + expire))
+            .compact();  // 生成令牌
+    return jwt;
+}
+----
+
+====== parseJWT 解析JWT令牌
+* @param jwt JWT令牌
+* @return JWT第二部分负载 payload 中存储的内容
+
+[source,java]
+----
+public static Claims parseJWT(String jwt) {
+
+    // 创建线程安全的 JwtParser
+    JwtParser parser = Jwts.parser().verifyWith(key).build();
+    return parser.parseSignedClaims(jwt).getPayload();
+
+    /*
+    // 在实际开发中，这里不用 try catch，由业务来捕获异常。
+    // 因为这里捕获了，业务就看不到异常了，无法给前端提示了。
+    try {
+        // 创建线程安全的 JwtParser
+        JwtParser parser = Jwts.parser().verifyWith(key).build();
+        return parser.parseSignedClaims(jwt).getPayload();
+    } catch (ExpiredJwtException e) {
+        throw new RuntimeException("Token 已过期", e);
+    } catch (MalformedJwtException e) {
+        throw new RuntimeException("Token 格式错误", e);
+    } catch (JwtException | IllegalArgumentException e) {
+        throw new RuntimeException("Token 验证失败", e);
+    }
+    */
+}
+----
+
+==== 登录接口调用 JWT 类生成 token 返回给前端
+
+
+===== file -> src/main/java/com/tjise/controller/LoginController.java
+[source,java]
+----
+@RestController
+public class LoginController {
+
+    @Autowired
+    private EmpService empService;
+
+    @PostMapping("/login")
+    public Result login(@RequestBody Emp emp) {
+        // 登录，去数据库验证用户名和密码
+        Emp e = empService.login(emp);
+
+        if (e == null) {
+            // 登录失败返回 NOT_LOGIN 后前端会自动跳转到登录页面
+            return Result.error("NOT_LOGIN");
+        } else {
+            // 登录成功
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", e.getId());
+            map.put("username", e.getUsername());
+            map.put("name", e.getName());
+
+            // 生成令牌并返回给前端
+            String jwt = JwtUtils.generateJwt(map);
+            return Result.success(jwt);
+        }
+    }
+}
+----
+
+使用 httpie 测试登录::    
+`http -v post http://localhost:8080/login username=limuwan password=123456`
+
+=== 统一拦截（二选一）
+统一拦截可以把对资源的请求拦截下来，从而实现一些特殊的处理。比如：登陆鉴权、统一编码处理、敏感字符处理等。
+
+.统一拦截流程图
+image::img/login_filter.png[login,480]
+
+IMPORTANT: 因为要返回 json 给前端，所以需要安装依赖 fastjson2
+
+==== fastjson2 pom.xml 新增依赖 
+[source,xml]
+....
+<!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
+<dependency>
+    <groupId>com.alibaba.fastjson2</groupId>
+    <artifactId>fastjson2</artifactId>
+    <version>2.0.57</version>
+</dependency>
+....
+
+==== 过滤器 Filter （介绍一下，以后使用 Interceptor）
+测试过滤器：（任何时候都可以测试）
+
+http -v :8080/emps/20
+
+http -v :8080/emps
+
+===== file -> src/main/java/com/tjise/filter/LoginCheckedFilter.java
+[source,java]
+----
+<< import >>
+
+// 过滤器拦截资源
+//@WebFilter(urlPatterns = "/emps/*")  // 拦截部分 api
+//@WebFilter(urlPatterns = {"/emps/*", "/users/*", "/admin/*"})  // 拦截多个路由怎么配置
+@WebFilter(urlPatterns = "/*")  // <1>
+public class LoginCheckedFilter implements Filter {
+    @others
+}
+----
+
+<1> 拦截所有资源
++
+为了让 @WebFilter 生效，还需要在启动类增加 @ServletComponentScan，参后面代码。
+
+====== << import >>
+[source,java]
+----
+package com.tjise.filter;
+
+import com.alibaba.fastjson2.JSONObject;
+import com.tjise.pojo.Result;
+import com.tjise.utils.JwtUtils;
+
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+----
+
+====== public void doFilter
+[source,java]
+----
+// 过滤器，只要资源访问，就会执行该方法
+@Override
+public void doFilter(
+        ServletRequest servletRequest,
+        ServletResponse servletResponse,
+        FilterChain filterChain) throws IOException, ServletException
+{
+    System.out.println("Enter LoginCheckedFilter.doFilter");
+
+    // 将 Servlet 请求对象转换为 HTTP Servlet 请求对象，否则没有相应的调用方法
+    HttpServletRequest request = (HttpServletRequest) servletRequest;
+    HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+    // 1. 获取请求路由
+    String url = request.getRequestURL().toString();
+
+    // 2. 判断请求的路由是否包含 login
+    if (url.contains("login")) {
+        // 放行去访问 login api
+        filterChain.doFilter(servletRequest, servletResponse);
+        return;
+    }
+
+    // 3. 获取请求头中的令牌 token
+    String jwt = request.getHeader("token");
+    if (jwt == null) {  // 返回登录页面
+        sendErrorResponse(response);
+        return;
+    }
+
+    // 4. 解析令牌
+    try {
+        JwtUtils.parseJWT(jwt);
+    } catch (Exception e) {  // 这就是不能在 JwtUtils.parseJWT 中 catch 的原因
+        sendErrorResponse(response);
+        return;
+    }
+
+    // 5. 令牌验证成功，放行去访问相应的 api
+     filterChain.doFilter(servletRequest, servletResponse);
+
+     // 6. api 执行完成后，还可以继续执行这里的代码
+     System.out.println("过滤器最后执行的代码");
+}
+----
+
+====== private void sendErrorResponse
+[source,java]
+----
+// 抽取的自定义方法
+private void sendErrorResponse(HttpServletResponse response) throws IOException {
+    Result notLogin = Result.error("NOT_LOGIN");
+    // return notLogin;  // 行不通，因为 doFilter 返回值只能是 void
+    // 所以可以使用 response.getWriter().write() 给前端返回约定好的 json 格式的数据
+    String jsonString = JSONObject.toJSONString(notLogin);
+    // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);  // 这个不要设置，会返回401，前端案例没处理
+    response.setContentType("application/json;charset=UTF-8");   // 防止乱码
+    response.getWriter().write(jsonString);
+
+    // 对于不复杂场景，直接返回固定的 JSON 字符串更简单
+    // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    // response.setContentType("application/json;charset=UTF-8");
+    // response.getWriter().write("{\"code\": 401, \"message\": \"NOT_LOGIN\"}")
+}
+----
+
+===== file -> src/main/java/com/tjise/GeneralManagerApplication.java
+[source,java]
+----
+package com.tjise;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+
+@ServletComponentScan  // <1>
+@SpringBootApplication
+public class GeneralManagerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(GeneralManagerApplication.class, args);
+	}
+
+}
+----
+
+<1> 新增：在引导类上只用 @ServletComponentScan 开启 Servlet 组件支持。其实就是让 WebFilter 生效
+
+==== 拦截器 Interceptor（SpringBoot 使用）
+拦截器 Interceptor 是一种动态拦截方法调用的机制，类似于过滤器。在 Spring 中动态拦截控制器中方法的执行。
+
+未登录测试拦截器
+
+* http -v :8080/emps/20
+* http -v :8080/emps
+
+登录测试拦截器
+
+1. 命令行先保存 TOKEN
++
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
++
+TIP: jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式输出
+
+2. 再使用该 TOKEN 登录
++
+http :8080/emps/20 "token: $TOKEN"
+
+最后可以再用浏览器测试一下。
+
+===== 如果 Filter 打开了，关闭 Filter，参里面具体更改
+
+
+====== file -> src/main/java/com/tjise/GeneralManagerApplication.java
+[source,java]
+----
+package com.tjise;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+
+// @ServletComponentScan  // <1>
+@SpringBootApplication
+public class GeneralManagerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(GeneralManagerApplication.class, args);
+	}
+
+}
+----
+
+<1> 在引导类上只用 @ServletComponentScan 开启 Servlet 组件支持。其实就是让 WebFilter 生效
++
+IMPORTANT: 我们要使用 Interceptor 了，不使用 Filter，则需注释此行即可。
+
+===== 定义拦截器
+
+
+====== file -> src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java
+
+
+====== class LoginCheckedInterceptor 前端请求 token 检查拦截器
+[source,java]
+----
+@Component
+public class LoginCheckedInterceptor implements HandlerInterceptor {  // <1>
+    @others
+}
+----
+
+<1> 实现接口 HandlerInterceptor
+
+====== preHandle 目标 api 执行前执行: return true 放行，return false 拦截
+[source,java]
+----
+@Override
+public boolean preHandle(HttpServletRequest request,
+                         HttpServletResponse response,
+                         Object handler) throws Exception {
+    System.out.println("Enter preHandle()");
+
+    // 1. 获取请求路由
+    String url = request.getRequestURL().toString();
+
+    // 2. 判断请求的路由是否包含 login
+    if (url.contains("login")) {
+        // 放行去访问 login api
+        return true;
+    }
+
+    // 3. 获取请求头中的令牌 token
+    String jwt = request.getHeader("token");
+    if (jwt == null) {  // 返回登录页面
+        sendErrorResponse(response);
+        return false;
+    }
+
+    // 4. 解析令牌
+    try {
+        JwtUtils.parseJWT(jwt);
+    } catch (Exception e) {
+        sendErrorResponse(response);
+        return false;
+    }
+
+    return true;   // 放行去执行 api
+    // return false;  // 拦截直接给客户端响应 200 结束
+}
+----
+
+====== sendErrorResponse() 自定义发送错误响应方法
+[source,java]
+----
+// 抽取的私有方法
+private void sendErrorResponse(HttpServletResponse response) throws IOException {
+    Result notLogin = Result.error("NOT_LOGIN");
+    // return notLogin;  // 行不通，因为 preHandle 返回值只能是 boolean
+    // 所以可以使用 response.getWriter().write() 给前端返回约定好的 json 格式的数据
+    String jsonString = JSONObject.toJSONString(notLogin);
+    // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);  // 这个不要设置，会返回401，前端案例没处理
+    response.setContentType("application/json;charset=UTF-8");  // 防止中文乱码
+    response.getWriter().write(jsonString);
+
+    // 对于不复杂场景，直接返回固定的 JSON 字符串更简单
+    // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    // response.setContentType("application/json;charset=UTF-8");
+    // response.getWriter().write("{\"code\": 401, \"message\": \"NOT_LOGIN\"}")
+}
+----
+
+===== 注册拦截器
+
+
+====== file -> src/main/java/com/tjise/interceptor/LoginCheckedInterceptorConfig.java
+[source,java]
+----
+package com.tjise.interceptor;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+/**
+ * 登录检查拦截器配置类
+ * 用于配置 Spring MVC 的拦截器，实现对请求的统一拦截处理
+ */
+@Configuration
+public class LoginCheckedInterceptorConfig implements WebMvcConfigurer {
+    // 自动注入登录检查拦截器实例
+    @Autowired
+    private LoginCheckedInterceptor loginCheckedInterceptor;
+
+    /**
+     * 注册拦截器方法
+     * 实现WebMvcConfigurer接口的addInterceptors方法，用于添加自定义拦截器
+     * @param registry 拦截器注册器
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loginCheckedInterceptor)
+                // 添加拦截路径模式，/** 表示拦截所有请求
+                .addPathPatterns("/**");
+                // 放开登录方法(代码中判断了，所以此处注释了)
+                //.excludePathPatterns("/login");
+    }
+}
+----
+
+实际应用：
+
+* 用于实现用户登录状态检查，在用户未登录时跳转到登录页面
+* 可以保护系统资源不被未授权用户访问
+
+===== 拦截器加允许 CORS
+
+
+====== file -> src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java
+
+
+====== override preHandle
+[source,java]
+----
+// 目标 api 执行前执行: return true 放行，return false 拦截
+@Override
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    System.out.println("Enter preHandle()");
+
+    // 增加处理 CORS 预检请求，这个要加，不加会报错的
+    if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+        System.out.println("Handling OPTIONS request");
+        response.setStatus(HttpServletResponse.SC_OK);
+        return true;
+    }
+
+    // 其他拦截逻辑
+    @others
+}
+----
+
+====== file -> src/main/java/com/tjise/interceptor/LoginCheckedInterceptorConfig.java
+
+
+====== class LoginCheckedInterceptorConfig
+[source,java]
+----
+/**
+ * 注册拦截器
+ */
+@Configuration
+public class LoginCheckedInterceptorConfig implements WebMvcConfigurer {
+
+    // 其他代码
+    @others
+
+    // 增加允许 CORS
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        System.out.println("Enter addCorsMappings()");
+        registry.addMapping("/**")  // 允许所有路由
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
+                .allowedHeaders("*")        // 允许所有头
+                .allowCredentials(true)     // 允许携带 cookie
+                .exposedHeaders("*");       // 暴露所有头
+    }
+}
+----
+
+==== 同时存在 Filter & interceptor 的执行顺序
+1. 里面的虚线框是 Spring Boot
+2. doFilter 走两次分别是放行前和放行后
+
+.共存流程
+image::img/filterAndInterceptor.png[,900]
+
+.Filter vs Interceptor
+****
+* 接口规范不同：过滤器需要实现 Filter 接口，而拦截器需要实现 HandlerInterceptor 接口。
+* 拦截范围不同：过滤器 Filter 会拦截所有的资源，而 Interceptor 只会拦截 Spring 环境中的资源。
+****
+
+=== 异常处理
+目前代码中的异常都是向上抛出的，，如 mapper -> service -> controller，最后到了前端。
+但是前端只认识固定的 Result 格式。所以我们要对异常进行处理。
+
+引入有异常的问题：
+
+////
+在 macos 中启动 mysql 数据库服务
+    sudo /usr/local/mysql/support-files/mysql.server start
+////
+
+1. 启动后端项目
+* 选中 src/main/java/com/tjise/GeneralManagerApplication.java
+* 点击鼠标右键 -> Run 'GeneralManager....Main()'
+
+2. 启动前端项目： pnpm run dev
+* node.js 使用的是 16 版本：`nvm use v16`
+* 确认指定版本成功：Now using node v16.20.2 (npm v8.19.4)
+* 访问 http://localhost:9528
+
+3. 测试异常
+* 点击「部门管理」-> 「新增部门」-> 学工部 （已经存在的部门，应该有提醒反馈，实际上没有）
+* 前端开发者调试模式会显示 http://localhost:9528/api/depts 500 服务器错
+* 后端会显示 `Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '学工部' for key 'dept.name'`
+* 原因是数据库中已经有了 name 为「学工部」的记录，且该 name 字段为 UNIQUE，即不允许有重复字段。
+* 前端没有提醒反馈的原因，是前端只认识 Result 格式的消息。不认识 500 错误。
+
+4. 处理异常的方式如下
+
+==== 方案一：在 Controller 方法中进行 try…catch 处理
+IMPORTANT: 项目中的每个 controller 都需要改代码，太麻烦了。
+
+===== file -> src/main/java/com/tjise/controller/DeptController.java
+
+
+====== 新增单个部门 insertDept -> 新增 try catch
+[source,java]
+----
+@PostMapping
+public Result insertDept(@RequestBody Dept dept){
+    try {
+        deptService.insertDept(dept);
+    } catch (Exception e) {
+        // 打印异常信息
+        e.printStackTrace();
+        return Result.error("部门已存在");  // <1>
+    }
+    return Result.success();
+}
+----
+
+<1> 使用 try catch 捕获异常后，返回 Result 数据，前端认识此格式。
+
+在浏览器中再进行测试新增部门「学工部」，前端会给出友好的提示「部门已存在」。
+
+==== 方案二：全局异常处理器
+1. 新增单个部门 insertDept -> 移除 try catch 恢复原来代码
+
+2. 定义全局异常处理器，参下面代码。
+
+===== file -> src/main/java/com/tjise/controller/DeptController.java
+
+
+====== 新增单个部门 insertDept -> 移除 try catch 恢复原来代码
+[source,java]
+----
+@PostMapping
+public Result insertDept(@RequestBody Dept dept){
+    deptService.insertDept(dept);
+    return Result.success();
+}
+----
+
+===== file -> src/main/java/com/tjise/exception/GlobalExceptionHandler.java
+[source,java]
+----
+package com.tjise.exception;
+
+import com.tjise.pojo.Result;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+/**
+ * 全局异常处理器
+ */
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    // @ExceptionHandler(value = {Exception.class})
+    @ExceptionHandler(Exception.class)  // 简写形式，此方法可以捕获所有异常
+    public Result handleException(Exception e)  // 会把拦截的异常传递给此方法的参数 e
+    {
+        e.printStackTrace();
+        //return Result.error(e.getMessage());  // 如有需要可以自定义错误信息，本例子省略。
+        // 上面信息太多字符了，用户看不懂，所以只返回一个通用的错误信息
+        return Result.error("处理异常，请稍后重试...");
+    }
+}
+----
+
+Exception 异常分类
+
+*  运行时异常 : RuntimeException , 编译时无需处理
+*  编译时异常 : 非 RuntimeException , 编译时处理
+
+=== 事务管理
+事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作 要么同时成功，要么同时失败。
+
+理解使用事务的条件：
+
+* 开启事务（一组操作开始前，开启事务）：`start transaction` / `begin`;
+* 提交事务（这组操作全部成功后，提交事务）：`commit`;
+* 回滚事务（中间任何一个操作出现异常，回滚事务）：`rollback`;
+
+[NOTE]
+====
+* 普通的 insert，update，delete 会默认执行 commit。
+* *Spring Boot 中使用 @Transactional 注解则会自动管理事务。*
+====
+
+需要事务的案例：
+
+1. 删除一个部门
+2. 同时删除该部门下的员工
+
+---
+
+开启事务日志：修改配置文件 `src/main/resources/application.yml` 增加事务日志功能
+
+.后端事务日志显示
+....
+2025-08-24 11:17:49.601 DEBUG 92701 --- [nio-8080-exec-2] o.s.jdbc.support.JdbcTransactionManager  : Creating new transaction with name [com.tjise.service.impl.DeptServiceImpl.deleteDeptById]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+
+2025-08-24 11:17:49.621 DEBUG 92701 --- [nio-8080-exec-2] o.s.jdbc.support.JdbcTransactionManager  : Initiating transaction rollback
+....
+
+==== @Transactional
+
+
+===== file -> src/main/resources/application.yml
+
+
+====== 开启事务日志 logging
+[source,yaml]
+----
+logging:
+    level:
+        # noinspection undefined
+        org.springframework.jdbc.support.JdbcTransactionManager: debug
+----
+
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== DeptServiceImpl -> 新增 DI empService
+[source,java,linenums]
+----
+@Service  // 把该类的对象交给 IOC 容器管理
+public class DeptServiceImpl implements DeptService {
+
+    // DI 注入 DeptMapper 实现类对象给变量 deptMapper
+    @Autowired
+    private DeptMapper deptMapper;
+
+    @Autowired
+    private EmpService empService;  // 新增
+    @others
+}
+----
+
+====== deleteDeptById 删除单个部门及其员工
+[source,java,linenum]
+----
+@Transactional  // <2>
+@Override
+public void deleteDeptById(Integer id) {
+
+    // 删除部门
+    deptMapper.deleteDeptById(id);
+
+    System.out.println(3/0);  // <1>
+
+    // 把此部门的员工删除
+    empService.deleteEmpByDeptId(id);
+}
+----
+
+<1> 如果有此运行时异常，则部门可以被删除，但是该部门员工无法被删除。
+<2> 增加此注解即可实现事务管理，解决 <1> 的问题。遇见异常可以回滚了。
++
+* 注解：@Transactional
+* 位置：可放在业务（service）层的方法上、类上、接口上。#实际开发中经常加在方法上。#
+* 作用：将当前方法交给 spring 进行事务管理，方法执行前，开启事务；成功执行完毕，提交事务；出现异常，回滚事务。
+
+===== file -> src/main/java/com/tjise/service/EmpService.java
+
+
+====== deleteEmpByDeptId 根据部门id删除员工 -> 新增
+[source,java]
+----
+void deleteEmpByDeptId(Integer deptId);
+----
+
+===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== deleteEmpByDeptId 根据部门id删除员工 -> 新增
+[source,java]
+----
+@Override
+public void deleteEmpByDeptId(Integer deptId) {
+    empMapper.deleteEmpByDeptId(deptId);
+}
+----
+
+===== file -> src/main/java/com/tjise/mapper/EmpMapper.java
+
+
+====== deleteEmpByDeptId 根据部门id删除员工 -> 新增
+[source,java]
+----
+@Delete("delete from emp where dept_id=#{deptId}")
+void deleteEmpByDeptId(Integer deptId);
+----
+
+==== @Transactional(rollbackFor)
+rollbackFor：控制出现何种异常类型，回滚事务。
+
+* 默认情况下，只有出现 RuntimeException 才回滚异常。
+* 如果出现编译时异常，则不回滚。
+
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== deleteDeptById 删除单个部门及其员工
+[source,java,linenum]
+----
+// @Transactional  // 不会捕获编译时异常，所以不会回滚
+@Transactional(rollbackFor = Exception.class)  // <2>
+@Override
+public void deleteDeptById(Integer id) throws Exception {  // <3>
+
+    // 删除部门
+    deptMapper.deleteDeptById(id);
+
+    if(true) {  // java 虚拟机不会检查 if 内的代码，所以可编译通过
+        throw new Exception("演示用异常");  // 编译时异常例子  // <1>
+    }
+
+    // 把此部门的员工删除
+    empService.deleteEmpByDeptId(id);
+}
+----
+<1> @Transactional 不会感知到编译时异常。
+<2> 增加此注解即可实现事务管理，解决 <1> 编译时异常不能回滚的问题。
+<3> 方法中声明一下 throws Exception，否则编译无法通过。
+
+===== file -> src/main/java/com/tjise/service/DeptService.java
+
+
+====== DeptService
+.src/main/java/com/tjise/service/DeptService.java
+[source,java,linenums]
+----
+package com.tjise.service;
+
+import com.tjise.pojo.Dept;
+import java.util.List;
+
+public interface DeptService {
+
+    public abstract List<Dept> selectAllDept();
+    
+    public abstract void deleteDeptById(Integer id) throws Exception;  // <1>
+    
+    public abstract void insertDept(Dept dept);
+
+    public abstract Dept getDeptById(Integer id);
+
+    public abstract void updateDept(Dept dept);
+}
+----
+
+<1> 对应于 src/main/java/com/tjise/service/impl/DeptServiceImpl.java，方法中也要声明一下 throws Exception，否则编译无法通过。
+
+===== file -> src/main/java/com/tjise/controller/DeptController.java
+
+
+====== deleteDeptById 删除单个部门
+[source,java]
+----
+@DeleteMapping("/{id}")  // 路径参数
+public Result deleteDeptById(@PathVariable Integer id) throws Exception {  // <1>
+    // 调用 service 层去删除数据库记录
+    deptService.deleteDeptById(id);
+    return Result.success();
+}
+----
+
+<1> 对应于 src/main/java/com/tjise/service/DeptService.java，方法中也要声明一下 throws Exception，否则编译无法通过。
+
+==== @Transactional(propagation)
+*propagation*：事务传播行为，指的就是当一个事务方法被另一个事务方法调用时，这个事务方法应该如何进行事务控制。
+
+[cols="1,2,2"]
+|===
+|属性值 |含义 |说明
+
+|*REQUIRED*
+|*【默认值】需要事务，有则加入，无则创建新事务*
+|*常用属性*
+
+|*REQUIRES_NEW*
+|*需要新事务，无论有无，总是创建新事务*
+|*常用属性*
+
+|SUPPORTS
+|支持事务，有则加入，无则在独立的连接中运行 SQL
+|结合 Hibernate、JPA 时有用，配在查询方法上
+
+|NOT_SUPPORTED
+|不支持事务，不加入，在独立的连接中运行 SQL
+|-
+
+|MANDATORY
+|必须有事务，否则抛异常
+|-
+
+|NEVER
+|必须没事务，否则抛异常
+|-
+
+|NESTED
+|嵌套事务
+|仅对 DataSourceTransactionManager 有效
+|===
+
+NOTE: 前两个属性常用
+
+应用场景：
+
+* REQUIRED：大部分情况下都是用该传播行为即可。
+
+* REQUIRES_NEW：当我们不希望事务之间相互影响时可以使用该传播行为。比如：下订单前需要记录日志，不论订单保存成功与否，都需要保证日志记录能够记录成功。
+
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== deleteDeptById 删除单个部门及其员工
+[source,java,linenum]
+----
+@Transactional(rollbackFor = Exception.class)
+@Override
+public void deleteDeptById(Integer id) throws Exception {
+
+    deptMapper.deleteDeptById(id);     // 删除部门
+    empService.deleteEmpByDeptId(id);  // 把此部门的员工删除  // <2>
+    System.out.println(3 / 0);         // 运行时异常  // <1>
+}
+----
+<1> 当产生该运行时异常时，看 <2> 的回滚情况。
+
+<2> deleteEmpByDeptId(id) 方法的注解 @Transactional(propagation) 取值不同，会影响 deleteEmpByDeptId(id) 是否回滚。
++
+* @Transactional(propagation = Propagation.REQUIRED) 会回滚
+* @Transactional(propagation = Propagation.REQUIRES_NEW) 不会回滚
+* deleteEmpByDeptId(id) 不加 @Transactional 也会回滚，因为 deleteEmpByDeptId(id) 已经被 deleteDeptById() 的事务包含了。
+
+===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== deleteEmpByDeptId 根据部门id删除员工 -> REQUIRED vs REQUIRES_NEW
+[source,java,linenum]
+----
+// 此例子中不加 @Transactional 也会回滚，因为 deleteEmpByDeptId(id) 已经被 deleteDeptById() 的事务包含了。
+
+// @Transactional  // <1>
+@Transactional(propagation = Propagation.REQUIRED)  // 这是默认值，同上  // <1>
+
+// @Transactional(propagation = Propagation.REQUIRES_NEW)  // <2>
+@Override
+public void deleteEmpByDeptId(Integer deptId) {
+    empMapper.deleteEmpByDeptId(deptId);
+}
+----
+
+删除员工也增加 @Transactional 进行事务管理。
+
+<1> 【默认值】有事务则加入，无则创建新事务。
++
+* 与调用该方法的 deleteDeptById() 是同一个事务，当 deleteDeptById() 中有异常时该方法##会回滚##。
+
+<2> 无论有无，总是创建新事务。
++
+* 与调用该方法的 deleteDeptById() 不是同一个事务了，当 deleteDeptById() 中有异常时该方法##不会回滚##。
+
+NOTE: 可以对比 Spring Boot 日志进行核实。
+
+[WARNING]
+====
+在这里只是演示 propagation 取值的用法。
+
+本例中该方法正确的逻辑应该是不写 @Transactional 或者使用 @Transactional(propagation = Propagation.REQUIRED)。因为删除部门不成功，应该回滚删除员工的操作。
+====
+
+=== 面向切面 AOP
+
+
+==== 引子 -> 记录业务层方法的执行耗时，并输出到控制台
+拿出两个方法举例能说明问题即可。
+从下面的代码更改中，可以发现每个方法中都存在重复的代码 <1> <2> <3>。
+所以引出 AOP 的应用。
+
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== 查询部门列表 -> 计算执行耗时
+[source,java]
+----
+@Override
+public List<Dept> selectAllDept() {
+
+    long begin = System.currentTimeMillis();  // <1>
+
+    List<Dept> deptList = deptMapper.selectAllDept();
+
+    long end = System.currentTimeMillis();  // <2>
+    log.info("方法执行耗时: {} ms", (end-begin));  // <3>
+
+    return deptList;
+}
+----
+
+<1> 开始时间
+<2> 结束时间
+<3> 计算耗时
+
+NOTE: @Slf4j 来自于于 lombok 依赖，包含了记录日志的方法 log。
+
+====== 获取单个部门 -> 计算执行耗时
+[source,java]
+----
+@Override
+public Dept getDeptById(Integer id) {
+
+    long begin = System.currentTimeMillis();  // <1>
+
+    Dept dept = deptMapper.getDeptById(id);
+
+    long end = System.currentTimeMillis();  // <2>
+    log.info("方法执行耗时: {} ms", (end-begin));  // <3>
+
+    return dept;
+}
+----
+
+<1> 开始时间
+<2> 结束时间
+<3> 计算耗时
+
+==== 面向切面 AOP 基础
+AOP：Aspect Oriented Programming（面向切面编程），它的核心思想是将重复的逻辑剥离出来，##在不修改原始逻辑的基础上对原始功能进行增强##。
+
+优势：无侵入、减少重复代码、提高开发效率、维护方便。
+
+===== 注释掉上节更改的代码 -> 去掉多余打印
+
+
+====== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== 查询部门列表 -> 计算执行耗时
+[source,java]
+----
+@Override
+public List<Dept> selectAllDept() {
+
+    // long begin = System.currentTimeMillis();  // <1>
+
+    List<Dept> deptList = deptMapper.selectAllDept();
+
+    // long end = System.currentTimeMillis();  // <2>
+    // log.info("方法执行耗时: {} ms", (end-begin));  // <3>
+
+    return deptList;
+}
+----
+
+<1> 开始时间
+<2> 结束时间
+<3> 计算耗时
+
+NOTE: @Slf4j 来自于于 lombok 依赖，包含了记录日志的方法 log。
+
+====== 获取单个部门 -> 计算执行耗时
+[source,java]
+----
+@Override
+public Dept getDeptById(Integer id) {
+
+    // long begin = System.currentTimeMillis();  // <1>
+
+    Dept dept = deptMapper.getDeptById(id);
+
+    // long end = System.currentTimeMillis();  // <2>
+    // log.info("方法执行耗时: {} ms", (end-begin));  // <3>
+
+    return dept;
+}
+----
+
+<1> 开始时间
+<2> 结束时间
+<3> 计算耗时
+
+===== 导入 AOP 起步依赖
+
+
+====== << aop >>
+[source,xml]
+....
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+....
+
+===== 定义统计执行耗时操作的切面类
+
+
+====== file -> src/main/java/com/tjise/aop/TimeAspect.java
+[source,java,linenum]
+----
+package com.tjise.aop;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component  // <2>
+@Aspect     // <2>
+public class TimeAspect {  // 切面类
+    @Around("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")  // <3>
+    public Object getTime(ProceedingJoinPoint joinPoint) throws Throwable {
+        long begin = System.currentTimeMillis();     // <1>
+
+        Object obj = joinPoint.proceed();            // <4>
+
+        long end = System.currentTimeMillis();       // <1>
+        log.info("方法执行耗时: {} ms", (end-begin));  // <1>
+
+        return obj;                                  // <4>
+    }
+}
+----
+
+<1> 抽取公共代码（统计执行耗时操作）。这些公共代码称为通知(Advice)。
+<2> 标识当前类是一个 AOP 类，并被 IOC 容器管理。
+<3> 配置公共代码作用于哪些目标方法上。通过 execution 中的切入点表达式计算得到切入点，从而找到目标方法。
++
+- Around 的名称叫通知。
+- 第一个星号 * 表示匹配所有方法的返回值类型，即任何方法的返回值类型都能被匹配。
+- 第二个星号 * 表示匹配所有方法。
+- .. 表示匹配任意多个参数。
+<4> 执行目标方法并返回值。joinPoint 代表目标方法。
+
+.execution 基本语法
+****
+execution(返回值类型 包名.类名.方法名(参数类型))
+
+- *：可以通配任意一个 返回值类型、包名、类名、方法名、或任意的一个参数类型
+- ..：可以通配任意层级的包、或任意类型、任意个数的参数
+****
+
+.使用 httpie 测试，查看后端日志中已经打印了方法执行耗时
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+http :8080/depts "token: $TOKEN"
+http :8080/depts/1 "token: $TOKEN"
+----
+
+==== 面向切面 AOP 进阶
+
+
+===== 注释掉上节更改的代码 -> 去掉多余打印
+
+
+====== file -> src/main/java/com/tjise/aop/TimeAspect.java
+
+
+====== public class TimeAspect
+[source,java,linenum]
+----
+@Slf4j
+// 注释下面两个注解，此切面类就失效了  // <.>
+// @Component
+// @Aspect
+public class TimeAspect {  // 切面类
+    @Around("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+    public Object getTime(ProceedingJoinPoint joinPoint) throws Throwable {
+        long begin = System.currentTimeMillis();
+
+        Object obj = joinPoint.proceed();
+
+        long end = System.currentTimeMillis();
+        log.info("方法执行耗时: {} ms", (end-begin));
+
+        return obj;
+    }
+}
+----
+
+===== 通知类型
+
+
+====== file -> src/main/java/com/tjise/aop/AdviceTypeAspectDemo.java
+[source,java]
+----
+package com.tjise.aop;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@Aspect
+public class AdviceTypeAspectDemo {  // 切面类
+    @others
+}
+----
+
+====== @Around 环绕通知 -> 最常用
+[source,java]
+----
+@Around("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+public Object getTime(ProceedingJoinPoint joinPoint) throws Throwable {
+    System.out.println("around 前");
+    Object obj = joinPoint.proceed();
+    System.out.println("around 后");
+    return obj;
+}
+----
+
+* 此注解标注的通知方法在目标方法前、后都有执行代码。
+* 此注解修饰的方法必须返回 Object。
+* @Around 需要自己调用 ProceedingJoinPoint.proceed() 来让目标方法执行，其他通知不需要考虑自己调用目标方法执行，因为会自动调用。
+
+====== @Before -> 了解：此注解标注的通知方法在目标方法前被执行
+[source,java]
+----
+@Before("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+public void before() {
+    System.out.println("before");
+}
+----
+
+====== @After  -> 了解：此注解标注的通知方法在目标方法后被执行，无论是否有异常
+[source,java]
+----
+@After("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+public void after() {
+    System.out.println("after");
+}
+----
+
+====== @AfterReturning -> 了解：此注解标注的通知方法在目标方法后被执行，有异常不会执行
+[source,java]
+----
+@AfterReturning("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+public void afterReturning() {
+    System.out.println("afterReturning");
+}
+----
+
+====== @AfterThrowing  -> 了解：此注解标注的通知方法发生异常后执行
+[source,java]
+----
+@AfterThrowing("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+public void afterThrowing() {
+    System.out.println("afterThrowing");
+}
+----
+
+====== 使用 httpie 测试
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+http :8080/depts "token: $TOKEN"
+----
+
+.测试结果：只有 afterThrowing 没有打印，因为没有异常发生。
+....
+around 前
+before
+显示其他内容
+afterReturning
+after
+around 后
+....
+
+思考：加个运行时异常会怎么样呢？::
+比如在 DeptServiceImpl 类的 selectAllDept() 方法中加入 `System.out.println(3 / 0);`
+
+.测试结果：只有 afterReturning 没有打印，因为有异常发生了。
+....
+around 前
+before
+afterThrowing
+after
+....
+
+===== 通知执行顺序
+当有多个切面的切点都匹配目标时，多个通知方法都会被执行。
+
+====== 注释掉上节更改的代码 -> 去掉多余打印
+
+
+====== file -> src/main/java/com/tjise/aop/AdviceTypeAspectDemo.java
+
+
+[source,java,linenum]
+----
+// 注释下面两个注解，此切面类就失效了
+// @Component
+// @Aspect
+@Slf4j
+public class AdviceTypeAspectDemo {  // 切面类
+    @others
+}
+----
+
+====== 方式一 默认按照切面类的名称字母排序
+* 目标前的通知方法：字母排名靠前的先执行
+* 目标后的通知方法：字母排名靠前的后执行
+
+.使用 httpie 测试下面代码，符合上面结论
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+http :8080/depts "token: $TOKEN"
+----
+
+.后端打印测试结果
+....
+before1 -> 目标前的通知方法：字母排名靠前的先执行
+before2
+其他打印内容
+after2
+after1 -> 目标后的通知方法：字母排名靠前的后执行
+....
+
+====== file -> src/main/java/com/tjise/aop/AdviceOrderAspectDemo1.java
+[source,java,linenum]
+----
+package com.tjise.aop;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@Aspect
+public class AdviceOrderAspectDemo1 {  // <1>
+
+    // @Before：此注解标注的通知方法在目标方法前被执行。
+    @Before("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+    public void before() {
+        System.out.println("before1");
+    }
+
+    // @After ：此注解标注的通知方法在目标方法后被执行，无论是否有异常。
+    @After("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+    public void after() {
+        System.out.println("after1");
+    }
+}
+----
+
+<1> 切面类名的字母排序靠前
+
+====== file -> src/main/java/com/tjise/aop/AdviceOrderAspectDemo2.java
+[source,java,linenum]
+----
+package com.tjise.aop;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@Aspect
+public class AdviceOrderAspectDemo2 {  // <1>
+
+    // @Before：此注解标注的通知方法在目标方法前被执行。
+    @Before("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+    public void before() {
+        System.out.println("before2");
+    }
+
+    // @After ：此注解标注的通知方法在目标方法后被执行，无论是否有异常。
+    @After("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+    public void after() {
+        System.out.println("after2");
+    }
+}
+----
+
+<1> 切面类名的字母排序靠后
+
+====== 方式二 用 @Order(数字) 加在切面类上来控制顺序 -> 常用方式
+* 目标前的通知方法：数字小的先执行
+* 目标后的通知方法：数字小的后执行
+
+.使用 httpie 测试下面代码，符合上面结论
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+http :8080/depts "token: $TOKEN"
+----
+
+.后端打印测试结果
+....
+before4 -> @Order(66)
+before3 -> @Order(99)
+其他打印代码
+after3 -> @Order(99)
+after4 -> @Order(66)
+....
+
+====== file -> src/main/java/com/tjise/aop/AdviceOrderAspectDemo3.java
+[source,java,linenum]
+----
+package com.tjise.aop;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@Aspect
+@Order(99)  // <1>
+public class AdviceOrderAspectDemo3 {  // 切面类
+
+    // @Before：此注解标注的通知方法在目标方法前被执行。
+    @Before("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+    public void before() {
+        System.out.println("before3");
+    }
+
+    // @After：此注解标注的通知方法在目标方法后被执行，无论是否有异常。
+    @After("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+    public void after() {
+        System.out.println("after3");
+    }
+}
+----
+
+<1> 用大数字注解类名
+
+====== file -> src/main/java/com/tjise/aop/AdviceOrderAspectDemo4.java
+[source,java,linenum]
+----
+package com.tjise.aop;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@Aspect
+@Order(66)  // <1>
+public class AdviceOrderAspectDemo4 {  // 切面类
+
+    // @Before：此注解标注的通知方法在目标方法前被执行。
+    @Before("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+    public void before() {
+        System.out.println("before4");
+    }
+
+    // @After：此注解标注的通知方法在目标方法后被执行，无论是否有异常。
+    @After("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+    public void after() {
+        System.out.println("after4");
+    }
+}
+----
+
+<1> 用小数字注解类名
+
+===== 切点表达式 @annotation()
+除了使用 execution() 切点表达式，
+还可以使用 @annotation() 切点表达式来根据目标方法是否有注解来进行匹配。
+
+====== file -> src/main/java/com/tjise/aop/AnnotationAspectDemo.java
+[source,java,linenum]
+----
+package com.tjise.aop;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@Aspect
+public class AnnotationAspectDemo {
+
+    // @Before：此注解标注的方法在目标方法前被执行。
+    @Before("@annotation(com.tjise.annotation.Log)")  // <1>
+    public void before() {
+        System.out.println("before");
+    }
+}
+----
+
+<1> 使用 @annotation() 切点表达式来根据目标方法是否有注解来进行匹配。
+
+====== file -> src/main/java/com/tjise/annotation/Log.java
+[source,java]
+----
+package com.tjise.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Log {}  // <1>
+----
+
+<1> 自定义标记性注解，用于记录日志。
+
+这两个元注解不是必须的，但通常建议添加。让我解释一下它们的作用：
+
+1. **`@Target(ElementType.METHOD)`**
+- 指定注解可以应用的目标元素类型
+- `ElementType.METHOD` 表示该注解只能用于方法上
+- 如果不写，注解默认可以用于任何元素类型
+
+2. **`@Retention(RetentionPolicy.RUNTIME)`**
+- 指定注解的保留策略
+- `RetentionPolicy.RUNTIME` 表示注解在运行时仍然可用，可以通过反射获取
+- 如果不写，默认是 `CLASS` 策略，运行时无法通过反射获取
+
+在 AOP 场景中，@Before、@After 等注解都需要在运行时被 Spring AOP 框架通过反射读取，所以必须使用 RetentionPolicy.RUNTIME 策略。
+
+====== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== deleteDeptById 删除单个部门及其员工
+[source,java,linenum]
+----
+@Transactional(rollbackFor = Exception.class)
+@Override
+@Log  // <1>
+public void deleteDeptById(Integer id) throws Exception {
+
+    deptMapper.deleteDeptById(id);     // 删除部门
+    empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
+    System.out.println(3 / 0);         // 运行时异常
+}
+----
+
+<1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
+
+.使用 httpie 测试，查看后端日志中已经打印了方法执行耗时
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+http DELETE :8080/depts/1 "token: $TOKEN"  # 会打印 before
+http :8080/depts "token: $TOKEN"    # 不会打印 before
+http :8080/depts/1 "token: $TOKEN"  # 不会打印 before
+----
+
+===== 切点表达式 @PointCut
+该注解的作用是将公共的切点表达式抽取出来，需要用到时引用该切点表达式即可。
+
+====== file -> src/main/java/com/tjise/aop/PointcutAspectDemo.java
+[source,java,linenum]
+----
+package com.tjise.aop;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.annotation.*;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@Aspect
+public class PointcutAspectDemo {
+
+    @Pointcut("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")  // <1>
+    public void pt(){}
+
+    // @Before：此注解标注的通知方法在目标方法前被执行。
+    @Before("pt()")  // <2>
+    public void before() {
+        System.out.println("before");
+    }
+
+    // @After ：此注解标注的通知方法在目标方法后被执行，无论是否有异常。
+    @After("pt()")  // <2>
+    public void after() {
+        System.out.println("after");
+    }
+}
+----
+
+<1> 使用 @Pointcut 注解抽取公共的切点表达式为一个方法。
+<2> 引用抽取的方法即可。
+
+.使用 httpie 测试，查看后端日志中已经打印了方法执行耗时
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+http :8080/depts "token: $TOKEN"    # 会打印 before 和 after
+http :8080/depts/1 "token: $TOKEN"  # 会打印 before 和 after
+----
+
+===== 连接点 JoinPoint
+连接点简单理解就是 目标方法，在 Spring 中用 JoinPoint 抽象了连接点，用它可以获得方法执行时的相关信息，如方法名、方法参数类型、方法实际参数等等。
+
+* 对于 @Around 通知，获取连接点信息只能使用 ProceedingJoinPoint。
+
+* 对于其他四种通知，获取连接点信息只能使用 JoinPoint，它是 ProceedingJoinPoint 的父类型。
+
+下面我们举个使用 @Around 通知中 ProceedingJoinPoint 的例子。
+
+====== file -> src/main/java/com/tjise/aop/JoinPointAspect.java
+[source,java,linenum]
+----
+package com.tjise.aop;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
+import java.util.Arrays;
+
+@Slf4j
+@Component
+@Aspect
+public class JoinPointAspect {
+    @Around("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
+    public Object getTime(ProceedingJoinPoint joinPoint) throws Throwable {  // <1>
+
+        String className = joinPoint.getTarget().getClass().getName();  // 获取类名
+        String methodName = joinPoint.getSignature().getName();   // 获取方法名
+        String args = Arrays.toString(joinPoint.getArgs());  // 获取方法参数值
+        log.info("类名：{}，方法名：{}，参数：{}", className, methodName, args);  // <2>
+
+        Object obj = joinPoint.proceed();  // <1>
+        return obj;
+    }
+}
+----
+
+<1> joinPoint 连接点代表方法对象。
+<2> 在后端打印获取到的内容。
+
+.使用 httpie 测试，查看后端日志中打印结果
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+http :8080/depts "token: $TOKEN"
+http :8080/depts/1 "token: $TOKEN"
+----
+
+==== 面向切面 AOP 案例
+将前面的部门和员工管理案例中对业务类（service）中的 增、删、改 方法的操作日志保存到数据库（MySQL）中。
+
+思路分析：
+
+1. 需要对所有业务类中的增、删、改 方法添加统一功能，使用 AOP 技术最为方便，因为不用更改原业务代码。
+2. 由于增、删、改 方法名没有规律，所以用 execution 不合适，但是可以用 @annotation 注解配合自定义 @Log 注解完成目标方法选取。
+
+===== 检查是否在 pom.xml 文件中导入了 AOP 依赖
+[source,xml]
+....
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+....
+
+===== 创建数据库操作日志表 operate_log
+[source,sql]
+----
+create table operate_log(
+    id int unsigned primary key auto_increment comment 'ID',
+    operate_user int unsigned comment '操作人',
+    operate_time datetime comment '操作时间',
+    class_name varchar(100) comment '操作的类名',
+    method_name varchar(100) comment '操作的方法名',
+    method_params varchar(1000) comment '方法参数',
+    return_value varchar(2000) comment '返回值',
+    cost_time bigint comment '方法执行耗时, 单位:ms'
+) comment '操作日志表';
+----
+
+===== file -> src/main/java/com/tjise/pojo/OperateLog.java
+.定义操作日志表对应的实体类
+[source,java]
+----
+package com.tjise.pojo;
+ 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+ 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class OperateLog {
+    private Integer id; //ID
+    private Integer operateUser; //操作人
+    private LocalDateTime operateTime; //操作时间
+    private String className; //操作类名
+    private String methodName; //操作方法名
+    private String methodParams; //操作方法参数
+    private String returnValue; //操作方法返回值
+    private Long costTime; //操作耗时
+}
+----
+
+===== file -> src/main/java/com/tjise/mapper/OperateLogMapper.java
+.定义操作日志表对应的 insert mapper
+[source,java]
+----
+package com.tjise.mapper;
+ 
+import com.tjise.pojo.OperateLog;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+ 
+@Mapper
+public interface OperateLogMapper {
+    //插入日志数据
+    @Insert("insert into operate_log (operate_user, operate_time, class_name, method_name, method_params, return_value, cost_time) " +
+            "values (#{operateUser}, #{operateTime}, #{className}, #{methodName}, #{methodParams}, #{returnValue}, #{costTime});")
+    public void insert(OperateLog log);
+}
+----
+
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== insertDept 新增部门 -> 增加 @Log
+[source,java]
+----
+@Override
+@Log  // <1>
+public void insertDept(Dept dept) {
+    // 指定 createTime & updateTime
+    dept.setCreateTime(LocalDateTime.now());
+    dept.setUpdateTime(LocalDateTime.now());
+    // 方法调用不用写类型 Dept
+    deptMapper.insertDept(dept);
+}
+----
+
+<1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
+
+====== updateDept 修改部门 -> 增加 @Log
+[source,java]
+----
+@Override
+@Log  // <1>
+public void updateDept(Dept dept) {
+    // 补全属性
+    dept.setUpdateTime(LocalDateTime.now());
+    deptMapper.updateDept(dept);
+}
+----
+
+<1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
+
+====== deleteDeptById 删除单个部门及其员工 -> 增加 @Log
+[source,java,linenum]
+----
+@Transactional(rollbackFor = Exception.class)
+@Override
+@Log  // <1>
+public void deleteDeptById(Integer id) throws Exception {
+
+    deptMapper.deleteDeptById(id);     // 删除部门
+    empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
+}
+----
+
+<1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
+
+===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== insertEmp 新增员工
+[source,java,linenums]
+----
+@Log
+@Override
+public void insertEmp(Emp emp){
+    // 补全属性
+    emp.setCreateTime(LocalDateTime.now());
+    emp.setUpdateTime(LocalDateTime.now());
+    empMapper.insertEmp(emp);
+}
+----
+
+<1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
+
+====== updateEmp 修改单个员工
+[source,java]
+----
+// emp 封装了要修改的数据
+@Log
+@Override
+public void updateEmp(Emp emp) {
+    // 在前端提交的表单中没有更新时间，所以需要后台来补充此属性
+    emp.setUpdateTime(LocalDateTime.now());
+    empMapper.updateEmp(emp);
+}
+----
+
+<1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
+
+====== deleteEmpByIds 删除员工
+[source,java,linenums]
+----
+@Log
+@Override
+public void deleteEmpByIds(List<Integer> ids) {
+    empMapper.deleteEmpByIds(ids);
+}
+----
+
+<1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
+
+====== deleteEmpByDeptId 根据部门id删除员工
+[source,java,linenum]
+----
+@Transactional
+@Log  // <1>
+@Override
+public void deleteEmpByDeptId(Integer deptId) {
+    empMapper.deleteEmpByDeptId(deptId);
+}
+----
+
+<1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
+
+===== file -> src/main/java/com/tjise/aop/LogAspect.java
+[source,java]
+----
+package com.tjise.aop;
+
+import com.alibaba.fastjson2.JSONObject;
+import com.tjise.mapper.OperateLogMapper;
+import com.tjise.utils.JwtUtils;
+import com.tjise.pojo.OperateLog;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+
+@Aspect
+@Component
+public class LogAspect {
+
+    // 含有用户上传的参数，其中有 token 可以解出登录的用户信息，如 id
+    @Autowired
+    private HttpServletRequest request;
+
+    // 把 OperateLogMapper 接口的实现类对象注入
+    @Autowired
+    private OperateLogMapper operateLogMapper;
+
+    @Around("@annotation(com.tjise.annotation.Log)")
+    public Object logServiceCURD(ProceedingJoinPoint joinPoint) throws Throwable {
+        @others
+    } 
+}
+----
+
+====== 1 获取操作人 operateUser
+[source,java]
+----
+String jwt = request.getHeader("token");
+Integer operateUser = (Integer) JwtUtils.parseJWT(jwt).get("id");
+----
+
+====== 2 获取操作时间 operateTime
+[source,java]
+----
+LocalDateTime operateTime = LocalDateTime.now();
+----
+
+====== 3 获取操作方法的类名
+[source,java]
+----
+String className = joinPoint.getTarget().getClass().getName();
+----
+
+====== 4 获取操作的方法名
+[source,java]
+----
+String methodName = joinPoint.getSignature().getName();
+----
+
+====== 5 获取操作的方法参数
+[source,java]
+----
+String methodParams = Arrays.toString(joinPoint.getArgs());
+----
+
+====== 6 获取操作方法的返回值
+[source,java]
+----
+long begin = System.currentTimeMillis();  // 操作方法执行开始时间
+Object result = joinPoint.proceed();      // 有异常就抛出
+long end = System.currentTimeMillis();    // 操作方法执行结束时间
+// 对象转字符串
+String returnValue = JSONObject.toJSONString(result);
+----
+
+====== 7 获取操作方法执行耗时
+[source,java]
+----
+long costTime = end - begin;
+----
+
+====== 8 获取的数据封装成 OperateLog 对象
+[source,java]
+----
+OperateLog operateLog = new OperateLog(
+        null,  // id 由数据库自动生成
+        operateUser,
+        operateTime,
+        className,
+        methodName,
+        methodParams,
+        returnValue,
+        costTime
+);
+----
+
+====== 9 将封装的 OperateLog 对象插入数据库表 operate_log 中
+[source,java]
+----
+operateLogMapper.insert(operateLog);
+----
+
+====== 10 返回操作方法执行的结果
+[source,java]
+----
+return result;
+----
+
+=== Redis 数据库应用
+
+
+==== 了解知识点 jedis
+IMPORTANT: 我们在 Spring Boot 中使用 `Spring Boot Starter Data Redis`，下面直接使用 jedis 的知识点作为了解即可。
+
+
+.直接使用依赖 jedis
+[source,scss]
+....
+<!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+<dependency>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+    <version>5.2.0</version>
+</dependency>
+....
+
+
+.测试代码
+[source,java]
+----
+Jedis jedis = new Jedis("127.0.0.1", 6379, false);  // SSL 为 false
+// jedis.auth("123456");  // 没有密码则不用写
+String pong = jedis.ping();
+System.out.println(pong);   // PONG 表示连接成功
+
+// 测试一下字符串设置
+jedis.set("name", "swot");
+String foo = jedis.get("name");
+System.out.println(foo);  // swot
+----
+
+NOTE: 其他类型的例子省略。
+
+**以上作为了解知识点，下面我们使用 `Spring Boot Starter Data Redis` 依赖，它的驱动库是 lettuce。**
+
+
+.Spring Boot Starter Data Redis 如何使用 jedis 驱动库
+****
+如果你想使用 jedis 驱动库，也是可以配合 Spring Boot Starter Data Redis 的，下面是实现的方式（参考资料）。
+
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+    <!-- 不使用 lettuce 驱动库了 -->
+    <exclusions>
+        <exclusion>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+
+<!-- 再显式引入 Jedis 驱动库 -->
+<dependency>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+</dependency>
+----
+****
+
+==== 登录时将 token 放入 Redis 数据库
+为什么要将 token 放入 redis 数据库中？
+
+1. 过期时间记录在 token 中，后端无法将用户踢下线。
+2. 将 token 存入关系型数据库中，太慢了。
+
+===== file -> pom.xml
+
+
+====== redis
+[source,scss]
+....
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
+<!-- spring-boot-starter-parent 中已经指定了相应可用的版本 -->
+<dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+....
+
+===== file -> src/main/resources/application.yml
+
+
+====== spring 新增配置 redis
+[source,python]
+----
+spring:
+    application:
+        name: mybatis_quickstart-crud
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/tjise
+        username: root
+        password: root
+    servlet:
+        multipart:                  # 上传文件
+            max-file-size: 10MB     # 指定单个文件上传的大小
+            max-request-size: 100MB  # 指定单次请求上传文件的总大小
+    # 新增配置 redis
+    redis:
+        database: 0
+        host: 127.0.0.1
+        port: 6379
+        # password: 未设置
+----
+
+===== file -> src/main/java/com/tjise/controller/LoginController.java
+[source,java]
+----
+@RestController
+public class LoginController {
+
+    @Autowired
+    private EmpService empService;
+
+    << 注入 redis 对象 >>
+
+    @PostMapping("/login")
+    public Result login(@RequestBody Emp emp) {
+        // 登录，去数据库验证用户名和密码
+        Emp e = empService.login(emp);
+
+        if (e == null) {
+            // 登录失败返回 NOT_LOGIN 后前端会自动跳转到登录页面
+            return Result.error("NOT_LOGIN");
+        } else {
+            // 登录成功
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", e.getId());
+            map.put("username", e.getUsername());
+            map.put("name", e.getName());
+
+            // 生成令牌并返回给前端
+            String jwt = JwtUtils.generateJwt(map);
+
+            << 将 jwt token 存入 redis 数据库 >>
+
+            return Result.success(jwt);
+        }
+    }
+}
+----
+
+====== << 注入 redis 对象 >>
+[source,java]
+----
+@Autowired
+private StringRedisTemplate stringRedisTemplate;
+----
+
+====== << 将 jwt token 存入 redis 数据库 >>
+[source,java]
+----
+stringRedisTemplate.opsForValue().set(
+        e.getUsername(), jwt,   // 将用户名存入 redis
+        JwtUtils.expire, TimeUnit.MILLISECONDS);
+----
+
+===== api 测试登录查看 redis
+使用 httpie 测试登录::    
+http -v post http://localhost:8080/login username=limuwan password=123456
+
+进入 redis 查看是否有以用户名 limuwan 为 key 的值。
+
+==== 前端请求进行 token 对比
+
+
+===== file -> src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java
+
+
+====== 注入 redis 对象
+[source,java]
+----
+@Autowired
+private StringRedisTemplate stringRedisTemplate;
+----
+
+====== preHandle 目标 api 执行前执行: return true 放行，return false 拦截
+[source,java]
+----
+@Override
+public boolean preHandle(HttpServletRequest request,
+                         HttpServletResponse response,
+                         Object handler) throws Exception {
+    System.out.println("Enter preHandle()");
+
+    // 1. 获取请求路由
+    String url = request.getRequestURL().toString();
+
+    // 2. 判断请求的路由是否包含 login
+    if (url.contains("login")) {
+        return true;  // 放行去访问 login api
+    }
+
+    // 3. 获取请求头中的令牌 token
+    String jwt = request.getHeader("token");
+    if (jwt == null) {  // 返回登录页面
+        sendErrorResponse(response);
+        return false;  // 拦截直接给客户端响应 200 结束
+    }
+
+    // 4. 解析令牌
+    Claims payload;
+    try {
+        payload = JwtUtils.parseJWT(jwt);
+    } catch (Exception e) {
+        sendErrorResponse(response);
+        return false;
+    }
+
+    // 5. 对比 redis 数据库中的值
+    String username = (String) payload.get("username");
+    String tokenFromRedis = stringRedisTemplate.opsForValue()
+                                               .get(username);
+    if (tokenFromRedis == null || !tokenFromRedis.equals(jwt)) {
+        sendErrorResponse(response);
+        return false;
+    }
+
+    return true;   // 放行去执行 api
+}
+----
+
+.使用 httpie 测试，查看后端日志中打印结果
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+http :8080/depts "token: $TOKEN"
+http :8080/depts/1 "token: $TOKEN"
+----
+
