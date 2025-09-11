@@ -62,8 +62,12 @@
 </v>
 <v t="swot.20241015083350.7"><vh>新创建请求响应模块</vh></v>
 <v t="swot.20241015083350.8"><vh>request  请求数据</vh>
-<v t="swot.20241015083350.9"><vh>@file spring-boot-ketang/spring-boot-request-response/src/main/java/com/tjise/controller/RequestController.java</vh></v>
-<v t="swot.20250910142433.1"><vh>@ignore-tree newHeadline 1</vh>
+<v t="swot.20241015083350.9"><vh>file -&gt; spring-boot-ketang/spring-boot-request-response/src/main/java/com/tjise/controller/RequestController.java</vh>
+<v t="swot.20241015083350.10"><vh>简单请求参数原始方式演示(了解以后不用)</vh></v>
+<v t="swot.20241015083350.11"><vh>简单请求参数: 前端提交与方法形参一致</vh></v>
+<v t="swot.20241015083350.12"><vh>@RequestParam 简单请求参数不一致</vh></v>
+<v t="swot.20241015083350.13"><vh>简单实体对象参数</vh></v>
+<v t="swot.20241015083350.14"><vh>复杂实体对象参数</vh></v>
 <v t="swot.20241015083350.15"><vh>使用数组接收参数（默认）</vh></v>
 <v t="swot.20241015083350.16"><vh>@RequestParam   使用集合接收参数（需使用 @RequestParam 指定）</vh></v>
 <v t="swot.20241015083350.17"><vh>@DateTimeFormat 日期参数</vh></v>
@@ -82,27 +86,21 @@
 <v t="swot.20241016134143.2"><vh>Spring Boot 响应数据</vh>
 <v t="swot.20241017094230.1"><vh>@path spring-boot-ketang/spring-boot-request-response/</vh>
 <v t="swot.20241016134143.3"><vh>@ResponseBody 了解内容</vh></v>
-<v t="swot.20241016134143.4"><vh>#file src/main/java/com/tjise/controller/ResponseController.java</vh>
+<v t="swot.20241016134143.4"><vh>file -&gt; src/main/java/com/tjise/controller/ResponseController.java</vh>
 <v t="swot.20241016134143.5"><vh>return String</vh></v>
 <v t="swot.20241016134143.6"><vh>return User json</vh></v>
 <v t="swot.20241016134143.7"><vh>return List json</vh></v>
 </v>
 <v t="swot.20241016134143.8"><vh>统一响应结果</vh></v>
-<v t="swot.20241016134143.9"><vh>#file src/main/java/com/swot/pojo/Result.java</vh></v>
-<v t="swot.20241016134143.10"><vh>#file src/main/java/com/swot/controller/ResponseController.java</vh>
-<v t="swot.20241016134143.11"><vh>return Result -&gt; String</vh></v>
-<v t="swot.20241016134143.12"><vh>return Result -&gt; User</vh></v>
-<v t="swot.20241016134143.13"><vh>return Result -&gt; List</vh></v>
+<v t="swot.20241016134143.9"><vh>file -&gt; src/main/java/com/tjise/pojo/Result.java</vh></v>
+<v t="swot.20250911104818.1"><vh>file -&gt; src/main/java/com/tjise/controller/ResponseController.java</vh>
+<v t="swot.20250911104818.2"><vh>return Result -&gt; String</vh></v>
+<v t="swot.20250911104818.3"><vh>return Result -&gt; User</vh></v>
+<v t="swot.20250911104818.4"><vh>return Result -&gt; List</vh></v>
 </v>
 <v t="swot.20241016134143.14"><vh>统一响应结果封装静态方法</vh></v>
-<v t="swot.20241016134143.15"><vh>#file src/main/java/com/swot/pojo/Result.java</vh>
-<v t="swot.20241016134143.16"><vh>@ignore-node 省略构造方法和 getter &amp; setter</vh></v>
-</v>
-<v t="swot.20241016134143.17"><vh>#file src/main/java/com/swot/controller/ResponseController.java</vh>
-<v t="swot.20241016134143.18"><vh>return Result -&gt; String</vh></v>
-<v t="swot.20241016134143.19"><vh>return Result -&gt; User</vh></v>
-<v t="swot.20241016134143.20"><vh>return Result -&gt; List</vh></v>
-</v>
+<v t="swot.20241016134143.15"><vh>@file src/main/java/com/tjise/pojo/Result.java</vh></v>
+<v t="swot.20241016134143.17"><vh>@file src/main/java/com/tjise/controller/ResponseController.java</vh></v>
 </v>
 </v>
 </v>
@@ -920,6 +918,136 @@ image::img/application.properties_gibberish.png[,900]
 :toclevels: 3
 
 </t>
+<t tx="swot.20241015083350.10">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@RequestMapping("/simpleParamOld")
+public String simpleParamOld(HttpServletRequest request,
+                             HttpServletResponse response)
+{
+    String name = request.getParameter("name");
+    String age  = request.getParameter("age");
+    System.out.println(name + " : " + age);
+    return "ok";
+}
+@doc
+----
+
+使用 httpie 测试：
+
+http "http://localhost:8080/simpleParamOld?name=Swot&amp;age=19"
+
+NOTE:  只能获取 url 携带的参数。
+</t>
+<t tx="swot.20241015083350.11">@doc
+[source,java,linenums]
+----
+@c
+@language java
+@RequestMapping("/simpleParam1")
+public String simpleParam1(String name, Integer age) {
+    System.out.println(name + " : " + age);
+    return "ok";
+}
+@language asciidoc
+@doc
+----
+
+注意事项:
+
+. 前端请求参数名与形参变量名相同，定义形参即可接收数据
+    * 如前端请求 http://localhost:8080/simpleParam1/?name=王林&amp;age=400
+    * url 中的 name 对应形参 String name，age  对应形参 Integer age
+
+. 参数类型可以自动类型转换，基本类型需要使用包装类类型接收
+    * age 网上传过来的是 String，现在已经是 Integer 类型了
+    * Integer 是包装类类型
+
+. 如果前端请求参数名与方法形参名称不一致，可以使用 @RequestParam 完成映射
+    * 参下面 @RequestParam 例子
+
+此方法可获取 get 方法 url 携带的参数（如上面的 url）或者 post 方法 body 使用 x-www-form-urlencoded 形式携带的参数。
+
+body 中发送 http://localhost:8080/simpleParam1 选择 x-www-form-urlencoded 类型的数据如下图所示
+
+image::img/request_simple_param_post_body1.png[]
+
+.使用 httpie 测试
+[source,console]
+----
+http --form POST localhost:8080/simpleParam1 \
+  name="王林" \
+  age="400"
+----
+</t>
+<t tx="swot.20241015083350.12">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@RequestMapping("/simpleParam2")
+public String simpleParam2(@RequestParam("username") String name,
+                           Integer age) {
+    System.out.println(name + " : " + age);
+    return "ok";
+}
+@doc
+----
+
+如果前端请求参数名与方法形参名称不一致，可以使用 @RequestParam 完成映射
+
+    * 如前端请求 http://localhost:8080/simpleParam2/?username=韩立&amp;age=2000
+    * username 的内容会被 name 接收到
+
+.使用 httpie 测试
+[source,console]
+----
+http "http://localhost:8080/simpleParam2/?username=韩立&amp;age=2000"
+----
+</t>
+<t tx="swot.20241015083350.13">@language java
+@doc
+1. 创建包 pojo，User 实体类放在包 pojo 中，参 pojo/User.java
+    * POJO: 在 Java 中，POJO 是 Plain Old Java Object 的缩写，意为简单的 Java 对象。它指的是一个普通的没有任何特殊要求或依赖的 Java 类，通常用来作为实体类来封装数据。POJO 类并不继承特定的父类，也不需要实现特定的接口，因此保持了很大的自由度和简单性。
+
+2. 前端传入参数名与 User 属性名相同
+    * 访问 url: http://localhost:8080/simplePojo/?name=韩立&amp;age=2000
+    * 服务器打印数据: `User{name='韩立', age=2000}`
+
+[source,java,linenums]
+----
+@c
+@RequestMapping("/simplePojo")
+public String simplePojo(User user) {
+    System.out.println(user);
+    return "ok";
+}
+@doc
+----
+</t>
+<t tx="swot.20241015083350.14">@language java
+@doc
+. 请求参数名与形参对象属性名相同，按照对象层次结构关系即可接收嵌套 POJO 属性参数。
+    * popo/Uesr.java 包含三个属性 user, name, address （address 对应 Address.java）
+    * popo/Address.java 包含两个属性 province, city
+
+. 前端传入参数名与 User 属性名相同
+    * 访问 url: http://localhost:8080/complexPojo/?name=韩立&amp;age=2000&amp;address.province=河北&amp;address.city=张家口
+    * 服务器打印数据: `User{name='韩立', age=2000, address=Address{province='河北', city='张家口'}}`
+
+[source,java,linenums]
+----
+@c
+@RequestMapping("/complexPojo")
+public String complexPojo(User user) {
+    System.out.println(user);
+    return "ok";
+}
+@doc
+----
+</t>
 <t tx="swot.20241015083350.15">@doc
 数组参数：请求参数为多个且参数的键是相同的，定义数组类型形参即可接收参数。
 
@@ -1007,7 +1135,7 @@ public String jsonParam(@RequestBody User user) {
 @doc
 ----
 
-.Postman 使用 POST 方法访问 url: http://localhost:8080/jsonParam 提交 body -&gt; raw -&gt; json
+.Postman 使用 POST 方法访问 url: http://localhost:8080/jsonParam 提交 body 中的 json
 [source,json]
 ----
 {
@@ -1025,6 +1153,16 @@ public String jsonParam(@RequestBody User user) {
 ....
 User{name='王林', age=400, address=Address{province='赵国', city='夔牛镇'}}
 ....
+
+
+.httpie 测试
+[source,console]
+----
+http -v POST http://localhost:8080/jsonParam \
+  name="王林" \
+  age:=400 \
+  address:='{"province": "赵国", "city": "夔牛镇"}'
+----
 </t>
 <t tx="swot.20241015083350.19">@doc
 1. 参数在 url 路径中
@@ -1053,16 +1191,17 @@ Postman 访问 url: http://localhost:8080/pathParam/19/李慕婉
 
 [source,java,linenums]
 ----
+@c
 @language java
 @RequestMapping("/pathParam/{id}/{girl}")
-public String pathParam(@PathVariable Integer id
+public String pathParam(@PathVariable Integer id,
                         @PathVariable String girl)
 {
     System.out.println(id);    // 19
-    System.out.println(gril);  // 李慕婉
+    System.out.println(girl);  // 李慕婉
     return "ok";
 }
-+doc
+@doc
 ----
 ====
 </t>
@@ -1277,6 +1416,32 @@ https://www.apipost.cn/
 
 </t>
 <t tx="swot.20241015083350.8">
+</t>
+<t tx="swot.20241015083350.9">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.controller;
+
+// import 都是下面例子用到的时候逐个导入的
+import com.tjise.pojo.User;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+
+@RestController
+public class RequestController {
+    // @others 伪代码表示此处还会有很多具体的代码
+    @others
+}
+@doc
+----
 </t>
 <t tx="swot.20241015110533.1">@language java
 @doc
@@ -1494,275 +1659,7 @@ public interface EmpMapper {
 :toc: right
 :toc-title: 目录
 :toclevels: 3</t>
-<t tx="swot.20241016134143.10">@language java
-@doc
-.使用 Result 改造后的代码
-[source,java,linenums]
-----
-@c
-package com.swot.controller;
-
-import com.swot.pojo.Result;
-import com.swot.pojo.User;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
-
-// 已经包含 @ResponseBody 注解
-@RestController
-public class ResponseController {
-    // 此处用 @others 表示还有很多代码
-    @others
-}
-@doc
-----
-</t>
-<t tx="swot.20241016134143.11">@doc
-.使用 Result 封装响应数据
-[source,java,linenums]
-----
-@language java
-@c
-@RequestMapping("/hello")
-public Result hello(){
-    System.out.println("Hello World!");
-    Result result = new Result(1, "success", "Hello World!");
-    return result;
-}
-@doc
-----
-
-.访问 http://localhost:8080/hello
-....
-{
-    "code": 1,
-    "msg": "success",
-    "data": "Hello World!"
-}
-....
-</t>
-<t tx="swot.20241016134143.12">@doc
-.使用 Result 封装响应数据
-[source,java,linenums]
-----
-@language java
-@c
-@RequestMapping("/getUser")
-public Result getUser(){
-
-    // User user = new User("王林", 400, null);
-    User user = new User();
-    user.setName("王林");
-    user.setAge(400);
-
-    System.out.println(user);
-    return new Result(1, "success", user);
-}
-@doc
-----
-
-.访问 http://localhost:8080/getUser
-....
-{
-    "code": 1,
-    "msg": "success",
-    "data": {
-        "name": "王林",
-        "age": 400,
-        "address": null
-    }
-}
-....
-</t>
-<t tx="swot.20241016134143.13">@doc
-.使用 Result 封装响应数据
-[source,java,linenums]
-----
-@language java
-@c
-@RequestMapping("/getList")
-public Result getList(){
-    User user = new User();
-    user.setName("王林");
-    user.setAge(400);
-
-    List&lt;User&gt; list = new ArrayList&lt;&gt;();
-    list.add(user);
-
-    System.out.println(list);
-    return new Result(1, "success", list);
-}
-@doc
-----
-
-.访问 http://localhost:8080/getList
-....
-{
-    "code": 1,
-    "msg": "susscess",
-    "data": [
-        {
-            "name": "王林",
-            "age": 400,
-            "address": null
-        }
-    ]
-}
-....
-</t>
 <t tx="swot.20241016134143.14">给 Result.java 封装一个静态方法 success，以减少代码的书写。
-</t>
-<t tx="swot.20241016134143.15">@language java
-@doc
-.Result.java 新增静态方法 success
-[source,java,linenums,highlight=8..11]
-----
-@c
-package com.swot.pojo;
-
-public class Result {
-    private Integer code;   //  响应码: 1 成功，0 失败
-    private String msg;     // 响应码描述字符串
-    private Object data;    // 返回数据
-
-    // 新增静态方法 success
-    public static Result success(Object data) {  // &lt;1&gt;
-        return new Result(1, "success", data);
-    }
-
-    // @others 表示省略显示构造方法和 getter &amp; setter
-    @others
-}
-@doc
-----
-
-&lt;1&gt; Object 是所有类型的父类，因为我们不知道 data 会是什么样的数据，所以此处用 Object 来声明形参变量 data。
-</t>
-<t tx="swot.20241016134143.16">public Result() {}
-
-public Result(Integer code, String msg, Object data) {
-    this.code = code;
-    this.msg = msg;
-    this.data = data;
-}
-
-public Integer getCode() {
-    return code;
-}
-
-public void setCode(Integer code) {
-    this.code = code;
-}
-
-public String getMsg() {
-    return msg;
-}
-
-public void setMsg(String msg) {
-    this.msg = msg;
-}
-
-public Object getData() {
-    return data;
-}
-
-public void setData(Object data) {
-    this.data = data;
-}
-
-@Override
-public String toString() {
-    return "Result{" +
-            "code=" + code +
-            ", msg='" + msg + '\'' +
-            ", data=" + data +
-            '}';
-}
-</t>
-<t tx="swot.20241016134143.17">@language java
-@doc
-.使用 Result 改造后的代码
-[source,java,linenums]
-----
-@c
-package com.swot.controller;
-
-import com.swot.pojo.Result;
-import com.swot.pojo.User;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
-
-// 已经包含 @ResponseBody 注解
-@RestController
-public class ResponseController {
-    // 此处用 @others 表示还有很多代码
-    @others
-}
-@doc
-----
-</t>
-<t tx="swot.20241016134143.18">@doc
-.使用 Result 封装响应数据
-[source,java,linenums,highlight=5]
-----
-@language java
-@c
-@RequestMapping("/hello")
-public Result hello(){
-    System.out.println("Hello World!");
-    // Result result = new Result(1, "success", "Hello World!");
-    return Result.success("Hello World!");  // 调用静态方法 success
-}
-@doc
-----
-
-.访问 http://localhost:8080/hello
-....
-{
-    "code": 1,
-    "msg": "success",
-    "data": "Hello World!"
-}
-....
-</t>
-<t tx="swot.20241016134143.19">@doc
-.使用 Result 封装响应数据
-[source,java,linenums,highlight=11]
-----
-@language java
-@c
-@RequestMapping("/getUser")
-public Result getUser(){
-
-    // User user = new User("王林", 400, null);
-    User user = new User();
-    user.setName("王林");
-    user.setAge(400);
-
-    System.out.println(user);
-    // return new Result(1, "success", user);
-    return Result.success(user);  // 调用静态方法 success
-}
-@doc
-----
-
-.访问 http://localhost:8080/getUser
-....
-{
-    "code": 1,
-    "msg": "success",
-    "data": {
-        "name": "王林",
-        "age": 400,
-        "address": null
-    }
-}
-....
 </t>
 <t tx="swot.20241016134143.2">
 ++++
@@ -1785,43 +1682,6 @@ public Result getUser(){
 &lt;/script&gt;
 ++++
 </t>
-<t tx="swot.20241016134143.20">@doc
-.使用 Result 封装响应数据
-[source,java,linenums,highlight=12]
-----
-@language java
-@c
-@RequestMapping("/getList")
-public Result getList(){
-    User user = new User();
-    user.setName("王林");
-    user.setAge(400);
-
-    List&lt;User&gt; list = new ArrayList&lt;&gt;();
-    list.add(user);
-
-    System.out.println(list);
-    // return new Result(1, "susscess", list);
-    return Result.success(list);  // 调用静态方法 success
-}
-@doc
-----
-
-.访问 http://localhost:8080/getList
-....
-{
-    "code": 1,
-    "msg": "susscess",
-    "data": [
-        {
-            "name": "王林",
-            "age": 400,
-            "address": null
-        }
-    ]
-}
-....
-</t>
 <t tx="swot.20241016134143.3">位置：属于方法注解、类注解，使用在控制器方法上/类上。
 
 作用：将当前方法返回值直接返回
@@ -1837,9 +1697,9 @@ IMPORTANT: [red]#*@RestController 注解已经包含了 @ResponseBody 的作用�
 [source,java,linenums]
 ----
 @c
-package com.swot.controller;
+package com.tjise.controller;
 
-import com.swot.pojo.User;
+import com.tjise.pojo.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -1867,6 +1727,11 @@ public String hello(){
 }
 @doc
 ----
+
+使用 httpie 测试 api
+
+    http :8080/hello
+
 </t>
 <t tx="swot.20241016134143.6">@doc
 [source,java,linenums]
@@ -1884,6 +1749,10 @@ public User getUser(){
 }
 @doc
 ----
+
+使用 httpie 测试 api
+
+    http -v :8080/getUser
 
 .访问 http://localhost:8080/getUser
 ....
@@ -1914,6 +1783,11 @@ public List&lt;User&gt; getList(){
 @doc
 ----
 
+使用 httpie 测试 api
+
+    http -v :8080/getList
+
+
 .访问 http://localhost:8080/getList
 ....
 [
@@ -1934,7 +1808,7 @@ public List&lt;User&gt; getList(){
 [source,java,linenums]
 ----
 @c
-package com.swot.pojo;
+package com.tjise.pojo;
 
 public class Result {
 
@@ -1942,7 +1816,7 @@ public class Result {
     private Integer code;
     // 响应码描述字符串
     private String msg;
-    // 返回数据
+    // 返回 Object 类型的数据
     private Object data;
 
     public Result() {
@@ -7207,10 +7081,6 @@ http POST https://jsonplaceholder.typicode.com/posts \
   title="Hello HTTPie" \
   body="This is the body of my post."
 
-# 使用原始 JSON 字符串
-http POST https://jsonplaceholder.typicode.com/posts \
-  data='{"userId": 1, "title": "Foo", "body": "Bar"}'
-
 # 从文件读取 JSON 数据
 http POST https://jsonplaceholder.typicode.com/posts &lt; data.json
 ----
@@ -7221,6 +7091,12 @@ http POST https://jsonplaceholder.typicode.com/posts &lt; data.json
 * `field=value`：字符串值（默认）
 * `field:=value`：非字符串值（数字、布尔值、数组、对象）
 ====
+
+.使用 = 和 := 的情况
+****
+* 字符串 → 用 =
+* 数字、布尔、数组、对象 → 用 :=
+****
 </t>
 <t tx="swot.20250910141943.1">获取资源信息（默认为 GET 方法，可省略）。
 
@@ -7261,6 +7137,123 @@ http --version
 http [选项] &lt;请求方法&gt; URL [请求项...]
 ----
 </t>
-<t tx="swot.20250910142433.1"></t>
+<t tx="swot.20250911104818.1">@language java
+@doc
+.使用 Result 改造后的代码
+[source,java,linenums]
+----
+@c
+package com.tjise.controller;
+
+import com.tjise.pojo.Result;
+import com.tjise.pojo.User;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// 已经包含 @ResponseBody 注解
+@RestController
+public class ResponseController {
+    // 此处用 @others 表示还有很多代码
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250911104818.2">@doc
+.使用 Result 封装响应数据
+[source,java,linenums]
+----
+@language java
+@c
+@RequestMapping("/hello")
+public Result hello(){
+    System.out.println("Hello World!");
+    Result result = new Result(1, "success", "Hello World!");
+    return result;
+}
+@doc
+----
+
+.访问 http://localhost:8080/hello
+....
+{
+    "code": 1,
+    "msg": "success",
+    "data": "Hello World!"
+}
+....
+</t>
+<t tx="swot.20250911104818.3">@doc
+.使用 Result 封装响应数据
+[source,java,linenums]
+----
+@language java
+@c
+@RequestMapping("/getUser")
+public Result getUser(){
+
+    // User user = new User("王林", 400, null);
+    User user = new User();
+    user.setName("王林");
+    user.setAge(400);
+
+    System.out.println(user);
+    return new Result(1, "success", user);
+}
+@doc
+----
+
+.访问 http://localhost:8080/getUser
+....
+{
+    "code": 1,
+    "msg": "success",
+    "data": {
+        "name": "王林",
+        "age": 400,
+        "address": null
+    }
+}
+....
+</t>
+<t tx="swot.20250911104818.4">@doc
+.使用 Result 封装响应数据
+[source,java,linenums]
+----
+@language java
+@c
+@RequestMapping("/getList")
+public Result getList(){
+    User user = new User();
+    user.setName("王林");
+    user.setAge(400);
+
+    List&lt;User&gt; list = new ArrayList&lt;&gt;();
+    list.add(user);
+
+    System.out.println(list);
+    return new Result(1, "success", list);
+}
+@doc
+----
+
+.访问 http://localhost:8080/getList
+....
+{
+    "code": 1,
+    "msg": "susscess",
+    "data": [
+        {
+            "name": "王林",
+            "age": 400,
+            "address": null
+        }
+    ]
+}
+....
+</t>
 </tnodes>
 </leo_file>
