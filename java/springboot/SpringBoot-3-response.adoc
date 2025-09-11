@@ -1,0 +1,439 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+
+= Spring Boot 响应数据
+
+++++
+<button id="toggleButton">目录</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== @path spring-boot-ketang/spring-boot-request-response/
+
+
+=== @ResponseBody 了解内容
+位置：属于方法注解、类注解，使用在控制器方法上/类上。
+
+作用：将当前方法返回值直接返回
+
+* 如果是 String 返回 String
+* 如果是实体/集合，则转换为 JSON 返回
+
+IMPORTANT: [red]#*@RestController 注解已经包含了 @ResponseBody 的作用，所以无需额外再添加 @ResponseBody*#
+
+=== file -> src/main/java/com/tjise/controller/ResponseController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.User;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// 已经包含 @ResponseBody 注解
+@RestController
+public class ResponseController {
+    // 此处用 @others 表示还有很多代码
+    @others
+}
+----
+
+==== return String
+[source,java,linenums]
+----
+@RequestMapping("/hello")
+public String hello(){
+    System.out.println("Hello World!");
+    return "Hello World!";
+}
+----
+
+使用 httpie 测试 api
+
+    http :8080/hello
+
+==== return User json
+[source,java,linenums]
+----
+@RequestMapping("/getUser")
+public User getUser(){
+    // User user = new User("王林", 400, null);
+    User user = new User();
+    user.setName("王林");
+    user.setAge(400);
+    System.out.println(user);
+    return user;
+}
+----
+
+使用 httpie 测试 api
+
+    http -v :8080/getUser
+
+.访问 http://localhost:8080/getUser
+....
+{
+    "name": "王林",
+    "age": 400,
+    "address": null
+}
+....
+
+==== return List json
+[source,java,linenums]
+----
+@RequestMapping("/getList")
+public List<User> getList(){
+    User user = new User();
+    user.setName("王林");
+    user.setAge(400);
+
+    List<User> list = new ArrayList<>();
+    list.add(user);
+
+    System.out.println(list);
+    return list;
+}
+----
+
+使用 httpie 测试 api
+
+    http -v :8080/getList
+
+
+.访问 http://localhost:8080/getList
+....
+[
+    {
+        "name": "王林",
+        "age": 400,
+        "address": null
+    }
+]
+....
+
+=== 统一响应结果
+对以上代码进行改造，使用统一响应结果 Result 类。
+
+=== file -> src/main/java/com/tjise/pojo/Result.java
+.定义返回数据的实体类 Result 的基本功能
+[source,java,linenums]
+----
+package com.tjise.pojo;
+
+public class Result {
+
+    //  响应码: 1 成功，0 失败
+    private Integer code;
+    // 响应码描述字符串
+    private String msg;
+    // 返回 Object 类型的数据
+    private Object data;
+
+    public Result() {
+    }
+
+    public Result(Integer code, String msg, Object data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                '}';
+    }
+}
+----
+
+=== file -> src/main/java/com/tjise/controller/ResponseController.java
+.使用 Result 改造后的代码
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Result;
+import com.tjise.pojo.User;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// 已经包含 @ResponseBody 注解
+@RestController
+public class ResponseController {
+    // 此处用 @others 表示还有很多代码
+    @others
+}
+----
+
+==== return Result -> String
+.使用 Result 封装响应数据
+[source,java,linenums]
+----
+@RequestMapping("/hello")
+public Result hello(){
+    System.out.println("Hello World!");
+    Result result = new Result(1, "success", "Hello World!");
+    return result;
+}
+----
+
+.访问 http://localhost:8080/hello
+....
+{
+    "code": 1,
+    "msg": "success",
+    "data": "Hello World!"
+}
+....
+
+==== return Result -> User
+.使用 Result 封装响应数据
+[source,java,linenums]
+----
+@RequestMapping("/getUser")
+public Result getUser(){
+
+    // User user = new User("王林", 400, null);
+    User user = new User();
+    user.setName("王林");
+    user.setAge(400);
+
+    System.out.println(user);
+    return new Result(1, "success", user);
+}
+----
+
+.访问 http://localhost:8080/getUser
+....
+{
+    "code": 1,
+    "msg": "success",
+    "data": {
+        "name": "王林",
+        "age": 400,
+        "address": null
+    }
+}
+....
+
+==== return Result -> List
+.使用 Result 封装响应数据
+[source,java,linenums]
+----
+@RequestMapping("/getList")
+public Result getList(){
+    User user = new User();
+    user.setName("王林");
+    user.setAge(400);
+
+    List<User> list = new ArrayList<>();
+    list.add(user);
+
+    System.out.println(list);
+    return new Result(1, "success", list);
+}
+----
+
+.访问 http://localhost:8080/getList
+....
+{
+    "code": 1,
+    "msg": "susscess",
+    "data": [
+        {
+            "name": "王林",
+            "age": 400,
+            "address": null
+        }
+    ]
+}
+....
+
+=== 统一响应结果封装静态方法
+给 Result.java 封装一个静态方法 success，以减少代码的书写。
+
+=== @file src/main/java/com/tjise/pojo/Result.java
+.Result.java 新增静态方法 success
+[source,java,linenums,highlight=8..11]
+----
+package com.tjise.pojo;
+
+public class Result {
+    private Integer code;   //  响应码: 1 成功，0 失败
+    private String msg;     // 响应码描述字符串
+    private Object data;    // 返回数据
+
+    // 新增静态方法 success
+    public static Result success(Object data) {  // <1>
+        return new Result(1, "success", data);
+    }
+
+    // @others 表示省略显示构造方法和 getter & setter
+    @others
+}
+----
+
+<1> Object 是所有类型的父类，因为我们不知道 data 会是什么样的数据，所以此处用 Object 来声明形参变量 data。
+
+=== @file src/main/java/com/tjise/controller/ResponseController.java
+.使用 Result 改造后的代码
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Result;
+import com.tjise.pojo.User;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// 已经包含 @ResponseBody 注解
+@RestController
+public class ResponseController {
+    // 此处用 @others 表示还有很多代码
+    @others
+}
+----
+
+==== return Result -> String
+.使用 Result 封装响应数据
+[source,java,linenums,highlight=5]
+----
+@RequestMapping("/hello")
+public Result hello(){
+    System.out.println("Hello World!");
+    // Result result = new Result(1, "success", "Hello World!");
+    return Result.success("Hello World!");  // 调用静态方法 success
+}
+----
+
+.访问 http://localhost:8080/hello
+....
+{
+    "code": 1,
+    "msg": "success",
+    "data": "Hello World!"
+}
+....
+
+==== return Result -> User
+.使用 Result 封装响应数据
+[source,java,linenums,highlight=11]
+----
+@RequestMapping("/getUser")
+public Result getUser(){
+
+    // User user = new User("王林", 400, null);
+    User user = new User();
+    user.setName("王林");
+    user.setAge(400);
+
+    System.out.println(user);
+    // return new Result(1, "success", user);
+    return Result.success(user);  // 调用静态方法 success
+}
+----
+
+.访问 http://localhost:8080/getUser
+....
+{
+    "code": 1,
+    "msg": "success",
+    "data": {
+        "name": "王林",
+        "age": 400,
+        "address": null
+    }
+}
+....
+
+==== return Result -> List
+.使用 Result 封装响应数据
+[source,java,linenums,highlight=12]
+----
+@RequestMapping("/getList")
+public Result getList(){
+    User user = new User();
+    user.setName("王林");
+    user.setAge(400);
+
+    List<User> list = new ArrayList<>();
+    list.add(user);
+
+    System.out.println(list);
+    // return new Result(1, "susscess", list);
+    return Result.success(list);  // 调用静态方法 success
+}
+----
+
+.访问 http://localhost:8080/getList
+....
+{
+    "code": 1,
+    "msg": "susscess",
+    "data": [
+        {
+            "name": "王林",
+            "age": 400,
+            "address": null
+        }
+    ]
+}
+....
+
