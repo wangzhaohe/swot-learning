@@ -562,13 +562,18 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_新创建请求响应模块">新创建请求响应模块</a></li>
 <li><a href="#_request_请求数据">request  请求数据</a>
 <ul class="sectlevel2">
-<li><a href="#_file_spring_boot_ketangspring_boot_request_responsesrcmainjavacomtjisecontrollerrequestcontroller_java">@file spring-boot-ketang/spring-boot-request-response/src/main/java/com/tjise/controller/RequestController.java</a>
+<li><a href="#_file_spring_boot_ketangspring_boot_request_responsesrcmainjavacomtjisecontrollerrequestcontroller_java">file &#8594; spring-boot-ketang/spring-boot-request-response/src/main/java/com/tjise/controller/RequestController.java</a>
 <ul class="sectlevel3">
 <li><a href="#_简单请求参数原始方式演示了解以后不用">简单请求参数原始方式演示(了解以后不用)</a></li>
 <li><a href="#_简单请求参数_前端提交与方法形参一致">简单请求参数: 前端提交与方法形参一致</a></li>
 <li><a href="#_requestparam_简单请求参数不一致">@RequestParam 简单请求参数不一致</a></li>
 <li><a href="#_简单实体对象参数">简单实体对象参数</a></li>
 <li><a href="#_复杂实体对象参数">复杂实体对象参数</a></li>
+<li><a href="#_使用数组接收参数默认">使用数组接收参数（默认）</a></li>
+<li><a href="#_requestparam_使用集合接收参数需使用_requestparam_指定">@RequestParam   使用集合接收参数（需使用 @RequestParam 指定）</a></li>
+<li><a href="#_datetimeformat_日期参数">@DateTimeFormat 日期参数</a></li>
+<li><a href="#_requestbody_解析_json_数据">@RequestBody    解析 json 数据</a></li>
+<li><a href="#_pathvariable_路径参数">@PathVariable   路径参数</a></li>
 </ul>
 </li>
 <li><a href="#_创建包_pojo_再创建下面实体类">创建包 pojo 再创建下面实体类</a>
@@ -950,7 +955,7 @@ asciidoctor httpie-guide.adoc</code></pre>
 <h2 id="_request_请求数据">request  请求数据</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_file_spring_boot_ketangspring_boot_request_responsesrcmainjavacomtjisecontrollerrequestcontroller_java">@file spring-boot-ketang/spring-boot-request-response/src/main/java/com/tjise/controller/RequestController.java</h3>
+<h3 id="_file_spring_boot_ketangspring_boot_request_responsesrcmainjavacomtjisecontrollerrequestcontroller_java">file &#8594; spring-boot-ketang/spring-boot-request-response/src/main/java/com/tjise/controller/RequestController.java</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -1239,6 +1244,245 @@ asciidoctor httpie-guide.adoc</code></pre>
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s">&quot;ok&quot;</span><span class="tok-p">;</span>
 <span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_使用数组接收参数默认">使用数组接收参数（默认）</h4>
+<div class="paragraph">
+<p>数组参数：请求参数为多个且参数的键是相同的，定义数组类型形参即可接收参数。</p>
+</div>
+<div class="paragraph">
+<p>访问 url: <a href="http://localhost:8080/arrayParam?state=绝情&amp;state=安逸&amp;state=岁月" class="bare">http://localhost:8080/arrayParam?state=绝情&amp;state=安逸&amp;state=岁月</a></p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>state 取自 state of mind 翻译为意境，《仙逆》中王林体验的三种化神意境，分别为绝情之境、安逸之境、岁月之境。</p>
+</div>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/arrayParam&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">arrayParam</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">state</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-n">Arrays</span><span class="tok-p">.</span><span class="tok-na">toString</span><span class="tok-p">(</span><span class="tok-n">state</span><span class="tok-p">));</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s">&quot;ok&quot;</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requestparam_使用集合接收参数需使用_requestparam_指定">@RequestParam   使用集合接收参数（需使用 @RequestParam 指定）</h4>
+<div class="paragraph">
+<p>集合参数：请求参数为多个且参数的键是相同的，定义集合类型形参接收并使用 @RequestParam 绑定参数关系。</p>
+</div>
+<div class="paragraph">
+<p>访问 url: <a href="http://localhost:8080/listParam?state=绝情&amp;state=安逸&amp;state=岁月" class="bare">http://localhost:8080/listParam?state=绝情&amp;state=安逸&amp;state=岁月</a></p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>state 取自 state of mind 翻译为意境，《仙逆》中王林体验的三种化神意境，分别为绝情之境、安逸之境、岁月之境。</p>
+</div>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/listParam&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">listParam</span><span class="tok-p">(</span><span class="tok-nd">@RequestParam</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">state</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-n">state</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// Spring Boot 默认使用 ArrayList 实现类</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s">&quot;ok&quot;</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_datetimeformat_日期参数">@DateTimeFormat 日期参数</h4>
+<div class="paragraph">
+<p>日期参数: 前端请求的参数是一个日期，使用日期参数接收且使用 @DateTimeFormat 注解完成日期参数格式转换。</p>
+</div>
+<div class="paragraph">
+<p>访问url: <a href="http://localhost:8080/dateParam?updateTime=2024-10-08" class="bare">http://localhost:8080/dateParam?updateTime=2024-10-08</a> 19:19:19</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/dateParam&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">dateParam</span><span class="tok-p">(</span><span class="tok-nd">@DateTimeFormat</span><span class="tok-p">(</span><span class="tok-n">pattern</span><span class="tok-o">=</span><span class="tok-s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">LocalDateTime</span><span class="tok-w"> </span><span class="tok-n">updateTime</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-n">updateTime</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s">&quot;ok&quot;</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>打印结果是 <code>2024-10-08T19:19:19</code> 是 <strong>ISO 8601</strong> 格式的日期时间表示法，具体来说是 <strong><code>LocalDateTime</code></strong> 类型的标准字符串输出。</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">解释</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><code>2024-10-08</code></strong>：表示日期（年-月-日）。</p>
+</li>
+<li>
+<p><strong><code>T</code></strong>：是日期和时间的分隔符，在 ISO 8601 标准中使用。</p>
+</li>
+<li>
+<p><strong><code>19:19:19</code></strong>：表示时间（时:分:秒）。</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Spring Boot 的 <code>LocalDateTime</code> 类型在进行 <code>toString()</code> 时会自动按照这种 ISO 8601 格式进行输出。所以，打印出来的结果是 <code>LocalDateTime</code> 默认的输出格式。</p>
+</div>
+<div class="paragraph">
+<p>这个格式不包含时区信息，仅仅表示日期和时间。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requestbody_解析_json_数据">@RequestBody    解析 json 数据</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>请求参数是 JSON 数据，使用 POJO 类型接收参数。</p>
+</li>
+<li>
+<p>需使用 @RequestBody 标识形参</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="title">获取 json 数据</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/jsonParam&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">jsonParam</span><span class="tok-p">(</span><span class="tok-nd">@RequestBody</span><span class="tok-w"> </span><span class="tok-n">User</span><span class="tok-w"> </span><span class="tok-n">user</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-n">user</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s">&quot;ok&quot;</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Postman 使用 POST 方法访问 url: <a href="http://localhost:8080/jsonParam" class="bare">http://localhost:8080/jsonParam</a> 提交 body 中的 json</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;name&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;王林&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;age&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">400</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;address&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nt">&quot;province&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;赵国&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nt">&quot;city&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;夔牛镇&quot;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>后端打印结果为
+<div class="literalblock">
+<div class="content">
+<pre>User{name='王林', age=400, address=Address{province='赵国', city='夔牛镇'}}</pre>
+</div>
+</div></td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">httpie 测试</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http -v POST http://localhost:8080/jsonParam \</span>
+<span class="tok-go">  name=&quot;王林&quot; \</span>
+<span class="tok-go">  age:=400 \</span>
+<span class="tok-go">  address:=&#39;{&quot;province&quot;: &quot;赵国&quot;, &quot;city&quot;: &quot;夔牛镇&quot;}&#39;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_pathvariable_路径参数">@PathVariable   路径参数</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>参数在 url 路径中</p>
+</li>
+<li>
+<p>需使用 {变量名} 标识该路径参数</p>
+</li>
+<li>
+<p>需要使用 @PathVariable 获取路径参数</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Postman 访问 url: <a href="http://localhost:8080/pathParam/19" class="bare">http://localhost:8080/pathParam/19</a> (RESTful风格的单条记录处理方式)</p>
+</div>
+<div class="listingblock">
+<div class="title">获取路径参数</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/pathParam/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">pathParam</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-w"> </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 19</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s">&quot;ok&quot;</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Example 1. 扩展多个路径参数举例</div>
+<div class="content">
+<div class="paragraph">
+<p>Postman 访问 url: <a href="http://localhost:8080/pathParam/19/李慕婉" class="bare">http://localhost:8080/pathParam/19/李慕婉</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/pathParam/{id}/{girl}&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">pathParam</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-w"> </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span>
+<span class="tok-w">                        </span><span class="tok-nd">@PathVariable</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">girl</span><span class="tok-p">)</span>
+<span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">    </span><span class="tok-c1">// 19</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-n">girl</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 李慕婉</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s">&quot;ok&quot;</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1532,7 +1776,7 @@ asciidoctor httpie-guide.adoc</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-10 15:30:02 +0800
+Last updated 2025-09-11 09:24:08 +0800
 </div>
 </div>
 </body>
