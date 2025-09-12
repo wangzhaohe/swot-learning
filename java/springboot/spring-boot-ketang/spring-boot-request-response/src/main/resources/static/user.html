@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--@+leo-ver=5-thin-->
+<!--@+node:swot.20241017141815.9: * @file spring-boot-ketang/spring-boot-request-response/src/main/resources/static/user.html-->
+<!--@@first-->
+<!--@@tabwidth -2-->
+<!--@@language html-->
+<!--@+doc-->
+<!--
+[source,html,linenums]
+----
+-->
+<!--@@c-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户信息</title>
+</head>
+
+<!--<script src="./js/vue.js"></script>-->
+<!--<script src="./js/axios-0.18.0.js"></script>-->
+
+<!-- Vue.js 2.6.10 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+
+<!-- Axios 0.18.0 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
+
+<!-- element-ui 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- element-ui 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<body>
+  <h1 align="center">用户信息列表展示</h1>
+  <div id="app">
+    <!-- {{ tableData }}-->
+    <el-table :data="tableData" style="width: 100%"  stripe border >
+      <el-table-column prop="name" label="姓名" align="center" min-width="25%">
+      </el-table-column>
+      <el-table-column prop="age" label="年龄" align="center" min-width="25%">
+      </el-table-column>
+      <el-table-column prop="address.province" label="省/市" align="center" min-width="25%">
+      </el-table-column>
+      <el-table-column prop="address.city" label="区/县" align="center" min-width="25%">
+      </el-table-column>
+    </el-table>
+  </div>
+</body>
+
+<style>
+    .el-table .warning-row {
+        background: oldlace;
+    }
+    .el-table .success-row {
+        background: #f0f9eb;
+    }
+</style>
+
+<script>
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                tableData: []
+            }
+        },
+        mounted(){
+            axios.get('/listUser').then(res=>{
+                if(res.data.code){
+                    this.tableData = res.data.data;
+                }
+            });
+        },
+        methods: {}
+    });
+</script>
+</html>
+<!--@+doc-->
+<!--
+----
+-->
+<!--@-leo-->

@@ -67,11 +67,11 @@
 <v t="swot.20241015083350.11"><vh>简单请求参数: 前端提交与方法形参一致</vh></v>
 <v t="swot.20241015083350.12"><vh>@RequestParam 简单请求参数不一致</vh></v>
 <v t="swot.20241015083350.13"><vh>简单实体对象参数</vh></v>
-<v t="swot.20241015083350.14"><vh>复杂实体对象参数</vh></v>
+<v t="swot.20241015083350.14"><vh>复杂实体对象参数（嵌套）</vh></v>
 <v t="swot.20241015083350.15"><vh>使用数组接收参数（默认）</vh></v>
 <v t="swot.20241015083350.16"><vh>@RequestParam   使用集合接收参数（需使用 @RequestParam 指定）</vh></v>
 <v t="swot.20241015083350.17"><vh>@DateTimeFormat 日期参数</vh></v>
-<v t="swot.20241015083350.18"><vh>@RequestBody    解析 json 数据</vh></v>
+<v t="swot.20241015083350.18"><vh>@RequestBody    解析前端上传的 json 数据</vh></v>
 <v t="swot.20241015083350.19"><vh>@PathVariable   路径参数</vh></v>
 </v>
 <v t="swot.20241015083350.20"><vh>创建包 pojo 再创建下面实体类</vh>
@@ -86,21 +86,31 @@
 <v t="swot.20241016134143.2"><vh>Spring Boot 响应数据</vh>
 <v t="swot.20241017094230.1"><vh>@path spring-boot-ketang/spring-boot-request-response/</vh>
 <v t="swot.20241016134143.3"><vh>@ResponseBody 了解内容</vh></v>
+<v t="swot.20250912080734.1"><vh>三种常用 response 类型</vh>
 <v t="swot.20241016134143.4"><vh>file -&gt; src/main/java/com/tjise/controller/ResponseController.java</vh>
 <v t="swot.20241016134143.5"><vh>return String</vh></v>
 <v t="swot.20241016134143.6"><vh>return User json</vh></v>
 <v t="swot.20241016134143.7"><vh>return List json</vh></v>
 </v>
-<v t="swot.20241016134143.8"><vh>统一响应结果</vh></v>
+</v>
+<v t="swot.20241016134143.8"><vh>定义统一响应结果类 Result</vh>
 <v t="swot.20241016134143.9"><vh>file -&gt; src/main/java/com/tjise/pojo/Result.java</vh></v>
 <v t="swot.20250911104818.1"><vh>file -&gt; src/main/java/com/tjise/controller/ResponseController.java</vh>
 <v t="swot.20250911104818.2"><vh>return Result -&gt; String</vh></v>
 <v t="swot.20250911104818.3"><vh>return Result -&gt; User</vh></v>
 <v t="swot.20250911104818.4"><vh>return Result -&gt; List</vh></v>
 </v>
-<v t="swot.20241016134143.14"><vh>统一响应结果封装静态方法</vh></v>
-<v t="swot.20241016134143.15"><vh>@file src/main/java/com/tjise/pojo/Result.java</vh></v>
-<v t="swot.20241016134143.17"><vh>@file src/main/java/com/tjise/controller/ResponseController.java</vh></v>
+</v>
+<v t="swot.20241016134143.14"><vh>统一响应结果类中封装静态方法 static Result success</vh>
+<v t="swot.20241016134143.15"><vh>file -&gt; src/main/java/com/tjise/pojo/Result.java</vh>
+<v t="swot.20241016134143.16"><vh>@ignore-node 省略构造方法和 getter &amp; setter</vh></v>
+</v>
+<v t="swot.20241016134143.17"><vh>file -&gt; src/main/java/com/tjise/controller/ResponseController.java</vh>
+<v t="swot.20241016134143.18"><vh>return Result -&gt; String</vh></v>
+<v t="swot.20241016134143.19"><vh>return Result -&gt; User</vh></v>
+<v t="swot.20241016134143.20"><vh>return Result -&gt; List</vh></v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -129,13 +139,13 @@
 <v t="swot.20241018084615.1"><vh>#file src/main/java/com/tjise/controller/UserController.java</vh></v>
 </v>
 <v t="swot.20241018082408.5"><vh>三层架构拆分代码</vh>
-<v t="swot.20241018082408.6"><vh>dao 层数据访问</vh>
+<v t="swot.20241018082408.6"><vh>1) dao 层数据访问</vh>
 <v t="swot.20241018082408.7"><vh>#file src/main/java/com/tjise/dao/UserDaoA.java</vh></v>
 </v>
-<v t="swot.20241018082408.8"><vh>service 层逻辑处理</vh>
+<v t="swot.20241018082408.8"><vh>2) service 层逻辑处理</vh>
 <v t="swot.20241018082408.9"><vh>#file src/main/java/com/tjise/service/UserServiceA.java</vh></v>
 </v>
-<v t="swot.20241018082408.10"><vh>controller 层处理请求、响应数据</vh>
+<v t="swot.20241018082408.10"><vh>3) controller 层处理请求、响应数据</vh>
 <v t="swot.20241018082408.11"><vh>#file src/main/java/com/tjise/controller/UserController.java</vh></v>
 </v>
 </v>
@@ -1661,6 +1671,156 @@ public interface EmpMapper {
 :toclevels: 3</t>
 <t tx="swot.20241016134143.14">给 Result.java 封装一个静态方法 success，以减少代码的书写。
 </t>
+<t tx="swot.20241016134143.15">@language java
+@doc
+.Result.java 新增静态方法 success
+[source,java,linenums,highlight=8..11]
+----
+@c
+package com.tjise.pojo;
+
+public class Result {
+    private Integer code;   //  响应码: 1 成功，0 失败
+    private String msg;     // 响应码描述字符串
+    private Object data;    // 返回数据
+
+    // 新增静态方法 success
+    public static Result success(Object data) {  // &lt;1&gt;
+        return new Result(1, "success", data);
+    }
+
+    // @others 表示省略显示构造方法和 getter &amp; setter
+    @others
+}
+@doc
+----
+
+&lt;1&gt; Object 是所有类型的父类，因为我们不知道 data 会是什么样的数据，所以此处用 Object 来声明形参变量 data。
+</t>
+<t tx="swot.20241016134143.16">public Result() {}
+
+public Result(Integer code, String msg, Object data) {
+    this.code = code;
+    this.msg = msg;
+    this.data = data;
+}
+
+public Integer getCode() {
+    return code;
+}
+
+public void setCode(Integer code) {
+    this.code = code;
+}
+
+public String getMsg() {
+    return msg;
+}
+
+public void setMsg(String msg) {
+    this.msg = msg;
+}
+
+public Object getData() {
+    return data;
+}
+
+public void setData(Object data) {
+    this.data = data;
+}
+
+@Override
+public String toString() {
+    return "Result{" +
+            "code=" + code +
+            ", msg='" + msg + '\'' +
+            ", data=" + data +
+            '}';
+}
+</t>
+<t tx="swot.20241016134143.17">@language java
+@doc
+.使用 Result 改造后的代码
+[source,java,linenums]
+----
+@c
+package com.tjise.controller;
+
+import com.tjise.pojo.Result;
+import com.tjise.pojo.User;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// 已经包含 @ResponseBody 注解
+@RestController
+public class ResponseController {
+    // 此处用 @others 表示还有很多代码
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20241016134143.18">@doc
+.使用 Result 封装响应数据
+[source,java,linenums,highlight=5]
+----
+@language java
+@c
+@RequestMapping("/hello")
+public Result hello(){
+    System.out.println("Hello World!");
+    // Result result = new Result(1, "success", "Hello World!");
+    return Result.success("Hello World!");  // 调用静态方法 success
+}
+@doc
+----
+
+.访问 http://localhost:8080/hello
+....
+{
+    "code": 1,
+    "msg": "success",
+    "data": "Hello World!"
+}
+....
+</t>
+<t tx="swot.20241016134143.19">@doc
+.使用 Result 封装响应数据
+[source,java,linenums,highlight=11]
+----
+@language java
+@c
+@RequestMapping("/getUser")
+public Result getUser(){
+
+    // User user = new User("王林", 400, null);
+    User user = new User();
+    user.setName("王林");
+    user.setAge(400);
+
+    System.out.println(user);
+    // return new Result(1, "success", user);
+    return Result.success(user);  // 调用静态方法 success
+}
+@doc
+----
+
+.访问 http://localhost:8080/getUser
+....
+{
+    "code": 1,
+    "msg": "success",
+    "data": {
+        "name": "王林",
+        "age": 400,
+        "address": null
+    }
+}
+....
+</t>
 <t tx="swot.20241016134143.2">
 ++++
 &lt;button id="toggleButton"&gt;目录&lt;/button&gt;
@@ -1681,6 +1841,43 @@ public interface EmpMapper {
     });
 &lt;/script&gt;
 ++++
+</t>
+<t tx="swot.20241016134143.20">@doc
+.使用 Result 封装响应数据
+[source,java,linenums,highlight=12]
+----
+@language java
+@c
+@RequestMapping("/getList")
+public Result getList(){
+    User user = new User();
+    user.setName("王林");
+    user.setAge(400);
+
+    List&lt;User&gt; list = new ArrayList&lt;&gt;();
+    list.add(user);
+
+    System.out.println(list);
+    // return new Result(1, "susscess", list);
+    return Result.success(list);  // 调用静态方法 success
+}
+@doc
+----
+
+.访问 http://localhost:8080/getList
+....
+{
+    "code": 1,
+    "msg": "susscess",
+    "data": [
+        {
+            "name": "王林",
+            "age": 400,
+            "address": null
+        }
+    ]
+}
+....
 </t>
 <t tx="swot.20241016134143.3">位置：属于方法注解、类注解，使用在控制器方法上/类上。
 
@@ -2010,7 +2207,9 @@ mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
 </t>
 <t tx="swot.20241017141815.10">创建控制器 UserController，代码完成后可以使用 postman 工具或者浏览器测试该 api。
 </t>
-<t tx="swot.20241017141815.12">[.thumb]
+<t tx="swot.20241017141815.12">访问：http://127.0.0.1:8080/user.html
+
+[.thumb]
 image::img/xml_data_show.png[]</t>
 <t tx="swot.20241017141815.2">
 ++++
@@ -2440,13 +2639,13 @@ class MybatisQuickstartCrudApplicationTests {
 [source,java,linenums]
 ----
 @c
-package com.swot.controller;
+package com.tjise.controller;
 
-import com.swot.pojo.Address;
-import com.swot.pojo.Result;
-import com.swot.pojo.User;
-import com.swot.service.UserServiceA;
-import com.swot.utils.XmlParserUtils;
+import com.tjise.pojo.Address;
+import com.tjise.pojo.Result;
+import com.tjise.pojo.User;
+import com.tjise.service.UserServiceA;
+import com.tjise.utils.XmlParserUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -2501,7 +2700,7 @@ public class UserController {
 </t>
 <t tx="swot.20241018082408.5">按照下面三个分层，分别创建 3 个包：
 
-1. 在 IDEA 中创建包 dao，在 dao 下创建类 UserDaoA.java
+1. 在 IDEA 中创建包 dao（Data Access Object 数据访问对象），在 dao 下创建类 UserDaoA.java
     * 起名为 A 是为了后面演示多个类的情况，先记住。
 
 2. 在 IDEA 中创建包 service，在 service 下创建类 UserServiceA.java
@@ -2521,11 +2720,11 @@ image::img/xml_data_show.png[]
 [source,java,linenums]
 ----
 @c
-package com.swot.dao;
+package com.tjise.dao;
 
-import com.swot.controller.UserController;
-import com.swot.pojo.User;
-import com.swot.utils.XmlParserUtils;
+import com.tjise.controller.UserController;
+import com.tjise.pojo.User;
+import com.tjise.utils.XmlParserUtils;
 
 import java.util.List;
 
@@ -2549,11 +2748,11 @@ public class UserDaoA {
 [source,java,linenums]
 ----
 @c
-package com.swot.service;
+package com.tjise.service;
 
-import com.swot.dao.UserDaoA;
-import com.swot.pojo.Address;
-import com.swot.pojo.User;
+import com.tjise.dao.UserDaoA;
+import com.tjise.pojo.Address;
+import com.tjise.pojo.User;
 
 import java.util.List;
 
@@ -2616,7 +2815,8 @@ public class UserController {
     }
 }
 @doc
-----</t>
+----
+</t>
 <t tx="swot.20241018093655.1"></t>
 <t tx="swot.20241018105726.10">@language java
 @doc
@@ -2809,9 +3009,7 @@ private UserDao userDao;  // service 层调用 Dao 层
 private UserService userService;  // controller 层调用 Service 层
 ----
 
-
 详细看下面的代码。
-
 
 .名词解释
 ****
@@ -3016,7 +3214,7 @@ beanName = userServiceA
 |注解            |说明                        |位置
 |@Component     | 声明 bean 对象的基础注解     |一般不属于以下三类时，可用此注解，比如定义的工具类、POJO 实体类等
 |@Controller    .3+.^| @Component 的衍生注解  | 标注在 controller 层的控制器类上
-|@Service                                    | 标注在 service 层的业务类上
+|@Service                                    | 标注在 service 层的业务类上，比 @Component 主义化更强
 |@Repository                                 | 标注在 dao 层数据访问类上（由于与 mybatis 整合会使用 @Mapper，所以用的少）
 |===
 
@@ -3196,7 +3394,7 @@ public class UserServiceA implements UserService {
 @doc
 ----</t>
 <t tx="swot.20241018105726.30">@language asciidoc
-目前来说，我们使用以上四个注解都可以声明 bean，但是在集成后端 web 开发之后，声明控制器 bean 只能用 @Controler。
+目前来说，我们使用以上四个注解都可以声明 bean，但是在集成后端 web 开发之后，声明控制器(Controller) 的 bean 只能用 @Controler。
 当前的应用已经加入了起步依赖 spring-boot-starter-web，所以我们使用 @RestController 就可以了。
 
 .为什么控制器 bean 只能用 `@Controller`？
@@ -3212,7 +3410,7 @@ NOTE: @RestController 注解已经包含了 @Controller 注释。
 <t tx="swot.20241018105726.31">@language asciidoc
 前面声明 bean 的四大注解，要想生效，还需要被组件扫描注解 @ComponentScan 扫描。
 
-@ComponentScan 注解虽然没有显式配置，但是实际上已经包含在了引导类声明注解 @SpringBootApplication 中，##默认扫描的范围是引导类所在包及其子包##。
+@ComponentScan 注解虽然没有显式配置，但是实际上已经包含在了引导类声明注解 @SpringBootApplication 中，##默认扫描的范围是引导类所在包及其子包##，按 Ctrl 点击 @SpringBootApplication 可查看包含的其他注解。
 
 .启动类已经包含了 @ComponentScan 注解
 image::img/ioc_component_scan.png[]
@@ -3240,7 +3438,7 @@ tree spring-boot-request-response/src/main/java
             └── XmlParserUtils.java
 ....
 
-所以只要四大注解(@Component,@Controller,@Service,@Repository)修饰的文件们超出了 tjise 目录，注解就无法生效了。您可以试试哟
+所以只要四大注解（@Component, @Controller, @Service, @Repository）修饰的文件们超出了 tjise 目录，注解就无法生效了。您可以试试哟！
 </t>
 <t tx="swot.20241018105726.32">@language asciidoc
 @Autowired 注解注入 bean 对象，##默认是按类的类型进行查找的##，所以如果存在多个相同类型的 bean 对象，将会报错。
@@ -3408,7 +3606,7 @@ import java.util.List;
 
 
 @Service    // --new-- IOC bean 对象是 UserService 类型的 userServiceA
-@Primary
+@Primary    // 加入新注解以解决多个 @Autowired 只要一个Bean 的问题
 public class UserServiceA implements UserService {
 
     @Autowired
@@ -3510,7 +3708,7 @@ NOTE: @Resource 是 java 提供的注解。
 </t>
 <t tx="swot.20241018105726.41">@language java
 @doc
-.使用 @Qualifier(bean对象名) 注入 ICO 容器中的 bean 对象给变量 userService
+.使用 @Resource 注解来指定使用哪个 bean 对象给变量 userService
 [source,java,linenums,highlight=21;22]
 ----
 @c
@@ -7255,5 +7453,6 @@ public Result getList(){
 }
 ....
 </t>
+<t tx="swot.20250912080734.1"></t>
 </tnodes>
 </leo_file>
