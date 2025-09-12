@@ -3209,7 +3209,7 @@ beanName = userServiceA
 
 要把某个对象交给 IOC 容器管理，需要在对应的类上添加如下注解之一：
 
-[cols="15%,25%,60%",options="header",stripes=even]
+[cols="15%,25%,60%",options="header"]
 |===
 |注解            |说明                        |位置
 |@Component     | 声明 bean 对象的基础注解     |一般不属于以下三类时，可用此注解，比如定义的工具类、POJO 实体类等
@@ -7129,8 +7129,37 @@ image::img/import_module_1.png[,640]
     &lt;java.version&gt;1.8&lt;/java.version&gt;
 &lt;/properties&gt;
 ----</t>
-<t tx="swot.20241028160046.1"></t>
-<t tx="swot.20241028160207.1"></t>
+<t tx="swot.20241028160046.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: Table of Contents
+:toclevels: 3</t>
+<t tx="swot.20241028160207.1">
+++++
+&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
 <t tx="swot.20241028160248.1"></t>
 <t tx="swot.20250910075822.1">@language asciidoc
 **HTTPie**（读作 _aitch-tee-tee-pie_）是一个现代、用户友好的命令行 HTTP 客户端。其目标是让与 Web 服务的交互尽可能简单直观，使 API 测试和调试变得轻而易举。
