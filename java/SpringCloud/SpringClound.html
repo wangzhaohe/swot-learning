@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Spring Cloud 微服务</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:30em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+/* table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7} */
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#9e9e9e}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+
+/* 自定义输出 HTML 样式 */
+/* 固定按钮在左上角 */
+#toggleButton {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    /*background-color: lightgrey;*/
+    color: #AB2C21;
+    border: none;
+    /*padding: 6px 10px;*/
+    cursor: pointer;
+}
+/*#toc.toc2{width:40em}*/
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:85em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+
+body.toc2.toc-right {
+    padding-left: 0;
+    padding-right: 0em;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+pre.pygments .hll { background-color: #ffffcc }
+pre.pygments { background: #f8f8f8; }
+pre.pygments .tok-c { color: #3D7B7B; font-style: italic } /* Comment */
+pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
+pre.pygments .tok-k { color: #008000; font-weight: bold } /* Keyword */
+pre.pygments .tok-o { color: #666666 } /* Operator */
+pre.pygments .tok-ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+pre.pygments .tok-cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+pre.pygments .tok-cp { color: #9C6500 } /* Comment.Preproc */
+pre.pygments .tok-cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+pre.pygments .tok-c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+pre.pygments .tok-cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
+pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
+pre.pygments .tok-ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+pre.pygments .tok-gr { color: #E40000 } /* Generic.Error */
+pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
+pre.pygments .tok-gi { color: #008400 } /* Generic.Inserted */
+pre.pygments .tok-go { color: #717171 } /* Generic.Output */
+pre.pygments .tok-gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
+pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+pre.pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
+pre.pygments .tok-kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+pre.pygments .tok-kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+pre.pygments .tok-kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+pre.pygments .tok-kp { color: #008000 } /* Keyword.Pseudo */
+pre.pygments .tok-kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+pre.pygments .tok-kt { color: #B00040 } /* Keyword.Type */
+pre.pygments .tok-m { color: #666666 } /* Literal.Number */
+pre.pygments .tok-s { color: #BA2121 } /* Literal.String */
+pre.pygments .tok-na { color: #687822 } /* Name.Attribute */
+pre.pygments .tok-nb { color: #008000 } /* Name.Builtin */
+pre.pygments .tok-nc { color: #0000FF; font-weight: bold } /* Name.Class */
+pre.pygments .tok-no { color: #880000 } /* Name.Constant */
+pre.pygments .tok-nd { color: #AA22FF } /* Name.Decorator */
+pre.pygments .tok-ni { color: #717171; font-weight: bold } /* Name.Entity */
+pre.pygments .tok-ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+pre.pygments .tok-nf { color: #0000FF } /* Name.Function */
+pre.pygments .tok-nl { color: #767600 } /* Name.Label */
+pre.pygments .tok-nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+pre.pygments .tok-nt { color: #008000; font-weight: bold } /* Name.Tag */
+pre.pygments .tok-nv { color: #19177C } /* Name.Variable */
+pre.pygments .tok-ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+pre.pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
+pre.pygments .tok-mb { color: #666666 } /* Literal.Number.Bin */
+pre.pygments .tok-mf { color: #666666 } /* Literal.Number.Float */
+pre.pygments .tok-mh { color: #666666 } /* Literal.Number.Hex */
+pre.pygments .tok-mi { color: #666666 } /* Literal.Number.Integer */
+pre.pygments .tok-mo { color: #666666 } /* Literal.Number.Oct */
+pre.pygments .tok-sa { color: #BA2121 } /* Literal.String.Affix */
+pre.pygments .tok-sb { color: #BA2121 } /* Literal.String.Backtick */
+pre.pygments .tok-sc { color: #BA2121 } /* Literal.String.Char */
+pre.pygments .tok-dl { color: #BA2121 } /* Literal.String.Delimiter */
+pre.pygments .tok-sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+pre.pygments .tok-s2 { color: #BA2121 } /* Literal.String.Double */
+pre.pygments .tok-se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+pre.pygments .tok-sh { color: #BA2121 } /* Literal.String.Heredoc */
+pre.pygments .tok-si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+pre.pygments .tok-sx { color: #008000 } /* Literal.String.Other */
+pre.pygments .tok-sr { color: #A45A77 } /* Literal.String.Regex */
+pre.pygments .tok-s1 { color: #BA2121 } /* Literal.String.Single */
+pre.pygments .tok-ss { color: #19177C } /* Literal.String.Symbol */
+pre.pygments .tok-bp { color: #008000 } /* Name.Builtin.Pseudo */
+pre.pygments .tok-fm { color: #0000FF } /* Name.Function.Magic */
+pre.pygments .tok-vc { color: #19177C } /* Name.Variable.Class */
+pre.pygments .tok-vg { color: #19177C } /* Name.Variable.Global */
+pre.pygments .tok-vi { color: #19177C } /* Name.Variable.Instance */
+pre.pygments .tok-vm { color: #19177C } /* Name.Variable.Magic */
+pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body class="article toc2 toc-right">
+<div id="header">
+<h1>Spring Cloud 微服务</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_spring_cloud_微服务介绍">Spring Cloud 微服务介绍</a>
+<ul class="sectlevel2">
+<li><a href="#_一_什么是微服务">一、 什么是微服务？</a></li>
+<li><a href="#_二_微服务带来的新挑战">二、 微服务带来的新挑战</a></li>
+<li><a href="#_三_什么是_spring_cloud">三、 什么是 Spring Cloud？</a></li>
+<li><a href="#_四_spring_cloud_的核心组件子项目">四、 Spring Cloud 的核心组件/子项目</a></li>
+<li><a href="#_五_spring_cloud_的流派">五、 Spring Cloud 的流派</a></li>
+<li><a href="#_六_总结">六、 总结</a></li>
+</ul>
+</li>
+<li><a href="#_创建一个空的工程_micro_service">创建一个空的工程 micro-service</a></li>
+<li><a href="#_创建商品微服务模块_service_item">创建商品微服务模块 service-item</a>
+<ul class="sectlevel2">
+<li><a href="#_file_service_itempom_xml">file &#8594; service-item/pom.xml</a></li>
+<li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitempojoitem_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/pojo/Item.java</a></li>
+<li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemservice_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/service/ItemService.java</a></li>
+<li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</a></li>
+<li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemapplication_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java</a></li>
+<li><a href="#_file_service_itemsrcmainresourcesapplication_yml">file &#8594; service-item/src/main/resources/application.yml</a></li>
+</ul>
+</li>
+<li><a href="#_创建订单微服务模块_service_order">创建订单微服务模块 service-order</a>
+<ul class="sectlevel2">
+<li><a href="#_file_pom_xml">file &#8594; pom.xml</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderpojoitem_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/pojo/Item.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderpojoorder_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/pojo/Order.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderpojoorderdetail_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/pojo/OrderDetail.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceordercontrollerordercontroller_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml">file &#8594; service-order/src/main/resources/application.yml</a></li>
+</ul>
+</li>
+<li><a href="#_http_客户端">HTTP 客户端</a>
+<ul class="sectlevel2">
+<li><a href="#_resttemplatespring_提供的传统同步_http_客户端">RestTemplate&#8201;&#8212;&#8201;Spring 提供的传统同步 HTTP 客户端</a>
+<ul class="sectlevel3">
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
+</ul>
+</li>
+<li><a href="#_resttemplate_okhttp_可以兼容老代码">RestTemplate + OkHttp 可以兼容老代码</a>
+<ul class="sectlevel3">
+<li><a href="#_file_service_orderpom_xml">file &#8594; service-order/pom.xml</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_3">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
+</ul>
+</li>
+<li><a href="#_okhttp_square_开源的高性能_http_客户端">OkHttp      &#8201;&#8212;&#8201;Square 开源的高性能 HTTP 客户端</a>
+<ul class="sectlevel3">
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_3">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_4">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
+</ul>
+</li>
+<li><a href="#_webclient_spring_webflux_提供的响应式_http_客户端">WebClient   &#8201;&#8212;&#8201;Spring WebFlux 提供的响应式 HTTP 客户端</a>
+<ul class="sectlevel3">
+<li><a href="#_file_service_orderpom_xml_2">file &#8594; service-order/pom.xml</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_4">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_5">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
+</ul>
+</li>
+<li><a href="#_restclient_spring_6_1_才支持目前的_spring_boot_2_7_18_使用的是_spring_5_3_x">RestClient  &#8201;&#8212;&#8201;Spring 6.1 才支持（目前的 Spring Boot 2.7.18 使用的是 Spring 5.3.x）</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<button id="toggleButton">Table of Contents</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spring_cloud_微服务介绍">Spring Cloud 微服务介绍</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_一_什么是微服务">一、 什么是微服务？</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>单体架构的困境</p>
+<div class="paragraph">
+<p>在传统单体架构（Monolithic Architecture）中，所有功能模块（如用户管理、订单管理、支付管理等）都被打包在一个大的应用程序中，并部署在一个应用服务器上。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>优点</strong>：开发、测试、部署简单。</p>
+</li>
+<li>
+<p><strong>缺点</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>复杂性高：代码庞大，耦合度高，维护困难。</p>
+</li>
+<li>
+<p>技术栈僵化：难以引入新的技术或框架。</p>
+</li>
+<li>
+<p>扩展性差：无法针对特定模块进行扩展，必须扩展整个应用。</p>
+</li>
+<li>
+<p>部署不灵活：一个小修改就需要重新部署整个应用，风险高。</p>
+</li>
+<li>
+<p>可靠性低：一个微小的问题可能导致整个应用崩溃。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>微服务架构的解决方案</p>
+<div class="paragraph">
+<p>微服务架构（Microservices Architecture）是一种将单个应用程序拆分为 <mark>一组小而自治的服务</mark> 的架构风格。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>核心思想</strong>：<strong>拆分</strong> 与 <strong>解耦</strong>。</p>
+</li>
+<li>
+<p><strong>每个服务</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>围绕 <strong>业务能力</strong> 构建。</p>
+</li>
+<li>
+<p>拥有独立的 <strong>数据库</strong> 和 <strong>数据模型</strong>。</p>
+</li>
+<li>
+<p>可以独立 <strong>开发</strong>、<strong>部署</strong>、<strong>扩展</strong> 和 <strong>重启</strong>。</p>
+</li>
+<li>
+<p>通过轻量级的通信机制（如 HTTP/REST、gRPC）进行协作。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>比喻：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>单体应用</strong> 像一个 <strong>大商场</strong> ：所有部门（服装、餐饮、超市）在一个大楼里，共享水电消防。一损俱损。</p>
+</li>
+<li>
+<p><strong>微服务</strong> 像一个 <strong>商业街</strong> ：每个店铺（服务）独立经营，有自己的特色和库存，通过公共街道（网络）连接。一店装修，不影响其他店。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_二_微服务带来的新挑战">二、 微服务带来的新挑战</h3>
+<div class="paragraph">
+<p>拆分成多个服务后，也引入了新的复杂性：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>服务发现：服务实例动态变化，消费者如何找到提供者？</p>
+</li>
+<li>
+<p>配置管理：如何统一管理所有服务的配置，并实现动态更新？</p>
+</li>
+<li>
+<p>负载均衡：如何将请求合理地分发到多个服务实例上？</p>
+</li>
+<li>
+<p>容错与熔断：如何防止一个服务故障导致整个系统雪崩？</p>
+</li>
+<li>
+<p>API网关：如何为外部客户端提供一个统一的入口，并处理跨切面问题（认证、限流、路由）？</p>
+</li>
+<li>
+<p>分布式事务：如何保证跨多个服务的数据一致性？</p>
+</li>
+<li>
+<p>监控与链路追踪：如何跟踪一个请求穿越多个服务的全过程，以便排查问题？</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_三_什么是_spring_cloud">三、 什么是 Spring Cloud？</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>定义</p>
+<div class="paragraph">
+<p>Spring Cloud 是一套基于 Spring Boot的 <mark>微服务生态工具集</mark>。它提供了一系列 <mark>标准化的工具和组件</mark>，用于快速解决微服务架构中的常见问题（如上述挑战），让我们能更专注于业务逻辑的开发。</p>
+</div>
+<div class="paragraph">
+<p><strong>简单来说</strong>：Spring Boot 让开发单个微服务变得简单，而 Spring Cloud 让 <mark>管理和协调</mark> 这些微服务变得简单。</p>
+</div>
+</li>
+<li>
+<p>核心定位</p>
+<div class="paragraph">
+<p>Spring Cloud 通过封装 <strong>Netflix</strong>、<strong>Alibaba</strong> 等公司成熟的微服务解决方案，提供了 <strong>开箱即用</strong> 的分布式系统开发体验。</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_四_spring_cloud_的核心组件子项目">四、 Spring Cloud 的核心组件/子项目</h3>
+<div class="paragraph">
+<p>Spring Cloud是一个“全家桶”，包含众多组件，以下是其中最核心的几个：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 50%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">组件名称</th>
+<th class="tableblock halign-left valign-top">功能</th>
+<th class="tableblock halign-left valign-top">比喻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Eureka / Nacos</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>服务发现与注册</strong>：服务提供者启动后向注册中心注册自己的地址，消费者从注册中心拉取服务列表。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>电话簿</strong>：服务在这里注册和查找彼此的地址。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Ribbon / LoadBalancer</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>客户端负载均衡</strong>：从服务列表中选择一个实例，将请求分发过去。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>导游</strong>：在多个相同的服务实例中，选择一个带你去。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Feign / OpenFeign</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>声明式HTTP客户端</strong>：基于接口和注解的方式调用远程服务，像调用本地方法一样简单。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>翻译官</strong>：帮你自动完成HTTP请求的组装和发送。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Hystrix / Sentinel</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>熔断器</strong>：当服务调用失败率达到阈值时，快速失败（熔断），防止雪崩效应，并提供服务降级。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>保险丝</strong>：电流过大（故障太多）自动熔断，保护整个电路（系统）。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Zuul / Gateway</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>API网关</strong>：所有外部请求的统一入口，负责路由、过滤、认证、限流、监控等。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>前台/门卫</strong>：所有访客必须经过这里，由它决定谁可以进、去哪里。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Config / Nacos</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>分布式配置中心</strong>：集中管理所有环境的配置文件，支持动态刷新。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>公告板</strong>：所有服务从这里获取最新配置，无需重启即可生效。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Sleuth / Zipkin</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>分布式链路追踪</strong>：跟踪一个请求从开始到结束的完整路径，用于性能分析和故障排查。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>快递追踪</strong>：可以查看你的包裹（请求）经过了哪些中转站（服务）。</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_五_spring_cloud_的流派">五、 Spring Cloud 的流派</h3>
+<div class="paragraph">
+<p>目前主要有两大主流体系：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Netflix系</strong>：Spring Cloud Netflix（如 Eureka, Hystrix, Zuul）是早期标准，目前已部分进入维护模式。</p>
+</li>
+<li>
+<p><strong>Alibaba系</strong>：<strong>Spring Cloud Alibaba</strong> 是目前国内最主流的方案，它提供了一站式的微服务解决方案（如 Nacos, Sentinel, Seata），与 Spring Cloud 生态无缝集成，功能强大且活跃度高。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>建议</strong>：新项目首选 <strong>Spring Cloud Alibaba</strong>。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_六_总结">六、 总结</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>微服务架构通过拆分和解耦，解决了单体应用的痛点，但也带来了分布式系统的复杂性。</p>
+</li>
+<li>
+<p><strong>Spring Cloud</strong> 不是一门新技术，而是一个 <strong>工具箱</strong>，它提供了 <strong>一整套标准化的解决方案</strong> 来轻松应对这些复杂性。</p>
+</li>
+<li>
+<p>使用 <strong>Spring Boot + Spring Cloud</strong>，可以快速构建和治理一套完整、健壮的分布式微服务系统。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_创建一个空的工程_micro_service">创建一个空的工程 micro-service</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="img/create_empty_project.png" alt="create empty project" width="800">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_创建商品微服务模块_service_item">创建商品微服务模块 service-item</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>写完下面的代码后，使用 httpie 测试一下</p>
+</div>
+<div class="paragraph">
+<p>http :8081/item/1</p>
+</div>
+<div class="sect2">
+<h3 id="_file_service_itempom_xml">file &#8594; service-item/pom.xml</h3>
+<div class="paragraph">
+<p>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 <a href="https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt" class="bare">https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt</a>;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;2.7.18&lt;/version&gt;
+        &lt;relativePath/&gt; &lt;!-- lookup parent from repository -&#8594;
+    &lt;/parent&gt;
+    &lt;groupId&gt;com.tjise&lt;/groupId&gt;
+    &lt;artifactId&gt;service-item&lt;/artifactId&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;name&gt;service-item&lt;/name&gt;
+    &lt;description&gt;service-item&lt;/description&gt;
+    &lt;properties&gt;
+        &lt;java.version&gt;1.8&lt;/java.version&gt;
+    &lt;/properties&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    &lt;!-- Lombok --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+        &lt;optional&gt;true&lt;/optional&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;/project&gt;</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_itemsrcmainjavacomtjiseserviceitempojoitem_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/pojo/Item.java</h3>
+<div class="paragraph">
+<p>package com.tjise.serviceitem.pojo;</p>
+</div>
+<div class="paragraph">
+<p>import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;</p>
+</div>
+<div class="paragraph">
+<p>@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Item {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private Long id;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private String title;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private String pic;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private String desc;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    private Long price;
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemservice_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/service/ItemService.java</h3>
+<div class="paragraph">
+<p>package com.tjise.serviceitem.service;</p>
+</div>
+<div class="paragraph">
+<p>import com.tjise.serviceitem.pojo.Item;
+import org.springframework.stereotype.Service;
+import java.util.HashMap;
+import java.util.Map;</p>
+</div>
+<div class="paragraph">
+<p>@Service
+public class ItemService {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private static final Map&lt;Long, Item&gt; ITEM_MAP = new HashMap&lt;Long, Item&gt;();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>static {// 准备一些静态数据，模拟数据库，只是为了简单而已
+    ITEM_MAP.put(1L, new Item(1L, "商品1", "http://图片1", "商品描述1", 1000L));
+    ITEM_MAP.put(2L, new Item(2L, "商品2", "http://图片2", "商品描述2", 2000L));
+    ITEM_MAP.put(3L, new Item(3L, "商品3", "http://图片3", "商品描述3", 3000L));
+    ITEM_MAP.put(4L, new Item(4L, "商品4", "http://图片4", "商品描述4", 4000L));
+    ITEM_MAP.put(5L, new Item(5L, "商品5", "http://图片5", "商品描述5", 5000L));
+    ITEM_MAP.put(6L, new Item(6L, "商品6", "http://图片6", "商品描述6", 6000L));
+    ITEM_MAP.put(7L, new Item(7L, "商品7", "http://图片7", "商品描述7", 7000L));
+    ITEM_MAP.put(8L, new Item(8L, "商品8", "http://图片8", "商品描述8", 8000L));
+    ITEM_MAP.put(9L, new Item(9L, "商品9", "http://图片9", "商品描述9", 9000L));
+    ITEM_MAP.put(10L, new Item(10L, "商品10", "http://图片10", "商品描述10", 10000L));
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/**
+ * 模拟实现商品查询
+ *
+ * @param id
+ * @return
+ */
+public Item queryItemById(Long id) {
+    return ITEM_MAP.get(id);
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>}</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</h3>
+<div class="paragraph">
+<p>package com.tjise.serviceitem.controller;</p>
+</div>
+<div class="paragraph">
+<p>import com.tjise.serviceitem.pojo.Item;
+import com.tjise.serviceitem.service.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;</p>
+</div>
+<div class="paragraph">
+<p>@RestController
+public class ItemController {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>@Autowired
+private ItemService itemService;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/**
+ * 对外提供接口服务，查询商品信息
+ *
+ * @param id
+ * @return
+ */
+@GetMapping(value = "item/{id}")
+public Item queryItemById(@PathVariable("id") Long id) {
+    return this.itemService.queryItemById(id);
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>}</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemapplication_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java</h3>
+<div class="paragraph">
+<p>package com.tjise.serviceitem;</p>
+</div>
+<div class="paragraph">
+<p>import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;</p>
+</div>
+<div class="paragraph">
+<p>@SpringBootApplication
+public class ServiceItemApplication {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>public static void main(String[] args) {
+    SpringApplication.run(ServiceItemApplication.class, args);
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>}</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_itemsrcmainresourcesapplication_yml">file &#8594; service-item/src/main/resources/application.yml</h3>
+<div class="paragraph">
+<p>server:
+  port: 8081</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_创建订单微服务模块_service_order">创建订单微服务模块 service-order</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_file_pom_xml">file &#8594; pom.xml</h3>
+<div class="paragraph">
+<p>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 <a href="https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt" class="bare">https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt</a>;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;2.7.18&lt;/version&gt;
+        &lt;relativePath/&gt; &lt;!-- lookup parent from repository -&#8594;
+    &lt;/parent&gt;
+    &lt;groupId&gt;com.tjise&lt;/groupId&gt;
+    &lt;artifactId&gt;service-order&lt;/artifactId&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;name&gt;service-order&lt;/name&gt;
+    &lt;description&gt;service-order&lt;/description&gt;
+    &lt;properties&gt;
+        &lt;java.version&gt;1.8&lt;/java.version&gt;
+    &lt;/properties&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    &lt;!-- Lombok --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+        &lt;optional&gt;true&lt;/optional&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderpojoitem_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/pojo/Item.java</h3>
+<div class="paragraph">
+<p>package com.tjise.serviceorder.pojo;</p>
+</div>
+<div class="paragraph">
+<p>import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;</p>
+</div>
+<div class="paragraph">
+<p>@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Item {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private Long id;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private String title;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private String pic;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private String desc;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    private Long price;
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderpojoorder_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/pojo/Order.java</h3>
+<div class="paragraph">
+<p>package com.tjise.serviceorder.pojo;</p>
+</div>
+<div class="paragraph">
+<p>import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;</p>
+</div>
+<div class="paragraph">
+<p>import java.util.Date;
+import java.util.List;</p>
+</div>
+<div class="paragraph">
+<p>@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Order {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private String orderId;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private Long userId;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private Date createDate;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private Date updateDate;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    private List&lt;OrderDetail&gt; orderDetails;
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderpojoorderdetail_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/pojo/OrderDetail.java</h3>
+<div class="paragraph">
+<p>package com.tjise.serviceorder.pojo;</p>
+</div>
+<div class="paragraph">
+<p>import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;</p>
+</div>
+<div class="paragraph">
+<p>@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderDetail {
+    private String orderId;
+    private Item item;
+}</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h3>
+<div class="paragraph">
+<p>package com.tjise.serviceorder.service;</p>
+</div>
+<div class="paragraph">
+<p>import com.tjise.serviceorder.pojo.Order;
+import com.tjise.serviceorder.pojo.OrderDetail;
+import com.tjise.serviceorder.pojo.Item;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;</p>
+</div>
+<div class="paragraph">
+<p>import java.io.IOException;
+import java.util.*;</p>
+</div>
+<div class="paragraph">
+<p>/**
+ * 订单服务类
+ * 提供订单查询功能，并通过调用商品服务获取商品详细信息
+ */
+@Service
+public class OrderService {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 使用静态Map模拟数据库存储订单数据
+private static final Map&lt;String, Order&gt; ORDER_DATA = new HashMap&lt;String, Order&gt;();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 初始化订单数据
+static {
+    // 模拟数据库，构造测试数据
+    Order order = new Order();
+    order.setOrderId("201810300001");
+    order.setCreateDate(new Date());
+    order.setUpdateDate(order.getCreateDate());
+    order.setUserId(1L);
+    List&lt;OrderDetail&gt; orderDetails = new ArrayList&lt;OrderDetail&gt;();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）
+Item item = new Item();
+item.setId(1L);
+orderDetails.add(new OrderDetail(order.getOrderId(), item));</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 创建第二个商品详情
+item = new Item();
+item.setId(2L);
+orderDetails.add(new OrderDetail(order.getOrderId(), item));</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>order.setOrderDetails(orderDetails);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    ORDER_DATA.put(order.getOrderId(), order);
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 注入商品服务，用于查询商品详细信息
+@Autowired
+private ItemService itemService;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/**
+ * 根据订单ID查询订单数据
+ *
+ * @param orderId 订单ID
+ * @return Order 订单信息，包含完整的商品详情
+ */
+public Order queryOrderById(String orderId) throws IOException {
+    // 从模拟数据库中查询订单
+    Order order = ORDER_DATA.get(orderId);
+    if (null == order) {
+        return null;
+    }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 获取订单详情列表
+List&lt;OrderDetail&gt; orderDetails = order.getOrderDetails();</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 遍历订单详情，通过商品微服务查询商品详细数据
+for (OrderDetail orderDetail : orderDetails) {
+    // 通过商品微服务查询商品详细数据
+    Item item = itemService.queryItemById(orderDetail.getItem().getId());
+    if (null == item) {
+        continue;
+    }
+    // 将查询到的商品详细信息设置到订单详情中
+    orderDetail.setItem(item);
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        return order;
+    }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h3>
+<div class="paragraph">
+<p>package com.tjise.serviceorder.service;</p>
+</div>
+<div class="paragraph">
+<p>import com.tjise.serviceorder.pojo.Item;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;</p>
+</div>
+<div class="paragraph">
+<p>/**
+ * 商品服务类
+ * 通过 REST 方式调用商品微服务获取商品信息
+ */
+@Service
+public class ItemService {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// Spring 框架对 RESTful 方式的 http 请求做了封装，来简化操作
+@Autowired
+private RestTemplate restTemplate;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/**
+ * 根据商品 ID 查询商品信息
+ * 通过 REST 调用商品微服务获取商品详细数据
+ *
+ * @param id 商品ID
+ * @return Item 商品信息
+ */
+public Item queryItemById(Long id) {
+    return restTemplate.getForObject("http://127.0.0.1:8081/item/"
+            + id, Item.class);
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>}</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainjavacomtjiseserviceordercontrollerordercontroller_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.controller</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.pojo.Order</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.service.OrderService</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.*</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单控制器</span>
+<span class="tok-cm"> * 处理订单相关的HTTP请求</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@RestController</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 注入订单服务</span>
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">OrderService</span><span class="tok-w"> </span><span class="tok-n">orderService</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 根据订单ID查询订单信息</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @param orderId 订单ID</span>
+<span class="tok-cm">     * @return Order 订单信息</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;order/{orderId}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;orderId&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">orderService</span><span class="tok-p">.</span><span class="tok-na">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>httpie 测试:
+http :8082/order/201810300001</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h3>
+<div class="paragraph">
+<p>package com.tjise.serviceorder;</p>
+</div>
+<div class="paragraph">
+<p>import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;</p>
+</div>
+<div class="paragraph">
+<p>/**
+ * 订单服务启动类
+ * Spring Boot 应用程序入口点
+ */
+@SpringBootApplication
+public class ServiceOrderApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceOrderApplication.class, args);
+    }</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    /**
+     * 创建RestTemplate实例
+     * 用于调用其他微服务
+     *
+     * @return RestTemplate
+     */
+    @Bean
+    public RestTemplate restTemplate() {
+        // 可以在这里添加拦截器来统一处理URL前缀
+        return new RestTemplate();
+    }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainresourcesapplication_yml">file &#8594; service-order/src/main/resources/application.yml</h3>
+<div class="paragraph">
+<p>server:
+  port: 8082</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_http_客户端">HTTP 客户端</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_resttemplatespring_提供的传统同步_http_客户端">RestTemplate&#8201;&#8212;&#8201;Spring 提供的传统同步 HTTP 客户端</h3>
+<div class="paragraph">
+<p>前面演示的是 方式一：字段注入（需要 @Autowired），
+下面演示一下使用 方式二单个构造函数注入的例子。</p>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h4>
+<div class="sect4">
+<h5 id="_class_itemservice">class ItemService</h5>
+<div class="paragraph">
+<p>/**
+ * 商品服务类
+ * 通过 REST 方式调用商品微服务获取商品信息
+ */
+@Service
+public class ItemService {
+    @others
+}</p>
+</div>
+<div class="sect5">
+<h6 id="_方式二_单个构造函数注入">方式二 单个构造函数注入</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">;</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">ItemService</span><span class="tok-p">(</span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">restTemplate</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resttemplate_okhttp_可以兼容老代码">RestTemplate + OkHttp 可以兼容老代码</h3>
+<div class="paragraph">
+<p>为了兼容老的 RestTemplate 代码，也可以在 RestTemplate 中配置 OkHttp。</p>
+</div>
+<div class="sect3">
+<h4 id="_file_service_orderpom_xml">file &#8594; service-order/pom.xml</h4>
+<div class="sect4">
+<h5 id="_okhttp_依赖">okhttp 依赖</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">使用</span><span class="tok-w"> </span><span class="tok-nt">Spring</span><span class="tok-w"> </span><span class="tok-nt">Boot</span><span class="tok-w"> </span><span class="tok-nt">管理的版本</span><span class="tok-err">：</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.squareup.okhttp3</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">okhttp</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
+<div class="sect4">
+<h5 id="_resttemplate_resttemplate">RestTemplate restTemplate</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 创建RestTemplate实例</span>
+<span class="tok-cm"> * 用于调用其他微服务</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * @return RestTemplate</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@Bean</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-nf">restTemplate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 可以在这里添加拦截器来统一处理URL前缀</span>
+<span class="tok-w">    </span><span class="tok-c1">// return new RestTemplate();  // 未使用 OkHttp</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OkHttp3ClientHttpRequestFactory</span><span class="tok-p">());</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_3">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h4>
+<div class="sect4">
+<h5 id="_class_itemservice_2">class ItemService</h5>
+<div class="paragraph">
+<p>/**
+ * 商品服务类
+ * 通过 REST 方式调用商品微服务获取商品信息
+ */
+@Service
+public class ItemService {
+    @others
+}</p>
+</div>
+<div class="sect5">
+<h6 id="_方式二_单个构造函数注入增加了查看是否成功使用了_okhttp_打印">方式二 单个构造函数注入&#8201;&#8212;&#8201;增加了查看是否成功使用了 OkHttp 打印</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">;</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">ItemService</span><span class="tok-p">(</span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">restTemplate</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-c1">// 检查请求工厂类型</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Request Factory: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">.</span><span class="tok-na">getRequestFactory</span><span class="tok-p">().</span><span class="tok-na">getClass</span><span class="tok-p">().</span><span class="tok-na">getName</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-c1">// 成功使用 OkHttp 会打印</span>
+<span class="tok-w">    </span><span class="tok-c1">// Request Factory: org.springframework.http.client.OkHttp3ClientHttpRequestFactory</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_okhttp_square_开源的高性能_http_客户端">OkHttp      &#8201;&#8212;&#8201;Square 开源的高性能 HTTP 客户端</h3>
+<div class="paragraph">
+<p>OkHttp 的异步 API 在应用程序层面实现了与 Node.js 类似的高并发编程模型：通过非阻塞 I/O 和回调机制，最大化利用少量线程来处理海量网络连接，从而高效地处理高并发 HTTP 请求。</p>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_3">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
+<div class="sect4">
+<h5 id="_okhttpclient_okhttpclient">OkHttpClient okHttpClient</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Bean</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-w"> </span><span class="tok-nf">okHttpClient</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-p">.</span><span class="tok-na">Builder</span><span class="tok-p">()</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">connectTimeout</span><span class="tok-p">(</span><span class="tok-mi">30</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">TimeUnit</span><span class="tok-p">.</span><span class="tok-na">SECONDS</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">readTimeout</span><span class="tok-p">(</span><span class="tok-mi">30</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">TimeUnit</span><span class="tok-p">.</span><span class="tok-na">SECONDS</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_4">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.fasterxml.jackson.databind.ObjectMapper</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">okhttp3.OkHttpClient</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">okhttp3.Request</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">okhttp3.Response</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.IOException</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 下面这两种方式是等价的，看自己的使用方式而定</span>
+<span class="tok-w">    </span><span class="tok-c1">// 方式一：字段注入（需要 @Autowired）</span>
+<span class="tok-w">    </span><span class="tok-c1">// @Autowired</span>
+<span class="tok-w">    </span><span class="tok-c1">// private OkHttpClient client;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 方式二 单个构造函数注入</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-w"> </span><span class="tok-n">client</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 单个构造函数注入（不需要 @Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">ObjectMapper</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 可支持 json 序列化</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">ItemService</span><span class="tok-p">(</span><span class="tok-n">OkHttpClient</span><span class="tok-w"> </span><span class="tok-n">client</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ObjectMapper</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">client</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">client</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">objectMapper</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-c1">// 检查请求工厂类型</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Using OkHttpClient: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">client</span><span class="tok-p">.</span><span class="tok-na">getClass</span><span class="tok-p">().</span><span class="tok-na">getName</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-c1">// 打印：Using OkHttpClient: okhttp3.OkHttpClient</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">Request</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Request</span><span class="tok-p">.</span><span class="tok-na">Builder</span><span class="tok-p">()</span>
+<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">url</span><span class="tok-p">(</span><span class="tok-s">&quot;http://127.0.0.1:8081/item/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span>
+<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Response</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">client</span><span class="tok-p">.</span><span class="tok-na">newCall</span><span class="tok-p">(</span><span class="tok-n">request</span><span class="tok-p">).</span><span class="tok-na">execute</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 读取响应体</span>
+<span class="tok-w">            </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">json</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-p">.</span><span class="tok-na">body</span><span class="tok-p">().</span><span class="tok-na">string</span><span class="tok-p">();</span>
+<span class="tok-w">            </span><span class="tok-c1">// 使用注入的 objectMapper 反序列化成 JSON 字符串</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">.</span><span class="tok-na">readValue</span><span class="tok-p">(</span><span class="tok-n">json</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_webclient_spring_webflux_提供的响应式_http_客户端">WebClient   &#8201;&#8212;&#8201;Spring WebFlux 提供的响应式 HTTP 客户端</h3>
+<div class="sect3">
+<h4 id="_file_service_orderpom_xml_2">file &#8594; service-order/pom.xml</h4>
+<div class="sect4">
+<h5 id="_webclient">WebClient</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-webflux</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_4">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
+<div class="sect4">
+<h5 id="_webclient_2">WebClient</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Bean</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-nf">webClient</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">builder</span><span class="tok-p">()</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">baseUrl</span><span class="tok-p">(</span><span class="tok-s">&quot;http://127.0.0.1:8081&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_5">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.fasterxml.jackson.databind.ObjectMapper</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">okhttp3.OkHttpClient</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">okhttp3.Request</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">okhttp3.Response</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Service</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.reactive.function.client.WebClient</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.IOException</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 下面这两种方式是等价的，看自己的使用方式而定</span>
+<span class="tok-w">    </span><span class="tok-c1">// 方式一：字段注入（需要 @Autowired）</span>
+<span class="tok-w">    </span><span class="tok-c1">// @Autowired</span>
+<span class="tok-w">    </span><span class="tok-c1">// private WebClient webClient;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 方式二 单个构造函数注入</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">ItemService</span><span class="tok-p">(</span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">webClient</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">uri</span><span class="tok-p">(</span><span class="tok-s">&quot;/item/{id}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">retrieve</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">bodyToMono</span><span class="tok-p">(</span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">block</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 同步调用，如需要异步可去掉block()</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_restclient_spring_6_1_才支持目前的_spring_boot_2_7_18_使用的是_spring_5_3_x">RestClient  &#8201;&#8212;&#8201;Spring 6.1 才支持（目前的 Spring Boot 2.7.18 使用的是 Spring 5.3.x）</h3>
+<div class="paragraph">
+<p>RestClient 的主要价值在于它提供了一个现代化但又不失简单的 API，结合了 RestTemplate 的易用性和 WebClient 的功能强大，是未来 Spring 应用HTTP客户端调用的推荐选择。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-09-14 21:57:12 +0800
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>
