@@ -1,0 +1,360 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+
+= Mybatis 基础增删改查
+
+++++
+<button id="toggleButton">目录</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== @path spring-boot-ketang/mybatis_quickstart-crud
+
+
+=== 案例准备工作
+使用 https://start.spring.io/ 创建 Spring Boot 工程，如下所示。
+
+注：给工程命名为 mybatis-quickstart-crud，在创建工程时选择对应的起步依赖 mybatis, mysql, lombok。
+
+image::img/mybatis_quickstart_crud_initializr.png[]
+
+*下面引用之前学过的文档内容，请注意项目名称更改为 mybatis-quickstart-crud.zip 即可*
+
+=== 导入自己创建的 Spring Boot 模块
+1. 解压下载的 Spring Boot 代码，如 hello-spring-boot.zip，可以发现就是一个 Maven 模块的目录结构。
++
+image::img/hello-spring-boot-unzip.png[,640]
+
+2. 使用 IDEA 导入 hello-spring-boot 模块
+
+* 进入 File -> Project Structure 对话框，选择 Modules
+* 点击 `+` 号，选择要导入的模块目录，如 hello-spring-boot
++
+image::img/import_module_0.png[,400]
+
+3. 在导入时有两个选项：
+
+* Create module from existing sources（从现有源创建模块）用于导入没有使用构建工具如 maven 的项目
+* Import module from external model（从外部模型导入模块）用于导入使用构建工具如 maven 创建的项目。因为我们是用 maven 来管理代码的，所以选择 `Import module from external model`
++
+[.thumb]
+image::img/import_module_1.png[,640]
+
+4. 然后会看见 IDEA 自动安装了依赖。
+
+5. 更改 hello-spring-boot 中的 pom.xml 文件中的 Spring Boot 和 JDK 版本号。
++
+[source,xml,linenums,highlight=4;8]
+----
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.7.18</version>
+    <relativePath/> <!-- lookup parent from repository -->
+</parent>
+<properties>
+    <java.version>1.8</java.version>
+</properties>
+----
+
+=== 检查所有依赖版本
+.将 mbatis 依赖的版本调整为支持 JDK1.8
+[source,xml,linenums,highlight=4;10]
+----
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>2.3.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter-test</artifactId>
+    <version>2.3.0</version>
+    <scope>test</scope>
+</dependency>
+----
+
+=== 编写 application.properties
+配置数据库连接信息。
+
+==== #file src/main/resources/application.properties
+[source,properties,linenums]
+----
+spring.application.name=mybatis_quickstart-crud
+
+
+# 配置文件行最后不能有空格
+
+# 驱动类名称
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+# 数据库连接的 url
+spring.datasource.url=jdbc:mysql://localhost:3306/mybatis_db
+# 连接数据库的用户名
+spring.datasource.username=root
+# 连接数据库的密码
+spring.datasource.password=root
+----
+
+=== 创建数据库表 emp
+.在数据库管理软件中执行命令
+[source,sql,linenums]
+----
+use mybatis_db;
+
+create table emp (
+  id          int unsigned primary key auto_increment comment 'ID',
+  username    varchar(20) not null unique comment '用户名',
+  password    varchar(32) default '123456' comment '密码',
+  name        varchar(10) not null comment '姓名',
+  gender      tinyint unsigned not null comment '性别, 说明: 1 男, 2 女',
+  image       varchar(300) comment '图像',
+  job         tinyint unsigned comment '职位, 说明: 1班主任, 2讲师, 3学工主管, 4教研主管, 5咨询师',
+  entrydate   date comment '入职时间',
+  dept_id     int unsigned comment '部门ID',
+  create_time datetime not null comment '创建时间',
+  update_time datetime not null comment '修改时间'
+) comment='员工表';
+----
+
+=== 插入数据到表 emp
+.在数据库管理软件中执行命令
+[source,sql,linenums]
+----
+INSERT INTO emp
+(id, username, password, name, gender, image, job, entrydate,dept_id, create_time, update_time) VALUES
+( 1 ,'jinyong'    ,'123456' ,'金庸'   , 1  ,'1.jpg'  , 4  ,'2000-01-01', 2  , now() , now()),
+( 2 ,'zhangwuji'  ,'123456' ,'张无忌' , 1  ,'2.jpg'  , 2  ,'2015-01-01', 2  , now() , now()),
+( 3 ,'yangxiao'   ,'123456' ,'杨逍'   , 1  ,'3.jpg'  , 2  ,'2008-05-01', 2  , now() , now()),
+( 4 ,'weiyixiao'  ,'123456' ,'韦一笑' , 1  ,'4.jpg'  , 2  ,'2007-01-01', 2  , now() , now()),
+( 5 ,'changyuchun','123456' ,'常遇春' , 1  ,'5.jpg'  , 2  ,'2012-12-05', 2  , now() , now()),
+( 6 ,'xiaozhao'   ,'123456' ,'小昭'   , 2  ,'6.jpg'  , 3  ,'2013-09-05', 1  , now() , now()),
+( 7 ,'jixiaofu'   ,'123456' ,'纪晓芙' , 2  ,'7.jpg'  , 1  ,'2005-08-01', 1  , now() , now()),
+( 8 ,'zhouzhiruo' ,'123456' ,'周芷若' , 2  ,'8.jpg'  , 1  ,'2014-11-09', 1  , now() , now()),
+( 9 ,'dingminjun' ,'123456' ,'丁敏君' , 2  ,'9.jpg'  , 1  ,'2011-03-11', 1  , now() , now()),
+(10 ,'zhaomin'    ,'123456' ,'赵敏'   , 2  ,'10.jpg' , 1  ,'2013-09-05', 1  , now() , now()),
+(11 ,'luzhangke'  ,'123456' ,'鹿杖客' , 1  ,'11.jpg' , 5  ,'2007-02-01', 3  , now() , now()),
+(12 ,'hebiweng'   ,'123456' ,'鹤笔翁' , 1  ,'12.jpg' , 5  ,'2008-08-18', 3  , now() , now()),
+(13 ,'fangdongbai','123456' ,'方东白' , 1  ,'13.jpg' , 5  ,'2012-11-01', 3  , now() , now()),
+(14 ,'zhangsanfeng','123456','张三丰' , 1  ,'14.jpg' , 2  ,'2002-08-01', 2  , now() , now()),
+(15 ,'yulianzhou' ,'123456' ,'俞莲舟' , 1  ,'15.jpg' , 2  ,'2011-05-01', 2  , now() , now()),
+(16 ,'songyuanqiao','123456','宋远桥' , 1  ,'16.jpg' , 2  ,'2010-01-01', 2  , now() , now()),
+(17 ,'chenyouliang','123456','陈友谅' , 1  ,'17.jpg' ,NULL,'2015-03-21',NULL , now(), now());
+----
+
+=== 创建对应的实体类 Emp
+创建 pojo 包，在包里创建 Emp.java 实体类。
+
+实体类属性采用小驼峰命名模式，可能会与数据库中字段的命名方式不同，以后会讲解如何处理该问题。
+
+==== #file src/main/java/com/tjise/pojo/Emp.java
+[source,java,linenums,highlight=22..24]
+----
+package com.tjise.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Emp {
+    private Integer id;
+    private String username;
+    private String password;
+    private String name;
+    private Short gender;
+    private String image;
+    private Short job;
+    private LocalDate entrydate;
+    private Integer deptId;     // 这里三行采用了小驼峰命名，数据库中一般为下划线命名方式
+    private LocalDateTime createTime;   // 后面会学如何处理这种不对应的问题
+    private LocalDateTime updateTime;
+}
+----
+
+=== 创建 Mapper 接口 EmpMapper
+创建包 mapper (和以前的 dao 的含义是一样的，只是 Spring Boot 项目习惯使用 mapper 而已)，在包中创建接口 EmpMapper.java
+
+==== #file src/main/java/com/tjise/mapper/EmpMapper.java
+[source,java,linenums]
+----
+package com.tjise.mapper;
+
+import org.apache.ibatis.annotations.Mapper;
+
+/* Mapper 注解
+    1. 让此接口被 mybatis 框架识别
+    2. Spring Boot 会自动创建此接口的实现类对象，交给 IOC 容器管理
+*/
+
+@Mapper
+public interface EmpMapper {
+
+}
+----
+
+=== 删除记录练习
+删除记录的 SQL 语句::
+    delete from 表名 where id = id值; +
+    delete from emp where id = 17;
+
+==== #file src/main/java/com/tjise/mapper/EmpMapper.java
+删除记录接口方法如下
+
+[source,java,linenums]
+----
+package com.tjise.mapper;
+
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Mapper;
+
+/* Mapper 注解
+    1. 让此接口被 mybatis 框架识别
+    2. Spring Boot 会自动创建此接口的实现类对象，交给 IOC 容器管理
+*/
+
+@Mapper
+public interface EmpMapper {
+
+    @Delete("delete from emp where id = #{id}")  // <1>
+    public abstract void deleteEmpById(Integer id);
+}
+----
+
+<1> 如果 mapper 接口方法形参只有一个普通类型的参数，\#{...} 里面的属性名可以随便写，如: #{id}、#{value}。
++
+*但是在实际开发中，我们还是要见名思意，不要随便起名字。*
+
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+接下来，我们就可以直接在单元测试类中通过 @Autowired 注解 EmpMapper 接口。
+然后就可以直接调用其 deleteEmpById 方法传递参数进行测试了。
+
+[source,java,linenums]
+----
+package com.tjise.mybatis_quickstart_crud;
+
+import com.tjise.mapper.EmpMapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    void deleteEmpByIdTest() {
+        empMapper.deleteEmpById(17);
+    }
+
+}
+----
+
+测试结果为删除了指定的数据库记录。
+
+=== 打开 mybatis 日志查看执行的 sql 语句
+可以在 application.properties 中，打开 mybatis 的日志，并指定输出到控制台，参下面文件所示。
+
+开启日志之后，我们再次运行单元测试。可以看到在控制台中，输出了执行的 SQL 语句。
+....
+==>  Preparing: delete from emp where id = ?
+==> Parameters: 17(Integer)
+<==    Updates: 0
+....
+
+
+但是发现输出的SQL语句为: `delete from emp where id = ?`，我们输入的参数 17 并没有在后面拼接，id 的值是使用 ? 进行占位。那这种SQL语句我们称为 #预编译 SQL#。
+
+==== #file src/main/resources/application.properties
+[source,properties,linenums,highlight=13;14]
+----
+# 配置文件行最后不能有空格
+spring.application.name=mybatis_quickstart-crud
+
+# 驱动类名称
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+# 数据库连接的 url
+spring.datasource.url=jdbc:mysql://localhost:3306/mybatis_db
+# 连接数据库的用户名
+spring.datasource.username=root
+# 连接数据库的密码
+spring.datasource.password=root
+
+# 指定mybatis输出日志的位置, 输出控制台
+mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+
+----
+
+=== 预编译 SQL
+预编译的 SQL，有两个优势：
+
+* 性能更高 -> 预编译SQL，编译一次之后会将编译后的SQL语句缓存起来，后面再次执行这条insert语句时，SQL语句一样，不会再次编译。 只是输入的参数不同。
++
+[.thumb]
+image::img/precompile_vs_noprecompile.png[]
+
+
+* 防止 SQL 注入 -> 将敏感字进行转义，安全。
+
+** SQL 注入是通过操作输入来修改事先定义好的SQL语句，用以达到执行代码对服务器进行攻击的方法。
+
+** 非预编译 sql 是直接对 sql 进行拼接，再进行编译，会出现 sql 注入问题。
++
+.SQL 注入举例
+[source,sql]
+----
+-- 下面是正常的执行语句，会返回 1，说明登录成功。
+select count(*) from emp where username = 'jinyong' and password = '123456';
+
+-- 下面是有 SQL 注入的情况，也会返回 1，说明也登录成功。(在 DBeaver 中执行成功，在 Antares 中执行不成功。)
+-- 用户在前端输入 {{jinyong'-- }}，直接把后面的 {{' and password = '123456';}} 给注释了
+select count(*) from emp where username = 'jinyong'-- ' and password = '123456';
+----
+
+** 预编译 sql，使用占位符替代具体的参数，编译之后再进行对占位符赋值。
++
+[source,sql]
+----
+select count(*) from emp where username = ? and password = ?;
+----
+
+= newHeadline
+
+
+== 插入
+
+
+== 更新
+
+
+== 查询
+
+

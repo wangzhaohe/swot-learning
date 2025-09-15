@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--@+leo-ver=5-thin-->
+<!--@+node:swot.20241022231327.1: * @file src/main/resources/com/tjise/mapper/EmpMapper.xml-->
+<!--@@first-->
+<!--@@language xml-->
+<!--@+doc-->
+<!--
+测试一下 <sql> 和 <include> 标签的配合使用。
+
+.<?xml version="1.0" encoding="UTF-8" ?>
+```xml
+-->
+<!--@@c-->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+    <!-- 省略其他代码显示 -->
+    <!--@+others-->
+    <!--@+node:swot.20241022231327.2: ** @ignore-node others-->
+    <select id="listEmpXml" resultType="com.tjise.pojo.Emp">
+      select * from emp where name like concat('%', #{name}, '%')
+                                   and gender = #{gender}
+                                   and entrydate between #{begin} and #{end}
+                                   order by update_time desc
+    </select>
+
+
+    <!-- if 标签 -->
+    <select id="listEmpXmlIf" resultType="com.tjise.pojo.Emp">
+        select * from emp
+        <where>
+            <if test="name != null">
+                name like concat('%', #{name}, '%')
+            </if>
+
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+
+            <if test="begin != null and end != null">
+                and entrydate between #{begin} and #{end}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
+
+    <update id="updateEmpXml">
+        update emp
+        <set>
+            <if test="username   != null"> username    = #{username},   </if>
+            <if test="name       != null"> name        = #{name},       </if>
+            <if test="gender     != null"> gender      = #{gender},     </if>
+            <if test="image      != null"> image       = #{image},      </if>
+            <if test="job        != null"> job         = #{job},        </if>
+            <if test="entrydate  != null"> entrydate   = #{entrydate},  </if>
+            <if test="deptId     != null"> dept_id     = #{deptId},     </if>
+            <if test="updateTime != null"> update_time = #{updateTime}, </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--@-others-->
+
+    <sql id="deleteIds">
+        DELETE FROM emp WHERE id IN
+    </sql>
+
+    <delete id="deleteEmpByIdsXml">
+
+        <!-- DELETE FROM emp WHERE id IN -->
+        <include refid="deleteIds" />
+
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
+<!--@+doc-->
+<!--
+```
+-->
+<!--@-leo-->
