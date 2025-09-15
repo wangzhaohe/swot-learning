@@ -601,8 +601,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_获取自增主键_id_options">获取自增主键 id &#8594; Options</a>
 <ul class="sectlevel3">
-<li><a href="#_file_srcmainjavacomtjisemapperempmapper_java_6">#file src/main/java/com/tjise/mapper/EmpMapper.java</a></li>
-<li><a href="#_file_srctestjavacomtjisemybatisquickstartcrudapplicationtests_java_4">#file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</a></li>
+<li><a href="#_file_srcmainjavacomtjisemapperempmapper_java_6">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</a></li>
+<li><a href="#_file_srctestjavacomtjisemybatisquickstartcrudapplicationtests_java_4">file &#8594; src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</a></li>
 </ul>
 </li>
 </ul>
@@ -615,7 +615,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel2">
 <li><a href="#_mapperdao层_update_记录">Mapper(Dao层) Update 记录</a>
 <ul class="sectlevel3">
-<li><a href="#_file_srcmainjavacomtjisemapperempmapper_java_7">###file src/main/java/com/tjise/mapper/EmpMapper.java</a></li>
+<li><a href="#_file_srcmainjavacomtjisemapperempmapper_java_7">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</a></li>
 </ul>
 </li>
 <li><a href="#_单元测试_updateemptest">单元测试 updateEmpTest</a>
@@ -634,7 +634,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_mapperdao层_select_单条件查询">Mapper(Dao层)  Select 单条件查询</a>
 <ul class="sectlevel3">
 <li><a href="#_file_srcmainjavacomtjisemapperempmapper_java_8">#file src/main/java/com/tjise/mapper/EmpMapper.java</a></li>
-<li><a href="#_单元测试_selectemptest">单元测试 selectEmpTest</a></li>
+<li><a href="#_file_srctestjavacomtjisemybatisquickstartcrudapplicationtests_java_6">#file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</a></li>
 <li><a href="#_1_select_数据封装_起别名_了解">1) @Select  数据封装 &#8594; 起别名 (了解)</a></li>
 <li><a href="#_2_results_数据封装_手动结果映射_result_了解">2) @Results 数据封装 &#8594; 手动结果映射 @Result (了解)</a></li>
 <li><a href="#_3_配置文件_数据封装_开启驼峰命名映射_推荐">3) 配置文件  数据封装 &#8594; 开启驼峰命名映射 (推荐)</a></li>
@@ -1567,7 +1567,9 @@ delete from emp where id = 15;</p>
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
-<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper</span><span class="tok-p">;</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper</span><span class="tok-p">;</span>
 
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Emp</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Delete</span><span class="tok-p">;</span>
@@ -1579,9 +1581,11 @@ delete from emp where id = 15;</p>
 
 <span class="tok-w">    </span><span class="tok-c1">// 省略其他代码显示</span>
 <span class="tok-w">    </span><span class="tok-nd">@others</span>
-
+<span class="tok-w">    </span><span class="tok-c1">// 这条语句是写死的测试</span>
 <span class="tok-w">    </span><span class="tok-c1">// @Insert(&quot;insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time)&quot; +</span>
 <span class="tok-w">            </span><span class="tok-c1">//  values (&#39;wanglin&#39;, &#39;王林&#39;, 1, &#39;1.png&#39;, 2, &#39;2003-02-10&#39;, 2, now(), now())&quot;)</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 这条语句是接收传入的实体对象</span>
 <span class="tok-w">    </span><span class="tok-cm">/* 方法的参数是一个实体类对象，取实体类对象中的属性为: #{成员变量名} */</span>
 <span class="tok-w">    </span><span class="tok-nd">@Insert</span><span class="tok-p">(</span><span class="tok-s">&quot;insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time)&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
 <span class="tok-w">            </span><span class="tok-s">&quot; values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptId}, #{createTime}, #{updateTime})&quot;</span><span class="tok-p">)</span>
@@ -1705,7 +1709,7 @@ delete from emp where id = 15;</p>
 <p>可以使用注解 @Options() 来获取自增主键的值。所以 @Options 会和 @Insert 配合一起使用。</p>
 </div>
 <div class="sect3">
-<h4 id="_file_srcmainjavacomtjisemapperempmapper_java_6">#file src/main/java/com/tjise/mapper/EmpMapper.java</h4>
+<h4 id="_file_srcmainjavacomtjisemapperempmapper_java_6">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -1776,7 +1780,7 @@ delete from emp where id = 15;</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_srctestjavacomtjisemybatisquickstartcrudapplicationtests_java_4">#file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</h4>
+<h4 id="_file_srctestjavacomtjisemybatisquickstartcrudapplicationtests_java_4">file &#8594; src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</h4>
 <div class="paragraph">
 <p>接下来，我们就可以直接在单元测试类中查看自增主键 id 是否生成成功。</p>
 </div>
@@ -1896,7 +1900,7 @@ emp.id: 22  -&gt; 自增主键 id 生成了</pre>
 <p>下面定义 Mapper 接口的抽象方法。</p>
 </div>
 <div class="sect3">
-<h4 id="_file_srcmainjavacomtjisemapperempmapper_java_7">###file src/main/java/com/tjise/mapper/EmpMapper.java</h4>
+<h4 id="_file_srcmainjavacomtjisemapperempmapper_java_7">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2095,12 +2099,7 @@ emp.id: 22  -&gt; 自增主键 id 生成了</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_单元测试_selectemptest">单元测试 selectEmpTest</h4>
-<div class="sect4">
-<h5 id="_file_srctestjavacomtjisemybatisquickstartcrudapplicationtests_java_6">#file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</h5>
-<div class="paragraph">
-<p>接下来，我们在测试类中测试更改数据库记录。</p>
-</div>
+<h4 id="_file_srctestjavacomtjisemybatisquickstartcrudapplicationtests_java_6">#file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2153,7 +2152,7 @@ emp.id: 22  -&gt; 自增主键 id 生成了</pre>
 
 <span class="tok-w">    </span><span class="tok-nd">@Test</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">selectEmpByIdTest</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-n">emp</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">selectEmpById</span><span class="tok-p">(</span><span class="tok-mi">18</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-n">emp</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">selectEmpById</span><span class="tok-p">(</span><span class="tok-mi">13</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-n">emp</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 有的字段封装失败</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
@@ -2162,22 +2161,11 @@ emp.id: 22  -&gt; 自增主键 id 生成了</pre>
 </div>
 </div>
 <div class="literalblock">
-<div class="title">控制台打印查询记录成功</div>
+<div class="title">控制台打印更新记录成功</div>
 <div class="content">
-<pre>==&gt;  Preparing: select * from emp where id = ?
-==&gt; Parameters: 18(Integer)
-&lt;==    Columns: id, username, password, name, gender, image, job, entrydate, dept_id, create_time, update_time
-&lt;==        Row: 18, fanghan, 123456, 方寒, 2, 2.png, 2, 2003-02-10, 2, 2024-10-18 15:29:47, 2024-10-19 20:05:23
-&lt;==      Total: 1
-Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4d7aaca2]
-Emp(id=18, username=fanghan, password=123456, name=方寒, gender=2, image=2.png, job=2, entrydate=2003-02-10, deptId=null, createTime=null, updateTime=null)</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>从打印可以看出，select 语句已经将数据正确取出，但是在实例化 Emp 对象时有三个参数无法赋值，原因为数据库表 emp 字段命名无法与 Emp 类的属性对应，如 dep_id != deptId，create_time != createTime，update_time != updateTime。</p>
-</div>
-<div class="paragraph">
-<p>有三种解决方式解决封装无法正确赋值问题，分别是「起别名」、「手动结果映射 @Result」、「开启驼峰命名映射」。</p>
+<pre>==&gt;  Preparing: update emp set username=?, name=?, gender=?, image=?, job=?, entrydate=?, dept_id=?, update_time=? where id=?
+==&gt; Parameters: fanghan(String), 方寒(String), 2(Short), 2.png(String), 2(Short), 2003-02-10(LocalDate), 2(Integer), 2024-10-19T20:05:23.088(LocalDateTime), 13(Integer)
+&lt;==    Updates: 1</pre>
 </div>
 </div>
 </div>
@@ -2828,7 +2816,7 @@ Emp(id=14, username=zhangsanfeng, password=123456, name=张三丰, gender=1, ima
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-15 14:52:37 +0800
+Last updated 2025-09-15 16:40:33 +0800
 </div>
 </div>
 </body>

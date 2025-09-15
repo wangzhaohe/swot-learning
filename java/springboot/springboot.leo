@@ -283,10 +283,10 @@
 </v>
 </v>
 <v t="swot.20241018111925.1"><vh>获取自增主键 id -&gt; Options</vh>
-<v t="swot.20241019073624.1"><vh>#file src/main/java/com/tjise/mapper/EmpMapper.java</vh>
+<v t="swot.20241019073624.1"><vh>file -&gt; src/main/java/com/tjise/mapper/EmpMapper.java</vh>
 <v t="swot.20241019073624.2"><vh>@ignore-node Delete</vh></v>
 </v>
-<v t="swot.20241019132212.1"><vh>#file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</vh>
+<v t="swot.20241019132212.1"><vh>file -&gt; src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</vh>
 <v t="swot.20241019132212.2"><vh>@ignore-node delete test</vh></v>
 </v>
 </v>
@@ -295,7 +295,7 @@
 <v t="swot.20241019134748.1"><vh>3. Mybatis 基础增删改查 -&gt; 更新</vh>
 <v t="swot.20241019134827.1"><vh>@path spring-boot-ketang/mybatis_quickstart-crud</vh>
 <v t="swot.20241019140657.1"><vh>Mapper(Dao层) Update 记录</vh>
-<v t="swot.20241019141143.1"><vh>###file src/main/java/com/tjise/mapper/EmpMapper.java</vh>
+<v t="swot.20241019141143.1"><vh>file -&gt; src/main/java/com/tjise/mapper/EmpMapper.java</vh>
 <v t="swot.20241019141143.2"><vh>@ignore-node Delete &amp; Insert</vh></v>
 </v>
 </v>
@@ -312,10 +312,10 @@
 <v t="swot.20241019203857.1"><vh>#file src/main/java/com/tjise/mapper/EmpMapper.java</vh>
 <v t="swot.20241019203857.2"><vh>@ignore-node Delete &amp; Insert</vh></v>
 </v>
-<v t="swot.20241019210142.1"><vh>单元测试 selectEmpTest</vh>
-<v t="swot.20241019210142.2"><vh>#file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</vh>
-<v t="swot.20241019210142.3"><vh>@ignore-node delete test</vh></v>
-</v>
+<v t="swot.20250915162444.1"><vh>#file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java</vh>
+<v t="swot.20250915162516.1"><vh>@ignore-node delete test</vh></v>
+<v t="swot.20250915162835.1"><vh>@ignore-node insertEmpTest</vh></v>
+<v t="swot.20250915162847.1"><vh>@ignore-node updateEmpTest</vh></v>
 </v>
 <v t="swot.20241020074923.1"><vh>1) @Select  数据封装 -&gt; 起别名 (了解)</vh>
 <v t="swot.20241020080523.1"><vh>#file src/main/java/com/tjise/mapper/EmpMapper.java</vh>
@@ -3893,9 +3893,11 @@ public interface EmpMapper {
 
     // 省略其他代码显示
     @others
-
+    // 这条语句是写死的测试
     // @Insert("insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time)" +
             //  values ('wanglin', '王林', 1, '1.png', 2, '2003-02-10', 2, now(), now())")
+
+    // 这条语句是接收传入的实体对象
     /* 方法的参数是一个实体类对象，取实体类对象中的属性为: #{成员变量名} */
     @Insert("insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time)" +
             " values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptId}, #{createTime}, #{updateTime})")
@@ -4297,107 +4299,6 @@ public abstract void insertEmp(Emp emp);
 // 注意 #{这儿是类的成员变量名}
 @Update("update emp set username=#{username}, name=#{name}, gender=#{gender}, image=#{image}, job=#{job}, entrydate=#{entrydate}, dept_id=#{deptId}, update_time=#{updateTime} where id=#{id}")
 public abstract void updateEmp(Emp emp);
-</t>
-<t tx="swot.20241019210142.1">@language asciidoc
-</t>
-<t tx="swot.20241019210142.2">@language java
-@doc
-接下来，我们在测试类中测试更改数据库记录。
-
-[source,java,linenums]
-----
-@c
-package com.tjise;
-
-import com.tjise.mapper.EmpMapper;
-import com.tjise.pojo.Emp;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-
-@SpringBootTest
-class MybatisQuickstartCrudApplicationTests {
-
-    @Autowired
-    private EmpMapper empMapper;
-
-    // 省略其他代码显示
-    @others
-
-    @Test
-    public void selectEmpByIdTest() {
-        Emp emp = empMapper.selectEmpById(18);
-        System.out.println(emp);  // 有的字段封装失败
-    }
-
-}
-@doc
-----
-
-.控制台打印查询记录成功
-....
-==&gt;  Preparing: select * from emp where id = ?
-==&gt; Parameters: 18(Integer)
-&lt;==    Columns: id, username, password, name, gender, image, job, entrydate, dept_id, create_time, update_time
-&lt;==        Row: 18, fanghan, 123456, 方寒, 2, 2.png, 2, 2003-02-10, 2, 2024-10-18 15:29:47, 2024-10-19 20:05:23
-&lt;==      Total: 1
-Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4d7aaca2]
-Emp(id=18, username=fanghan, password=123456, name=方寒, gender=2, image=2.png, job=2, entrydate=2003-02-10, deptId=null, createTime=null, updateTime=null)
-....
-
-从打印可以看出，select 语句已经将数据正确取出，但是在实例化 Emp 对象时有三个参数无法赋值，原因为数据库表 emp 字段命名无法与 Emp 类的属性对应，如 dep_id != deptId，create_time != createTime，update_time != updateTime。
-
-有三种解决方式解决封装无法正确赋值问题，分别是「起别名」、「手动结果映射 @Result」、「开启驼峰命名映射」。
-</t>
-<t tx="swot.20241019210142.3">@Test
-void deleteEmpByIdTest() {
-    empMapper.deleteEmpById(17);
-}
-
-@Test
-void deleteFromTableByIdTest() {
-    empMapper.deleteFromTableById("emp");
-}
-
-@Test
-public void insertEmpTest(){
-    // 创建实体类对象
-    Emp emp = new Emp();
-    emp.setUsername("zhouyuan");
-    emp.setName("周元");
-    emp.setGender((short) 2);
-    emp.setImage("2.png");
-    emp.setJob((short) 2);      // 讲师
-    emp.setEntrydate(LocalDate.of(2003,2,10));
-    emp.setDeptId(2);   // 先随便给个数值吧
-    emp.setCreateTime(LocalDateTime.now());
-    emp.setUpdateTime(LocalDateTime.now());
-
-    empMapper.insertEmp(emp);
-    System.out.println("emp.id: " + emp.getId());
-}
-
-
-@Test
-public void updateEmpTest(){
-    // 创建实体类对象
-    Emp emp = new Emp();
-    emp.setId(18);
-    emp.setUsername("fanghan");
-    emp.setName("方寒");
-    emp.setGender((short) 2);
-    emp.setImage("2.png");
-    emp.setJob((short) 2);      // 讲师
-    emp.setEntrydate(LocalDate.of(2003,2,10));
-    emp.setDeptId(2);   // 先随便给个数值吧
-    emp.setUpdateTime(LocalDateTime.now());
-
-    empMapper.updateEmp(emp);
-}
 </t>
 <t tx="swot.20241019212645.1"></t>
 <t tx="swot.20241020074923.1">@language asciidoc
@@ -5862,11 +5763,14 @@ select * from emp WHERE gender = ? order by update_time desc
 public abstract void updateEmp(Emp emp);
 ----
 
+[WARNING]
+====
 存在问题：只要一个字段改变，这个语句会设置所有的字段。比如只更新 username 字段，emp 对象传入的属性除了 username 有值外，其他属性都是 null，则这条语句将数据库中的其他字段都给设置成 null 了。这就出现 bug 了。
+====
 
 我们可以使用 &lt;if&gt; 标签配合 &lt;set&gt; 标签来解决该问题。过程分析如下所示。
 
-NOTE: &lt;set&gt; 标签可以动态地在行首插入 SET 关键字，并会删掉额外的逗号。(用在update语句中)
+NOTE: &lt;set&gt; 标签可以动态地在行首插入 SET 关键字，并会删掉额外的逗号。(用在 update 语句中)
 </t>
 <t tx="swot.20241022130715.1">@language java
 @doc
@@ -7482,6 +7386,94 @@ SELECT * FROM emp WHERE name LIKE '%张%'
 
 上面描述出处: https://mybatis.org/mybatis-3/zh_CN/getting-started.html#%E6%8E%A2%E7%A9%B6%E5%B7%B2%E6%98%A0%E5%B0%84%E7%9A%84-sql-%E8%AF%AD%E5%8F%A5[探究已映射的-sql-语句]
 ****
+</t>
+<t tx="swot.20250915162444.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    // 省略其他代码显示
+    @others
+
+    @Test
+    public void selectEmpByIdTest() {
+        Emp emp = empMapper.selectEmpById(13);
+        System.out.println(emp);  // 有的字段封装失败
+    }
+
+}
+@doc
+----
+
+.控制台打印更新记录成功
+....
+==&gt;  Preparing: update emp set username=?, name=?, gender=?, image=?, job=?, entrydate=?, dept_id=?, update_time=? where id=?
+==&gt; Parameters: fanghan(String), 方寒(String), 2(Short), 2.png(String), 2(Short), 2003-02-10(LocalDate), 2(Integer), 2024-10-19T20:05:23.088(LocalDateTime), 13(Integer)
+&lt;==    Updates: 1
+....
+</t>
+<t tx="swot.20250915162516.1">@Test
+void deleteEmpByIdTest() {
+    empMapper.deleteEmpById(17);
+}
+
+@Test
+void deleteFromTableByIdTest() {
+    empMapper.deleteFromTableById("emp");
+}
+</t>
+<t tx="swot.20250915162835.1">@Test
+public void insertEmpTest(){
+    // 创建实体类对象
+    Emp emp = new Emp();
+    emp.setUsername("zhouyuan");
+    emp.setName("周元");
+    emp.setGender((short) 2);
+    emp.setImage("2.png");
+    emp.setJob((short) 2);      // 讲师
+    emp.setEntrydate(LocalDate.of(2003,2,10));
+    emp.setDeptId(2);   // 先随便给个数值吧
+    emp.setCreateTime(LocalDateTime.now());
+    emp.setUpdateTime(LocalDateTime.now());
+
+    empMapper.insertEmp(emp);
+    System.out.println("emp.id: " + emp.getId());
+}
+</t>
+<t tx="swot.20250915162847.1">@Test
+public void updateEmpTest(){
+    // 创建实体类对象
+    Emp emp = new Emp();
+    emp.setId(13);
+    emp.setUsername("fanghan");
+    emp.setName("方寒");
+    emp.setGender((short) 2);
+    emp.setImage("2.png");
+    emp.setJob((short) 2);      // 讲师
+    emp.setEntrydate(LocalDate.of(2003,2,10));
+    emp.setDeptId(2);   // 先随便给个数值吧
+    emp.setUpdateTime(LocalDateTime.now());
+
+    empMapper.updateEmp(emp);
+}
 </t>
 </tnodes>
 </leo_file>

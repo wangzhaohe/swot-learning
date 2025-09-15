@@ -520,9 +520,11 @@ public interface EmpMapper {
 
     // 省略其他代码显示
     @others
-
+    // 这条语句是写死的测试
     // @Insert("insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time)" +
             //  values ('wanglin', '王林', 1, '1.png', 2, '2003-02-10', 2, now(), now())")
+
+    // 这条语句是接收传入的实体对象
     /* 方法的参数是一个实体类对象，取实体类对象中的属性为: #{成员变量名} */
     @Insert("insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time)" +
             " values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptId}, #{createTime}, #{updateTime})")
@@ -593,7 +595,7 @@ class MybatisQuickstartCrudApplicationTests {
 
 可以使用注解 @Options() 来获取自增主键的值。所以 @Options 会和 @Insert 配合一起使用。
 
-==== #file src/main/java/com/tjise/mapper/EmpMapper.java
+==== file -> src/main/java/com/tjise/mapper/EmpMapper.java
 [source,java,linenums,highlight=17]
 ----
 package com.tjise.mapper;
@@ -626,7 +628,7 @@ public interface EmpMapper {
 <2> @Insert() 方法直接插入死的数据演示
 <3> @Insert() 方法的参数是一个实体类对象，取实体类对象中的属性为: #{成员变量名}
 
-==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+==== file -> src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
 接下来，我们就可以直接在单元测试类中查看自增主键 id 是否生成成功。
 
 [source,java,linenums]
@@ -699,7 +701,7 @@ UPDATE emp SET username = 'shihao', name = '石昊', gender = 1 , image = '1.jpg
 
 下面定义 Mapper 接口的抽象方法。
 
-==== ###file src/main/java/com/tjise/mapper/EmpMapper.java
+==== file -> src/main/java/com/tjise/mapper/EmpMapper.java
 [source,java,linenums]
 ----
 package com.tjise.mapper;
@@ -815,12 +817,7 @@ public interface EmpMapper {
 }
 ----
 
-==== 单元测试 selectEmpTest
-
-
-===== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
-接下来，我们在测试类中测试更改数据库记录。
-
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
 [source,java,linenums]
 ----
 package com.tjise;
@@ -846,27 +843,19 @@ class MybatisQuickstartCrudApplicationTests {
 
     @Test
     public void selectEmpByIdTest() {
-        Emp emp = empMapper.selectEmpById(18);
+        Emp emp = empMapper.selectEmpById(13);
         System.out.println(emp);  // 有的字段封装失败
     }
 
 }
 ----
 
-.控制台打印查询记录成功
+.控制台打印更新记录成功
 ....
-==>  Preparing: select * from emp where id = ?
-==> Parameters: 18(Integer)
-<==    Columns: id, username, password, name, gender, image, job, entrydate, dept_id, create_time, update_time
-<==        Row: 18, fanghan, 123456, 方寒, 2, 2.png, 2, 2003-02-10, 2, 2024-10-18 15:29:47, 2024-10-19 20:05:23
-<==      Total: 1
-Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4d7aaca2]
-Emp(id=18, username=fanghan, password=123456, name=方寒, gender=2, image=2.png, job=2, entrydate=2003-02-10, deptId=null, createTime=null, updateTime=null)
+==>  Preparing: update emp set username=?, name=?, gender=?, image=?, job=?, entrydate=?, dept_id=?, update_time=? where id=?
+==> Parameters: fanghan(String), 方寒(String), 2(Short), 2.png(String), 2(Short), 2003-02-10(LocalDate), 2(Integer), 2024-10-19T20:05:23.088(LocalDateTime), 13(Integer)
+<==    Updates: 1
 ....
-
-从打印可以看出，select 语句已经将数据正确取出，但是在实例化 Emp 对象时有三个参数无法赋值，原因为数据库表 emp 字段命名无法与 Emp 类的属性对应，如 dep_id != deptId，create_time != createTime，update_time != updateTime。
-
-有三种解决方式解决封装无法正确赋值问题，分别是「起别名」、「手动结果映射 @Result」、「开启驼峰命名映射」。
 
 ==== 1) @Select  数据封装 -> 起别名 (了解)
 在 SQL 语句中，对不一样的列名起别名，别名和实体类属性名一样。
