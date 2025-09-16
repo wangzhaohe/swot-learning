@@ -9786,6 +9786,13 @@ image::img/docker_container_mysql.png[]
 
 在宿主机测试连接到 redis 服务器::
 mysql -h127.0.0.1 -P3307 -uroot -p
+
+[TIP]
+====
+MySQL 本身永远只监听容器内的 3306 端口，
+“连 3307” 其实是指连宿主机上映射出来的 3307 端口，
+宿主机再把流量转发到容器的 3306。
+====
 </t>
 </tnodes>
 </leo_file>
