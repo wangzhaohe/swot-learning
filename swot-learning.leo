@@ -24,6 +24,7 @@
 <v t="swot.20250906075427.1"><vh>Install Docker</vh></v>
 <v t="swot.20250906084634.1"><vh>Pull &amp; Run Redis</vh></v>
 <v t="swot.20250906093952.1"><vh>Commit &amp; Save &amp; Load &amp; Run 把 redis 容器做成离线镜像包发给学生</vh></v>
+<v t="swot.20250916164207.1"><vh>Pull &amp; Run MySQL</vh></v>
 </v>
 </v>
 </v>
@@ -9232,6 +9233,7 @@ NOTE: save 落盘只是为了给学生发送已经有数据的容器打包。
 
 在宿主机测试连接到 redis 服务器::
 redis-cli
+
 </t>
 <t tx="swot.20250906093952.1">@language asciidoc
 1. 把正在跑的容器打成镜像
@@ -9768,6 +9770,22 @@ OK
 * `(nil)` 就是“没查到，空的”。
 ====
 
+</t>
+<t tx="swot.20250916164207.1">@language asciidoc
+.docker pull MySQL
+image::img/docker_pull_mysql.png[]
+
+.docker_run_MySQL
+image::img/docker_run_mysql.png[]
+
+.docker_run_MySQL_port
+image::img/docker_run_mysql_port.png[,600]
+
+.docker_container_mysql
+image::img/docker_container_mysql.png[]
+
+在宿主机测试连接到 redis 服务器::
+mysql -h127.0.0.1 -P3307 -uroot -p
 </t>
 </tnodes>
 </leo_file>
