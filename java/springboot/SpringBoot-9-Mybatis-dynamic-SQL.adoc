@@ -1,0 +1,1157 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+
+= Mybatis 动态 SQL
+
+++++
+<button id="toggleButton">目录</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== 引入 XML 映射语句的必要性
+如前面的多条件查询 sql 语句为：
+
+```sql
+SELECT * FROM emp WHERE name LIKE '%张%' 
+         AND gender = 1 
+         AND entrydate BETWEEN '2000-01-01' AND '2020-01-01' 
+         ORDER BY update_time DESC;
+```
+
+* 姓名：要求支持模糊匹配
+* 性别：要求精确匹配
+* 入职时间：要求进行范围查询
+* 并且要求根据最后修改时间 update_time 字段进行倒序排序
+
+上面的 SQL 语句是一次性写死的，但是在实际的项目中 SQL 语句会随着用户的输入或外部条件的变化而变化，并不是所有的条件都会被同时输入，所以就需要使用 *动态 SQL*。
+
+.XML 映射语句的必要性
+****
+之前使用注解来映射简单语句会使代码显得更加简洁，但对于稍微复杂一点的语句，Java 注解不仅力不从心，还会让本就复杂的 SQL 语句更加混乱不堪。 因此，如果你需要做一些很复杂的操作，最好用 XML 来映射语句。
+
+上面描述出处: https://mybatis.org/mybatis-3/zh_CN/getting-started.html#%E6%8E%A2%E7%A9%B6%E5%B7%B2%E6%98%A0%E5%B0%84%E7%9A%84-sql-%E8%AF%AD%E5%8F%A5[探究已映射的-sql-语句]
+****
+
+== @path spring-boot-ketang/mybatis_quickstart-crud
+
+
+=== SQL 映射配置文件 XML 规范
+SQL 映射配置文件的需要符合一定规范的:
+
+1. XML 映射文件的名称与 Mapper 接口名称一致（如 EmpMapper.java 和 EmpMapper.xml），并且将 XML 映射文件和 Mapper 接口放置在相同包下(同包同名)，但是 XML 映射文件要放在 resources 目录下。
+* xml 文件内容模板在官网有 https://mybatis.org/mybatis-3/zh_CN/getting-started.html#%E6%8E%A2%E7%A9%B6%E5%B7%B2%E6%98%A0%E5%B0%84%E7%9A%84-sql-%E8%AF%AD%E5%8F%A5[探究已映射的-sql-语句]
+* 此例 xml 文件名为: src/main/resources/com/tjise/mapper/EmpMapper.xml
+* XML 文件的 文档类型定义（Document Type Definition，DTD）声明部分
+
++
+.src/main/resources/com/tjise/mapper/EmpMapper.xml
+[source,xml,linenum]
+----
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+----
+
+2. XML映射文件的 namespace 属性与 Mapper 接口全限定名一致。
++
+.src/main/resources/com/tjise/mapper/EmpMapper.xml
+[source,java,linenums,highlight=5]
+----
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tjise.mapper.EmpMapper">
+</mapper>
+----
+
+3. XML映射文件中 sql 语句的 id 与 Mapper 接口中的方法名一致，并保持参数类型和返回值类型一致。
++
+.src/main/resources/com/tjise/mapper/EmpMapper.xml
+[source,xml,linenums,highlight=15..20]
+....
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+  <!-- 
+    属性 id 必须与接口中的某个方法绑定, 如方法 listEmp
+    属性 resultType 的值是方法的返回值类型，具体参下面注意事项：
+        1. 如果方法返回值类型属于 List 集合, 则 resultType 的值是此集合的泛型全限定名, 如下所示。集合的泛型这里指集合中存储的元素的类型。
+        2. 返回单条记录也是这样写 com.tjise.pojo.Emp
+        3. insert / update / delete 不用写 resultType 属性，因为没有返回值。
+  -->
+
+  <select id="listEmp" resultType="com.tjise.pojo.Emp">
+    select * from emp where name like concat('%', #{name}, '%')
+             and gender = #{gender}
+             and entrydate between #{begin} and #{end}
+             order by update_time desc
+  </select>
+</mapper>
+....
+
+下面是完整的文件示例，运行看下效果和之前是一样的。
+
+==== #file src/main/resources/com/tjise/mapper/EmpMapper.xml
+.<?xml version="1.0" encoding="UTF-8" ?>
+```xml
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+  <select id="listEmpXml" resultType="com.tjise.pojo.Emp">
+    select * from emp where name like concat('%', #{name}, '%')
+                                 and gender = #{gender}
+                                 and entrydate between #{begin} and #{end}
+                                 order by update_time desc
+  </select>
+
+</mapper>
+```
+
+==== #file src/main/java/com/tjise/mapper/EmpMapper.java
+[source,java,linenums]
+----
+package com.tjise.mapper;
+
+import com.tjise.pojo.Emp;
+import org.apache.ibatis.annotations.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Mapper
+public interface EmpMapper {
+
+    // 省略其他代码显示
+    @others
+
+    public List<Emp> listEmpXml(
+        String name,
+        Short gender,
+        LocalDate begin,
+        LocalDate end
+    );
+}
+----
+
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    // 省略其他代码显示
+    @others
+
+    @Test
+    public void listEmpXmlTest() {
+        List<Emp> listEmpXml = empMapper.listEmpXml(
+            "张",
+            (short) 1,
+            LocalDate.of(2000, 1, 1),
+            LocalDate.of(2020, 1, 1)
+        );
+        for(Emp emp : listEmpXml){
+            System.out.println(emp);
+        }
+    }
+
+}
+----
+.运行该测试代码，在控制台打印查询记录成功
+....
+==>  Preparing: select * from emp where name like concat('%', ?, '%') and gender = ? and entrydate between ? and ? order by update_time desc
+==> Parameters: 张(String), 1(Short), 2000-01-01(LocalDate), 2020-01-01(LocalDate)
+<==    Columns: id, username, password, name, gender, image, job, entrydate, dept_id, create_time, update_time
+<==        Row: 2, zhangwuji, 123456, 张无忌, 1, 2.jpg, 2, 2015-01-01, 2, 2024-10-15 16:48:57, 2024-10-15 16:48:57
+<==        Row: 14, zhangsanfeng, 123456, 张三丰, 1, 14.jpg, 2, 2002-08-01, 2, 2024-10-15 16:48:57, 2024-10-15 16:48:57
+<==      Total: 2
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@573284a5]
+Emp(id=2, username=zhangwuji, password=123456, name=张无忌, gender=1, image=2.jpg, job=2, entrydate=2015-01-01, deptId=2, createTime=2024-10-15T16:48:57, updateTime=2024-10-15T16:48:57)
+Emp(id=14, username=zhangsanfeng, password=123456, name=张三丰, gender=1, image=14.jpg, job=2, entrydate=2002-08-01, deptId=2, createTime=2024-10-15T16:48:57, updateTime=2024-10-15T16:48:57)
+....
+
+=== xml 标签 <if>
+if 标签用于判断条件是否成立，使用 test 属性进行条件判断，如果条件为 true，则拼接 SQL。
+
+==== #file src/main/resources/com/tjise/mapper/EmpMapper.xml
+.<?xml version="1.0" encoding="UTF-8" ?>
+```xml
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+    <!-- 省略其他代码显示 -->
+    @others
+
+    <!-- if 标签 -->
+    <!-- 因为 select 有返回值，所以需要写 resultType -->
+    <select id="listEmpXmlIf" resultType="com.tjise.pojo.Emp">
+        select * from emp where
+
+        <if test="name != null">
+            name like concat('%', #{name}, '%')
+        </if>
+
+        <if test="gender != null">
+            and gender = #{gender}
+        </if>
+
+        <if test="begin != null and end != null">
+            and entrydate between #{begin} and #{end}
+        </if>
+
+        order by update_time desc
+    </select>
+
+</mapper>
+```
+
+==== #file src/main/java/com/tjise/mapper/EmpMapper.java
+[source,java,linenums]
+----
+package com.tjise.mapper;
+
+import com.tjise.pojo.Emp;
+import org.apache.ibatis.annotations.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Mapper
+public interface EmpMapper {
+
+    // 省略其他代码显示
+    @others
+
+    public List<Emp> listEmpXmlIf(
+        String name,
+        Short gender,
+        LocalDate begin,
+        LocalDate end
+    );
+}
+----
+
+==== 根据测试类传入的参数不同，分几种情况分析
+
+
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+全部参数都给正常值的情况。
+
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void listEmpXmlIfTest() {  // <1>
+        List<Emp> listEmpXmlIf = empMapper.listEmpXmlIf(
+            "张",
+            (short) 1,
+            LocalDate.of(2000, 1, 1),
+            LocalDate.of(2020, 1, 1)
+        );
+        for(Emp emp : listEmpXmlIf){
+            System.out.println(emp);
+        }
+    }
+
+}
+----
+<1> 测试通过，4 个参数都给了，所以 sql 语句正确为
+
+    `select * from emp where name like concat('%', ?, '%') and gender = ? and entrydate between ? and ? order by update_time desc`
++
+....
+==>  Preparing: select * from emp where name like concat('%', ?, '%') and gender = ? and entrydate between ? and ? order by update_time desc
+==> Parameters: 张(String), 1(Short), 2000-01-01(LocalDate), 2020-01-01(LocalDate)
+<==    Columns: id, username, password, name, gender, image, job, entrydate, dept_id, create_time, update_time
+<==        Row: 2, zhangwuji, 123456, 张无忌, 1, 2.jpg, 2, 2015-01-01, 2, 2024-10-15 16:48:57, 2024-10-15 16:48:57
+<==        Row: 14, zhangsanfeng, 123456, 张三丰, 1, 14.jpg, 2, 2002-08-01, 2, 2024-10-15 16:48:57, 2024-10-15 16:48:57
+<==      Total: 2
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@87b5b49]
+Emp(id=2, username=zhangwuji, password=123456, name=张无忌, gender=1, image=2.jpg, job=2, entrydate=2015-01-01, deptId=2, createTime=2024-10-15T16:48:57, updateTime=2024-10-15T16:48:57)
+Emp(id=14, username=zhangsanfeng, password=123456, name=张三丰, gender=1, image=14.jpg, job=2, entrydate=2002-08-01, deptId=2, createTime=2024-10-15T16:48:57, updateTime=2024-10-15T16:48:57)
+....
+
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+时间范围参数都给 null 的情况。
+
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void listEmpXmlIfTest() {
+        List<Emp> listEmpXmlIf = empMapper.listEmpXmlIf(
+            "张",
+            (short) 1,
+            null,   // 不给值看下生成的 sql，应该不包含此字段
+            null
+        );
+        for(Emp emp : listEmpXmlIf){
+            System.out.println(emp);
+        }
+    }
+}
+----
+
+测试通过，从下面控制台打印的结果可以看出 sql 语句有变化了（因为数据库的记录只有2个人姓张，所以取出来的还是那两条记录）。这个 sql 语句是正确的。
+
+    `select * from emp where name like concat('%', ?, '%') and gender = ? order by update_time desc`
++
+.控制台打印查询记录成功
+....
+==>  Preparing: select * from emp where name like concat('%', ?, '%') and gender = ? order by update_time desc
+==> Parameters: 张(String), 1(Short)
+<==    Columns: id, username, password, name, gender, image, job, entrydate, dept_id, create_time, update_time
+<==        Row: 2, zhangwuji, 123456, 张无忌, 1, 2.jpg, 2, 2015-01-01, 2, 2024-10-15 16:48:57, 2024-10-15 16:48:57
+<==        Row: 14, zhangsanfeng, 123456, 张三丰, 1, 14.jpg, 2, 2002-08-01, 2, 2024-10-15 16:48:57, 2024-10-15 16:48:57
+<==      Total: 2
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@87b5b49]
+Emp(id=2, username=zhangwuji, password=123456, name=张无忌, gender=1, image=2.jpg, job=2, entrydate=2015-01-01, deptId=2, createTime=2024-10-15T16:48:57, updateTime=2024-10-15T16:48:57)
+Emp(id=14, username=zhangsanfeng, password=123456, name=张三丰, gender=1, image=14.jpg, job=2, entrydate=2002-08-01, deptId=2, createTime=2024-10-15T16:48:57, updateTime=2024-10-15T16:48:57)
+....
+
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+全部参数都给 null 的情况。
+
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void listEmpXmlIfTest() {
+        List<Emp> listEmpXmlIf = empMapper.listEmpXmlIf(
+            null,
+            null,
+            null,
+            null
+        );
+        for(Emp emp : listEmpXmlIf){
+            System.out.println(emp);
+        }
+    }
+}
+----
+
+测试报错，从控制台打印结果可以看出所有参数都给 null，sql 语句多了一个 where 关键字，语法不对导致报错。
+
+....
+==>  Preparing: select * from emp where       order by update_time desc
+==> Parameters: 
+org.springframework.jdbc.BadSqlGrammarException
+....
+
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+只有性别的情况。
+
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void listEmpXmlIfTest() {
+        List<Emp> listEmpXmlIf = empMapper.listEmpXmlIf(
+            null,
+            (short) 1,
+            null,
+            null
+        );
+        for(Emp emp : listEmpXmlIf){
+            System.out.println(emp);
+        }
+    }
+}
+----
+
+测试报错，从控制台打印结果可以看出 sql 语句 where 后面多了 and 关键字，语法不对导致报错。
+
+....
+==>  Preparing: select * from emp where and gender = ? order by update_time desc
+==> Parameters: 1(Short)
+org.springframework.jdbc.BadSqlGrammarException: 
+....
+
+==== 使用 <where> 标签解决 where 和 and 多或少的问题
+where 元素只会在子元素有内容的情况下才插入 where 子句。而且会自动去除子句的开头的 AND 或 OR。
+
+==== #file src/main/resources/com/tjise/mapper/EmpMapper.xml
+使用 <where></where> 标签后，再测试上面的几种情况，发现都正常了。
+
+.<?xml version="1.0" encoding="UTF-8" ?>
+```xml
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+    <!-- 省略其他代码显示 -->
+    @others
+
+    <!-- if 标签 -->
+    <select id="listEmpXmlIf" resultType="com.tjise.pojo.Emp">
+        select * from emp
+        <where>
+            <if test="name != null">
+                name like concat('%', #{name}, '%')
+            </if>
+
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+
+            <if test="begin != null and end != null">
+                and entrydate between #{begin} and #{end}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
+</mapper>
+```
+
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+全部参数都给正常值的情况。
+
+.测试通过，4 个参数都给了，sql 语句正确。
+....
+select * from emp WHERE name like concat('%', ?, '%') and gender = ? and entrydate between ? and ? order by update_time desc
+....
+
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void listEmpXmlIfTest() {
+        List<Emp> listEmpXmlIf = empMapper.listEmpXmlIf(
+            "张",
+            (short) 1,
+            LocalDate.of(2000, 1, 1),
+            LocalDate.of(2020, 1, 1)
+        );
+        for(Emp emp : listEmpXmlIf){
+            System.out.println(emp);
+        }
+    }
+
+}
+----
+
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+时间范围参数都给 null 的情况。
+
+.测试通过，控制台打印生成的 sql 语句正确。
+....
+select * from emp WHERE name like concat('%', ?, '%') and gender = ? order by update_time desc
+....
+9
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void listEmpXmlIfTest() {
+        List<Emp> listEmpXmlIf = empMapper.listEmpXmlIf(
+            "张",
+            (short) 1,
+            null,   // 不给值看下生成的 sql
+            null
+        );
+        for(Emp emp : listEmpXmlIf){
+            System.out.println(emp);
+        }
+    }
+}
+----
+
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+全部参数都给 null 的情况。
+
+.测试通过，控制台打印生成的 sql 语句正确。
+....
+select * from emp order by update_time desc
+....
+
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void listEmpXmlIfTest() {
+        List<Emp> listEmpXmlIf = empMapper.listEmpXmlIf(
+            null,
+            null,
+            null,
+            null
+        );
+        for(Emp emp : listEmpXmlIf){
+            System.out.println(emp);
+        }
+    }
+}
+----
+
+==== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+只有性别的情况。
+
+.测试通过，控制台打印生成的 sql 语句正确。
+....
+select * from emp WHERE gender = ? order by update_time desc
+....
+
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void listEmpXmlIfTest() {
+        List<Emp> listEmpXmlIf = empMapper.listEmpXmlIf(
+            null,
+            (short) 1,
+            null,
+            null
+        );
+        for(Emp emp : listEmpXmlIf){
+            System.out.println(emp);
+        }
+    }
+}
+----
+
+=== xml 标签 <set>
+完善更新员工功能，修改为动态更新员工数据信息。
+
+* 如果字段有值，则更新
+* 如果字段无值，则不更新
+
+解决方案：动态 SQL
+
+先来看下面之前的解决方案，如 EmpMapper.java 中的 @update 语句。
+
+[source,java]
+----
+@Update("update emp set username=#{username}, name=#{name}, gender=#{gender}, image=#{image}, job=#{job}, entrydate=#{entrydate}, dept_id=#{deptId}, update_time=#{updateTime} where id=#{id}")
+public abstract void updateEmp(Emp emp);
+----
+
+[WARNING]
+====
+存在问题：只要一个字段改变，这个语句会设置所有的字段。比如只更新 username 字段，emp 对象传入的属性除了 username 有值外，其他属性都是 null，则这条语句将数据库中的其他字段都给设置成 null 了。这就出现 bug 了。
+====
+
+我们可以使用 <if> 标签配合 <set> 标签来解决该问题。过程分析如下所示。
+
+NOTE: <set> 标签可以动态地在行首插入 SET 关键字，并会删掉额外的逗号。(用在 update 语句中)
+
+==== EmpMapper.java: 之前有 bug 的 sql
+
+
+===== file -> src/main/java/com/tjise/mapper/EmpMapper.java
+[source,java,linenums]
+----
+package com.tjise.mapper;
+
+import com.tjise.pojo.Emp;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
+
+@Mapper
+public interface EmpMapper {
+
+    // 省略其他代码显示
+    @others
+
+    // 注意 #{这儿是类的成员变量名}
+    @Update("update emp set username=#{username}, name=#{name}, gender=#{gender}, image=#{image}, job=#{job}, entrydate=#{entrydate}, dept_id=#{deptId}, update_time=#{updateTime} where id=#{id}")
+    public abstract void updateEmp(Emp emp);
+}
+----
+
+==== EmpMapper.java: 使用 xml 后删除 sql
+
+
+===== #file src/main/java/com/tjise/mapper/EmpMapper.java
+.使用 xml 后的 EmpMapper
+[source,java,linenums]
+----
+package com.tjise.mapper;
+
+import com.tjise.pojo.Emp;
+import org.apache.ibatis.annotations.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Mapper
+public interface EmpMapper {
+
+    // 省略其他代码显示
+    @others
+    // @Update("update emp set username=#{username}, name=#{name}, gender=#{gender}, image=#{image}, job=#{job}, entrydate=#{entrydate}, dept_id=#{deptId}, update_time=#{updateTime} where id=#{id}")
+    public abstract void updateEmpXml(Emp emp);
+}
+----
+
+==== EmpMapper.xml: 增加 <if> 标签后的 xml
+
+
+===== #file src/main/resources/com/tjise/mapper/EmpMapper.xml
+增加 <if> 标签后
+
+.<?xml version="1.0" encoding="UTF-8" ?>
+```xml
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+    <!-- 省略其他代码显示 -->
+    @others
+
+    <update id="updateEmpXml">
+        update emp set
+            <if test="username   != null"> username    = #{username},   </if>
+            <if test="name       != null"> name        = #{name},       </if>
+            <if test="gender     != null"> gender      = #{gender},     </if>
+            <if test="image      != null"> image       = #{image},      </if>
+            <if test="job        != null"> job         = #{job},        </if>
+            <if test="entrydate  != null"> entrydate   = #{entrydate},  </if>
+            <if test="deptId     != null"> dept_id     = #{deptId},     </if>
+            <if test="updateTime != null"> update_time = #{updateTime}  </if>
+        where id = #{id}
+    </update>
+
+</mapper>
+```
+
+==== 测试所有字段正常
+
+
+===== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+所有参数给全的情况，是正常。
+
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void updateEmpXmlTest() {
+        // 创建实体类对象
+        Emp emp = new Emp();
+        emp.setId(18);
+        emp.setUsername("shihao");
+        emp.setName("石昊");
+        emp.setGender((short) 2);
+        emp.setImage("2.png");
+        emp.setJob((short) 2);      // 讲师
+        emp.setEntrydate(LocalDate.of(2003,2,10));
+        emp.setDeptId(2);   // 先随便给个数值吧
+        emp.setUpdateTime(LocalDateTime.now());
+        // 调用方法更新数据
+        empMapper.updateEmpXml(emp);
+    }
+}
+----
+
+.测试通过，控制台打印生成的 sql 语句正确。
+....
+==>  Preparing: update emp SET username = ?, name = ?, gender = ?, image = ?, job = ?, entrydate = ?, dept_id = ?, update_time = ? where id = ?
+==> Parameters: shihao(String), 石昊(String), 2(Short), 2.png(String), 2(Short), 2003-02-10(LocalDate), 2(Integer), 2024-10-22T16:18:16.480(LocalDateTime), 18(Integer)
+<==    Updates: 1
+....
+
+==== 测试部分字段错误
+
+
+===== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+只给了两个字段的值，报错了。
+
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void updateEmpXmlTest() {
+        // 创建实体类对象
+        Emp emp = new Emp();
+        emp.setId(18);
+        emp.setUsername("wanglin");
+        emp.setName("王林");
+        // 调用方法更新数据
+        empMapper.updateEmpXml(emp);
+    }
+}
+----
+
+.测试通过，控制台打印生成的 sql 语句错误，多逗号了 `name = ?,`。
+....
+==>  Preparing: update emp set username = ?, name = ?, where id = ?
+==> Parameters: wanglin(String), 王林(String), 18(Integer)
+....
+
+==== EmpMapper.xml: 使用 <set> 标签解决
+
+
+===== #file src/main/resources/com/tjise/mapper/EmpMapper.xml
+增加 <set> 标签后
+
+.<?xml version="1.0" encoding="UTF-8" ?>
+```xml
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+    <!-- 省略其他代码显示 -->
+    @others
+
+    <update id="updateEmpXml">
+        update emp
+        <set>
+            <if test="username   != null"> username    = #{username},   </if>
+            <if test="name       != null"> name        = #{name},       </if>
+            <if test="gender     != null"> gender      = #{gender},     </if>
+            <if test="image      != null"> image       = #{image},      </if>
+            <if test="job        != null"> job         = #{job},        </if>
+            <if test="entrydate  != null"> entrydate   = #{entrydate},  </if>
+            <if test="deptId     != null"> dept_id     = #{deptId},     </if>
+            <if test="updateTime != null"> update_time = #{updateTime}, </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
+```
+
+==== 测试部分字段正确
+
+
+===== #file src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+只给了两个字段的值。
+
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void updateEmpXmlTest() {
+        // 创建实体类对象
+        Emp emp = new Emp();
+        emp.setId(18);
+        emp.setUsername("wanglin");
+        emp.setName("王林");
+        empMapper.updateEmpXml(emp);
+    }
+}
+----
+
+.测试通过，控制台打印生成的 sql 语句正确`。
+....
+==>  Preparing: update emp SET username = ?, name = ? where id = ?
+==> Parameters: wanglin(String), 王林(String), 18(Integer)
+<==    Updates: 1
+....
+
+=== xml 标签 <foreach>
+先看一次删除多条记录，sql 语句为
+
+```sql
+DELETE FROM emp WHERE id IN (1,2,3);
+```
+
+TIP: 实际上删除一条或者多条记录都可以使用该语句。
+
+要想能够灵活地删除多条记录，可以使用动态 SQL，如下面代码所示。
+
+==== file -> src/main/java/com/tjise/mapper/EmpMapper.java
+.使用 xml 后的 EmpMapper
+[source,java,linenums]
+----
+package com.tjise.mapper;
+
+import com.tjise.pojo.Emp;
+import org.apache.ibatis.annotations.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Mapper
+public interface EmpMapper {
+
+    // 省略其他代码显示
+    @others
+
+    public abstract void deleteEmpByIdsXml(List<Integer> ids);
+}
+----
+
+==== file -> src/main/resources/com/tjise/mapper/EmpMapper.xml
+增加 <foreach> 标签后
+
+foreach 属性介绍
+
+* collection: 集合名称，传入 mapper 对应方法的参数
+* item:       集合遍历出来的元素/项，自己起名字
+* separator:  每一次遍历使用的分隔符
+* open:       遍历开始前拼接的片段
+* close:      遍历结束后拼接的片段
+
+.<?xml version="1.0" encoding="UTF-8" ?>
+```xml
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+    <!-- 省略其他代码显示 -->
+    @others
+
+    <!-- 参考 sql -->
+    <!-- DELETE FROM emp WHERE id IN (1,2,3); -->
+    <!-- 需求: 需要使用 foreach 标签将集合 List ids 中的 id 拼接成 (1, 2, 3) -->
+
+    <delete id="deleteEmpByIdsXml">
+        DELETE FROM emp WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
+```
+
+==== file -> src/test/java/com/tjise/MybatisQuickstartCrudApplicationTests.java
+[source,java,linenums]
+----
+package com.tjise;
+
+import com.tjise.mapper.EmpMapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+
+@SpringBootTest
+class MybatisQuickstartCrudApplicationTests {
+
+    @Autowired
+    private EmpMapper empMapper;
+
+    @Test
+    public void deleteEmpByIdsXmlTest() {
+        List<Integer> list = new ArrayList<>();
+        Collections.addAll(list, 10, 11, 12);
+        empMapper.deleteEmpByIdsXml(list);
+    }
+}
+----
+
+.测试通过，控制台打印生成的 sql 语句正确`。
+....
+==>  Preparing: DELETE FROM emp WHERE id IN ( ? , ? , ? )
+==> Parameters: 18(Integer), 19(Integer), 22(Integer)
+<==    Updates: 3
+....
+
+=== xml 标签 <sql><include>
+在 xml 映射文件中配置的 SQL，有时可能会存在很多重复的片段，此时就会存在很多冗余的代码。所以可以：
+
+1. 使用 <sql> 定义共用代码
++
+[source,xml]
+----
+<sql id="deleteIds">
+    DELETE FROM emp WHERE id IN
+</sql>
+----
+
+2. 使用 <include> 引用共用代码的
++
+[source,sql]
+----
+<include refid="deleteIds" />
+----
+
+==== #file src/main/resources/com/tjise/mapper/EmpMapper.xml
+测试一下 <sql> 和 <include> 标签的配合使用。这里只是为了测试该语法，我们的例子里并没有重复的抽取内容。请知晓！
+
+.<?xml version="1.0" encoding="UTF-8" ?>
+```xml
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+    <!-- 省略其他代码显示 -->
+    @others
+
+    <sql id="deleteIds">
+        DELETE FROM emp WHERE id IN
+    </sql>
+
+    <delete id="deleteEmpByIdsXml">
+
+        <!-- DELETE FROM emp WHERE id IN -->
+        <include refid="deleteIds" />
+
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
+```
+
+执行上面的测试，依然是成功的。
+
+....
+==>  Preparing: DELETE FROM emp WHERE id IN ( ? , ? , ? )
+==> Parameters: 18(Integer), 19(Integer), 22(Integer)
+<==    Updates: 0
+....
+
