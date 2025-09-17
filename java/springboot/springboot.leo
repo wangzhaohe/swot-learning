@@ -139,7 +139,7 @@
 <v t="swot.20241018084615.1"><vh>#file src/main/java/com/tjise/controller/UserController.java</vh></v>
 </v>
 <v t="swot.20241018082408.5"><vh>三层架构拆分代码</vh>
-<v t="swot.20241018082408.6"><vh>1) dao 层数据访问</vh>
+<v t="swot.20241018082408.6"><vh>1) dao 层数据访问（使用 mybatis 后常用 mapper 代替 dao）</vh>
 <v t="swot.20241018082408.7"><vh>#file src/main/java/com/tjise/dao/UserDaoA.java</vh></v>
 </v>
 <v t="swot.20241018082408.8"><vh>2) service 层逻辑处理</vh>
@@ -230,14 +230,14 @@
 </v>
 </v>
 <v t="swot.20241013133847.12"><vh>JDBC 介绍(了解)</vh></v>
-<v t="swot.20241013133847.13"><vh>数据库连接池 Druid</vh></v>
+<v t="swot.20241013133847.13"><vh>数据库连接池 Ali Druid</vh></v>
 <v t="swot.20241013133847.14"><vh>lombok 注解简化 pojo 类代码</vh>
 <v t="swot.20241015110533.1"><vh>#file spring-boot-ketang/mybatis-quickstart/src/main/java/com/tjise/pojo/User.java</vh></v>
 </v>
 </v>
 </v>
 <v t="swot.20241015114619.1"><vh>@adoc SpringBoot-8-Mybatis-crud-运行测试类.adoc</vh>
-<v t="swot.20241015114654.1"><vh>1. Mybatis 基础增删改查 -&gt; 删除</vh>
+<v t="swot.20241015114654.1"><vh>1. Mybatis 基础增删改查 -&gt; 删除 DELETE</vh>
 <v t="swot.20241016171631.1"><vh>@path spring-boot-ketang/mybatis_quickstart-crud</vh>
 <v t="swot.20241015113043.1"><vh>案例准备工作</vh></v>
 <v t="swot.20241011155227.9"></v>
@@ -270,7 +270,7 @@
 </v>
 </v>
 </v>
-<v t="swot.20241017235753.1"><vh>2. Mybatis 基础增删改查 -&gt; 新增</vh>
+<v t="swot.20241017235753.1"><vh>2. Mybatis 基础增删改查 -&gt; 新增 CREATE</vh>
 <v t="swot.20241018000113.1"><vh>@path spring-boot-ketang/mybatis_quickstart-crud</vh>
 <v t="swot.20241018111146.1"><vh>Mapper(Dao层) Insert 记录</vh>
 <v t="swot.20241018163833.1"><vh>#file src/main/java/com/tjise/mapper/EmpMapper.java</vh>
@@ -292,7 +292,7 @@
 </v>
 </v>
 </v>
-<v t="swot.20241019134748.1"><vh>3. Mybatis 基础增删改查 -&gt; 更新</vh>
+<v t="swot.20241019134748.1"><vh>3. Mybatis 基础增删改查 -&gt; 更新 UPDATE</vh>
 <v t="swot.20241019134827.1"><vh>@path spring-boot-ketang/mybatis_quickstart-crud</vh>
 <v t="swot.20241019140657.1"><vh>Mapper(Dao层) Update 记录</vh>
 <v t="swot.20241019141143.1"><vh>file -&gt; src/main/java/com/tjise/mapper/EmpMapper.java</vh>
@@ -306,7 +306,7 @@
 </v>
 </v>
 </v>
-<v t="swot.20241019201320.1"><vh>4. Mybatis 基础增删改查 -&gt; 查询</vh>
+<v t="swot.20241019201320.1"><vh>4. Mybatis 基础增删改查 -&gt; 查询 READ</vh>
 <v t="swot.20241019212645.1"><vh>@path spring-boot-ketang/mybatis_quickstart-crud</vh>
 <v t="swot.20241019201654.1"><vh>Mapper(Dao层)  Select 单条件查询</vh>
 <v t="swot.20241019203857.1"><vh>#file src/main/java/com/tjise/mapper/EmpMapper.java</vh>
