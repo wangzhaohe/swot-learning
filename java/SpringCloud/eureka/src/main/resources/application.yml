@@ -1,0 +1,19 @@
+#@+leo-ver=5-thin
+#@+node:swot.20250916160550.1: * @file eureka/src/main/resources/application.yml
+#@@language python
+server:
+  port: 8761  # 1. Eureka Server端口设置为8761（默认端口）
+
+eureka:
+  instance:
+    hostname: localhost  # 2. 设置主机名为localhost
+  client:
+    register-with-eureka: false  # 3. Eureka Server不向自己注册
+    fetch-registry: false        # 4. 不需要获取服务注册信息
+    service-url:
+      # 5. 设置Eureka Server的访问地址
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      
+  server:
+    enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭）
+#@-leo

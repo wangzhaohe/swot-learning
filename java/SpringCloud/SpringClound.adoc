@@ -679,17 +679,7 @@ public RestTemplate restTemplate() {
 ==== file -> service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
 
 
-===== class ItemService
-/**
- * 商品服务类
- * 通过 REST 方式调用商品微服务获取商品信息
- */
-@Service
-public class ItemService {
-    @others
-}
-
-====== 方式二 单个构造函数注入 -- 增加了查看是否成功使用了 OkHttp 打印
+===== 方式二 单个构造函数注入 -- 增加了查看是否成功使用了 OkHttp 打印
 [source,java]
 ----
 private final RestTemplate restTemplate;
@@ -790,7 +780,7 @@ public class ItemService {
 @Bean
 public WebClient webClient() {
     return WebClient.builder()
-        .baseUrl("http://127.0.0.1:8081")
+        .baseUrl("http://127.0.0.1:8081/item")
         .build();
 }
 ----
@@ -825,7 +815,7 @@ public class ItemService {
 
     public Item queryItemById(Long id) {
         return webClient.get()
-            .uri("/item/{id}", id)
+            .uri("/{id}", id)
             .retrieve()
             .bodyToMono(Item.class)
             .block(); // 同步调用，如需要异步可去掉block()
@@ -835,4 +825,221 @@ public class ItemService {
 
 === RestClient   -- Spring 6.1 才支持（目前的 Spring Boot 2.7.18 使用的是 Spring 5.3.x）
 RestClient 的主要价值在于它提供了一个现代化但又不失简单的 API，结合了 RestTemplate 的易用性和 WebClient 的功能强大，是未来 Spring 应用HTTP客户端调用的推荐选择。
+
+== 解决 service-order url 硬编码问题：使用 @Value
+通过以上的测试我们发现，在订单系统中要调用商品微服务中的查询接口来获取数据，在订单微服务中将 url 硬编码到代码中，这样显然不好，因为，运行环境一旦发生变化这个 url 地址将不可用。
+
+如何解决呢？
+
+解决方案：将 ur l地址写入到 application.yml 配置文件中。
+
+=== file -> service-order/src/main/resources/application.yml
+server:
+  port: 8082
+
+# 新增 url 配置
+myspcloud:
+  item:
+    url: http://127.0.0.1:8081/item/
+
+=== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+
+
+==== class ServiceOrderApplication
+/**
+ * 订单服务启动类
+ * Spring Boot 应用程序入口点
+ */
+@SpringBootApplication
+public class ServiceOrderApplication {
+
+    // 新增使用 @Value 注解获取配置的 url
+    @Value("${myspcloud.item.url}")
+    private String itemUrl;
+
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceOrderApplication.class, args);
+    }
+    @others
+}
+
+===== WebClient
+[source,java]
+----
+@Bean
+public WebClient webClient() {
+    return WebClient.builder()
+        .baseUrl(itemUrl)   // 使用注入的 Url
+        .build();
+}
+----
+
+== 解决 service-order url 硬编码问题：使用 @ConfigurationProperties
+
+
+=== file -> service-order/src/main/java/com/tjise/serviceorder/utils/ItemProperties.java
+[source,java]
+----
+package com.tjise.serviceorder.utils;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+
+@Data
+@Component
+@ConfigurationProperties(prefix = "myspcloud.item")
+public class ItemProperties {
+    // 下面属性值的内容会从配置文件中被自动获取到
+    private String url;
+}
+----
+
+=== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+
+
+==== class ServiceOrderApplication
+/**
+ * 订单服务启动类
+ * Spring Boot 应用程序入口点
+ */
+@SpringBootApplication
+public class ServiceOrderApplication {
+
+    // 新增 DI 注入 配置的 url
+    @Autowired
+    private ItemProperties itemProperties;
+
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceOrderApplication.class, args);
+    }
+    @others
+}
+
+===== @Bean WebClient
+[source,java]
+----
+// 直接注入也可以的
+// public WebClient webClient(ItemServiceProperties properties) {
+@Bean
+public WebClient webClient() {
+    return WebClient.builder()
+        .baseUrl(itemProperties.getUrl())   // 使用注入的 Url
+        .build();
+}
+----
+
+== 解决：商品微服务 ip 发生变更则需要更改订单微服务的配置文件
+
+
+== 解决：商品微服务有多个，订单微服务该链接哪个？
+
+
+== 引入微服务注册、发现机制
+image::img/service_register.png[,640]
+
+1. 服务提供者将服务注册到注册中心
+2. 服务消费者通过注册中心查找服务
+3. 查找到服务后进行调用（这里就是无需硬编码url的解决方案）
+4. 服务的消费者与服务注册中心保持心跳连接，一旦服务提供者的地址发生变更时，注册中心会通知服务消费者
+
+=== Eureka 介绍
+Eureka 是 Netfix 开源的服务发现组件，本身是一个基于 REST 的服务。它包含 Server 和 Client 两部分。SpringCloud 将它集成在子项目 SpringCloud Netfix 中，从而实现微服务的注册与发现。
+
+* Eureka Server 提供服务注册服务，各个节点启动后，会在 Eureka Server 中进行注册，这样 EurekaServer 中的服务注册表中将会存储所有可用服务节点的信息，服务节点的信息可以在界面中直观的看到。
+
+* Eureka Client 是一个 java 客户端，用于简化与 Eureka Server 的交互，客户端同时也有一个内置的、使用轮询(round-robin)负载算法的负载均衡器。
+
+* 在应用启动后，将会向 Eureka Server 发送心跳,默认周期为 30 秒，如果 Eureka Server 在多个心跳周期内没有接收到某个节点的心跳，Eureka Server 将会从服务注册表中把这个服务节点移除(默认90秒)。
+
+* Eureka Server 之间通过复制的方式完成数据的同步，Eureka 还提供了客户端缓存机制，即使所有的 Eureka Server 都挂掉，客户端依然可以利用缓存中的信息消费其他服务的 API。
+
+综上，Eureka 通过心跳检查、客户端缓存等机制，确保了系统的高可用性、灵活性和可伸缩性。
+
+=== Eureka Server 的创建
+创建一个 maven 的项目，命名为 eureka。
+
+image::img/create_euraka_module.png[,800]
+
+==== @file eureka/pom.xml
+[source,scss]
+....
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tjise</groupId>
+    <artifactId>eureka</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <!-- 加入下面各项内容 -->
+    @others
+</project>
+....
+
+===== properties 配置项目属性：Java 版本、Spring Boot 和 Spring Cloud 版本
+[source,scss]
+....
+<properties>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- 这两个版本要匹配才行 -->
+    <spring.boot.version>2.7.18</spring.boot.version>
+    <spring.cloud.version>2021.0.8</spring.cloud.version>
+</properties>
+....
+
+===== dependencyManagement 依赖管理：导入 Spring Boot 和 Spring Cloud 的依赖管理
+[source,scss]
+....
+<dependencyManagement>
+    <dependencies>
+        <!-- Spring Boot 依赖管理 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>${spring.boot.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <!-- Spring Cloud依赖管理 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring.cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+....
+
+===== dependencies 项目依赖：添加 Eureka Server 依赖
+[source,scss]
+....
+<dependencies>
+    <!-- Eureka Server核心依赖 -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+    </dependency>
+</dependencies>
+....
+
+===== plugins 构建配置：添加 Spring Boot Maven 插件
+[source,scss]
+....
+<build>
+    <plugins>
+        <!-- Spring Boot Maven插件，用于打包可执行jar -->
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <version>${spring.boot.version}</version>
+        </plugin>
+    </plugins>
+</build>
+....
 

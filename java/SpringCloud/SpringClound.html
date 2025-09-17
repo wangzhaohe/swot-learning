@@ -599,6 +599,42 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_restclient_spring_6_1_才支持目前的_spring_boot_2_7_18_使用的是_spring_5_3_x">RestClient  &#8201;&#8212;&#8201;Spring 6.1 才支持（目前的 Spring Boot 2.7.18 使用的是 Spring 5.3.x）</a></li>
 </ul>
 </li>
+<li><a href="#_解决_service_order_url_硬编码问题使用_value">解决 service-order url 硬编码问题：使用 @Value</a>
+<ul class="sectlevel2">
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_2">file &#8594; service-order/src/main/resources/application.yml</a></li>
+</ul>
+</li>
+<li><a href="#_新增_url_配置">新增 url 配置</a>
+<ul class="sectlevel2">
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_5">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a>
+<ul class="sectlevel3">
+<li><a href="#_class_serviceorderapplication">class ServiceOrderApplication</a></li>
+</ul>
+</li>
+<li><a href="#_解决_service_order_url_硬编码问题使用_configurationproperties">解决 service-order url 硬编码问题：使用 @ConfigurationProperties</a>
+<ul class="sectlevel2">
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderutilsitemproperties_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/utils/ItemProperties.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_6">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a>
+<ul class="sectlevel3">
+<li><a href="#_class_serviceorderapplication_2">class ServiceOrderApplication</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_解决商品微服务_ip_发生变更则需要更改订单微服务的配置文件">解决：商品微服务 ip 发生变更则需要更改订单微服务的配置文件</a></li>
+<li><a href="#_解决商品微服务有多个订单微服务该链接哪个">解决：商品微服务有多个，订单微服务该链接哪个？</a></li>
+<li><a href="#_引入微服务注册发现机制">引入微服务注册、发现机制</a>
+<ul class="sectlevel2">
+<li><a href="#_eureka_介绍">Eureka 介绍</a></li>
+<li><a href="#_eureka_server_的创建">Eureka Server 的创建</a>
+<ul class="sectlevel3">
+<li><a href="#_file_eurekapom_xml">@file eureka/pom.xml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1622,19 +1658,7 @@ public class ItemService {
 <div class="sect3">
 <h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_3">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h4>
 <div class="sect4">
-<h5 id="_class_itemservice_2">class ItemService</h5>
-<div class="paragraph">
-<p>/**
- * 商品服务类
- * 通过 REST 方式调用商品微服务获取商品信息
- */
-@Service
-public class ItemService {
-    @others
-}</p>
-</div>
-<div class="sect5">
-<h6 id="_方式二_单个构造函数注入增加了查看是否成功使用了_okhttp_打印">方式二 单个构造函数注入&#8201;&#8212;&#8201;增加了查看是否成功使用了 OkHttp 打印</h6>
+<h5 id="_方式二_单个构造函数注入增加了查看是否成功使用了_okhttp_打印">方式二 单个构造函数注入&#8201;&#8212;&#8201;增加了查看是否成功使用了 OkHttp 打印</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">;</span>
@@ -1645,7 +1669,6 @@ public class ItemService {
 <span class="tok-w">    </span><span class="tok-c1">// 成功使用 OkHttp 会打印</span>
 <span class="tok-w">    </span><span class="tok-c1">// Request Factory: org.springframework.http.client.OkHttp3ClientHttpRequestFactory</span>
 <span class="tok-p">}</span></code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -1747,7 +1770,7 @@ public class ItemService {
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Bean</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-nf">webClient</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">builder</span><span class="tok-p">()</span>
-<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">baseUrl</span><span class="tok-p">(</span><span class="tok-s">&quot;http://127.0.0.1:8081&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">baseUrl</span><span class="tok-p">(</span><span class="tok-s">&quot;http://127.0.0.1:8081/item&quot;</span><span class="tok-p">)</span>
 <span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -1785,7 +1808,7 @@ public class ItemService {
 
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">()</span>
-<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">uri</span><span class="tok-p">(</span><span class="tok-s">&quot;/item/{id}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">uri</span><span class="tok-p">(</span><span class="tok-s">&quot;/{id}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span>
 <span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">retrieve</span><span class="tok-p">()</span>
 <span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">bodyToMono</span><span class="tok-p">(</span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
 <span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">block</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 同步调用，如需要异步可去掉block()</span>
@@ -1803,10 +1826,316 @@ public class ItemService {
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_解决_service_order_url_硬编码问题使用_value">解决 service-order url 硬编码问题：使用 @Value</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>通过以上的测试我们发现，在订单系统中要调用商品微服务中的查询接口来获取数据，在订单微服务中将 url 硬编码到代码中，这样显然不好，因为，运行环境一旦发生变化这个 url 地址将不可用。</p>
+</div>
+<div class="paragraph">
+<p>如何解决呢？</p>
+</div>
+<div class="paragraph">
+<p>解决方案：将 ur l地址写入到 application.yml 配置文件中。</p>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainresourcesapplication_yml_2">file &#8594; service-order/src/main/resources/application.yml</h3>
+<div class="paragraph">
+<p>server:
+  port: 8082</p>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_新增_url_配置" class="sect0">新增 url 配置</h1>
+<div class="paragraph">
+<p>myspcloud:
+  item:
+    url: <a href="http://127.0.0.1:8081/item/" class="bare">http://127.0.0.1:8081/item/</a></p>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_5">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h3>
+<div class="sect3">
+<h4 id="_class_serviceorderapplication">class ServiceOrderApplication</h4>
+<div class="paragraph">
+<p>/**
+ * 订单服务启动类
+ * Spring Boot 应用程序入口点
+ */
+@SpringBootApplication
+public class ServiceOrderApplication {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 新增使用 @Value 注解获取配置的 url
+@Value("${myspcloud.item.url}")
+private String itemUrl;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    public static void main(String[] args) {
+        SpringApplication.run(ServiceOrderApplication.class, args);
+    }
+    @others
+}</pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_webclient_3">WebClient</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Bean</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-nf">webClient</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">builder</span><span class="tok-p">()</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">baseUrl</span><span class="tok-p">(</span><span class="tok-n">itemUrl</span><span class="tok-p">)</span><span class="tok-w">   </span><span class="tok-c1">// 使用注入的 Url</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_解决_service_order_url_硬编码问题使用_configurationproperties">解决 service-order url 硬编码问题：使用 @ConfigurationProperties</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderutilsitemproperties_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/utils/ItemProperties.java</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.utils</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.Data</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.context.properties.ConfigurationProperties</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Component</span><span class="tok-p">;</span>
+
+
+<span class="tok-nd">@Data</span>
+<span class="tok-nd">@Component</span>
+<span class="tok-nd">@ConfigurationProperties</span><span class="tok-p">(</span><span class="tok-n">prefix</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;myspcloud.item&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemProperties</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 下面属性值的内容会从配置文件中被自动获取到</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">url</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_6">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h3>
+<div class="sect3">
+<h4 id="_class_serviceorderapplication_2">class ServiceOrderApplication</h4>
+<div class="paragraph">
+<p>/**
+ * 订单服务启动类
+ * Spring Boot 应用程序入口点
+ */
+@SpringBootApplication
+public class ServiceOrderApplication {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 新增 DI 注入 配置的 url
+@Autowired
+private ItemProperties itemProperties;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    public static void main(String[] args) {
+        SpringApplication.run(ServiceOrderApplication.class, args);
+    }
+    @others
+}</pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_bean_webclient">@Bean WebClient</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 直接注入也可以的</span>
+<span class="tok-c1">// public WebClient webClient(ItemServiceProperties properties) {</span>
+<span class="tok-nd">@Bean</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-nf">webClient</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">builder</span><span class="tok-p">()</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">baseUrl</span><span class="tok-p">(</span><span class="tok-n">itemProperties</span><span class="tok-p">.</span><span class="tok-na">getUrl</span><span class="tok-p">())</span><span class="tok-w">   </span><span class="tok-c1">// 使用注入的 Url</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_解决商品微服务_ip_发生变更则需要更改订单微服务的配置文件">解决：商品微服务 ip 发生变更则需要更改订单微服务的配置文件</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_解决商品微服务有多个订单微服务该链接哪个">解决：商品微服务有多个，订单微服务该链接哪个？</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_引入微服务注册发现机制">引入微服务注册、发现机制</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="img/service_register.png" alt="service register" width="640">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>服务提供者将服务注册到注册中心</p>
+</li>
+<li>
+<p>服务消费者通过注册中心查找服务</p>
+</li>
+<li>
+<p>查找到服务后进行调用（这里就是无需硬编码url的解决方案）</p>
+</li>
+<li>
+<p>服务的消费者与服务注册中心保持心跳连接，一旦服务提供者的地址发生变更时，注册中心会通知服务消费者</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_eureka_介绍">Eureka 介绍</h3>
+<div class="paragraph">
+<p>Eureka 是 Netfix 开源的服务发现组件，本身是一个基于 REST 的服务。它包含 Server 和 Client 两部分。SpringCloud 将它集成在子项目 SpringCloud Netfix 中，从而实现微服务的注册与发现。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Eureka Server 提供服务注册服务，各个节点启动后，会在 Eureka Server 中进行注册，这样 EurekaServer 中的服务注册表中将会存储所有可用服务节点的信息，服务节点的信息可以在界面中直观的看到。</p>
+</li>
+<li>
+<p>Eureka Client 是一个 java 客户端，用于简化与 Eureka Server 的交互，客户端同时也有一个内置的、使用轮询(round-robin)负载算法的负载均衡器。</p>
+</li>
+<li>
+<p>在应用启动后，将会向 Eureka Server 发送心跳,默认周期为 30 秒，如果 Eureka Server 在多个心跳周期内没有接收到某个节点的心跳，Eureka Server 将会从服务注册表中把这个服务节点移除(默认90秒)。</p>
+</li>
+<li>
+<p>Eureka Server 之间通过复制的方式完成数据的同步，Eureka 还提供了客户端缓存机制，即使所有的 Eureka Server 都挂掉，客户端依然可以利用缓存中的信息消费其他服务的 API。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>综上，Eureka 通过心跳检查、客户端缓存等机制，确保了系统的高可用性、灵活性和可伸缩性。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_eureka_server_的创建">Eureka Server 的创建</h3>
+<div class="paragraph">
+<p>创建一个 maven 的项目，命名为 eureka。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/create_euraka_module.png" alt="create euraka module" width="800">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_eurekapom_xml">@file eureka/pom.xml</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">project</span><span class="tok-w"> </span><span class="tok-nt">xmlns</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://maven.apache.org/POM/4.0.0&quot;</span>
+<span class="tok-w">         </span><span class="tok-nt">xmlns</span><span class="tok-nd">:xsi</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+<span class="tok-w">         </span><span class="tok-nt">xsi</span><span class="tok-nd">:schemaLocation</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">modelVersion</span><span class="tok-o">&gt;</span><span class="tok-nt">4</span><span class="tok-nc">.0.0</span><span class="tok-o">&lt;/</span><span class="tok-nt">modelVersion</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">eureka</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.0-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">加入下面各项内容</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">@</span><span class="tok-nt">others</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">project</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_properties_配置项目属性java_版本spring_boot_和_spring_cloud_版本">properties 配置项目属性：Java 版本、Spring Boot 和 Spring Cloud 版本</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">maven</span><span class="tok-nc">.compiler.source</span><span class="tok-o">&gt;</span><span class="tok-nt">8</span><span class="tok-o">&lt;/</span><span class="tok-nt">maven</span><span class="tok-nc">.compiler.source</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">maven</span><span class="tok-nc">.compiler.target</span><span class="tok-o">&gt;</span><span class="tok-nt">8</span><span class="tok-o">&lt;/</span><span class="tok-nt">maven</span><span class="tok-nc">.compiler.target</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">project</span><span class="tok-nc">.build.sourceEncoding</span><span class="tok-o">&gt;</span><span class="tok-nt">UTF-8</span><span class="tok-o">&lt;/</span><span class="tok-nt">project</span><span class="tok-nc">.build.sourceEncoding</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">这两个版本要匹配才行</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">spring</span><span class="tok-nc">.boot.version</span><span class="tok-o">&gt;</span><span class="tok-nt">2</span><span class="tok-nc">.7.18</span><span class="tok-o">&lt;/</span><span class="tok-nt">spring</span><span class="tok-nc">.boot.version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">spring</span><span class="tok-nc">.cloud.version</span><span class="tok-o">&gt;</span><span class="tok-nt">2021</span><span class="tok-nc">.0.8</span><span class="tok-o">&lt;/</span><span class="tok-nt">spring</span><span class="tok-nc">.cloud.version</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_dependencymanagement_依赖管理导入_spring_boot_和_spring_cloud_的依赖管理">dependencyManagement 依赖管理：导入 Spring Boot 和 Spring Cloud 的依赖管理</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">Spring</span><span class="tok-w"> </span><span class="tok-nt">Boot</span><span class="tok-w"> </span><span class="tok-nt">依赖管理</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-dependencies</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-err">$</span><span class="tok-p">{</span><span class="tok-nt">spring</span><span class="tok-nc">.boot.version</span><span class="tok-p">}</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">type</span><span class="tok-o">&gt;</span><span class="tok-nt">pom</span><span class="tok-o">&lt;/</span><span class="tok-nt">type</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">import</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">Spring</span><span class="tok-w"> </span><span class="tok-nt">Cloud依赖管理</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-dependencies</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-err">$</span><span class="tok-p">{</span><span class="tok-nt">spring</span><span class="tok-nc">.cloud.version</span><span class="tok-p">}</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">type</span><span class="tok-o">&gt;</span><span class="tok-nt">pom</span><span class="tok-o">&lt;/</span><span class="tok-nt">type</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">import</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_dependencies_项目依赖添加_eureka_server_依赖">dependencies 项目依赖：添加 Eureka Server 依赖</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">Eureka</span><span class="tok-w"> </span><span class="tok-nt">Server核心依赖</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-starter-netflix-eureka-server</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_plugins_构建配置添加_spring_boot_maven_插件">plugins 构建配置：添加 Spring Boot Maven 插件</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">build</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">plugins</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">Spring</span><span class="tok-w"> </span><span class="tok-nt">Boot</span><span class="tok-w"> </span><span class="tok-nt">Maven插件</span><span class="tok-err">，</span><span class="tok-nt">用于打包可执行jar</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">plugin</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-maven-plugin</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-err">$</span><span class="tok-p">{</span><span class="tok-nt">spring</span><span class="tok-nc">.boot.version</span><span class="tok-p">}</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">plugin</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">plugins</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">build</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-14 21:57:12 +0800
+Last updated 2025-09-16 15:26:33 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -32,7 +32,7 @@ public class ItemService {
 
     public Item queryItemById(Long id) {
         return webClient.get()
-            .uri("/item/{id}", id)
+            .uri("/{id}", id)
             .retrieve()
             .bodyToMono(Item.class)
             .block(); // 同步调用，如需要异步可去掉block()
