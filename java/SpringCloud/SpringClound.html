@@ -626,10 +626,17 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_eureka_介绍">Eureka 介绍</a></li>
 <li><a href="#_eureka_server_的创建">Eureka Server 的创建</a>
 <ul class="sectlevel3">
-<li><a href="#_file_eurekapom_xml">@file eureka/pom.xml</a></li>
-<li><a href="#_file_eurekasrcmainjavacomtjiseeurekaeurekaapplication_java">@file eureka/src/main/java/com/tjise/eureka/EurekaApplication.java</a></li>
-<li><a href="#_file_eurekasrcmainresourcesapplication_yml">@file eureka/src/main/resources/application.yml</a></li>
-<li><a href="#_启动_eureka_server_并测试">启动 Eureka Server 并测试</a></li>
+<li><a href="#_file_eurekapom_xml">file &#8594; eureka/pom.xml</a></li>
+<li><a href="#_file_eurekasrcmainjavacomtjiseeurekaeurekaapplication_java">file &#8594; eureka/src/main/java/com/tjise/eureka/EurekaApplication.java</a></li>
+<li><a href="#_file_eurekasrcmainresourcesapplication_yml">file &#8594; eureka/src/main/resources/application.yml</a></li>
+<li><a href="#_启动_eureka_server_并测试网页管理端">启动 Eureka Server 并测试网页管理端</a></li>
+</ul>
+</li>
+<li><a href="#_eureka_server_注册商品微服务">Eureka Server 注册商品微服务</a>
+<ul class="sectlevel3">
+<li><a href="#_file_service_itempom_xml_2">file &#8594; service-item/pom.xml</a></li>
+<li><a href="#_file_service_itemsrcmainresourcesapplication_yml_2">file &#8594; service-item/src/main/resources/application.yml</a></li>
+<li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemapplication_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java</a></li>
 </ul>
 </li>
 </ul>
@@ -1132,13 +1139,11 @@ public class ServiceItemApplication {</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>public static void main(String[] args) {
-    SpringApplication.run(ServiceItemApplication.class, args);
+<pre>    public static void main(String[] args) {
+        SpringApplication.run(ServiceItemApplication.class, args);
+    }
 }</pre>
 </div>
-</div>
-<div class="paragraph">
-<p>}</p>
 </div>
 </div>
 <div class="sect2">
@@ -2041,7 +2046,7 @@ private ItemProperties itemProperties;</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_eurekapom_xml">@file eureka/pom.xml</h4>
+<h4 id="_file_eurekapom_xml">file &#8594; eureka/pom.xml</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">project</span><span class="tok-w"> </span><span class="tok-nt">xmlns</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://maven.apache.org/POM/4.0.0&quot;</span>
@@ -2132,7 +2137,7 @@ private ItemProperties itemProperties;</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_eurekasrcmainjavacomtjiseeurekaeurekaapplication_java">@file eureka/src/main/java/com/tjise/eureka/EurekaApplication.java</h4>
+<h4 id="_file_eurekasrcmainjavacomtjiseeurekaeurekaapplication_java">file &#8594; eureka/src/main/java/com/tjise/eureka/EurekaApplication.java</h4>
 <div class="paragraph">
 <p>package com.tjise.eureka;</p>
 </div>
@@ -2161,7 +2166,7 @@ public class EurekaApplication {</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_eurekasrcmainresourcesapplication_yml">@file eureka/src/main/resources/application.yml</h4>
+<h4 id="_file_eurekasrcmainresourcesapplication_yml">file &#8594; eureka/src/main/resources/application.yml</h4>
 <div class="paragraph">
 <p>server:
   port: 8761  # 1. Eureka Server端口设置为8761（默认端口）</p>
@@ -2185,7 +2190,7 @@ public class EurekaApplication {</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_启动_eureka_server_并测试">启动 Eureka Server 并测试</h4>
+<h4 id="_启动_eureka_server_并测试网页管理端">启动 Eureka Server 并测试网页管理端</h4>
 <div class="paragraph">
 <p>现在可以通过以下命令启动 Eureka Server：</p>
 </div>
@@ -2236,12 +2241,138 @@ public class EurekaApplication {</p>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_eureka_server_注册商品微服务">Eureka Server 注册商品微服务</h3>
+<div class="paragraph">
+<p>成功注册 service-item 到 eureka 是这样的，如下图</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/eureka_admin_with_service-item.png" alt="eureka admin with service item">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_itempom_xml_2">file &#8594; service-item/pom.xml</h4>
+<div class="sect4">
+<h5 id="_properties_新增_cloud_版本_2021_0_8">properties &#8594; 新增 cloud 版本 2021.0.8</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">java</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.8</span><span class="tok-o">&lt;/</span><span class="tok-nt">java</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">spring-cloud</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span><span class="tok-nt">2021</span><span class="tok-nc">.0.8</span><span class="tok-o">&lt;/</span><span class="tok-nt">spring-cloud</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_dependencymanagement_新增_cloud_dependency">dependencyManagement &#8594; 新增 cloud dependency</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-dependencies</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-err">$</span><span class="tok-p">{</span><span class="tok-nt">spring-cloud</span><span class="tok-nc">.version</span><span class="tok-p">}</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">type</span><span class="tok-o">&gt;</span><span class="tok-nt">pom</span><span class="tok-o">&lt;/</span><span class="tok-nt">type</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">import</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_spring_cloud_starter_netflix_eureka_client">spring-cloud-starter-netflix-eureka-client</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">添加</span><span class="tok-w"> </span><span class="tok-nt">Eureka</span><span class="tok-w"> </span><span class="tok-nt">客户端依赖</span><span class="tok-err">，</span><span class="tok-nt">用于将服务注册到</span><span class="tok-w"> </span><span class="tok-nt">Eureka</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-starter-netflix-eureka-client</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_itemsrcmainresourcesapplication_yml_2">file &#8594; service-item/src/main/resources/application.yml</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-c1">### 服务端口号(本身是一个web项目)</span>
+<span class="tok-n">server</span><span class="tok-p">:</span>
+    <span class="tok-n">port</span><span class="tok-p">:</span> <span class="tok-mi">8081</span>
+
+<span class="tok-c1">### 起个名字作为服务名称(该服务注册到eureka注册中心的名称，比如商品服务)</span>
+<span class="tok-n">spring</span><span class="tok-p">:</span>
+    <span class="tok-n">application</span><span class="tok-p">:</span>
+        <span class="tok-n">name</span><span class="tok-p">:</span> <span class="tok-n">app</span><span class="tok-o">-</span><span class="tok-n">item</span>
+
+<span class="tok-c1">### 服务注册到eureka注册中心的地址</span>
+<span class="tok-n">eureka</span><span class="tok-p">:</span>
+    <span class="tok-n">client</span><span class="tok-p">:</span>
+        <span class="tok-n">service</span><span class="tok-o">-</span><span class="tok-n">url</span><span class="tok-p">:</span>
+            <span class="tok-n">defaultZone</span><span class="tok-p">:</span> <span class="tok-n">http</span><span class="tok-p">:</span><span class="tok-o">//</span><span class="tok-mf">127.0.0.1</span><span class="tok-p">:</span><span class="tok-mi">8761</span><span class="tok-o">/</span><span class="tok-n">eureka</span><span class="tok-o">/</span>
+        <span class="tok-c1">### 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心</span>
+        <span class="tok-n">register</span><span class="tok-o">-</span><span class="tok-k">with</span><span class="tok-o">-</span><span class="tok-n">eureka</span><span class="tok-p">:</span> <span class="tok-n">true</span>
+        <span class="tok-c1">### 是否需要从 eureka 上检索服务</span>
+        <span class="tok-n">fetch</span><span class="tok-o">-</span><span class="tok-n">registry</span><span class="tok-p">:</span> <span class="tok-n">true</span>
+    <span class="tok-n">instance</span><span class="tok-p">:</span>
+        <span class="tok-c1"># 使用IP地址注册而不是主机名</span>
+        <span class="tok-n">prefer</span><span class="tok-o">-</span><span class="tok-n">ip</span><span class="tok-o">-</span><span class="tok-n">address</span><span class="tok-p">:</span> <span class="tok-n">true</span>
+        <span class="tok-c1"># 客户端在注册时使用自己的IP，而不是主机名，是生产环境的最佳实践。避免主机名解析问题</span>
+        <span class="tok-n">ip</span><span class="tok-o">-</span><span class="tok-n">address</span><span class="tok-p">:</span> <span class="tok-mf">127.0.0.1</span></code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>name 和 instance 两者都有重要作用，缺一不可：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>spring.application.name：服务的逻辑名称，用于服务发现和负载均衡</p>
+</li>
+<li>
+<p>eureka.instance 配置：实例的网络地址，用于实际通信</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>即使使用IP注册，仍然需要服务名称来进行服务发现和调用。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemapplication_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.SpringApplication</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.netflix.eureka.EnableEurekaClient</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@SpringBootApplication</span>
+<span class="tok-nd">@EnableEurekaClient</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ServiceItemApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ServiceItemApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-17 10:12:18 +0800
+Last updated 2025-09-18 22:56:30 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

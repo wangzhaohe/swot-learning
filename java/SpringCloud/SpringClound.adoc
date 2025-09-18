@@ -302,7 +302,6 @@ public class ServiceItemApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServiceItemApplication.class, args);
     }
-
 }
 
 === file -> service-item/src/main/resources/application.yml
@@ -961,7 +960,7 @@ Eureka 是 Netfix 开源的服务发现组件，本身是一个基于 REST 的�
 
 image::img/create_eureka_module.png[,800]
 
-==== @file eureka/pom.xml
+==== file -> eureka/pom.xml
 [source,scss]
 ....
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -1042,7 +1041,7 @@ image::img/create_eureka_module.png[,800]
 </build>
 ....
 
-==== @file eureka/src/main/java/com/tjise/eureka/EurekaApplication.java
+==== file -> eureka/src/main/java/com/tjise/eureka/EurekaApplication.java
 package com.tjise.eureka;
 
 import org.springframework.boot.SpringApplication;
@@ -1063,7 +1062,7 @@ public class EurekaApplication {
     }
 }
 
-==== @file eureka/src/main/resources/application.yml
+==== file -> eureka/src/main/resources/application.yml
 server:
   port: 8761  # 1. Eureka Server端口设置为8761（默认端口）
 
@@ -1080,7 +1079,7 @@ eureka:
   server:
     enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭）
 
-==== 启动 Eureka Server 并测试
+==== 启动 Eureka Server 并测试网页管理端
 现在可以通过以下命令启动 Eureka Server：
 
 . 进入eureka项目目录
@@ -1096,4 +1095,103 @@ eureka:
 启动后访问 http://localhost:8761 即可看到 Eureka Server 的管理界面。
 
 image::img/eureka_admin_no_instance.png[]
+
+=== Eureka Server 注册商品微服务
+成功注册 service-item 到 eureka 是这样的，如下图
+
+image::img/eureka_admin_with_service-item.png[]
+
+==== file -> service-item/pom.xml
+
+
+===== properties -> 新增 cloud 版本 2021.0.8
+[source,scss]
+....
+<properties>
+    <java.version>1.8</java.version>
+    <spring-cloud.version>2021.0.8</spring-cloud.version>
+</properties>
+....
+
+===== dependencyManagement -> 新增 cloud dependency
+[source,scss]
+....
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring-cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+....
+
+===== spring-cloud-starter-netflix-eureka-client
+[source,scss]
+....
+<!-- 添加 Eureka 客户端依赖，用于将服务注册到 Eureka -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+....
+
+==== file -> service-item/src/main/resources/application.yml
+[source,python]
+----
+### 服务端口号(本身是一个web项目)
+server:
+    port: 8081
+
+### 起个名字作为服务名称(该服务注册到eureka注册中心的名称，比如商品服务)
+spring:
+    application:
+        name: app-item
+
+### 服务注册到eureka注册中心的地址
+eureka:
+    client:
+        service-url:
+            defaultZone: http://127.0.0.1:8761/eureka/
+        ### 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
+        register-with-eureka: true
+        ### 是否需要从 eureka 上检索服务
+        fetch-registry: true
+    instance:
+        # 使用IP地址注册而不是主机名
+        prefer-ip-address: true
+        # 客户端在注册时使用自己的IP，而不是主机名，是生产环境的最佳实践。避免主机名解析问题
+        ip-address: 127.0.0.1
+----
+
+****
+name 和 instance 两者都有重要作用，缺一不可：
+
+- spring.application.name：服务的逻辑名称，用于服务发现和负载均衡
+- eureka.instance 配置：实例的网络地址，用于实际通信
+
+即使使用IP注册，仍然需要服务名称来进行服务发现和调用。
+****
+
+==== file -> service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java
+[source,java]
+----
+package com.tjise.serviceitem;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+
+@SpringBootApplication
+@EnableEurekaClient
+public class ServiceItemApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceItemApplication.class, args);
+    }
+}
+----
 
