@@ -34,7 +34,7 @@
 </script>
 ++++
 
-=== 案例准备工作
+=== 创建模块 general-manager
 使用 https://start.spring.io/ 创建 Spring Boot 工程 (后面会将该工程作为模块导入到整体项目 spring-boot-ketang 中)，如下所示。
 
 注：给工程命名为 general-manager ，在创建工程时选择对应的起步依赖 web, mybatis, mysql, lombok。
@@ -92,7 +92,7 @@ Package:   com.ecommerce.platform.userservice
 ==== 关系总结
 
 * **Group ID + Artifact ID** 组合必须唯一，类似Maven坐标
-* **Package Name** 通常基于Group ID，但需要符合Java包命名规则
+* **Package Name** 通常基于 Group ID，但需要符合 Java 包命名规则
 * **Name** 是面向用户的友好显示名称
 
 这些信息在项目生成后会体现在 file:///Users/swot/swot-learn/java/springboot/spring-boot-ketang/general-manager/pom.xml[pom.xml]（Maven）配置文件中。
@@ -190,8 +190,8 @@ COLLATE utf8_general_ci;
 ----
 -- 创建部门表
 create table dept(
-    id int unsigned primary key auto_increment comment '主键ID',
-    name varchar(10) not null unique comment '部门名称',
+    id          int unsigned primary key auto_increment comment '主键ID',
+    name        varchar(10) not null unique comment '部门名称',
     create_time datetime not null comment '创建时间',
     update_time datetime not null comment '修改时间'
 ) comment '部门表';
@@ -246,6 +246,9 @@ INSERT INTO emp
 ----
 
 === 创建数据库表 dept 对应实体类
+
+
+==== file -> src/main/java/com/tjise/pojo/Dept.java
 .src/main/java/com/tjise/pojo/Dept.java
 [source,java,linenums]
 ----
@@ -268,6 +271,9 @@ public class Dept {
 ----
 
 === 创建数据库表 emp  对应的实体类
+
+
+==== file -> src/main/java/com/tjise/pojo/Emp.java
 .src/main/java/com/tjise/pojo/emp.java
 [source,java,linenums]
 ----
@@ -297,7 +303,10 @@ public class Emp {
 }
 ----
 
-=== 创建统一响应结果实体类 Result
+=== 创建统一响应结果 Result 实体类
+
+
+==== file -> src/main/java/com/tjise/pojo/Result.java
 .src/main/java/com/tjise/pojo/Result.java
 [source,java,linenums]
 ----
@@ -338,8 +347,7 @@ public class Result {
 ==== 部门三层架构
 
 
-===== 原始 DeptController
-.src/main/java/com/tjise/controller/DeptController.java
+===== file -> src/main/java/com/tjise/controller/DeptController.java
 [source,java,linenums]
 ----
 package com.tjise.controller;
@@ -351,8 +359,7 @@ public class DeptController {
 }
 ----
 
-===== 原始 DeptService
-.src/main/java/com/tjise/service/DeptService.java
+===== file -> src/main/java/com/tjise/service/DeptService.java
 [source,java,linenums]
 ----
 package com.tjise.service;
@@ -361,13 +368,13 @@ public interface DeptService {
 }
 ----
 
-===== 原始 DeptServiceImpl
-.src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 [source,java,linenums]
 ----
 package com.tjise.service.impl;
 
 import com.tjise.service.DeptService;
+import org.springframework.stereotype.Service;
 
 
 @Service  // 把该类的对象交给 IOC 容器管理
@@ -375,12 +382,12 @@ public class DeptServiceImpl implements DeptService {
 }
 ----
 
-===== 原始 DeptMapper
-.src/main/java/com/tjise/mapper/DeptMapper.java
+===== file -> src/main/java/com/tjise/mapper/DeptMapper.java
 [source,java,linenums]
 ----
 package com.tjise.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 
 @Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
 public interface DeptMapper {
@@ -390,8 +397,7 @@ public interface DeptMapper {
 ==== 员工三层架构 
 
 
-===== EmpController
-.src/main/java/com/tjise/controller/EmpController.java
+===== file -> src/main/java/com/tjise/controller/EmpController.java
 [source,java,linenums]
 ----
 package com.tjise.controller;
@@ -404,8 +410,7 @@ public class EmpController {
 }
 ----
 
-===== EmpService
-.src/main/java/com/tjise/service/EmpService.java
+===== file -> src/main/java/com/tjise/service/EmpService.java
 [source,java,linenums]
 ----
 package com.tjise.service;
@@ -414,8 +419,7 @@ public interface EmpService {
 }
 ----
 
-===== EmpServiceImpl
-.src/main/java/com/tjise/service/EmpServiceImpl.java
+===== file -> src/main/java/com/tjise/service/EmpServiceImpl.java
 [source,java,linenums]
 ----
 package com.tjise.service;
@@ -427,8 +431,7 @@ public class EmpServiceImpl implements EmpService {
 }
 ----
 
-===== EmpMapper
-.src/main/java/com/tjise/mapper/EmpMapper.java
+===== file -> src/main/java/com/tjise/mapper/EmpMapper.java
 [source,java,linenums]
 ----
 package com.tjise.mapper;
@@ -464,8 +467,13 @@ RESTful API 使用标准的 HTTP 方法来操作资源，每个方法具有特�
 [NOTE]
 ====
 * 上述行为是风格，是约定方式，约定不是规范，可以打破，所以称为 RESTful 风格，而不是 RESTful 规范。
-* 描述模块的功能通常使用复数，也就是加s的格式来描述，表示此类资源，而非单个资源。如：depts、emps、users、books 等等。
+* 描述模块的功能通常使用复数，也就是加 s 的格式来描述，表示此类资源，而非单个资源。如：depts、emps、users、books 等等。
 ====
+
+****
+* “资源清晰、读为主、多端开放、无状态、可缓存、赶进度” 六个关键词只要命中四个，就别犹豫，直接上 REST；
+* 其余情况不适合使用 REST，如 二进制 RPC、消息、流式或 GraphQL 等等。
+****
 
 === API 接口文档的书写
 API 接口文档主要由项目的主导者来书写，可以是后端开发人员，也可以是前端开发人员。
@@ -490,7 +498,10 @@ image::img/dept_list.png[]
 ==== 查询部门列表
 查询部门的全部数据（由于部门数据比较少，不考虑分页）
 
+// 在员工管理功能中会考虑分页
+
 1. 基本信息
+
 * 请求路径：/depts
 * 请求方式：GET
 * 接口描述：该接口用于部门列表数据查询
@@ -540,14 +551,25 @@ image::img/dept_list.png[]
 
 image::img/develope_flow.png[]
 
-测试接口: 使用 postman GET 方法测试 http://localhost:8080/depts
+* 测试接口: 使用 http http://localhost:8080/depts
+* 测试接口: 使用浏览器测试 http://localhost:9528/#/system/dept
 
-测试接口: 使用浏览器测试 http://localhost:9528/#/system/dept
-
-===== DeptController  -> 处理请求
-.src/main/java/com/tjise/controller/DeptController.java
+===== file -> src/main/java/com/tjise/controller/DeptController.java
 [source,java,linenums]
 ----
+package com.tjise.controller;
+
+import com.tjise.pojo.Dept;
+import com.tjise.pojo.Result;
+import com.tjise.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+// 如果是浏览器访问，会有跨域问题，参下面节点的解决方式
 @RestController
 public class DeptController {
 
@@ -564,21 +586,33 @@ public class DeptController {
 }
 ----
 
-===== DeptService     -> 接口
+===== file -> src/main/java/com/tjise/service/DeptService.java
 定义该接口目的是为了用类的多态实现 controller 层左边解耦。
 
-.src/main/java/com/tjise/service/DeptService.java
 [source,java,linenums]
 ----
+package com.tjise.service;
+
+import com.tjise.pojo.Dept;
+import java.util.List;
+
 public interface DeptService {
     public abstract List<Dept> selectAllDept();
 }
 ----
 
-===== DeptServiceImpl -> 实现接口
-.src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 [source,java,linenums]
 ----
+package com.tjise.service.impl;
+
+import com.tjise.mapper.DeptMapper;
+import com.tjise.pojo.Dept;
+import com.tjise.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
 @Service  // 把该类的对象交给 IOC 容器管理
 public class DeptServiceImpl implements DeptService {
 
@@ -594,10 +628,17 @@ public class DeptServiceImpl implements DeptService {
 }
 ----
 
-===== DeptMapper      -> 数据库
-.src/main/java/com/tjise/mapper/DeptMapper.java
+===== file -> src/main/java/com/tjise/mapper/DeptMapper.java
 [source,java,linenums]
 ----
+package com.tjise.mapper;
+
+import com.tjise.pojo.Dept;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import java.util.List;
+
+
 @Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
 public interface DeptMapper {
     @Select("select * from dept")
@@ -605,13 +646,125 @@ public interface DeptMapper {
 }
 ----
 
+==== 跨域处理
+
+
+===== 临时-后端在 controller 中解决跨域问题
+
+
+====== file -> src/main/java/com/tjise/controller/DeptController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Dept;
+import com.tjise.pojo.Result;
+import com.tjise.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@CrossOrigin(
+    originPatterns = "*",
+    allowedHeaders = "*",
+    methods = {org.springframework.web.bind.annotation.RequestMethod.GET, 
+               org.springframework.web.bind.annotation.RequestMethod.POST, 
+               org.springframework.web.bind.annotation.RequestMethod.PUT, 
+               org.springframework.web.bind.annotation.RequestMethod.DELETE,
+               org.springframework.web.bind.annotation.RequestMethod.OPTIONS},
+    allowCredentials = "true"
+)
+public class DeptController {
+
+    @Autowired        // DI 注入 IOC 容器中的 DeptService Bean 对象，默认名称为 deptService
+    private DeptService deptService;
+
+//  @RequestMapping("/depts")                                        // 所有方法都可以请求
+//  @RequestMapping(value = "/depts", method = {RequestMethod.GET})  // 完整写法
+    @GetMapping("/depts")                                            // 更加简洁的方式
+    public Result selectAllDept(){
+        List<Dept> deptList = deptService.selectAllDept();
+        return Result.success(deptList);
+    }
+}
+----
+
+===== 掌握-后端在全局解决跨域问题
+创建了一个全局跨域配置类，这样就不需要在每个 Controller 上单独添加 @CrossOrigin 注解了。
+
+让我详细解释一下 Spring Boot 是如何处理我们通过 @Bean 注册的 CorsFilter 的：
+
+1. 注册过程：
+  - 当 Spring Boot 应用启动时，它会扫描所有带有 @Configuration 注解的类
+  - 在 CorsConfig 类中，@Bean 注解的方法 corsFilter() 会被 Spring 容器调用
+  - Spring 会将返回的 CorsFilter 实例注册为一个 Bean，并自动将其添加到过滤器链中
+  - 这个过程不需要我们手动注册，Spring Boot 会自动处理
+
+2. 请求处理过程：
+  - 当前端发送请求时，请求会经过 Servlet 容器的过滤器链
+  - CorsFilter 位于过滤器链的较早位置，会首先处理请求
+  - 对于简单请求（GET、POST等），CorsFilter 会直接处理并添加相应的 CORS 响应头
+  - 对于复杂请求（带有自定义头、PUT/DELETE 方法等），浏览器会先发送预检请求（OPTIONS）
+  - CorsFilter 会处理这个预检请求，检查是否允许实际请求的跨域访问
+  - 如果预检通过，浏览器才会发送实际请求，CorsFilter 再次处理并添加 CORS 响应头
+  - 最后请求才会到达我们的 Controller 方法
+
+3. 为什么这种方式有效：
+  - CorsFilter 是 Spring 框架专门为处理跨域问题设计的过滤器
+  - 它会在响应中添加必要的 CORS 头，如 Access-Control-Allow-Origin、Access-Control-Allow-Methods 等
+  - 这些响应头告诉浏览器服务器允许哪些跨域请求，从而避免了跨域错误
+
+这种方式比使用 @WebFilter 更简洁，因为 Spring Boot 会自动处理过滤器的注册和配置，而不需要我们手动管理。
+
+====== file -> src/main/java/com/tjise/config/CorsConfig.java
+[source,java]
+----
+package com.tjise.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+@Configuration
+public class CorsConfig {
+
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        // 允许所有域名进行跨域调用
+        config.addAllowedOriginPattern("*");
+        // 允许所有请求头
+        config.addAllowedHeader("*");
+        // 允许所有方法（POST、GET...）
+        config.addAllowedMethod("*");
+        // 允许携带 Cookie
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+}
+----
+
+===== 了解-在开发时前端自己处理跨域问题
+
+
+===== 了解-运维在部署时通过 Nginx 反向代理解决跨域
+
+
 ==== 删除单个部门
 1. 基本信息
 
 * 请求路径：/depts/{id}
 * 请求方式：DELETE
 * 接口描述：该接口用于根据ID删除部门数据
-
 
 2. 请求参数
 
@@ -628,9 +781,8 @@ public interface DeptMapper {
 
 3. 响应数据
 
-参数格式：application/json
-
-参数说明
+* 参数格式：application/json
+* 参数说明
 +
 [cols="1,1,1,3",options="header",stripes=even]
 |===
@@ -641,8 +793,8 @@ public interface DeptMapper {
 | data   | object | 非必须   | 返回的数据
 |===
 
-响应数据样例：
-
+* 响应数据样例：
++
 ```json
 {
     "code":1,
@@ -654,9 +806,9 @@ public interface DeptMapper {
 .开发流程
 image::img/dept_delete.png[开发流程,960]
 
-测试接口: 使用 postman DELETE 方法测试 http://localhost:8080/depts/5
-
-查看数据库中是否删除了相应 id 的记录。
+* 测试接口: 使用 http DELETE http://localhost:8080/depts/5
+* 测试使用浏览器删除一条记录。
+* 查看数据库中是否删除了相应 id 的记录。
 
 ===== DeptController  -> 处理请求
 .src/main/java/com/tjise/controller/DeptController.java
@@ -706,7 +858,6 @@ public abstract void deleteDeptById(Integer id);
 * 请求方式：POST
 * 接口描述：该接口用于添加部门数据
 
-
 2. 请求参数
 * 格式：application/json
 * 参数说明：
@@ -748,9 +899,8 @@ public abstract void deleteDeptById(Integer id);
 }
 ```
 
-测试接口: 使用 postman POST 方法测试 http://localhost:8080/depts 查看数据库是否有新增记录。
-
-在前端新增部门，查看数据库是否有新增记录。
+* 测试接口: 使用 httpie POST http://localhost:8080/depts name=教研部
+* 测试在前端新增部门，查看数据库是否有新增记录。
 
 ===== DeptController  -> 处理请求
 .src/main/java/com/tjise/controller/DeptController.java
@@ -815,7 +965,6 @@ public abstract void insertDept(Dept dept);
 ==== 注解优化
 前面 controller/DeptController.java 文件的方法注解中有重复的字符串 "/depts"，现抽取到类的注解中，以减少重复的字符串。
 
-
 .三行代码中都有 /depts
 [source,java]
 ----
@@ -861,9 +1010,7 @@ import com.tjise.pojo.Result;
 import com.tjise.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/depts")                         // 抽取到类的注解上
@@ -966,6 +1113,9 @@ public class DeptController {
 }
 ```
 
+* 测试接口: httpie :8080/depts/1
+* 测试在浏览器获取单个部门。
+
 ===== DeptController  -> 处理请求
 [source,java,linenums]
 ----
@@ -1002,13 +1152,13 @@ public abstract Dept getDeptById(Integer id);
 ==== 修改部门
 1. 基本信息
 
-* 请求路径：/depts/{id}
-* 请求方式：GET
-* 接口描述：该接口用于根据ID查询部门数据
+* 请求路径：/depts
+* 请求方式：PUT
+* 接口描述：该接口用于修改部门数据
 
 2. 请求参数
 
-* 参数格式：路径参数
+* 参数格式：application/json
 * 参数说明：
 +
 [caption=]
@@ -1016,11 +1166,15 @@ public abstract Dept getDeptById(Integer id);
 |===
 | 参数名 | 类型     | 是否必须 | 备注
 | id    | number  | 必须     | 部门ID
+| name  | string  | 必须     | 部门名称
 |===
 * 请求参数样例：
 +
-```
-/depts/1
+```json
+{
+    "id": 1,
+    "name": "教研部"
+}
 ```
 
 3. 响应数据
@@ -1032,15 +1186,9 @@ public abstract Dept getDeptById(Integer id);
 [cols="1,1,1,1",options="header"]
 |===
 | 参数名 | 类型     | 是否必须 | 备注
-| id    | number  | 必须     | 部门ID
-| 参数名            | 类型     | 是否必须 | 备注                
 | code           | number | 必须   | 响应码，1 代表成功，0 代表失败
 | msg            | string | 非必须  | 提示信息              
 | data           | object | 非必须  | 返回的数据           
-| \|- id         | number | 非必须  | id               
-| \|- name       | string | 非必须  | 部门名称              
-| \|- createTime | string | 非必须  | 创建时间              
-| \|- updateTime | string | 非必须  | 修改时间              
 |===
 
 * 响应数据样例：
@@ -1049,14 +1197,11 @@ public abstract Dept getDeptById(Integer id);
 {
   "code": 1,
   "msg": "success",
-  "data": {
-    "id": 1,
-    "name": "学工部",
-    "createTime": "2022-09-01T23:06:29",
-    "updateTime": "2022-09-01T23:06:29"
-  }
-}
+  "data": null
 ```
+
+* 测试接口: http PUT http://localhost:8080/depts id:=1 name="教研部"
+* 测试在前端修改部门，查看数据库是否有更新记录。
 
 ===== DeptController  -> 处理请求
 [source,java,linenums]
@@ -2595,8 +2740,8 @@ import java.time.format.DateTimeFormatter;
 
 // 阿里云 OSS 工具类
 // 放入IOC 容器中，不属于 控制层 @Controller、业务层 @Service、持久层 @Repository，所以就用 @Component 吧
+// @ConfigurationProperties(prefix = "aliyun.oss")
 @Component
-@ConfigurationProperties(prefix = "aliyun.oss")
 @Data  // 内部需要使用 setter 来设置属性值，所以要使用 lombok 来自动生成 setter
 public class AliOSSUtils {
 
@@ -5207,7 +5352,7 @@ public boolean preHandle(HttpServletRequest request,
         sendErrorResponse(response);
         return false;  // 拦截直接给客户端响应 200 结束
     }
-
+    // ---------- 更新代码开始 ------
     // 4. 解析令牌
     Claims payload;
     try {
@@ -5225,7 +5370,7 @@ public boolean preHandle(HttpServletRequest request,
         sendErrorResponse(response);
         return false;
     }
-
+    // ---------- 更新代码结束 ------
     return true;   // 放行去执行 api
 }
 ----

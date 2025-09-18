@@ -7193,8 +7193,8 @@ http POST https://jsonplaceholder.typicode.com/posts &lt; data.json
 
 .使用 = 和 := 的情况
 ****
-* 字符串 → 用 =
-* 数字、布尔、数组、对象 → 用 :=
+* 字符串用 =
+* 数字、布尔、数组、对象用 :=
 ****
 </t>
 <t tx="swot.20250910141943.1">获取资源信息（默认为 GET 方法，可省略）。

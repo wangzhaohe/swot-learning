@@ -537,16 +537,28 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel1">
 <li><a href="#_spring_boot_综合项目案例">Spring Boot 综合项目案例</a>
 <ul class="sectlevel2">
-<li><a href="#_案例准备工作">案例准备工作</a></li>
+<li><a href="#_创建模块_general_manager">创建模块 general-manager</a></li>
 <li><a href="#_导入自己创建的_spring_boot_模块">导入自己创建的 Spring Boot 模块</a></li>
 <li><a href="#_检查所有依赖版本">检查所有依赖版本</a></li>
 <li><a href="#_编写_application_properties">编写 application.properties</a></li>
 <li><a href="#_创建数据库_general_manager">创建数据库 general_manager</a></li>
 <li><a href="#_创建数据库表_dept_并插入数据">创建数据库表 dept 并插入数据</a></li>
 <li><a href="#_创建数据库表_emp_并插入数据">创建数据库表 emp  并插入数据</a></li>
-<li><a href="#_创建数据库表_dept_对应实体类">创建数据库表 dept 对应实体类</a></li>
-<li><a href="#_创建数据库表_emp_对应的实体类">创建数据库表 emp  对应的实体类</a></li>
-<li><a href="#_创建统一响应结果实体类_result">创建统一响应结果实体类 Result</a></li>
+<li><a href="#_创建数据库表_dept_对应实体类">创建数据库表 dept 对应实体类</a>
+<ul class="sectlevel3">
+<li><a href="#_file_srcmainjavacomtjisepojodept_java">file &#8594; src/main/java/com/tjise/pojo/Dept.java</a></li>
+</ul>
+</li>
+<li><a href="#_创建数据库表_emp_对应的实体类">创建数据库表 emp  对应的实体类</a>
+<ul class="sectlevel3">
+<li><a href="#_file_srcmainjavacomtjisepojoemp_java">file &#8594; src/main/java/com/tjise/pojo/Emp.java</a></li>
+</ul>
+</li>
+<li><a href="#_创建统一响应结果_result_实体类">创建统一响应结果 Result 实体类</a>
+<ul class="sectlevel3">
+<li><a href="#_file_srcmainjavacomtjisepojoresult_java">file &#8594; src/main/java/com/tjise/pojo/Result.java</a></li>
+</ul>
+</li>
 <li><a href="#_准备对应的三层架构包_controller_service_mapper">准备对应的三层架构包 Controller Service Mapper</a>
 <ul class="sectlevel3">
 <li><a href="#_部门三层架构">部门三层架构</a></li>
@@ -559,6 +571,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_部门管理">部门管理</a>
 <ul class="sectlevel3">
 <li><a href="#_查询部门列表">查询部门列表</a></li>
+<li><a href="#_跨域处理">跨域处理</a></li>
 <li><a href="#_删除单个部门">删除单个部门</a></li>
 <li><a href="#_新增部门">新增部门</a></li>
 <li><a href="#_注解优化">注解优化</a></li>
@@ -652,7 +665,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
     });
 </script>
 <div class="sect2">
-<h3 id="_案例准备工作">案例准备工作</h3>
+<h3 id="_创建模块_general_manager">创建模块 general-manager</h3>
 <div class="paragraph">
 <p>使用 <a href="https://start.spring.io/" class="bare">https://start.spring.io/</a> 创建 Spring Boot 工程 (后面会将该工程作为模块导入到整体项目 spring-boot-ketang 中)，如下所示。</p>
 </div>
@@ -748,7 +761,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <p><strong>Group ID + Artifact ID</strong> 组合必须唯一，类似Maven坐标</p>
 </li>
 <li>
-<p><strong>Package Name</strong> 通常基于Group ID，但需要符合Java包命名规则</p>
+<p><strong>Package Name</strong> 通常基于 Group ID，但需要符合 Java 包命名规则</p>
 </li>
 <li>
 <p><strong>Name</strong> 是面向用户的友好显示名称</p>
@@ -946,8 +959,8 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <span class="normal">14</span>
 <span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">-- 创建部门表</span>
 <span class="tok-k">create</span><span class="tok-w"> </span><span class="tok-k">table</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">(</span>
-<span class="tok-w">    </span><span class="tok-n">id</span><span class="tok-w"> </span><span class="tok-nb">int</span><span class="tok-w"> </span><span class="tok-n">unsigned</span><span class="tok-w"> </span><span class="tok-k">primary</span><span class="tok-w"> </span><span class="tok-k">key</span><span class="tok-w"> </span><span class="tok-n">auto_increment</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;主键ID&#39;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">10</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">not</span><span class="tok-w"> </span><span class="tok-k">null</span><span class="tok-w"> </span><span class="tok-k">unique</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;部门名称&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">id</span><span class="tok-w">          </span><span class="tok-nb">int</span><span class="tok-w"> </span><span class="tok-n">unsigned</span><span class="tok-w"> </span><span class="tok-k">primary</span><span class="tok-w"> </span><span class="tok-k">key</span><span class="tok-w"> </span><span class="tok-n">auto_increment</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;主键ID&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">name</span><span class="tok-w">        </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">10</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">not</span><span class="tok-w"> </span><span class="tok-k">null</span><span class="tok-w"> </span><span class="tok-k">unique</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;部门名称&#39;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-n">create_time</span><span class="tok-w"> </span><span class="tok-n">datetime</span><span class="tok-w"> </span><span class="tok-k">not</span><span class="tok-w"> </span><span class="tok-k">null</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;创建时间&#39;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-n">update_time</span><span class="tok-w"> </span><span class="tok-n">datetime</span><span class="tok-w"> </span><span class="tok-k">not</span><span class="tok-w"> </span><span class="tok-k">null</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;修改时间&#39;</span>
 <span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;部门表&#39;</span><span class="tok-p">;</span>
@@ -1042,6 +1055,8 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_创建数据库表_dept_对应实体类">创建数据库表 dept 对应实体类</h3>
+<div class="sect3">
+<h4 id="_file_srcmainjavacomtjisepojodept_java">file &#8594; src/main/java/com/tjise/pojo/Dept.java</h4>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/pojo/Dept.java</div>
 <div class="content">
@@ -1080,8 +1095,11 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect2">
 <h3 id="_创建数据库表_emp_对应的实体类">创建数据库表 emp  对应的实体类</h3>
+<div class="sect3">
+<h4 id="_file_srcmainjavacomtjisepojoemp_java">file &#8594; src/main/java/com/tjise/pojo/Emp.java</h4>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/pojo/emp.java</div>
 <div class="content">
@@ -1136,8 +1154,11 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect2">
-<h3 id="_创建统一响应结果实体类_result">创建统一响应结果实体类 Result</h3>
+<h3 id="_创建统一响应结果_result_实体类">创建统一响应结果 Result 实体类</h3>
+<div class="sect3">
+<h4 id="_file_srcmainjavacomtjisepojoresult_java">file &#8594; src/main/java/com/tjise/pojo/Result.java</h4>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/pojo/Result.java</div>
 <div class="content">
@@ -1202,14 +1223,14 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect2">
 <h3 id="_准备对应的三层架构包_controller_service_mapper">准备对应的三层架构包 Controller Service Mapper</h3>
 <div class="sect3">
 <h4 id="_部门三层架构">部门三层架构</h4>
 <div class="sect4">
-<h5 id="_原始_deptcontroller">原始 DeptController</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/controller/DeptController.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1229,9 +1250,8 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_原始_deptservice">原始 DeptService</h5>
+<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/service/DeptService.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1245,9 +1265,8 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_原始_deptserviceimpl">原始 DeptServiceImpl</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/service/impl/DeptServiceImpl.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1256,9 +1275,11 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.impl</span><span class="tok-p">;</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.impl</span><span class="tok-p">;</span>
 
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.DeptService</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Service</span><span class="tok-p">;</span>
 
 
 <span class="tok-nd">@Service</span><span class="tok-w">  </span><span class="tok-c1">// 把该类的对象交给 IOC 容器管理</span>
@@ -1269,17 +1290,18 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_原始_deptmapper">原始 DeptMapper</h5>
+<h5 id="_file_srcmainjavacomtjisemapperdeptmapper_java">file &#8594; src/main/java/com/tjise/mapper/DeptMapper.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/mapper/DeptMapper.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper</span><span class="tok-p">;</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper</span><span class="tok-p">;</span>
 
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Mapper</span><span class="tok-p">;</span>
 
 <span class="tok-nd">@Mapper</span><span class="tok-w">  </span><span class="tok-c1">// 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptMapper</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -1292,9 +1314,8 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <div class="sect3">
 <h4 id="_员工三层架构">员工三层架构</h4>
 <div class="sect4">
-<h5 id="_empcontroller">EmpController</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerempcontroller_java">file &#8594; src/main/java/com/tjise/controller/EmpController.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/controller/EmpController.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1316,9 +1337,8 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_empservice">EmpService</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/service/EmpService.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1332,9 +1352,8 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_empserviceimpl">EmpServiceImpl</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempserviceimpl_java">file &#8594; src/main/java/com/tjise/service/EmpServiceImpl.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/service/EmpServiceImpl.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1354,9 +1373,8 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_empmapper">EmpMapper</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/mapper/EmpMapper.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1455,13 +1473,27 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <p>上述行为是风格，是约定方式，约定不是规范，可以打破，所以称为 RESTful 风格，而不是 RESTful 规范。</p>
 </li>
 <li>
-<p>描述模块的功能通常使用复数，也就是加s的格式来描述，表示此类资源，而非单个资源。如：depts、emps、users、books 等等。</p>
+<p>描述模块的功能通常使用复数，也就是加 s 的格式来描述，表示此类资源，而非单个资源。如：depts、emps、users、books 等等。</p>
 </li>
 </ul>
 </div>
 </td>
 </tr>
 </table>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>“资源清晰、读为主、多端开放、无状态、可缓存、赶进度” 六个关键词只要命中四个，就别犹豫，直接上 REST；</p>
+</li>
+<li>
+<p>其余情况不适合使用 REST，如 二进制 RPC、消息、流式或 GraphQL 等等。</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1633,16 +1665,19 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <img src="img/develope_flow.png" alt="develope flow">
 </div>
 </div>
-<div class="paragraph">
-<p>测试接口: 使用 postman GET 方法测试 <a href="http://localhost:8080/depts" class="bare">http://localhost:8080/depts</a></p>
-</div>
-<div class="paragraph">
+<div class="ulist">
+<ul>
+<li>
+<p>测试接口: 使用 http <a href="http://localhost:8080/depts" class="bare">http://localhost:8080/depts</a></p>
+</li>
+<li>
 <p>测试接口: 使用浏览器测试 <a href="http://localhost:9528/#/system/dept" class="bare">http://localhost:9528/#/system/dept</a></p>
+</li>
+</ul>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求">DeptController  &#8594; 处理请求</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_2">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/controller/DeptController.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -1657,7 +1692,33 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@RestController</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Result</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.DeptService</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.CrossOrigin</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.GetMapping</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RestController</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 如果是浏览器访问，会有跨域问题，参下面节点的解决方式</span>
+<span class="tok-nd">@RestController</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DeptController</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
 <span class="tok-w">    </span><span class="tok-nd">@Autowired</span><span class="tok-w">        </span><span class="tok-c1">// DI 注入 IOC 容器中的 DeptService Bean 对象，默认名称为 deptService</span>
@@ -1676,16 +1737,25 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptservice_接口">DeptService     &#8594; 接口</h5>
+<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_2">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
 <div class="paragraph">
 <p>定义该接口目的是为了用类的多态实现 controller 层左边解耦。</p>
 </div>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/service/DeptService.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptService</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
 <span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
@@ -1693,9 +1763,8 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_2">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/service/impl/DeptServiceImpl.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -1709,7 +1778,25 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Service</span><span class="tok-w">  </span><span class="tok-c1">// 把该类的对象交给 IOC 容器管理</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.impl</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper.DeptMapper</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.DeptService</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Service</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Service</span><span class="tok-w">  </span><span class="tok-c1">// 把该类的对象交给 IOC 容器管理</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DeptServiceImpl</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">DeptService</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// DI 注入 DeptMapper 实现类对象给变量 deptMapper</span>
@@ -1727,15 +1814,30 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_file_srcmainjavacomtjisemapperdeptmapper_java_2">file &#8594; src/main/java/com/tjise/mapper/DeptMapper.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/mapper/DeptMapper.java</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Mapper</span><span class="tok-w">  </span><span class="tok-c1">// 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Mapper</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Select</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+
+<span class="tok-nd">@Mapper</span><span class="tok-w">  </span><span class="tok-c1">// 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptMapper</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from dept&quot;</span><span class="tok-p">)</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
@@ -1743,6 +1845,213 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_跨域处理">跨域处理</h4>
+<div class="sect4">
+<h5 id="_临时_后端在_controller_中解决跨域问题">临时-后端在 controller 中解决跨域问题</h5>
+<div class="sect5">
+<h6 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_3">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Result</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.DeptService</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.CrossOrigin</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.GetMapping</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RestController</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@RestController</span>
+<span class="tok-nd">@CrossOrigin</span><span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-n">originPatterns</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">allowedHeaders</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">methods</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-n">org</span><span class="tok-p">.</span><span class="tok-na">springframework</span><span class="tok-p">.</span><span class="tok-na">web</span><span class="tok-p">.</span><span class="tok-na">bind</span><span class="tok-p">.</span><span class="tok-na">annotation</span><span class="tok-p">.</span><span class="tok-na">RequestMethod</span><span class="tok-p">.</span><span class="tok-na">GET</span><span class="tok-p">,</span>
+<span class="tok-w">               </span><span class="tok-n">org</span><span class="tok-p">.</span><span class="tok-na">springframework</span><span class="tok-p">.</span><span class="tok-na">web</span><span class="tok-p">.</span><span class="tok-na">bind</span><span class="tok-p">.</span><span class="tok-na">annotation</span><span class="tok-p">.</span><span class="tok-na">RequestMethod</span><span class="tok-p">.</span><span class="tok-na">POST</span><span class="tok-p">,</span>
+<span class="tok-w">               </span><span class="tok-n">org</span><span class="tok-p">.</span><span class="tok-na">springframework</span><span class="tok-p">.</span><span class="tok-na">web</span><span class="tok-p">.</span><span class="tok-na">bind</span><span class="tok-p">.</span><span class="tok-na">annotation</span><span class="tok-p">.</span><span class="tok-na">RequestMethod</span><span class="tok-p">.</span><span class="tok-na">PUT</span><span class="tok-p">,</span>
+<span class="tok-w">               </span><span class="tok-n">org</span><span class="tok-p">.</span><span class="tok-na">springframework</span><span class="tok-p">.</span><span class="tok-na">web</span><span class="tok-p">.</span><span class="tok-na">bind</span><span class="tok-p">.</span><span class="tok-na">annotation</span><span class="tok-p">.</span><span class="tok-na">RequestMethod</span><span class="tok-p">.</span><span class="tok-na">DELETE</span><span class="tok-p">,</span>
+<span class="tok-w">               </span><span class="tok-n">org</span><span class="tok-p">.</span><span class="tok-na">springframework</span><span class="tok-p">.</span><span class="tok-na">web</span><span class="tok-p">.</span><span class="tok-na">bind</span><span class="tok-p">.</span><span class="tok-na">annotation</span><span class="tok-p">.</span><span class="tok-na">RequestMethod</span><span class="tok-p">.</span><span class="tok-na">OPTIONS</span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-n">allowCredentials</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;true&quot;</span>
+<span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DeptController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span><span class="tok-w">        </span><span class="tok-c1">// DI 注入 IOC 容器中的 DeptService Bean 对象，默认名称为 deptService</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">DeptService</span><span class="tok-w"> </span><span class="tok-n">deptService</span><span class="tok-p">;</span>
+
+<span class="tok-c1">//  @RequestMapping(&quot;/depts&quot;)                                        // 所有方法都可以请求</span>
+<span class="tok-c1">//  @RequestMapping(value = &quot;/depts&quot;, method = {RequestMethod.GET})  // 完整写法</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/depts&quot;</span><span class="tok-p">)</span><span class="tok-w">                                            </span><span class="tok-c1">// 更加简洁的方式</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">(){</span>
+<span class="tok-w">        </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">deptList</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">deptService</span><span class="tok-p">.</span><span class="tok-na">selectAllDept</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">(</span><span class="tok-n">deptList</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_掌握_后端在全局解决跨域问题">掌握-后端在全局解决跨域问题</h5>
+<div class="paragraph">
+<p>创建了一个全局跨域配置类，这样就不需要在每个 Controller 上单独添加 @CrossOrigin 注解了。</p>
+</div>
+<div class="paragraph">
+<p>让我详细解释一下 Spring Boot 是如何处理我们通过 @Bean 注册的 CorsFilter 的：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>注册过程：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>当 Spring Boot 应用启动时，它会扫描所有带有 @Configuration 注解的类</p>
+</li>
+<li>
+<p>在 CorsConfig 类中，@Bean 注解的方法 corsFilter() 会被 Spring 容器调用</p>
+</li>
+<li>
+<p>Spring 会将返回的 CorsFilter 实例注册为一个 Bean，并自动将其添加到过滤器链中</p>
+</li>
+<li>
+<p>这个过程不需要我们手动注册，Spring Boot 会自动处理</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>请求处理过程：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>当前端发送请求时，请求会经过 Servlet 容器的过滤器链</p>
+</li>
+<li>
+<p>CorsFilter 位于过滤器链的较早位置，会首先处理请求</p>
+</li>
+<li>
+<p>对于简单请求（GET、POST等），CorsFilter 会直接处理并添加相应的 CORS 响应头</p>
+</li>
+<li>
+<p>对于复杂请求（带有自定义头、PUT/DELETE 方法等），浏览器会先发送预检请求（OPTIONS）</p>
+</li>
+<li>
+<p>CorsFilter 会处理这个预检请求，检查是否允许实际请求的跨域访问</p>
+</li>
+<li>
+<p>如果预检通过，浏览器才会发送实际请求，CorsFilter 再次处理并添加 CORS 响应头</p>
+</li>
+<li>
+<p>最后请求才会到达我们的 Controller 方法</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>为什么这种方式有效：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>CorsFilter 是 Spring 框架专门为处理跨域问题设计的过滤器</p>
+</li>
+<li>
+<p>它会在响应中添加必要的 CORS 头，如 Access-Control-Allow-Origin、Access-Control-Allow-Methods 等</p>
+</li>
+<li>
+<p>这些响应头告诉浏览器服务器允许哪些跨域请求，从而避免了跨域错误</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>这种方式比使用 @WebFilter 更简洁，因为 Spring Boot 会自动处理过滤器的注册和配置，而不需要我们手动管理。</p>
+</div>
+<div class="sect5">
+<h6 id="_file_srcmainjavacomtjiseconfigcorsconfig_java">file &#8594; src/main/java/com/tjise/config/CorsConfig.java</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.config</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.context.annotation.Bean</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.context.annotation.Configuration</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.cors.CorsConfiguration</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.cors.UrlBasedCorsConfigurationSource</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.filter.CorsFilter</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Configuration</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">CorsConfig</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Bean</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">CorsFilter</span><span class="tok-w"> </span><span class="tok-nf">corsFilter</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">CorsConfiguration</span><span class="tok-w"> </span><span class="tok-n">config</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CorsConfiguration</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-c1">// 允许所有域名进行跨域调用</span>
+<span class="tok-w">        </span><span class="tok-n">config</span><span class="tok-p">.</span><span class="tok-na">addAllowedOriginPattern</span><span class="tok-p">(</span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// 允许所有请求头</span>
+<span class="tok-w">        </span><span class="tok-n">config</span><span class="tok-p">.</span><span class="tok-na">addAllowedHeader</span><span class="tok-p">(</span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// 允许所有方法（POST、GET...）</span>
+<span class="tok-w">        </span><span class="tok-n">config</span><span class="tok-p">.</span><span class="tok-na">addAllowedMethod</span><span class="tok-p">(</span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// 允许携带 Cookie</span>
+<span class="tok-w">        </span><span class="tok-n">config</span><span class="tok-p">.</span><span class="tok-na">setAllowCredentials</span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-n">UrlBasedCorsConfigurationSource</span><span class="tok-w"> </span><span class="tok-n">source</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">UrlBasedCorsConfigurationSource</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">source</span><span class="tok-p">.</span><span class="tok-na">registerCorsConfiguration</span><span class="tok-p">(</span><span class="tok-s">&quot;/**&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">config</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CorsFilter</span><span class="tok-p">(</span><span class="tok-n">source</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_了解_在开发时前端自己处理跨域问题">了解-在开发时前端自己处理跨域问题</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_了解_运维在部署时通过_nginx_反向代理解决跨域">了解-运维在部署时通过 Nginx 反向代理解决跨域</h5>
+
 </div>
 </div>
 <div class="sect3">
@@ -1807,18 +2116,13 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </li>
 <li>
 <p>响应数据</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
+<div class="ulist">
+<ul>
+<li>
 <p>参数格式：application/json</p>
-</div>
-<div class="paragraph">
+</li>
+<li>
 <p>参数说明</p>
-</div>
-<div class="paragraph">
-<p>+</p>
-</div>
 <table class="tableblock frame-all grid-all stripes-even stretch">
 <colgroup>
 <col style="width: 16.6666%;">
@@ -1855,9 +2159,9 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
+</li>
+<li>
 <p>响应数据样例：</p>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="json"><span></span><span class="tok-p">{</span>
@@ -1867,20 +2171,33 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="img/dept_delete.png" alt="开发流程" width="960">
 </div>
 <div class="title">Figure 1. 开发流程</div>
 </div>
-<div class="paragraph">
-<p>测试接口: 使用 postman DELETE 方法测试 <a href="http://localhost:8080/depts/5" class="bare">http://localhost:8080/depts/5</a></p>
-</div>
-<div class="paragraph">
+<div class="ulist">
+<ul>
+<li>
+<p>测试接口: 使用 http DELETE <a href="http://localhost:8080/depts/5" class="bare">http://localhost:8080/depts/5</a></p>
+</li>
+<li>
+<p>测试使用浏览器删除一条记录。</p>
+</li>
+<li>
 <p>查看数据库中是否删除了相应 id 的记录。</p>
+</li>
+</ul>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求_2">DeptController  &#8594; 处理请求</h5>
+<h5 id="_deptcontroller_处理请求">DeptController  &#8594; 处理请求</h5>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/controller/DeptController.java</div>
 <div class="content">
@@ -1900,7 +2217,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptservice_接口_2">DeptService     &#8594; 接口</h5>
+<h5 id="_deptservice_接口">DeptService     &#8594; 接口</h5>
 <div class="paragraph">
 <p>定义该接口目的是为了用类的多态实现 controller 层左边解耦。</p>
 </div>
@@ -1915,7 +2232,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口_2">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_deptserviceimpl_实现接口">DeptServiceImpl &#8594; 实现接口</h5>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/service/impl/DeptServiceImpl.java</div>
 <div class="content">
@@ -1933,7 +2250,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库_2">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_deptmapper_数据库">DeptMapper      &#8594; 数据库</h5>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/mapper/DeptMapper.java</div>
 <div class="content">
@@ -2070,19 +2387,19 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </li>
+<li>
+<p>测试接口: 使用 httpie POST <a href="http://localhost:8080/depts" class="bare">http://localhost:8080/depts</a> name=教研部</p>
+</li>
+<li>
+<p>测试在前端新增部门，查看数据库是否有新增记录。</p>
+</li>
 </ul>
 </div>
 </li>
 </ol>
 </div>
-<div class="paragraph">
-<p>测试接口: 使用 postman POST 方法测试 <a href="http://localhost:8080/depts" class="bare">http://localhost:8080/depts</a> 查看数据库是否有新增记录。</p>
-</div>
-<div class="paragraph">
-<p>在前端新增部门，查看数据库是否有新增记录。</p>
-</div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求_3">DeptController  &#8594; 处理请求</h5>
+<h5 id="_deptcontroller_处理请求_2">DeptController  &#8594; 处理请求</h5>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/controller/DeptController.java</div>
 <div class="content">
@@ -2102,7 +2419,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptservice_接口_3">DeptService     &#8594; 接口</h5>
+<h5 id="_deptservice_接口_2">DeptService     &#8594; 接口</h5>
 <div class="paragraph">
 <p>定义该接口目的是为了用类的多态实现 controller 层左边解耦。</p>
 </div>
@@ -2115,7 +2432,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口_3">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_deptserviceimpl_实现接口_2">DeptServiceImpl &#8594; 实现接口</h5>
 <div class="paragraph">
 <p>数据库表 dept 字段 对应的 java 实体类中有 4 个属性</p>
 </div>
@@ -2168,7 +2485,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库_3">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_deptmapper_数据库_2">DeptMapper      &#8594; 数据库</h5>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/mapper/DeptMapper.java</div>
 <div class="content">
@@ -2233,7 +2550,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <p>注解优化后再次使用 postman 或者浏览器进行测试，依然是正常的。</p>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java">#file src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_4">#file src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2285,50 +2602,46 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <span class="normal">47</span>
 <span class="normal">48</span>
 <span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
+<span class="normal">50</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
 
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Result</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.DeptService</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.*</span><span class="tok-p">;</span>
-
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
 
-
 <span class="tok-nd">@RestController</span>
-<span class="hll"><span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/depts&quot;</span><span class="tok-p">)</span><span class="tok-w">                         </span><span class="tok-c1">// 抽取到类的注解上</span>
-</span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DeptController</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// DI 注入 IOC 容器中的 DeptService Bean 对象，默认名称为 deptService</span>
-<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/depts&quot;</span><span class="tok-p">)</span><span class="tok-w">                         </span><span class="tok-c1">// 抽取到类的注解上</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DeptController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="hll"><span class="tok-w">    </span><span class="tok-c1">// DI 注入 IOC 容器中的 DeptService Bean 对象，默认名称为 deptService</span>
+</span><span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">DeptService</span><span class="tok-w"> </span><span class="tok-n">deptService</span><span class="tok-p">;</span>
 
-<span class="hll"><span class="tok-w">    </span><span class="tok-nd">@GetMapping</span>
-</span><span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
-<span class="tok-w">        </span><span class="tok-c1">// 调用 service 层</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="hll">
+</span><span class="tok-w">        </span><span class="tok-c1">// 调用 service 层</span>
 <span class="tok-w">        </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">deptList</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">deptService</span><span class="tok-p">.</span><span class="tok-na">selectAllDept</span><span class="tok-p">();</span>
 
 <span class="tok-w">        </span><span class="tok-c1">// 把数据封装成统一的响应格式进行返回</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">(</span><span class="tok-n">deptList</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
-<span class="hll"><span class="tok-w">    </span><span class="tok-nd">@DeleteMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/{id}&quot;</span><span class="tok-p">)</span>
-</span><span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-w"> </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
-<span class="tok-w">        </span><span class="tok-c1">// 调用 service 层</span>
+<span class="tok-w">    </span><span class="tok-nd">@DeleteMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-w"> </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="hll">
+</span><span class="tok-w">        </span><span class="tok-c1">// 调用 service 层</span>
 <span class="tok-w">        </span><span class="tok-n">deptService</span><span class="tok-p">.</span><span class="tok-na">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
 
 <span class="tok-w">        </span><span class="tok-c1">// 把数据封装成统一的响应格式进行返回</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">();</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
-<span class="hll"><span class="tok-w">    </span><span class="tok-nd">@PostMapping</span>
-</span><span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-nd">@RequestBody</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
-<span class="tok-w">        </span><span class="tok-c1">// 前端传入 JSON 数据 { &quot;name&quot;: &quot;人事部&quot; }，打印封装的数据只有 name，如下</span>
+<span class="tok-w">    </span><span class="tok-nd">@PostMapping</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-nd">@RequestBody</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="hll">
+</span><span class="tok-w">        </span><span class="tok-c1">// 前端传入 JSON 数据 { &quot;name&quot;: &quot;人事部&quot; }，打印封装的数据只有 name，如下</span>
 <span class="tok-w">        </span><span class="tok-c1">// Dept(id=null, name=人事部, createTime=null, updateTime=null)</span>
 <span class="tok-w">        </span><span class="tok-c1">// System.out.println(dept);</span>
 
@@ -2492,13 +2805,19 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </li>
+<li>
+<p>测试接口: httpie :8080/depts/1</p>
+</li>
+<li>
+<p>测试在浏览器获取单个部门。</p>
+</li>
 </ul>
 </div>
 </li>
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求_4">DeptController  &#8594; 处理请求</h5>
+<h5 id="_deptcontroller_处理请求_3">DeptController  &#8594; 处理请求</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -2515,7 +2834,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptservice_接口_4">DeptService     &#8594; 接口</h5>
+<h5 id="_deptservice_接口_3">DeptService     &#8594; 接口</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-nf">getDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
@@ -2524,7 +2843,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口_4">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_deptserviceimpl_实现接口_3">DeptServiceImpl &#8594; 实现接口</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -2541,7 +2860,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库_4">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_deptmapper_数据库_3">DeptMapper      &#8594; 数据库</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -2561,13 +2880,13 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>请求路径：/depts/{id}</p>
+<p>请求路径：/depts</p>
 </li>
 <li>
-<p>请求方式：GET</p>
+<p>请求方式：PUT</p>
 </li>
 <li>
-<p>接口描述：该接口用于根据ID查询部门数据</p>
+<p>接口描述：该接口用于修改部门数据</p>
 </li>
 </ul>
 </div>
@@ -2577,7 +2896,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>参数格式：路径参数</p>
+<p>参数格式：application/json</p>
 </li>
 <li>
 <p>参数说明：</p>
@@ -2603,6 +2922,12 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">必须</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">部门ID</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">必须</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">部门名称</p></td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -2610,7 +2935,10 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <p>请求参数样例：</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>/depts/1</code></pre>
+<pre class="pygments highlight"><code data-lang="json"><span></span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;id&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;name&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;教研部&quot;</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </li>
@@ -2643,18 +2971,6 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">必须</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">部门ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">参数名</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">类型</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">是否必须</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">备注</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">code</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">必须</p></td>
@@ -2672,30 +2988,6 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">非必须</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">返回的数据</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">|- id</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">非必须</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">|- name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">非必须</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">部门名称</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">|- createTime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">非必须</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">创建时间</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">|- updateTime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">非必须</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">修改时间</p></td>
-</tr>
 </tbody>
 </table>
 </li>
@@ -2706,15 +2998,15 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <pre class="pygments highlight"><code data-lang="json"><span></span><span class="tok-p">{</span>
 <span class="tok-w">  </span><span class="tok-nt">&quot;code&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span>
 <span class="tok-w">  </span><span class="tok-nt">&quot;msg&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;success&quot;</span><span class="tok-p">,</span>
-<span class="tok-w">  </span><span class="tok-nt">&quot;data&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-nt">&quot;id&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-nt">&quot;name&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;学工部&quot;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-nt">&quot;createTime&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;2022-09-01T23:06:29&quot;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-nt">&quot;updateTime&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;2022-09-01T23:06:29&quot;</span>
-<span class="tok-w">  </span><span class="tok-p">}</span>
-<span class="tok-p">}</span></code></pre>
+<span class="tok-w">  </span><span class="tok-nt">&quot;data&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">null</span></code></pre>
 </div>
 </div>
+</li>
+<li>
+<p>测试接口: http PUT <a href="http://localhost:8080/depts" class="bare">http://localhost:8080/depts</a> id:=1 name="教研部"</p>
+</li>
+<li>
+<p>测试在前端修改部门，查看数据库是否有更新记录。</p>
 </li>
 </ul>
 </div>
@@ -2722,7 +3014,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求_5">DeptController  &#8594; 处理请求</h5>
+<h5 id="_deptcontroller_处理请求_4">DeptController  &#8594; 处理请求</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -2739,7 +3031,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptservice_接口_5">DeptService     &#8594; 接口</h5>
+<h5 id="_deptservice_接口_4">DeptService     &#8594; 接口</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">updateDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
@@ -2748,7 +3040,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口_5">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_deptserviceimpl_实现接口_4">DeptServiceImpl &#8594; 实现接口</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -2767,7 +3059,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库_5">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_deptmapper_数据库_4">DeptMapper      &#8594; 数据库</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -4722,8 +5014,8 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="shell"><span></span><span class="tok-c1"># 设置阿里云 OSS 这是 macos 的设置，其他操作系统参考上面官方文档</span>
-<span class="tok-nb">export</span><span class="tok-w"> </span><span class="tok-nv">OSS_ACCESS_KEY_ID</span><span class="tok-o">=</span><span class="tok-s2">&quot;&quot;</span>[REMOVED]
-<span class="tok-nb">export</span><span class="tok-w"> </span><span class="tok-nv">OSS_ACCESS_KEY_SECRET</span><span class="tok-o">=</span><span class="tok-s2">&quot;&quot;</span>[REMOVED]
+<span class="tok-nb">export</span><span class="tok-w"> </span><span class="tok-nv">OSS_ACCESS_KEY_ID</span><span class="tok-o">=</span><span class="tok-s2">&quot;&quot;</span><span class="tok-o">[</span>REMOVED<span class="tok-o">]</span>
+<span class="tok-nb">export</span><span class="tok-w"> </span><span class="tok-nv">OSS_ACCESS_KEY_SECRET</span><span class="tok-o">=</span><span class="tok-s2">&quot;&quot;</span><span class="tok-o">[</span>REMOVED<span class="tok-o">]</span>
 
 <span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-nv">$OSS_ACCESS_KEY_ID</span>
 <span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-nv">$OSS_ACCESS_KEY_SECRET</span></code></pre>
@@ -5101,8 +5393,8 @@ x-oss-storage-class: Standard</pre>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-c1"># 在封装的工具类 AliOSSUtils.java 中，与之对应引用为 @Vaule(&quot;${aliyun.oss.endpoint}&quot;)</span>
 <span class="tok-n">aliyun</span><span class="tok-o">.</span><span class="tok-n">oss</span><span class="tok-o">.</span><span class="tok-n">endpoint</span><span class="tok-o">=</span><span class="tok-n">https</span><span class="tok-p">:</span><span class="tok-o">//</span><span class="tok-n">oss</span><span class="tok-o">-</span><span class="tok-n">cn</span><span class="tok-o">-</span><span class="tok-n">beijing</span><span class="tok-o">.</span><span class="tok-n">aliyuncs</span><span class="tok-o">.</span><span class="tok-n">com</span>
-<span class="tok-n">aliyun</span><span class="tok-o">.</span><span class="tok-n">oss</span><span class="tok-o">.</span><span class="tok-n">accessKeyId</span><span class="tok-o">=</span><span class="tok-n">[REMOVED]</span>
-<span class="tok-n">aliyun</span><span class="tok-o">.</span><span class="tok-n">oss</span><span class="tok-o">.</span><span class="tok-n">accessKeySecret</span><span class="tok-o">=</span><span class="tok-n">[REMOVED]</span>
+<span class="tok-n">aliyun</span><span class="tok-o">.</span><span class="tok-n">oss</span><span class="tok-o">.</span><span class="tok-n">accessKeyId</span><span class="tok-o">=</span><span class="tok-p">[</span><span class="tok-n">REMOVED</span><span class="tok-p">]</span>
+<span class="tok-n">aliyun</span><span class="tok-o">.</span><span class="tok-n">oss</span><span class="tok-o">.</span><span class="tok-n">accessKeySecret</span><span class="tok-o">=</span><span class="tok-p">[</span><span class="tok-n">REMOVED</span><span class="tok-p">]</span>
 <span class="tok-n">aliyun</span><span class="tok-o">.</span><span class="tok-n">oss</span><span class="tok-o">.</span><span class="tok-n">bucketName</span><span class="tok-o">=</span><span class="tok-n">swot</span><span class="tok-o">-</span><span class="tok-n">learn</span></code></pre>
 </div>
 </div>
@@ -5425,8 +5717,8 @@ private String bucketName;</p>
 
 <span class="tok-c1">// 阿里云 OSS 工具类</span>
 <span class="tok-c1">// 放入IOC 容器中，不属于 控制层 @Controller、业务层 @Service、持久层 @Repository，所以就用 @Component 吧</span>
+<span class="tok-c1">// @ConfigurationProperties(prefix = &quot;aliyun.oss&quot;)</span>
 <span class="tok-nd">@Component</span>
-<span class="tok-nd">@ConfigurationProperties</span><span class="tok-p">(</span><span class="tok-n">prefix</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;aliyun.oss&quot;</span><span class="tok-p">)</span>
 <span class="tok-nd">@Data</span><span class="tok-w">  </span><span class="tok-c1">// 内部需要使用 setter 来设置属性值，所以要使用 lombok 来自动生成 setter</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">AliOSSUtils</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
@@ -6123,7 +6415,7 @@ http -v :8080/login username=xxxxxx password=123456</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceempservice_java">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_2">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="sect5">
 <h6 id="_login_新增">login 新增</h6>
 <div class="listingblock">
@@ -6156,9 +6448,9 @@ http -v :8080/login username=xxxxxx password=123456</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisemapperempmapper_java">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_2">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
-<h6 id="_empmapper_2">EmpMapper</h6>
+<h6 id="_empmapper">EmpMapper</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -7084,7 +7376,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </table>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_2">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_5">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="sect5">
 <h6 id="_新增单个部门_insertdept_新增_try_catch">新增单个部门 insertDept &#8594; 新增 try catch</h6>
 <div class="listingblock">
@@ -7129,7 +7421,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_3">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_6">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="sect5">
 <h6 id="_新增单个部门_insertdept_移除_try_catch_恢复原来代码">新增单个部门 insertDept &#8594; 移除 try catch 恢复原来代码</h6>
 <div class="listingblock">
@@ -7271,7 +7563,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_3">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deptserviceimpl_新增_di_empservice">DeptServiceImpl &#8594; 新增 DI empService</h6>
 <div class="listingblock">
@@ -7359,7 +7651,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_2">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_3">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -7384,7 +7676,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_2">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_3">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增_3">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -7412,7 +7704,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ul>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_2">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_4">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deletedeptbyid_删除单个部门及其员工_2">deleteDeptById 删除单个部门及其员工</h6>
 <div class="listingblock">
@@ -7468,7 +7760,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_3">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
 <div class="sect5">
 <h6 id="_deptservice">DeptService</h6>
 <div class="listingblock">
@@ -7521,7 +7813,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_4">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_7">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="sect5">
 <h6 id="_deletedeptbyid_删除单个部门">deleteDeptById 删除单个部门</h6>
 <div class="listingblock">
@@ -7627,7 +7919,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ul>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_3">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_5">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deletedeptbyid_删除单个部门及其员工_3">deleteDeptById 删除单个部门及其员工</h6>
 <div class="listingblock">
@@ -7777,7 +8069,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 所以引出 AOP 的应用。</p>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_4">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_查询部门列表_计算执行耗时">查询部门列表 &#8594; 计算执行耗时</h6>
 <div class="listingblock">
@@ -7873,7 +8165,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_注释掉上节更改的代码_去掉多余打印">注释掉上节更改的代码 &#8594; 去掉多余打印</h5>
 <div class="sect5">
-<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_5">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
+<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
 
 </div>
 <div class="sect5">
@@ -8768,7 +9060,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
+<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
 
 </div>
 <div class="sect5">
@@ -9092,7 +9384,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_9">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_insertdept_新增部门_增加_log">insertDept 新增部门 &#8594; 增加 @Log</h6>
 <div class="listingblock">
@@ -9671,7 +9963,7 @@ after4 -&gt; @Order(66)</pre>
 <span class="tok-w">        </span><span class="tok-n">sendErrorResponse</span><span class="tok-p">(</span><span class="tok-n">response</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 拦截直接给客户端响应 200 结束</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
-
+<span class="tok-w">    </span><span class="tok-c1">// ---------- 更新代码开始 ------</span>
 <span class="tok-w">    </span><span class="tok-c1">// 4. 解析令牌</span>
 <span class="tok-w">    </span><span class="tok-n">Claims</span><span class="tok-w"> </span><span class="tok-n">payload</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -9689,7 +9981,7 @@ after4 -&gt; @Order(66)</pre>
 <span class="tok-w">        </span><span class="tok-n">sendErrorResponse</span><span class="tok-p">(</span><span class="tok-n">response</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
-
+<span class="tok-w">    </span><span class="tok-c1">// ---------- 更新代码结束 ------</span>
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span><span class="tok-w">   </span><span class="tok-c1">// 放行去执行 api</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -9711,7 +10003,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-07 22:51:43 +0800
+Last updated 2025-09-18 11:16:22 +0800
 </div>
 </div>
 </body>
