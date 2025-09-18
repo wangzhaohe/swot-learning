@@ -621,14 +621,15 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
-<li><a href="#_解决商品微服务_ip_发生变更则需要更改订单微服务的配置文件">解决：商品微服务 ip 发生变更则需要更改订单微服务的配置文件</a></li>
-<li><a href="#_解决商品微服务有多个订单微服务该链接哪个">解决：商品微服务有多个，订单微服务该链接哪个？</a></li>
 <li><a href="#_引入微服务注册发现机制">引入微服务注册、发现机制</a>
 <ul class="sectlevel2">
 <li><a href="#_eureka_介绍">Eureka 介绍</a></li>
 <li><a href="#_eureka_server_的创建">Eureka Server 的创建</a>
 <ul class="sectlevel3">
 <li><a href="#_file_eurekapom_xml">@file eureka/pom.xml</a></li>
+<li><a href="#_file_eurekasrcmainjavacomtjiseeurekaeurekaapplication_java">@file eureka/src/main/java/com/tjise/eureka/EurekaApplication.java</a></li>
+<li><a href="#_file_eurekasrcmainresourcesapplication_yml">@file eureka/src/main/resources/application.yml</a></li>
+<li><a href="#_启动_eureka_server_并测试">启动 Eureka Server 并测试</a></li>
 </ul>
 </li>
 </ul>
@@ -1968,20 +1969,21 @@ private ItemProperties itemProperties;</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_解决商品微服务_ip_发生变更则需要更改订单微服务的配置文件">解决：商品微服务 ip 发生变更则需要更改订单微服务的配置文件</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_解决商品微服务有多个订单微服务该链接哪个">解决：商品微服务有多个，订单微服务该链接哪个？</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
 <h2 id="_引入微服务注册发现机制">引入微服务注册、发现机制</h2>
 <div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>问题：商品微服务 ip 发生变更则需要更改订单微服务的配置文件</p>
+</li>
+<li>
+<p>问题：商品微服务有多个，订单微服务该链接哪个？</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>从而引入微服务注册、发现机制，如下。</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="img/service_register.png" alt="service register" width="640">
@@ -2035,7 +2037,7 @@ private ItemProperties itemProperties;</pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/create_euraka_module.png" alt="create euraka module" width="800">
+<img src="img/create_eureka_module.png" alt="create eureka module" width="800">
 </div>
 </div>
 <div class="sect3">
@@ -2129,13 +2131,117 @@ private ItemProperties itemProperties;</pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_file_eurekasrcmainjavacomtjiseeurekaeurekaapplication_java">@file eureka/src/main/java/com/tjise/eureka/EurekaApplication.java</h4>
+<div class="paragraph">
+<p>package com.tjise.eureka;</p>
+</div>
+<div class="paragraph">
+<p>import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;</p>
+</div>
+<div class="paragraph">
+<p>/**
+ * Eureka Server启动类
+ *
+ * @EnableEurekaServer 注解启用 Eureka Server 功能
+ */
+@SpringBootApplication
+@EnableEurekaServer
+public class EurekaApplication {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    public static void main(String[] args) {
+        SpringApplication.run(EurekaApplication.class, args);
+    }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_eurekasrcmainresourcesapplication_yml">@file eureka/src/main/resources/application.yml</h4>
+<div class="paragraph">
+<p>server:
+  port: 8761  # 1. Eureka Server端口设置为8761（默认端口）</p>
+</div>
+<div class="paragraph">
+<p>eureka:
+  instance:
+    hostname: localhost  # 2. 设置主机名为localhost
+  client:
+    register-with-eureka: false  # 3. Eureka Server不向自己注册
+    fetch-registry: false        # 4. Eureka 自己不需要获取服务注册信息
+    service-url:
+      # 5. 设置 Eureka Server 的访问地址
+      defaultZone: <a href="http://${eureka.instance.hostname}:${server.port}/eureka/" class="bare">http://${eureka.instance.hostname}:${server.port}/eureka/</a></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>server:
+  enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭）</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_启动_eureka_server_并测试">启动 Eureka Server 并测试</h4>
+<div class="paragraph">
+<p>现在可以通过以下命令启动 Eureka Server：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>进入eureka项目目录</p>
+<div class="ulist">
+<ul>
+<li>
+<p>cd /Users/swot/swot-learning/java/SpringCloud/eureka</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>启动应用</p>
+<div class="ulist">
+<ul>
+<li>
+<p>mvn spring-boot:run</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>或者先打包再运行</p>
+<div class="ulist">
+<ul>
+<li>
+<p>mvn clean package</p>
+</li>
+<li>
+<p>java -jar target/eureka-1.0-SNAPSHOT.jar</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>启动后访问 <a href="http://localhost:8761" class="bare">http://localhost:8761</a> 即可看到 Eureka Server 的管理界面。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/eureka_admin_no_instance.png" alt="eureka admin no instance">
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-16 15:26:33 +0800
+Last updated 2025-09-17 10:12:18 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

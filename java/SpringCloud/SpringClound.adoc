@@ -930,13 +930,12 @@ public WebClient webClient() {
 }
 ----
 
-== 解决：商品微服务 ip 发生变更则需要更改订单微服务的配置文件
-
-
-== 解决：商品微服务有多个，订单微服务该链接哪个？
-
-
 == 引入微服务注册、发现机制
+* 问题：商品微服务 ip 发生变更则需要更改订单微服务的配置文件
+* 问题：商品微服务有多个，订单微服务该链接哪个？
+
+从而引入微服务注册、发现机制，如下。
+
 image::img/service_register.png[,640]
 
 1. 服务提供者将服务注册到注册中心
@@ -960,7 +959,7 @@ Eureka 是 Netfix 开源的服务发现组件，本身是一个基于 REST 的�
 === Eureka Server 的创建
 创建一个 maven 的项目，命名为 eureka。
 
-image::img/create_euraka_module.png[,800]
+image::img/create_eureka_module.png[,800]
 
 ==== @file eureka/pom.xml
 [source,scss]
@@ -1042,4 +1041,59 @@ image::img/create_euraka_module.png[,800]
     </plugins>
 </build>
 ....
+
+==== @file eureka/src/main/java/com/tjise/eureka/EurekaApplication.java
+package com.tjise.eureka;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+
+/**
+ * Eureka Server启动类
+ * 
+ * @EnableEurekaServer 注解启用 Eureka Server 功能
+ */
+@SpringBootApplication
+@EnableEurekaServer
+public class EurekaApplication {
+    
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaApplication.class, args);
+    }
+}
+
+==== @file eureka/src/main/resources/application.yml
+server:
+  port: 8761  # 1. Eureka Server端口设置为8761（默认端口）
+
+eureka:
+  instance:
+    hostname: localhost  # 2. 设置主机名为localhost
+  client:
+    register-with-eureka: false  # 3. Eureka Server不向自己注册
+    fetch-registry: false        # 4. Eureka 自己不需要获取服务注册信息
+    service-url:
+      # 5. 设置 Eureka Server 的访问地址
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      
+  server:
+    enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭）
+
+==== 启动 Eureka Server 并测试
+现在可以通过以下命令启动 Eureka Server：
+
+. 进入eureka项目目录
+* cd /Users/swot/swot-learning/java/SpringCloud/eureka
+
+. 启动应用
+* mvn spring-boot:run
+
+. 或者先打包再运行
+* mvn clean package
+* java -jar target/eureka-1.0-SNAPSHOT.jar
+
+启动后访问 http://localhost:8761 即可看到 Eureka Server 的管理界面。
+
+image::img/eureka_admin_no_instance.png[]
 
