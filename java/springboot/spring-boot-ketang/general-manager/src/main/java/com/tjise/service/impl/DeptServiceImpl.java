@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250919084938.1: * @file src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+//@+node:swot.20250919102302.1: * @file src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 //@@language java
 //@+others
-//@+node:swot.20250919085114.1: ** @ignore-node class DeptServiceImpl
+//@+node:swot.20250919102302.2: ** @ignore-node class DeptServiceImpl
 //@+doc
 // [source,java,linenums]
 // ----
@@ -14,6 +14,8 @@ import com.tjise.pojo.Dept;
 import com.tjise.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service  // 把该类的对象交给 IOC 容器管理
@@ -29,7 +31,7 @@ public class DeptServiceImpl implements DeptService {
         return deptList;
     }
     //@+others
-    //@+node:swot.20241101091510.1: *3* deleteDeptById
+    //@+node:swot.20250919102302.3: *3* @ignore-node deleteDeptById
     //@@language java
     //@+doc
     // .src/main/java/com/tjise/service/impl/DeptServiceImpl.java
@@ -40,6 +42,38 @@ public class DeptServiceImpl implements DeptService {
     public void deleteDeptById(Integer id) {
         // 方法调用不用写类型 Integer
         deptMapper.deleteDeptById(id);
+    }
+    //@+doc
+    // ----
+    //@+node:swot.20241101144418.4: *3* insertDept
+    //@@language java
+    //@+doc
+    // 数据库表 dept 字段 对应的 java 实体类中有 4 个属性
+    //
+    // ```java
+    // public class Dept {
+    //     private Integer id;
+    //     private String name;
+    //     private LocalDateTime createTime;
+    //     private LocalDateTime updateTime;
+    // }
+    // ```
+    //
+    // * id 是数据库自增长字段
+    // * name 是前端传送来的
+    // * createTime 需要后端指定
+    // * updateTime 需要后端指定
+    //
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @Override
+    public void insertDept(Dept dept) {
+        // 指定 createTime & updateTime
+        dept.setCreateTime(LocalDateTime.now());
+        dept.setUpdateTime(LocalDateTime.now());
+        // 方法调用不用写类型 Dept
+        deptMapper.insertDept(dept);
     }
     //@+doc
     // ----

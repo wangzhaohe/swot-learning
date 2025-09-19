@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250919083742.1: * @file src/main/java/com/tjise/controller/DeptController.java
+//@+node:swot.20250919102245.1: * @file src/main/java/com/tjise/controller/DeptController.java
 //@@language java
 //@+others
-//@+node:swot.20250919083945.1: ** @ignore-node class DeptController
+//@+node:swot.20250919102245.2: ** @ignore-node class DeptController
 //@+doc
 // [source,java,linenums]
 // ----
@@ -32,7 +32,7 @@ public class DeptController {
         return Result.success(deptList);
     }
     //@+others
-    //@+node:swot.20241101090545.1: *3* deleteDeptById
+    //@+node:swot.20250919102245.3: *3* @ignore-node deleteDeptById
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -42,6 +42,20 @@ public class DeptController {
     public Result deleteDeptById(@PathVariable Integer id){
         // 调用 service 层去删除数据库记录
         deptService.deleteDeptById(id);
+        return Result.success();
+    }
+    //@+doc
+    // ----
+    //@+node:swot.20241101144418.2: *3* insertDept
+    //@@language java
+    //@+doc
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @PostMapping("/depts")
+    public Result insertDept(@RequestBody Dept dept){
+        // 调用 service 层去删除数据库记录
+        deptService.insertDept(dept);
         return Result.success();
     }
     //@+doc
