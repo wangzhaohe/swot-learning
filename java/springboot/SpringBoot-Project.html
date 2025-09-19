@@ -2069,7 +2069,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <p>请求方式：DELETE</p>
 </li>
 <li>
-<p>接口描述：该接口用于根据ID删除部门数据</p>
+<p>接口描述：该接口用于根据 ID 删除部门数据</p>
 </li>
 </ul>
 </div>
@@ -2186,7 +2186,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>测试接口: 使用 http DELETE <a href="http://localhost:8080/depts/5" class="bare">http://localhost:8080/depts/5</a></p>
+<p>测试接口: http DELETE <a href="http://localhost:8080/depts/1" class="bare">http://localhost:8080/depts/1</a></p>
 </li>
 <li>
 <p>测试使用浏览器删除一条记录。</p>
@@ -2197,9 +2197,10 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </ul>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求">DeptController  &#8594; 处理请求</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_4">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<div class="sect5">
+<h6 id="_deletedeptbyid">deleteDeptById</h6>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/controller/DeptController.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -2216,23 +2217,43 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_deptservice_接口">DeptService     &#8594; 接口</h5>
+<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_3">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
 <div class="paragraph">
 <p>定义该接口目的是为了用类的多态实现 controller 层左边解耦。</p>
 </div>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/service/DeptService.java</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// 该抽象方法无返回值，只传入要删除记录的数据库 id 即可</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 新增抽象方法：无返回值，只传入要删除记录的数据库 id 即可。</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_3">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<div class="sect5">
+<h6 id="_deletedeptbyid_2">deleteDeptById</h6>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/service/impl/DeptServiceImpl.java</div>
 <div class="content">
@@ -2249,14 +2270,46 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_file_srcmainjavacomtjisemapperdeptmapper_java_3">file &#8594; src/main/java/com/tjise/mapper/DeptMapper.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/mapper/DeptMapper.java</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Delete</span><span class="tok-p">(</span><span class="tok-s">&quot;delete from dept where id=#{id}&quot;</span><span class="tok-p">)</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Delete</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Mapper</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Select</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+
+<span class="tok-nd">@Mapper</span><span class="tok-w">  </span><span class="tok-c1">// 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptMapper</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from dept&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 新增删除部门</span>
+<span class="tok-w">    </span><span class="tok-nd">@Delete</span><span class="tok-p">(</span><span class="tok-s">&quot;delete from dept where id=#{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
@@ -2399,7 +2452,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求_2">DeptController  &#8594; 处理请求</h5>
+<h5 id="_deptcontroller_处理请求">DeptController  &#8594; 处理请求</h5>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/controller/DeptController.java</div>
 <div class="content">
@@ -2419,7 +2472,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptservice_接口_2">DeptService     &#8594; 接口</h5>
+<h5 id="_deptservice_接口">DeptService     &#8594; 接口</h5>
 <div class="paragraph">
 <p>定义该接口目的是为了用类的多态实现 controller 层左边解耦。</p>
 </div>
@@ -2432,7 +2485,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口_2">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_deptserviceimpl_实现接口">DeptServiceImpl &#8594; 实现接口</h5>
 <div class="paragraph">
 <p>数据库表 dept 字段 对应的 java 实体类中有 4 个属性</p>
 </div>
@@ -2485,7 +2538,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库_2">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_deptmapper_数据库">DeptMapper      &#8594; 数据库</h5>
 <div class="listingblock">
 <div class="title">src/main/java/com/tjise/mapper/DeptMapper.java</div>
 <div class="content">
@@ -2550,7 +2603,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <p>注解优化后再次使用 postman 或者浏览器进行测试，依然是正常的。</p>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_4">#file src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_5">#file src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2817,7 +2870,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求_3">DeptController  &#8594; 处理请求</h5>
+<h5 id="_deptcontroller_处理请求_2">DeptController  &#8594; 处理请求</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -2834,7 +2887,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptservice_接口_3">DeptService     &#8594; 接口</h5>
+<h5 id="_deptservice_接口_2">DeptService     &#8594; 接口</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-nf">getDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
@@ -2843,7 +2896,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口_3">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_deptserviceimpl_实现接口_2">DeptServiceImpl &#8594; 实现接口</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -2860,7 +2913,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库_3">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_deptmapper_数据库_2">DeptMapper      &#8594; 数据库</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -3014,7 +3067,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求_4">DeptController  &#8594; 处理请求</h5>
+<h5 id="_deptcontroller_处理请求_3">DeptController  &#8594; 处理请求</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -3031,7 +3084,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptservice_接口_4">DeptService     &#8594; 接口</h5>
+<h5 id="_deptservice_接口_3">DeptService     &#8594; 接口</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">updateDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
@@ -3040,7 +3093,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口_4">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_deptserviceimpl_实现接口_3">DeptServiceImpl &#8594; 实现接口</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -3059,7 +3112,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库_4">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_deptmapper_数据库_3">DeptMapper      &#8594; 数据库</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -7376,7 +7429,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </table>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_5">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_6">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="sect5">
 <h6 id="_新增单个部门_insertdept_新增_try_catch">新增单个部门 insertDept &#8594; 新增 try catch</h6>
 <div class="listingblock">
@@ -7421,7 +7474,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_6">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_7">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="sect5">
 <h6 id="_新增单个部门_insertdept_移除_try_catch_恢复原来代码">新增单个部门 insertDept &#8594; 移除 try catch 恢复原来代码</h6>
 <div class="listingblock">
@@ -7563,7 +7616,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_3">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_4">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deptserviceimpl_新增_di_empservice">DeptServiceImpl &#8594; 新增 DI empService</h6>
 <div class="listingblock">
@@ -7704,7 +7757,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ul>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_4">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_5">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deletedeptbyid_删除单个部门及其员工_2">deleteDeptById 删除单个部门及其员工</h6>
 <div class="listingblock">
@@ -7760,7 +7813,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_3">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_4">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
 <div class="sect5">
 <h6 id="_deptservice">DeptService</h6>
 <div class="listingblock">
@@ -7813,7 +7866,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_7">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_8">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="sect5">
 <h6 id="_deletedeptbyid_删除单个部门">deleteDeptById 删除单个部门</h6>
 <div class="listingblock">
@@ -7919,7 +7972,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ul>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_5">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deletedeptbyid_删除单个部门及其员工_3">deleteDeptById 删除单个部门及其员工</h6>
 <div class="listingblock">
@@ -8069,7 +8122,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 所以引出 AOP 的应用。</p>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_查询部门列表_计算执行耗时">查询部门列表 &#8594; 计算执行耗时</h6>
 <div class="listingblock">
@@ -8165,7 +8218,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_注释掉上节更改的代码_去掉多余打印">注释掉上节更改的代码 &#8594; 去掉多余打印</h5>
 <div class="sect5">
-<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
+<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
 
 </div>
 <div class="sect5">
@@ -9060,7 +9113,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
+<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_9">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
 
 </div>
 <div class="sect5">
@@ -9384,7 +9437,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_9">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_10">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_insertdept_新增部门_增加_log">insertDept 新增部门 &#8594; 增加 @Log</h6>
 <div class="listingblock">
@@ -10003,7 +10056,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-18 11:16:22 +0800
+Last updated 2025-09-19 08:59:28 +0800
 </div>
 </div>
 </body>

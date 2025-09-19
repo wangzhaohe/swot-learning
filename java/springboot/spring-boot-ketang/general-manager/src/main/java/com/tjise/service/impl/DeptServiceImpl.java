@@ -1,6 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20241031174225.1: * @file src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+//@+node:swot.20250919084938.1: * @file src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 //@@language java
+//@+others
+//@+node:swot.20250919085114.1: ** @ignore-node class DeptServiceImpl
 //@+doc
 // [source,java,linenums]
 // ----
@@ -26,7 +28,24 @@ public class DeptServiceImpl implements DeptService {
         List<Dept> deptList = deptMapper.selectAllDept();
         return deptList;
     }
+    //@+others
+    //@+node:swot.20241101091510.1: *3* deleteDeptById
+    //@@language java
+    //@+doc
+    // .src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @Override
+    public void deleteDeptById(Integer id) {
+        // 方法调用不用写类型 Integer
+        deptMapper.deleteDeptById(id);
+    }
+    //@+doc
+    // ----
+    //@-others
 }
 //@+doc
 // ----
+//@-others
 //@-leo

@@ -62,10 +62,18 @@
 <v t="swot.20250918104922.1"><vh>了解-运维在部署时通过 Nginx 反向代理解决跨域</vh></v>
 </v>
 <v t="swot.20241101085903.1"><vh>删除单个部门</vh>
-<v t="swot.20241101090545.1"><vh>DeptController  -&gt; 处理请求</vh></v>
-<v t="swot.20241101091156.1"><vh>DeptService     -&gt; 接口</vh></v>
-<v t="swot.20241101091510.1"><vh>DeptServiceImpl -&gt; 实现接口</vh></v>
-<v t="swot.20241101091756.1"><vh>DeptMapper      -&gt; 数据库</vh></v>
+<v t="swot.20250919083742.1"><vh>file -&gt; src/main/java/com/tjise/controller/DeptController.java</vh>
+<v t="swot.20250919083945.1"><vh>@ignore-node class DeptController</vh>
+<v t="swot.20241101090545.1"><vh>deleteDeptById</vh></v>
+</v>
+</v>
+<v t="swot.20250919084644.1"><vh>file -&gt; src/main/java/com/tjise/service/DeptService.java</vh></v>
+<v t="swot.20250919084938.1"><vh>file -&gt; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</vh>
+<v t="swot.20250919085114.1"><vh>@ignore-node class DeptServiceImpl</vh>
+<v t="swot.20241101091510.1"><vh>deleteDeptById</vh></v>
+</v>
+</v>
+<v t="swot.20250919085347.1"><vh>file -&gt; src/main/java/com/tjise/mapper/DeptMapper.java</vh></v>
 </v>
 <v t="swot.20241101144118.1"><vh>新增部门</vh>
 <v t="swot.20241101144418.2"><vh>DeptController  -&gt; 处理请求</vh></v>
@@ -1470,7 +1478,7 @@ public interface EmpMapper {
 
 * 请求路径：/depts/{id}
 * 请求方式：DELETE
-* 接口描述：该接口用于根据ID删除部门数据
+* 接口描述：该接口用于根据 ID 删除部门数据
 
 2. 请求参数
 
@@ -1512,13 +1520,13 @@ public interface EmpMapper {
 .开发流程
 image::img/dept_delete.png[开发流程,960]
 
-* 测试接口: 使用 http DELETE http://localhost:8080/depts/5
+* 测试接口: http DELETE http://localhost:8080/depts/1
 * 测试使用浏览器删除一条记录。
 * 查看数据库中是否删除了相应 id 的记录。
+
 </t>
 <t tx="swot.20241101090545.1">@language java
 @doc
-.src/main/java/com/tjise/controller/DeptController.java
 [source,java,linenums]
 ----
 @c
@@ -1528,19 +1536,6 @@ public Result deleteDeptById(@PathVariable Integer id){
     deptService.deleteDeptById(id);
     return Result.success();
 }
-@doc
-----
-</t>
-<t tx="swot.20241101091156.1">@language java
-@doc
-定义该接口目的是为了用类的多态实现 controller 层左边解耦。
-
-.src/main/java/com/tjise/service/DeptService.java
-[source,java,linenums]
-----
-@c
-// 该抽象方法无返回值，只传入要删除记录的数据库 id 即可
-public abstract void deleteDeptById(Integer id);
 @doc
 ----
 </t>
@@ -1555,17 +1550,6 @@ public void deleteDeptById(Integer id) {
     // 方法调用不用写类型 Integer
     deptMapper.deleteDeptById(id);
 }
-@doc
-----
-</t>
-<t tx="swot.20241101091756.1">@language java
-@doc
-.src/main/java/com/tjise/mapper/DeptMapper.java
-[source,java,linenums]
-----
-@c
-@Delete("delete from dept where id=#{id}")
-public abstract void deleteDeptById(Integer id);
 @doc
 ----
 </t>
@@ -9382,5 +9366,121 @@ public class CorsConfig {
 <t tx="swot.20250918104840.1"></t>
 <t tx="swot.20250918104847.1"></t>
 <t tx="swot.20250918104922.1"></t>
+<t tx="swot.20250919083742.1">@language java
+@others
+</t>
+<t tx="swot.20250919083945.1">@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.controller;
+
+import com.tjise.pojo.Dept;
+import com.tjise.pojo.Result;
+import com.tjise.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+// 如果是浏览器访问，会有跨域问题，参下面节点的解决方式
+@RestController
+public class DeptController {
+
+    @Autowired        // DI 注入 IOC 容器中的 DeptService Bean 对象，默认名称为 deptService
+    private DeptService deptService;
+
+//  @RequestMapping("/depts")                                        // 所有方法都可以请求
+//  @RequestMapping(value = "/depts", method = {RequestMethod.GET})  // 完整写法
+    @GetMapping("/depts")                                            // 更加简洁的方式
+    public Result selectAllDept(){
+        List&lt;Dept&gt; deptList = deptService.selectAllDept();
+        return Result.success(deptList);
+    }
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250919084644.1">@language java
+@doc
+定义该接口目的是为了用类的多态实现 controller 层左边解耦。
+
+[source,java,linenums]
+----
+@c
+package com.tjise.service;
+
+import com.tjise.pojo.Dept;
+import java.util.List;
+
+public interface DeptService {
+    public abstract List&lt;Dept&gt; selectAllDept();
+
+    // 新增抽象方法：无返回值，只传入要删除记录的数据库 id 即可。
+    public abstract void deleteDeptById(Integer id);
+}
+@doc
+----
+</t>
+<t tx="swot.20250919084938.1">@language java
+@others
+</t>
+<t tx="swot.20250919085114.1">@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.service.impl;
+
+import com.tjise.mapper.DeptMapper;
+import com.tjise.pojo.Dept;
+import com.tjise.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service  // 把该类的对象交给 IOC 容器管理
+public class DeptServiceImpl implements DeptService {
+
+    // DI 注入 DeptMapper 实现类对象给变量 deptMapper
+    @Autowired
+    private DeptMapper deptMapper;
+
+    @Override
+    public List&lt;Dept&gt; selectAllDept() {
+        List&lt;Dept&gt; deptList = deptMapper.selectAllDept();
+        return deptList;
+    }
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250919085347.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.mapper;
+
+import com.tjise.pojo.Dept;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import java.util.List;
+
+
+@Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
+public interface DeptMapper {
+    @Select("select * from dept")
+    public abstract List&lt;Dept&gt; selectAllDept();
+    
+    // 新增删除部门
+    @Delete("delete from dept where id=#{id}")
+    public abstract void deleteDeptById(Integer id);
+}
+@doc
+----
+</t>
 </tnodes>
 </leo_file>

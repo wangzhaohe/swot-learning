@@ -1,6 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20241031174034.1: * @file src/main/java/com/tjise/controller/DeptController.java
+//@+node:swot.20250919083742.1: * @file src/main/java/com/tjise/controller/DeptController.java
 //@@language java
+//@+others
+//@+node:swot.20250919083945.1: ** @ignore-node class DeptController
 //@+doc
 // [source,java,linenums]
 // ----
@@ -11,9 +13,7 @@ import com.tjise.pojo.Dept;
 import com.tjise.pojo.Result;
 import com.tjise.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,7 +31,24 @@ public class DeptController {
         List<Dept> deptList = deptService.selectAllDept();
         return Result.success(deptList);
     }
+    //@+others
+    //@+node:swot.20241101090545.1: *3* deleteDeptById
+    //@@language java
+    //@+doc
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @DeleteMapping("/depts/{id}")  // 路径参数
+    public Result deleteDeptById(@PathVariable Integer id){
+        // 调用 service 层去删除数据库记录
+        deptService.deleteDeptById(id);
+        return Result.success();
+    }
+    //@+doc
+    // ----
+    //@-others
 }
 //@+doc
 // ----
+//@-others
 //@-leo

@@ -1,5 +1,5 @@
 //@+leo-ver=5-thin
-//@+node:swot.20241031174419.1: * @file src/main/java/com/tjise/mapper/DeptMapper.java
+//@+node:swot.20250919085347.1: * @file src/main/java/com/tjise/mapper/DeptMapper.java
 //@@language java
 //@+doc
 // [source,java,linenums]
@@ -8,6 +8,7 @@
 package com.tjise.mapper;
 
 import com.tjise.pojo.Dept;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import java.util.List;
@@ -17,6 +18,10 @@ import java.util.List;
 public interface DeptMapper {
     @Select("select * from dept")
     public abstract List<Dept> selectAllDept();
+    
+    // 新增删除部门
+    @Delete("delete from dept where id=#{id}")
+    public abstract void deleteDeptById(Integer id);
 }
 //@+doc
 // ----
