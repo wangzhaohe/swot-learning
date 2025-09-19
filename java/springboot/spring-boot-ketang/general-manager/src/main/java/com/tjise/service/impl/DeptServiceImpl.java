@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250919102302.1: * @file src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+//@+node:swot.20250919143443.1: * @file src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 //@@language java
 //@+others
-//@+node:swot.20250919102302.2: ** @ignore-node class DeptServiceImpl
+//@+node:swot.20250919143443.2: ** @ignore-node class DeptServiceImpl
 //@+doc
 // [source,java,linenums]
 // ----
@@ -31,7 +31,7 @@ public class DeptServiceImpl implements DeptService {
         return deptList;
     }
     //@+others
-    //@+node:swot.20250919102302.3: *3* @ignore-node deleteDeptById
+    //@+node:swot.20250919143443.3: *3* deleteDeptById
     //@@language java
     //@+doc
     // .src/main/java/com/tjise/service/impl/DeptServiceImpl.java
@@ -39,13 +39,13 @@ public class DeptServiceImpl implements DeptService {
     // ----
     //@@c
     @Override
-    public void deleteDeptById(Integer id) {
+    public int deleteDeptById(Integer id) {
         // 方法调用不用写类型 Integer
-        deptMapper.deleteDeptById(id);
+        return deptMapper.deleteDeptById(id);
     }
     //@+doc
     // ----
-    //@+node:swot.20241101144418.4: *3* insertDept
+    //@+node:swot.20250919143443.4: *3* @ignore-node  insertDept
     //@@language java
     //@+doc
     // 数据库表 dept 字段 对应的 java 实体类中有 4 个属性
