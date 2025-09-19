@@ -111,16 +111,42 @@
 </v>
 </v>
 <v t="swot.20241104090932.1"><vh>获取单个部门</vh>
-<v t="swot.20241104091030.1"><vh>DeptController  -&gt; 处理请求</vh></v>
-<v t="swot.20241104091050.1"><vh>DeptService     -&gt; 接口</vh></v>
-<v t="swot.20241104091121.1"><vh>DeptServiceImpl -&gt; 实现接口</vh></v>
-<v t="swot.20241104091145.1"><vh>DeptMapper      -&gt; 数据库</vh></v>
+<v t="swot.20250919160830.1"><vh>file -&gt; src/main/java/com/tjise/controller/DeptController.java</vh>
+<v t="swot.20250919160830.2"><vh>@ignore-node import</vh></v>
+<v t="swot.20250919160830.3"><vh>@ignore-node class DeptController</vh>
+<v t="swot.20250919160830.4"><vh>@ignore-node deleteDeptById</vh></v>
+<v t="swot.20241104091030.1"><vh>getDeptById</vh></v>
+</v>
+</v>
+<v t="swot.20250919160903.1"><vh>file -&gt; src/main/java/com/tjise/service/DeptService.java</vh></v>
+<v t="swot.20250919160933.1"><vh>file -&gt; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</vh>
+<v t="swot.20250919160933.2"><vh>@ignore-node class DeptServiceImpl</vh>
+<v t="swot.20250919160933.3"><vh>@ignore-node deleteDeptById</vh></v>
+<v t="swot.20250919160933.4"><vh>@ignore-node insertDept</vh></v>
+<v t="swot.20241104091121.1"><vh>getDeptById</vh></v>
+</v>
+</v>
+<v t="swot.20250919160943.1"><vh>file -&gt; src/main/java/com/tjise/mapper/DeptMapper.java</vh></v>
 </v>
 <v t="swot.20241104091227.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30392d313871077573732e"><vh>修改部门</vh>
-<v t="swot.20241104091227.2"><vh>DeptController  -&gt; 处理请求</vh></v>
-<v t="swot.20241104091227.3"><vh>DeptService     -&gt; 接口</vh></v>
+<v t="swot.20250919162317.1"><vh>file -&gt; src/main/java/com/tjise/controller/DeptController.java</vh>
+<v t="swot.20250919162317.2"><vh>@ignore-node import</vh></v>
+<v t="swot.20250919162317.3"><vh>@ignore-node class DeptController</vh>
+<v t="swot.20250919162317.4"><vh>@ignore-node deleteDeptById</vh></v>
+<v t="swot.20250919162317.5"><vh>@ignore-node getDeptById</vh></v>
+<v t="swot.20241104091227.2"><vh>updateDept</vh></v>
+</v>
+</v>
+<v t="swot.20250919162323.1"><vh>file -&gt; src/main/java/com/tjise/service/DeptService.java</vh></v>
+<v t="swot.20250919162328.1"><vh>file -&gt; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</vh>
+<v t="swot.20250919162328.2"><vh>@ignore-node class DeptServiceImpl</vh>
+<v t="swot.20250919162328.3"><vh>@ignore-node deleteDeptById</vh></v>
+<v t="swot.20250919162328.4"><vh>@ignore-node insertDept</vh></v>
+<v t="swot.20250919162328.5"><vh>@ignore-node getDeptById</vh></v>
 <v t="swot.20241104091227.4"><vh>DeptServiceImpl -&gt; 实现接口</vh></v>
-<v t="swot.20241104091227.5"><vh>DeptMapper      -&gt; 数据库</vh></v>
+</v>
+</v>
+<v t="swot.20250919162334.1"><vh>file -&gt; src/main/java/com/tjise/mapper/DeptMapper.java</vh></v>
 </v>
 </v>
 <v t="swot.20241104132937.1" descendentVnodeUnknownAttributes="7d7100285807000000302e342e362e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d3135710775735807000000302e342e382e3071087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30382d3135710e75735809000000302e342e382e302e30710f7d7110285808000000616e6e6f7461746571117d71122858080000007072696f7269747971134b01580a000000707269736574646174657114580a000000323032352d30392d3039711575580500000069636f6e7371165d71177d7118285804000000747970657119580400000066696c65711a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67711b580700000072656c50617468711c580d000000636c656f2f707269312e706e67711d58050000007768657265711e580e0000006265666f7265486561646c696e65711f5807000000796f666673657471204b005807000000786f666673657471214b0258040000007870616471224b0158020000006f6e71235805000000766e6f646571245808000000636c656f49636f6e712558010000003171267561755809000000302e342e382e312e3071277d7128285808000000616e6e6f7461746571297d712a2858080000007072696f72697479712b4b02580a00000070726973657464617465712c580a000000323032352d30392d3039712d75580500000069636f6e73712e5d712f7d7130286819681a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e677131681c580d000000636c656f2f707269322e706e677132681e681f68204b0068214b0268224b0168236824682568267561755807000000302e342e392e3071337d7134285808000000616e6e6f7461746571357d71362858080000007072696f7269747971374b03580a000000707269736574646174657138580a000000323032352d30392d3039713975580500000069636f6e73713a5d713b7d713c286819681a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269332e706e67713d681c580d000000636c656f2f707269332e706e67713e681e681f68204b0068214b0268224b0168236824682568267561755808000000302e342e31302e30713f7d7140285808000000616e6e6f7461746571417d71422858080000007072696f7269747971434b04580a000000707269736574646174657144580a000000323032352d30392d3039714575580500000069636f6e7371465d71477d7148286819681a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269342e706e677149681c580d000000636c656f2f707269342e706e67714a681e681f68204b0068214b0268224b0168236824682568267561755806000000302e342e3131714b7d714c5808000000616e6e6f74617465714d7d714e2858080000007072696f72697479714f4d0f27580a000000707269736574646174657150580a000000323032352d30382d3135715175735808000000302e342e31312e3071527d7153285808000000616e6e6f7461746571547d71552858080000007072696f7269747971564b05580a000000707269736574646174657157580a000000323032352d30392d3039715875580500000069636f6e7371595d715a7d715b286819681a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269352e706e67715c681c580d000000636c656f2f707269352e706e67715d681e681f68204b0068214b0268224b0168236824682568267561755808000000302e342e31312e31715e7d715f285808000000616e6e6f7461746571607d71612858080000007072696f7269747971624b06580a000000707269736574646174657163580a000000323032352d30392d3039716475580500000069636f6e7371655d71667d7167286819681a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269362e706e677168681c580d000000636c656f2f707269362e706e677169681e681f68204b0068214b0268224b016823682468256826756175752e"><vh>员工管理</vh>
@@ -1817,15 +1843,6 @@ public Result getDeptById(@PathVariable Integer id){
 @doc
 ----
 </t>
-<t tx="swot.20241104091050.1">@language java
-@doc
-[source,java,linenums]
-----
-@c
-public abstract Dept getDeptById(Integer id);
-@doc
-----
-</t>
 <t tx="swot.20241104091121.1">@language java
 @doc
 [source,java,linenums]
@@ -1839,20 +1856,10 @@ public Dept getDeptById(Integer id) {
 @doc
 ----
 </t>
-<t tx="swot.20241104091145.1">@language java
-@doc
-[source,java,linenums]
-----
-@c
-@Select("select * from dept where id = #{id}")
-public abstract Dept getDeptById(Integer id);
-@doc
-----
-</t>
 <t tx="swot.20241104091227.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032352d30392d31387103752e">@language asciidoc
 1. 基本信息
 
-* 请求路径：/depts
+* 请求路径：/depts（不是 REST 风格了，因为实体对象 Dept 包含了 id）
 * 请求方式：PUT
 * 接口描述：该接口用于修改部门数据
 
@@ -1865,8 +1872,8 @@ public abstract Dept getDeptById(Integer id);
 [cols="1,1,1,1",options="header"]
 |===
 | 参数名 | 类型     | 是否必须 | 备注
-| id    | number  | 必须     | 部门ID
-| name  | string  | 必须     | 部门名称
+| id    | number  | 必须     | 部门ID （用于获取单个部门）
+| name  | string  | 必须     | 部门名称（要更改的部门名称）
 |===
 * 请求参数样例：
 +
@@ -1911,17 +1918,9 @@ public abstract Dept getDeptById(Integer id);
 @PutMapping
 public Result updateDept(@RequestBody Dept dept) {
     deptService.updateDept(dept);
+    // 这儿的逻辑有些粗糙，应该判断修改是否成功（此处省略）
     return Result.success();
 }
-@doc
-----
-</t>
-<t tx="swot.20241104091227.3">@language java
-@doc
-[source,java,linenums]
-----
-@c
-public abstract void updateDept(Dept dept);
 @doc
 ----
 </t>
@@ -1936,16 +1935,6 @@ public void updateDept(Dept dept) {
     dept.setUpdateTime(LocalDateTime.now());
     deptMapper.updateDept(dept);
 }
-@doc
-----
-</t>
-<t tx="swot.20241104091227.5">@language java
-@doc
-[source,java,linenums]
-----
-@c
-@Update("update dept set name = #{name}, update_time=#{updateTime} where id=#{id}")
-public abstract void updateDept(Dept dept);
 @doc
 ----
 </t>
@@ -9857,6 +9846,453 @@ public class DeptController {
         return Result.success();
     }   
 }
+</t>
+<t tx="swot.20250919160830.1">@language java
+@others
+</t>
+<t tx="swot.20250919160830.2">package com.tjise.controller;
+
+import com.tjise.pojo.Dept;
+import com.tjise.pojo.Result;
+import com.tjise.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+</t>
+<t tx="swot.20250919160830.3">@RestController
+@RequestMapping("/depts")                         // 抽取到类的注解上
+public class DeptController {
+    // DI 注入 IOC 容器中的 DeptService Bean 对象，默认名称为 deptService
+    @Autowired
+    private DeptService deptService;
+
+    @GetMapping
+    public Result selectAllDept() {
+
+        // 调用 service 层
+        List&lt;Dept&gt; deptList = deptService.selectAllDept();
+
+        // 把数据封装成统一的响应格式进行返回
+        return Result.success(deptList);
+    }
+    @others
+    @PostMapping
+    public Result insertDept(@RequestBody Dept dept) {
+    
+        // 前端传入 JSON 数据 { "name": "人事部" }，打印封装的数据只有 name，如下
+        // Dept(id=null, name=人事部, createTime=null, updateTime=null)
+        // System.out.println(dept);
+        
+        // 调用 service 层
+        deptService.insertDept(dept);
+
+        // 把数据封装成统一的响应格式进行返回
+        return Result.success();
+    }   
+}
+</t>
+<t tx="swot.20250919160830.4">@doc
+[source,java]
+----
+@c
+@language java
+@DeleteMapping("/{id}")
+public Result deleteDeptById(@PathVariable Integer id) {
+
+    // 调用 service 层
+    int rowsAffected = deptService.deleteDeptById(id);
+
+    // 根据删除结果返回统一的响应格式
+    if (rowsAffected &gt; 0) {
+        // 删除成功
+        return Result.success();
+    } else {
+        // 删除失败，ID不存在
+        return Result.error("部门ID不存在");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20250919160903.1">@language java
+@doc
+定义该接口目的是为了用类的多态实现 controller 层左边解耦。
+
+[source,java,linenums]
+----
+@c
+package com.tjise.service;
+
+import com.tjise.pojo.Dept;
+import java.util.List;
+
+public interface DeptService {
+    public abstract List&lt;Dept&gt; selectAllDept();
+
+    // 抽象方法：返回删除的影响行数 int，用于判断是否删除成功
+    public abstract int deleteDeptById(Integer id);
+
+    public abstract void insertDept(Dept dept);
+    
+    // 新增获取单个部门
+    public abstract Dept getDeptById(Integer id);
+}
+@doc
+----
+</t>
+<t tx="swot.20250919160933.1">@language java
+@others
+</t>
+<t tx="swot.20250919160933.2">@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.service.impl;
+
+import com.tjise.mapper.DeptMapper;
+import com.tjise.pojo.Dept;
+import com.tjise.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service  // 把该类的对象交给 IOC 容器管理
+public class DeptServiceImpl implements DeptService {
+
+    // DI 注入 DeptMapper 实现类对象给变量 deptMapper
+    @Autowired
+    private DeptMapper deptMapper;
+
+    @Override
+    public List&lt;Dept&gt; selectAllDept() {
+        List&lt;Dept&gt; deptList = deptMapper.selectAllDept();
+        return deptList;
+    }
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250919160933.3">@language java
+@doc
+.src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+[source,java,linenums]
+----
+@c
+@Override
+public int deleteDeptById(Integer id) {
+    // 方法调用不用写类型 Integer
+    return deptMapper.deleteDeptById(id);
+}
+@doc
+----
+</t>
+<t tx="swot.20250919160933.4">@language java
+@doc
+数据库表 dept 字段 对应的 java 实体类中有 4 个属性
+
+```java
+public class Dept {
+    private Integer id;
+    private String name;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+}
+```
+
+* id 是数据库自增长字段
+* name 是前端传送来的
+* createTime 需要后端指定
+* updateTime 需要后端指定
+
+[source,java,linenums]
+----
+@c
+@Override
+public void insertDept(Dept dept) {
+    // 指定 createTime &amp; updateTime
+    dept.setCreateTime(LocalDateTime.now());
+    dept.setUpdateTime(LocalDateTime.now());
+    // 方法调用不用写类型 Dept
+    deptMapper.insertDept(dept);
+}
+@doc
+----
+</t>
+<t tx="swot.20250919160943.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.mapper;
+
+import com.tjise.pojo.Dept;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import java.util.List;
+
+@Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
+public interface DeptMapper {
+    @Select("select * from dept")
+    public abstract List&lt;Dept&gt; selectAllDept();
+
+    // 更改返回值为整形 int
+    @Delete("delete from dept where id=#{id}")
+    public abstract int deleteDeptById(Integer id);
+
+    @Insert("INSERT INTO dept (name, create_time, update_time) " +
+            "VALUES (#{name}, #{createTime}, #{updateTime})")
+    public abstract void insertDept(Dept dept);
+
+    // 新增获取单个部门
+    @Select("select * from dept where id = #{id}")
+    public abstract Dept getDeptById(Integer id);
+}
+@doc
+----
+</t>
+<t tx="swot.20250919162317.1">@language java
+@others
+</t>
+<t tx="swot.20250919162317.2">package com.tjise.controller;
+
+import com.tjise.pojo.Dept;
+import com.tjise.pojo.Result;
+import com.tjise.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+</t>
+<t tx="swot.20250919162317.3">@RestController
+@RequestMapping("/depts")                         // 抽取到类的注解上
+public class DeptController {
+    // DI 注入 IOC 容器中的 DeptService Bean 对象，默认名称为 deptService
+    @Autowired
+    private DeptService deptService;
+
+    @GetMapping
+    public Result selectAllDept() {
+
+        // 调用 service 层
+        List&lt;Dept&gt; deptList = deptService.selectAllDept();
+
+        // 把数据封装成统一的响应格式进行返回
+        return Result.success(deptList);
+    }
+    @others
+    @PostMapping
+    public Result insertDept(@RequestBody Dept dept) {
+    
+        // 前端传入 JSON 数据 { "name": "人事部" }，打印封装的数据只有 name，如下
+        // Dept(id=null, name=人事部, createTime=null, updateTime=null)
+        // System.out.println(dept);
+        
+        // 调用 service 层
+        deptService.insertDept(dept);
+
+        // 把数据封装成统一的响应格式进行返回
+        return Result.success();
+    }   
+}
+</t>
+<t tx="swot.20250919162317.4">@doc
+[source,java]
+----
+@c
+@language java
+@DeleteMapping("/{id}")
+public Result deleteDeptById(@PathVariable Integer id) {
+
+    // 调用 service 层
+    int rowsAffected = deptService.deleteDeptById(id);
+
+    // 根据删除结果返回统一的响应格式
+    if (rowsAffected &gt; 0) {
+        // 删除成功
+        return Result.success();
+    } else {
+        // 删除失败，ID不存在
+        return Result.error("部门ID不存在");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20250919162317.5">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@GetMapping("/{id}")
+public Result getDeptById(@PathVariable Integer id){
+    Dept dept = deptService.getDeptById(id);
+    return Result.success(dept);
+}
+@doc
+----
+</t>
+<t tx="swot.20250919162323.1">@language java
+@doc
+定义该接口目的是为了用类的多态实现 controller 层左边解耦。
+
+[source,java,linenums]
+----
+@c
+package com.tjise.service;
+
+import com.tjise.pojo.Dept;
+import java.util.List;
+
+public interface DeptService {
+    public abstract List&lt;Dept&gt; selectAllDept();
+
+    // 抽象方法：返回删除的影响行数 int，用于判断是否删除成功
+    public abstract int deleteDeptById(Integer id);
+
+    public abstract void insertDept(Dept dept);
+    
+    public abstract Dept getDeptById(Integer id);
+    
+    // 新增更新单个部门
+    public abstract void updateDept(Dept dept);
+}
+@doc
+----
+</t>
+<t tx="swot.20250919162328.1">@language java
+@others
+</t>
+<t tx="swot.20250919162328.2">@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.service.impl;
+
+import com.tjise.mapper.DeptMapper;
+import com.tjise.pojo.Dept;
+import com.tjise.service.DeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service  // 把该类的对象交给 IOC 容器管理
+public class DeptServiceImpl implements DeptService {
+
+    // DI 注入 DeptMapper 实现类对象给变量 deptMapper
+    @Autowired
+    private DeptMapper deptMapper;
+
+    @Override
+    public List&lt;Dept&gt; selectAllDept() {
+        List&lt;Dept&gt; deptList = deptMapper.selectAllDept();
+        return deptList;
+    }
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250919162328.3">@language java
+@doc
+.src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+[source,java,linenums]
+----
+@c
+@Override
+public int deleteDeptById(Integer id) {
+    // 方法调用不用写类型 Integer
+    return deptMapper.deleteDeptById(id);
+}
+@doc
+----
+</t>
+<t tx="swot.20250919162328.4">@language java
+@doc
+数据库表 dept 字段 对应的 java 实体类中有 4 个属性
+
+```java
+public class Dept {
+    private Integer id;
+    private String name;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+}
+```
+
+* id 是数据库自增长字段
+* name 是前端传送来的
+* createTime 需要后端指定
+* updateTime 需要后端指定
+
+[source,java,linenums]
+----
+@c
+@Override
+public void insertDept(Dept dept) {
+    // 指定 createTime &amp; updateTime
+    dept.setCreateTime(LocalDateTime.now());
+    dept.setUpdateTime(LocalDateTime.now());
+    // 方法调用不用写类型 Dept
+    deptMapper.insertDept(dept);
+}
+@doc
+----
+</t>
+<t tx="swot.20250919162328.5">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@Override
+public Dept getDeptById(Integer id) {
+    Dept dept = deptMapper.getDeptById(id);
+    return dept;
+}
+@doc
+----
+</t>
+<t tx="swot.20250919162334.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.mapper;
+
+import com.tjise.pojo.Dept;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
+@Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
+public interface DeptMapper {
+    @Select("select * from dept")
+    public abstract List&lt;Dept&gt; selectAllDept();
+
+    // 更改返回值为整形 int
+    @Delete("delete from dept where id=#{id}")
+    public abstract int deleteDeptById(Integer id);
+
+    @Insert("INSERT INTO dept (name, create_time, update_time) " +
+            "VALUES (#{name}, #{createTime}, #{updateTime})")
+    public abstract void insertDept(Dept dept);
+
+    @Select("select * from dept where id = #{id}")
+    public abstract Dept getDeptById(Integer id);
+
+    // 新增更新单个部门
+    @Update("update dept set name = #{name}, update_time=#{updateTime} where id=#{id}")
+    public abstract void updateDept(Dept dept);
+}
+@doc
+----
 </t>
 </tnodes>
 </leo_file>

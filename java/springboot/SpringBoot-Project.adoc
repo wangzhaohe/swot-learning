@@ -899,9 +899,7 @@ public interface DeptMapper {
 * 请求参数样例：
 +
 ```json
-{
-	"name": "教研部"
-}
+{ "name": "教研部" }
 ```
 
 3. 响应数据
@@ -927,11 +925,14 @@ public interface DeptMapper {
 }
 ```
 
-* 测试接口: 使用 httpie POST http://localhost:8080/depts name=教研部
+* 测试接口: 使用 http POST http://localhost:8080/depts name="教研部"
+* 在浏览器中测试新增部门功能。
 * 测试在前端新增部门，查看数据库是否有新增记录。
 
-===== DeptController  -> 处理请求
-.src/main/java/com/tjise/controller/DeptController.java
+===== file -> src/main/java/com/tjise/controller/DeptController.java
+
+
+====== insertDept
 [source,java,linenums]
 ----
 @PostMapping("/depts")
@@ -942,16 +943,31 @@ public Result insertDept(@RequestBody Dept dept){
 }
 ----
 
-===== DeptService     -> 接口
+===== file -> src/main/java/com/tjise/service/DeptService.java
 定义该接口目的是为了用类的多态实现 controller 层左边解耦。
 
-.src/main/java/com/tjise/service/DeptService.java
 [source,java,linenums]
 ----
-public abstract void insertDept(Dept dept);
+package com.tjise.service;
+
+import com.tjise.pojo.Dept;
+import java.util.List;
+
+public interface DeptService {
+    public abstract List<Dept> selectAllDept();
+
+    // 抽象方法：无返回值，只传入要删除记录的数据库 id 即可。
+    public abstract void deleteDeptById(Integer id);
+
+    // 新增抽象方法：新增部门
+    public abstract void insertDept(Dept dept);
+}
 ----
 
-===== DeptServiceImpl -> 实现接口
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== insertDept
 数据库表 dept 字段 对应的 java 实体类中有 4 个属性
 
 ```java
@@ -968,7 +984,6 @@ public class Dept {
 * createTime 需要后端指定
 * updateTime 需要后端指定
 
-.src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 [source,java,linenums]
 ----
 @Override
@@ -981,13 +996,32 @@ public void insertDept(Dept dept) {
 }
 ----
 
-===== DeptMapper      -> 数据库
-.src/main/java/com/tjise/mapper/DeptMapper.java
+===== file -> src/main/java/com/tjise/mapper/DeptMapper.java
 [source,java,linenums]
 ----
-@Insert("INSERT INTO dept (name, create_time, update_time) " + 
-        "VALUES (#{name}, #{createTime}, #{updateTime})")
-public abstract void insertDept(Dept dept);
+package com.tjise.mapper;
+
+import com.tjise.pojo.Dept;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import java.util.List;
+
+@Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
+public interface DeptMapper {
+    @Select("select * from dept")
+    public abstract List<Dept> selectAllDept();
+
+
+    @Delete("delete from dept where id=#{id}")
+    public abstract void deleteDeptById(Integer id);
+
+    // 新增部门
+    @Insert("INSERT INTO dept (name, create_time, update_time) " +
+            "VALUES (#{name}, #{createTime}, #{updateTime})")
+    public abstract void insertDept(Dept dept);
+}
 ----
 
 ==== 注解优化
@@ -1026,9 +1060,9 @@ public class DeptController {
 
 NOTE: 一个完整的请求路径，应该是类上的 @RequestMapping 的 value 属性 + 方法上的 @RequestMapping 的 value 属性。
 
-注解优化后再次使用 postman 或者浏览器进行测试，依然是正常的。
+注解优化后再次使用 httpie 或者浏览器进行测试，依然是正常的。
 
-===== #file src/main/java/com/tjise/controller/DeptController.java
+===== file -> src/main/java/com/tjise/controller/DeptController.java
 [source,java,linenums,highlight=13;19;29;39]
 ----
 package com.tjise.controller;
@@ -1083,6 +1117,110 @@ public class DeptController {
 }
 ----
 
+1. http GET :8080/depts
+2. http DELETE :8080/depts/1
+3. HTTP POST :8080/depts name="开发部"
+
+==== 删除部门逻辑增强
+总结下面所做的修改：
+
+1. 修改了DeptMapper接口中的deleteDeptById方法，使其返回int类型表示影响的行数，而不是void。
+
+2. 修改了DeptService接口中的deleteDeptById方法签名，使其返回int类型。
+
+3. 修改了DeptServiceImpl实现类中的deleteDeptById方法，使其返回mapper方法的返回值。
+
+4. 修改了DeptController中的deleteDeptById方法，根据删除操作的结果返回统一的响应格式：
+  - 如果删除成功（影响行数>0），返回成功的响应
+  - 如果删除失败（影响行数=0），返回错误信息"部门ID不存在"
+
+这些修改确保了当尝试删除不存在的部门ID时，前端会收到统一格式的错误响应，而不是默认的成功响应。
+
+===== file -> src/main/java/com/tjise/mapper/DeptMapper.java
+[source,java,linenums]
+----
+package com.tjise.mapper;
+
+import com.tjise.pojo.Dept;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import java.util.List;
+
+@Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
+public interface DeptMapper {
+    @Select("select * from dept")
+    public abstract List<Dept> selectAllDept();
+
+    // 更改返回值为整形 int
+    @Delete("delete from dept where id=#{id}")
+    public abstract int deleteDeptById(Integer id);
+
+    // 新增部门
+    @Insert("INSERT INTO dept (name, create_time, update_time) " +
+            "VALUES (#{name}, #{createTime}, #{updateTime})")
+    public abstract void insertDept(Dept dept);
+}
+----
+
+===== file -> src/main/java/com/tjise/service/DeptService.java
+定义该接口目的是为了用类的多态实现 controller 层左边解耦。
+
+[source,java,linenums]
+----
+package com.tjise.service;
+
+import com.tjise.pojo.Dept;
+import java.util.List;
+
+public interface DeptService {
+    public abstract List<Dept> selectAllDept();
+
+    // 抽象方法：返回删除的影响行数 int，用于判断是否删除成功
+    public abstract int deleteDeptById(Integer id);
+
+    public abstract void insertDept(Dept dept);
+}
+----
+
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== deleteDeptById
+.src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+[source,java,linenums]
+----
+@Override
+public int deleteDeptById(Integer id) {
+    // 方法调用不用写类型 Integer
+    return deptMapper.deleteDeptById(id);
+}
+----
+
+===== file -> src/main/java/com/tjise/controller/DeptController.java
+
+
+====== deleteDeptById
+[source,java]
+----
+@DeleteMapping("/{id}")
+public Result deleteDeptById(@PathVariable Integer id) {
+
+    // 调用 service 层
+    int rowsAffected = deptService.deleteDeptById(id);
+
+    // 根据删除结果返回统一的响应格式
+    if (rowsAffected > 0) {
+        // 删除成功
+        return Result.success();
+    } else {
+        // 删除失败，ID不存在
+        return Result.error("部门ID不存在");
+    }
+}
+----
+
 ==== 获取单个部门
 1. 基本信息
 
@@ -1116,7 +1254,7 @@ public class DeptController {
 .参数说明
 [cols="1,1,1,1",options="header",stripes=even]
 |===
-| 参数名            | 类型     | 是否必须 | 备注
+| 参数名          | 类型   | 是否必须 | 备注
 | code           | number | 必须   | 响应码，1 代表成功，0 代表失败
 | msg            | string | 非必须  | 提示信息
 | data           | object | 非必须  | 返回的数据
@@ -1141,10 +1279,13 @@ public class DeptController {
 }
 ```
 
-* 测试接口: httpie :8080/depts/1
+* 测试接口: http :8080/depts/1
 * 测试在浏览器获取单个部门。
 
-===== DeptController  -> 处理请求
+===== file -> src/main/java/com/tjise/controller/DeptController.java
+
+
+====== getDeptById
 [source,java,linenums]
 ----
 @GetMapping("/{id}")
@@ -1154,13 +1295,33 @@ public Result getDeptById(@PathVariable Integer id){
 }
 ----
 
-===== DeptService     -> 接口
+===== file -> src/main/java/com/tjise/service/DeptService.java
+定义该接口目的是为了用类的多态实现 controller 层左边解耦。
+
 [source,java,linenums]
 ----
-public abstract Dept getDeptById(Integer id);
+package com.tjise.service;
+
+import com.tjise.pojo.Dept;
+import java.util.List;
+
+public interface DeptService {
+    public abstract List<Dept> selectAllDept();
+
+    // 抽象方法：返回删除的影响行数 int，用于判断是否删除成功
+    public abstract int deleteDeptById(Integer id);
+
+    public abstract void insertDept(Dept dept);
+    
+    // 新增获取单个部门
+    public abstract Dept getDeptById(Integer id);
+}
 ----
 
-===== DeptServiceImpl -> 实现接口
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== getDeptById
 [source,java,linenums]
 ----
 @Override
@@ -1170,17 +1331,41 @@ public Dept getDeptById(Integer id) {
 }
 ----
 
-===== DeptMapper      -> 数据库
+===== file -> src/main/java/com/tjise/mapper/DeptMapper.java
 [source,java,linenums]
 ----
-@Select("select * from dept where id = #{id}")
-public abstract Dept getDeptById(Integer id);
+package com.tjise.mapper;
+
+import com.tjise.pojo.Dept;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import java.util.List;
+
+@Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
+public interface DeptMapper {
+    @Select("select * from dept")
+    public abstract List<Dept> selectAllDept();
+
+    // 更改返回值为整形 int
+    @Delete("delete from dept where id=#{id}")
+    public abstract int deleteDeptById(Integer id);
+
+    @Insert("INSERT INTO dept (name, create_time, update_time) " +
+            "VALUES (#{name}, #{createTime}, #{updateTime})")
+    public abstract void insertDept(Dept dept);
+
+    // 新增获取单个部门
+    @Select("select * from dept where id = #{id}")
+    public abstract Dept getDeptById(Integer id);
+}
 ----
 
 ==== 修改部门
 1. 基本信息
 
-* 请求路径：/depts
+* 请求路径：/depts（不是 REST 风格了，因为实体对象 Dept 包含了 id）
 * 请求方式：PUT
 * 接口描述：该接口用于修改部门数据
 
@@ -1193,8 +1378,8 @@ public abstract Dept getDeptById(Integer id);
 [cols="1,1,1,1",options="header"]
 |===
 | 参数名 | 类型     | 是否必须 | 备注
-| id    | number  | 必须     | 部门ID
-| name  | string  | 必须     | 部门名称
+| id    | number  | 必须     | 部门ID （用于获取单个部门）
+| name  | string  | 必须     | 部门名称（要更改的部门名称）
 |===
 * 请求参数样例：
 +
@@ -1231,23 +1416,49 @@ public abstract Dept getDeptById(Integer id);
 * 测试接口: http PUT http://localhost:8080/depts id:=1 name="教研部"
 * 测试在前端修改部门，查看数据库是否有更新记录。
 
-===== DeptController  -> 处理请求
+===== file -> src/main/java/com/tjise/controller/DeptController.java
+
+
+====== updateDept
 [source,java,linenums]
 ----
 @PutMapping
 public Result updateDept(@RequestBody Dept dept) {
     deptService.updateDept(dept);
+    // 这儿的逻辑有些粗糙，应该判断修改是否成功（此处省略）
     return Result.success();
 }
 ----
 
-===== DeptService     -> 接口
+===== file -> src/main/java/com/tjise/service/DeptService.java
+定义该接口目的是为了用类的多态实现 controller 层左边解耦。
+
 [source,java,linenums]
 ----
-public abstract void updateDept(Dept dept);
+package com.tjise.service;
+
+import com.tjise.pojo.Dept;
+import java.util.List;
+
+public interface DeptService {
+    public abstract List<Dept> selectAllDept();
+
+    // 抽象方法：返回删除的影响行数 int，用于判断是否删除成功
+    public abstract int deleteDeptById(Integer id);
+
+    public abstract void insertDept(Dept dept);
+    
+    public abstract Dept getDeptById(Integer id);
+    
+    // 新增更新单个部门
+    public abstract void updateDept(Dept dept);
+}
 ----
 
-===== DeptServiceImpl -> 实现接口
+===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+
+
+====== DeptServiceImpl -> 实现接口
 [source,java,linenums]
 ----
 @Override
@@ -1258,11 +1469,36 @@ public void updateDept(Dept dept) {
 }
 ----
 
-===== DeptMapper      -> 数据库
+===== file -> src/main/java/com/tjise/mapper/DeptMapper.java
 [source,java,linenums]
 ----
-@Update("update dept set name = #{name}, update_time=#{updateTime} where id=#{id}")
-public abstract void updateDept(Dept dept);
+package com.tjise.mapper;
+
+import com.tjise.pojo.Dept;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
+@Mapper  // 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中
+public interface DeptMapper {
+    @Select("select * from dept")
+    public abstract List<Dept> selectAllDept();
+
+    // 更改返回值为整形 int
+    @Delete("delete from dept where id=#{id}")
+    public abstract int deleteDeptById(Integer id);
+
+    @Insert("INSERT INTO dept (name, create_time, update_time) " +
+            "VALUES (#{name}, #{createTime}, #{updateTime})")
+    public abstract void insertDept(Dept dept);
+
+    @Select("select * from dept where id = #{id}")
+    public abstract Dept getDeptById(Integer id);
+
+    // 新增更新单个部门
+    @Update("update dept set name = #{name}, update_time=#{updateTime} where id=#{id}")
+    public abstract void updateDept(Dept dept);
+}
 ----
 
 === 员工管理

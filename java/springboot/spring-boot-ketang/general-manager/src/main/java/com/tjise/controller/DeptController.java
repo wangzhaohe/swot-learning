@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250919143736.1: * @file src/main/java/com/tjise/controller/DeptController.java
+//@+node:swot.20250919162317.1: * @file src/main/java/com/tjise/controller/DeptController.java
 //@@language java
 //@+others
-//@+node:swot.20250919143948.1: ** @ignore-node import
+//@+node:swot.20250919162317.2: ** @ignore-node import
 package com.tjise.controller;
 
 import com.tjise.pojo.Dept;
@@ -11,7 +11,7 @@ import com.tjise.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-//@+node:swot.20250919143959.1: ** @ignore-node class DeptController
+//@+node:swot.20250919162317.3: ** @ignore-node class DeptController
 @RestController
 @RequestMapping("/depts")                         // 抽取到类的注解上
 public class DeptController {
@@ -29,7 +29,7 @@ public class DeptController {
         return Result.success(deptList);
     }
     //@+others
-    //@+node:swot.20250919143836.1: *3* deleteDeptById
+    //@+node:swot.20250919162317.4: *3* @ignore-node deleteDeptById
     //@+doc
     // [source,java]
     // ----
@@ -53,6 +53,33 @@ public class DeptController {
     //@+doc
     // ----
     //
+    //@+node:swot.20250919162317.5: *3* @ignore-node getDeptById
+    //@@language java
+    //@+doc
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @GetMapping("/{id}")
+    public Result getDeptById(@PathVariable Integer id){
+        Dept dept = deptService.getDeptById(id);
+        return Result.success(dept);
+    }
+    //@+doc
+    // ----
+    //@+node:swot.20241104091227.2: *3* updateDept
+    //@@language java
+    //@+doc
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @PutMapping
+    public Result updateDept(@RequestBody Dept dept) {
+        deptService.updateDept(dept);
+        // 这儿的逻辑有些粗糙，应该判断修改是否成功（此处省略）
+        return Result.success();
+    }
+    //@+doc
+    // ----
     //@-others
     @PostMapping
     public Result insertDept(@RequestBody Dept dept) {

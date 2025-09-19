@@ -575,6 +575,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_删除单个部门">删除单个部门</a></li>
 <li><a href="#_新增部门">新增部门</a></li>
 <li><a href="#_注解优化">注解优化</a></li>
+<li><a href="#_删除部门逻辑增强">删除部门逻辑增强</a></li>
 <li><a href="#_获取单个部门">获取单个部门</a></li>
 <li><a href="#_修改部门">修改部门</a></li>
 </ul>
@@ -2373,9 +2374,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <p>请求参数样例：</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="json"><span></span><span class="tok-p">{</span>
-<span class="tok-w">	</span><span class="tok-nt">&quot;name&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;教研部&quot;</span>
-<span class="tok-p">}</span></code></pre>
+<pre class="pygments highlight"><code data-lang="json"><span></span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nt">&quot;name&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;教研部&quot;</span><span class="tok-w"> </span><span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </li>
@@ -2441,7 +2440,10 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </li>
 <li>
-<p>测试接口: 使用 httpie POST <a href="http://localhost:8080/depts" class="bare">http://localhost:8080/depts</a> name=教研部</p>
+<p>测试接口: 使用 http POST <a href="http://localhost:8080/depts" class="bare">http://localhost:8080/depts</a> name="教研部"</p>
+</li>
+<li>
+<p>在浏览器中测试新增部门功能。</p>
 </li>
 <li>
 <p>测试在前端新增部门，查看数据库是否有新增记录。</p>
@@ -2452,9 +2454,10 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求">DeptController  &#8594; 处理请求</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_5">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<div class="sect5">
+<h6 id="_insertdept">insertDept</h6>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/controller/DeptController.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -2471,21 +2474,49 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_deptservice_接口">DeptService     &#8594; 接口</h5>
+<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_4">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
 <div class="paragraph">
 <p>定义该接口目的是为了用类的多态实现 controller 层左边解耦。</p>
 </div>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/service/DeptService.java</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 抽象方法：无返回值，只传入要删除记录的数据库 id 即可。</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 新增抽象方法：新增部门</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_4">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<div class="sect5">
+<h6 id="_insertdept_2">insertDept</h6>
 <div class="paragraph">
 <p>数据库表 dept 字段 对应的 java 实体类中有 4 个属性</p>
 </div>
@@ -2516,7 +2547,6 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </ul>
 </div>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/service/impl/DeptServiceImpl.java</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
@@ -2537,16 +2567,56 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_file_srcmainjavacomtjisemapperdeptmapper_java_4">file &#8594; src/main/java/com/tjise/mapper/DeptMapper.java</h5>
 <div class="listingblock">
-<div class="title">src/main/java/com/tjise/mapper/DeptMapper.java</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Insert</span><span class="tok-p">(</span><span class="tok-s">&quot;INSERT INTO dept (name, create_time, update_time) &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
-<span class="tok-w">        </span><span class="tok-s">&quot;VALUES (#{name}, #{createTime}, #{updateTime})&quot;</span><span class="tok-p">)</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Delete</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Insert</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Mapper</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Select</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Mapper</span><span class="tok-w">  </span><span class="tok-c1">// 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptMapper</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from dept&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
+
+
+<span class="tok-w">    </span><span class="tok-nd">@Delete</span><span class="tok-p">(</span><span class="tok-s">&quot;delete from dept where id=#{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 新增部门</span>
+<span class="tok-w">    </span><span class="tok-nd">@Insert</span><span class="tok-p">(</span><span class="tok-s">&quot;INSERT INTO dept (name, create_time, update_time) &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
+<span class="tok-w">            </span><span class="tok-s">&quot;VALUES (#{name}, #{createTime}, #{updateTime})&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
@@ -2600,10 +2670,10 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </table>
 </div>
 <div class="paragraph">
-<p>注解优化后再次使用 postman 或者浏览器进行测试，依然是正常的。</p>
+<p>注解优化后再次使用 httpie 或者浏览器进行测试，依然是正常的。</p>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_5">#file src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_6">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2706,6 +2776,189 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>http GET :8080/depts</p>
+</li>
+<li>
+<p>http DELETE :8080/depts/1</p>
+</li>
+<li>
+<p>HTTP POST :8080/depts name="开发部"</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_删除部门逻辑增强">删除部门逻辑增强</h4>
+<div class="paragraph">
+<p>总结下面所做的修改：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>修改了DeptMapper接口中的deleteDeptById方法，使其返回int类型表示影响的行数，而不是void。</p>
+</li>
+<li>
+<p>修改了DeptService接口中的deleteDeptById方法签名，使其返回int类型。</p>
+</li>
+<li>
+<p>修改了DeptServiceImpl实现类中的deleteDeptById方法，使其返回mapper方法的返回值。</p>
+</li>
+<li>
+<p>修改了DeptController中的deleteDeptById方法，根据删除操作的结果返回统一的响应格式：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>如果删除成功（影响行数&gt;0），返回成功的响应</p>
+</li>
+<li>
+<p>如果删除失败（影响行数=0），返回错误信息"部门ID不存在"</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>这些修改确保了当尝试删除不存在的部门ID时，前端会收到统一格式的错误响应，而不是默认的成功响应。</p>
+</div>
+<div class="sect4">
+<h5 id="_file_srcmainjavacomtjisemapperdeptmapper_java_5">file &#8594; src/main/java/com/tjise/mapper/DeptMapper.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Delete</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Insert</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Mapper</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Select</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Mapper</span><span class="tok-w">  </span><span class="tok-c1">// 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptMapper</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from dept&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 更改返回值为整形 int</span>
+<span class="tok-w">    </span><span class="tok-nd">@Delete</span><span class="tok-p">(</span><span class="tok-s">&quot;delete from dept where id=#{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 新增部门</span>
+<span class="tok-w">    </span><span class="tok-nd">@Insert</span><span class="tok-p">(</span><span class="tok-s">&quot;INSERT INTO dept (name, create_time, update_time) &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
+<span class="tok-w">            </span><span class="tok-s">&quot;VALUES (#{name}, #{createTime}, #{updateTime})&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_5">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
+<div class="paragraph">
+<p>定义该接口目的是为了用类的多态实现 controller 层左边解耦。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 抽象方法：返回删除的影响行数 int，用于判断是否删除成功</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_5">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<div class="sect5">
+<h6 id="_deletedeptbyid_3">deleteDeptById</h6>
+<div class="listingblock">
+<div class="title">src/main/java/com/tjise/service/impl/DeptServiceImpl.java</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Override</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 方法调用不用写类型 Integer</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_7">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<div class="sect5">
+<h6 id="_deletedeptbyid_4">deleteDeptById</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@DeleteMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-w"> </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 调用 service 层</span>
+<span class="tok-w">    </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">rowsAffected</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">deptService</span><span class="tok-p">.</span><span class="tok-na">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 根据删除结果返回统一的响应格式</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">rowsAffected</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 删除成功</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 删除失败，ID不存在</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">error</span><span class="tok-p">(</span><span class="tok-s">&quot;部门ID不存在&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -2859,7 +3112,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </li>
 <li>
-<p>测试接口: httpie :8080/depts/1</p>
+<p>测试接口: http :8080/depts/1</p>
 </li>
 <li>
 <p>测试在浏览器获取单个部门。</p>
@@ -2870,7 +3123,9 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求_2">DeptController  &#8594; 处理请求</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_8">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<div class="sect5">
+<h6 id="_getdeptbyid">getDeptById</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -2886,17 +3141,53 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_deptservice_接口_2">DeptService     &#8594; 接口</h5>
+<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_6">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
+<div class="paragraph">
+<p>定义该接口目的是为了用类的多态实现 controller 层左边解耦。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-nf">getDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 抽象方法：返回删除的影响行数 int，用于判断是否删除成功</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 新增获取单个部门</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-nf">getDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口_2">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<div class="sect5">
+<h6 id="_getdeptbyid_2">getDeptById</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -2912,13 +3203,62 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库_2">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_file_srcmainjavacomtjisemapperdeptmapper_java_6">file &#8594; src/main/java/com/tjise/mapper/DeptMapper.java</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from dept where id = #{id}&quot;</span><span class="tok-p">)</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-nf">getDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Delete</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Insert</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Mapper</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.Select</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Mapper</span><span class="tok-w">  </span><span class="tok-c1">// 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptMapper</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from dept&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 更改返回值为整形 int</span>
+<span class="tok-w">    </span><span class="tok-nd">@Delete</span><span class="tok-p">(</span><span class="tok-s">&quot;delete from dept where id=#{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Insert</span><span class="tok-p">(</span><span class="tok-s">&quot;INSERT INTO dept (name, create_time, update_time) &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
+<span class="tok-w">            </span><span class="tok-s">&quot;VALUES (#{name}, #{createTime}, #{updateTime})&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 新增获取单个部门</span>
+<span class="tok-w">    </span><span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from dept where id = #{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-nf">getDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
@@ -2933,7 +3273,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>请求路径：/depts</p>
+<p>请求路径：/depts（不是 REST 风格了，因为实体对象 Dept 包含了 id）</p>
 </li>
 <li>
 <p>请求方式：PUT</p>
@@ -2973,13 +3313,13 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">必须</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">部门ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">部门ID （用于获取单个部门）</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">必须</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">部门名称</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">部门名称（要更改的部门名称）</p></td>
 </tr>
 </tbody>
 </table>
@@ -3067,33 +3407,77 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_deptcontroller_处理请求_3">DeptController  &#8594; 处理请求</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_9">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<div class="sect5">
+<h6 id="_updatedept">updateDept</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@PutMapping</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@PutMapping</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">updateDept</span><span class="tok-p">(</span><span class="tok-nd">@RequestBody</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-n">deptService</span><span class="tok-p">.</span><span class="tok-na">updateDept</span><span class="tok-p">(</span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-c1">// 这儿的逻辑有些粗糙，应该判断修改是否成功（此处省略）</span>
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">();</span>
 <span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_deptservice_接口_3">DeptService     &#8594; 接口</h5>
+<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_7">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
+<div class="paragraph">
+<p>定义该接口目的是为了用类的多态实现 controller 层左边解耦。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">updateDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 抽象方法：返回删除的影响行数 int，用于判断是否删除成功</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-nf">getDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 新增更新单个部门</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">updateDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_deptserviceimpl_实现接口_3">DeptServiceImpl &#8594; 实现接口</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<div class="sect5">
+<h6 id="_deptserviceimpl_实现接口">DeptServiceImpl &#8594; 实现接口</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -3111,13 +3495,64 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_deptmapper_数据库_3">DeptMapper      &#8594; 数据库</h5>
+<h5 id="_file_srcmainjavacomtjisemapperdeptmapper_java_7">file &#8594; src/main/java/com/tjise/mapper/DeptMapper.java</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Update</span><span class="tok-p">(</span><span class="tok-s">&quot;update dept set name = #{name}, update_time=#{updateTime} where id=#{id}&quot;</span><span class="tok-p">)</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">updateDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.mapper</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Dept</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.apache.ibatis.annotations.*</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Mapper</span><span class="tok-w">  </span><span class="tok-c1">// 1. 让 mybatis 识别 2. 将该接口的实现类对象放入 IOC 容器中</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">DeptMapper</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from dept&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 更改返回值为整形 int</span>
+<span class="tok-w">    </span><span class="tok-nd">@Delete</span><span class="tok-p">(</span><span class="tok-s">&quot;delete from dept where id=#{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Insert</span><span class="tok-p">(</span><span class="tok-s">&quot;INSERT INTO dept (name, create_time, update_time) &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
+<span class="tok-w">            </span><span class="tok-s">&quot;VALUES (#{name}, #{createTime}, #{updateTime})&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from dept where id = #{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-nf">getDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 新增更新单个部门</span>
+<span class="tok-w">    </span><span class="tok-nd">@Update</span><span class="tok-p">(</span><span class="tok-s">&quot;update dept set name = #{name}, update_time=#{updateTime} where id=#{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">updateDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
@@ -7429,7 +7864,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </table>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_6">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_10">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="sect5">
 <h6 id="_新增单个部门_insertdept_新增_try_catch">新增单个部门 insertDept &#8594; 新增 try catch</h6>
 <div class="listingblock">
@@ -7474,7 +7909,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_7">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_11">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="sect5">
 <h6 id="_新增单个部门_insertdept_移除_try_catch_恢复原来代码">新增单个部门 insertDept &#8594; 移除 try catch 恢复原来代码</h6>
 <div class="listingblock">
@@ -7616,7 +8051,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_4">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deptserviceimpl_新增_di_empservice">DeptServiceImpl &#8594; 新增 DI empService</h6>
 <div class="listingblock">
@@ -7757,7 +8192,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ul>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_5">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_9">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deletedeptbyid_删除单个部门及其员工_2">deleteDeptById 删除单个部门及其员工</h6>
 <div class="listingblock">
@@ -7813,7 +8248,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_4">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseservicedeptservice_java_8">file &#8594; src/main/java/com/tjise/service/DeptService.java</h5>
 <div class="sect5">
 <h6 id="_deptservice">DeptService</h6>
 <div class="listingblock">
@@ -7866,7 +8301,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_8">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_12">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="sect5">
 <h6 id="_deletedeptbyid_删除单个部门">deleteDeptById 删除单个部门</h6>
 <div class="listingblock">
@@ -7972,7 +8407,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ul>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_10">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deletedeptbyid_删除单个部门及其员工_3">deleteDeptById 删除单个部门及其员工</h6>
 <div class="listingblock">
@@ -8122,7 +8557,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 所以引出 AOP 的应用。</p>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_11">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_查询部门列表_计算执行耗时">查询部门列表 &#8594; 计算执行耗时</h6>
 <div class="listingblock">
@@ -8218,7 +8653,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_注释掉上节更改的代码_去掉多余打印">注释掉上节更改的代码 &#8594; 去掉多余打印</h5>
 <div class="sect5">
-<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
+<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_12">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
 
 </div>
 <div class="sect5">
@@ -9113,7 +9548,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_9">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
+<h6 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_13">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h6>
 
 </div>
 <div class="sect5">
@@ -9437,7 +9872,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_10">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_14">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_insertdept_新增部门_增加_log">insertDept 新增部门 &#8594; 增加 @Log</h6>
 <div class="listingblock">
@@ -10056,7 +10491,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-19 08:59:28 +0800
+Last updated 2025-09-19 16:39:31 +0800
 </div>
 </div>
 </body>

@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250919143443.1: * @file src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+//@+node:swot.20250919162328.1: * @file src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 //@@language java
 //@+others
-//@+node:swot.20250919143443.2: ** @ignore-node class DeptServiceImpl
+//@+node:swot.20250919162328.2: ** @ignore-node class DeptServiceImpl
 //@+doc
 // [source,java,linenums]
 // ----
@@ -31,7 +31,7 @@ public class DeptServiceImpl implements DeptService {
         return deptList;
     }
     //@+others
-    //@+node:swot.20250919143443.3: *3* deleteDeptById
+    //@+node:swot.20250919162328.3: *3* @ignore-node deleteDeptById
     //@@language java
     //@+doc
     // .src/main/java/com/tjise/service/impl/DeptServiceImpl.java
@@ -45,7 +45,7 @@ public class DeptServiceImpl implements DeptService {
     }
     //@+doc
     // ----
-    //@+node:swot.20250919143443.4: *3* @ignore-node  insertDept
+    //@+node:swot.20250919162328.4: *3* @ignore-node insertDept
     //@@language java
     //@+doc
     // 数据库表 dept 字段 对应的 java 实体类中有 4 个属性
@@ -74,6 +74,33 @@ public class DeptServiceImpl implements DeptService {
         dept.setUpdateTime(LocalDateTime.now());
         // 方法调用不用写类型 Dept
         deptMapper.insertDept(dept);
+    }
+    //@+doc
+    // ----
+    //@+node:swot.20250919162328.5: *3* @ignore-node getDeptById
+    //@@language java
+    //@+doc
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @Override
+    public Dept getDeptById(Integer id) {
+        Dept dept = deptMapper.getDeptById(id);
+        return dept;
+    }
+    //@+doc
+    // ----
+    //@+node:swot.20241104091227.4: *3* DeptServiceImpl -> 实现接口
+    //@@language java
+    //@+doc
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @Override
+    public void updateDept(Dept dept) {
+        // 补全属性
+        dept.setUpdateTime(LocalDateTime.now());
+        deptMapper.updateDept(dept);
     }
     //@+doc
     // ----
