@@ -25,18 +25,17 @@ import java.util.concurrent.TimeUnit;
  * Spring Boot 应用程序入口点
  */
 @SpringBootApplication
-@EnableEurekaClient  // 启用 Eureka 客户端功能
+@EnableEurekaClient  // new -> 启用 Eureka 客户端功能
 public class ServiceOrderApplication {
-
-    // 新增 DI 注入 配置的 url
     // @Autowired
-    // private ItemProperties itemProperties;  // 使用 Eureka 就用不到该对象了
+    // private ItemProperties itemProperties;  // 新增 DI 注入 配置的 url
+    // 使用 Eureka 找服务名的方式，就用不到该对象来找配置参数了。
 
     public static void main(String[] args) {
         SpringApplication.run(ServiceOrderApplication.class, args);
     }
     //@+others
-    //@+node:swot.20250919222308.4: *3* @ignore-node RestTemplate restTemplate
+    //@+node:swot.20250919222308.4: *3* RestTemplate
     //@+doc
     // [source,java]
     // ----
@@ -49,20 +48,22 @@ public class ServiceOrderApplication {
      * @return RestTemplate
      */
     @Bean
+    @LoadBalanced // new -> 使用负载均衡
     public RestTemplate restTemplate() {
         // 可以在这里添加拦截器来统一处理URL前缀
-        // return new RestTemplate();  // 未使用 OkHttp
-        return new RestTemplate(new OkHttp3ClientHttpRequestFactory());
+        // return new RestTemplate();  // not use OkHttp
+        return new RestTemplate(new OkHttp3ClientHttpRequestFactory());  // use OkHttp
     }
     //@+doc
     // ----
-    //@+node:swot.20250919222308.5: *3* @ignore-node OkHttpClient okHttpClient
+    //@+node:swot.20250919222308.5: *3* OkHttpClient
     //@+doc
     // [source,java]
     // ----
     //@@c
     //@@language java
     @Bean
+    @LoadBalanced // new -> 使用负载均衡
     public OkHttpClient okHttpClient() {
         return new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -72,8 +73,9 @@ public class ServiceOrderApplication {
     //@+doc
     // ----
     //
-    //@+node:swot.20250919222308.6: *3* @Bean WebClient
+    //@+node:swot.20250919222308.6: *3* WebClient
     //@+doc
+    //@@nowrap
     // [source,java]
     // ----
     //@@c
@@ -81,7 +83,7 @@ public class ServiceOrderApplication {
     // 直接注入也可以的
     // public WebClient webClient(ItemServiceProperties properties) {
     @Bean
-    @LoadBalanced // 使用负载均衡
+    @LoadBalanced // new -> 使用负载均衡
     public WebClient webClient() {
         return WebClient.builder()
             // .baseUrl(itemProperties.getUrl())   // 使用注入的 Url
@@ -90,7 +92,6 @@ public class ServiceOrderApplication {
     }
     //@+doc
     // ----
-    //
     //@-others
 }
 //@-others

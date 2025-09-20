@@ -33,6 +33,9 @@ import com.tjise.serviceorder.pojo.Order;
 import com.tjise.serviceorder.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
 //@+node:swot.20250920110227.1: ** @ignore-node class OrderController
 /**
  * 订单控制器
@@ -52,7 +55,7 @@ public class OrderController {
      * @return Order 订单信息
      */
     @GetMapping(value = "order/{orderId}")
-    public Order queryOrderById(@PathVariable("orderId") String orderId) {
+    public Order queryOrderById(@PathVariable("orderId") String orderId) throws IOException {
         return orderService.queryOrderById(orderId);
     }
     //@+node:swot.20250920111147.1: *3* get services in Eureka 看看都注册了哪些微服务
