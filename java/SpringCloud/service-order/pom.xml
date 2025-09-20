@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--@+leo-ver=5-thin-->
-<!--@+node:swot.20250914212915.1: * @file service-order/pom.xml-->
+<!--@+node:swot.20250919080549.1: * @file service-order/pom.xml-->
 <!--@@first-->
 <!--@@language xml-->
 <!--@+others-->
-<!--@+node:swot.20250914212915.2: ** @ignore-node project-->
+<!--@+node:swot.20250919080549.2: ** @ignore-node project-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -14,14 +14,53 @@
         <version>2.7.18</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.tjise</groupId>
     <artifactId>service-order</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>service-order</name>
     <description>service-order</description>
+    <!--@+others-->
+    <!--@+node:swot.20250919135501.1: *3* properties-->
+    <!--@+doc-->
+    <!--
+    [source,scss]
+    ....
+    -->
+    <!--@@c-->
+    <!--@@language xml-->
     <properties>
         <java.version>1.8</java.version>
+        <spring-cloud.version>2021.0.8</spring-cloud.version>
     </properties>
+    <!--@+doc-->
+    <!--
+    ....
+    -->
+    <!--@+node:swot.20250919135651.1: *3* dependencyManagement -> 新增 cloud dependency-->
+    <!--@+doc-->
+    <!--
+    [source,scss]
+    ....
+    -->
+    <!--@@c-->
+    <!--@@language xml-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <!--@+doc-->
+    <!--
+    ....
+    -->
+    <!--@+node:swot.20250919135524.1: *3* @ignore-node dependencies-->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -41,7 +80,7 @@
             <optional>true</optional>
         </dependency>
         <!--@+others-->
-        <!--@+node:swot.20250914212915.3: *3* @ignore-node okhttp 依赖-->
+        <!--@+node:swot.20250919080549.3: *4* @ignore-node okhttp 依赖-->
         <!--@+doc-->
         <!--
         [source,scss]
@@ -58,7 +97,7 @@
         <!--
         ....
         -->
-        <!--@+node:swot.20250914101602.1: *3* WebClient-->
+        <!--@+node:swot.20250919080549.4: *4* @ignore-node WebClient 依赖-->
         <!--@+doc-->
         <!--
         [source,scss]
@@ -74,9 +113,26 @@
         <!--
         ....
         -->
+        <!--@+node:swot.20250919135739.1: *4* spring-cloud-starter-netflix-eureka-client-->
+        <!--@+doc-->
+        <!--
+        [source,scss]
+        ....
+        -->
+        <!--@@c-->
+        <!--@@language xml-->
+        <!-- 添加 Eureka 客户端依赖, 用于将服务注册到 Eureka -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <!--@+doc-->
+        <!--
+        ....
+        -->
         <!--@-others-->
     </dependencies>
-
+    <!--@-others-->
     <build>
         <plugins>
             <plugin>

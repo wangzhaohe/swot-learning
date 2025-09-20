@@ -1,12 +1,37 @@
 #@+leo-ver=5-thin
-#@+node:swot.20250915102329.1: * @file service-order/src/main/resources/application.yml
+#@+node:swot.20250919170635.1: * @file service-order/src/main/resources/application.yml
+#@+doc
+# [source,python]
+# ----
+#@@c
 #@@language python
 server:
-  port: 8082
+    port: 8082
 
 # 新增 url 配置
 myspcloud:
-  item:
-    url: http://127.0.0.1:8081/item/
+    item:
+        url: http://127.0.0.1:8081/item/
 
+# 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
+spring:
+    application:
+        name: app-order
+
+# 服务注册到 eureka 注册中心的地址
+eureka:
+    client:
+        service-url:
+            defaultZone: http://127.0.0.1:8761/eureka
+        # 因为该应用为服务提供者，是eureka的一个客户端，需要注册到注册中心
+        register-with-eureka: true
+        # 是否需要从eureka上检索服务
+        fetch-registry: true
+    instance:
+        # 使用IP地址注册而不是主机名
+        prefer-ip-address: true
+        # 客户端在注册时使用自己的IP，而不是主机名，是生产环境的最佳实践。避免主机名解析问题
+        ip-address: 127.0.0.1
+#@+doc
+# ----
 #@-leo

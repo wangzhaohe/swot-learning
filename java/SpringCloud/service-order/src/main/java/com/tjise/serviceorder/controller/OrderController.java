@@ -3,12 +3,14 @@
 //@@language java
 package com.tjise.serviceorder.controller;
 
+import com.netflix.discovery.converters.Auto;
 import com.tjise.serviceorder.pojo.Order;
 import com.tjise.serviceorder.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 订单控制器
@@ -30,6 +32,14 @@ public class OrderController {
     @GetMapping(value = "order/{orderId}")
     public Order queryOrderById(@PathVariable("orderId") String orderId) throws IOException {
         return orderService.queryOrderById(orderId);
+    }
+
+    @Autowired
+    private org.springframework.cloud.client.discovery.DiscoveryClient discoveryClient;
+
+    @GetMapping("/services")
+    public List<String> getServices() {
+        return discoveryClient.getServices();
     }
 }
 //@-leo
