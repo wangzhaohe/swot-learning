@@ -30,10 +30,10 @@
 </script>
 ++++
 
-== Spring Cloud 微服务介绍
+== 1. Spring Cloud 微服务介绍
 
 
-=== 一、 什么是微服务？
+=== 1.1 什么是微服务？
 1. 单体架构的困境
 +
 在传统单体架构（Monolithic Architecture）中，所有功能模块（如用户管理、订单管理、支付管理等）都被打包在一个大的应用程序中，并部署在一个应用服务器上。
@@ -64,7 +64,7 @@
 * *单体应用* 像一个 *大商场* ：所有部门（服装、餐饮、超市）在一个大楼里，共享水电消防。一损俱损。
 * *微服务* 像一个 *商业街* ：每个店铺（服务）独立经营，有自己的特色和库存，通过公共街道（网络）连接。一店装修，不影响其他店。
 
-=== 二、 微服务带来的新挑战
+=== 1.2 微服务带来的新挑战
 拆分成多个服务后，也引入了新的复杂性：
 
 . 服务发现：服务实例动态变化，消费者如何找到提供者？
@@ -75,7 +75,7 @@
 . 分布式事务：如何保证跨多个服务的数据一致性？
 . 监控与链路追踪：如何跟踪一个请求穿越多个服务的全过程，以便排查问题？
 
-=== 三、 什么是 Spring Cloud？
+=== 1.3 Spring Cloud？
 1. 定义
 +
 Spring Cloud 是一套基于 Spring Boot的 #微服务生态工具集#。它提供了一系列 #标准化的工具和组件#，用于快速解决微服务架构中的常见问题（如上述挑战），让我们能更专注于业务逻辑的开发。
@@ -87,7 +87,7 @@ Spring Cloud 是一套基于 Spring Boot的 #微服务生态工具集#。它提�
 +
 Spring Cloud 通过封装 *Netflix*、*Alibaba* 等公司成熟的微服务解决方案，提供了 *开箱即用* 的分布式系统开发体验。
 
-=== 四、 Spring Cloud 的核心组件/子项目
+=== 1.4 Cloud 的核心组件/子项目
 Spring Cloud是一个“全家桶”，包含众多组件，以下是其中最核心的几个：
 
 [cols="1,3,2", options="header"]
@@ -125,7 +125,7 @@ Spring Cloud是一个“全家桶”，包含众多组件，以下是其中最�
 | *快递追踪*：可以查看你的包裹（请求）经过了哪些中转站（服务）。
 |===
 
-=== 五、 Spring Cloud 的流派
+=== 1.5 Cloud 的流派
 目前主要有两大主流体系：
 
 . *Netflix系*：Spring Cloud Netflix（如 Eureka, Hystrix, Zuul）是早期标准，目前已部分进入维护模式。
@@ -134,18 +134,18 @@ Spring Cloud是一个“全家桶”，包含众多组件，以下是其中最�
 
 *建议*：新项目首选 *Spring Cloud Alibaba*。
 
-=== 六、 总结
+=== 1.6 总结
 * 微服务架构通过拆分和解耦，解决了单体应用的痛点，但也带来了分布式系统的复杂性。
 
 * *Spring Cloud* 不是一门新技术，而是一个 *工具箱*，它提供了 *一整套标准化的解决方案* 来轻松应对这些复杂性。
 
 * 使用 *Spring Boot + Spring Cloud*，可以快速构建和治理一套完整、健壮的分布式微服务系统。
 
-== 创建一个空的工程 micro-service
+== 2. 创建一个空的工程 micro-service
 
 image::img/create_empty_project.png[,800]
 
-== 创建商品微服务模块 service-item
+== 3. 创建商品微服务模块 service-item
 写完下面的代码后，使用 httpie 测试一下
 
 http :8081/item/1
@@ -308,10 +308,10 @@ public class ServiceItemApplication {
 server:
   port: 8081
 
-== 创建订单微服务模块 service-order
+== 4. 创建订单微服务模块 service-order
 
 
-=== file -> pom.xml
+=== file -> service-order/pom.xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -610,10 +610,10 @@ public class ServiceOrderApplication {
 server:
   port: 8082
 
-== HTTP 客户端
+== 5. HTTP 客户端
 
 
-=== RestTemplate -- Spring 提供的传统同步 HTTP 客户端
+=== 5.1 RestTemplate -- Spring 提供的传统同步 HTTP 客户端
 前面演示的是 方式一：字段注入（需要 @Autowired），
 下面演示一下使用 方式二单个构造函数注入的例子。
 
@@ -639,7 +639,7 @@ public ItemService(RestTemplate restTemplate) {
 }
 ----
 
-=== RestTemplate + OkHttp 可以兼容老代码
+=== 5.2 RestTemplate + OkHttp 可以兼容老代码
 为了兼容老的 RestTemplate 代码，也可以在 RestTemplate 中配置 OkHttp。
 
 ==== file -> service-order/pom.xml
@@ -682,7 +682,7 @@ public RestTemplate restTemplate() {
 [source,java]
 ----
 private final RestTemplate restTemplate;
-public ItemService(RestTemplate restTemplate) {
+public ItemService(RestTemplate restTemplate) {  // 单个构造函数
     this.restTemplate = restTemplate;
     // 检查请求工厂类型
     System.out.println("Request Factory: " + restTemplate.getRequestFactory().getClass().getName());
@@ -691,7 +691,7 @@ public ItemService(RestTemplate restTemplate) {
 }
 ----
 
-=== OkHttp       -- Square 开源的高性能 HTTP 客户端
+=== 5.3 OkHttp -- 单独使用 Square 开源的高性能 HTTP 客户端
 OkHttp 的异步 API 在应用程序层面实现了与 Node.js 类似的高并发编程模型：通过非阻塞 I/O 和回调机制，最大化利用少量线程来处理海量网络连接，从而高效地处理高并发 HTTP 请求。
 
 ==== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
@@ -755,7 +755,7 @@ public class ItemService {
 }
 ----
 
-=== WebClient    -- Spring WebFlux 提供的响应式 HTTP 客户端
+=== 5.4 WebClient  -- Spring WebFlux 提供的响应式 HTTP 客户端
 
 
 ==== file -> service-order/pom.xml
@@ -779,8 +779,8 @@ public class ItemService {
 @Bean
 public WebClient webClient() {
     return WebClient.builder()
-        .baseUrl("http://127.0.0.1:8081/item")
-        .build();
+          .baseUrl("http://127.0.0.1:8081/item")
+          .build();
 }
 ----
 
@@ -822,17 +822,22 @@ public class ItemService {
 }
 ----
 
-=== RestClient   -- Spring 6.1 才支持（目前的 Spring Boot 2.7.18 使用的是 Spring 5.3.x）
+=== 5.5  RestClient -- Spring 6.1 才支持（目前的 Spring Boot 2.7.18 使用的是 Spring 5.3.x）
 RestClient 的主要价值在于它提供了一个现代化但又不失简单的 API，结合了 RestTemplate 的易用性和 WebClient 的功能强大，是未来 Spring 应用HTTP客户端调用的推荐选择。
 
-== 解决 service-order url 硬编码问题：使用 @Value
+== 6. service-order url 硬编码问题
+
+
+=== 6.1 解决 service-order url 硬编码问题：使用 @Value
 通过以上的测试我们发现，在订单系统中要调用商品微服务中的查询接口来获取数据，在订单微服务中将 url 硬编码到代码中，这样显然不好，因为，运行环境一旦发生变化这个 url 地址将不可用。
 
 如何解决呢？
 
-解决方案：将 ur l地址写入到 application.yml 配置文件中。
+解决方案：将 url 地址写入到 yml 配置文件中。
 
-=== file -> service-order/src/main/resources/application.yml
+==== file -> service-order/src/main/resources/application.yml
+[source,python]
+----
 server:
   port: 8082
 
@@ -841,10 +846,12 @@ myspcloud:
   item:
     url: http://127.0.0.1:8081/item/
 
-=== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+----
+
+==== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
 
 
-==== class ServiceOrderApplication
+===== class ServiceOrderApplication
 /**
  * 订单服务启动类
  * Spring Boot 应用程序入口点
@@ -862,7 +869,7 @@ public class ServiceOrderApplication {
     @others
 }
 
-===== WebClient
+====== WebClient
 [source,java]
 ----
 @Bean
@@ -873,10 +880,10 @@ public WebClient webClient() {
 }
 ----
 
-== 解决 service-order url 硬编码问题：使用 @ConfigurationProperties
+=== 6.2 解决 service-order url 硬编码问题：使用 @ConfigurationProperties
 
 
-=== file -> service-order/src/main/java/com/tjise/serviceorder/utils/ItemProperties.java
+==== file -> service-order/src/main/java/com/tjise/serviceorder/utils/ItemProperties.java
 [source,java]
 ----
 package com.tjise.serviceorder.utils;
@@ -895,10 +902,10 @@ public class ItemProperties {
 }
 ----
 
-=== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+==== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
 
 
-==== class ServiceOrderApplication
+===== class ServiceOrderApplication
 /**
  * 订单服务启动类
  * Spring Boot 应用程序入口点
@@ -916,7 +923,7 @@ public class ServiceOrderApplication {
     @others
 }
 
-===== @Bean WebClient
+====== @Bean WebClient
 [source,java]
 ----
 // 直接注入也可以的
@@ -929,7 +936,7 @@ public WebClient webClient() {
 }
 ----
 
-== 引入微服务注册、发现机制
+== 7. 引入微服务注册、发现机制
 * 问题：商品微服务 ip 发生变更则需要更改订单微服务的配置文件
 * 问题：商品微服务有多个，订单微服务该链接哪个？
 
@@ -942,7 +949,7 @@ image::img/service_register.png[,640]
 3. 查找到服务后进行调用（这里就是无需硬编码url的解决方案）
 4. 服务的消费者与服务注册中心保持心跳连接，一旦服务提供者的地址发生变更时，注册中心会通知服务消费者
 
-=== Eureka 介绍
+=== 7.1 Eureka 介绍
 Eureka 是 Netfix 开源的服务发现组件，本身是一个基于 REST 的服务。它包含 Server 和 Client 两部分。SpringCloud 将它集成在子项目 SpringCloud Netfix 中，从而实现微服务的注册与发现。
 
 * Eureka Server 提供服务注册服务，各个节点启动后，会在 Eureka Server 中进行注册，这样 EurekaServer 中的服务注册表中将会存储所有可用服务节点的信息，服务节点的信息可以在界面中直观的看到。
@@ -955,7 +962,7 @@ Eureka 是 Netfix 开源的服务发现组件，本身是一个基于 REST 的�
 
 综上，Eureka 通过心跳检查、客户端缓存等机制，确保了系统的高可用性、灵活性和可伸缩性。
 
-=== Eureka Server 的创建
+=== 7.2 Eureka Server 的创建
 创建一个 maven 的项目，命名为 eureka。
 
 image::img/create_eureka_module.png[,800]
@@ -976,7 +983,7 @@ image::img/create_eureka_module.png[,800]
 </project>
 ....
 
-===== properties 配置项目属性：Java 版本、Spring Boot 和 Spring Cloud 版本
+===== 1. properties 配置项目属性：Java 版本、Spring Boot 和 Spring Cloud 版本
 [source,scss]
 ....
 <properties>
@@ -989,7 +996,7 @@ image::img/create_eureka_module.png[,800]
 </properties>
 ....
 
-===== dependencyManagement 依赖管理：导入 Spring Boot 和 Spring Cloud 的依赖管理
+===== 2. dependencyManagement 依赖管理：导入 Spring Boot 和 Spring Cloud 的依赖管理
 [source,scss]
 ....
 <dependencyManagement>
@@ -1014,7 +1021,7 @@ image::img/create_eureka_module.png[,800]
 </dependencyManagement>
 ....
 
-===== dependencies 项目依赖：添加 Eureka Server 依赖
+===== 3. dependencies 项目依赖：添加 Eureka Server 依赖
 [source,scss]
 ....
 <dependencies>
@@ -1026,7 +1033,7 @@ image::img/create_eureka_module.png[,800]
 </dependencies>
 ....
 
-===== plugins 构建配置：添加 Spring Boot Maven 插件
+===== 4. plugins 构建配置：添加 Spring Boot Maven 插件
 [source,scss]
 ....
 <build>
@@ -1085,7 +1092,7 @@ eureka:
 . 进入eureka项目目录
 * cd /Users/swot/swot-learning/java/SpringCloud/eureka
 
-. 启动应用
+. 使用 IDEA 启动应用
 * mvn spring-boot:run
 
 . 或者先打包再运行
@@ -1096,7 +1103,7 @@ eureka:
 
 image::img/eureka_admin_no_instance.png[]
 
-=== Eureka Server 注册商品微服务
+=== 7.3 Eureka Server 注册商品微服务到
 成功注册 service-item 到 eureka 是这样的，如下图
 
 image::img/eureka_admin_with_service-item.png[]
@@ -1104,7 +1111,7 @@ image::img/eureka_admin_with_service-item.png[]
 ==== file -> service-item/pom.xml
 
 
-===== properties -> 新增 cloud 版本 2021.0.8
+===== properties Add cloud Version 2021.0.8
 [source,scss]
 ....
 <properties>
@@ -1113,7 +1120,7 @@ image::img/eureka_admin_with_service-item.png[]
 </properties>
 ....
 
-===== dependencyManagement -> 新增 cloud dependency
+===== dependencyManagement Add cloud dependency
 [source,scss]
 ....
 <dependencyManagement>
@@ -1132,7 +1139,7 @@ image::img/eureka_admin_with_service-item.png[]
 ===== spring-cloud-starter-netflix-eureka-client
 [source,scss]
 ....
-<!-- 添加 Eureka 客户端依赖，用于将服务注册到 Eureka -->
+<!-- 添加 Eureka 客户端依赖, 用于将服务注册到 Eureka -->
 <dependency>
     <groupId>org.springframework.cloud</groupId>
     <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -1192,6 +1199,147 @@ public class ServiceItemApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServiceItemApplication.class, args);
     }
+}
+----
+
+=== 7.4 Eureka 中发现商品微服务
+之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。
+
+httpie 测试:
+http :8082/order/201810300001
+
+==== 7.4.1 file -> service-order/pom.xml
+
+
+===== properties version
+[source,scss]
+....
+<properties>
+    <java.version>1.8</java.version>
+    <spring-cloud.version>2021.0.8</spring-cloud.version>
+</properties>
+....
+
+===== Add cloud dependency
+[source,scss]
+....
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring-cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+....
+
+===== eureka-client 依赖
+[source,scss]
+....
+<!-- 添加 Eureka 客户端依赖, 用于将服务注册到 Eureka -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+....
+
+==== 7.4.2 file -> service-order/src/main/resources/application.yml
+[source,python]
+----
+server:
+    port: 8082
+
+# 新增 url 配置
+myspcloud:
+    item:
+        url: http://127.0.0.1:8081/item/
+
+# 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
+spring:
+    application:
+        name: app-order
+
+# 服务注册到 eureka 注册中心的地址
+eureka:
+    client:
+        service-url:
+            defaultZone: http://127.0.0.1:8761/eureka
+        # 因为该应用为服务提供者，是eureka的一个客户端，需要注册到注册中心
+        register-with-eureka: true
+        # 是否需要从eureka上检索服务
+        fetch-registry: true
+    instance:
+        # 使用IP地址注册而不是主机名
+        prefer-ip-address: true
+        # 客户端在注册时使用自己的IP，而不是主机名，是生产环境的最佳实践。避免主机名解析问题
+        ip-address: 127.0.0.1
+----
+
+==== 7.4.3 file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+
+
+===== class ServiceOrderApplication
+/**
+ * 订单服务启动类
+ * Spring Boot 应用程序入口点
+ */
+@SpringBootApplication
+@EnableEurekaClient  // 启用 Eureka 客户端功能
+public class ServiceOrderApplication {
+    // @Autowired
+    // private ItemProperties itemProperties;  // 新增 DI 注入 配置的 url
+    // 使用 Eureka 找服务名的方式，就用不到该对象来找配置参数了。
+
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceOrderApplication.class, args);
+    }
+    @others
+}
+
+====== RestTemplate
+[source,java]
+----
+/**
+ * 创建RestTemplate实例
+ * 用于调用其他微服务
+ * 
+ * @return RestTemplate
+ */
+@Bean
+public RestTemplate restTemplate() {
+    // 可以在这里添加拦截器来统一处理URL前缀
+    // return new RestTemplate();  // not use OkHttp
+    return new RestTemplate(new OkHttp3ClientHttpRequestFactory());  // use OkHttp
+}
+----
+
+====== OkHttpClient
+[source,java]
+----
+@Bean
+public OkHttpClient okHttpClient() {
+    return new OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .build();
+}
+----
+
+====== WebClient
+[source,java]
+----
+// 直接注入也可以的
+// public WebClient webClient(ItemServiceProperties properties) {
+@Bean
+@LoadBalanced // 使用负载均衡
+public WebClient webClient() {
+    return WebClient.builder()
+        // .baseUrl(itemProperties.getUrl())   // 使用注入的 Url
+        .baseUrl("http://app-item/item")  // 改成使用 eureka 注册中心调用(去注册中心根据 app-item 查找服务，这种方式必须先开启负载均衡 @LoadBalanced)
+        .build();
 }
 ----
 
