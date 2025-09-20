@@ -635,9 +635,10 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_7_4_eureka_中发现商品微服务">7.4 Eureka 中发现商品微服务</a>
 <ul class="sectlevel3">
-<li><a href="#_7_4_1_file_service_orderpom_xml">7.4.1 file &#8594; service-order/pom.xml</a></li>
-<li><a href="#_7_4_2_file_service_ordersrcmainresourcesapplication_yml">7.4.2 file &#8594; service-order/src/main/resources/application.yml</a></li>
-<li><a href="#_7_4_3_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java">7.4.3 file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
+<li><a href="#_file_service_orderpom_xml_4">file &#8594; service-order/pom.xml</a></li>
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
+<li><a href="#_测试微服务是否注册成功">测试微服务是否注册成功</a></li>
 </ul>
 </li>
 </ul>
@@ -2378,7 +2379,7 @@ public class EurekaApplication {</p>
 http :8082/order/201810300001</p>
 </div>
 <div class="sect3">
-<h4 id="_7_4_1_file_service_orderpom_xml">7.4.1 file &#8594; service-order/pom.xml</h4>
+<h4 id="_file_service_orderpom_xml_4">file &#8594; service-order/pom.xml</h4>
 <div class="sect4">
 <h5 id="_properties_version">properties version</h5>
 <div class="listingblock">
@@ -2422,7 +2423,7 @@ http :8082/order/201810300001</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_7_4_2_file_service_ordersrcmainresourcesapplication_yml">7.4.2 file &#8594; service-order/src/main/resources/application.yml</h4>
+<h4 id="_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">server</span><span class="tok-p">:</span>
@@ -2456,7 +2457,7 @@ http :8082/order/201810300001</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_7_4_3_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java">7.4.3 file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
 <div class="sect4">
 <h5 id="_class_serviceorderapplication_3">class ServiceOrderApplication</h5>
 <div class="paragraph">
@@ -2532,13 +2533,61 @@ public class ServiceOrderApplication {
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_测试微服务是否注册成功">测试微服务是否注册成功</h4>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceordercontrollerordercontroller_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java</h5>
+<div class="sect5">
+<h6 id="_docs">docs</h6>
+<div class="listingblock">
+<div class="title">httpie 测试已经注册的微服务</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8082/services</span></code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">返回都注册了哪些微服务</div>
+<div class="content">
+<pre>HTTP/1.1 200
+Connection: keep-alive
+Content-Type: application/json
+Date: Sat, 20 Sep 2025 03:05:52 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+[
+    "app-item",
+    "app-order"
+]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>说明上面的两个微服务在 Eureka 中已经注册成功了。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_get_services_in_eureka_看看都注册了哪些微服务">get services in Eureka 看看都注册了哪些微服务</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Autowired</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">org</span><span class="tok-p">.</span><span class="tok-na">springframework</span><span class="tok-p">.</span><span class="tok-na">cloud</span><span class="tok-p">.</span><span class="tok-na">client</span><span class="tok-p">.</span><span class="tok-na">discovery</span><span class="tok-p">.</span><span class="tok-na">DiscoveryClient</span><span class="tok-w"> </span><span class="tok-n">discoveryClient</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/services&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">getServices</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">discoveryClient</span><span class="tok-p">.</span><span class="tok-na">getServices</span><span class="tok-p">();</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-20 10:40:13 +0800
+Last updated 2025-09-20 11:18:45 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

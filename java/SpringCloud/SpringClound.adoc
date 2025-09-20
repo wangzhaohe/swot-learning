@@ -1208,7 +1208,7 @@ public class ServiceItemApplication {
 httpie 测试:
 http :8082/order/201810300001
 
-==== 7.4.1 file -> service-order/pom.xml
+==== file -> service-order/pom.xml
 
 
 ===== properties version
@@ -1246,7 +1246,7 @@ http :8082/order/201810300001
 </dependency>
 ....
 
-==== 7.4.2 file -> service-order/src/main/resources/application.yml
+==== file -> service-order/src/main/resources/application.yml
 [source,python]
 ----
 server:
@@ -1278,7 +1278,7 @@ eureka:
         ip-address: 127.0.0.1
 ----
 
-==== 7.4.3 file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+==== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
 
 
 ===== class ServiceOrderApplication
@@ -1340,6 +1340,51 @@ public WebClient webClient() {
         // .baseUrl(itemProperties.getUrl())   // 使用注入的 Url
         .baseUrl("http://app-item/item")  // 改成使用 eureka 注册中心调用(去注册中心根据 app-item 查找服务，这种方式必须先开启负载均衡 @LoadBalanced)
         .build();
+}
+----
+
+==== 测试微服务是否注册成功
+
+
+===== file -> service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
+
+
+====== docs
+// httpie 测试获取订单详情
+// http :8082/order/201810300001
+
+.httpie 测试已经注册的微服务
+[source,console]
+----
+http :8082/services
+----
+
+.返回都注册了哪些微服务
+....
+HTTP/1.1 200
+Connection: keep-alive
+Content-Type: application/json
+Date: Sat, 20 Sep 2025 03:05:52 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+[
+    "app-item",
+    "app-order"
+]
+....
+
+说明上面的两个微服务在 Eureka 中已经注册成功了。
+
+====== get services in Eureka 看看都注册了哪些微服务
+[source,java]
+----
+@Autowired
+private org.springframework.cloud.client.discovery.DiscoveryClient discoveryClient;
+
+@GetMapping("/services")
+public List<String> getServices() {
+    return discoveryClient.getServices();
 }
 ----
 
