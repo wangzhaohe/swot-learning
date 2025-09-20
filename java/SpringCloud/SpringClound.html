@@ -637,7 +637,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_file_service_orderpom_xml_4">file &#8594; service-order/pom.xml</a></li>
 <li><a href="#_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</a></li>
-<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">@file service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_6">@file service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
 <li><a href="#_测试微服务是否注册成功">测试微服务是否注册成功</a></li>
 </ul>
 </li>
@@ -2457,7 +2458,7 @@ http :8082/order/201810300001</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">@file service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
 <div class="sect4">
 <h5 id="_class_serviceorderapplication_3">class ServiceOrderApplication</h5>
 <div class="paragraph">
@@ -2466,7 +2467,7 @@ http :8082/order/201810300001</p>
  * Spring Boot 应用程序入口点
  */
 @SpringBootApplication
-@EnableEurekaClient  // 启用 Eureka 客户端功能
+@EnableEurekaClient  // new &#8594; 启用 Eureka 客户端功能
 public class ServiceOrderApplication {
     // @Autowired
     // private ItemProperties itemProperties;  // 新增 DI 注入 配置的 url
@@ -2492,6 +2493,7 @@ public class ServiceOrderApplication {
 <span class="tok-cm"> * @return RestTemplate</span>
 <span class="tok-cm"> */</span>
 <span class="tok-nd">@Bean</span>
+<span class="tok-nd">@LoadBalanced</span><span class="tok-w"> </span><span class="tok-c1">// new -&gt; 使用负载均衡</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-nf">restTemplate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-c1">// 可以在这里添加拦截器来统一处理URL前缀</span>
 <span class="tok-w">    </span><span class="tok-c1">// return new RestTemplate();  // not use OkHttp</span>
@@ -2505,6 +2507,7 @@ public class ServiceOrderApplication {
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Bean</span>
+<span class="tok-nd">@LoadBalanced</span><span class="tok-w"> </span><span class="tok-c1">// new -&gt; 使用负载均衡</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-w"> </span><span class="tok-nf">okHttpClient</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-p">.</span><span class="tok-na">Builder</span><span class="tok-p">()</span>
 <span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">connectTimeout</span><span class="tok-p">(</span><span class="tok-mi">30</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">TimeUnit</span><span class="tok-p">.</span><span class="tok-na">SECONDS</span><span class="tok-p">)</span>
@@ -2521,7 +2524,7 @@ public class ServiceOrderApplication {
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 直接注入也可以的</span>
 <span class="tok-c1">// public WebClient webClient(ItemServiceProperties properties) {</span>
 <span class="tok-nd">@Bean</span>
-<span class="tok-nd">@LoadBalanced</span><span class="tok-w"> </span><span class="tok-c1">// 使用负载均衡</span>
+<span class="tok-nd">@LoadBalanced</span><span class="tok-w"> </span><span class="tok-c1">// new -&gt; 使用负载均衡</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-nf">webClient</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">builder</span><span class="tok-p">()</span>
 <span class="tok-w">        </span><span class="tok-c1">// .baseUrl(itemProperties.getUrl())   // 使用注入的 Url</span>
@@ -2534,16 +2537,57 @@ public class ServiceOrderApplication {
 </div>
 </div>
 <div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_6">@file service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h4>
+<div class="paragraph">
+<p>package com.tjise.serviceorder.service;</p>
+</div>
+<div class="paragraph">
+<p>import com.tjise.serviceorder.pojo.Item;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;</p>
+</div>
+<div class="paragraph">
+<p>/**
+ * 商品服务类
+ * 通过 REST 方式调用商品微服务获取商品信息
+ */
+@Service
+public class ItemService {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// Spring 框架对 RESTful 方式的 http 请求做了封装，来简化操作
+@Autowired
+private RestTemplate restTemplate;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    /**
+     * 根据商品 ID 查询商品信息
+     * 通过 REST 调用商品微服务获取商品详细数据
+     *
+     * @param id 商品ID
+     * @return Item 商品信息
+     */
+    public Item queryItemById(Long id) {
+        return restTemplate.getForObject("http://app-item/item/"
+                + id, Item.class);
+    }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_测试微服务是否注册成功">测试微服务是否注册成功</h4>
 <div class="sect4">
 <h5 id="_file_service_ordersrcmainjavacomtjiseserviceordercontrollerordercontroller_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java</h5>
 <div class="sect5">
 <h6 id="_docs">docs</h6>
-<div class="listingblock">
-<div class="title">httpie 测试已经注册的微服务</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8082/services</span></code></pre>
-</div>
+<div class="paragraph">
+<p>httpie 测试已经注册的微服务:
+http :8082/services</p>
 </div>
 <div class="literalblock">
 <div class="title">返回都注册了哪些微服务</div>
@@ -2587,7 +2631,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-20 11:18:45 +0800
+Last updated 2025-09-20 19:15:59 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

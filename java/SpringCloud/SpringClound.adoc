@@ -1278,7 +1278,7 @@ eureka:
         ip-address: 127.0.0.1
 ----
 
-==== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+==== @file service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
 
 
 ===== class ServiceOrderApplication
@@ -1287,7 +1287,7 @@ eureka:
  * Spring Boot 应用程序入口点
  */
 @SpringBootApplication
-@EnableEurekaClient  // 启用 Eureka 客户端功能
+@EnableEurekaClient  // new -> 启用 Eureka 客户端功能
 public class ServiceOrderApplication {
     // @Autowired
     // private ItemProperties itemProperties;  // 新增 DI 注入 配置的 url
@@ -1309,6 +1309,7 @@ public class ServiceOrderApplication {
  * @return RestTemplate
  */
 @Bean
+@LoadBalanced // new -> 使用负载均衡
 public RestTemplate restTemplate() {
     // 可以在这里添加拦截器来统一处理URL前缀
     // return new RestTemplate();  // not use OkHttp
@@ -1320,6 +1321,7 @@ public RestTemplate restTemplate() {
 [source,java]
 ----
 @Bean
+@LoadBalanced // new -> 使用负载均衡
 public OkHttpClient okHttpClient() {
     return new OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -1334,7 +1336,7 @@ public OkHttpClient okHttpClient() {
 // 直接注入也可以的
 // public WebClient webClient(ItemServiceProperties properties) {
 @Bean
-@LoadBalanced // 使用负载均衡
+@LoadBalanced // new -> 使用负载均衡
 public WebClient webClient() {
     return WebClient.builder()
         // .baseUrl(itemProperties.getUrl())   // 使用注入的 Url
@@ -1342,6 +1344,38 @@ public WebClient webClient() {
         .build();
 }
 ----
+
+==== @file service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
+package com.tjise.serviceorder.service;
+
+import com.tjise.serviceorder.pojo.Item;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+/**
+ * 商品服务类
+ * 通过 REST 方式调用商品微服务获取商品信息
+ */
+@Service
+public class ItemService {
+
+    // Spring 框架对 RESTful 方式的 http 请求做了封装，来简化操作
+    @Autowired
+    private RestTemplate restTemplate;
+
+    /**
+     * 根据商品 ID 查询商品信息
+     * 通过 REST 调用商品微服务获取商品详细数据
+     * 
+     * @param id 商品ID
+     * @return Item 商品信息
+     */
+    public Item queryItemById(Long id) {
+        return restTemplate.getForObject("http://app-item/item/"
+                + id, Item.class);
+    }
+}
 
 ==== 测试微服务是否注册成功
 
@@ -1353,11 +1387,8 @@ public WebClient webClient() {
 // httpie 测试获取订单详情
 // http :8082/order/201810300001
 
-.httpie 测试已经注册的微服务
-[source,console]
-----
+httpie 测试已经注册的微服务:
 http :8082/services
-----
 
 .返回都注册了哪些微服务
 ....
