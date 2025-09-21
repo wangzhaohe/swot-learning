@@ -946,7 +946,7 @@ image::img/service_register.png[,640]
 
 1. 服务提供者将服务注册到注册中心
 2. 服务消费者通过注册中心查找服务
-3. 查找到服务后进行调用（这里就是无需硬编码url的解决方案）
+3. 查找到服务后进行调用（这里就是无需硬编码 url 的解决方案）
 4. 服务的消费者与服务注册中心保持心跳连接，一旦服务提供者的地址发生变更时，注册中心会通知服务消费者
 
 === 7.1 Eureka 介绍
@@ -1205,6 +1205,10 @@ public class ServiceItemApplication {
 === 7.4 Eureka 中发现商品微服务
 之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。
 
+成功注册 service-order 到 eureka 是这样的，如下图
+
+image::img/eureka_admin_with_service-order.png[]
+
 httpie 测试:
 [source,console]
 ----
@@ -1424,8 +1428,7 @@ public class ItemService {  // 商品服务类
 [source,java]
 ----
 public Item queryItemById(Long id) {
-    return restTemplate.getForObject(
-            "http://app-item/item/" + id, Item.class);  // <1>
+    return restTemplate.getForObject("http://app-item/item/" + id, Item.class);  // <1>
 }
 ----
 
@@ -1488,13 +1491,12 @@ public Order queryOrderById(String orderId) throws IOException {
     for (OrderDetail orderDetail : orderDetails) {
         // 通过商品微服务查询商品详细数据
         // Item item = itemService.queryItemById(orderDetail.getItem().getId());  // <1>
-        Item item = itemService.queryItemByIdWithOkHttpClient(orderDetail.getItem().getId());  // <2>
-        // Item item = itemService.queryItemByIdWithWebClient(orderDetail.getItem().getId());  // <3>
+        // Item item = itemService.queryItemByIdWithOkHttpClient(orderDetail.getItem().getId());  // <2>
+        Item item = itemService.queryItemByIdWithWebClient(orderDetail.getItem().getId());  // <3>
         if (null == item) {
             continue;
         }
-        // 将查询到的商品详细信息设置到订单详情中
-        orderDetail.setItem(item);
+        orderDetail.setItem(item);  // 将查询到的商品详细信息设置到订单详情中
     }
     return order;
 }

@@ -1535,7 +1535,7 @@ image::img/service_register.png[,640]
 
 1. 服务提供者将服务注册到注册中心
 2. 服务消费者通过注册中心查找服务
-3. 查找到服务后进行调用（这里就是无需硬编码url的解决方案）
+3. 查找到服务后进行调用（这里就是无需硬编码 url 的解决方案）
 4. 服务的消费者与服务注册中心保持心跳连接，一旦服务提供者的地址发生变更时，注册中心会通知服务消费者
 
 </t>
@@ -1868,6 +1868,10 @@ public class ServiceItemApplication {
 </t>
 <t tx="swot.20250918225928.1">@language asciidoc
 之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。
+
+成功注册 service-order 到 eureka 是这样的，如下图
+
+image::img/eureka_admin_with_service-order.png[]
 
 httpie 测试:
 [source,console]

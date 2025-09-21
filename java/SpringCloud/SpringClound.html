@@ -2006,7 +2006,7 @@ private ItemProperties itemProperties;</pre>
 <p>服务消费者通过注册中心查找服务</p>
 </li>
 <li>
-<p>查找到服务后进行调用（这里就是无需硬编码url的解决方案）</p>
+<p>查找到服务后进行调用（这里就是无需硬编码 url 的解决方案）</p>
 </li>
 <li>
 <p>服务的消费者与服务注册中心保持心跳连接，一旦服务提供者的地址发生变更时，注册中心会通知服务消费者</p>
@@ -2376,6 +2376,14 @@ public class EurekaApplication {</p>
 <p>之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。</p>
 </div>
 <div class="paragraph">
+<p>成功注册 service-order 到 eureka 是这样的，如下图</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/eureka_admin_with_service-order.png" alt="eureka admin with service order">
+</div>
+</div>
+<div class="paragraph">
 <p>httpie 测试:</p>
 </div>
 <div class="listingblock">
@@ -2648,8 +2656,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">.</span><span class="tok-na">getForObject</span><span class="tok-p">(</span>
-<span class="tok-w">            </span><span class="tok-s">&quot;http://app-item/item/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">.</span><span class="tok-na">getForObject</span><span class="tok-p">(</span><span class="tok-s">&quot;http://app-item/item/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -2725,13 +2732,12 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">OrderDetail</span><span class="tok-w"> </span><span class="tok-n">orderDetail</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-c1">// 通过商品微服务查询商品详细数据</span>
 <span class="tok-w">        </span><span class="tok-c1">// Item item = itemService.queryItemById(orderDetail.getItem().getId());  </span><i class="conum" data-value="1"></i><b>(1)</b>
-<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemByIdWithOkHttpClient</span><span class="tok-p">(</span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">());</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
-<span class="tok-w">        </span><span class="tok-c1">// Item item = itemService.queryItemByIdWithWebClient(orderDetail.getItem().getId());  </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">        </span><span class="tok-c1">// Item item = itemService.queryItemByIdWithOkHttpClient(orderDetail.getItem().getId());  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemByIdWithWebClient</span><span class="tok-p">(</span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">());</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
 <span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-k">continue</span><span class="tok-p">;</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
-<span class="tok-w">        </span><span class="tok-c1">// 将查询到的商品详细信息设置到订单详情中</span>
-<span class="tok-w">        </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 将查询到的商品详细信息设置到订单详情中</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">;</span>
 <span class="tok-p">}</span></code></pre>
@@ -2761,7 +2767,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-21 16:11:20 +0800
+Last updated 2025-09-21 16:41:52 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
