@@ -1698,7 +1698,7 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
       
   server:
-    enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭）
+    enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭，但是会有红色警告提示，属于正常）
 </t>
 <t tx="swot.20250917094025.1">@language asciidoc
 现在可以通过以下命令启动 Eureka Server：
