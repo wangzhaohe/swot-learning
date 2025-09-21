@@ -25,6 +25,7 @@
 <v t="swot.20250906084634.1"><vh>Pull &amp; Run Redis</vh></v>
 <v t="swot.20250906093952.1"><vh>Commit &amp; Save &amp; Load &amp; Run 把 redis 容器做成离线镜像包发给学生</vh></v>
 <v t="swot.20250916164207.1"><vh>Pull &amp; Run MySQL</vh></v>
+<v t="swot.20250921231329.1"><vh>Pull &amp; Run Nginx</vh></v>
 </v>
 </v>
 </v>
@@ -9793,6 +9794,20 @@ MySQL 本身永远只监听容器内的 3306 端口，
 “连 3307” 其实是指连宿主机上映射出来的 3307 端口，
 宿主机再把流量转发到容器的 3306。
 ====
+</t>
+<t tx="swot.20250921231329.1">@language asciidoc
+.docker_pull_nginx 
+image::img/docker_pull_nginx.png[]
+
+.docker_run_nginx
+image::img/docker_run_nginx.png[]
+
+.docker_run_nginx_port
+image::img/docker_run_nginx_port.png[,600]
+
+.docker_container_nginx
+image::img/docker_container_nginx.png[]
+
 </t>
 </tnodes>
 </leo_file>
