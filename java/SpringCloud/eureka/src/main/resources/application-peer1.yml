@@ -1,0 +1,35 @@
+#@+leo-ver=5-thin
+#@+node:swot.20250921213424.1: * @file eureka/src/main/resources/application-peer1.yml
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server-clustered
+  security:
+    basic:
+      enable: true
+    user:
+      name: root
+      password: root
+
+eureka:
+  instance:
+    hostname: eureka1
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+  server:
+    enable-self-preservation: false
+    # Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。
+    eviction-interval-timer-in-ms: 10000
+#@+doc
+# ----
+#@-leo
