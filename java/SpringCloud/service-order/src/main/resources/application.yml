@@ -1,37 +1,46 @@
 #@+leo-ver=5-thin
-#@+node:swot.20250919170635.1: * @file service-order/src/main/resources/application.yml
+#@+node:swot.20250921181657.1: * @file service-order/src/main/resources/application.yml
+#@@language yaml
+#@+others
+#@+node:swot.20250921181657.2: ** port
 #@+doc
-# [source,python]
+# [source,yaml]
 # ----
 #@@c
-#@@language python
 server:
     port: 8082
-
-# 新增 url 配置
-# myspcloud:
-    # item:
-        # url: http://127.0.0.1:8081/item/
-
+#@+doc
+# ----
+#@+node:swot.20250921181657.3: ** name
+#@+doc
+# [source, yaml]
+# ----
+#@@c
 # 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
 spring:
     application:
         name: app-order
-
+#@+doc
+# ----
+#@+node:swot.20250921181657.4: ** eureka
+#@+doc
+# [source,yaml]
+# ----
+#@@c
 # 服务注册到 eureka 注册中心的地址
 eureka:
     client:
         service-url:
-            defaultZone: http://127.0.0.1:8761/eureka
-        # 因为该应用为服务提供者，是eureka的一个客户端，需要注册到注册中心
-        register-with-eureka: true
-        # 是否需要从eureka上检索服务
-        fetch-registry: true
+            # defaultZone: http://127.0.0.1:8761/eureka/
+            # 更改：加入用户名和密码
+            defaultZone: http://root:root@127.0.0.1:8761/eureka/
+        register-with-eureka: true  # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
+        fetch-registry: true        # 是否需要从 eureka 上检索服务
     instance:
-        # 使用IP地址注册而不是主机名
-        prefer-ip-address: true
-        # 客户端在注册时使用自己的IP，而不是主机名，是生产环境的最佳实践。避免主机名解析问题
-        ip-address: 127.0.0.1
+        prefer-ip-address: true     # 使用 IP地址 注册而不是主机名
+        ip-address: 127.0.0.1       # 客户端在注册时使用自己的 IP，而不是主机名
+                                    # 这是生产环境的最佳实践。避免主机名解析问题
 #@+doc
 # ----
+#@-others
 #@-leo

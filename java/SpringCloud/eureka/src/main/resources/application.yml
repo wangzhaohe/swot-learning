@@ -1,9 +1,40 @@
 #@+leo-ver=5-thin
-#@+node:swot.20250916160550.1: * @file eureka/src/main/resources/application.yml
-#@@language python
+#@+node:swot.20250921165831.1: * @file eureka/src/main/resources/application.yml
+#@@language yaml
+#@+others
+#@+node:swot.20250921170022.1: ** server
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
 server:
   port: 8761  # 1. Eureka Server端口设置为8761（默认端口）
-
+#@+doc
+# ----
+#@+node:swot.20250921170040.1: ** spring -> new added
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
+spring:
+  application:
+    name: app-eureka-center
+  security:
+    basic:
+      enable: true  # 开启基于 HTTP basic 的认证
+    user:  # 配置用户的账号信息
+      name: root
+      password: root
+#@+doc
+# ----
+#@+node:swot.20250921165918.1: ** eureka -> new changed
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
 eureka:
   instance:
     hostname: localhost  # 2. 设置主机名为localhost
@@ -12,8 +43,13 @@ eureka:
     fetch-registry: false        # 4. Eureka 自己不需要获取服务注册信息
     service-url:
       # 5. 设置 Eureka Server 的访问地址
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-      
+      # defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      # 改成需要账号和密码的形式
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/
   server:
     enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭）
+#@+doc
+# ----
+#
+#@-others
 #@-leo

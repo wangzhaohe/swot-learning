@@ -626,7 +626,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_启动_eureka_server_并测试网页管理端">启动 Eureka Server 并测试网页管理端</a></li>
 </ul>
 </li>
-<li><a href="#_7_3_eureka_server_注册商品微服务到">7.3 Eureka Server 注册商品微服务到</a>
+<li><a href="#_7_3_eureka_server_注册商品微服务">7.3 Eureka Server 注册商品微服务</a>
 <ul class="sectlevel3">
 <li><a href="#_file_service_itempom_xml_2">file &#8594; service-item/pom.xml</a></li>
 <li><a href="#_file_service_itemsrcmainresourcesapplication_yml_2">file &#8594; service-item/src/main/resources/application.yml</a></li>
@@ -640,6 +640,15 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_7_4_3_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java">7.4.3 file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
 <li><a href="#_7_4_4_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java">7.4.4 file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
 <li><a href="#_7_4_5_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java">7.4.5 file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
+</ul>
+</li>
+<li><a href="#_7_5_eureka_添加用户认证">7.5 Eureka 添加用户认证</a>
+<ul class="sectlevel3">
+<li><a href="#_file_eurekapom_xml_2">@file eureka/pom.xml</a></li>
+<li><a href="#_file_eurekasrcmainresourcesapplication_yml_2">@file eureka/src/main/resources/application.yml</a></li>
+<li><a href="#_file_eurekasrcmainjavacomtjiseeurekaconfwebsecurityconfig_java">@file eureka/src/main/java/com/tjise/eureka/conf/WebSecurityConfig.java</a></li>
+<li><a href="#_file_service_itemsrcmainresourcesapplication_yml_3">@file service-item/src/main/resources/application.yml</a></li>
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_3">@file service-order/src/main/resources/application.yml</a></li>
 </ul>
 </li>
 </ul>
@@ -2245,7 +2254,7 @@ public class EurekaApplication {</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_7_3_eureka_server_注册商品微服务到">7.3 Eureka Server 注册商品微服务到</h3>
+<h3 id="_7_3_eureka_server_注册商品微服务">7.3 Eureka Server 注册商品微服务</h3>
 <div class="paragraph">
 <p>成功注册 service-item 到 eureka 是这样的，如下图</p>
 </div>
@@ -2470,7 +2479,7 @@ public class EurekaApplication {</p>
 <span class="tok-w">        </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">        </span><span class="tok-c1"># 是否需要从 eureka 上检索服务</span>
 <span class="tok-w">    </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
 <span class="tok-w">        </span><span class="tok-nt">prefer-ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">     </span><span class="tok-c1"># 使用 IP地址 注册而不是主机名</span>
-<span class="tok-w">            </span><span class="tok-nt">ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">127.0.0.1</span><span class="tok-w">   </span><span class="tok-c1"># 客户端在注册时使用自己的 IP，而不是主机名</span>
+<span class="tok-w">        </span><span class="tok-nt">ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">127.0.0.1</span><span class="tok-w">       </span><span class="tok-c1"># 客户端在注册时使用自己的 IP，而不是主机名</span>
 <span class="tok-w">                                    </span><span class="tok-c1"># 这是生产环境的最佳实践。避免主机名解析问题</span></code></pre>
 </div>
 </div>
@@ -2762,12 +2771,229 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_7_5_eureka_添加用户认证">7.5 Eureka 添加用户认证</h3>
+<div class="paragraph">
+<p>在前面的示例中，我们可以看到不需要登录即可访问到 Eureka 服务，这样其实是不安全的。
+所以需要为 Eureka 添加用户认证功能。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/eureka_login.png" alt="eureka login" width="800">
+</div>
+<div class="title">Figure 1. 加入用户认证功能后需要登录界面</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/eureka_admin_with_user_and_pass.png" alt="eureka admin with user and pass">
+</div>
+<div class="title">Figure 2. 加入用户认证功能后依然可以注册成功</div>
+</div>
+<div class="sect3">
+<h4 id="_file_eurekapom_xml_2">@file eureka/pom.xml</h4>
+<div class="sect4">
+<h5 id="_security_安全认证依赖">security 安全认证依赖</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-security</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_eurekasrcmainresourcesapplication_yml_2">@file eureka/src/main/resources/application.yml</h4>
+<div class="sect4">
+<h5 id="_server">server</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8761</span><span class="tok-w">  </span><span class="tok-c1"># 1. Eureka Server端口设置为8761（默认端口）</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_spring_new_added">spring &#8594; new added</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">app-eureka-center</span>
+<span class="tok-w">  </span><span class="tok-nt">security</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">basic</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">enable</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">  </span><span class="tok-c1"># 开启基于 HTTP basic 的认证</span>
+<span class="tok-w">    </span><span class="tok-nt">user</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># 配置用户的账号信息</span>
+<span class="tok-w">      </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
+<span class="tok-w">      </span><span class="tok-nt">password</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_eureka_new_changed">eureka &#8594; new changed</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">hostname</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">localhost</span><span class="tok-w">  </span><span class="tok-c1"># 2. 设置主机名为localhost</span>
+<span class="tok-w">  </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span><span class="tok-w">  </span><span class="tok-c1"># 3. Eureka Server不向自己注册</span>
+<span class="tok-w">    </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span><span class="tok-w">        </span><span class="tok-c1"># 4. Eureka 自己不需要获取服务注册信息</span>
+<span class="tok-w">    </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-c1"># 5. 设置 Eureka Server 的访问地址</span>
+<span class="tok-w">      </span><span class="tok-c1"># defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/</span>
+<span class="tok-w">      </span><span class="tok-c1"># 改成需要账号和密码的形式</span>
+<span class="tok-w">      </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/</span>
+<span class="tok-w">  </span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">enable-self-preservation</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span><span class="tok-w">  </span><span class="tok-c1"># 6. 关闭自我保护机制（开发环境建议关闭）</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_eurekasrcmainjavacomtjiseeurekaconfwebsecurityconfig_java">@file eureka/src/main/java/com/tjise/eureka/conf/WebSecurityConfig.java</h4>
+<div class="sect4">
+<h5 id="_websecurityconfig_新建安全配置类">WebSecurityConfig 新建安全配置类</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Configuration</span>
+<span class="tok-nd">@EnableWebSecurity</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">WebSecurityConfig</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Bean</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">SecurityFilterChain</span><span class="tok-w"> </span><span class="tok-nf">filterChain</span><span class="tok-p">(</span><span class="tok-n">HttpSecurity</span><span class="tok-w"> </span><span class="tok-n">http</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">http</span><span class="tok-p">.</span><span class="tok-na">sessionManagement</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">sessionCreationPolicy</span><span class="tok-p">(</span><span class="tok-n">SessionCreationPolicy</span><span class="tok-p">.</span><span class="tok-na">NEVER</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">and</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">csrf</span><span class="tok-p">().</span><span class="tok-na">disable</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">authorizeHttpRequests</span><span class="tok-p">(</span><span class="tok-n">authz</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">authz</span>
+<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">anyRequest</span><span class="tok-p">().</span><span class="tok-na">authenticated</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">httpBasic</span><span class="tok-p">(</span><span class="tok-n">Customizer</span><span class="tok-p">.</span><span class="tok-na">withDefaults</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">http</span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_itemsrcmainresourcesapplication_yml_3">@file service-item/src/main/resources/application.yml</h4>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>name 和 instance 两者都有重要作用，缺一不可：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>spring.application.name：服务的逻辑名称，用于服务发现和负载均衡</p>
+</li>
+<li>
+<p>eureka.instance 配置：实例的网络地址，用于实际通信</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_port_2">port</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1">### 服务端口号(本身是一个web项目)</span>
+<span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8081</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_name_2">name</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1">### 起个名字作为服务名称(该服务注册到eureka注册中心的名称，比如商品服务)</span>
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">app-item</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_eureka_2">eureka</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1">### 服务注册到eureka注册中心的地址</span>
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-c1"># defaultZone: http://127.0.0.1:8761/eureka/</span>
+<span class="tok-w">            </span><span class="tok-c1"># 更改：加入用户名和密码</span>
+<span class="tok-w">            </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@127.0.0.1:8761/eureka/</span>
+
+<span class="tok-w">        </span><span class="tok-c1">### 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心</span>
+<span class="tok-w">        </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">        </span><span class="tok-c1">### 是否需要从 eureka 上检索服务</span>
+<span class="tok-w">        </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">prefer-ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">  </span><span class="tok-c1"># 使用IP地址注册而不是主机名</span>
+<span class="tok-w">        </span><span class="tok-nt">ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">127.0.0.1</span><span class="tok-w">    </span><span class="tok-c1"># 客户端在注册时使用自己的IP，而不是主机名。</span>
+<span class="tok-w">                                 </span><span class="tok-c1"># 这是生产环境的最佳实践，避免主机名解析问题。</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainresourcesapplication_yml_3">@file service-order/src/main/resources/application.yml</h4>
+<div class="sect4">
+<h5 id="_port_3">port</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8082</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_name_3">name</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)</span>
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">app-order</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_eureka_3">eureka</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># 服务注册到 eureka 注册中心的地址</span>
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-c1"># defaultZone: http://127.0.0.1:8761/eureka/</span>
+<span class="tok-w">            </span><span class="tok-c1"># 更改：加入用户名和密码</span>
+<span class="tok-w">            </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@127.0.0.1:8761/eureka/</span>
+<span class="tok-w">        </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">  </span><span class="tok-c1"># 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心</span>
+<span class="tok-w">        </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">        </span><span class="tok-c1"># 是否需要从 eureka 上检索服务</span>
+<span class="tok-w">    </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">prefer-ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">     </span><span class="tok-c1"># 使用 IP地址 注册而不是主机名</span>
+<span class="tok-w">        </span><span class="tok-nt">ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">127.0.0.1</span><span class="tok-w">       </span><span class="tok-c1"># 客户端在注册时使用自己的 IP，而不是主机名</span>
+<span class="tok-w">                                    </span><span class="tok-c1"># 这是生产环境的最佳实践。避免主机名解析问题</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-21 16:41:52 +0800
+Last updated 2025-09-21 18:47:08 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

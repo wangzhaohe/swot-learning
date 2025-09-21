@@ -1103,7 +1103,7 @@ eureka:
 
 image::img/eureka_admin_no_instance.png[]
 
-=== 7.3 Eureka Server 注册商品微服务到
+=== 7.3 Eureka Server 注册商品微服务
 成功注册 service-item 到 eureka 是这样的，如下图
 
 image::img/eureka_admin_with_service-item.png[]
@@ -1284,7 +1284,7 @@ eureka:
         fetch-registry: true        # 是否需要从 eureka 上检索服务
     instance:
         prefer-ip-address: true     # 使用 IP地址 注册而不是主机名
-            ip-address: 127.0.0.1   # 客户端在注册时使用自己的 IP，而不是主机名
+        ip-address: 127.0.0.1       # 客户端在注册时使用自己的 IP，而不是主机名
                                     # 这是生产环境的最佳实践。避免主机名解析问题
 ----
 
@@ -1504,4 +1504,177 @@ public Order queryOrderById(String orderId) throws IOException {
 <1> 使用 RestTemplate
 <2> 使用 OkHttpClient
 <3> 使用 WebClient
+
+=== 7.5 Eureka 添加用户认证
+在前面的示例中，我们可以看到不需要登录即可访问到 Eureka 服务，这样其实是不安全的。
+所以需要为 Eureka 添加用户认证功能。
+
+.加入用户认证功能后需要登录界面
+image::img/eureka_login.png[,800]
+
+.加入用户认证功能后依然可以注册成功
+image::img/eureka_admin_with_user_and_pass.png[]
+
+==== @file eureka/pom.xml
+
+
+===== security 安全认证依赖
+[source,scss]
+....
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+....
+
+==== @file eureka/src/main/resources/application.yml
+
+
+===== server
+[source,yaml]
+----
+server:
+  port: 8761  # 1. Eureka Server端口设置为8761（默认端口）
+----
+
+===== spring -> new added
+[source,yaml]
+----
+spring:
+  application:
+    name: app-eureka-center
+  security:
+    basic:
+      enable: true  # 开启基于 HTTP basic 的认证
+    user:  # 配置用户的账号信息
+      name: root
+      password: root
+----
+
+===== eureka -> new changed
+[source,yaml]
+----
+eureka:
+  instance:
+    hostname: localhost  # 2. 设置主机名为localhost
+  client:
+    register-with-eureka: false  # 3. Eureka Server不向自己注册
+    fetch-registry: false        # 4. Eureka 自己不需要获取服务注册信息
+    service-url:
+      # 5. 设置 Eureka Server 的访问地址
+      # defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      # 改成需要账号和密码的形式
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭）
+----
+
+==== @file eureka/src/main/java/com/tjise/eureka/conf/WebSecurityConfig.java
+
+
+===== WebSecurityConfig 新建安全配置类
+[source,java]
+----
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.NEVER)
+            .and()
+            .csrf().disable()
+            .authorizeHttpRequests(authz -> authz
+                    .anyRequest().authenticated()
+            )
+            .httpBasic(Customizer.withDefaults());
+        return http.build();
+    }
+}
+----
+
+==== @file service-item/src/main/resources/application.yml
+****
+name 和 instance 两者都有重要作用，缺一不可：
+
+- spring.application.name：服务的逻辑名称，用于服务发现和负载均衡
+- eureka.instance 配置：实例的网络地址，用于实际通信
+
+即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。
+****
+
+===== port
+[source,yaml]
+----
+### 服务端口号(本身是一个web项目)
+server:
+    port: 8081
+----
+
+===== name
+[source,yaml]
+----
+### 起个名字作为服务名称(该服务注册到eureka注册中心的名称，比如商品服务)
+spring:
+    application:
+        name: app-item
+----
+
+===== eureka
+[source,yaml]
+----
+### 服务注册到eureka注册中心的地址
+eureka:
+    client:
+        service-url:
+            # defaultZone: http://127.0.0.1:8761/eureka/
+            # 更改：加入用户名和密码
+            defaultZone: http://root:root@127.0.0.1:8761/eureka/
+
+        ### 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
+        register-with-eureka: true
+        ### 是否需要从 eureka 上检索服务
+        fetch-registry: true
+    instance:
+        prefer-ip-address: true  # 使用IP地址注册而不是主机名
+        ip-address: 127.0.0.1    # 客户端在注册时使用自己的IP，而不是主机名。
+                                 # 这是生产环境的最佳实践，避免主机名解析问题。
+----
+
+==== @file service-order/src/main/resources/application.yml
+
+
+===== port
+[source,yaml]
+----
+server:
+    port: 8082
+----
+
+===== name
+[source, yaml]
+----
+# 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
+spring:
+    application:
+        name: app-order
+----
+
+===== eureka
+[source,yaml]
+----
+# 服务注册到 eureka 注册中心的地址
+eureka:
+    client:
+        service-url:
+            # defaultZone: http://127.0.0.1:8761/eureka/
+            # 更改：加入用户名和密码
+            defaultZone: http://root:root@127.0.0.1:8761/eureka/
+        register-with-eureka: true  # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
+        fetch-registry: true        # 是否需要从 eureka 上检索服务
+    instance:
+        prefer-ip-address: true     # 使用 IP地址 注册而不是主机名
+        ip-address: 127.0.0.1       # 客户端在注册时使用自己的 IP，而不是主机名
+                                    # 这是生产环境的最佳实践。避免主机名解析问题
+----
 

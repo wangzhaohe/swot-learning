@@ -1,42 +1,65 @@
 #@+leo-ver=5-thin
-#@+node:swot.20250918184444.1: * @file service-item/src/main/resources/application.yml
+#@+node:swot.20250921181348.1: * @file service-item/src/main/resources/application.yml
+#@@language yaml
+#@+others
+#@+node:swot.20250921182102.1: ** port
 #@+doc
-# [source,python]
+# [source,yaml]
 # ----
 #@@c
-#@@language python
+#@@language yaml
 ### 服务端口号(本身是一个web项目)
 server:
     port: 8081
-
+#@+doc
+# ----
+#
+#@+node:swot.20250921182058.1: ** name
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
 ### 起个名字作为服务名称(该服务注册到eureka注册中心的名称，比如商品服务)
 spring:
     application:
         name: app-item
-
+#@+doc
+# ----
+#
+#@+node:swot.20250921182054.1: ** eureka
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
 ### 服务注册到eureka注册中心的地址
 eureka:
     client:
         service-url:
-            defaultZone: http://127.0.0.1:8761/eureka/
-        ### 因为该应用为服务提供者，是eureka的一个客户端，需要注册到注册中心
+            # defaultZone: http://127.0.0.1:8761/eureka/
+            # 更改：加入用户名和密码
+            defaultZone: http://root:root@127.0.0.1:8761/eureka/
+
+        ### 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
         register-with-eureka: true
-        ### 是否需要从eureka上检索服务
+        ### 是否需要从 eureka 上检索服务
         fetch-registry: true
     instance:
-        # 使用IP地址注册而不是主机名
-        prefer-ip-address: true
-        # 客户端在注册时使用自己的IP，而不是主机名
-        ip-address: 127.0.0.1
+        prefer-ip-address: true  # 使用IP地址注册而不是主机名
+        ip-address: 127.0.0.1    # 客户端在注册时使用自己的IP，而不是主机名。
+                                 # 这是生产环境的最佳实践，避免主机名解析问题。
 #@+doc
 # ----
 #
+#@-others
+#@+doc
 # ****
 # name 和 instance 两者都有重要作用，缺一不可：
 #
 # - spring.application.name：服务的逻辑名称，用于服务发现和负载均衡
 # - eureka.instance 配置：实例的网络地址，用于实际通信
 #
-# 即使使用IP注册，仍然需要服务名称来进行服务发现和调用。
+# 即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。
 # ****
 #@-leo
