@@ -1085,6 +1085,7 @@ eureka:
       
   server:
     enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭，但是会有红色警告提示，属于正常）
+                                     # 设置成 false 后保证服务不可用时及时剔除相应的微服务，易测试。
 
 ==== 启动 Eureka Server 并测试网页管理端
 现在可以通过以下命令启动 Eureka Server：
@@ -1515,7 +1516,7 @@ image::img/eureka_login.png[,800]
 .加入用户认证功能后依然可以注册成功
 image::img/eureka_admin_with_user_and_pass.png[]
 
-==== @file eureka/pom.xml
+==== file -> eureka/pom.xml
 
 
 ===== security 安全认证依赖
@@ -1527,7 +1528,7 @@ image::img/eureka_admin_with_user_and_pass.png[]
 </dependency>
 ....
 
-==== @file eureka/src/main/resources/application.yml
+==== file -> eureka/src/main/resources/application.yml
 
 
 ===== server
@@ -1566,10 +1567,10 @@ eureka:
       # 改成需要账号和密码的形式
       defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/
   server:
-    enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭）
+    enable-self-preservation: true  # 6. 关闭自我保护机制（开发环境建议关闭）
 ----
 
-==== @file eureka/src/main/java/com/tjise/eureka/conf/WebSecurityConfig.java
+==== file -> eureka/src/main/java/com/tjise/eureka/conf/WebSecurityConfig.java
 
 
 ===== WebSecurityConfig 新建安全配置类
@@ -1593,7 +1594,7 @@ public class WebSecurityConfig {
 }
 ----
 
-==== @file service-item/src/main/resources/application.yml
+==== file -> service-item/src/main/resources/application.yml
 ****
 name 和 instance 两者都有重要作用，缺一不可：
 
@@ -1641,7 +1642,7 @@ eureka:
                                  # 这是生产环境的最佳实践，避免主机名解析问题。
 ----
 
-==== @file service-order/src/main/resources/application.yml
+==== file -> service-order/src/main/resources/application.yml
 
 
 ===== port
@@ -1677,4 +1678,164 @@ eureka:
         ip-address: 127.0.0.1       # 客户端在注册时使用自己的 IP，而不是主机名
                                     # 这是生产环境的最佳实践。避免主机名解析问题
 ----
+
+=== 7.6 Eureka 集群（高可用性）
+前面的测试发现，Eureka服务是一个单点服务，在生产环境就会出现单点故障，为了确保 Eureka 服务的高可用，需要搭建 Eureka 服务的集群。
+
+1. sudo vim /etc/hosts 增加 3 个主机名
++
+[source,shell]
+----
+127.0.0.1 eureka1
+127.0.0.1 eureka2
+127.0.0.1 eureka3
+----
+2. 创建 3 个配置文件: application-peer[1,2,3].yml
+3. 按下图在开发机器上配置 3 个 Eureka 服务的集群。
++
+image::img/eureka_multi.png[]
+
+4.
+
+==== file -> eureka/src/main/resources/application-peer1.yml
+[source,yaml]
+----
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server-clustered
+  security:
+    basic:
+      enable: true
+    user:
+      name: root
+      password: root
+
+eureka:
+  instance:
+    hostname: eureka1
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+  server:
+    enable-self-preservation: false
+    # Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。
+    eviction-interval-timer-in-ms: 10000
+----
+
+==== file -> eureka/src/main/resources/application-peer2.yml
+[source,yaml]
+----
+server:
+  port: 8762
+
+spring:
+  application:
+    name: eureka-server-clustered
+  security:
+    basic:
+      enable: true
+    user:
+      name: root
+      password: root
+
+eureka:
+  instance:
+    hostname: eureka2
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka3:8763/eureka/
+  server:
+    enable-self-preservation: false
+    # Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。
+    eviction-interval-timer-in-ms: 10000
+----
+
+==== file -> eureka/src/main/resources/application-peer3.yml
+[source,yaml]
+----
+server:
+  port: 8763
+
+spring:
+  application:
+    name: eureka-server-clustered
+  security:
+    basic:
+      enable: true
+    user:
+      name: root
+      password: root
+
+eureka:
+  instance:
+    hostname: eureka3
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/
+  server:
+    enable-self-preservation: false
+    # Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。
+    eviction-interval-timer-in-ms: 10000
+----
+
+==== 创建 nginx 容器实现访问 Eureka 3 台服务器集群的负载均衡
+.创建 nginx 容器
+[source,console]
+----
+docker run -d --name nginx \
+-p 80:80 \
+-p 8760:8760 \
+-v ./eureka.conf:/etc/nginx/conf.d/eureka.conf \
+nginx 
+----
+
+==== file -> eureka/src/main/resources/eureka.conf
+[source,python]
+----
+upstream eureka-cluster {
+    server host.docker.internal:8761;
+    server host.docker.internal:8762;
+    server host.docker.internal:8763;
+}
+
+server {
+    listen 8760;
+    location / {
+        proxy_pass http://eureka-cluster;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+----
+
+要让容器里的 Nginx 把请求转发到“宿主机上的 Eureka”，就得用宿主机在 Docker 网络中的地址。 +
+Docker 已经预留了一个特殊 DNS 名：host.docker.internal +
+它自动解析成宿主机在 Docker 网桥里的 IP。
+
+1. 复制文件（假设 eureka.conf 放在当前目录）
++
+[source,console]
+----
+docker cp eureka.conf nginx:/etc/nginx/conf.d/eureka.conf
+----
++
+成功返回 Successfully copied 2.56kB to nginx:/etc/nginx/conf.d/eureka.conf
+
+2. 热加载
++
+[source,console]
+----
+docker exec nginx nginx -s reload
+----
+
+3. 访问 http://localhost:8760/ 会按 nginx 默认的负载均衡访问 3 台 Eureka 服务器。
 

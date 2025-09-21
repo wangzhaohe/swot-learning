@@ -644,11 +644,20 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_7_5_eureka_添加用户认证">7.5 Eureka 添加用户认证</a>
 <ul class="sectlevel3">
-<li><a href="#_file_eurekapom_xml_2">@file eureka/pom.xml</a></li>
-<li><a href="#_file_eurekasrcmainresourcesapplication_yml_2">@file eureka/src/main/resources/application.yml</a></li>
-<li><a href="#_file_eurekasrcmainjavacomtjiseeurekaconfwebsecurityconfig_java">@file eureka/src/main/java/com/tjise/eureka/conf/WebSecurityConfig.java</a></li>
-<li><a href="#_file_service_itemsrcmainresourcesapplication_yml_3">@file service-item/src/main/resources/application.yml</a></li>
-<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_3">@file service-order/src/main/resources/application.yml</a></li>
+<li><a href="#_file_eurekapom_xml_2">file &#8594; eureka/pom.xml</a></li>
+<li><a href="#_file_eurekasrcmainresourcesapplication_yml_2">file &#8594; eureka/src/main/resources/application.yml</a></li>
+<li><a href="#_file_eurekasrcmainjavacomtjiseeurekaconfwebsecurityconfig_java">file &#8594; eureka/src/main/java/com/tjise/eureka/conf/WebSecurityConfig.java</a></li>
+<li><a href="#_file_service_itemsrcmainresourcesapplication_yml_3">file &#8594; service-item/src/main/resources/application.yml</a></li>
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</a></li>
+</ul>
+</li>
+<li><a href="#_7_6_eureka_集群高可用性">7.6 Eureka 集群（高可用性）</a>
+<ul class="sectlevel3">
+<li><a href="#_file_eurekasrcmainresourcesapplication_peer1_yml">file &#8594; eureka/src/main/resources/application-peer1.yml</a></li>
+<li><a href="#_file_eurekasrcmainresourcesapplication_peer2_yml">file &#8594; eureka/src/main/resources/application-peer2.yml</a></li>
+<li><a href="#_file_eurekasrcmainresourcesapplication_peer3_yml">file &#8594; eureka/src/main/resources/application-peer3.yml</a></li>
+<li><a href="#_创建_nginx_容器实现访问_eureka_3_台服务器集群的负载均衡">创建 nginx 容器实现访问 Eureka 3 台服务器集群的负载均衡</a></li>
+<li><a href="#_file_eurekasrcmainresourceseureka_conf">file &#8594; eureka/src/main/resources/eureka.conf</a></li>
 </ul>
 </li>
 </ul>
@@ -2197,7 +2206,8 @@ public class EurekaApplication {</p>
 <div class="literalblock">
 <div class="content">
 <pre>server:
-  enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭，但是会有红色警告提示，属于正常）</pre>
+  enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭，但是会有红色警告提示，属于正常）
+                                   # 设置成 false 后保证服务不可用时及时剔除相应的微服务，易测试。</pre>
 </div>
 </div>
 </div>
@@ -2790,7 +2800,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <div class="title">Figure 2. 加入用户认证功能后依然可以注册成功</div>
 </div>
 <div class="sect3">
-<h4 id="_file_eurekapom_xml_2">@file eureka/pom.xml</h4>
+<h4 id="_file_eurekapom_xml_2">file &#8594; eureka/pom.xml</h4>
 <div class="sect4">
 <h5 id="_security_安全认证依赖">security 安全认证依赖</h5>
 <div class="listingblock">
@@ -2804,7 +2814,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_eurekasrcmainresourcesapplication_yml_2">@file eureka/src/main/resources/application.yml</h4>
+<h4 id="_file_eurekasrcmainresourcesapplication_yml_2">file &#8594; eureka/src/main/resources/application.yml</h4>
 <div class="sect4">
 <h5 id="_server">server</h5>
 <div class="listingblock">
@@ -2846,13 +2856,13 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <span class="tok-w">      </span><span class="tok-c1"># 改成需要账号和密码的形式</span>
 <span class="tok-w">      </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/</span>
 <span class="tok-w">  </span><span class="tok-nt">server</span><span class="tok-p">:</span>
-<span class="tok-w">    </span><span class="tok-nt">enable-self-preservation</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span><span class="tok-w">  </span><span class="tok-c1"># 6. 关闭自我保护机制（开发环境建议关闭）</span></code></pre>
+<span class="tok-w">    </span><span class="tok-nt">enable-self-preservation</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">  </span><span class="tok-c1"># 6. 关闭自我保护机制（开发环境建议关闭）</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_eurekasrcmainjavacomtjiseeurekaconfwebsecurityconfig_java">@file eureka/src/main/java/com/tjise/eureka/conf/WebSecurityConfig.java</h4>
+<h4 id="_file_eurekasrcmainjavacomtjiseeurekaconfwebsecurityconfig_java">file &#8594; eureka/src/main/java/com/tjise/eureka/conf/WebSecurityConfig.java</h4>
 <div class="sect4">
 <h5 id="_websecurityconfig_新建安全配置类">WebSecurityConfig 新建安全配置类</h5>
 <div class="listingblock">
@@ -2878,7 +2888,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_service_itemsrcmainresourcesapplication_yml_3">@file service-item/src/main/resources/application.yml</h4>
+<h4 id="_file_service_itemsrcmainresourcesapplication_yml_3">file &#8594; service-item/src/main/resources/application.yml</h4>
 <div class="sidebarblock">
 <div class="content">
 <div class="paragraph">
@@ -2945,7 +2955,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_service_ordersrcmainresourcesapplication_yml_3">@file service-order/src/main/resources/application.yml</h4>
+<h4 id="_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</h4>
 <div class="sect4">
 <h5 id="_port_3">port</h5>
 <div class="listingblock">
@@ -2988,12 +2998,207 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_7_6_eureka_集群高可用性">7.6 Eureka 集群（高可用性）</h3>
+<div class="paragraph">
+<p>前面的测试发现，Eureka服务是一个单点服务，在生产环境就会出现单点故障，为了确保 Eureka 服务的高可用，需要搭建 Eureka 服务的集群。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>sudo vim /etc/hosts 增加 3 个主机名</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span><span class="tok-m">127</span>.0.0.1<span class="tok-w"> </span>eureka1
+<span class="tok-m">127</span>.0.0.1<span class="tok-w"> </span>eureka2
+<span class="tok-m">127</span>.0.0.1<span class="tok-w"> </span>eureka3</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>创建 3 个配置文件: application-peer[1,2,3].yml</p>
+</li>
+<li>
+<p>按下图在开发机器上配置 3 个 Eureka 服务的集群。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/eureka_multi.png" alt="eureka multi">
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>4.</p>
+</div>
+<div class="sect3">
+<h4 id="_file_eurekasrcmainresourcesapplication_peer1_yml">file &#8594; eureka/src/main/resources/application-peer1.yml</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8761</span>
+
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">eureka-server-clustered</span>
+<span class="tok-w">  </span><span class="tok-nt">security</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">basic</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">enable</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">user</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
+<span class="tok-w">      </span><span class="tok-nt">password</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
+
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">hostname</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">eureka1</span>
+<span class="tok-w">  </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/</span>
+<span class="tok-w">  </span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">enable-self-preservation</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
+<span class="tok-w">    </span><span class="tok-c1"># Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。</span>
+<span class="tok-w">    </span><span class="tok-nt">eviction-interval-timer-in-ms</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10000</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_eurekasrcmainresourcesapplication_peer2_yml">file &#8594; eureka/src/main/resources/application-peer2.yml</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8762</span>
+
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">eureka-server-clustered</span>
+<span class="tok-w">  </span><span class="tok-nt">security</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">basic</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">enable</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">user</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
+<span class="tok-w">      </span><span class="tok-nt">password</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
+
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">hostname</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">eureka2</span>
+<span class="tok-w">  </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@eureka1:8761/eureka/,http://root:root@eureka3:8763/eureka/</span>
+<span class="tok-w">  </span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">enable-self-preservation</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
+<span class="tok-w">    </span><span class="tok-c1"># Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。</span>
+<span class="tok-w">    </span><span class="tok-nt">eviction-interval-timer-in-ms</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10000</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_eurekasrcmainresourcesapplication_peer3_yml">file &#8594; eureka/src/main/resources/application-peer3.yml</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8763</span>
+
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">eureka-server-clustered</span>
+<span class="tok-w">  </span><span class="tok-nt">security</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">basic</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">enable</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">user</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
+<span class="tok-w">      </span><span class="tok-nt">password</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
+
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">hostname</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">eureka3</span>
+<span class="tok-w">  </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/</span>
+<span class="tok-w">  </span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">enable-self-preservation</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
+<span class="tok-w">    </span><span class="tok-c1"># Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。</span>
+<span class="tok-w">    </span><span class="tok-nt">eviction-interval-timer-in-ms</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10000</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_创建_nginx_容器实现访问_eureka_3_台服务器集群的负载均衡">创建 nginx 容器实现访问 Eureka 3 台服务器集群的负载均衡</h4>
+<div class="listingblock">
+<div class="title">创建 nginx 容器</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">docker run -d --name nginx \</span>
+<span class="tok-go">-p 80:80 \</span>
+<span class="tok-go">-p 8760:8760 \</span>
+<span class="tok-go">-v ./eureka.conf:/etc/nginx/conf.d/eureka.conf \</span>
+<span class="tok-go">nginx</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_eurekasrcmainresourceseureka_conf">file &#8594; eureka/src/main/resources/eureka.conf</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">upstream</span> <span class="tok-n">eureka</span><span class="tok-o">-</span><span class="tok-n">cluster</span> <span class="tok-p">{</span>
+    <span class="tok-n">server</span> <span class="tok-n">host</span><span class="tok-o">.</span><span class="tok-n">docker</span><span class="tok-o">.</span><span class="tok-n">internal</span><span class="tok-p">:</span><span class="tok-mi">8761</span><span class="tok-p">;</span>
+    <span class="tok-n">server</span> <span class="tok-n">host</span><span class="tok-o">.</span><span class="tok-n">docker</span><span class="tok-o">.</span><span class="tok-n">internal</span><span class="tok-p">:</span><span class="tok-mi">8762</span><span class="tok-p">;</span>
+    <span class="tok-n">server</span> <span class="tok-n">host</span><span class="tok-o">.</span><span class="tok-n">docker</span><span class="tok-o">.</span><span class="tok-n">internal</span><span class="tok-p">:</span><span class="tok-mi">8763</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+
+<span class="tok-n">server</span> <span class="tok-p">{</span>
+    <span class="tok-n">listen</span> <span class="tok-mi">8760</span><span class="tok-p">;</span>
+    <span class="tok-n">location</span> <span class="tok-o">/</span> <span class="tok-p">{</span>
+        <span class="tok-n">proxy_pass</span> <span class="tok-n">http</span><span class="tok-p">:</span><span class="tok-o">//</span><span class="tok-n">eureka</span><span class="tok-o">-</span><span class="tok-n">cluster</span><span class="tok-p">;</span>
+        <span class="tok-n">proxy_set_header</span> <span class="tok-n">Host</span> <span class="tok-err">$</span><span class="tok-n">host</span><span class="tok-p">;</span>
+        <span class="tok-n">proxy_set_header</span> <span class="tok-n">X</span><span class="tok-o">-</span><span class="tok-n">Real</span><span class="tok-o">-</span><span class="tok-n">IP</span> <span class="tok-err">$</span><span class="tok-n">remote_addr</span><span class="tok-p">;</span>
+    <span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>要让容器里的 Nginx 把请求转发到“宿主机上的 Eureka”，就得用宿主机在 Docker 网络中的地址。<br>
+Docker 已经预留了一个特殊 DNS 名：host.docker.internal<br>
+它自动解析成宿主机在 Docker 网桥里的 IP。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>复制文件（假设 eureka.conf 放在当前目录）</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">docker cp eureka.conf nginx:/etc/nginx/conf.d/eureka.conf</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>成功返回 Successfully copied 2.56kB to nginx:/etc/nginx/conf.d/eureka.conf</p>
+</div>
+</li>
+<li>
+<p>热加载</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">docker exec nginx nginx -s reload</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>访问 <a href="http://localhost:8760/" class="bare">http://localhost:8760/</a> 会按 nginx 默认的负载均衡访问 3 台 Eureka 服务器。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-21 19:33:45 +0800
+Last updated 2025-09-22 00:28:00 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
