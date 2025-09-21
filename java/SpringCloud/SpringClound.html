@@ -635,11 +635,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_7_4_eureka_中发现商品微服务">7.4 Eureka 中发现商品微服务</a>
 <ul class="sectlevel3">
-<li><a href="#_file_service_orderpom_xml_4">file &#8594; service-order/pom.xml</a></li>
-<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</a></li>
-<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">@file service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
-<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_6">@file service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
-<li><a href="#_测试微服务是否注册成功">测试微服务是否注册成功</a></li>
+<li><a href="#_7_4_1_file_service_orderpom_xml">7.4.1 file &#8594; service-order/pom.xml</a></li>
+<li><a href="#_7_4_2_file_service_ordersrcmainresourcesapplication_yml">7.4.2 file &#8594; service-order/src/main/resources/application.yml</a></li>
+<li><a href="#_7_4_3_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java">7.4.3 file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
+<li><a href="#_7_4_4_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java">7.4.4 file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
+<li><a href="#_7_4_5_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java">7.4.5 file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
 </ul>
 </li>
 </ul>
@@ -2376,11 +2376,15 @@ public class EurekaApplication {</p>
 <p>之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。</p>
 </div>
 <div class="paragraph">
-<p>httpie 测试:
-http :8082/order/201810300001</p>
+<p>httpie 测试:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8082/order/201810300001</span></code></pre>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_file_service_orderpom_xml_4">file &#8594; service-order/pom.xml</h4>
+<h4 id="_7_4_1_file_service_orderpom_xml">7.4.1 file &#8594; service-order/pom.xml</h4>
 <div class="sect4">
 <h5 id="_properties_version">properties version</h5>
 <div class="listingblock">
@@ -2424,62 +2428,85 @@ http :8082/order/201810300001</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</h4>
+<h4 id="_7_4_2_file_service_ordersrcmainresourcesapplication_yml">7.4.2 file &#8594; service-order/src/main/resources/application.yml</h4>
+<div class="sect4">
+<h5 id="_port">port</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">server</span><span class="tok-p">:</span>
-    <span class="tok-n">port</span><span class="tok-p">:</span> <span class="tok-mi">8082</span>
-
-<span class="tok-c1"># 新增 url 配置</span>
-<span class="tok-n">myspcloud</span><span class="tok-p">:</span>
-    <span class="tok-n">item</span><span class="tok-p">:</span>
-        <span class="tok-n">url</span><span class="tok-p">:</span> <span class="tok-n">http</span><span class="tok-p">:</span><span class="tok-o">//</span><span class="tok-mf">127.0.0.1</span><span class="tok-p">:</span><span class="tok-mi">8081</span><span class="tok-o">/</span><span class="tok-n">item</span><span class="tok-o">/</span>
-
-<span class="tok-c1"># 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)</span>
-<span class="tok-n">spring</span><span class="tok-p">:</span>
-    <span class="tok-n">application</span><span class="tok-p">:</span>
-        <span class="tok-n">name</span><span class="tok-p">:</span> <span class="tok-n">app</span><span class="tok-o">-</span><span class="tok-n">order</span>
-
-<span class="tok-c1"># 服务注册到 eureka 注册中心的地址</span>
-<span class="tok-n">eureka</span><span class="tok-p">:</span>
-    <span class="tok-n">client</span><span class="tok-p">:</span>
-        <span class="tok-n">service</span><span class="tok-o">-</span><span class="tok-n">url</span><span class="tok-p">:</span>
-            <span class="tok-n">defaultZone</span><span class="tok-p">:</span> <span class="tok-n">http</span><span class="tok-p">:</span><span class="tok-o">//</span><span class="tok-mf">127.0.0.1</span><span class="tok-p">:</span><span class="tok-mi">8761</span><span class="tok-o">/</span><span class="tok-n">eureka</span>
-        <span class="tok-c1"># 因为该应用为服务提供者，是eureka的一个客户端，需要注册到注册中心</span>
-        <span class="tok-n">register</span><span class="tok-o">-</span><span class="tok-k">with</span><span class="tok-o">-</span><span class="tok-n">eureka</span><span class="tok-p">:</span> <span class="tok-n">true</span>
-        <span class="tok-c1"># 是否需要从eureka上检索服务</span>
-        <span class="tok-n">fetch</span><span class="tok-o">-</span><span class="tok-n">registry</span><span class="tok-p">:</span> <span class="tok-n">true</span>
-    <span class="tok-n">instance</span><span class="tok-p">:</span>
-        <span class="tok-c1"># 使用IP地址注册而不是主机名</span>
-        <span class="tok-n">prefer</span><span class="tok-o">-</span><span class="tok-n">ip</span><span class="tok-o">-</span><span class="tok-n">address</span><span class="tok-p">:</span> <span class="tok-n">true</span>
-        <span class="tok-c1"># 客户端在注册时使用自己的IP，而不是主机名，是生产环境的最佳实践。避免主机名解析问题</span>
-        <span class="tok-n">ip</span><span class="tok-o">-</span><span class="tok-n">address</span><span class="tok-p">:</span> <span class="tok-mf">127.0.0.1</span></code></pre>
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8082</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_name">name</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)</span>
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">app-order</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_eureka">eureka</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># 服务注册到 eureka 注册中心的地址</span>
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://127.0.0.1:8761/eureka</span>
+<span class="tok-w">        </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">  </span><span class="tok-c1"># 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心</span>
+<span class="tok-w">        </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">        </span><span class="tok-c1"># 是否需要从 eureka 上检索服务</span>
+<span class="tok-w">    </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">prefer-ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">     </span><span class="tok-c1"># 使用 IP地址 注册而不是主机名</span>
+<span class="tok-w">            </span><span class="tok-nt">ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">127.0.0.1</span><span class="tok-w">   </span><span class="tok-c1"># 客户端在注册时使用自己的 IP，而不是主机名</span>
+<span class="tok-w">                                    </span><span class="tok-c1"># 这是生产环境的最佳实践。避免主机名解析问题</span></code></pre>
+</div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">@file service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
+<h4 id="_7_4_3_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java">7.4.3 file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
 <div class="sect4">
-<h5 id="_class_serviceorderapplication_3">class ServiceOrderApplication</h5>
-<div class="paragraph">
-<p>/**
- * 订单服务启动类
- * Spring Boot 应用程序入口点
- */
-@SpringBootApplication
-@EnableEurekaClient  // new &#8594; 启用 Eureka 客户端功能
-public class ServiceOrderApplication {
-    // @Autowired
-    // private ItemProperties itemProperties;  // 新增 DI 注入 配置的 url
-    // 使用 Eureka 找服务名的方式，就用不到该对象来找配置参数了。</p>
-</div>
-<div class="literalblock">
+<h5 id="_class_serviceorderapplication_note下面的三个客户端任选一个即可">class ServiceOrderApplication &#8594; NOTE:下面的三个客户端任选一个即可</h5>
+<div class="listingblock">
 <div class="content">
-<pre>    public static void main(String[] args) {
-        SpringApplication.run(ServiceOrderApplication.class, args);
-    }
-    @others
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务启动类，Spring Boot 应用程序入口点。</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@SpringBootApplication</span>
+<span class="tok-nd">@EnableEurekaClient</span><span class="tok-w">  </span><span class="tok-c1">// new -&gt; 启用 Eureka 客户端功能</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ServiceOrderApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ServiceOrderApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 包含其他代码</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">负载均衡使用拦截器原理：</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>拦截请求URL</p>
+</li>
+<li>
+<p>识别服务名</p>
+</li>
+<li>
+<p>通过服务发现获取实际地址</p>
+</li>
+<li>
+<p>替换URL并发起请求</p>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect5">
@@ -2487,9 +2514,7 @@ public class ServiceOrderApplication {
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
-<span class="tok-cm"> * 创建RestTemplate实例</span>
-<span class="tok-cm"> * 用于调用其他微服务</span>
-<span class="tok-cm"> *</span>
+<span class="tok-cm"> * 创建 RestTemplate 实例，用于调用其他微服务。</span>
 <span class="tok-cm"> * @return RestTemplate</span>
 <span class="tok-cm"> */</span>
 <span class="tok-nd">@Bean</span>
@@ -2497,17 +2522,18 @@ public class ServiceOrderApplication {
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-nf">restTemplate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-c1">// 可以在这里添加拦截器来统一处理URL前缀</span>
 <span class="tok-w">    </span><span class="tok-c1">// return new RestTemplate();  // not use OkHttp</span>
-<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OkHttp3ClientHttpRequestFactory</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// use OkHttp</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-p">(</span>
+<span class="tok-w">           </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OkHttp3ClientHttpRequestFactory</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// use OkHttp</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_okhttpclient">OkHttpClient</h6>
+<h6 id="_okhttpclient_不支持_loadbalanced">OkHttpClient 不支持 @LoadBalanced</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Bean</span>
-<span class="tok-nd">@LoadBalanced</span><span class="tok-w"> </span><span class="tok-c1">// new -&gt; 使用负载均衡</span>
+<span class="tok-c1">// @LoadBalanced  // OkHttpClient 不支持负载均衡，在这儿写该注解没用。</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-w"> </span><span class="tok-nf">okHttpClient</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-p">.</span><span class="tok-na">Builder</span><span class="tok-p">()</span>
 <span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">connectTimeout</span><span class="tok-p">(</span><span class="tok-mi">30</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">TimeUnit</span><span class="tok-p">.</span><span class="tok-na">SECONDS</span><span class="tok-p">)</span>
@@ -2521,107 +2547,211 @@ public class ServiceOrderApplication {
 <h6 id="_webclient_4">WebClient</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 直接注入也可以的</span>
-<span class="tok-c1">// public WebClient webClient(ItemServiceProperties properties) {</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 配置负载均衡的 WebClient.Builder</span>
 <span class="tok-nd">@Bean</span>
 <span class="tok-nd">@LoadBalanced</span><span class="tok-w"> </span><span class="tok-c1">// new -&gt; 使用负载均衡</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-nf">webClient</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">builder</span><span class="tok-p">()</span>
-<span class="tok-w">        </span><span class="tok-c1">// .baseUrl(itemProperties.getUrl())   // 使用注入的 Url</span>
-<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">baseUrl</span><span class="tok-p">(</span><span class="tok-s">&quot;http://app-item/item&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 改成使用 eureka 注册中心调用(去注册中心根据 app-item 查找服务，这种方式必须先开启负载均衡 @LoadBalanced)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">Builder</span><span class="tok-w"> </span><span class="tok-nf">loadBalancedWebClientBuilder</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">builder</span><span class="tok-p">();</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c1">// 使用 Builder 创建 WebClient</span>
+<span class="tok-nd">@Bean</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-nf">webClient</span><span class="tok-p">(</span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">Builder</span><span class="tok-w"> </span><span class="tok-n">builder</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">builder</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">baseUrl</span><span class="tok-p">(</span><span class="tok-s">&quot;http://app-item/item&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 使用 eureka 注册中心调用(去注册中心查找服务 app-item，这种方式必须先开启负载均衡 @LoadBalanced)</span>
 <span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">总结</div>
+<div class="paragraph">
+<p>WebClient 也需要使用 @LoadBalanced 注解，但需要注解在 WebClient.Builder 上，而不是 WebClient 实例上。
+这与 WebClient 的设计有关：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>WebClient 是不可变的（immutable）</p>
+</li>
+<li>
+<p>WebClient.Builder 是可变的，用于构建 WebClient 实例</p>
+</li>
+<li>
+<p>Spring Cloud 需要在 Builder 层面注入负载均衡能力</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>这样设计是为了与 WebClient 的不可变性设计保持一致，同时也提供了更灵活的配置方式。</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_6">@file service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h4>
+<h4 id="_7_4_4_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java">7.4.4 file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h4>
+<div class="sect4">
+<h5 id="_import">import</h5>
 <div class="paragraph">
 <p>package com.tjise.serviceorder.service;</p>
 </div>
 <div class="paragraph">
-<p>import com.tjise.serviceorder.pojo.Item;
+<p>import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tjise.serviceorder.pojo.Item;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;</p>
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 <div class="paragraph">
-<p>/**
- * 商品服务类
- * 通过 REST 方式调用商品微服务获取商品信息
- */
-@Service
-public class ItemService {</p>
+<p>import java.io.IOException;</p>
 </div>
-<div class="literalblock">
+</div>
+<div class="sect4">
+<h5 id="_class_itemservice_2">class ItemService</h5>
+<div class="listingblock">
 <div class="content">
-<pre>// Spring 框架对 RESTful 方式的 http 请求做了封装，来简化操作
-@Autowired
-private RestTemplate restTemplate;</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 根据商品 ID 查询商品信息：通过 REST 调用商品微服务获取商品详细数据</span>
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemService</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 商品服务类</span>
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-w"> </span><span class="tok-n">okHttpClient</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">ObjectMapper</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 可支持 json 序列化</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 单个构造方法注入</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">ItemService</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nd">@Autowired</span><span class="tok-p">(</span><span class="tok-n">required</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-w"> </span><span class="tok-n">okHttpClient</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nd">@Autowired</span><span class="tok-p">(</span><span class="tok-n">required</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">ObjectMapper</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">webClient</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">okHttpClient</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">okHttpClient</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">objectMapper</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 包含其他代码</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
-<div class="literalblock">
+<div class="sect5">
+<h6 id="_方式一_resttemplate_queryitembyid">方式一: RestTemplate &#8594; queryItemById</h6>
+<div class="listingblock">
 <div class="content">
-<pre>    /**
-     * 根据商品 ID 查询商品信息
-     * 通过 REST 调用商品微服务获取商品详细数据
-     *
-     * @param id 商品ID
-     * @return Item 商品信息
-     */
-    public Item queryItemById(Long id) {
-        return restTemplate.getForObject("http://app-item/item/"
-                + id, Item.class);
-    }
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">.</span><span class="tok-na">getForObject</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-s">&quot;http://app-item/item/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>app-item 是 service-item 在 Eureka 中注册的服务名。</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_方式二_okhttpclient_queryitembyidwithokhttpclient_okhttpclient_本身不支持服务发现功能需要自己实现负载均衡的调用">方式二: OkHttpClient &#8594; queryItemByIdWithOkHttpClient &#8594; OkHttpClient 本身不支持服务发现功能，需要自己实现负载均衡的调用</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Autowired</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">LoadBalancerClient</span><span class="tok-w"> </span><span class="tok-n">loadBalancerClient</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithOkHttpClient</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 自己实现负载均衡的调用：使用 LoadBalancerClient 获取负载均衡的实例</span>
+<span class="tok-w">    </span><span class="tok-n">ServiceInstance</span><span class="tok-w"> </span><span class="tok-n">instance</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">loadBalancerClient</span><span class="tok-p">.</span><span class="tok-na">choose</span><span class="tok-p">(</span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">actualUrl</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;http://&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">instance</span><span class="tok-p">.</span><span class="tok-na">getHost</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">instance</span><span class="tok-p">.</span><span class="tok-na">getPort</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;/item/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-n">Request</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Request</span><span class="tok-p">.</span><span class="tok-na">Builder</span><span class="tok-p">().</span><span class="tok-na">url</span><span class="tok-p">(</span><span class="tok-n">actualUrl</span><span class="tok-p">).</span><span class="tok-na">build</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Response</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">okHttpClient</span><span class="tok-p">.</span><span class="tok-na">newCall</span><span class="tok-p">(</span><span class="tok-n">request</span><span class="tok-p">).</span><span class="tok-na">execute</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 执行 OkHttpClient 调用</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">json</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-p">.</span><span class="tok-na">body</span><span class="tok-p">().</span><span class="tok-na">string</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 读取响应体</span>
+<span class="tok-w">        </span><span class="tok-c1">// 使用注入的 objectMapper 反序列化成 JSON 字符串</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">.</span><span class="tok-na">readValue</span><span class="tok-p">(</span><span class="tok-n">json</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_方式三_webclient_queryitembyidwithwebclient">方式三: WebClient &#8594; queryItemByIdWithWebClient</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithWebClient</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">()</span>
+<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">uri</span><span class="tok-p">(</span><span class="tok-s">&quot;/{id}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span>
+<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">retrieve</span><span class="tok-p">()</span>
+<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">bodyToMono</span><span class="tok-p">(</span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
+<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">block</span><span class="tok-p">();</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_测试微服务是否注册成功">测试微服务是否注册成功</h4>
+<h4 id="_7_4_5_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java">7.4.5 file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h4>
 <div class="sect4">
-<h5 id="_file_service_ordersrcmainjavacomtjiseserviceordercontrollerordercontroller_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java</h5>
-<div class="sect5">
-<h6 id="_docs">docs</h6>
-<div class="paragraph">
-<p>httpie 测试已经注册的微服务:
-http :8082/services</p>
-</div>
-<div class="literalblock">
-<div class="title">返回都注册了哪些微服务</div>
-<div class="content">
-<pre>HTTP/1.1 200
-Connection: keep-alive
-Content-Type: application/json
-Date: Sat, 20 Sep 2025 03:05:52 GMT
-Keep-Alive: timeout=60
-Transfer-Encoding: chunked
-
-[
-    "app-item",
-    "app-order"
-]</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>说明上面的两个微服务在 Eureka 中已经注册成功了。</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_get_services_in_eureka_看看都注册了哪些微服务">get services in Eureka 看看都注册了哪些微服务</h6>
+<h5 id="_order_queryorderbyid">Order queryOrderById</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Autowired</span>
-<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">org</span><span class="tok-p">.</span><span class="tok-na">springframework</span><span class="tok-p">.</span><span class="tok-na">cloud</span><span class="tok-p">.</span><span class="tok-na">client</span><span class="tok-p">.</span><span class="tok-na">discovery</span><span class="tok-p">.</span><span class="tok-na">DiscoveryClient</span><span class="tok-w"> </span><span class="tok-n">discoveryClient</span><span class="tok-p">;</span>
-
-<span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/services&quot;</span><span class="tok-p">)</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">getServices</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">discoveryClient</span><span class="tok-p">.</span><span class="tok-na">getServices</span><span class="tok-p">();</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 注入商品服务，用于查询商品详细信息</span>
+<span class="tok-nd">@Autowired</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 根据订单ID查询订单数据</span>
+<span class="tok-cm"> * @param orderId 订单ID</span>
+<span class="tok-cm"> * @return Order 订单信息，包含完整的商品详情</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 从模拟数据库中查询订单</span>
+<span class="tok-w">    </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 获取订单详情列表</span>
+<span class="tok-w">    </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderDetails</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-c1">// 遍历订单详情，通过商品微服务查询商品详细数据</span>
+<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">OrderDetail</span><span class="tok-w"> </span><span class="tok-n">orderDetail</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 通过商品微服务查询商品详细数据</span>
+<span class="tok-w">        </span><span class="tok-c1">// Item item = itemService.queryItemById(orderDetail.getItem().getId());  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemByIdWithOkHttpClient</span><span class="tok-p">(</span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">());</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">        </span><span class="tok-c1">// Item item = itemService.queryItemByIdWithWebClient(orderDetail.getItem().getId());  </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">continue</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-c1">// 将查询到的商品详细信息设置到订单详情中</span>
+<span class="tok-w">        </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">;</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用 RestTemplate</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>使用 OkHttpClient</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>使用 WebClient</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -2631,7 +2761,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-20 19:15:59 +0800
+Last updated 2025-09-21 16:11:20 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

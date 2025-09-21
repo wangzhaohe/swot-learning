@@ -4,8 +4,10 @@
 //@+others
 //@+node:swot.20250920111410.1: ** docs
 //@+doc
-// // httpie 测试获取订单详情
-// // http :8082/order/201810300001
+// httpie 测试获取订单详情 +
+// http :8082/order/201810300001
+//
+// ***
 //
 // httpie 测试已经注册的微服务:
 // http :8082/services
