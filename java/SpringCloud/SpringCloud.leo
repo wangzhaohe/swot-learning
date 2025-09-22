@@ -30,7 +30,15 @@
 <v t="swot.20250912140845.1"><vh>file -&gt; service-order/src/main/java/com/tjise/serviceorder/pojo/Item.java</vh></v>
 <v t="swot.20250912140908.1"><vh>file -&gt; service-order/src/main/java/com/tjise/serviceorder/pojo/Order.java</vh></v>
 <v t="swot.20250912141126.1"><vh>file -&gt; service-order/src/main/java/com/tjise/serviceorder/pojo/OrderDetail.java</vh></v>
-<v t="swot.20250913160821.1"><vh>file -&gt; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</vh></v>
+<v t="swot.20250913160821.1"><vh>file -&gt; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</vh>
+<v t="swot.20250922234952.1"><vh>@ignore-node import</vh></v>
+<v t="swot.20250923001453.1"><vh>class OrderService</vh>
+<v t="swot.20250923001649.1"><vh>ORDER_DATA 模拟数据</vh>
+<v t="swot.20250923002048.1"><vh>订单 order</vh></v>
+</v>
+<v t="swot.20250923001803.1"><vh>queryOrderById</vh></v>
+</v>
+</v>
 <v t="swot.20250913164316.1"><vh>file -&gt; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</vh></v>
 <v t="swot.20250913164255.1"><vh>file -&gt; service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java</vh></v>
 <v t="swot.20250913170215.1"><vh>file -&gt; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</vh></v>
@@ -241,7 +249,23 @@
 <v t="swot.20250922225949.4" descendentVnodeUnknownAttributes="7d710058010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b02580a000000707269736574646174657106580a000000323032352d30392d3232710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67710d580700000072656c50617468710e580d000000636c656f2f707269322e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>eureka</vh></v>
 </v>
 </v>
-<v t="swot.20250922232551.1"><vh>测试高可用性</vh></v>
+<v t="swot.20250922232551.1"><vh>测试高可用性</vh>
+<v t="swot.20250923003436.1"><vh>1. httpie 测试</vh></v>
+<v t="swot.20250923003556.1"><vh>2. 停止一个 eureka 服务再测试</vh></v>
+<v t="swot.20250923003649.1"><vh>3. 创建新订单再测试</vh>
+<v t="swot.20250923002644.1"><vh>file -&gt; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</vh>
+<v t="swot.20250923002644.2"><vh>@ignore-node import</vh></v>
+<v t="swot.20250923002644.3"><vh>class OrderService</vh>
+<v t="swot.20250923002644.4"><vh>ORDER_DATA 模拟数据</vh>
+<v t="swot.20250923002644.5"><vh>第一个订单 order</vh></v>
+<v t="swot.20250923002644.6"><vh>第二个订单 order2</vh></v>
+</v>
+<v t="swot.20250923002644.7"><vh>queryOrderById</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20250923003731.1"><vh>4. 重启 service-order 后，httpie 测试:</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -548,36 +572,42 @@ server:
   port: 8081
 </t>
 <t tx="swot.20250912140740.1"></t>
-<t tx="swot.20250912140845.1">@language java
+<t tx="swot.20250912140845.1">@doc
+.商品实体类 Item
+[source,java]
+----
+@c
+@language java
 package com.tjise.serviceorder.pojo;
 
-import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
-    
     private Long id;
-    
     private String title;
-    
     private String pic;
-    
     private String desc;
-    
     private Long price;
 }
+@doc
+----
 </t>
-<t tx="swot.20250912140908.1">@language java
+<t tx="swot.20250912140908.1">@doc
+.订单实体类 Order
+[source,java]
+----
+@c
+@language java
 package com.tjise.serviceorder.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Date;
 import java.util.List;
 
@@ -585,17 +615,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
-
     private String orderId;
-
     private Long userId;
-
     private Date createDate;
-
     private Date updateDate;
-
     private List&lt;OrderDetail&gt; orderDetails;
 }
+@doc
+----
 </t>
 <t tx="swot.20250912141126.1">@language java
 package com.tjise.serviceorder.pojo;
@@ -613,86 +640,7 @@ public class OrderDetail {
 }
 </t>
 <t tx="swot.20250913160821.1">@language java
-package com.tjise.serviceorder.service;
-
-import com.tjise.serviceorder.pojo.Order;
-import com.tjise.serviceorder.pojo.OrderDetail;
-import com.tjise.serviceorder.pojo.Item;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.*;
-
-/**
- * 订单服务类
- * 提供订单查询功能，并通过调用商品服务获取商品详细信息
- */
-@Service
-public class OrderService {
-
-    // 使用静态Map模拟数据库存储订单数据
-    private static final Map&lt;String, Order&gt; ORDER_DATA = new HashMap&lt;String, Order&gt;();
-
-    // 初始化订单数据
-    static {
-        // 模拟数据库，构造测试数据
-        Order order = new Order();
-        order.setOrderId("201810300001");
-        order.setCreateDate(new Date());
-        order.setUpdateDate(order.getCreateDate());
-        order.setUserId(1L);
-        List&lt;OrderDetail&gt; orderDetails = new ArrayList&lt;OrderDetail&gt;();
-
-        // 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）
-        Item item = new Item();
-        item.setId(1L);
-        orderDetails.add(new OrderDetail(order.getOrderId(), item));
-
-        // 创建第二个商品详情
-        item = new Item();
-        item.setId(2L);
-        orderDetails.add(new OrderDetail(order.getOrderId(), item));
-
-        order.setOrderDetails(orderDetails);
-
-        ORDER_DATA.put(order.getOrderId(), order);
-    }
-
-    // 注入商品服务，用于查询商品详细信息
-    @Autowired
-    private ItemService itemService;
-
-    /**
-     * 根据订单ID查询订单数据
-     * 
-     * @param orderId 订单ID
-     * @return Order 订单信息，包含完整的商品详情
-     */
-    public Order queryOrderById(String orderId) throws IOException {
-        // 从模拟数据库中查询订单
-        Order order = ORDER_DATA.get(orderId);
-        if (null == order) {
-            return null;
-        }
-        
-        // 获取订单详情列表
-        List&lt;OrderDetail&gt; orderDetails = order.getOrderDetails();
-        
-        // 遍历订单详情，通过商品微服务查询商品详细数据
-        for (OrderDetail orderDetail : orderDetails) {
-            // 通过商品微服务查询商品详细数据
-            Item item = itemService.queryItemById(orderDetail.getItem().getId());
-            if (null == item) {
-                continue;
-            }
-            // 将查询到的商品详细信息设置到订单详情中
-            orderDetail.setItem(item);
-        }
-
-        return order;
-    }
-}
+@others
 </t>
 <t tx="swot.20250913164255.1">@doc
 [source,java]
@@ -765,7 +713,6 @@ public class ItemService {
         return restTemplate.getForObject("http://127.0.0.1:8081/item/"
                 + id, Item.class);
     }
-
 }
 </t>
 <t tx="swot.20250913170215.1">@language java
@@ -3072,15 +3019,279 @@ eureka:
 <t tx="swot.20250922232410.1"></t>
 <t tx="swot.20250922232431.1"></t>
 <t tx="swot.20250922232551.1">@language asciidoc
-1. httpie 测试:
-+
-[source,console]
+</t>
+<t tx="swot.20250922234952.1">package com.tjise.serviceorder.service;
+
+import com.tjise.serviceorder.pojo.Order;
+import com.tjise.serviceorder.pojo.OrderDetail;
+import com.tjise.serviceorder.pojo.Item;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.io.IOException;
+import java.util.*;
+</t>
+<t tx="swot.20250923001453.1">/**
+ * 订单服务类
+ * 提供订单查询功能，并通过调用商品服务获取商品详细信息
+ */
+@Service
+public class OrderService {
+    @others
+}
+</t>
+<t tx="swot.20250923001649.1">// 使用静态Map模拟数据库存储订单数据
+private static final Map&lt;String, Order&gt; ORDER_DATA = new HashMap&lt;String, Order&gt;();
+// 初始化订单数据
+static {
+    // 模拟数据库，构造测试数据
+    @others
+}
+</t>
+<t tx="swot.20250923001803.1">// 注入商品服务，用于查询商品详细信息
+@Autowired
+private ItemService itemService;
+/**
+ * 根据订单ID查询订单数据
+ * 
+ * @param orderId 订单ID
+ * @return Order 订单信息，包含完整的商品详情
+ */
+public Order queryOrderById(String orderId) throws IOException {
+    // 从模拟数据库中查询订单
+    Order order = ORDER_DATA.get(orderId);
+    if (null == order) {
+        return null;
+    }
+    // 获取订单详情列表
+    List&lt;OrderDetail&gt; orderDetails = order.getOrderDetails();
+
+    // 遍历订单详情，通过商品微服务查询商品详细数据
+    for (OrderDetail orderDetail : orderDetails) {
+        // 通过商品微服务查询商品详细数据
+        Item item = itemService.queryItemById(orderDetail.getItem().getId());
+        if (null == item) {
+            continue;
+        }
+        // 将查询到的商品详细信息设置到订单详情中
+        orderDetail.setItem(item);
+    }
+    return order;
+}
+</t>
+<t tx="swot.20250923002048.1">Order order = new Order();
+order.setOrderId("201810300001");
+order.setCreateDate(new Date());
+order.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
+order.setUserId(1L);
+List&lt;OrderDetail&gt; orderDetails = new ArrayList&lt;OrderDetail&gt;();
+
+// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）
+Item item = new Item();
+item.setId(1L);
+orderDetails.add(new OrderDetail(order.getOrderId(), item));
+
+// 创建第二个商品详情
+item = new Item();
+item.setId(2L);
+orderDetails.add(new OrderDetail(order.getOrderId(), item));
+
+order.setOrderDetails(orderDetails);
+
+ORDER_DATA.put(order.getOrderId(), order);
+</t>
+<t tx="swot.20250923002644.1">@language java
+@others
+</t>
+<t tx="swot.20250923002644.2">package com.tjise.serviceorder.service;
+
+import com.tjise.serviceorder.pojo.Order;
+import com.tjise.serviceorder.pojo.OrderDetail;
+import com.tjise.serviceorder.pojo.Item;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.io.IOException;
+import java.util.*;
+</t>
+<t tx="swot.20250923002644.3">/**
+ * 订单服务类
+ * 提供订单查询功能，并通过调用商品服务获取商品详细信息
+ */
+@Service
+public class OrderService {
+    @others
+}
+</t>
+<t tx="swot.20250923002644.4">// 使用静态Map模拟数据库存储订单数据
+private static final Map&lt;String, Order&gt; ORDER_DATA = new HashMap&lt;String, Order&gt;();
+// 初始化订单数据
+static {
+    // 模拟数据库，构造测试数据
+    @others
+}
+</t>
+<t tx="swot.20250923002644.5">Order order = new Order();
+order.setOrderId("201810300001");
+order.setCreateDate(new Date());
+order.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
+order.setUserId(1L);
+List&lt;OrderDetail&gt; orderDetails = new ArrayList&lt;OrderDetail&gt;();
+
+// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）
+Item item = new Item();
+item.setId(1L);
+orderDetails.add(new OrderDetail(order.getOrderId(), item));
+
+// 创建第二个商品详情
+item = new Item();
+item.setId(2L);
+orderDetails.add(new OrderDetail(order.getOrderId(), item));
+
+order.setOrderDetails(orderDetails);
+
+ORDER_DATA.put(order.getOrderId(), order);
+</t>
+<t tx="swot.20250923002644.6">Order order2 = new Order();
+order2.setOrderId("201810300002");
+order2.setCreateDate(new Date());
+order2.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
+order2.setUserId(2L);
+List&lt;OrderDetail&gt; orderDetails2 = new ArrayList&lt;OrderDetail&gt;();
+
+// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）
+Item item2 = new Item();
+item2.setId(3L);
+orderDetails2.add(new OrderDetail(order2.getOrderId(), item2));
+
+// 创建第二个商品详情
+item2 = new Item();
+item2.setId(4L);
+orderDetails2.add(new OrderDetail(order2.getOrderId(), item2));
+
+order2.setOrderDetails(orderDetails2);
+
+ORDER_DATA.put(order2.getOrderId(), order2);
+</t>
+<t tx="swot.20250923002644.7">// 注入商品服务，用于查询商品详细信息
+@Autowired
+private ItemService itemService;
+/**
+ * 根据订单ID查询订单数据
+ * 
+ * @param orderId 订单ID
+ * @return Order 订单信息，包含完整的商品详情
+ */
+public Order queryOrderById(String orderId) throws IOException {
+    // 从模拟数据库中查询订单
+    Order order = ORDER_DATA.get(orderId);
+    if (null == order) {
+        return null;
+    }
+    // 获取订单详情列表
+    List&lt;OrderDetail&gt; orderDetails = order.getOrderDetails();
+
+    // 遍历订单详情，通过商品微服务查询商品详细数据
+    for (OrderDetail orderDetail : orderDetails) {
+        // 通过商品微服务查询商品详细数据
+        Item item = itemService.queryItemById(orderDetail.getItem().getId());
+        if (null == item) {
+            continue;
+        }
+        // 将查询到的商品详细信息设置到订单详情中
+        orderDetail.setItem(item);
+    }
+    return order;
+}
+</t>
+<t tx="swot.20250923003436.1">[source,console]
 ----
 http :8082/order/201810300001
 ----
++
+....
+HTTP/1.1 200
+Connection: keep-alive
+Content-Type: application/json
+Date: Mon, 22 Sep 2025 16:32:37 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
 
-2. 停掉端口为 8761 的 eureka 服务，再测试应该还是能正常访问的。
+{
+    "createDate": "2025-09-22T16:30:20.174+00:00",
+    "orderDetails": [
+        {
+            "item": {
+                "desc": "商品描述1",
+                "id": 1,
+                "pic": "http://图片1",
+                "price": 1000,
+                "title": "商品1"
+            },
+            "orderId": "201810300001"
+        },
+        {
+            "item": {
+                "desc": "商品描述2",
+                "id": 2,
+                "pic": "http://图片2",
+                "price": 2000,
+                "title": "商品2"
+            },
+            "orderId": "201810300001"
+        }
+    ],
+    "orderId": "201810300001",
+    "updateDate": "2025-09-22T16:30:20.174+00:00",
+    "userId": 1
+}
+....
+</t>
+<t tx="swot.20250923003556.1">停掉端口为 8761 的 eureka 服务，再测试应该还是能正常访问的。
+</t>
+<t tx="swot.20250923003649.1">为了防止是缓存的效果，再创建一个订单 order2，如下。
+</t>
+<t tx="swot.20250923003731.1">[source,console]
+----
+http :8082/order/201810300002
+----
++
+.测试结果说明 Eureka 高可用无问题
+....
+HTTP/1.1 200
+Connection: keep-alive
+Content-Type: application/json
+Date: Mon, 22 Sep 2025 16:31:11 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
 
+{
+    "createDate": "2025-09-22T16:30:20.175+00:00",
+    "orderDetails": [
+        {
+            "item": {
+                "desc": "商品描述3",
+                "id": 3,
+                "pic": "http://图片3",
+                "price": 3000,
+                "title": "商品3"
+            },
+            "orderId": "201810300002"
+        },
+        {
+            "item": {
+                "desc": "商品描述4",
+                "id": 4,
+                "pic": "http://图片4",
+                "price": 4000,
+                "title": "商品4"
+            },
+            "orderId": "201810300002"
+        }
+    ],
+    "orderId": "201810300002",
+    "updateDate": "2025-09-22T16:30:20.174+00:00",
+    "userId": 2
+}
+....
 </t>
 </tnodes>
 </leo_file>
