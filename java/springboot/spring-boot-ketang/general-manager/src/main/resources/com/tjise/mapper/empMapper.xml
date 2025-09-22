@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--@+leo-ver=5-thin-->
+<!--@+node:swot.20250922120350.1: * @file src/main/resources/com/tjise/mapper/empMapper.xml-->
+<!--@@first-->
+<!--@@language xml-->
+<!--@+others-->
+<!--@+node:swot.20241104141008.1: ** EmpMapper.xml -> 动态SQL-->
+<!--@+doc-->
+<!--
+[source,scss]
+....
+-->
+<!--@@c-->
+<!--@@language xml-->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+
+  <select id="list" resultType="com.tjise.pojo.Emp">
+        select * from emp
+        <where>
+            <if test="name != null">
+                name like concat('%', #{name}, '%')
+            </if>
+
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+
+            <if test="begin != null and end != null">
+                and entrydate between #{begin} and #{end}
+            </if>
+        </where>
+        order by update_time desc
+  </select>
+
+</mapper>
+<!--@+doc-->
+<!--
+....
+-->
+<!--@-others-->
+<!--@-leo-->

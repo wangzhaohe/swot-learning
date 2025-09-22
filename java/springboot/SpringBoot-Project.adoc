@@ -1501,7 +1501,7 @@ public interface DeptMapper {
 }
 ----
 
-=== 16. 员工管理 CRUE
+=== 16. 员工管理 CRUD
 
 
 ==== 16.1 查询员工列表
@@ -1861,7 +1861,118 @@ return new PageBean(p.getTotal(), p.getResult());
 ===== 再实现多条件分页查询
 条件分页查询流程
 
-image::img/condition_page_flow.png[]
+image::img/condition_page_flow.png[,1000]
+
+====== file -> src/main/java/com/tjise/controller/EmpController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.PageBean;
+import com.tjise.pojo.Result;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/emps")
+public class EmpController {
+    @Autowired
+    private EmpService empService;
+    @others
+}
+----
+
+====== selectPage
+[source,java]
+----
+@GetMapping
+public Result selectPage(
+        @RequestParam(defaultValue = "1") Integer page,
+        @RequestParam(defaultValue = "10") Integer pageSize) {
+    PageBean pageBean = empService.selectPage(page, pageSize);
+    return Result.success(pageBean);
+}
+----
+* 分页查询，先不考虑条件查询。
+* @RequestParam(default) 设置 page 和 pageSize 默认值。
+* 若不设默认值，且前端又没传递参数 page 和 pageSize，则在 service 层对 page 做运算时会报空值异常(NullPointerException)。
+
+====== file -> src/main/java/com/tjise/service/EmpService.java
+[source,java,linenums]
+----
+package com.tjise.service;
+
+import com.tjise.pojo.PageBean;
+
+public interface EmpService {
+    PageBean selectPage(
+        Integer page,
+        Integer pageSize
+    );
+}
+----
+
+====== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== selectPage
+获取总记录数和当前页数据，封装成 PageBean 返回。
+
+[source,java,linenums]
+----
+@Override
+public PageBean selectPage(Integer page, Integer pageSize) {
+
+    /*
+    // 获取总记录数
+    Long total = empMapper.selectCount();
+
+    // 获取当前页数据
+    int offset = (page - 1) * pageSize;  // <1>
+    List<Emp> empList = empMapper.selectPage(offset, pageSize);
+
+    // 封装成 PageBean
+    PageBean pageBean = new PageBean(total, empList);
+    return pageBean;
+    */
+    // 下面节点内容放在此处
+    @others
+}
+----
+<1> 在 controller 层对 page 设置了默认值，所以即使前端没传递 page 和 pageSize，此处也不会报 NullPointerException。
+
+====== 使用 PageHelper 的逻辑
+[source,java,linenums]
+----
+// 设置分页查询参数 page: 页码, pageSize: 每页显示数量
+PageHelper.startPage(page, pageSize);   // 紧跟着的第一个 select 方法会被分页 <1>
+List<Emp> empList = empMapper.list();   // 执行查询  // <2>
+Page<Emp> p = (Page<Emp>) empList;      // 获取分页结果，将 empList 转成 Page 类型
+
+// 封装成 PageBean 对象返回
+return new PageBean(p.getTotal(), p.getResult());
+----
+
+<1> 必须紧跟着！！！
+<2> PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
+
+====== file -> src/main/java/com/tjise/mapper/EmpMapper.java
+
+
+====== list -> 要使用 PageHelper select 所有记录即可
+[source,java,linenums]
+----
+// 使用 PageHelper 后查询语句更简单
+@Select("select * from emp")
+public abstract List<Emp> list();
+----
+
+====== file -> src/main/resources/com/tjise/mapper/empMapper.xml
+
 
 ====== EmpController -> 处理请求
 .多条件分页查询
@@ -1874,17 +1985,19 @@ image::img/condition_page_flow.png[]
 public Result selectPage(
         @RequestParam(defaultValue="1")  Integer page,
         @RequestParam(defaultValue="10") Integer pageSize,
+        // 多传递了 4 个参数
         String name,
         Short gender,
         @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
         @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
 {
-    // 打印一下看是否可以取到前端传递的参数，也可以使用 debug 模式查看
+    // 打印看是否可以取到前端传递的参数，也可以使用 IDEA debug 模式查看
     System.out.printf(
         "page=%s, pageSize=%s, name=%s, gender=%s, begin=%s, end=%s%n",
          page, pageSize, name, gender, begin, end);
 
-    PageBean pageBean = empService.selectPage(page, pageSize, name, gender, begin, end);
+    PageBean pageBean = empService.selectPage(
+                        page, pageSize, name, gender, begin, end);
     return Result.success(pageBean);
 }
 ----
@@ -1966,34 +2079,34 @@ public abstract List<Emp> list(
 ===== 测试查询员工列表
 测试查询员工列表 api，假设本地服务端口为 8080，上下文路径为 /emps
 
-1. 不传 page 和 pageSize，验证默认值：*预期：page=1，pageSize=10*
+1. 不传 page 和 pageSize，验证默认值：page=1，pageSize=10
 +
 ```bash
-http :8080/emps
+http -v :8080/emps
 ```
   
 2. 只传 page：*预期：page=2，pageSize=10*
 +
 ```bash
-http :8080/emps page==2
+http -v GET :8080/emps page==2
 ```
   
 3. 只传 pageSize：*预期：page=1，pageSize=5*
 +
 ```bash
-http :8080/emps pageSize==5
+http -v GET :8080/emps pageSize==5
 ```
   
 4. 同时指定 page 和 pageSize：*预期：page=3，pageSize=20*
 +
 ```bash
-http :8080/emps page==3 pageSize==20
+http -v GET :8080/emps page==3 pageSize==20
 ```
 
 5. 把参数放在 URL 路径里（这样写也是可以的）
 +  
 ```bash
-http :8080/emps?page=4&pageSize=15
+http -v GET :8080/emps?page=4&pageSize=15
 ```
 
 6. 如果想看完整响应头，可加 `-v`
@@ -2003,30 +2116,26 @@ http -v :8080/emps page==2 pageSize==5
 ```
 
 ==== 16.2 删除员工(单个和多个删除功能合一)
-批量删除员工包含删除一条和多条记录的功能。
+批量删除员工包含删除**一条和多条**记录的功能。
 
 1. 基本信息
-
 * 请求路径：/emps/{ids}
 * 请求方式：DELETE
 * 接口描述：该接口用于批量删除员工的数据信息
 
 2. 请求参数
-
 * 参数格式：路径参数
 * 参数说明：
 +
 [cols="1*5",options="header",stripes=even]
 |===
-| 参数名 | 类型       | 示例  | 是否必须 | 备注         
+| 参数名 | 类型        | 示例  | 是否必须 | 备注         
 | ids    | 数组 array | 1,2,3 | 必须     | 员工的id数组
 |===
 
 * 请求参数样例： `/emps/1,2,3`
 
-
 3. 响应数据
-
 * 参数格式：application/json
 * 参数说明：
 +
@@ -2051,7 +2160,7 @@ http -v :8080/emps page==2 pageSize==5
 4. 删除员工开发流程
 +
 [.thumb]
-image::img/delete_emp_flow.png[,1024]
+image::img/delete_emp_flow.png[,1000]
 
 ===== 删除员工 EmpController
 [source,java,linenums]

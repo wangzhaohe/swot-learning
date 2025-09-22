@@ -1,20 +1,21 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250922105319.1: * @file src/main/java/com/tjise/mapper/EmpMapper.java
+//@+node:swot.20250922113536.1: * @file src/main/java/com/tjise/mapper/EmpMapper.java
 //@@language java
 //@+others
-//@+node:swot.20250922105507.1: ** @ignore-node import
+//@+node:swot.20250922113536.2: ** @ignore-node import
 package com.tjise.mapper;
 
 import com.tjise.pojo.Emp;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDate;
 import java.util.List;
-//@+node:swot.20250922105523.1: ** @ignore-node interface EmpMapper
+//@+node:swot.20250922113536.3: ** @ignore-node interface EmpMapper
 @Mapper
 public interface EmpMapper {
     //@+others
-    //@+node:swot.20250922105319.2: *3* @ignore-node selectCount & selectpage
+    //@+node:swot.20250922113536.4: *3* @ignore-node selectCount & selectpage
     //@+doc
     // [source,java,linenums]
     // ----
@@ -29,15 +30,19 @@ public interface EmpMapper {
     public abstract List<Emp> selectPage(int offset, Integer pageSize);
     //@+doc
     // ----
-    //@+node:swot.20241104135928.1: *3* list -> 要使用 PageHelper select 所有记录即可
+    //@+node:swot.20241104140404.1: *3* 多条件查询传递多个参数
     //@@language java
     //@+doc
     // [source,java,linenums]
     // ----
     //@@c
-    // 使用 PageHelper 后查询语句更简单
-    @Select("select * from emp")
-    public abstract List<Emp> list();
+    // 使用 PageHelper 并配合条件查询，使用 xml 动态 sql 来实现
+    public abstract List<Emp> list(
+            String name,
+            Short gender,
+            LocalDate begin,
+            LocalDate end
+    );
     //@+doc
     // ----
     //@-others
