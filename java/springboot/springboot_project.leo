@@ -251,10 +251,12 @@
 </v>
 <v t="swot.20241105083144.1"><vh>16.4 文件上传员工头像</vh>
 <v t="swot.20241105083205.1"><vh>文件上传接口信息描述</vh></v>
-<v t="swot.20241105083521.1"><vh>文件上传至本地开发目录</vh></v>
-<v t="swot.20241105083957.1"><vh>file -&gt; src/main/java/com/tjise/controller/UploadController.java</vh></v>
-<v t="swot.20241105084910.1"><vh>文件上传目录映射</vh></v>
+<v t="swot.20241105084910.1"><vh>文件上传目录映射</vh>
 <v t="swot.20241105084957.1"><vh>file -&gt; src/main/java/com/tjise/config/MyMvcConfig.java</vh></v>
+</v>
+<v t="swot.20241105083521.1"><vh>文件上传至本地开发目录</vh>
+<v t="swot.20241105083957.1"><vh>file -&gt; src/main/java/com/tjise/controller/UploadController.java</vh></v>
+</v>
 <v t="swot.20241105090209.1"><vh>测试图片上传功能</vh></v>
 <v t="swot.20241105091218.1"><vh>文件上传大小限制</vh></v>
 </v>
@@ -2338,7 +2340,6 @@ IMPORTANT: item 的值要和 #{} 中的值一样！
     "data":null
 }
 ```
-
 </t>
 <t tx="swot.20241104152833.2">@language java
 @doc
@@ -2545,15 +2546,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-
 @RestController
 public class UploadController {
-
     // mkdir uploads
-    private static final String UPLOAD_DIR = "/Users/swot/swot-learn/java/springboot/spring-boot-ketang/general-manager/uploads/";
+    private static final String UPLOAD_DIR = "/Users/swot/swot-learning/java/springboot/spring-boot-ketang/general-manager/uploads/";
 
     @PostMapping("/upload")
     public Result upload(@RequestParam("image") MultipartFile image) throws IOException {
+        // 可以使用 IDEA 的 debug 模式查看变量
         String filename = image.getOriginalFilename();  // 获取上传的文件名
         String[] names = filename.split("\\.");         // 以点切割文件名
         // \\. 中的第一个 \ 是为了让 Java 编译器理解这是一个反斜杠
@@ -2562,7 +2562,7 @@ public class UploadController {
         UUID randomString = UUID.randomUUID();
         String randomFilename  = randomString + "." + extName;
         image.transferTo(new File(UPLOAD_DIR, randomFilename));
-        // 前缀 uploads 参后面配置内容
+        // 前缀路由 uploads 参上面配置内容
         return Result.success("http://localhost:8080/uploads/" + randomFilename);
     }
 }
@@ -2671,8 +2671,14 @@ public class UploadController {
 </t>
 <t tx="swot.20241105090209.1">1. 运行后台服务程序
 
-2. 使用 postman 或者在网页中测试图片上传
-
+2. 使用 httpie 或者在网页中测试图片上传
++
+.上传单个文件
+[source, console]
+----
+http POST https://httpbin.org/post \
+     file@/path/to/file.jpg
+----
 </t>
 <t tx="swot.20241105091218.1">@language asciidoc
 上传文件默认大小为 1M (1048576 bytes)，如果上传超限，则会报错:
@@ -3344,7 +3350,7 @@ http -v :8080/emps/20
 . 开通OSS: 登录阿里云官网。将鼠标移至产品找到并单击对象存储OSS打开OSS产品详情页面。在OSS产品详情页中的单击立即开通。开通服务后，在OSS产品详情页面单击管理控制台直接进入OSS管理控制台界面。您也可以单击位于官网首页右上方菜单栏的控制台，进入阿里云管理控制台首页，然后单击左侧的对象存储OSS菜单进入 https://oss.console.aliyun.com/overview[OSS管理控制台界面]。
 
 . 创建存储空间
-* 新建Bucket，自己命名 ，读写权限为**公共读**
+* 新建 Bucket，自己命名 ，读写权限为**公共读**
 +
 [.thumb]
 image::img/aliyun_oss_create_bucket0.png[]
@@ -3414,7 +3420,7 @@ String objectName = "xian_ni_01.jpg";
 // 如果未指定本地路径，则默认从示例程序所属项目对应本地路径中上传文件流。
 String filePath= "/Users/swot/Downloads/xianni/1.jpg";
 
-// 创建OSSClient实例。
+// 创建 OSSClient 实例
 OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 @doc
 ----
@@ -3515,7 +3521,7 @@ String filePath= "/Users/swot/Downloads/xianni/1.jpg";
 // 使用DefaultCredentialProvider方法直接设置AK和SK
 CredentialsProvider credentialsProvider = new DefaultCredentialProvider(accessKeyId, accessKeySecret);
 
-// 使用credentialsProvider初始化客户端
+// 创建配置
 ClientBuilderConfiguration clientBuilderConfiguration = new ClientBuilderConfiguration();
 // 显式声明使用 V4 签名算法
 clientBuilderConfiguration.setSignatureVersion(SignVersion.V4);  
