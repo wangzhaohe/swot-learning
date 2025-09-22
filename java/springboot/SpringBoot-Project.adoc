@@ -1872,10 +1872,13 @@ import com.tjise.pojo.PageBean;
 import com.tjise.pojo.Result;
 import com.tjise.service.EmpService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/emps")
@@ -1887,94 +1890,6 @@ public class EmpController {
 ----
 
 ====== selectPage
-[source,java]
-----
-@GetMapping
-public Result selectPage(
-        @RequestParam(defaultValue = "1") Integer page,
-        @RequestParam(defaultValue = "10") Integer pageSize) {
-    PageBean pageBean = empService.selectPage(page, pageSize);
-    return Result.success(pageBean);
-}
-----
-* 分页查询，先不考虑条件查询。
-* @RequestParam(default) 设置 page 和 pageSize 默认值。
-* 若不设默认值，且前端又没传递参数 page 和 pageSize，则在 service 层对 page 做运算时会报空值异常(NullPointerException)。
-
-====== file -> src/main/java/com/tjise/service/EmpService.java
-[source,java,linenums]
-----
-package com.tjise.service;
-
-import com.tjise.pojo.PageBean;
-
-public interface EmpService {
-    PageBean selectPage(
-        Integer page,
-        Integer pageSize
-    );
-}
-----
-
-====== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
-
-
-====== selectPage
-获取总记录数和当前页数据，封装成 PageBean 返回。
-
-[source,java,linenums]
-----
-@Override
-public PageBean selectPage(Integer page, Integer pageSize) {
-
-    /*
-    // 获取总记录数
-    Long total = empMapper.selectCount();
-
-    // 获取当前页数据
-    int offset = (page - 1) * pageSize;  // <1>
-    List<Emp> empList = empMapper.selectPage(offset, pageSize);
-
-    // 封装成 PageBean
-    PageBean pageBean = new PageBean(total, empList);
-    return pageBean;
-    */
-    // 下面节点内容放在此处
-    @others
-}
-----
-<1> 在 controller 层对 page 设置了默认值，所以即使前端没传递 page 和 pageSize，此处也不会报 NullPointerException。
-
-====== 使用 PageHelper 的逻辑
-[source,java,linenums]
-----
-// 设置分页查询参数 page: 页码, pageSize: 每页显示数量
-PageHelper.startPage(page, pageSize);   // 紧跟着的第一个 select 方法会被分页 <1>
-List<Emp> empList = empMapper.list();   // 执行查询  // <2>
-Page<Emp> p = (Page<Emp>) empList;      // 获取分页结果，将 empList 转成 Page 类型
-
-// 封装成 PageBean 对象返回
-return new PageBean(p.getTotal(), p.getResult());
-----
-
-<1> 必须紧跟着！！！
-<2> PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
-
-====== file -> src/main/java/com/tjise/mapper/EmpMapper.java
-
-
-====== list -> 要使用 PageHelper select 所有记录即可
-[source,java,linenums]
-----
-// 使用 PageHelper 后查询语句更简单
-@Select("select * from emp")
-public abstract List<Emp> list();
-----
-
-====== file -> src/main/resources/com/tjise/mapper/empMapper.xml
-
-
-====== EmpController -> 处理请求
 .多条件分页查询
 [source,java,linenums]
 ----
@@ -2002,19 +1917,30 @@ public Result selectPage(
 }
 ----
 
-====== EmpService    -> 接口
+====== file -> src/main/java/com/tjise/service/EmpService.java
 [source,java,linenums]
 ----
-public abstract PageBean selectPage(
-                Integer page,
-                Integer pageSize,
-                String name,
-                Short gender,
-                LocalDate begin,
-                LocalDate end);
+package com.tjise.service;
+
+import com.tjise.pojo.PageBean;
+
+import java.time.LocalDate;
+
+public interface EmpService {
+    public abstract PageBean selectPage(
+            Integer page,
+            Integer pageSize,
+            String name,
+            Short gender,
+            LocalDate begin,
+            LocalDate end);
+}
 ----
 
-====== EmpServiceImpl-> 实现接口
+====== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== 多条件查询传递多个参数
 [source,java,linenums]
 ----
 @Override
@@ -2035,7 +1961,13 @@ public PageBean selectPage(Integer page,
 }
 ----
 
-====== EmpMapper     -> 数据库
+<1> 必须紧跟着！！！
+<2> PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
+
+====== file -> src/main/java/com/tjise/mapper/EmpMapper.java
+
+
+====== 多条件查询传递多个参数
 [source,java,linenums]
 ----
 // 使用 PageHelper 并配合条件查询，使用 xml 动态 sql 来实现
@@ -2047,8 +1979,12 @@ public abstract List<Emp> list(
 );
 ----
 
+====== file -> src/main/resources/com/tjise/mapper/empMapper.xml
+
+
 ====== EmpMapper.xml -> 动态SQL
-----
+[source,scss]
+....
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -2074,7 +2010,7 @@ public abstract List<Emp> list(
   </select>
 
 </mapper>
-----
+....
 
 ===== 测试查询员工列表
 测试查询员工列表 api，假设本地服务端口为 8080，上下文路径为 /emps
@@ -2106,7 +2042,7 @@ http -v GET :8080/emps page==3 pageSize==20
 5. 把参数放在 URL 路径里（这样写也是可以的）
 +  
 ```bash
-http -v GET :8080/emps?page=4&pageSize=15
+http -v GET ":8080/emps?page=4&pageSize=15"
 ```
 
 6. 如果想看完整响应头，可加 `-v`
@@ -2162,7 +2098,31 @@ http -v :8080/emps page==2 pageSize==5
 [.thumb]
 image::img/delete_emp_flow.png[,1000]
 
-===== 删除员工 EmpController
+===== @file src/main/java/com/tjise/controller/EmpController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.PageBean;
+import com.tjise.pojo.Result;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/emps")
+public class EmpController {
+    @Autowired
+    private EmpService empService;
+    @others
+}
+----
+
+====== deleteEmp
 [source,java,linenums]
 ----
 @DeleteMapping("/{ids}")
@@ -2172,13 +2132,30 @@ public Result deleteEmp(@PathVariable List<Integer> ids) {
 }
 ----
 
-===== 删除员工 EmpService
+===== @file src/main/java/com/tjise/service/EmpService.java
+[source,java,linenums]
+----
+package com.tjise.service;
+
+import com.tjise.pojo.PageBean;
+import java.time.LocalDate;
+import java.util.List;
+
+public interface EmpService {
+    @others
+}
+----
+
+====== deleteEmpByIds
 [source,java,linenums]
 ----
 void deleteEmpByIds(List<Integer> ids);
 ----
 
-===== 删除员工 EmpServiceImpl
+===== @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== deleteEmpByIds
 [source,java,linenums]
 ----
 @Override
@@ -2187,15 +2164,33 @@ public void deleteEmpByIds(List<Integer> ids) {
 }
 ----
 
-===== 删除员工 EmpMapper
+===== @file src/main/java/com/tjise/mapper/EmpMapper.java
+
+
+====== deleteEmpByIds
 [source,java,linenums]
 ----
 public abstract void deleteEmpByIds(List<Integer> ids);
 ----
 
-===== 删除员工 EmpMapper.xml
-sql: delete from emp where id in (1, 2, 3);
+===== @file src/main/resources/com/tjise/mapper/empMapper.xml
 
+
+====== EmpMapper.xml -> 动态SQL
+[source,scss]
+....
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+  @others
+
+</mapper>
+....
+
+====== deleteEmpByIds
+sql: delete from emp where id in (1, 2, 3);
 
 ```
 <delete id="deleteEmpByIds">
@@ -2205,6 +2200,25 @@ sql: delete from emp where id in (1, 2, 3);
     </foreach>
 </delete>
 ```
+
+在 MyBatis 解析后，上面这段 XML 最终会变成一条**完整、可直接执行的 SQL 语句**发送到数据库。  
+以接口传入 `List<Integer> ids = Arrays.asList(1,2,3)` 为例，解析结果等价于：
+
+```sql
+DELETE FROM emp WHERE id IN (1, 2, 3);
+```
+
+具体过程  
+1. `<foreach>` 把集合 `ids` 展开成 `(1,2,3)` 这一段文本。  
+2. 整个 SQL 模板被替换成：  
+   `DELETE FROM emp WHERE id IN ( ?, ?, ? )`  
+   并生成对应的 `PreparedStatement` 参数列表 `[1,2,3]`。  
+3. JDBC 驱动收到的是带占位符的预编译 SQL 和三个参数值，**不会**出现 `"in ('1,2,3')"` 这种字符串拼接错误。
+
+所以，无论你把 `item` 取名 `"id"` 还是 `"aaa"`，最终 SQL 形态都一样：  
+`… IN ( ?, ?, … )`，参数按顺序逐个绑定。
+
+IMPORTANT: item 的值要和 #{} 中的值一样！
 
 ==== 16.3 新增员工
 1. 基本信息

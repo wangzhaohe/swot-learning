@@ -4374,16 +4374,22 @@ public class PageBean {
 <span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
-<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
 
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.PageBean</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Result</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.EmpService</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.format.annotation.DateTimeFormat</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.GetMapping</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RequestParam</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RestController</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.time.LocalDate</span><span class="tok-p">;</span>
 
 <span class="tok-nd">@RestController</span>
 <span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/emps&quot;</span><span class="tok-p">)</span>
@@ -4398,172 +4404,6 @@ public class PageBean {
 </div>
 <div class="sect5">
 <h6 id="_selectpage_4">selectPage</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@GetMapping</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">selectPage</span><span class="tok-p">(</span>
-<span class="tok-w">        </span><span class="tok-nd">@RequestParam</span><span class="tok-p">(</span><span class="tok-n">defaultValue</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;1&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">page</span><span class="tok-p">,</span>
-<span class="tok-w">        </span><span class="tok-nd">@RequestParam</span><span class="tok-p">(</span><span class="tok-n">defaultValue</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;10&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">pageSize</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-n">PageBean</span><span class="tok-w"> </span><span class="tok-n">pageBean</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">empService</span><span class="tok-p">.</span><span class="tok-na">selectPage</span><span class="tok-p">(</span><span class="tok-n">page</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">pageSize</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">(</span><span class="tok-n">pageBean</span><span class="tok-p">);</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>分页查询，先不考虑条件查询。</p>
-</li>
-<li>
-<p>@RequestParam(default) 设置 page 和 pageSize 默认值。</p>
-</li>
-<li>
-<p>若不设默认值，且前端又没传递参数 page 和 pageSize，则在 service 层对 page 做运算时会报空值异常(NullPointerException)。</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_file_srcmainjavacomtjiseserviceempservice_java_3">file &#8594; src/main/java/com/tjise/service/EmpService.java</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
-
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.PageBean</span><span class="tok-p">;</span>
-
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">EmpService</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-n">PageBean</span><span class="tok-w"> </span><span class="tok-nf">selectPage</span><span class="tok-p">(</span>
-<span class="tok-w">        </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">page</span><span class="tok-p">,</span>
-<span class="tok-w">        </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">pageSize</span>
-<span class="tok-w">    </span><span class="tok-p">);</span>
-<span class="tok-p">}</span>
-</pre></div></td></tr></table></div></code></pre>
-</div>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_4">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h6>
-
-</div>
-<div class="sect5">
-<h6 id="_selectpage_5">selectPage</h6>
-<div class="paragraph">
-<p>获取总记录数和当前页数据，封装成 PageBean 返回。</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Override</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">PageBean</span><span class="tok-w"> </span><span class="tok-nf">selectPage</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">page</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">pageSize</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
-<span class="tok-w">    </span><span class="tok-cm">/*</span>
-<span class="tok-cm">    // 获取总记录数</span>
-<span class="tok-cm">    Long total = empMapper.selectCount();</span>
-
-<span class="tok-cm">    // 获取当前页数据</span>
-<span class="tok-cm">    int offset = (page - 1) * pageSize;  </span><i class="conum" data-value="1"></i><b>(1)</b>
-<span class="tok-cm">    List&lt;Emp&gt; empList = empMapper.selectPage(offset, pageSize);</span>
-
-<span class="tok-cm">    // 封装成 PageBean</span>
-<span class="tok-cm">    PageBean pageBean = new PageBean(total, empList);</span>
-<span class="tok-cm">    return pageBean;</span>
-<span class="tok-cm">    */</span>
-<span class="tok-w">    </span><span class="tok-c1">// 下面节点内容放在此处</span>
-<span class="tok-w">    </span><span class="tok-nd">@others</span>
-<span class="tok-p">}</span>
-</pre></div></td></tr></table></div></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>在 controller 层对 page 设置了默认值，所以即使前端没传递 page 和 pageSize，此处也不会报 NullPointerException。</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_使用_pagehelper_的逻辑_2">使用 PageHelper 的逻辑</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// 设置分页查询参数 page: 页码, pageSize: 每页显示数量</span>
-<span class="tok-n">PageHelper</span><span class="tok-p">.</span><span class="tok-na">startPage</span><span class="tok-p">(</span><span class="tok-n">page</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">pageSize</span><span class="tok-p">);</span><span class="tok-w">   </span><span class="tok-c1">// 紧跟着的第一个 select 方法会被分页 </span><i class="conum" data-value="1"></i><b>(1)</b>
-<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">empList</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">list</span><span class="tok-p">();</span><span class="tok-w">   </span><span class="tok-c1">// 执行查询  </span><i class="conum" data-value="2"></i><b>(2)</b>
-<span class="tok-n">Page</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">p</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Page</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">empList</span><span class="tok-p">;</span><span class="tok-w">      </span><span class="tok-c1">// 获取分页结果，将 empList 转成 Page 类型</span>
-
-<span class="tok-c1">// 封装成 PageBean 对象返回</span>
-<span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">PageBean</span><span class="tok-p">(</span><span class="tok-n">p</span><span class="tok-p">.</span><span class="tok-na">getTotal</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">p</span><span class="tok-p">.</span><span class="tok-na">getResult</span><span class="tok-p">());</span>
-</pre></div></td></tr></table></div></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>必须紧跟着！！！</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_file_srcmainjavacomtjisemapperempmapper_java_4">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h6>
-
-</div>
-<div class="sect5">
-<h6 id="_list_要使用_pagehelper_select_所有记录即可_2">list &#8594; 要使用 PageHelper select 所有记录即可</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// 使用 PageHelper 后查询语句更简单</span>
-<span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from emp&quot;</span><span class="tok-p">)</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">list</span><span class="tok-p">();</span>
-</pre></div></td></tr></table></div></code></pre>
-</div>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_file_srcmainresourcescomtjisemapperempmapper_xml">file &#8594; src/main/resources/com/tjise/mapper/empMapper.xml</h6>
-
-</div>
-<div class="sect5">
-<h6 id="_empcontroller_处理请求">EmpController &#8594; 处理请求</h6>
 <div class="listingblock">
 <div class="title">多条件分页查询</div>
 <div class="content">
@@ -4615,28 +4455,48 @@ public class PageBean {
 </div>
 </div>
 <div class="sect5">
-<h6 id="_empservice_接口">EmpService    &#8594; 接口</h6>
+<h6 id="_file_srcmainjavacomtjiseserviceempservice_java_3">file &#8594; src/main/java/com/tjise/service/EmpService.java</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">PageBean</span><span class="tok-w"> </span><span class="tok-nf">selectPage</span><span class="tok-p">(</span>
-<span class="tok-w">                </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">page</span><span class="tok-p">,</span>
-<span class="tok-w">                </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">pageSize</span><span class="tok-p">,</span>
-<span class="tok-w">                </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">,</span>
-<span class="tok-w">                </span><span class="tok-n">Short</span><span class="tok-w"> </span><span class="tok-n">gender</span><span class="tok-p">,</span>
-<span class="tok-w">                </span><span class="tok-n">LocalDate</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-p">,</span>
-<span class="tok-w">                </span><span class="tok-n">LocalDate</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.PageBean</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.time.LocalDate</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">EmpService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">PageBean</span><span class="tok-w"> </span><span class="tok-nf">selectPage</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">page</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">pageSize</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-n">Short</span><span class="tok-w"> </span><span class="tok-n">gender</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-n">LocalDate</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-n">LocalDate</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_empserviceimpl_实现接口">EmpServiceImpl&#8594; 实现接口</h6>
+<h6 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_4">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_多条件查询传递多个参数">多条件查询传递多个参数</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -4673,9 +4533,25 @@ public class PageBean {
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>必须紧跟着！！！</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect5">
-<h6 id="_empmapper_数据库">EmpMapper     &#8594; 数据库</h6>
+<h6 id="_file_srcmainjavacomtjisemapperempmapper_java_4">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_多条件查询传递多个参数_2">多条件查询传递多个参数</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -4696,34 +4572,38 @@ public class PageBean {
 </div>
 </div>
 <div class="sect5">
+<h6 id="_file_srcmainresourcescomtjisemapperempmapper_xml">file &#8594; src/main/resources/com/tjise/mapper/empMapper.xml</h6>
+
+</div>
+<div class="sect5">
 <h6 id="_empmapper_xml_动态sql">EmpMapper.xml &#8594; 动态SQL</h6>
 <div class="listingblock">
 <div class="content">
-<pre>&lt;!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;!</span><span class="tok-nt">DOCTYPE</span><span class="tok-w"> </span><span class="tok-nt">mapper</span>
+<span class="tok-w">  </span><span class="tok-nt">PUBLIC</span><span class="tok-w"> </span><span class="tok-s2">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span>
+<span class="tok-w">  </span><span class="tok-s2">&quot;https://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span><span class="tok-o">&gt;</span>
 
-&lt;mapper namespace="com.tjise.mapper.EmpMapper"&gt;
+<span class="tok-o">&lt;</span><span class="tok-nt">mapper</span><span class="tok-w"> </span><span class="tok-nt">namespace</span><span class="tok-o">=</span><span class="tok-s2">&quot;com.tjise.mapper.EmpMapper&quot;</span><span class="tok-o">&gt;</span>
 
-  &lt;select id="list" resultType="com.tjise.pojo.Emp"&gt;
-        select * from emp
-        &lt;where&gt;
-            &lt;if test="name != null"&gt;
-                name like concat('%', #{name}, '%')
-            &lt;/if&gt;
+<span class="tok-w">  </span><span class="tok-o">&lt;</span><span class="tok-nt">select</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-o">=</span><span class="tok-s2">&quot;list&quot;</span><span class="tok-w"> </span><span class="tok-nt">resultType</span><span class="tok-o">=</span><span class="tok-s2">&quot;com.tjise.pojo.Emp&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">select</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-nt">from</span><span class="tok-w"> </span><span class="tok-nt">emp</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">where</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">if</span><span class="tok-w"> </span><span class="tok-nt">test</span><span class="tok-o">=</span><span class="tok-s2">&quot;name != null&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-nt">name</span><span class="tok-w"> </span><span class="tok-nt">like</span><span class="tok-w"> </span><span class="tok-nt">concat</span><span class="tok-o">(</span><span class="tok-s1">&#39;%&#39;</span><span class="tok-o">,</span><span class="tok-w"> </span><span class="tok-nn">#</span><span class="tok-p">{</span><span class="tok-nt">name</span><span class="tok-p">}</span><span class="tok-o">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;%&#39;</span><span class="tok-o">)</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;/</span><span class="tok-nt">if</span><span class="tok-o">&gt;</span>
 
-            &lt;if test="gender != null"&gt;
-                and gender = #{gender}
-            &lt;/if&gt;
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">if</span><span class="tok-w"> </span><span class="tok-nt">test</span><span class="tok-o">=</span><span class="tok-s2">&quot;gender != null&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-nt">and</span><span class="tok-w"> </span><span class="tok-nt">gender</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nn">#</span><span class="tok-p">{</span><span class="tok-nt">gender</span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;/</span><span class="tok-nt">if</span><span class="tok-o">&gt;</span>
 
-            &lt;if test="begin != null and end != null"&gt;
-                and entrydate between #{begin} and #{end}
-            &lt;/if&gt;
-        &lt;/where&gt;
-        order by update_time desc
-  &lt;/select&gt;
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">if</span><span class="tok-w"> </span><span class="tok-nt">test</span><span class="tok-o">=</span><span class="tok-s2">&quot;begin != null and end != null&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-nt">and</span><span class="tok-w"> </span><span class="tok-nt">entrydate</span><span class="tok-w"> </span><span class="tok-nt">between</span><span class="tok-w"> </span><span class="tok-nn">#</span><span class="tok-p">{</span><span class="tok-nt">begin</span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-nt">and</span><span class="tok-w"> </span><span class="tok-nn">#</span><span class="tok-p">{</span><span class="tok-nt">end</span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;/</span><span class="tok-nt">if</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">where</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">order</span><span class="tok-w"> </span><span class="tok-nt">by</span><span class="tok-w"> </span><span class="tok-nt">update_time</span><span class="tok-w"> </span><span class="tok-nt">desc</span>
+<span class="tok-w">  </span><span class="tok-o">&lt;/</span><span class="tok-nt">select</span><span class="tok-o">&gt;</span>
 
-&lt;/mapper&gt;</pre>
+<span class="tok-o">&lt;/</span><span class="tok-nt">mapper</span><span class="tok-o">&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -4771,7 +4651,7 @@ public class PageBean {
 <p>把参数放在 URL 路径里（这样写也是可以的）</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="bash"><span></span>http<span class="tok-w"> </span>-v<span class="tok-w"> </span>GET<span class="tok-w"> </span>:8080/emps?page<span class="tok-o">=</span><span class="tok-m">4</span><span class="tok-p">&amp;</span><span class="tok-nv">pageSize</span><span class="tok-o">=</span><span class="tok-m">15</span></code></pre>
+<pre class="pygments highlight"><code data-lang="bash"><span></span>http<span class="tok-w"> </span>-v<span class="tok-w"> </span>GET<span class="tok-w"> </span><span class="tok-s2">&quot;:8080/emps?page=4&amp;pageSize=15&quot;</span></code></pre>
 </div>
 </div>
 </li>
@@ -4943,7 +4823,51 @@ public class PageBean {
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_删除员工_empcontroller">删除员工 EmpController</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerempcontroller_java_4">@file src/main/java/com/tjise/controller/EmpController.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.PageBean</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Result</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.EmpService</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.format.annotation.DateTimeFormat</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.*</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.time.LocalDate</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@RestController</span>
+<span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/emps&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">EmpController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">EmpService</span><span class="tok-w"> </span><span class="tok-n">empService</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_deleteemp">deleteEmp</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -4959,8 +4883,33 @@ public class PageBean {
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_删除员工_empservice">删除员工 EmpService</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_4">@file src/main/java/com/tjise/service/EmpService.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.PageBean</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.time.LocalDate</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">EmpService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_deleteempbyids">deleteEmpByIds</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByIds</span><span class="tok-p">(</span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Integer</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">ids</span><span class="tok-p">);</span>
@@ -4968,8 +4917,11 @@ public class PageBean {
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_删除员工_empserviceimpl">删除员工 EmpServiceImpl</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_5">@file src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<div class="sect5">
+<h6 id="_deleteempbyids_2">deleteEmpByIds</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -4983,8 +4935,11 @@ public class PageBean {
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_删除员工_empmapper">删除员工 EmpMapper</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_5">@file src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<div class="sect5">
+<h6 id="_deleteempbyids_3">deleteEmpByIds</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByIds</span><span class="tok-p">(</span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Integer</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">ids</span><span class="tok-p">);</span>
@@ -4992,8 +4947,26 @@ public class PageBean {
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_删除员工_empmapper_xml">删除员工 EmpMapper.xml</h5>
+<h5 id="_file_srcmainresourcescomtjisemapperempmapper_xml_2">@file src/main/resources/com/tjise/mapper/empMapper.xml</h5>
+<div class="sect5">
+<h6 id="_empmapper_xml_动态sql_2">EmpMapper.xml &#8594; 动态SQL</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;!</span><span class="tok-nt">DOCTYPE</span><span class="tok-w"> </span><span class="tok-nt">mapper</span>
+<span class="tok-w">  </span><span class="tok-nt">PUBLIC</span><span class="tok-w"> </span><span class="tok-s2">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span>
+<span class="tok-w">  </span><span class="tok-s2">&quot;https://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span><span class="tok-o">&gt;</span>
+
+<span class="tok-o">&lt;</span><span class="tok-nt">mapper</span><span class="tok-w"> </span><span class="tok-nt">namespace</span><span class="tok-o">=</span><span class="tok-s2">&quot;com.tjise.mapper.EmpMapper&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">  </span><span class="tok-o">@</span><span class="tok-nt">others</span>
+
+<span class="tok-o">&lt;/</span><span class="tok-nt">mapper</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_deleteempbyids_4">deleteEmpByIds</h6>
 <div class="paragraph">
 <p>sql: delete from emp where id in (1, 2, 3);</p>
 </div>
@@ -5005,6 +4978,40 @@ public class PageBean {
         #{id}
     &lt;/foreach&gt;
 &lt;/delete&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在 MyBatis 解析后，上面这段 XML 最终会变成一条<strong>完整、可直接执行的 SQL 语句</strong>发送到数据库。
+以接口传入 <code>List&lt;Integer&gt; ids = Arrays.asList(1,2,3)</code> 为例，解析结果等价于：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sql"><span></span><span class="tok-k">DELETE</span><span class="tok-w"> </span><span class="tok-k">FROM</span><span class="tok-w"> </span><span class="tok-n">emp</span><span class="tok-w"> </span><span class="tok-k">WHERE</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-w"> </span><span class="tok-k">IN</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">3</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>具体过程
+1. <code>&lt;foreach&gt;</code> 把集合 <code>ids</code> 展开成 <code>(1,2,3)</code> 这一段文本。
+2. 整个 SQL 模板被替换成：
+   <code>DELETE FROM emp WHERE id IN ( ?, ?, ? )</code>
+   并生成对应的 <code>PreparedStatement</code> 参数列表 <code>[1,2,3]</code>。
+3. JDBC 驱动收到的是带占位符的预编译 SQL 和三个参数值，<strong>不会</strong>出现 <code>"in ('1,2,3')"</code> 这种字符串拼接错误。</p>
+</div>
+<div class="paragraph">
+<p>所以，无论你把 <code>item</code> 取名 <code>"id"</code> 还是 <code>"aaa"</code>，最终 SQL 形态都一样：
+<code>… IN ( ?, ?, … )</code>，参数按顺序逐个绑定。</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+item 的值要和 #{} 中的值一样！
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -7287,7 +7294,7 @@ http -v :8080/login username=xxxxxx password=123456</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_4">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_5">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="sect5">
 <h6 id="_login_新增">login 新增</h6>
 <div class="listingblock">
@@ -7298,7 +7305,7 @@ http -v :8080/login username=xxxxxx password=123456</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_5">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_员工登录功能_login_新增">员工登录功能 login &#8594; 新增</h6>
 <div class="ulist">
@@ -7320,7 +7327,7 @@ http -v :8080/login username=xxxxxx password=123456</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_5">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_6">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
 <h6 id="_empmapper">EmpMapper</h6>
 <div class="listingblock">
@@ -8523,7 +8530,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_5">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_6">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -8534,7 +8541,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增_2">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -8548,7 +8555,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_6">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_7">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增_3">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -8842,7 +8849,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_required_vs_requires_new">deleteEmpByDeptId 根据部门id删除员工 &#8594; REQUIRED vs REQUIRES_NEW</h6>
 <div class="listingblock">
@@ -10336,7 +10343,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_9">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_insertemp_新增员工">insertEmp 新增员工</h6>
 <div class="listingblock">
@@ -10875,7 +10882,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-22 14:01:05 +0800
+Last updated 2025-09-22 16:32:14 +0800
 </div>
 </div>
 </body>

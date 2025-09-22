@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250922113542.1: * @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+//@+node:swot.20250922161305.1: * @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 //@@language java
 //@+others
-//@+node:swot.20250922113542.2: ** @ignore-node import
+//@+node:swot.20250922161305.2: ** @ignore-node import
 package com.tjise.service.impl;
 
 import com.github.pagehelper.Page;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-//@+node:swot.20250922113542.3: ** @ignore-node class EmpServiceImpl
+//@+node:swot.20250922161305.3: ** @ignore-node class EmpServiceImpl
 //@+doc
 // [source,java,linenums]
 // ----
@@ -26,7 +26,7 @@ public class EmpServiceImpl implements EmpService {
     @Autowired
     private EmpMapper empMapper;
     //@+others
-    //@+node:swot.20241104140358.1: *3* 多条件查询传递多个参数
+    //@+node:swot.20250922161305.4: *3* @ignore-node selectPage 多条件查询传递多个参数
     //@+doc
     // [source,java,linenums]
     // ----
@@ -53,6 +53,18 @@ public class EmpServiceImpl implements EmpService {
     //
     // <1> 必须紧跟着！！！
     // <2> PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
+    //@+node:swot.20241104152558.1: *3* deleteEmpByIds
+    //@@language java
+    //@+doc
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @Override
+    public void deleteEmpByIds(List<Integer> ids) {
+        empMapper.deleteEmpByIds(ids);
+    }
+    //@+doc
+    // ----
     //@-others
 }
 //@+doc

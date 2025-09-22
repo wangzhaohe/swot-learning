@@ -1,5 +1,5 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250922113452.3: * @file src/main/java/com/tjise/controller/EmpController.java
+//@+node:swot.20250922161251.1: * @file src/main/java/com/tjise/controller/EmpController.java
 //@@language java
 //@+doc
 // [source,java,linenums]
@@ -12,12 +12,10 @@ import com.tjise.pojo.Result;
 import com.tjise.service.EmpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/emps")
@@ -25,7 +23,7 @@ public class EmpController {
     @Autowired
     private EmpService empService;
     //@+others
-    //@+node:swot.20241104140344.1: ** selectPage
+    //@+node:swot.20250922161251.2: ** @ignore-node selectPage
     //@+doc
     // .多条件分页查询
     // [source,java,linenums]
@@ -53,6 +51,19 @@ public class EmpController {
         PageBean pageBean = empService.selectPage(
                             page, pageSize, name, gender, begin, end);
         return Result.success(pageBean);
+    }
+    //@+doc
+    // ----
+    //@+node:swot.20241104152539.1: ** deleteEmp
+    //@@language java
+    //@+doc
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @DeleteMapping("/{ids}")
+    public Result deleteEmp(@PathVariable List<Integer> ids) {
+        empService.deleteEmpByIds(ids);
+        return Result.success();
     }
     //@+doc
     // ----
