@@ -213,11 +213,35 @@
 <v t="swot.20250818122756.1"><vh>测试查询员工列表</vh></v>
 </v>
 <v t="swot.20241104152455.1"><vh>16.2 删除员工(单个和多个删除功能合一)</vh>
-<v t="swot.20250922161251.1"><vh>@file src/main/java/com/tjise/controller/EmpController.java</vh></v>
-<v t="swot.20250922161257.1"><vh>@file src/main/java/com/tjise/service/EmpService.java</vh></v>
-<v t="swot.20250922161305.1"><vh>@file src/main/java/com/tjise/service/impl/EmpServiceImpl.java</vh></v>
-<v t="swot.20250922161310.1"><vh>@file src/main/java/com/tjise/mapper/EmpMapper.java</vh></v>
-<v t="swot.20250922161317.1"><vh>@file src/main/resources/com/tjise/mapper/empMapper.xml</vh></v>
+<v t="swot.20250922161251.1"><vh>file -&gt; src/main/java/com/tjise/controller/EmpController.java</vh>
+<v t="swot.20250922161251.2"><vh>@ignore-node selectPage</vh></v>
+<v t="swot.20241104152539.1"><vh>deleteEmp</vh></v>
+</v>
+<v t="swot.20250922161257.1"><vh>file -&gt; src/main/java/com/tjise/service/EmpService.java</vh>
+<v t="swot.20250922161552.1"><vh>@ignore-node selectPage</vh></v>
+<v t="swot.20241104152550.1"><vh>deleteEmpByIds</vh></v>
+</v>
+<v t="swot.20250922161305.1"><vh>file -&gt; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</vh>
+<v t="swot.20250922161305.2"><vh>@ignore-node import</vh></v>
+<v t="swot.20250922161305.3"><vh>@ignore-node class EmpServiceImpl</vh>
+<v t="swot.20250922161305.4"><vh>@ignore-node selectPage 多条件查询传递多个参数</vh></v>
+<v t="swot.20241104152558.1"><vh>deleteEmpByIds</vh></v>
+</v>
+</v>
+<v t="swot.20250922161310.1"><vh>file -&gt; src/main/java/com/tjise/mapper/EmpMapper.java</vh>
+<v t="swot.20250922161310.2"><vh>@ignore-node import</vh></v>
+<v t="swot.20250922161310.3"><vh>@ignore-node interface EmpMapper</vh>
+<v t="swot.20250922161310.4"><vh>@ignore-node selectCount &amp; selectpage</vh></v>
+<v t="swot.20250922161310.5"><vh>@ignore-node list 多条件查询传递多个参数</vh></v>
+<v t="swot.20241104152608.1"><vh>deleteEmpByIds</vh></v>
+</v>
+</v>
+<v t="swot.20250922161317.1"><vh>file -&gt; src/main/resources/com/tjise/mapper/empMapper.xml</vh>
+<v t="swot.20250922161317.2"><vh>EmpMapper.xml -&gt; 动态SQL</vh>
+<v t="swot.20250922161823.1"><vh>@ignore-node list</vh></v>
+<v t="swot.20241104152615.1"><vh>deleteEmpByIds</vh></v>
+</v>
+</v>
 </v>
 <v t="swot.20241104152833.1"><vh>16.3 新增员工</vh>
 <v t="swot.20241104152833.2"><vh>新增员工 EmpController</vh></v>
@@ -2141,7 +2165,7 @@ public PageBean selectPage(Integer page, Integer pageSize, String name, Short ge
 * 参数格式：路径参数
 * 参数说明：
 +
-[cols="1*5",options="header",stripes=even]
+[cols="5*1",options="header"]
 |===
 | 参数名 | 类型        | 示例  | 是否必须 | 备注         
 | ids    | 数组 array | 1,2,3 | 必须     | 员工的id数组
@@ -2153,7 +2177,7 @@ public PageBean selectPage(Integer page, Integer pageSize, String name, Short ge
 * 参数格式：application/json
 * 参数说明：
 +
-[cols="1*4,3",options="header",stripes=even]
+[cols="3*1,3",options="header"]
 |===
 | 参数名 | 类型     | 是否必须 | 备注                           
 | code   | number | 必须     | 响应码，1 代表成功，0 代表失败
@@ -2175,6 +2199,85 @@ public PageBean selectPage(Integer page, Integer pageSize, String name, Short ge
 +
 [.thumb]
 image::img/delete_emp_flow.png[,1000]
+</t>
+<t tx="swot.20241104152539.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@DeleteMapping("/{ids}")
+public Result deleteEmp(@PathVariable List&lt;Integer&gt; ids) {
+    empService.deleteEmpByIds(ids);
+    return Result.success();
+}
+@doc
+----
+</t>
+<t tx="swot.20241104152550.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+void deleteEmpByIds(List&lt;Integer&gt; ids);
+@doc
+----
+
+</t>
+<t tx="swot.20241104152558.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@Override
+public void deleteEmpByIds(List&lt;Integer&gt; ids) {
+    empMapper.deleteEmpByIds(ids);
+}
+@doc
+----
+</t>
+<t tx="swot.20241104152608.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+public abstract void deleteEmpByIds(List&lt;Integer&gt; ids);
+@doc
+----
+
+</t>
+<t tx="swot.20241104152615.1">@language java
+@doc
+sql: delete from emp where id in (1, 2, 3);
+
+```
+@c
+&lt;delete id="deleteEmpByIds"&gt;
+    delete from emp where id in
+    &lt;foreach collection="ids" item="id" open="(" close=")" separator=","&gt;
+        #{id}
+    &lt;/foreach&gt;
+&lt;/delete&gt;
+@doc
+```
+
+在 MyBatis 解析后，上面这段 XML 最终会变成一条**完整、可直接执行的 SQL 语句**发送到数据库。  
+以接口传入 `List&lt;Integer&gt; ids = Arrays.asList(1,2,3)` 为例，解析结果等价于：
+
+```sql
+DELETE FROM emp WHERE id IN (1, 2, 3);
+```
+
+具体过程  
+1. `&lt;foreach&gt;` 把集合 `ids` 展开成 `(1,2,3)` 这一段文本。  
+2. 整个 SQL 模板被替换成：  
+   `DELETE FROM emp WHERE id IN ( ?, ?, ? )`  
+   并生成对应的 `PreparedStatement` 参数列表 `[1,2,3]`。  
+3. JDBC 驱动收到的是带占位符的预编译 SQL 和三个参数值，**不会**出现 `"in ('1,2,3')"` 这种字符串拼接错误。
+
+所以，无论你把 `item` 取名 `"id"` 还是 `"aaa"`，最终 SQL 形态都一样：  
+`… IN ( ?, ?, … )`，参数按顺序逐个绑定。
+
+IMPORTANT: item 的值要和 #{} 中的值一样！
 </t>
 <t tx="swot.20241104152833.1">@language asciidoc
 1. 基本信息
@@ -10382,6 +10485,231 @@ public class EmpServiceImpl implements EmpService {
 <t tx="swot.20250922120350.1">@first &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 @language xml
 @others
+</t>
+<t tx="swot.20250922161251.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.controller;
+
+import com.tjise.pojo.PageBean;
+import com.tjise.pojo.Result;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/emps")
+public class EmpController {
+    @Autowired
+    private EmpService empService;
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250922161251.2">@doc
+.多条件分页查询
+[source,java,linenums]
+----
+@c
+@language java
+/* @RequestParam(default) 设置默认值
+   若不设默认值，且前端又没传递参数 page 和 pageSize
+   则在 service 层对 page 做运算时会报空值异常(NullPointerException) */
+@GetMapping
+public Result selectPage(
+        @RequestParam(defaultValue="1")  Integer page,
+        @RequestParam(defaultValue="10") Integer pageSize,
+        // 多传递了 4 个参数
+        String name,
+        Short gender,
+        @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+        @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
+{
+    // 打印看是否可以取到前端传递的参数，也可以使用 IDEA debug 模式查看
+    System.out.printf(
+        "page=%s, pageSize=%s, name=%s, gender=%s, begin=%s, end=%s%n",
+         page, pageSize, name, gender, begin, end);
+
+    PageBean pageBean = empService.selectPage(
+                        page, pageSize, name, gender, begin, end);
+    return Result.success(pageBean);
+}
+@doc
+----
+</t>
+<t tx="swot.20250922161257.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.service;
+
+import com.tjise.pojo.PageBean;
+import java.time.LocalDate;
+import java.util.List;
+
+public interface EmpService {
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250922161305.1">@language java
+@others
+</t>
+<t tx="swot.20250922161305.2">package com.tjise.service.impl;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+</t>
+<t tx="swot.20250922161305.3">@doc
+[source,java,linenums]
+----
+@c
+@Service  // 把该类的对象交给 IOC 容器管理
+public class EmpServiceImpl implements EmpService {
+    @Autowired
+    private EmpMapper empMapper;
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250922161305.4">@doc
+[source,java,linenums]
+----
+@c
+@language java
+@Override
+public PageBean selectPage(Integer page,
+                           Integer pageSize,
+                           String name,
+                           Short gender,
+                           LocalDate begin,
+                           LocalDate end)
+{
+    // 设置分页查询参数 pageNum: 页码, pageSize: 每页显示数量
+    PageHelper.startPage(page, pageSize);   // 紧跟着的第一个select方法会被分页
+    List&lt;Emp&gt; empList = empMapper.list(name, gender, begin, end);   // 执行查询
+    Page&lt;Emp&gt; p = (Page&lt;Emp&gt;) empList;      // 获取分页结果，将 empList 转成 Page 类型
+
+    // 封装成 PageBean 对象返回
+    return new PageBean(p.getTotal(), p.getResult());
+}
+@doc
+----
+
+&lt;1&gt; 必须紧跟着！！！
+&lt;2&gt; PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
+</t>
+<t tx="swot.20250922161310.1">@language java
+@others
+</t>
+<t tx="swot.20250922161310.2">package com.tjise.mapper;
+
+import com.tjise.pojo.Emp;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.time.LocalDate;
+import java.util.List;
+</t>
+<t tx="swot.20250922161310.3">@Mapper
+public interface EmpMapper {
+    @others
+}
+</t>
+<t tx="swot.20250922161310.4">@doc
+[source,java,linenums]
+----
+@c
+@language java
+// 查询记录总数
+@Select("select count(*) from emp")
+public abstract Long selectCount();
+
+// 查询分页数据
+@Select("select * from emp LIMIT #{offset}, #{pageSize}")
+public abstract List&lt;Emp&gt; selectPage(int offset, Integer pageSize);
+@doc
+----
+</t>
+<t tx="swot.20250922161310.5">@language java
+@doc
+[source,java,linenums]
+----
+@c
+// 使用 PageHelper 并配合条件查询，使用 xml 动态 sql 来实现
+public abstract List&lt;Emp&gt; list(
+        String name,
+        Short gender,
+        LocalDate begin,
+        LocalDate end
+);
+@doc
+----
+</t>
+<t tx="swot.20250922161317.1">@first &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+@language xml
+@others
+</t>
+<t tx="swot.20250922161317.2">@doc
+[source,scss]
+....
+@c
+@language xml
+&lt;!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;
+
+&lt;mapper namespace="com.tjise.mapper.EmpMapper"&gt;
+  @others
+
+&lt;/mapper&gt;
+@doc
+....
+</t>
+<t tx="swot.20250922161552.1">public abstract PageBean selectPage(
+        Integer page,
+        Integer pageSize,
+        String name,
+        Short gender,
+        LocalDate begin,
+        LocalDate end);
+</t>
+<t tx="swot.20250922161823.1">&lt;select id="list" resultType="com.tjise.pojo.Emp"&gt;
+      select * from emp
+      &lt;where&gt;
+          &lt;if test="name != null"&gt;
+              name like concat('%', #{name}, '%')
+          &lt;/if&gt;
+
+          &lt;if test="gender != null"&gt;
+              and gender = #{gender}
+          &lt;/if&gt;
+
+          &lt;if test="begin != null and end != null"&gt;
+              and entrydate between #{begin} and #{end}
+          &lt;/if&gt;
+      &lt;/where&gt;
+      order by update_time desc
+&lt;/select&gt;
 </t>
 </tnodes>
 </leo_file>
