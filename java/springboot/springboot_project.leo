@@ -37,7 +37,7 @@
 <v t="swot.20241031090525.1"><vh>员工三层架构 </vh>
 <v t="swot.20241031215505.1"><vh>file -&gt; src/main/java/com/tjise/controller/EmpController.java</vh></v>
 <v t="swot.20241031215523.1"><vh>file -&gt; src/main/java/com/tjise/service/EmpService.java</vh></v>
-<v t="swot.20241031215527.1"><vh>file -&gt; src/main/java/com/tjise/service/EmpServiceImpl.java</vh></v>
+<v t="swot.20241031215527.1"><vh>file -&gt; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</vh></v>
 <v t="swot.20241031215530.1"><vh>file -&gt; src/main/java/com/tjise/mapper/EmpMapper.java</vh></v>
 </v>
 </v>
@@ -157,7 +157,7 @@
 <v t="swot.20250922093737.1"><vh>selectPage</vh></v>
 </v>
 <v t="swot.20250922092140.1"><vh>file -&gt; src/main/java/com/tjise/service/EmpService.java</vh></v>
-<v t="swot.20250922092146.1"><vh>file -&gt; src/main/java/com/tjise/service/EmpServiceImpl.java</vh>
+<v t="swot.20250922092146.1"><vh>file -&gt; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</vh>
 <v t="swot.20241104134525.1"><vh>selectPage</vh></v>
 </v>
 <v t="swot.20250922092154.1"><vh>file -&gt; src/main/java/com/tjise/mapper/EmpMapper.java</vh>
@@ -165,9 +165,28 @@
 </v>
 </v>
 <v t="swot.20241104135015.1"><vh>分页插件 PageHelper</vh>
+<v t="swot.20250922104327.1"><vh>file -&gt; pom.xml</vh>
+<v t="swot.20250922104511.1"><vh>@ignore-node project</vh>
+<v t="swot.20250922104851.1"><vh>@ignore-node dependencies</vh>
 <v t="swot.20241104135055.1"><vh>pom.xml 增加依赖 pagehelper</vh></v>
-<v t="swot.20241104135605.1"><vh>EmpServiceImpl-&gt; 实现接口</vh></v>
-<v t="swot.20241104135928.1"><vh>EmpMapper     -&gt; 数据库</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20250922105319.1"><vh>file -&gt; src/main/java/com/tjise/mapper/EmpMapper.java</vh>
+<v t="swot.20250922105507.1"><vh>@ignore-node import</vh></v>
+<v t="swot.20250922105523.1"><vh>@ignore-node interface EmpMapper</vh>
+<v t="swot.20250922105319.2"><vh>@ignore-node selectCount &amp; selectpage</vh></v>
+<v t="swot.20241104135928.1"><vh>list -&gt; 要使用 PageHelper select 所有记录即可</vh></v>
+</v>
+</v>
+<v t="swot.20250922105712.1"><vh>file -&gt; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</vh>
+<v t="swot.20250922112029.1"><vh>@ignore-node import</vh></v>
+<v t="swot.20250922110410.1"><vh>@ignore-node class EmpServiceImpl</vh>
+<v t="swot.20250922105712.2"><vh>selectPage</vh>
+<v t="swot.20241104135605.1"><vh>使用 PageHelper 的逻辑</vh></v>
+</v>
+</v>
+</v>
 </v>
 <v t="swot.20241104140302.1"><vh>再实现多条件分页查询</vh>
 <v t="swot.20241104140344.1"><vh>EmpController -&gt; 处理请求</vh></v>
@@ -1838,8 +1857,8 @@ Result.success(pageBean);
 .开发流程
 image::img/emp_list_flow.png[,1000]
 
-* 使用 httpie 测试 http :8080/emps?page=2&amp;pageSize=5
-* 使用 httpie 测试 http :8080/emps
+* 使用 httpie 测试 http ":8080/emps?page=2&amp;pageSize=5"
+* 使用 httpie 测试 http ":8080/emps"
 * 使用浏览器测试 http://localhost:9528/#/system/emp
 </t>
 <t tx="swot.20241104134525.1">@doc
@@ -1885,6 +1904,7 @@ public abstract List&lt;Emp&gt; selectPage(int offset, Integer pageSize);
 ----
 </t>
 <t tx="swot.20241104135015.1">@language asciidoc
+@wrap
 当数据量大时, 所有的业务模块，只要涉及到分页 , 都需要指定上述的固定步骤，而且代码繁琐。
 
 所以 MyBatis 提供了分页插件 PageHelper https://pagehelper.github.io/
@@ -1892,7 +1912,7 @@ public abstract List&lt;Emp&gt; selectPage(int offset, Integer pageSize);
 PageHelper 分页插件支持任何复杂的单表、多表分页。
 
 .使用 PageHelper 开发流程
-image::img/pagehelper_flow.png[]
+image::img/pagehelper_flow.png[,1000]
 </t>
 <t tx="swot.20241104135055.1">@doc
 ```xml
@@ -1910,9 +1930,9 @@ image::img/pagehelper_flow.png[]
 ----
 @c
 @language java
-// 设置分页查询参数 pageNum: 页码, pageSize: 每页显示数量
-PageHelper.startPage(page, pageSize);   // 紧跟着的第一个select方法会被分页
-List&lt;Emp&gt; empList = empMapper.list();   // 执行查询  // &lt;.&gt;
+// 设置分页查询参数 page: 页码, pageSize: 每页显示数量
+PageHelper.startPage(page, pageSize);   // 紧跟着的第一个 select 方法会被分页 &lt;1&gt;
+List&lt;Emp&gt; empList = empMapper.list();   // 执行查询  // &lt;2&gt;
 Page&lt;Emp&gt; p = (Page&lt;Emp&gt;) empList;      // 获取分页结果，将 empList 转成 Page 类型
 
 // 封装成 PageBean 对象返回
@@ -1921,23 +1941,14 @@ return new PageBean(p.getTotal(), p.getResult());
 @doc
 ----
 
-&lt;1&gt; PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
+&lt;1&gt; 必须紧跟着！！！
+&lt;2&gt; PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
 </t>
 <t tx="swot.20241104135928.1">@language java
 @doc
 [source,java,linenums]
 ----
 @c
-/* 下面两个查询都不要了
-// 查询记录总数
-@Select("select count(*) from emp")
-public abstract Long selectCount();
-
-// 查询分页
-@Select("SELECT * from emp LIMIT #{offset}, #{pageSize}")
-public abstract List&lt;Emp&gt; selectPage(Integer offset, Integer pageSize);
-*/
-
 // 使用 PageHelper 后查询语句更简单
 @Select("select * from emp")
 public abstract List&lt;Emp&gt; list();
@@ -10121,6 +10132,198 @@ public Result selectPage(
 * 分页查询，先不考虑条件查询。
 * @RequestParam(default) 设置 page 和 pageSize 默认值。
 * 若不设默认值，且前端又没传递参数 page 和 pageSize，则在 service 层对 page 做运算时会报空值异常(NullPointerException)。
+</t>
+<t tx="swot.20250922104327.1">@first &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+@language xml
+@others
+</t>
+<t tx="swot.20250922104511.1">&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+	&lt;parent&gt;
+		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+		&lt;version&gt;2.7.18&lt;/version&gt;
+		&lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+	&lt;/parent&gt;
+	&lt;groupId&gt;com.tjise&lt;/groupId&gt;
+	&lt;artifactId&gt;general-manager&lt;/artifactId&gt;
+	&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+	&lt;name&gt;general-manager&lt;/name&gt;
+	&lt;description&gt;project for general-manager&lt;/description&gt;
+	&lt;url/&gt;
+	&lt;licenses&gt;
+		&lt;license/&gt;
+	&lt;/licenses&gt;
+	&lt;developers&gt;
+		&lt;developer/&gt;
+	&lt;/developers&gt;
+	&lt;scm&gt;
+		&lt;connection/&gt;
+		&lt;developerConnection/&gt;
+		&lt;tag/&gt;
+		&lt;url/&gt;
+	&lt;/scm&gt;
+	&lt;properties&gt;
+		&lt;java.version&gt;1.8&lt;/java.version&gt;
+	&lt;/properties&gt;
+ @others
+	&lt;build&gt;
+		&lt;plugins&gt;
+			&lt;plugin&gt;
+				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+				&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+				&lt;configuration&gt;
+					&lt;annotationProcessorPaths&gt;
+						&lt;path&gt;
+							&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+							&lt;artifactId&gt;lombok&lt;/artifactId&gt;
+						&lt;/path&gt;
+					&lt;/annotationProcessorPaths&gt;
+				&lt;/configuration&gt;
+			&lt;/plugin&gt;
+			&lt;plugin&gt;
+				&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+				&lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+				&lt;configuration&gt;
+					&lt;excludes&gt;
+						&lt;exclude&gt;
+							&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+							&lt;artifactId&gt;lombok&lt;/artifactId&gt;
+						&lt;/exclude&gt;
+					&lt;/excludes&gt;
+				&lt;/configuration&gt;
+			&lt;/plugin&gt;
+		&lt;/plugins&gt;
+	&lt;/build&gt;
+
+&lt;/project&gt;
+</t>
+<t tx="swot.20250922104851.1">&lt;dependencies&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+		&lt;version&gt;2.3.0&lt;/version&gt;
+	&lt;/dependency&gt;
+
+	&lt;dependency&gt;
+		&lt;groupId&gt;com.mysql&lt;/groupId&gt;
+		&lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+		&lt;scope&gt;runtime&lt;/scope&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+		&lt;artifactId&gt;lombok&lt;/artifactId&gt;
+		&lt;optional&gt;true&lt;/optional&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+		&lt;scope&gt;test&lt;/scope&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;mybatis-spring-boot-starter-test&lt;/artifactId&gt;
+		&lt;version&gt;2.3.0&lt;/version&gt;
+		&lt;scope&gt;test&lt;/scope&gt;
+	&lt;/dependency&gt;
+ @others
+&lt;/dependencies&gt;
+</t>
+<t tx="swot.20250922105319.1">@language java
+@others
+</t>
+<t tx="swot.20250922105319.2">@doc
+[source,java,linenums]
+----
+@c
+@language java
+// 查询记录总数
+@Select("select count(*) from emp")
+public abstract Long selectCount();
+
+// 查询分页数据
+@Select("select * from emp LIMIT #{offset}, #{pageSize}")
+public abstract List&lt;Emp&gt; selectPage(int offset, Integer pageSize);
+@doc
+----
+</t>
+<t tx="swot.20250922105507.1">package com.tjise.mapper;
+
+import com.tjise.pojo.Emp;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+</t>
+<t tx="swot.20250922105523.1">@Mapper
+public interface EmpMapper {
+    @others
+}
+</t>
+<t tx="swot.20250922105712.1">@language java
+@others
+</t>
+<t tx="swot.20250922105712.2">@doc
+获取总记录数和当前页数据，封装成 PageBean 返回。
+
+[source,java,linenums]
+----
+@c
+@language java
+@Override
+public PageBean selectPage(Integer page, Integer pageSize) {
+
+    /*
+    // 获取总记录数
+    Long total = empMapper.selectCount();
+
+    // 获取当前页数据
+    int offset = (page - 1) * pageSize;  // &lt;1&gt;
+    List&lt;Emp&gt; empList = empMapper.selectPage(offset, pageSize);
+
+    // 封装成 PageBean
+    PageBean pageBean = new PageBean(total, empList);
+    return pageBean;
+    */
+    // 下面节点内容放在此处
+    @others
+}
+@language asciidoc
+@doc
+----
+@wrap
+&lt;1&gt; 在 controller 层对 page 设置了默认值，所以即使前端没传递 page 和 pageSize，此处也不会报 NullPointerException。
+</t>
+<t tx="swot.20250922110410.1">@doc
+[source,java,linenums]
+----
+@c
+@Service  // 把该类的对象交给 IOC 容器管理
+public class EmpServiceImpl implements EmpService {
+    @Autowired
+    private EmpMapper empMapper;
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250922112029.1">package com.tjise.service.impl;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 </t>
 </tnodes>
 </leo_file>

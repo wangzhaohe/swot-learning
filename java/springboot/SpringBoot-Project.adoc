@@ -419,7 +419,7 @@ public interface EmpService {
 }
 ----
 
-===== file -> src/main/java/com/tjise/service/EmpServiceImpl.java
+===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 [source,java,linenums]
 ----
 package com.tjise.service;
@@ -1637,8 +1637,8 @@ Result.success(pageBean);
 .开发流程
 image::img/emp_list_flow.png[,1000]
 
-* 使用 httpie 测试 http :8080/emps?page=2&pageSize=5
-* 使用 httpie 测试 http :8080/emps
+* 使用 httpie 测试 http ":8080/emps?page=2&pageSize=5"
+* 使用 httpie 测试 http ":8080/emps"
 * 使用浏览器测试 http://localhost:9528/#/system/emp
 
 ====== file -> src/main/java/com/tjise/pojo/PageBean.java
@@ -1709,7 +1709,7 @@ public interface EmpService {
 }
 ----
 
-====== file -> src/main/java/com/tjise/service/EmpServiceImpl.java
+====== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 [source,java,linenums]
 ----
 package com.tjise.service;
@@ -1789,7 +1789,10 @@ public abstract List<Emp> selectPage(int offset, Integer pageSize);
 PageHelper 分页插件支持任何复杂的单表、多表分页。
 
 .使用 PageHelper 开发流程
-image::img/pagehelper_flow.png[]
+image::img/pagehelper_flow.png[,1000]
+
+====== file -> pom.xml
+
 
 ====== pom.xml 增加依赖 pagehelper
 ```xml
@@ -1800,37 +1803,60 @@ image::img/pagehelper_flow.png[]
 </dependency>
 ```
 
-====== EmpServiceImpl-> 实现接口
+====== file -> src/main/java/com/tjise/mapper/EmpMapper.java
+
+
+====== list -> 要使用 PageHelper select 所有记录即可
 [source,java,linenums]
 ----
-// 设置分页查询参数 pageNum: 页码, pageSize: 每页显示数量
-PageHelper.startPage(page, pageSize);   // 紧跟着的第一个select方法会被分页
-List<Emp> empList = empMapper.list();   // 执行查询  // <.>
+// 使用 PageHelper 后查询语句更简单
+@Select("select * from emp")
+public abstract List<Emp> list();
+----
+
+====== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== selectPage
+获取总记录数和当前页数据，封装成 PageBean 返回。
+
+[source,java,linenums]
+----
+@Override
+public PageBean selectPage(Integer page, Integer pageSize) {
+
+    /*
+    // 获取总记录数
+    Long total = empMapper.selectCount();
+
+    // 获取当前页数据
+    int offset = (page - 1) * pageSize;  // <1>
+    List<Emp> empList = empMapper.selectPage(offset, pageSize);
+
+    // 封装成 PageBean
+    PageBean pageBean = new PageBean(total, empList);
+    return pageBean;
+    */
+    // 下面节点内容放在此处
+    @others
+}
+----
+<1> 在 controller 层对 page 设置了默认值，所以即使前端没传递 page 和 pageSize，此处也不会报 NullPointerException。
+
+====== 使用 PageHelper 的逻辑
+[source,java,linenums]
+----
+// 设置分页查询参数 page: 页码, pageSize: 每页显示数量
+PageHelper.startPage(page, pageSize);   // 紧跟着的第一个 select 方法会被分页 <1>
+List<Emp> empList = empMapper.list();   // 执行查询  // <2>
 Page<Emp> p = (Page<Emp>) empList;      // 获取分页结果，将 empList 转成 Page 类型
 
 // 封装成 PageBean 对象返回
 return new PageBean(p.getTotal(), p.getResult());
 ----
 
-<1> PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
-
-====== EmpMapper     -> 数据库
-[source,java,linenums]
-----
-/* 下面两个查询都不要了
-// 查询记录总数
-@Select("select count(*) from emp")
-public abstract Long selectCount();
-
-// 查询分页
-@Select("SELECT * from emp LIMIT #{offset}, #{pageSize}")
-public abstract List<Emp> selectPage(Integer offset, Integer pageSize);
-*/
-
-// 使用 PageHelper 后查询语句更简单
-@Select("select * from emp")
-public abstract List<Emp> list();
-----
+<1> 必须紧跟着！！！
+<2> PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
 
 ===== 再实现多条件分页查询
 条件分页查询流程

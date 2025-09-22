@@ -1353,7 +1353,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceempserviceimpl_java">file &#8594; src/main/java/com/tjise/service/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -3939,10 +3939,10 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>使用 httpie 测试 http :8080/emps?page=2&amp;pageSize=5</p>
+<p>使用 httpie 测试 http ":8080/emps?page=2&amp;pageSize=5"</p>
 </li>
 <li>
-<p>使用 httpie 测试 http :8080/emps</p>
+<p>使用 httpie 测试 http ":8080/emps"</p>
 </li>
 <li>
 <p>使用浏览器测试 <a href="http://localhost:9528/#/system/emp" class="bare">http://localhost:9528/#/system/emp</a></p>
@@ -4064,7 +4064,7 @@ public class PageBean {
 </div>
 </div>
 <div class="sect5">
-<h6 id="_file_srcmainjavacomtjiseserviceempserviceimpl_java_2">file &#8594; src/main/java/com/tjise/service/EmpServiceImpl.java</h6>
+<h6 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_2">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -4214,9 +4214,13 @@ public class PageBean {
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/pagehelper_flow.png" alt="pagehelper flow">
+<img src="img/pagehelper_flow.png" alt="pagehelper flow" width="1000">
 </div>
 <div class="title">Figure 3. 使用 PageHelper 开发流程</div>
+</div>
+<div class="sect5">
+<h6 id="_file_pom_xml">file &#8594; pom.xml</h6>
+
 </div>
 <div class="sect5">
 <h6 id="_pom_xml_增加依赖_pagehelper">pom.xml 增加依赖 pagehelper</h6>
@@ -4231,36 +4235,31 @@ public class PageBean {
 </div>
 </div>
 <div class="sect5">
-<h6 id="_empserviceimpl_实现接口">EmpServiceImpl&#8594; 实现接口</h6>
+<h6 id="_file_srcmainjavacomtjisemapperempmapper_java_3">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_list_要使用_pagehelper_select_所有记录即可">list &#8594; 要使用 PageHelper select 所有记录即可</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// 设置分页查询参数 pageNum: 页码, pageSize: 每页显示数量</span>
-<span class="tok-n">PageHelper</span><span class="tok-p">.</span><span class="tok-na">startPage</span><span class="tok-p">(</span><span class="tok-n">page</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">pageSize</span><span class="tok-p">);</span><span class="tok-w">   </span><span class="tok-c1">// 紧跟着的第一个select方法会被分页</span>
-<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">empList</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">list</span><span class="tok-p">();</span><span class="tok-w">   </span><span class="tok-c1">// 执行查询  </span><i class="conum" data-value="1"></i><b>(1)</b>
-<span class="tok-n">Page</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">p</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Page</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">empList</span><span class="tok-p">;</span><span class="tok-w">      </span><span class="tok-c1">// 获取分页结果，将 empList 转成 Page 类型</span>
-
-<span class="tok-c1">// 封装成 PageBean 对象返回</span>
-<span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">PageBean</span><span class="tok-p">(</span><span class="tok-n">p</span><span class="tok-p">.</span><span class="tok-na">getTotal</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">p</span><span class="tok-p">.</span><span class="tok-na">getResult</span><span class="tok-p">());</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// 使用 PageHelper 后查询语句更简单</span>
+<span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from emp&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">list</span><span class="tok-p">();</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
 </div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。</td>
-</tr>
-</table>
-</div>
 </div>
 <div class="sect5">
-<h6 id="_empmapper_数据库">EmpMapper     &#8594; 数据库</h6>
+<h6 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_3">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_selectpage_3">selectPage</h6>
+<div class="paragraph">
+<p>获取总记录数和当前页数据，封装成 PageBean 返回。</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -4275,21 +4274,72 @@ public class PageBean {
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-cm">/* 下面两个查询都不要了</span>
-<span class="tok-cm">// 查询记录总数</span>
-<span class="tok-cm">@Select(&quot;select count(*) from emp&quot;)</span>
-<span class="tok-cm">public abstract Long selectCount();</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Override</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">PageBean</span><span class="tok-w"> </span><span class="tok-nf">selectPage</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">page</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">pageSize</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
-<span class="tok-cm">// 查询分页</span>
-<span class="tok-cm">@Select(&quot;SELECT * from emp LIMIT #{offset}, #{pageSize}&quot;)</span>
-<span class="tok-cm">public abstract List&lt;Emp&gt; selectPage(Integer offset, Integer pageSize);</span>
-<span class="tok-cm">*/</span>
+<span class="tok-w">    </span><span class="tok-cm">/*</span>
+<span class="tok-cm">    // 获取总记录数</span>
+<span class="tok-cm">    Long total = empMapper.selectCount();</span>
 
-<span class="tok-c1">// 使用 PageHelper 后查询语句更简单</span>
-<span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from emp&quot;</span><span class="tok-p">)</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">list</span><span class="tok-p">();</span>
+<span class="tok-cm">    // 获取当前页数据</span>
+<span class="tok-cm">    int offset = (page - 1) * pageSize;  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-cm">    List&lt;Emp&gt; empList = empMapper.selectPage(offset, pageSize);</span>
+
+<span class="tok-cm">    // 封装成 PageBean</span>
+<span class="tok-cm">    PageBean pageBean = new PageBean(total, empList);</span>
+<span class="tok-cm">    return pageBean;</span>
+<span class="tok-cm">    */</span>
+<span class="tok-w">    </span><span class="tok-c1">// 下面节点内容放在此处</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>在 controller 层对 page 设置了默认值，所以即使前端没传递 page 和 pageSize，此处也不会报 NullPointerException。</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_使用_pagehelper_的逻辑">使用 PageHelper 的逻辑</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// 设置分页查询参数 page: 页码, pageSize: 每页显示数量</span>
+<span class="tok-n">PageHelper</span><span class="tok-p">.</span><span class="tok-na">startPage</span><span class="tok-p">(</span><span class="tok-n">page</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">pageSize</span><span class="tok-p">);</span><span class="tok-w">   </span><span class="tok-c1">// 紧跟着的第一个 select 方法会被分页 </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">empList</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">list</span><span class="tok-p">();</span><span class="tok-w">   </span><span class="tok-c1">// 执行查询  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-n">Page</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">p</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Page</span><span class="tok-o">&lt;</span><span class="tok-n">Emp</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">empList</span><span class="tok-p">;</span><span class="tok-w">      </span><span class="tok-c1">// 获取分页结果，将 empList 转成 Page 类型</span>
+
+<span class="tok-c1">// 封装成 PageBean 对象返回</span>
+<span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">PageBean</span><span class="tok-p">(</span><span class="tok-n">p</span><span class="tok-p">.</span><span class="tok-na">getTotal</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">p</span><span class="tok-p">.</span><span class="tok-na">getResult</span><span class="tok-p">());</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>必须紧跟着！！！</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -4373,7 +4423,7 @@ public class PageBean {
 </div>
 </div>
 <div class="sect5">
-<h6 id="_empserviceimpl_实现接口_2">EmpServiceImpl&#8594; 实现接口</h6>
+<h6 id="_empserviceimpl_实现接口">EmpServiceImpl&#8594; 实现接口</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -4412,7 +4462,7 @@ public class PageBean {
 </div>
 </div>
 <div class="sect5">
-<h6 id="_empmapper_数据库_2">EmpMapper     &#8594; 数据库</h6>
+<h6 id="_empmapper_数据库">EmpMapper     &#8594; 数据库</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -7035,7 +7085,7 @@ http -v :8080/login username=xxxxxx password=123456</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_4">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_员工登录功能_login_新增">员工登录功能 login &#8594; 新增</h6>
 <div class="ulist">
@@ -7057,7 +7107,7 @@ http -v :8080/login username=xxxxxx password=123456</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_3">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_4">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
 <h6 id="_empmapper">EmpMapper</h6>
 <div class="listingblock">
@@ -8271,7 +8321,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_2">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_5">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增_2">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -8285,7 +8335,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_4">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_5">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增_3">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -8579,7 +8629,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_3">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_required_vs_requires_new">deleteEmpByDeptId 根据部门id删除员工 &#8594; REQUIRED vs REQUIRES_NEW</h6>
 <div class="listingblock">
@@ -10073,7 +10123,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_4">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_insertemp_新增员工">insertEmp 新增员工</h6>
 <div class="listingblock">
@@ -10419,7 +10469,7 @@ after4 -&gt; @Order(66)</pre>
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_file_pom_xml">file &#8594; pom.xml</h5>
+<h5 id="_file_pom_xml_2">file &#8594; pom.xml</h5>
 <div class="sect5">
 <h6 id="_redis">redis</h6>
 <div class="listingblock">
@@ -10612,7 +10662,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-22 10:16:47 +0800
+Last updated 2025-09-22 11:24:19 +0800
 </div>
 </div>
 </body>
