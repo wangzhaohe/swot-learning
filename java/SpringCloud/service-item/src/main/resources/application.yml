@@ -1,8 +1,8 @@
 #@+leo-ver=5-thin
-#@+node:swot.20250921181348.1: * @file service-item/src/main/resources/application.yml
+#@+node:swot.20250922225939.1: * @file service-item/src/main/resources/application.yml
 #@@language yaml
 #@+others
-#@+node:swot.20250921182102.1: ** port
+#@+node:swot.20250922225939.2: ** port
 #@+doc
 # [source,yaml]
 # ----
@@ -14,7 +14,7 @@ server:
 #@+doc
 # ----
 #
-#@+node:swot.20250921182058.1: ** name
+#@+node:swot.20250922225939.3: ** name
 #@+doc
 # [source,yaml]
 # ----
@@ -27,28 +27,25 @@ spring:
 #@+doc
 # ----
 #
-#@+node:swot.20250921182054.1: ** eureka
+#@+node:swot.20250922225939.4: ** eureka
 #@+doc
 # [source,yaml]
 # ----
 #@@c
 #@@language yaml
-### 服务注册到eureka注册中心的地址
+### 服务注册到 eureka 注册中心的地址
 eureka:
     client:
         service-url:
-            # defaultZone: http://127.0.0.1:8761/eureka/
-            # 更改：加入用户名和密码
-            defaultZone: http://root:root@127.0.0.1:8761/eureka/
+            # defaultZone: http://root:root@127.0.0.1:8761/eureka/
+            defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+        register-with-eureka: true # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
+        fetch-registry: true       # 是否需要从 eureka 上检索服务
 
-        ### 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
-        register-with-eureka: true
-        ### 是否需要从 eureka 上检索服务
-        fetch-registry: true
     instance:
-        prefer-ip-address: true  # 使用IP地址注册而不是主机名
-        ip-address: 127.0.0.1    # 客户端在注册时使用自己的IP，而不是主机名。
-                                 # 这是生产环境的最佳实践，避免主机名解析问题。
+        prefer-ip-address: true    # 使用IP地址注册而不是主机名
+        ip-address: 127.0.0.1      # 客户端在注册时使用自己的IP，而不是主机名。
+                                   # 这是生产环境的最佳实践，避免主机名解析问题。
 #@+doc
 # ----
 #

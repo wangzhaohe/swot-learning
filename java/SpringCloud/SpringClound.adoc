@@ -1680,7 +1680,7 @@ eureka:
 ----
 
 === 7.6 Eureka 集群（高可用性）
-前面的测试发现，Eureka服务是一个单点服务，在生产环境就会出现单点故障，为了确保 Eureka 服务的高可用，需要搭建 Eureka 服务的集群。
+前面的测试发现，Eureka 服务是一个单点服务，在生产环境就会出现单点故障，为了确保 Eureka 服务的高可用，需要搭建 Eureka 服务的集群。
 
 1. sudo vim /etc/hosts 增加 3 个主机名
 +
@@ -1690,44 +1690,46 @@ eureka:
 127.0.0.1 eureka2
 127.0.0.1 eureka3
 ----
-2. 创建 3 个配置文件: application-peer[1,2,3].yml
+2. 在 eureka 中创建 3 个配置文件: application-peer[1,2,3].yml
+* defaultZone 配置多个地址在 Eureka 集群中的作用：
+  ** 相互注册: 每个 Eureka Server 实例都需要知道集群中其他实例的地址，以便它们能够互相注册和同步服务注册信息。
+    *** application-peer1.yml 中的这个配置告诉 eureka1 实例，它需要向 eureka2 和 eureka3 进行注册，并从它们那里获取服务注册信息。
+    *** 同理，application-peer2.yml 会配置 eureka1 和 eureka3 的地址，application-peer3.yml 会配置 eureka1 和 eureka2 的地址。
+  ** 高可用性: 通过相互注册，整个 Eureka 集群形成了一个去中心化的结构。即使其中一个 Eureka Server 实例宕机，其他实例仍然可以提供服务注册与发现功能，保证了服务的持续可用性。
+  ** 信息同步: Eureka Server 实例之间会定期同步服务注册信息，确保所有实例上的服务列表保持一致。
+  
 3. 按下图在开发机器上配置 3 个 Eureka 服务的集群。
 +
 image::img/eureka_multi.png[]
 
-4.
+4. 访问三个 eureka 管理端网址，查看注册情况。
++
+http://localhost:8761/ | http://localhost:8762/ | http://localhost:8763/
++
+.三个网址内容类似
+image::img/eureka_multi_admin.png[]
 
-==== file -> eureka/src/main/resources/application-peer1.yml
+TIP: 用户名: root 密码: root
+
+5. 为了实现高可用性，service-item 和 service-order 应该像 Eureka Server 之间相互注册那样，将所有 Eureka Server 的地址都配置上。这样做可以确保即使其中一个 Eureka Server 实例宕机，服务仍然能够成功注册和发现其他服务，从而提高整个系统的可用性。
++
 [source,yaml]
 ----
-server:
-  port: 8761
-
-spring:
-  application:
-    name: eureka-server-clustered
-  security:
-    basic:
-      enable: true
-    user:
-      name: root
-      password: root
-
 eureka:
-  instance:
-    hostname: eureka1
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
-  server:
-    enable-self-preservation: false
-    # Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。
-    eviction-interval-timer-in-ms: 10000
+    client:
+        service-url:
+            defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+        register-with-eureka: true
+        fetch-registry: true
+    instance:
+        prefer-ip-address: true
+        ip-address: 127.0.0.1
 ----
 
-==== file -> eureka/src/main/resources/application-peer2.yml
+==== 配置 Eureka
+
+
+===== file -> eureka/src/main/resources/application-peer2.yml
 [source,yaml]
 ----
 server:
@@ -1757,7 +1759,37 @@ eureka:
     eviction-interval-timer-in-ms: 10000
 ----
 
-==== file -> eureka/src/main/resources/application-peer3.yml
+===== file -> eureka/src/main/resources/application-peer1.yml
+[source,yaml]
+----
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server-clustered
+  security:
+    basic:
+      enable: true
+    user:
+      name: root
+      password: root
+
+eureka:
+  instance:
+    hostname: eureka1
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+  server:
+    enable-self-preservation: false
+    # Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。
+    eviction-interval-timer-in-ms: 10000
+----
+
+===== file -> eureka/src/main/resources/application-peer3.yml
 [source,yaml]
 ----
 server:
@@ -1787,7 +1819,7 @@ eureka:
     eviction-interval-timer-in-ms: 10000
 ----
 
-==== 创建 nginx 容器实现访问 Eureka 3 台服务器集群的负载均衡
+===== 反例: 创建 nginx 容器实现访问 Eureka 3 台服务器集群的负载均衡（会引入 nginx 单点故障问题）
 .创建 nginx 容器
 [source,console]
 ----
@@ -1795,10 +1827,35 @@ docker run -d --name nginx \
 -p 80:80 \
 -p 8760:8760 \
 -v ./eureka.conf:/etc/nginx/conf.d/eureka.conf \
-nginx 
+nginx
 ----
 
-==== file -> eureka/src/main/resources/eureka.conf
+NOTE: 使用命令行可以同时映射多个端口。docker desktop GUI 客户端无法映射多个端口。
+
+***
+
+WARNING: nginx 出现单点故障，则整个 Eureka 集群无法访问。所以这种方式用的很少。
+
+
+.好好理解一下
+****
+- **Eureka 自己带了客户端负载均衡思想**
+
+  - 客户端直接配置多台 `Eureka Server`，会自动轮询、重试。
+  - 集群节点之间数据同步，不需要额外中间层。
+
+- **Nginx 放在这里反而引入了单点**
+
+  - Eureka 是 peer-to-peer 对等架构，本来就没有“主从”问题。
+  - 加个 Nginx 只会让本来不需要的层变成潜在风险点。
+
+- **现在更清楚 Nginx 的定位**
+
+  - 它更适合放在 **网关层**（对外入口），做统一访问、鉴权、流量控制。
+  - 不适合放在 **注册中心层**。
+****
+
+====== file -> eureka/src/main/resources/eureka.conf
 [source,python]
 ----
 upstream eureka-cluster {
@@ -1821,21 +1878,99 @@ server {
 Docker 已经预留了一个特殊 DNS 名：host.docker.internal +
 它自动解析成宿主机在 Docker 网桥里的 IP。
 
-1. 复制文件（假设 eureka.conf 放在当前目录）
+访问 http://localhost:8760/ 会按 nginx 默认的负载均衡访问 3 台 Eureka 服务器。
+
+==== 配置 微服务
+
+
+===== file -> service-item/src/main/resources/application.yml
+****
+name 和 instance 两者都有重要作用，缺一不可：
+
+- spring.application.name：服务的逻辑名称，用于服务发现和负载均衡
+- eureka.instance 配置：实例的网络地址，用于实际通信
+
+即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。
+****
+
+====== port
+[source,yaml]
+----
+### 服务端口号(本身是一个web项目)
+server:
+    port: 8081
+----
+
+====== name
+[source,yaml]
+----
+### 起个名字作为服务名称(该服务注册到eureka注册中心的名称，比如商品服务)
+spring:
+    application:
+        name: app-item
+----
+
+====== eureka
+[source,yaml]
+----
+### 服务注册到 eureka 注册中心的地址
+eureka:
+    client:
+        service-url:
+            # defaultZone: http://root:root@127.0.0.1:8761/eureka/
+            defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+        register-with-eureka: true # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
+        fetch-registry: true       # 是否需要从 eureka 上检索服务
+
+    instance:
+        prefer-ip-address: true    # 使用IP地址注册而不是主机名
+        ip-address: 127.0.0.1      # 客户端在注册时使用自己的IP，而不是主机名。
+                                   # 这是生产环境的最佳实践，避免主机名解析问题。
+----
+
+===== file -> service-order/src/main/resources/application.yml
+
+
+====== port
+[source,yaml]
+----
+server:
+    port: 8082
+----
+
+====== name
+[source, yaml]
+----
+# 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
+spring:
+    application:
+        name: app-order
+----
+
+====== eureka
+[source,yaml]
+----
+# 服务注册到 eureka 注册中心的地址
+eureka:
+    client:
+        service-url:
+            # defaultZone: http://root:root@127.0.0.1:8761/eureka/
+            defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+        register-with-eureka: true  # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
+        fetch-registry: true        # 是否需要从 eureka 上检索服务
+    instance:
+        prefer-ip-address: true     # 使用 IP地址 注册而不是主机名
+        ip-address: 127.0.0.1       # 客户端在注册时使用自己的 IP，而不是主机名
+                                    # 这是生产环境的最佳实践。避免主机名解析问题
+----
+
+==== 测试高可用性
+1. httpie 测试:
 +
 [source,console]
 ----
-docker cp eureka.conf nginx:/etc/nginx/conf.d/eureka.conf
-----
-+
-成功返回 Successfully copied 2.56kB to nginx:/etc/nginx/conf.d/eureka.conf
-
-2. 热加载
-+
-[source,console]
-----
-docker exec nginx nginx -s reload
+http :8082/order/201810300001
 ----
 
-3. 访问 http://localhost:8760/ 会按 nginx 默认的负载均衡访问 3 台 Eureka 服务器。
+2. 停掉端口为 8761 的 eureka 服务，再测试应该还是能正常访问的。
 
