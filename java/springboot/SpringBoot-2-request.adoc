@@ -118,8 +118,8 @@ http POST https://jsonplaceholder.typicode.com/posts < data.json
 
 .使用 = 和 := 的情况
 ****
-* 字符串 → 用 =
-* 数字、布尔、数组、对象 → 用 :=
+* 字符串用 =
+* 数字、布尔、数组、对象用 :=
 ****
 
 ==== 发送 PUT 和 PATCH 请求
@@ -173,8 +173,8 @@ http --form POST https://httpbin.org/post \
 [source,bash]
 ----
 # 上传单个文件
-http POST https://httpbin.org/post \
-  file@/path/to/file.jpg
+http -f POST https://httpbin.org/post \
+  字段名@/path/to/file.jpg
 
 # 上传多个文件及其他字段
 http -f POST https://httpbin.org/post \
@@ -393,7 +393,7 @@ public String simplePojo(User user) {
 }
 ----
 
-==== 复杂实体对象参数
+==== 复杂实体对象参数（嵌套）
 . 请求参数名与形参对象属性名相同，按照对象层次结构关系即可接收嵌套 POJO 属性参数。
     * popo/Uesr.java 包含三个属性 user, name, address （address 对应 Address.java）
     * popo/Address.java 包含两个属性 province, city
@@ -472,7 +472,7 @@ Spring Boot 的 `LocalDateTime` 类型在进行 `toString()` 时会自动按照�
 
 这个格式不包含时区信息，仅仅表示日期和时间。
 
-==== @RequestBody    解析 json 数据
+==== @RequestBody    解析前端上传的 json 数据
 1. 请求参数是 JSON 数据，使用 POJO 类型接收参数。
 2. 需使用 @RequestBody 标识形参
 

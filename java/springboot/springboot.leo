@@ -7115,8 +7115,8 @@ http GET https://httpbin.org/get \
 [source,bash]
 ----
 # 上传单个文件
-http POST https://httpbin.org/post \
-  file@/path/to/file.jpg
+http -f POST https://httpbin.org/post \
+  字段名@/path/to/file.jpg
 
 # 上传多个文件及其他字段
 http -f POST https://httpbin.org/post \
