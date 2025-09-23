@@ -2423,8 +2423,52 @@ public abstract void insertEmp(Emp emp);
 }
 ----
 
-===== 文件上传目录映射
-要想实现上述功能，还需要定义一个 spring 的配置类，来指定将哪个目录映射成哪个前缀。
+===== 文件上传至本地开发目录
+在 Spring Boot 中接收前端上传的图片并存储在可以通过 URL 访问的目录下。
+
+通常 ##不要## 将图片存储在 `src/main/resources/static` 目录下。这是因为 Spring Boot 默认会在重新编译后才能将 static 目录下的文件作为静态资源提供。也就是说需要重新启动开发环境才能在浏览器中访问上传的资源文件。这样在开发时很不方便，还有在服务器上部署以后，客户端上传的文件也不能实时更新。
+
+下面将前端上传的资源存储在指定的目录 UPLOAD_DIR 下，并且使用前缀 uploads 进行访问。
+
+====== @file src/main/java/com/tjise/controller/UploadController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Result;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
+@RestController
+public class UploadController {
+    // 别忘记创建目录: mkdir uploads
+    private static final String UPLOAD_DIR = "/Users/swot/swot-learning/java/springboot/spring-boot-ketang/general-manager/uploads/";
+
+    @PostMapping("/upload")
+    public Result upload(@RequestParam("image") MultipartFile image) throws IOException {
+        // 可以使用 IDEA 的 debug 模式查看变量
+        String filename = image.getOriginalFilename();  // 获取上传的文件名
+        String[] names = filename.split("\\.");         // 以点切割文件名
+        // \\. 中的第一个 \ 是为了让 Java 编译器理解这是一个反斜杠
+        // \\. 中的第二个 \ 则是在正则表达式中表示字面量的点
+        String extName = names[names.length - 1];       // 获取文件扩展名
+        UUID randomString = UUID.randomUUID();          // 生成随机字符串
+        String randomFilename  = randomString + "." + extName;
+        image.transferTo(new File(UPLOAD_DIR, randomFilename));
+        // 前缀路由 uploads 参节点配置内容
+        return Result.success("http://localhost:8080/uploads/" + randomFilename);
+    }
+}
+----
+
+===== 文件上传目录映射（指本地目录映射成url前缀）
+要想实现上传功能，需要定义一个 spring 的配置类，来指定将哪个目录映射成哪个前缀。
 如在 config 包中书写实现接口 WebMvcConfigurer 的类 MyMvcConfig.java。
 
 创建 config 包: `mkdir config`
@@ -2452,7 +2496,7 @@ public abstract void insertEmp(Emp emp);
   
 4. Spring Boot 在容器初始化阶段，会拿到**所有**实现了 `WebMvcConfigurer` 接口的 Bean，依次调用它们的回调方法（`addResourceHandlers`、`addViewControllers`…），把各个配置“叠加”到最终的 Spring MVC 配置中。
   
-5. 最终，`/uploads/**` → 本地磁盘目录 的映射就生效了。
+5. 最终，`/uploads/**` 到本地磁盘目录 的映射就生效了。
   
 因此：  
 
@@ -2460,7 +2504,7 @@ public abstract void insertEmp(Emp emp);
 
 * 如果你把 `MyMvcConfig` 放到和启动类**平级或更外层**的包，例如 `com.other.config`，而又没手动 `@ComponentScan("com.other")`，就不会被扫描到。
 
-====== file -> src/main/java/com/tjise/config/MyMvcConfig.java
+====== @file src/main/java/com/tjise/config/MyMvcConfig.java
 [source,java]
 ----
 package com.tjise.config;
@@ -2479,51 +2523,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 映射图片保存地址
         registry.addResourceHandler("/uploads/**")  // 增加 url 前缀
-                .addResourceLocations("file:/Users/swot/swot-learn/java/springboot/spring-boot-ketang/general-manager/uploads/");  // 获取图片的路径
-    }
-}
-----
-
-===== 文件上传至本地开发目录
-在 Spring Boot 中接收前端上传的图片并存储在可以通过 URL 访问的目录下。
-
-通常 ##不要## 将图片存储在 `src/main/resources/static` 目录下。这是因为 Spring Boot 默认会在重新编译后才能将 static 目录下的文件作为静态资源提供。也就是说需要重新启动开发环境才能在浏览器中访问上传的资源文件。这样在开发时很不方便，还有在服务器上部署以后，客户端上传的文件也不能实时更新。
-
-下面将前端上传的资源存储在指定的目录 UPLOAD_DIR 下，并且使用前缀 uploads 进行访问。
-
-====== file -> src/main/java/com/tjise/controller/UploadController.java
-[source,java,linenums]
-----
-package com.tjise.controller;
-
-import com.tjise.pojo.Result;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
-
-@RestController
-public class UploadController {
-    // mkdir uploads
-    private static final String UPLOAD_DIR = "/Users/swot/swot-learning/java/springboot/spring-boot-ketang/general-manager/uploads/";
-
-    @PostMapping("/upload")
-    public Result upload(@RequestParam("image") MultipartFile image) throws IOException {
-        // 可以使用 IDEA 的 debug 模式查看变量
-        String filename = image.getOriginalFilename();  // 获取上传的文件名
-        String[] names = filename.split("\\.");         // 以点切割文件名
-        // \\. 中的第一个 \ 是为了让 Java 编译器理解这是一个反斜杠
-        // \\. 中的第二个 \ 则是在正则表达式中表示字面量的点
-        String extName = names[names.length - 1];       // 获取文件扩展名
-        UUID randomString = UUID.randomUUID();
-        String randomFilename  = randomString + "." + extName;
-        image.transferTo(new File(UPLOAD_DIR, randomFilename));
-        // 前缀路由 uploads 参上面配置内容
-        return Result.success("http://localhost:8080/uploads/" + randomFilename);
+                .addResourceLocations("file:/Users/swot/swot-learning/java/springboot/spring-boot-ketang/general-manager/uploads/");  // 获取图片的路径
     }
 }
 ----
@@ -2536,8 +2536,7 @@ public class UploadController {
 .上传单个文件
 [source, console]
 ----
-http POST https://httpbin.org/post \
-     file@/path/to/file.jpg
+http -f POST :8080/upload image@/Users/swot/Downloads/xianni/1.jpg
 ----
 
 ===== 文件上传大小限制
@@ -2560,7 +2559,7 @@ spring.servlet.multipart.max-request-size=100MB
 ==== 16.5 文件上传至阿里云 OSS
 
 
-===== 阿里云 OSS 简介
+===== 16.5.1 阿里云 OSS 简介
 ​阿里云对象存储服务（Object Storage Service，简称OSS）为您提供基于网络的数据存取服务。使用OSS，您可以通过网络随时存储和调用包括文本、图片、音频和视频等在内的各种非结构化数据文件。
 
 阿里云OSS将数据文件以对象（object）的形式上传到存储空间（bucket）中。
@@ -2573,7 +2572,7 @@ spring.servlet.multipart.max-request-size=100MB
 - 在阿里云管理控制台执行基本和高级OSS任务。
 - 使用阿里云开发工具包或直接在应用程序中进行 RESTful API 调用执行基本和高级 OSS 任务
 
-===== 阿里云 OSS 开通
+===== 16.5.2 阿里云 OSS 开通
 . 打开 https://www.aliyun.com/ ，申请阿里云账号并完成实名认证。
 
 . 充值（有试用流量）
@@ -2589,13 +2588,13 @@ image::img/aliyun_oss_create_bucket0.png[]
 [.thumb]
 image::img/aliyun_oss_create_bucket1.png[,1000]
 
-===== 获取访问密钥
+===== 16.5.3 获取访问密钥
 在阿里云右上角主帐号下拉菜单中，可以操作访问密钥 AccessKey
 
 [.thumb]
 image::img/oss_AccessKey.png[]
 
-===== 引入阿里云 OSS 依赖
+===== 16.5.4 引入阿里云 OSS 依赖
 https://help.aliyun.com/document_detail/32009.html?spm=a2c4g.11186623.6.919.7c264562C2Fjfs[参考文档官方]
 创建测试工程，引入依赖
 
@@ -2607,7 +2606,7 @@ https://help.aliyun.com/document_detail/32009.html?spm=a2c4g.11186623.6.919.7c26
 </dependency>
 ```
 
-===== OSS 明文文本密钥测试本地文件上传 -- 也叫静态凭证（仅用于测试环境）
+===== 16.5.5 OSS 明文文本密钥测试本地文件上传 -- 也叫静态凭证（仅用于测试环境）
 https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#bd4a905a056cr[静态凭证文档 2025-08-14 16:10:58]
 
 ====== 下面是在 main 函数中使用 OSSClientBuilder.create() 方式的测试 -- 最新方式
@@ -2790,7 +2789,7 @@ try {
 }
 ----
 
-===== OSS 环境变量密钥测试本地文件上传 -- 适用于生产环境使用环境变量的情况
+===== 16.5.6 OSS 环境变量密钥测试本地文件上传 -- 适用于生产环境使用环境变量的情况
 https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#9c8e8849706wp[配置访问凭证]
 
 .在操作系统中导出两个环境变量，分别是:
@@ -2832,16 +2831,16 @@ public class AliOssEnvTest {
         String filePath= "/Users/swot/Downloads/xianni/2.jpg";
         // 填写Bucket所在地域。以华东1（杭州）为例，Region填写为cn-hangzhou。
         String region = "cn-beijing";
-        
+
         // 创建OSSClient实例。
         ClientBuilderConfiguration clientBuilderConfiguration = new ClientBuilderConfiguration();
         clientBuilderConfiguration.setSignatureVersion(SignVersion.V4);
-        
+
         OSS ossClient = OSSClientBuilder.create()
             .endpoint(endpoint)
             .credentialsProvider(credentialsProvider)
             .clientConfiguration(clientBuilderConfiguration)
-            .region(region)               
+            .region(region)
             .build();
 
         try {
@@ -2852,15 +2851,15 @@ public class AliOssEnvTest {
             PutObjectResult result = ossClient.putObject(putObjectRequest);
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "
-                    + "but was rejected with an error response for some reason.");
+                             + "but was rejected with an error response for some reason.");
             System.out.println("Error Message:" + oe.getErrorMessage());
             System.out.println("Error Code:" + oe.getErrorCode());
             System.out.println("Request ID:" + oe.getRequestId());
             System.out.println("Host ID:" + oe.getHostId());
         } catch (ClientException ce) {
             System.out.println("Caught an ClientException, which means the client encountered "
-                    + "a serious internal problem while trying to communicate with OSS, "
-                    + "such as not being able to access the network.");
+                             + "a serious internal problem while trying to communicate with OSS, "
+                             + "such as not being able to access the network.");
             System.out.println("Error Message:" + ce.getMessage());
         } finally {
             if (ossClient != null) {
@@ -2868,10 +2867,10 @@ public class AliOssEnvTest {
             }
         }
     }
-} 
+}
 ----
 
-===== OSS 封装工具类
+===== 16.5.7 OSS 封装工具类
 upload 是非静态方法，需要类的对象去调用。可以将 IOC 控制反转容器中的 bean 对象去做 DI 依赖注入对象后，来调用 upload 方法。
 
 .详细解释，先把概念拆成三块。
@@ -2952,8 +2951,8 @@ public class AliOSSUtils {
 }
 ----
 
-===== OSS 封装工具类的使用 -> 重写图片上传控制类
-使用 http 测试上传图片: +
+===== 16.5.8 OSS 封装工具类的使用 -> 重写图片上传控制类
+使用 httpie 测试上传图片: +
 http -f POST http://localhost:8080/upload image@/Users/swot/Downloads/uifaces-cartoon-image-8.jpg
 
 .图片上传成功
@@ -3029,12 +3028,12 @@ public class UploadController {
 }
 ----
 
-===== 使用 @Value 注解从配置文件引入阿里云 OSS 参数
+===== 16.5.9 使用 @Value 注解从配置文件引入阿里云 OSS 参数
 1. 在配置文件 application.properties 中增加 4个 aliyun.oss.xxx
 
 2. 为了不用在 AliOSSUtils.java 文件中硬编码配置，给 AliOssUtils 中的私有变量加 @Value 注解，以读取 application.properties 中的配置。
 
-3. 测试上传
+3. httpie 测试上传
 
 http -f POST http://localhost:8080/upload image@/Users/swot/Downloads/uifaces-cartoon-image-8.jpg
 
@@ -3137,12 +3136,12 @@ private String accessKeySecret;
 @Value("${aliyun.oss.bucketName}")
 private String bucketName;
 
-===== application.yml/application.yaml 配置文件(推荐替换 application.properties 配置文件)
+===== 16.5.10 application.yml/application.yaml 配置文件(推荐替换 application.properties 配置文件)
 yml 文件语法
 
 * 大小写敏感
 * 值前边必须有空格，作为分隔符
-* 使用缩进表示层级关系，缩进时，不允许使用Tab键，只能用空格（idea中会自动将Tab转换为空格）
+* 使用缩进表示层级关系，缩进时，不允许使用 Tab 键，只能用空格（idea 中会自动将 Tab 转换为空格）
 * 缩进的空格数目不重要，只要相同层级的元素左侧对齐即可
 * # 表示注释，从这个字符一直到行尾，都会被解析器忽略
 
@@ -3198,7 +3197,7 @@ aliyun:
         bucketName: "swot-learn"
 ----
 
-===== 每个属性都写 @Value 太麻烦了，使用 @ConfigurationProperties 直接匹配配置文件中的键
+===== 16.5.11 每个属性都写 @Value 太麻烦了，使用 @ConfigurationProperties 直接匹配配置文件中的键
 
 
 ====== file -> src/main/java/com/tjise/utils/AliOSSUtils.java
@@ -3249,7 +3248,7 @@ public class AliOSSUtils {
 }
 ----
 
-===== 抽出一个类来解决多个类可能会共用相同属性问题
+===== 16.5.12 抽出一个类来解决多个类可能会共用相同属性问题
 
 
 ====== file -> src/main/java/com/tjise/utils/AliOSSUtilsProperties.java

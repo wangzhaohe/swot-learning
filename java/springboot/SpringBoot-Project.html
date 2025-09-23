@@ -5463,93 +5463,6 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect4">
-<h5 id="_文件上传目录映射">文件上传目录映射</h5>
-<div class="paragraph">
-<p>要想实现上述功能，还需要定义一个 spring 的配置类，来指定将哪个目录映射成哪个前缀。
-如在 config 包中书写实现接口 WebMvcConfigurer 的类 MyMvcConfig.java。</p>
-</div>
-<div class="paragraph">
-<p>创建 config 包: <code>mkdir config</code></p>
-</div>
-<div class="paragraph">
-<p>下面代码中的 <code>MyMvcConfig</code> 之所以会被“自动注册”，是因为它被放在 <strong>启动类所在的包或其子包</strong> 里（<code>com.tjise</code> 或其子包），Spring Boot 启动时会自动扫描到它的 <code>@Configuration</code>，进而把它里面对 <code>WebMvcConfigurer</code> 的实现（<code>addResourceHandlers</code>）合并进 Spring MVC 的全局配置。</p>
-</div>
-<div class="paragraph">
-<p>详细过程如下：</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>你项目的主启动类（<code>@SpringBootApplication</code>）通常长这样：</p>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-w">  </span><span class="tok-nd">@SpringBootApplication</span><span class="tok-w">   </span><span class="tok-c1">// 里面包含 @ComponentScan</span>
-<span class="tok-w">  </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Application</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">      </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">          </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">Application</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
-<span class="tok-w">      </span><span class="tok-p">}</span>
-<span class="tok-w">  </span><span class="tok-p">}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>默认 <code>@SpringBootApplication</code> 的 <code>@ComponentScan</code> 从该类所在包（<code>com.tjise.xxx</code>）开始，向下递归扫描所有子包。</p>
-</div>
-</li>
-<li>
-<p><code>MyMvcConfig</code> 的包名是 <code>com.tjise.config</code>，恰好是启动类所在包的<strong>子包</strong>，所以被扫描到。</p>
-</li>
-<li>
-<p>扫描到后发现这个类上有 <code>@Configuration</code>，于是被注册为 Spring 容器里的一个 <strong>配置 Bean</strong>。</p>
-</li>
-<li>
-<p>Spring Boot 在容器初始化阶段，会拿到<strong>所有</strong>实现了 <code>WebMvcConfigurer</code> 接口的 Bean，依次调用它们的回调方法（<code>addResourceHandlers</code>、<code>addViewControllers</code>…），把各个配置“叠加”到最终的 Spring MVC 配置中。</p>
-</li>
-<li>
-<p>最终，<code>/uploads/**</code> → 本地磁盘目录 的映射就生效了。</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>因此：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>只要你没改 <code>@SpringBootApplication</code> 的扫描路径，也没在启动类上加额外的 <code>@ComponentScan(excludeFilters=&#8230;&#8203;)</code>，放在 <code>com.tjise.config</code> 里的 <code>MyMvcConfig</code> 天然就会被自动注册。</p>
-</li>
-<li>
-<p>如果你把 <code>MyMvcConfig</code> 放到和启动类<strong>平级或更外层</strong>的包，例如 <code>com.other.config</code>，而又没手动 <code>@ComponentScan("com.other")</code>，就不会被扫描到。</p>
-</li>
-</ul>
-</div>
-<div class="sect5">
-<h6 id="_file_srcmainjavacomtjiseconfigmymvcconfig_java">file &#8594; src/main/java/com/tjise/config/MyMvcConfig.java</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.config</span><span class="tok-p">;</span>
-
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.context.annotation.Configuration</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.servlet.config.annotation.WebMvcConfigurer</span><span class="tok-p">;</span>
-
-<span class="tok-c1">// 此注解表明该类是 Spring 配置类。Spring 会自动扫描并注册该类，使其可以作为应用上下文的一部分。</span>
-<span class="tok-nd">@Configuration</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">MyMvcConfig</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">WebMvcConfigurer</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// WebMvcConfigurer 是一个接口，允许用户自定义 Spring MVC 的配置。通过实现这个接口，你可以覆盖默认配置或添加自定义配置。</span>
-
-<span class="tok-w">    </span><span class="tok-c1">// 配置虚拟路径映射访问</span>
-<span class="tok-w">    </span><span class="tok-nd">@Override</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">addResourceHandlers</span><span class="tok-p">(</span><span class="tok-n">ResourceHandlerRegistry</span><span class="tok-w"> </span><span class="tok-n">registry</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-c1">// 映射图片保存地址</span>
-<span class="tok-w">        </span><span class="tok-n">registry</span><span class="tok-p">.</span><span class="tok-na">addResourceHandler</span><span class="tok-p">(</span><span class="tok-s">&quot;/uploads/**&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 增加 url 前缀</span>
-<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">addResourceLocations</span><span class="tok-p">(</span><span class="tok-s">&quot;file:/Users/swot/swot-learn/java/springboot/spring-boot-ketang/general-manager/uploads/&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 获取图片的路径</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect4">
 <h5 id="_文件上传至本地开发目录">文件上传至本地开发目录</h5>
 <div class="paragraph">
 <p>在 Spring Boot 中接收前端上传的图片并存储在可以通过 URL 访问的目录下。</p>
@@ -5561,7 +5474,7 @@ item 的值要和 #{} 中的值一样！
 <p>下面将前端上传的资源存储在指定的目录 UPLOAD_DIR 下，并且使用前缀 uploads 进行访问。</p>
 </div>
 <div class="sect5">
-<h6 id="_file_srcmainjavacomtjisecontrolleruploadcontroller_java">file &#8594; src/main/java/com/tjise/controller/UploadController.java</h6>
+<h6 id="_file_srcmainjavacomtjisecontrolleruploadcontroller_java">@file src/main/java/com/tjise/controller/UploadController.java</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -5609,7 +5522,7 @@ item 的值要和 #{} 中的值一样！
 
 <span class="tok-nd">@RestController</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">UploadController</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// mkdir uploads</span>
+<span class="tok-w">    </span><span class="tok-c1">// 别忘记创建目录: mkdir uploads</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">UPLOAD_DIR</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;/Users/swot/swot-learning/java/springboot/spring-boot-ketang/general-manager/uploads/&quot;</span><span class="tok-p">;</span>
 
 <span class="tok-w">    </span><span class="tok-nd">@PostMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/upload&quot;</span><span class="tok-p">)</span>
@@ -5620,14 +5533,101 @@ item 的值要和 #{} 中的值一样！
 <span class="tok-w">        </span><span class="tok-c1">// \\. 中的第一个 \ 是为了让 Java 编译器理解这是一个反斜杠</span>
 <span class="tok-w">        </span><span class="tok-c1">// \\. 中的第二个 \ 则是在正则表达式中表示字面量的点</span>
 <span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">extName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">names</span><span class="tok-o">[</span><span class="tok-n">names</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-o">]</span><span class="tok-p">;</span><span class="tok-w">       </span><span class="tok-c1">// 获取文件扩展名</span>
-<span class="tok-w">        </span><span class="tok-n">UUID</span><span class="tok-w"> </span><span class="tok-n">randomString</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">UUID</span><span class="tok-p">.</span><span class="tok-na">randomUUID</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">UUID</span><span class="tok-w"> </span><span class="tok-n">randomString</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">UUID</span><span class="tok-p">.</span><span class="tok-na">randomUUID</span><span class="tok-p">();</span><span class="tok-w">          </span><span class="tok-c1">// 生成随机字符串</span>
 <span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">randomFilename</span><span class="tok-w">  </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">randomString</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;.&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">extName</span><span class="tok-p">;</span>
 <span class="tok-w">        </span><span class="tok-n">image</span><span class="tok-p">.</span><span class="tok-na">transferTo</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">File</span><span class="tok-p">(</span><span class="tok-n">UPLOAD_DIR</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">randomFilename</span><span class="tok-p">));</span>
-<span class="tok-w">        </span><span class="tok-c1">// 前缀路由 uploads 参上面配置内容</span>
+<span class="tok-w">        </span><span class="tok-c1">// 前缀路由 uploads 参节点配置内容</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">(</span><span class="tok-s">&quot;http://localhost:8080/uploads/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">randomFilename</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_文件上传目录映射指本地目录映射成url前缀">文件上传目录映射（指本地目录映射成url前缀）</h5>
+<div class="paragraph">
+<p>要想实现上传功能，需要定义一个 spring 的配置类，来指定将哪个目录映射成哪个前缀。
+如在 config 包中书写实现接口 WebMvcConfigurer 的类 MyMvcConfig.java。</p>
+</div>
+<div class="paragraph">
+<p>创建 config 包: <code>mkdir config</code></p>
+</div>
+<div class="paragraph">
+<p>下面代码中的 <code>MyMvcConfig</code> 之所以会被“自动注册”，是因为它被放在 <strong>启动类所在的包或其子包</strong> 里（<code>com.tjise</code> 或其子包），Spring Boot 启动时会自动扫描到它的 <code>@Configuration</code>，进而把它里面对 <code>WebMvcConfigurer</code> 的实现（<code>addResourceHandlers</code>）合并进 Spring MVC 的全局配置。</p>
+</div>
+<div class="paragraph">
+<p>详细过程如下：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>你项目的主启动类（<code>@SpringBootApplication</code>）通常长这样：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-w">  </span><span class="tok-nd">@SpringBootApplication</span><span class="tok-w">   </span><span class="tok-c1">// 里面包含 @ComponentScan</span>
+<span class="tok-w">  </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Application</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">          </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">Application</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">      </span><span class="tok-p">}</span>
+<span class="tok-w">  </span><span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>默认 <code>@SpringBootApplication</code> 的 <code>@ComponentScan</code> 从该类所在包（<code>com.tjise.xxx</code>）开始，向下递归扫描所有子包。</p>
+</div>
+</li>
+<li>
+<p><code>MyMvcConfig</code> 的包名是 <code>com.tjise.config</code>，恰好是启动类所在包的<strong>子包</strong>，所以被扫描到。</p>
+</li>
+<li>
+<p>扫描到后发现这个类上有 <code>@Configuration</code>，于是被注册为 Spring 容器里的一个 <strong>配置 Bean</strong>。</p>
+</li>
+<li>
+<p>Spring Boot 在容器初始化阶段，会拿到<strong>所有</strong>实现了 <code>WebMvcConfigurer</code> 接口的 Bean，依次调用它们的回调方法（<code>addResourceHandlers</code>、<code>addViewControllers</code>…），把各个配置“叠加”到最终的 Spring MVC 配置中。</p>
+</li>
+<li>
+<p>最终，<code>/uploads/**</code> 到本地磁盘目录 的映射就生效了。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>因此：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>只要你没改 <code>@SpringBootApplication</code> 的扫描路径，也没在启动类上加额外的 <code>@ComponentScan(excludeFilters=&#8230;&#8203;)</code>，放在 <code>com.tjise.config</code> 里的 <code>MyMvcConfig</code> 天然就会被自动注册。</p>
+</li>
+<li>
+<p>如果你把 <code>MyMvcConfig</code> 放到和启动类<strong>平级或更外层</strong>的包，例如 <code>com.other.config</code>，而又没手动 <code>@ComponentScan("com.other")</code>，就不会被扫描到。</p>
+</li>
+</ul>
+</div>
+<div class="sect5">
+<h6 id="_file_srcmainjavacomtjiseconfigmymvcconfig_java">@file src/main/java/com/tjise/config/MyMvcConfig.java</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.config</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.context.annotation.Configuration</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.servlet.config.annotation.WebMvcConfigurer</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 此注解表明该类是 Spring 配置类。Spring 会自动扫描并注册该类，使其可以作为应用上下文的一部分。</span>
+<span class="tok-nd">@Configuration</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">MyMvcConfig</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">WebMvcConfigurer</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// WebMvcConfigurer 是一个接口，允许用户自定义 Spring MVC 的配置。通过实现这个接口，你可以覆盖默认配置或添加自定义配置。</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 配置虚拟路径映射访问</span>
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">addResourceHandlers</span><span class="tok-p">(</span><span class="tok-n">ResourceHandlerRegistry</span><span class="tok-w"> </span><span class="tok-n">registry</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 映射图片保存地址</span>
+<span class="tok-w">        </span><span class="tok-n">registry</span><span class="tok-p">.</span><span class="tok-na">addResourceHandler</span><span class="tok-p">(</span><span class="tok-s">&quot;/uploads/**&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 增加 url 前缀</span>
+<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">addResourceLocations</span><span class="tok-p">(</span><span class="tok-s">&quot;file:/Users/swot/swot-learning/java/springboot/spring-boot-ketang/general-manager/uploads/&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 获取图片的路径</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -5644,8 +5644,7 @@ item 的值要和 #{} 中的值一样！
 <div class="listingblock">
 <div class="title">上传单个文件</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http POST https://httpbin.org/post \</span>
-<span class="tok-go">     file@/path/to/file.jpg</span></code></pre>
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http -f POST :8080/upload image@/Users/swot/Downloads/xianni/1.jpg</span></code></pre>
 </div>
 </div>
 </li>
@@ -5679,7 +5678,7 @@ item 的值要和 #{} 中的值一样！
 <div class="sect3">
 <h4 id="_16_5_文件上传至阿里云_oss">16.5 文件上传至阿里云 OSS</h4>
 <div class="sect4">
-<h5 id="_阿里云_oss_简介">阿里云 OSS 简介</h5>
+<h5 id="_16_5_1_阿里云_oss_简介">16.5.1 阿里云 OSS 简介</h5>
 <div class="paragraph">
 <p>​阿里云对象存储服务（Object Storage Service，简称OSS）为您提供基于网络的数据存取服务。使用OSS，您可以通过网络随时存储和调用包括文本、图片、音频和视频等在内的各种非结构化数据文件。</p>
 </div>
@@ -5710,7 +5709,7 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect4">
-<h5 id="_阿里云_oss_开通">阿里云 OSS 开通</h5>
+<h5 id="_16_5_2_阿里云_oss_开通">16.5.2 阿里云 OSS 开通</h5>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5746,7 +5745,7 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect4">
-<h5 id="_获取访问密钥">获取访问密钥</h5>
+<h5 id="_16_5_3_获取访问密钥">16.5.3 获取访问密钥</h5>
 <div class="paragraph">
 <p>在阿里云右上角主帐号下拉菜单中，可以操作访问密钥 AccessKey</p>
 </div>
@@ -5757,7 +5756,7 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect4">
-<h5 id="_引入阿里云_oss_依赖">引入阿里云 OSS 依赖</h5>
+<h5 id="_16_5_4_引入阿里云_oss_依赖">16.5.4 引入阿里云 OSS 依赖</h5>
 <div class="paragraph">
 <p><a href="https://help.aliyun.com/document_detail/32009.html?spm=a2c4g.11186623.6.919.7c264562C2Fjfs">参考文档官方</a>
 创建测试工程，引入依赖</p>
@@ -5773,7 +5772,7 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect4">
-<h5 id="_oss_明文文本密钥测试本地文件上传也叫静态凭证仅用于测试环境">OSS 明文文本密钥测试本地文件上传&#8201;&#8212;&#8201;也叫静态凭证（仅用于测试环境）</h5>
+<h5 id="_16_5_5_oss_明文文本密钥测试本地文件上传也叫静态凭证仅用于测试环境">16.5.5 OSS 明文文本密钥测试本地文件上传&#8201;&#8212;&#8201;也叫静态凭证（仅用于测试环境）</h5>
 <div class="paragraph">
 <p><a href="https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&amp;scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#bd4a905a056cr">静态凭证文档 2025-08-14 16:10:58</a></p>
 </div>
@@ -5977,7 +5976,7 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect4">
-<h5 id="_oss_环境变量密钥测试本地文件上传适用于生产环境使用环境变量的情况">OSS 环境变量密钥测试本地文件上传&#8201;&#8212;&#8201;适用于生产环境使用环境变量的情况</h5>
+<h5 id="_16_5_6_oss_环境变量密钥测试本地文件上传适用于生产环境使用环境变量的情况">16.5.6 OSS 环境变量密钥测试本地文件上传&#8201;&#8212;&#8201;适用于生产环境使用环境变量的情况</h5>
 <div class="paragraph">
 <p><a href="https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&amp;scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#9c8e8849706wp">配置访问凭证</a></p>
 </div>
@@ -6041,15 +6040,15 @@ item 的值要和 #{} 中的值一样！
 <span class="tok-w">            </span><span class="tok-n">PutObjectResult</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ossClient</span><span class="tok-p">.</span><span class="tok-na">putObject</span><span class="tok-p">(</span><span class="tok-n">putObjectRequest</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">OSSException</span><span class="tok-w"> </span><span class="tok-n">oe</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Caught an OSSException, which means your request made it to OSS, &quot;</span>
-<span class="tok-w">                    </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;but was rejected with an error response for some reason.&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">                             </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;but was rejected with an error response for some reason.&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Error Message:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">oe</span><span class="tok-p">.</span><span class="tok-na">getErrorMessage</span><span class="tok-p">());</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Error Code:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">oe</span><span class="tok-p">.</span><span class="tok-na">getErrorCode</span><span class="tok-p">());</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Request ID:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">oe</span><span class="tok-p">.</span><span class="tok-na">getRequestId</span><span class="tok-p">());</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Host ID:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">oe</span><span class="tok-p">.</span><span class="tok-na">getHostId</span><span class="tok-p">());</span>
 <span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">ClientException</span><span class="tok-w"> </span><span class="tok-n">ce</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Caught an ClientException, which means the client encountered &quot;</span>
-<span class="tok-w">                    </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;a serious internal problem while trying to communicate with OSS, &quot;</span>
-<span class="tok-w">                    </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;such as not being able to access the network.&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">                             </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;a serious internal problem while trying to communicate with OSS, &quot;</span>
+<span class="tok-w">                             </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;such as not being able to access the network.&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Error Message:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">ce</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
 <span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">finally</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">ossClient</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -6063,7 +6062,7 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect4">
-<h5 id="_oss_封装工具类">OSS 封装工具类</h5>
+<h5 id="_16_5_7_oss_封装工具类">16.5.7 OSS 封装工具类</h5>
 <div class="paragraph">
 <p>upload 是非静态方法，需要类的对象去调用。可以将 IOC 控制反转容器中的 bean 对象去做 DI 依赖注入对象后，来调用 upload 方法。</p>
 </div>
@@ -6173,9 +6172,9 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect4">
-<h5 id="_oss_封装工具类的使用_重写图片上传控制类">OSS 封装工具类的使用 &#8594; 重写图片上传控制类</h5>
+<h5 id="_16_5_8_oss_封装工具类的使用_重写图片上传控制类">16.5.8 OSS 封装工具类的使用 &#8594; 重写图片上传控制类</h5>
 <div class="paragraph">
-<p>使用 http 测试上传图片:<br>
+<p>使用 httpie 测试上传图片:<br>
 http -f POST <a href="http://localhost:8080/upload" class="bare">http://localhost:8080/upload</a> image@/Users/swot/Downloads/uifaces-cartoon-image-8.jpg</p>
 </div>
 <div class="literalblock">
@@ -6286,7 +6285,7 @@ x-oss-storage-class: Standard</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_使用_value_注解从配置文件引入阿里云_oss_参数">使用 @Value 注解从配置文件引入阿里云 OSS 参数</h5>
+<h5 id="_16_5_9_使用_value_注解从配置文件引入阿里云_oss_参数">16.5.9 使用 @Value 注解从配置文件引入阿里云 OSS 参数</h5>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -6296,7 +6295,7 @@ x-oss-storage-class: Standard</pre>
 <p>为了不用在 AliOSSUtils.java 文件中硬编码配置，给 AliOssUtils 中的私有变量加 @Value 注解，以读取 application.properties 中的配置。</p>
 </li>
 <li>
-<p>测试上传</p>
+<p>httpie 测试上传</p>
 </li>
 </ol>
 </div>
@@ -6480,7 +6479,7 @@ private String bucketName;</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_application_ymlapplication_yaml_配置文件推荐替换_application_properties_配置文件">application.yml/application.yaml 配置文件(推荐替换 application.properties 配置文件)</h5>
+<h5 id="_16_5_10_application_ymlapplication_yaml_配置文件推荐替换_application_properties_配置文件">16.5.10 application.yml/application.yaml 配置文件(推荐替换 application.properties 配置文件)</h5>
 <div class="paragraph">
 <p>yml 文件语法</p>
 </div>
@@ -6493,7 +6492,7 @@ private String bucketName;</p>
 <p>值前边必须有空格，作为分隔符</p>
 </li>
 <li>
-<p>使用缩进表示层级关系，缩进时，不允许使用Tab键，只能用空格（idea中会自动将Tab转换为空格）</p>
+<p>使用缩进表示层级关系，缩进时，不允许使用 Tab 键，只能用空格（idea 中会自动将 Tab 转换为空格）</p>
 </li>
 <li>
 <p>缩进的空格数目不重要，只要相同层级的元素左侧对齐即可</p>
@@ -6588,7 +6587,7 @@ private String bucketName;</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_每个属性都写_value_太麻烦了使用_configurationproperties_直接匹配配置文件中的键">每个属性都写 @Value 太麻烦了，使用 @ConfigurationProperties 直接匹配配置文件中的键</h5>
+<h5 id="_16_5_11_每个属性都写_value_太麻烦了使用_configurationproperties_直接匹配配置文件中的键">16.5.11 每个属性都写 @Value 太麻烦了，使用 @ConfigurationProperties 直接匹配配置文件中的键</h5>
 <div class="sect5">
 <h6 id="_file_srcmainjavacomtjiseutilsaliossutils_java_3">file &#8594; src/main/java/com/tjise/utils/AliOSSUtils.java</h6>
 <div class="listingblock">
@@ -6641,7 +6640,7 @@ private String bucketName;</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_抽出一个类来解决多个类可能会共用相同属性问题">抽出一个类来解决多个类可能会共用相同属性问题</h5>
+<h5 id="_16_5_12_抽出一个类来解决多个类可能会共用相同属性问题">16.5.12 抽出一个类来解决多个类可能会共用相同属性问题</h5>
 <div class="sect5">
 <h6 id="_file_srcmainjavacomtjiseutilsaliossutilsproperties_java">file &#8594; src/main/java/com/tjise/utils/AliOSSUtilsProperties.java</h6>
 <div class="paragraph">
@@ -10974,7 +10973,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-23 09:40:11 +0800
+Last updated 2025-09-23 11:28:52 +0800
 </div>
 </div>
 </body>
