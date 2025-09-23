@@ -151,17 +151,19 @@ image::img/import_module_1.png[,640]
 ----
 
 === 4. 编写 application.properties
+
+
+==== file -> src/main/resources/application.properties
 [source,properties,linenums]
 ----
 # 配置文件行最后不能有空格
 spring.application.name=general-manager
 
-
 # --- 数据库 ---
 # 驱动类名称
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 # 数据库连接的 url
-spring.datasource.url=jdbc:mysql://localhost:3306/general_manager
+spring.datasource.url=jdbc:mysql://localhost:3307/general_manager
 # 连接数据库的用户名
 spring.datasource.username=root
 # 连接数据库的密码
@@ -2381,7 +2383,7 @@ public abstract void insertEmp(Emp emp);
 ==== 16.4 文件上传员工头像
 
 
-===== 文件上传接口信息描述
+===== 16.4.1 文件上传接口信息描述
 1. 基本信息
 
 * 请求路径：/upload
@@ -2423,14 +2425,14 @@ public abstract void insertEmp(Emp emp);
 }
 ----
 
-===== 文件上传至本地开发目录
+===== 16.4.2 文件上传至本地开发目录
 在 Spring Boot 中接收前端上传的图片并存储在可以通过 URL 访问的目录下。
 
 通常 ##不要## 将图片存储在 `src/main/resources/static` 目录下。这是因为 Spring Boot 默认会在重新编译后才能将 static 目录下的文件作为静态资源提供。也就是说需要重新启动开发环境才能在浏览器中访问上传的资源文件。这样在开发时很不方便，还有在服务器上部署以后，客户端上传的文件也不能实时更新。
 
 下面将前端上传的资源存储在指定的目录 UPLOAD_DIR 下，并且使用前缀 uploads 进行访问。
 
-====== @file src/main/java/com/tjise/controller/UploadController.java
+====== file -> src/main/java/com/tjise/controller/UploadController.java
 [source,java,linenums]
 ----
 package com.tjise.controller;
@@ -2467,7 +2469,7 @@ public class UploadController {
 }
 ----
 
-===== 文件上传目录映射（指本地目录映射成url前缀）
+===== 16.4.3 文件上传目录映射（指本地目录映射成url前缀）
 要想实现上传功能，需要定义一个 spring 的配置类，来指定将哪个目录映射成哪个前缀。
 如在 config 包中书写实现接口 WebMvcConfigurer 的类 MyMvcConfig.java。
 
@@ -2504,7 +2506,7 @@ public class UploadController {
 
 * 如果你把 `MyMvcConfig` 放到和启动类**平级或更外层**的包，例如 `com.other.config`，而又没手动 `@ComponentScan("com.other")`，就不会被扫描到。
 
-====== @file src/main/java/com/tjise/config/MyMvcConfig.java
+====== file -> src/main/java/com/tjise/config/MyMvcConfig.java
 [source,java]
 ----
 package com.tjise.config;
@@ -2528,7 +2530,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
 }
 ----
 
-===== 测试图片上传功能
+===== 16.4.4 测试图片上传功能
 1. 运行后台服务程序
 
 2. 使用 httpie 或者在网页中测试图片上传
@@ -2539,20 +2541,48 @@ public class MyMvcConfig implements WebMvcConfigurer {
 http -f POST :8080/upload image@/Users/swot/Downloads/xianni/1.jpg
 ----
 
-===== 文件上传大小限制
+===== 16.4.5 文件上传大小限制
 上传文件默认大小为 1M (1048576 bytes)，如果上传超限，则会报错:
 ....
 org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException: The field image exceeds its maximum permitted size of 1048576 bytes.
 ....
 
-在文件 src/main/resources/application.properties 中加入配置信息
-
+.在配置文件 application.properties 中加入配置信息
 [source,properties]
 ----
-#指定单个文件上传的大小，默认为 1M
+# 指定单个文件上传的大小，默认为 1M
 spring.servlet.multipart.max-file-size=10MB
 
-#指定单次请求上传文件的总大小
+# 指定单次请求上传文件的总大小
+spring.servlet.multipart.max-request-size=100MB
+----
+
+====== file -> src/main/resources/application.properties
+[source,properties,linenums]
+----
+# 配置文件行最后不能有空格
+spring.application.name=general-manager
+
+# --- 数据库 ---
+# 驱动类名称
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+# 数据库连接的 url
+spring.datasource.url=jdbc:mysql://localhost:3307/general_manager
+# 连接数据库的用户名
+spring.datasource.username=root
+# 连接数据库的密码
+spring.datasource.password=root
+
+# --- mybatis ---
+# 指定mybatis输出日志的位置, 输出控制台
+mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+#开启驼峰命名自动映射，即从经典数据库列名 a_column 映射到经典 Java 属性 名 aColumn。
+mybatis.configuration.map-underscore-to-camel-case=true
+
+# --- New Added ---
+# 指定单个文件上传的大小，默认为 1M
+spring.servlet.multipart.max-file-size=10MB
+# 指定单次请求上传文件的总大小
 spring.servlet.multipart.max-request-size=100MB
 ----
 
@@ -2560,7 +2590,7 @@ spring.servlet.multipart.max-request-size=100MB
 
 
 ===== 16.5.1 阿里云 OSS 简介
-​阿里云对象存储服务（Object Storage Service，简称OSS）为您提供基于网络的数据存取服务。使用OSS，您可以通过网络随时存储和调用包括文本、图片、音频和视频等在内的各种非结构化数据文件。
+​阿里云对象存储服务（Object Storage Service，简称OSS）为您提供基于网络的数据存取服务。使用 OSS，您可以通过网络随时存储和调用包括文本、图片、音频和视频等在内的各种非结构化数据文件。
 
 阿里云OSS将数据文件以对象（object）的形式上传到存储空间（bucket）中。
 
@@ -2577,7 +2607,10 @@ spring.servlet.multipart.max-request-size=100MB
 
 . 充值（有试用流量）
 
-. 开通OSS: 登录阿里云官网。将鼠标移至产品找到并单击对象存储OSS打开OSS产品详情页面。在OSS产品详情页中的单击立即开通。开通服务后，在OSS产品详情页面单击管理控制台直接进入OSS管理控制台界面。您也可以单击位于官网首页右上方菜单栏的控制台，进入阿里云管理控制台首页，然后单击左侧的对象存储OSS菜单进入 https://oss.console.aliyun.com/overview[OSS管理控制台界面]。
+. 开通OSS:
+    * 登录阿里云官网。将鼠标移至产品找到并单击对象存储 OSS 打开 OSS 产品详情页面。在 OSS 产品详情页中的单击立即开通。
+    * 开通服务后，在 OSS 产品详情页面单击管理控制台直接进入 OSS 管理控制台界面。
+    * 您也可以单击位于官网首页右上方菜单栏的控制台，进入阿里云管理控制台首页，然后单击左侧的对象存储OSS菜单进入 https://oss.console.aliyun.com/overview[OSS管理控制台界面]。
 
 . 创建存储空间
 * 新建 Bucket，自己命名 ，读写权限为**公共读**
@@ -2605,6 +2638,19 @@ https://help.aliyun.com/document_detail/32009.html?spm=a2c4g.11186623.6.919.7c26
     <version>3.15.1</version>
 </dependency>
 ```
+
+====== file -> pom.xml
+
+
+====== aliyun-sdk-oss
+[source,scss]
+....
+<dependency>
+    <groupId>com.aliyun.oss</groupId>
+    <artifactId>aliyun-sdk-oss</artifactId>
+    <version>3.15.1</version>
+</dependency>
+....
 
 ===== 16.5.5 OSS 明文文本密钥测试本地文件上传 -- 也叫静态凭证（仅用于测试环境）
 https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#bd4a905a056cr[静态凭证文档 2025-08-14 16:10:58]
@@ -2648,7 +2694,7 @@ import com.aliyun.oss.common.comm.SignVersion;
 ----
 // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
 String endpoint = "https://oss-cn-beijing.aliyuncs.com";
-String region = "cn-beijing";
+String region = "cn-beijing";  // 具体与 endpoint 不同的对应，请搜索 aliyun 官网
 
 // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
 // 在阿里云控制台左上角帐号下拉菜单中点击 「AccessKey管理」获取密钥
@@ -3047,7 +3093,7 @@ spring.application.name=general-manager
 # 驱动类名称
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 # 数据库连接的 url
-spring.datasource.url=jdbc:mysql://localhost:3306/general_manager
+spring.datasource.url=jdbc:mysql://localhost:3307/general_manager
 # 连接数据库的用户名
 spring.datasource.username=root
 # 连接数据库的密码
@@ -3171,7 +3217,7 @@ spring:
         name: mybatis_quickstart-crud
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/tjise
+        url: jdbc:mysql://localhost:3307/tjise
         username: root
         password: root
     servlet:
@@ -3332,7 +3378,7 @@ public class AliOSSUtils {
 ----
 
 ==== 16.6 查询单个员工
-根据ID查询基本信息
+根据 ID 查询基本信息
 
 * 请求路径：/emps/{id}
 * 请求方式：GET
@@ -5795,7 +5841,7 @@ spring:
         name: mybatis_quickstart-crud
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/tjise
+        url: jdbc:mysql://localhost:3307/tjise
         username: root
         password: root
     servlet:

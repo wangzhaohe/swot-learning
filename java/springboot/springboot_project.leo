@@ -291,19 +291,30 @@
 <v t="swot.20250814100225.1"><vh>16.5.1 阿里云 OSS 简介</vh></v>
 <v t="swot.20250814100303.1"><vh>16.5.2 阿里云 OSS 开通</vh></v>
 <v t="swot.20250814100308.1"><vh>16.5.3 获取访问密钥</vh></v>
-<v t="swot.20241105093916.1"><vh>16.5.4 引入阿里云 OSS 依赖</vh></v>
+<v t="swot.20241105093916.1"><vh>16.5.4 引入阿里云 OSS 依赖</vh>
+<v t="swot.20250923161826.1"><vh>file -&gt; pom.xml</vh>
+<v t="swot.20250923161826.2"><vh>@ignore-node project</vh>
+<v t="swot.20250923161826.3"><vh>@ignore-node dependencies</vh>
+<v t="swot.20250923161826.4"><vh>@ignore-node pom.xml 增加依赖 pagehelper</vh></v>
+<v t="swot.20250923161903.1"><vh>aliyun-sdk-oss</vh></v>
+</v>
+</v>
+</v>
+</v>
 <v t="swot.20241105094150.1"><vh>16.5.5 OSS 明文文本密钥测试本地文件上传 -- 也叫静态凭证（仅用于测试环境）</vh>
-<v t="swot.20250814174312.1"><vh>下面是在 main 函数中使用 OSSClientBuilder.create() 方式的测试 -- 最新方式</vh></v>
+<v t="swot.20250814174312.1"><vh>下面是在 main 函数中使用 OSSClientBuilder.create() 方式的测试 -- 最新方式</vh>
 <v t="swot.20250814164105.1"><vh>file -&gt; src/test/java/com/tjise/AkDemoTest.java</vh>
 <v t="swot.20250814164105.2"><vh>&lt;&lt; import &gt;&gt;</vh></v>
 <v t="swot.20250814164105.5"><vh>上传配置</vh></v>
 <v t="swot.20250814164105.6"><vh>开始上传</vh></v>
 </v>
-<v t="swot.20250814174404.1"><vh>下面是在 test 中使用 @Test 注解的 OSSClientBuilder().build() 方式的测试</vh></v>
+</v>
+<v t="swot.20250814174404.1"><vh>下面是在 test 中使用 @Test 注解的 OSSClientBuilder().build() 方式的测试</vh>
 <v t="swot.20250814145848.1"><vh>file -&gt; src/test/java/com/tjise/AliOssTest.java</vh>
 <v t="swot.20250814150336.1"><vh>&lt;&lt; import &gt;&gt;</vh></v>
 <v t="swot.20250814151117.1"><vh>上传配置</vh></v>
 <v t="swot.20250814151242.1"><vh>开始上传</vh></v>
+</v>
 </v>
 </v>
 <v t="swot.20241105141545.1"><vh>16.5.6 OSS 环境变量密钥测试本地文件上传 -- 适用于生产环境使用环境变量的情况</vh>
@@ -3144,7 +3155,7 @@ public void updateEmp(Emp emp);
 ```
 </t>
 <t tx="swot.20241230135844.2">@language asciidoc
-根据ID查询基本信息
+根据 ID 查询基本信息
 
 * 请求路径：/emps/{id}
 * 请求方式：GET
@@ -3346,7 +3357,7 @@ public Result getEmpById(@PathVariable Integer id) {
 
 http -v :8080/emps/20
 </t>
-<t tx="swot.20250814100225.1">​阿里云对象存储服务（Object Storage Service，简称OSS）为您提供基于网络的数据存取服务。使用OSS，您可以通过网络随时存储和调用包括文本、图片、音频和视频等在内的各种非结构化数据文件。
+<t tx="swot.20250814100225.1">​阿里云对象存储服务（Object Storage Service，简称OSS）为您提供基于网络的数据存取服务。使用 OSS，您可以通过网络随时存储和调用包括文本、图片、音频和视频等在内的各种非结构化数据文件。
 
 阿里云OSS将数据文件以对象（object）的形式上传到存储空间（bucket）中。
 
@@ -3362,7 +3373,10 @@ http -v :8080/emps/20
 
 . 充值（有试用流量）
 
-. 开通OSS: 登录阿里云官网。将鼠标移至产品找到并单击对象存储OSS打开OSS产品详情页面。在OSS产品详情页中的单击立即开通。开通服务后，在OSS产品详情页面单击管理控制台直接进入OSS管理控制台界面。您也可以单击位于官网首页右上方菜单栏的控制台，进入阿里云管理控制台首页，然后单击左侧的对象存储OSS菜单进入 https://oss.console.aliyun.com/overview[OSS管理控制台界面]。
+. 开通OSS:
+    * 登录阿里云官网。将鼠标移至产品找到并单击对象存储 OSS 打开 OSS 产品详情页面。在 OSS 产品详情页中的单击立即开通。
+    * 开通服务后，在 OSS 产品详情页面单击管理控制台直接进入 OSS 管理控制台界面。
+    * 您也可以单击位于官网首页右上方菜单栏的控制台，进入阿里云管理控制台首页，然后单击左侧的对象存储OSS菜单进入 https://oss.console.aliyun.com/overview[OSS管理控制台界面]。
 
 . 创建存储空间
 * 新建 Bucket，自己命名 ，读写权限为**公共读**
@@ -3516,7 +3530,7 @@ import com.aliyun.oss.common.comm.SignVersion;
 @c
 // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
 String endpoint = "https://oss-cn-beijing.aliyuncs.com";
-String region = "cn-beijing";
+String region = "cn-beijing";  // 具体与 endpoint 不同的对应，请搜索 aliyun 官网
 
 // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
 // 在阿里云控制台左上角帐号下拉菜单中点击 「AccessKey管理」获取密钥
@@ -11026,5 +11040,129 @@ spring.servlet.multipart.max-request-size=100MB
 @doc
 ----
 </t>
+<t tx="swot.20250923161826.1">@first &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+@language xml
+@others
+</t>
+<t tx="swot.20250923161826.2">&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+	&lt;parent&gt;
+		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+		&lt;version&gt;2.7.18&lt;/version&gt;
+		&lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+	&lt;/parent&gt;
+	&lt;groupId&gt;com.tjise&lt;/groupId&gt;
+	&lt;artifactId&gt;general-manager&lt;/artifactId&gt;
+	&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+	&lt;name&gt;general-manager&lt;/name&gt;
+	&lt;description&gt;project for general-manager&lt;/description&gt;
+	&lt;url/&gt;
+	&lt;licenses&gt;
+		&lt;license/&gt;
+	&lt;/licenses&gt;
+	&lt;developers&gt;
+		&lt;developer/&gt;
+	&lt;/developers&gt;
+	&lt;scm&gt;
+		&lt;connection/&gt;
+		&lt;developerConnection/&gt;
+		&lt;tag/&gt;
+		&lt;url/&gt;
+	&lt;/scm&gt;
+	&lt;properties&gt;
+		&lt;java.version&gt;1.8&lt;/java.version&gt;
+	&lt;/properties&gt;
+ @others
+	&lt;build&gt;
+		&lt;plugins&gt;
+			&lt;plugin&gt;
+				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+				&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+				&lt;configuration&gt;
+					&lt;annotationProcessorPaths&gt;
+						&lt;path&gt;
+							&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+							&lt;artifactId&gt;lombok&lt;/artifactId&gt;
+						&lt;/path&gt;
+					&lt;/annotationProcessorPaths&gt;
+				&lt;/configuration&gt;
+			&lt;/plugin&gt;
+			&lt;plugin&gt;
+				&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+				&lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+				&lt;configuration&gt;
+					&lt;excludes&gt;
+						&lt;exclude&gt;
+							&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+							&lt;artifactId&gt;lombok&lt;/artifactId&gt;
+						&lt;/exclude&gt;
+					&lt;/excludes&gt;
+				&lt;/configuration&gt;
+			&lt;/plugin&gt;
+		&lt;/plugins&gt;
+	&lt;/build&gt;
+
+&lt;/project&gt;
+</t>
+<t tx="swot.20250923161826.3">&lt;dependencies&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+		&lt;version&gt;2.3.0&lt;/version&gt;
+	&lt;/dependency&gt;
+
+	&lt;dependency&gt;
+		&lt;groupId&gt;com.mysql&lt;/groupId&gt;
+		&lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+		&lt;scope&gt;runtime&lt;/scope&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+		&lt;artifactId&gt;lombok&lt;/artifactId&gt;
+		&lt;optional&gt;true&lt;/optional&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+		&lt;scope&gt;test&lt;/scope&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;mybatis-spring-boot-starter-test&lt;/artifactId&gt;
+		&lt;version&gt;2.3.0&lt;/version&gt;
+		&lt;scope&gt;test&lt;/scope&gt;
+	&lt;/dependency&gt;
+ @others
+&lt;/dependencies&gt;
+</t>
+<t tx="swot.20250923161826.4">@doc
+```xml
+@c
+&lt;dependency&gt;
+    &lt;groupId&gt;com.github.pagehelper&lt;/groupId&gt;
+    &lt;artifactId&gt;pagehelper-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;1.4.2&lt;/version&gt;
+&lt;/dependency&gt;
+@doc
+```
+</t>
+<t tx="swot.20250923161903.1">@doc
+[source,scss]
+....
+@c
+@language xml
+&lt;dependency&gt;
+    &lt;groupId&gt;com.aliyun.oss&lt;/groupId&gt;
+    &lt;artifactId&gt;aliyun-sdk-oss&lt;/artifactId&gt;
+    &lt;version&gt;3.15.1&lt;/version&gt;
+&lt;/dependency&gt;
+@doc
+....</t>
 </tnodes>
 </leo_file>
