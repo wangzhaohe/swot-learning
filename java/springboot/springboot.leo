@@ -7110,7 +7110,7 @@ http GET https://httpbin.org/get \
   sort=="desc"
 ----
 </t>
-<t tx="swot.20250910141841.1">使用 `@` 符号。
+<t tx="swot.20250910141841.1">使用 `-f` 和 `@` 符号。
 
 [source,bash]
 ----
