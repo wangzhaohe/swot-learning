@@ -1984,7 +1984,6 @@ public abstract List<Emp> list(
 ====== file -> src/main/resources/com/tjise/mapper/empMapper.xml
 
 
-====== EmpMapper.xml -> 动态SQL
 [source,scss]
 ....
 <!DOCTYPE mapper
@@ -1992,25 +1991,21 @@ public abstract List<Emp> list(
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.tjise.mapper.EmpMapper">
-
   <select id="list" resultType="com.tjise.pojo.Emp">
         select * from emp
         <where>
             <if test="name != null">
                 name like concat('%', #{name}, '%')
             </if>
-
             <if test="gender != null">
                 and gender = #{gender}
             </if>
-
             <if test="begin != null and end != null">
                 and entrydate between #{begin} and #{end}
             </if>
         </where>
         order by update_time desc
   </select>
-
 </mapper>
 ....
 
@@ -3396,6 +3391,8 @@ public class AliOSSUtils {
 
 请求参数样例：`/emps/1`
 
+***
+
 响应数据
 
 参数格式：application/json
@@ -3453,8 +3450,7 @@ public Result getEmpById(@PathVariable Integer id) {
 }
 ----
 
-测试
-
+测试:
 http -v :8080/emps/20
 
 ===== 查询单个员工 EmpService
@@ -3581,7 +3577,7 @@ public void updateEmp(Emp emp);
     UPDATE emp
     <!-- 自动加 set，自动去除多余的逗号 -->
     <set>
-        <!--                             数据库字段名    Emp 成员变量名 -->
+        <!--        Emp 成员变量名         数据库字段名    Emp 成员变量名 -->
         <if test = "username!=null">     username    = #{username}  , </if>
         <if test = "name != null">       name        = #{name}      , </if>
         <if test = "gender != null">     gender      = #{gender}    , </if>
@@ -3605,12 +3601,13 @@ public void updateEmp(Emp emp);
 [horizontal]
 请求路径:: `/login`
 请求方式:: `POST`
-接口描述:: 该接口用于员工登录 Tlias 智能学习辅助系统，登录完毕后，系统下发 JWT 令牌。
+接口描述:: 该接口用于员工登录系统，登录成功后，系统下发 JWT 令牌。
 
 [discrete]
 ===== 请求参数
 
-*参数格式*： `application/json`
+[horizontal]
+参数格式:: `application/json`
 
 .参数说明
 [cols="1,1,1,3", options="header"]
@@ -3656,7 +3653,7 @@ public void updateEmp(Emp emp);
 [discrete]
 ===== 备注说明
 
-用户登录成功后，系统会自动下发 JWT 令牌，然后在后续的每次请求中，都需要在请求头（header）中携带到服务端，请求头的名称为 `token`，值为登录时下发的 JWT 令牌。
+用户登录成功后，系统会自动下发 JWT 令牌，然后在后续的每次请求中，都需要在请求头 header 中携带到服务端，请求头的名称为 `token`，值为登录时下发的 JWT 令牌。
 
 如果检测到用户未登录，则会返回如下固定错误信息：
 
@@ -3670,10 +3667,10 @@ public void updateEmp(Emp emp);
 ----
 
 ==== httpie 测试
-成功测试: +
+成功测试::
 http -v :8080/login username=limuwan password=123456
 
-失败测试: +
+失败测试::
 http -v :8080/login username=xxxxxx password=123456
 
 ==== 创建后端登录代码
@@ -3684,6 +3681,7 @@ http -v :8080/login username=xxxxxx password=123456
 ----
 @RestController
 public class LoginController {
+
     @Autowired
     private EmpService empService;
 
@@ -3691,8 +3689,8 @@ public class LoginController {
     public Result login(@RequestBody Emp emp) {
         Emp e = empService.login(emp);  // 去数据库验证
         return e == null
-                    ? Result.error("用户名或密码有误")
-                    : Result.success();
+               ? Result.error("用户名或密码有误")
+               : Result.success();
     }
 }
 ----
@@ -3763,7 +3761,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
 
 * 第一部分：Header(头）， 作用：记录令牌类型、签名算法等。 例如：{"alg":"HS256","type","JWT}
 * 第二部分：Payload(有效载荷），作用：携带一些用户信息及过期时间等。 例如：{“id":"1","username":“Tom"}
-* 第三部分：Signature(签名），作用：防止Token被篡改、确保安全性。 理解：计算出来的签名，一个字符串
+* 第三部分：Signature(签名），作用：防止Token被篡改、确保安全性。 理解：计算出来的签名，一个字符串。
 
 ==== pom.xml 新增依赖 JWT
 参考网址: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api/0.12.6
@@ -3834,7 +3832,7 @@ public void generateJwt() {
 }
 ----
 
-====== parseJwt() 测试解析 JWT
+====== parseJwt()    测试解析 JWT
 [source,java]
 ----
 @Test
@@ -3848,7 +3846,8 @@ public void parseJwt() {
                 .build();
 
         // 3. 解析 generateJwt() 生成的 JWT 并返回载荷
-        Jws<Claims> jws = parser.parseSignedClaims("eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJsaW11d2FuIiwiZXhwIjoxNzU1MzM5OTczfQ.2uL_v-lYN_SpOxNTlQN8LRVrRtWgThsTZ2RaJFx7Dak");
+        Jws<Claims> jws = parser.parseSignedClaims(
+            "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJsaW11d2FuIiwiZXhwIjoxNzU1MzM5OTczfQ.2uL_v-lYN_SpOxNTlQN8LRVrRtWgThsTZ2RaJFx7Dak");
         Claims payload = jws.getPayload();// 就是以前版本的 getBody() 方法
         System.out.println(payload);
 
@@ -3964,7 +3963,7 @@ public class LoginController {
 ----
 
 使用 httpie 测试登录::    
-`http -v post http://localhost:8080/login username=limuwan password=123456`
+http -v post http://localhost:8080/login username=limuwan password=123456
 
 === 18. 统一拦截（二选一）
 统一拦截可以把对资源的请求拦截下来，从而实现一些特殊的处理。比如：登陆鉴权、统一编码处理、敏感字符处理等。

@@ -209,7 +209,7 @@
 </v>
 </v>
 <v t="swot.20250922120350.1"><vh>file -&gt; src/main/resources/com/tjise/mapper/empMapper.xml</vh>
-<v t="swot.20241104141008.1"><vh>EmpMapper.xml -&gt; 动态SQL</vh></v>
+<v t="swot.20241104141008.1"><vh>@no-head mapper</vh></v>
 </v>
 </v>
 <v t="swot.20250818122756.1"><vh>测试查询员工列表</vh></v>
@@ -370,7 +370,7 @@
 <v t="swot.20250816112818.1"><vh>@ignore-node import</vh></v>
 <v t="swot.20250816112852.1" descendentVnodeUnknownAttributes="7d71005803000000302e3171017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b02580a000000707269736574646174657106580a000000323032352d30392d3037710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67710d580700000072656c50617468710e580d000000636c656f2f707269322e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>@ignore-node public interface EmpService</vh>
 <v t="swot.20250817004231.1"><vh>@ignore-tree</vh>
-<v t="swot.20250816113055.1"><vh>PageBean</vh></v>
+<v t="swot.20250816113055.1"><vh>selectPage</vh></v>
 <v t="swot.20250816113051.1"><vh>deleteEmpByIds</vh></v>
 <v t="swot.20250816113047.1"><vh>insertEmp</vh></v>
 <v t="swot.20250816113044.1"><vh>getEmpById</vh></v>
@@ -418,7 +418,7 @@
 <v t="swot.20250816185036.1"><vh>@ignore-node import</vh></v>
 <v t="swot.20250816185106.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d30392d3037710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755803000000302e3171197d711a285808000000616e6e6f74617465711b7d711c2858080000007072696f72697479711d4b02580a00000070726973657464617465711e580a000000323032352d30392d3037711f75580500000069636f6e7371205d71217d712228680b680c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e677123680e580d000000636c656f2f707269322e706e6771246810681168124b0068134b0268144b016815681668176818756175752e"><vh>@no-head public class JWTTest</vh>
 <v t="swot.20250816185206.1" descendentVnodeUnknownAttributes="7d710058010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d30392d3037710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>generateJwt() 测试创建 JWT</vh></v>
-<v t="swot.20250816185148.1" descendentVnodeUnknownAttributes="7d710058010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b02580a000000707269736574646174657106580a000000323032352d30392d3037710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67710d580700000072656c50617468710e580d000000636c656f2f707269322e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>parseJwt() 测试解析 JWT</vh></v>
+<v t="swot.20250816185148.1" descendentVnodeUnknownAttributes="7d710058010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b02580a000000707269736574646174657106580a000000323032352d30392d3037710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67710d580700000072656c50617468710e580d000000636c656f2f707269322e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>parseJwt()    测试解析 JWT</vh></v>
 </v>
 </v>
 </v>
@@ -850,28 +850,6 @@
 </v>
 </v>
 </v>
-<v t="swot.20241030092402.1"><vh>@path spring-boot-ketang/general-manager</vh>
-<v t="swot.20241031213124.1"><vh>@path src/main/java/com/tjise</vh>
-<v t="swot.20241031090121.1"><vh>员工三层架构</vh>
-<v t="swot.20241031090121.2"><vh>file -&gt; controller/EmpController.java</vh>
-<v t="swot.20241031090121.3"><vh>EmpController</vh>
-<v t="swot.20241104151251.1"><vh>分页多条件查询</vh></v>
-<v t="swot.20241104154954.1"><vh>删除员工 EmpController</vh></v>
-<v t="swot.20241104160558.1"><vh>新增员工 EmpController</vh></v>
-<v t="swot.20241230150625.1"></v>
-<v t="swot.20241230135844.8"></v>
-</v>
-</v>
-</v>
-</v>
-<v t="swot.20241104152114.1"><vh>@path src/main/resources/com/tjise</vh>
-<v t="swot.20241104151942.1"><vh>file -&gt; mapper/empMapper.xml</vh>
-<v t="swot.20241104155642.1"><vh>多条件查询</vh></v>
-<v t="swot.20241104155607.1"><vh>删除员工 EmpMapper.xml</vh></v>
-<v t="swot.20241230135844.12"></v>
-</v>
-</v>
-</v>
 </vnodes>
 <tnodes>
 <t tx="swot.20241030090345.2">@language asciidoc
@@ -907,7 +885,6 @@
 &lt;/script&gt;
 ++++
 </t>
-<t tx="swot.20241030092402.1"></t>
 <t tx="swot.20241030092905.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032342d31322d33307103752e">@language asciidoc
 使用 https://start.spring.io/ 创建 Spring Boot 工程 (后面会将该工程作为模块导入到整体项目 spring-boot-ketang 中)，如下所示。
 
@@ -1082,40 +1059,6 @@ INSERT INTO emp
 </t>
 <t tx="swot.20241031083548.1"></t>
 <t tx="swot.20241031083703.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032342d31302d33317103752e"></t>
-<t tx="swot.20241031090121.1"></t>
-<t tx="swot.20241031090121.2">@language java
-@others
-</t>
-<t tx="swot.20241031090121.3">@language java
-@doc
-.src/main/java/com/tjise/controller/EmpController.java
-[source,java,linenums]
-----
-@c
-package com.tjise.controller;
-
-import com.tjise.pojo.Emp;
-import com.tjise.pojo.PageBean;
-import com.tjise.pojo.Result;
-import com.tjise.service.EmpService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
-
-@RestController
-@RequestMapping("/emps")
-public class EmpController {
-
-    @Autowired
-    private EmpService empService;
-    @others
-}
-@doc
-----
-</t>
 <t tx="swot.20241031090121.4" _mod_time="4741da2840fa0c97552e">@language java
 @others
 </t>
@@ -1397,7 +1340,6 @@ public interface DeptService {
 @doc
 ----
 </t>
-<t tx="swot.20241031213124.1"></t>
 <t tx="swot.20241031215505.1">@language java
 @doc
 [source,java,linenums]
@@ -2123,40 +2065,24 @@ public abstract List&lt;Emp&gt; list(
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;
 
 &lt;mapper namespace="com.tjise.mapper.EmpMapper"&gt;
-
   &lt;select id="list" resultType="com.tjise.pojo.Emp"&gt;
         select * from emp
         &lt;where&gt;
             &lt;if test="name != null"&gt;
                 name like concat('%', #{name}, '%')
             &lt;/if&gt;
-
             &lt;if test="gender != null"&gt;
                 and gender = #{gender}
             &lt;/if&gt;
-
             &lt;if test="begin != null and end != null"&gt;
                 and entrydate between #{begin} and #{end}
             &lt;/if&gt;
         &lt;/where&gt;
         order by update_time desc
   &lt;/select&gt;
-
 &lt;/mapper&gt;
 @doc
 ....
-</t>
-<t tx="swot.20241104151251.1">@GetMapping
-public Result selectPage(@RequestParam(defaultValue = "1") Integer page,
-                         @RequestParam(defaultValue = "10") Integer pageSize,
-                         String name,
-                         Short gender,
-                         @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
-                         @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
-                         ) {
-    PageBean pageBean = empService.selectPage(page, pageSize, name, gender, begin, end);
-    return Result.success(pageBean);
-}
 </t>
 <t tx="swot.20241104151414.1">@Override
 public PageBean selectPage(Integer page, Integer pageSize, String name, Short gender, LocalDate begin, LocalDate end) {
@@ -2176,23 +2102,6 @@ public PageBean selectPage(Integer page, Integer pageSize, String name, Short ge
     return new PageBean(p.getTotal(), p.getResult());
 }
 </t>
-<t tx="swot.20241104151942.1">@first &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
-@language xml
-@doc
-.&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
-```xml
-@c
-&lt;!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;
-
-&lt;mapper namespace="com.tjise.mapper.EmpMapper"&gt;
-    @others
-&lt;/mapper&gt;
-@doc
-```
-</t>
-<t tx="swot.20241104152114.1"></t>
 <t tx="swot.20241104152455.1">@language asciidoc
 批量删除员工包含删除**一条和多条**记录的功能。
 
@@ -2445,19 +2354,6 @@ public abstract void insertEmp(Emp emp);
 ----
 
 </t>
-<t tx="swot.20241104154954.1">@language java
-@doc
-[source,java,linenums]
-----
-@c
-@DeleteMapping("/{ids}")
-public Result deleteEmp(@PathVariable List&lt;Integer&gt; ids) {
-    empService.deleteEmpByIds(ids);
-    return Result.success();
-}
-@doc
-----
-</t>
 <t tx="swot.20241104155215.1">@language java
 @doc
 [source,java,linenums]
@@ -2469,54 +2365,6 @@ public void deleteEmpByIds(List&lt;Integer&gt; ids) {
 }
 @doc
 ----
-</t>
-<t tx="swot.20241104155607.1">@language java
-@doc
-sql: delete from emp where id in (1, 2, 3);
-
-
-```
-@c
-&lt;delete id="deleteEmpByIds"&gt;
-    delete from emp where id in
-    &lt;foreach collection="ids" item="id" open="(" close=")" separator=","&gt;
-        #{id}
-    &lt;/foreach&gt;
-&lt;/delete&gt;
-@doc
-```
-</t>
-<t tx="swot.20241104155642.1">&lt;select id="list" resultType="com.tjise.pojo.Emp"&gt;
-    select * from emp
-    &lt;where&gt;
-        &lt;if test="name != null"&gt;
-            name like concat('%', #{name}, '%')
-        &lt;/if&gt;
-
-        &lt;if test="gender != null"&gt;
-            and gender = #{gender}
-        &lt;/if&gt;
-
-        &lt;if test="begin != null and end != null"&gt;
-            and entrydate between #{begin} and #{end}
-        &lt;/if&gt;
-    &lt;/where&gt;
-    order by update_time desc
-&lt;/select&gt;
-</t>
-<t tx="swot.20241104160558.1">@language java
-@doc
-[source,java,linenums]
-----
-@c
-@PostMapping
-public Result insertEmp(@RequestBody Emp emp){
-    empService.insertEmp(emp);
-    return Result.success();
-}
-@doc
-----
-
 </t>
 <t tx="swot.20241104160622.1">@language java
 @doc
@@ -3139,7 +2987,7 @@ public void updateEmp(Emp emp);
     UPDATE emp
     &lt;!-- 自动加 set，自动去除多余的逗号 --&gt;
     &lt;set&gt;
-        &lt;!--                             数据库字段名    Emp 成员变量名 --&gt;
+        &lt;!--        Emp 成员变量名         数据库字段名    Emp 成员变量名 --&gt;
         &lt;if test = "username!=null"&gt;     username    = #{username}  , &lt;/if&gt;
         &lt;if test = "name != null"&gt;       name        = #{name}      , &lt;/if&gt;
         &lt;if test = "gender != null"&gt;     gender      = #{gender}    , &lt;/if&gt;
@@ -3172,6 +3020,8 @@ public void updateEmp(Emp emp);
 |===
 
 请求参数样例：`/emps/1`
+
+***
 
 响应数据
 
@@ -3353,8 +3203,7 @@ public Result getEmpById(@PathVariable Integer id) {
 @doc
 ----
 
-测试
-
+测试:
 http -v :8080/emps/20
 </t>
 <t tx="swot.20250814100225.1">​阿里云对象存储服务（Object Storage Service，简称OSS）为您提供基于网络的数据存取服务。使用 OSS，您可以通过网络随时存储和调用包括文本、图片、音频和视频等在内的各种非结构化数据文件。
@@ -3862,6 +3711,7 @@ public class AliOSSUtils {
 @others
 @RestController
 public class LoginController {
+
     @Autowired
     private EmpService empService;
 
@@ -3869,8 +3719,8 @@ public class LoginController {
     public Result login(@RequestBody Emp emp) {
         Emp e = empService.login(emp);  // 去数据库验证
         return e == null
-                    ? Result.error("用户名或密码有误")
-                    : Result.success();
+               ? Result.error("用户名或密码有误")
+               : Result.success();
     }
 }
 @doc
@@ -3883,12 +3733,13 @@ public class LoginController {
 [horizontal]
 请求路径:: `/login`
 请求方式:: `POST`
-接口描述:: 该接口用于员工登录 Tlias 智能学习辅助系统，登录完毕后，系统下发 JWT 令牌。
+接口描述:: 该接口用于员工登录系统，登录成功后，系统下发 JWT 令牌。
 
 [discrete]
 ===== 请求参数
 
-*参数格式*： `application/json`
+[horizontal]
+参数格式:: `application/json`
 
 .参数说明
 [cols="1,1,1,3", options="header"]
@@ -3934,7 +3785,7 @@ public class LoginController {
 [discrete]
 ===== 备注说明
 
-用户登录成功后，系统会自动下发 JWT 令牌，然后在后续的每次请求中，都需要在请求头（header）中携带到服务端，请求头的名称为 `token`，值为登录时下发的 JWT 令牌。
+用户登录成功后，系统会自动下发 JWT 令牌，然后在后续的每次请求中，都需要在请求头 header 中携带到服务端，请求头的名称为 `token`，值为登录时下发的 JWT 令牌。
 
 如果检测到用户未登录，则会返回如下固定错误信息：
 
@@ -3947,10 +3798,10 @@ public class LoginController {
 }
 ----
 </t>
-<t tx="swot.20250816104037.1">成功测试: +
+<t tx="swot.20250816104037.1">成功测试::
 http -v :8080/login username=limuwan password=123456
 
-失败测试: +
+失败测试::
 http -v :8080/login username=xxxxxx password=123456
 </t>
 <t tx="swot.20250816112818.1">package com.tjise.service;
@@ -3979,8 +3830,14 @@ import java.util.List;
 <t tx="swot.20250816113051.1">void deleteEmpByIds(List&lt;Integer&gt; ids);
 
 </t>
-<t tx="swot.20250816113055.1">PageBean selectPage(Integer page, Integer pageSize, String name, Short gender, LocalDate begin, LocalDate end);
-
+<t tx="swot.20250816113055.1">public abstract PageBean selectPage(
+    Integer page,
+    Integer pageSize,
+    String name,
+    Short gender,
+    LocalDate begin,
+    LocalDate end
+);
 </t>
 <t tx="swot.20250816113556.1" annotate="7d71002858080000007072696f7269747971014b03580a000000707269736574646174657102580a000000323032352d30392d30377103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269332e706e677104580700000072656c506174687105580d000000636c656f2f707269332e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e">@language java
 @doc
@@ -4177,8 +4034,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
 
 * 第一部分：Header(头）， 作用：记录令牌类型、签名算法等。 例如：{"alg":"HS256","type","JWT}
 * 第二部分：Payload(有效载荷），作用：携带一些用户信息及过期时间等。 例如：{“id":"1","username":“Tom"}
-* 第三部分：Signature(签名），作用：防止Token被篡改、确保安全性。 理解：计算出来的签名，一个字符串
-
+* 第三部分：Signature(签名），作用：防止Token被篡改、确保安全性。 理解：计算出来的签名，一个字符串。
 </t>
 <t tx="swot.20250816164303.1">@first &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 @language xml
@@ -4263,7 +4119,6 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
 &lt;/dependency&gt;
 @doc
 ----
-
 </t>
 <t tx="swot.20250816184821.1"></t>
 <t tx="swot.20250816184928.1">@language java
@@ -4316,7 +4171,8 @@ public void parseJwt() {
                 .build();
 
         // 3. 解析 generateJwt() 生成的 JWT 并返回载荷
-        Jws&lt;Claims&gt; jws = parser.parseSignedClaims("eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJsaW11d2FuIiwiZXhwIjoxNzU1MzM5OTczfQ.2uL_v-lYN_SpOxNTlQN8LRVrRtWgThsTZ2RaJFx7Dak");
+        Jws&lt;Claims&gt; jws = parser.parseSignedClaims(
+            "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJsaW11d2FuIiwiZXhwIjoxNzU1MzM5OTczfQ.2uL_v-lYN_SpOxNTlQN8LRVrRtWgThsTZ2RaJFx7Dak");
         Claims payload = jws.getPayload();// 就是以前版本的 getBody() 方法
         System.out.println(payload);
 
@@ -4539,7 +4395,7 @@ public class LoginController {
 ----
 
 使用 httpie 测试登录::    
-`http -v post http://localhost:8080/login username=limuwan password=123456`
+http -v post http://localhost:8080/login username=limuwan password=123456
 </t>
 <t tx="swot.20250817004231.1">@others
 </t>
