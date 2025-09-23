@@ -14,7 +14,9 @@
 </v>
 <v t="swot.20241030094455.1"><vh>2. 导入自己创建的 Spring Boot 模块</vh></v>
 <v t="swot.20241030095306.1"><vh>3. 检查所有依赖版本</vh></v>
-<v t="swot.20241105150027.1"><vh>4. 编写 application.properties</vh></v>
+<v t="swot.20241105150027.1"><vh>4. 编写 application.properties</vh>
+<v t="swot.20250923132711.1"><vh>file -&gt; src/main/resources/application.properties</vh></v>
+</v>
 <v t="swot.20241030103609.1"><vh>5. 创建数据库 general_manager</vh></v>
 <v t="swot.20241030104304.1"><vh>6. 创建数据库表 dept 并插入数据</vh></v>
 <v t="swot.20241030142345.1"><vh>7. 创建数据库表 emp  并插入数据</vh></v>
@@ -273,15 +275,17 @@
 </v>
 </v>
 <v t="swot.20241105083144.1"><vh>16.4 文件上传员工头像</vh>
-<v t="swot.20241105083205.1"><vh>文件上传接口信息描述</vh></v>
-<v t="swot.20241105083521.1"><vh>文件上传至本地开发目录</vh>
-<v t="swot.20241105083957.1"><vh>@file src/main/java/com/tjise/controller/UploadController.java</vh></v>
+<v t="swot.20241105083205.1"><vh>16.4.1 文件上传接口信息描述</vh></v>
+<v t="swot.20241105083521.1"><vh>16.4.2 文件上传至本地开发目录</vh>
+<v t="swot.20241105083957.1"><vh>file -&gt; src/main/java/com/tjise/controller/UploadController.java</vh></v>
 </v>
-<v t="swot.20241105084910.1"><vh>文件上传目录映射（指本地目录映射成url前缀）</vh>
-<v t="swot.20241105084957.1"><vh>@file src/main/java/com/tjise/config/MyMvcConfig.java</vh></v>
+<v t="swot.20241105084910.1"><vh>16.4.3 文件上传目录映射（指本地目录映射成url前缀）</vh>
+<v t="swot.20241105084957.1"><vh>file -&gt; src/main/java/com/tjise/config/MyMvcConfig.java</vh></v>
 </v>
-<v t="swot.20241105090209.1"><vh>测试图片上传功能</vh></v>
-<v t="swot.20241105091218.1"><vh>文件上传大小限制</vh></v>
+<v t="swot.20241105090209.1"><vh>16.4.4 测试图片上传功能</vh></v>
+<v t="swot.20241105091218.1"><vh>16.4.5 文件上传大小限制</vh>
+<v t="swot.20250923133256.1"><vh>file -&gt; src/main/resources/application.properties</vh></v>
+</v>
 </v>
 <v t="swot.20241105092914.1" descendentVnodeUnknownAttributes="7d7100285805000000302e362e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d3135710775735805000000302e382e3071087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30382d3135710e75735807000000302e382e302e30710f7d7110285808000000616e6e6f7461746571117d71122858080000007072696f7269747971134b01580a000000707269736574646174657114580a000000323032352d30392d3039711575580500000069636f6e7371165d71177d7118285804000000747970657119580400000066696c65711a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67711b580700000072656c50617468711c580d000000636c656f2f707269312e706e67711d58050000007768657265711e580e0000006265666f7265486561646c696e65711f5807000000796f666673657471204b005807000000786f666673657471214b0258040000007870616471224b0158020000006f6e71235805000000766e6f646571245808000000636c656f49636f6e712558010000003171267561755807000000302e382e312e3071277d7128285808000000616e6e6f7461746571297d712a2858080000007072696f72697479712b4b02580a00000070726973657464617465712c580a000000323032352d30392d3039712d75580500000069636f6e73712e5d712f7d7130286819681a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e677131681c580d000000636c656f2f707269322e706e677132681e681f68204b0068214b0268224b0168236824682568267561755805000000302e392e3071337d7134285808000000616e6e6f7461746571357d71362858080000007072696f7269747971374b03580a000000707269736574646174657138580a000000323032352d30392d3039713975580500000069636f6e73713a5d713b7d713c286819681a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269332e706e67713d681c580d000000636c656f2f707269332e706e67713e681e681f68204b0068214b0268224b0168236824682568267561755806000000302e31302e30713f7d7140285808000000616e6e6f7461746571417d71422858080000007072696f7269747971434b04580a000000707269736574646174657144580a000000323032352d30392d3039714575580500000069636f6e7371465d71477d7148286819681a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269342e706e677149681c580d000000636c656f2f707269342e706e67714a681e681f68204b0068214b0268224b0168236824682568267561755804000000302e3131714b7d714c5808000000616e6e6f74617465714d7d714e2858080000007072696f72697479714f4d0f27580a000000707269736574646174657150580a000000323032352d30382d3135715175735806000000302e31312e3071527d7153285808000000616e6e6f7461746571547d71552858080000007072696f7269747971564b05580a000000707269736574646174657157580a000000323032352d30392d3039715875580500000069636f6e7371595d715a7d715b286819681a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269352e706e67715c681c580d000000636c656f2f707269352e706e67715d681e681f68204b0068214b0268224b0168236824682568267561755806000000302e31312e31715e7d715f285808000000616e6e6f7461746571607d71612858080000007072696f7269747971624b06580a000000707269736574646174657163580a000000323032352d30392d3039716475580500000069636f6e7371655d71667d7167286819681a681a58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269362e706e677168681c580d000000636c656f2f707269362e706e677169681e681f68204b0068214b0268224b016823682468256826756175752e"><vh>16.5 文件上传至阿里云 OSS</vh>
 <v t="swot.20250814100225.1"><vh>16.5.1 阿里云 OSS 简介</vh></v>
@@ -967,7 +971,7 @@ spring.application.name=general-manager
 # 驱动类名称
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 # 数据库连接的 url
-spring.datasource.url=jdbc:mysql://localhost:3306/general_manager
+spring.datasource.url=jdbc:mysql://localhost:3307/general_manager
 # 连接数据库的用户名
 spring.datasource.username=root
 # 连接数据库的密码
@@ -2568,6 +2572,46 @@ public void insertEmp(Emp emp){
 
 下面将前端上传的资源存储在指定的目录 UPLOAD_DIR 下，并且使用前缀 uploads 进行访问。
 </t>
+<t tx="swot.20241105083957.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.controller;
+
+import com.tjise.pojo.Result;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
+@RestController
+public class UploadController {
+    // 别忘记创建目录: mkdir uploads
+    private static final String UPLOAD_DIR = "/Users/swot/swot-learning/java/springboot/spring-boot-ketang/general-manager/uploads/";
+
+    @PostMapping("/upload")
+    public Result upload(@RequestParam("image") MultipartFile image) throws IOException {
+        // 可以使用 IDEA 的 debug 模式查看变量
+        String filename = image.getOriginalFilename();  // 获取上传的文件名
+        String[] names = filename.split("\\.");         // 以点切割文件名
+        // \\. 中的第一个 \ 是为了让 Java 编译器理解这是一个反斜杠
+        // \\. 中的第二个 \ 则是在正则表达式中表示字面量的点
+        String extName = names[names.length - 1];       // 获取文件扩展名
+        UUID randomString = UUID.randomUUID();          // 生成随机字符串
+        String randomFilename  = randomString + "." + extName;
+        image.transferTo(new File(UPLOAD_DIR, randomFilename));
+        // 前缀路由 uploads 参节点配置内容
+        return Result.success("http://localhost:8080/uploads/" + randomFilename);
+    }
+}
+@doc
+----
+</t>
 <t tx="swot.20241105084910.1">@language asciidoc
 要想实现上传功能，需要定义一个 spring 的配置类，来指定将哪个目录映射成哪个前缀。
 如在 config 包中书写实现接口 WebMvcConfigurer 的类 MyMvcConfig.java。
@@ -2604,6 +2648,33 @@ public void insertEmp(Emp emp){
 * 只要你没改 `@SpringBootApplication` 的扫描路径，也没在启动类上加额外的 `@ComponentScan(excludeFilters=...)`，放在 `com.tjise.config` 里的 `MyMvcConfig` 天然就会被自动注册。  
 
 * 如果你把 `MyMvcConfig` 放到和启动类**平级或更外层**的包，例如 `com.other.config`，而又没手动 `@ComponentScan("com.other")`，就不会被扫描到。
+</t>
+<t tx="swot.20241105084957.1">@language java
+@doc
+[source,java]
+----
+@c
+package com.tjise.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+// 此注解表明该类是 Spring 配置类。Spring 会自动扫描并注册该类，使其可以作为应用上下文的一部分。
+@Configuration
+public class MyMvcConfig implements WebMvcConfigurer {
+    // WebMvcConfigurer 是一个接口，允许用户自定义 Spring MVC 的配置。通过实现这个接口，你可以覆盖默认配置或添加自定义配置。
+
+    // 配置虚拟路径映射访问
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // 映射图片保存地址
+        registry.addResourceHandler("/uploads/**")  // 增加 url 前缀
+                .addResourceLocations("file:/Users/swot/swot-learning/java/springboot/spring-boot-ketang/general-manager/uploads/");  // 获取图片的路径
+    }
+}
+@doc
+----
 </t>
 <t tx="swot.20241105085808.1">@language java
 @doc
@@ -2657,17 +2728,15 @@ http -f POST :8080/upload image@/Users/swot/Downloads/xianni/1.jpg
 org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException: The field image exceeds its maximum permitted size of 1048576 bytes.
 ....
 
-在文件 src/main/resources/application.properties 中加入配置信息
-
+.在配置文件 application.properties 中加入配置信息
 [source,properties]
 ----
-#指定单个文件上传的大小，默认为 1M
+# 指定单个文件上传的大小，默认为 1M
 spring.servlet.multipart.max-file-size=10MB
 
-#指定单次请求上传文件的总大小
+# 指定单次请求上传文件的总大小
 spring.servlet.multipart.max-request-size=100MB
 ----
-
 </t>
 <t tx="swot.20241105092914.1"></t>
 <t tx="swot.20241105093916.1">https://help.aliyun.com/document_detail/32009.html?spm=a2c4g.11186623.6.919.7c264562C2Fjfs[参考文档官方]
@@ -2833,33 +2902,7 @@ public class AliOSSUtils {
 @doc
 ----
 </t>
-<t tx="swot.20241105150027.1">@language python
-@doc
-[source,properties,linenums]
-----
-@c
-# 配置文件行最后不能有空格
-spring.application.name=general-manager
-
-
-# --- 数据库 ---
-# 驱动类名称
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-# 数据库连接的 url
-spring.datasource.url=jdbc:mysql://localhost:3306/general_manager
-# 连接数据库的用户名
-spring.datasource.username=root
-# 连接数据库的密码
-spring.datasource.password=root
-
-# --- mybatis ---
-# 指定mybatis输出日志的位置, 输出控制台
-mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
-#开启驼峰命名自动映射，即从经典数据库列名 a_column 映射到经典 Java 属性 名 aColumn。
-mybatis.configuration.map-underscore-to-camel-case=true
-@doc
-----
-</t>
+<t tx="swot.20241105150027.1"></t>
 <t tx="swot.20241105150535.1">yml 文件语法
 
 * 大小写敏感
@@ -2896,7 +2939,7 @@ spring:
         name: mybatis_quickstart-crud
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/tjise
+        url: jdbc:mysql://localhost:3307/tjise
         username: root
         password: root
     servlet:
@@ -5681,7 +5724,7 @@ aliyun:
         name: mybatis_quickstart-crud
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/tjise
+        url: jdbc:mysql://localhost:3307/tjise
         username: root
         password: root
     servlet:
@@ -8542,7 +8585,7 @@ spring:
         name: mybatis_quickstart-crud
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/tjise
+        url: jdbc:mysql://localhost:3307/tjise
         username: root
         password: root
     servlet:
@@ -10924,6 +10967,64 @@ public abstract void deleteEmpByIds(List&lt;Integer&gt; ids);
 @doc
 ----
 
+</t>
+<t tx="swot.20250923132711.1">@language python
+@doc
+[source,properties,linenums]
+----
+@c
+# 配置文件行最后不能有空格
+spring.application.name=general-manager
+
+# --- 数据库 ---
+# 驱动类名称
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+# 数据库连接的 url
+spring.datasource.url=jdbc:mysql://localhost:3307/general_manager
+# 连接数据库的用户名
+spring.datasource.username=root
+# 连接数据库的密码
+spring.datasource.password=root
+
+# --- mybatis ---
+# 指定mybatis输出日志的位置, 输出控制台
+mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+#开启驼峰命名自动映射，即从经典数据库列名 a_column 映射到经典 Java 属性 名 aColumn。
+mybatis.configuration.map-underscore-to-camel-case=true
+@doc
+----
+</t>
+<t tx="swot.20250923133256.1">@language python
+@doc
+[source,properties,linenums]
+----
+@c
+# 配置文件行最后不能有空格
+spring.application.name=general-manager
+
+# --- 数据库 ---
+# 驱动类名称
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+# 数据库连接的 url
+spring.datasource.url=jdbc:mysql://localhost:3307/general_manager
+# 连接数据库的用户名
+spring.datasource.username=root
+# 连接数据库的密码
+spring.datasource.password=root
+
+# --- mybatis ---
+# 指定mybatis输出日志的位置, 输出控制台
+mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+#开启驼峰命名自动映射，即从经典数据库列名 a_column 映射到经典 Java 属性 名 aColumn。
+mybatis.configuration.map-underscore-to-camel-case=true
+
+# --- New Added ---
+# 指定单个文件上传的大小，默认为 1M
+spring.servlet.multipart.max-file-size=10MB
+# 指定单次请求上传文件的总大小
+spring.servlet.multipart.max-request-size=100MB
+@doc
+----
 </t>
 </tnodes>
 </leo_file>
