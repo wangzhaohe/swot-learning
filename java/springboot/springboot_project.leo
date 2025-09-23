@@ -244,10 +244,33 @@
 </v>
 </v>
 <v t="swot.20241104152833.1"><vh>16.3 新增员工</vh>
-<v t="swot.20241104152833.2"><vh>新增员工 EmpController</vh></v>
-<v t="swot.20241104152833.3"><vh>新增员工 EmpService</vh></v>
-<v t="swot.20241104152833.4"><vh>新增员工 EmpServiceImpl</vh></v>
-<v t="swot.20241104152833.5"><vh>新增员工 EmpMapper</vh></v>
+<v t="swot.20250923082847.1"><vh>file -&gt; src/main/java/com/tjise/controller/EmpController.java</vh>
+<v t="swot.20250923082847.2"><vh>@ignore-node selectPage</vh></v>
+<v t="swot.20250923082847.3"><vh>@ignore-node deleteEmp</vh></v>
+<v t="swot.20241104152833.2"><vh>insertEmp</vh></v>
+</v>
+<v t="swot.20250923083327.1"><vh>file -&gt; src/main/java/com/tjise/service/EmpService.java</vh>
+<v t="swot.20250923083327.2"><vh>@ignore-node selectPage</vh></v>
+<v t="swot.20250923083327.3"><vh>@ignore-node deleteEmpByIds</vh></v>
+<v t="swot.20241104152833.3"><vh>insertEmp</vh></v>
+</v>
+<v t="swot.20250923083510.1"><vh>file -&gt; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</vh>
+<v t="swot.20250923083510.2"><vh>@ignore-node import</vh></v>
+<v t="swot.20250923083510.3"><vh>@ignore-node class EmpServiceImpl</vh>
+<v t="swot.20250923083510.4"><vh>@ignore-node selectPage 多条件查询传递多个参数</vh></v>
+<v t="swot.20250923083510.5"><vh>@ignore-node deleteEmpByIds</vh></v>
+<v t="swot.20241104152833.4"><vh>insertEmp</vh></v>
+</v>
+</v>
+<v t="swot.20250923084213.1"><vh>file -&gt; src/main/java/com/tjise/mapper/EmpMapper.java</vh>
+<v t="swot.20250923084213.2"><vh>@ignore-node import</vh></v>
+<v t="swot.20250923084213.3"><vh>@ignore-node interface EmpMapper</vh>
+<v t="swot.20250923084213.4"><vh>@ignore-node selectCount &amp; selectpage</vh></v>
+<v t="swot.20250923084213.5"><vh>@ignore-node list 多条件查询传递多个参数</vh></v>
+<v t="swot.20250923084213.6"><vh>@ignore-node deleteEmpByIds</vh></v>
+<v t="swot.20241104152833.5"><vh>insertEmp</vh></v>
+</v>
+</v>
 </v>
 <v t="swot.20241105083144.1"><vh>16.4 文件上传员工头像</vh>
 <v t="swot.20241105083205.1"><vh>文件上传接口信息描述</vh></v>
@@ -266,20 +289,20 @@
 <v t="swot.20250814100308.1"><vh>获取访问密钥</vh></v>
 <v t="swot.20241105093916.1"><vh>引入阿里云 OSS 依赖</vh></v>
 <v t="swot.20241105094150.1"><vh>OSS 明文文本密钥测试本地文件上传 -- 也叫静态凭证（仅用于测试环境）</vh>
-<v t="swot.20250814174312.1"><vh>下面是有 main 函数使用 OSSClientBuilder.create() 方式测试 -- 最新方式</vh></v>
+<v t="swot.20250814174312.1"><vh>下面是在 main 函数中使用 OSSClientBuilder.create() 方式的测试 -- 最新方式</vh></v>
 <v t="swot.20250814164105.1"><vh>file -&gt; src/test/java/com/tjise/AkDemoTest.java</vh>
 <v t="swot.20250814164105.2"><vh>&lt;&lt; import &gt;&gt;</vh></v>
 <v t="swot.20250814164105.5"><vh>上传配置</vh></v>
 <v t="swot.20250814164105.6"><vh>开始上传</vh></v>
 </v>
-<v t="swot.20250814174404.1"><vh>下面是有 @Test 注解使用 OSSClientBuilder().build() 方式测试</vh></v>
+<v t="swot.20250814174404.1"><vh>下面是在 test 中使用 @Test 注解的 OSSClientBuilder().build() 方式的测试</vh></v>
 <v t="swot.20250814145848.1"><vh>file -&gt; src/test/java/com/tjise/AliOssTest.java</vh>
 <v t="swot.20250814150336.1"><vh>&lt;&lt; import &gt;&gt;</vh></v>
 <v t="swot.20250814151117.1"><vh>上传配置</vh></v>
 <v t="swot.20250814151242.1"><vh>开始上传</vh></v>
 </v>
 </v>
-<v t="swot.20241105141545.1"><vh>OSS 环境变量密钥测试本地文件上传（适用于生产环境使用环境变量的情况）</vh>
+<v t="swot.20241105141545.1"><vh>OSS 环境变量密钥测试本地文件上传 -- 适用于生产环境使用环境变量的情况</vh>
 <v t="swot.20250814182908.1"><vh>file -&gt; src/test/java/com/tjise/AliOssEnvTest.java</vh></v>
 </v>
 <v t="swot.20241105143814.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d313571077573732e"><vh>OSS 封装工具类</vh>
@@ -2299,7 +2322,7 @@ IMPORTANT: item 的值要和 #{} 中的值一样！
 | username  | string | 必须     | 用户名
 | name      | string | 必须     | 姓名
 | gender    | number | 必须     | 性别, 说明: 1 男, 2 女
-| image     | string | 非必须   | 图像
+| image     | string | 非必须   | 头像
 | deptId    | number | 非必须   | 部门id
 | entrydate | string | 非必须   | 入职日期
 | job       | number | 非必须   | 职位, 说明: 1 班主任,2 讲师, 3 学工主管, 4 教研主管, 5 咨询师
@@ -2340,6 +2363,22 @@ IMPORTANT: item 的值要和 #{} 中的值一样！
     "data":null
 }
 ```
+
+测试新增员工 api
+
+* 在浏览器的管理端进行新增员工测试。
+* 使用 httpie 进行 post 测试。
+[source, console]
+----
+http POST :8080/emps \
+  image='' \
+  username='wanglin' \
+  name='王林' \
+  gender:=1 \
+  job:=1 \
+  entrydate='2025-09-23' \
+  deptId:=16
+----
 </t>
 <t tx="swot.20241104152833.2">@language java
 @doc
@@ -2371,7 +2410,7 @@ void insertEmp(Emp emp);
 @c
 @Override
 public void insertEmp(Emp emp){
-    // 补全属性
+    // 业务逻辑补全属性
     emp.setCreateTime(LocalDateTime.now());
     emp.setUpdateTime(LocalDateTime.now());
     empMapper.insertEmp(emp);
@@ -2385,7 +2424,7 @@ public void insertEmp(Emp emp){
 ----
 @c
 @Insert("insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time) " +
-        "values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entryDate}, #{deptId}, #{createTime}, #{updateTime})")
+        "values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptId}, #{createTime}, #{updateTime})")
 public abstract void insertEmp(Emp emp);
 @doc
 ----
@@ -2710,11 +2749,12 @@ spring.servlet.multipart.max-request-size=100MB
 &lt;/dependency&gt;
 ```
 </t>
-<t tx="swot.20241105094150.1">https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&amp;scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#bd4a905a056cr[静态凭证 2025-08-14 16:10:58]
+<t tx="swot.20241105094150.1">https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&amp;scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#bd4a905a056cr[静态凭证文档 2025-08-14 16:10:58]
 </t>
 <t tx="swot.20241105141545.1">@language asciidoc
 https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&amp;scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#9c8e8849706wp[配置访问凭证]
-在操作系统中导出两个环境变量，分别是:
+
+.在操作系统中导出两个环境变量，分别是:
 
 ```shell
 # 设置阿里云 OSS 这是 macos 的设置，其他操作系统参考上面官方文档
@@ -10716,6 +10756,242 @@ public abstract List&lt;Emp&gt; list(
       &lt;/where&gt;
       order by update_time desc
 &lt;/select&gt;
+</t>
+<t tx="swot.20250923082847.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.controller;
+
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import com.tjise.pojo.Result;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/emps")
+public class EmpController {
+    @Autowired
+    private EmpService empService;
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250923082847.2">@doc
+.多条件分页查询
+[source,java,linenums]
+----
+@c
+@language java
+/* @RequestParam(default) 设置默认值
+   若不设默认值，且前端又没传递参数 page 和 pageSize
+   则在 service 层对 page 做运算时会报空值异常(NullPointerException) */
+@GetMapping
+public Result selectPage(
+        @RequestParam(defaultValue="1")  Integer page,
+        @RequestParam(defaultValue="10") Integer pageSize,
+        // 多传递了 4 个参数
+        String name,
+        Short gender,
+        @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+        @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
+{
+    // 打印看是否可以取到前端传递的参数，也可以使用 IDEA debug 模式查看
+    System.out.printf(
+        "page=%s, pageSize=%s, name=%s, gender=%s, begin=%s, end=%s%n",
+         page, pageSize, name, gender, begin, end);
+
+    PageBean pageBean = empService.selectPage(
+                        page, pageSize, name, gender, begin, end);
+    return Result.success(pageBean);
+}
+@doc
+----
+</t>
+<t tx="swot.20250923082847.3">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@DeleteMapping("/{ids}")
+public Result deleteEmp(@PathVariable List&lt;Integer&gt; ids) {
+    empService.deleteEmpByIds(ids);
+    return Result.success();
+}
+@doc
+----
+</t>
+<t tx="swot.20250923083327.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.service;
+
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import java.time.LocalDate;
+import java.util.List;
+
+public interface EmpService {
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250923083327.2">public abstract PageBean selectPage(
+        Integer page,
+        Integer pageSize,
+        String name,
+        Short gender,
+        LocalDate begin,
+        LocalDate end);
+</t>
+<t tx="swot.20250923083327.3">@language java
+@doc
+[source,java,linenums]
+----
+@c
+void deleteEmpByIds(List&lt;Integer&gt; ids);
+@doc
+----
+
+</t>
+<t tx="swot.20250923083510.1">@language java
+@others
+</t>
+<t tx="swot.20250923083510.2">package com.tjise.service.impl;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+</t>
+<t tx="swot.20250923083510.3">@doc
+[source,java,linenums]
+----
+@c
+@Service  // 把该类的对象交给 IOC 容器管理
+public class EmpServiceImpl implements EmpService {
+    @Autowired
+    private EmpMapper empMapper;
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250923083510.4">@doc
+[source,java,linenums]
+----
+@c
+@language java
+@Override
+public PageBean selectPage(Integer page,
+                           Integer pageSize,
+                           String name,
+                           Short gender,
+                           LocalDate begin,
+                           LocalDate end)
+{
+    // 设置分页查询参数 pageNum: 页码, pageSize: 每页显示数量
+    PageHelper.startPage(page, pageSize);   // 紧跟着的第一个select方法会被分页
+    List&lt;Emp&gt; empList = empMapper.list(name, gender, begin, end);   // 执行查询
+    Page&lt;Emp&gt; p = (Page&lt;Emp&gt;) empList;      // 获取分页结果，将 empList 转成 Page 类型
+
+    // 封装成 PageBean 对象返回
+    return new PageBean(p.getTotal(), p.getResult());
+}
+@doc
+----
+
+&lt;1&gt; 必须紧跟着！！！
+&lt;2&gt; PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
+</t>
+<t tx="swot.20250923083510.5">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@Override
+public void deleteEmpByIds(List&lt;Integer&gt; ids) {
+    empMapper.deleteEmpByIds(ids);
+}
+@doc
+----
+</t>
+<t tx="swot.20250923084213.1">@language java
+@others
+</t>
+<t tx="swot.20250923084213.2">package com.tjise.mapper;
+
+import com.tjise.pojo.Emp;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.time.LocalDate;
+import java.util.List;
+</t>
+<t tx="swot.20250923084213.3">@Mapper
+public interface EmpMapper {
+    @others
+}
+</t>
+<t tx="swot.20250923084213.4">@doc
+[source,java,linenums]
+----
+@c
+@language java
+// 查询记录总数
+@Select("select count(*) from emp")
+public abstract Long selectCount();
+
+// 查询分页数据
+@Select("select * from emp LIMIT #{offset}, #{pageSize}")
+public abstract List&lt;Emp&gt; selectPage(int offset, Integer pageSize);
+@doc
+----
+</t>
+<t tx="swot.20250923084213.5">@language java
+@doc
+[source,java,linenums]
+----
+@c
+// 使用 PageHelper 并配合条件查询，使用 xml 动态 sql 来实现
+public abstract List&lt;Emp&gt; list(
+        String name,
+        Short gender,
+        LocalDate begin,
+        LocalDate end
+);
+@doc
+----
+</t>
+<t tx="swot.20250923084213.6">@language java
+@doc
+[source,java,linenums]
+----
+@c
+public abstract void deleteEmpByIds(List&lt;Integer&gt; ids);
+@doc
+----
+
 </t>
 </tnodes>
 </leo_file>

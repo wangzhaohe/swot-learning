@@ -2238,7 +2238,7 @@ IMPORTANT: item 的值要和 #{} 中的值一样！
 | username  | string | 必须     | 用户名
 | name      | string | 必须     | 姓名
 | gender    | number | 必须     | 性别, 说明: 1 男, 2 女
-| image     | string | 非必须   | 图像
+| image     | string | 非必须   | 头像
 | deptId    | number | 非必须   | 部门id
 | entrydate | string | 非必须   | 入职日期
 | job       | number | 非必须   | 职位, 说明: 1 班主任,2 讲师, 3 学工主管, 4 教研主管, 5 咨询师
@@ -2280,7 +2280,48 @@ IMPORTANT: item 的值要和 #{} 中的值一样！
 }
 ```
 
-===== 新增员工 EmpController
+测试新增员工 api
+
+* 在浏览器的管理端进行新增员工测试。
+* 使用 httpie 进行 post 测试。
+[source, console]
+----
+http POST :8080/emps \
+  image='' \
+  username='wanglin' \
+  name='王林' \
+  gender:=1 \
+  job:=1 \
+  entrydate='2025-09-23' \
+  deptId:=16
+----
+
+===== file -> src/main/java/com/tjise/controller/EmpController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import com.tjise.pojo.Result;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/emps")
+public class EmpController {
+    @Autowired
+    private EmpService empService;
+    @others
+}
+----
+
+====== insertEmp
 [source,java,linenums]
 ----
 @PostMapping
@@ -2290,29 +2331,50 @@ public Result insertEmp(@RequestBody Emp emp){
 }
 ----
 
-===== 新增员工 EmpService
+===== file -> src/main/java/com/tjise/service/EmpService.java
+[source,java,linenums]
+----
+package com.tjise.service;
+
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import java.time.LocalDate;
+import java.util.List;
+
+public interface EmpService {
+    @others
+}
+----
+
+====== insertEmp
 [source,java,linenums]
 ----
 void insertEmp(Emp emp);
 ----
 
-===== 新增员工 EmpServiceImpl
+===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== insertEmp
 [source,java,linenums]
 ----
 @Override
 public void insertEmp(Emp emp){
-    // 补全属性
+    // 业务逻辑补全属性
     emp.setCreateTime(LocalDateTime.now());
     emp.setUpdateTime(LocalDateTime.now());
     empMapper.insertEmp(emp);
 }
 ----
 
-===== 新增员工 EmpMapper
+===== file -> src/main/java/com/tjise/mapper/EmpMapper.java
+
+
+====== insertEmp
 [source,java,linenums]
 ----
 @Insert("insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time) " +
-        "values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entryDate}, #{deptId}, #{createTime}, #{updateTime})")
+        "values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptId}, #{createTime}, #{updateTime})")
 public abstract void insertEmp(Emp emp);
 ----
 
@@ -2361,51 +2423,6 @@ public abstract void insertEmp(Emp emp);
 }
 ----
 
-===== 文件上传至本地开发目录
-在 Spring Boot 中接收前端上传的图片并存储在可以通过 URL 访问的目录下。
-
-通常 ##不要## 将图片存储在 `src/main/resources/static` 目录下。这是因为 Spring Boot 默认会在重新编译后才能将 static 目录下的文件作为静态资源提供。也就是说需要重新启动开发环境才能在浏览器中访问上传的资源文件。这样在开发时很不方便，还有在服务器上部署以后，客户端上传的文件也不能实时更新。
-
-下面将前端上传的资源存储在指定的目录 UPLOAD_DIR 下，并且使用前缀 uploads 进行访问。
-
-===== file -> src/main/java/com/tjise/controller/UploadController.java
-[source,java,linenums]
-----
-package com.tjise.controller;
-
-import com.tjise.pojo.Result;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
-
-
-@RestController
-public class UploadController {
-
-    // mkdir uploads
-    private static final String UPLOAD_DIR = "/Users/swot/swot-learn/java/springboot/spring-boot-ketang/general-manager/uploads/";
-
-    @PostMapping("/upload")
-    public Result upload(@RequestParam("image") MultipartFile image) throws IOException {
-        String filename = image.getOriginalFilename();  // 获取上传的文件名
-        String[] names = filename.split("\\.");         // 以点切割文件名
-        // \\. 中的第一个 \ 是为了让 Java 编译器理解这是一个反斜杠
-        // \\. 中的第二个 \ 则是在正则表达式中表示字面量的点
-        String extName = names[names.length - 1];       // 获取文件扩展名
-        UUID randomString = UUID.randomUUID();
-        String randomFilename  = randomString + "." + extName;
-        image.transferTo(new File(UPLOAD_DIR, randomFilename));
-        // 前缀 uploads 参后面配置内容
-        return Result.success("http://localhost:8080/uploads/" + randomFilename);
-    }
-}
-----
-
 ===== 文件上传目录映射
 要想实现上述功能，还需要定义一个 spring 的配置类，来指定将哪个目录映射成哪个前缀。
 如在 config 包中书写实现接口 WebMvcConfigurer 的类 MyMvcConfig.java。
@@ -2443,7 +2460,7 @@ public class UploadController {
 
 * 如果你把 `MyMvcConfig` 放到和启动类**平级或更外层**的包，例如 `com.other.config`，而又没手动 `@ComponentScan("com.other")`，就不会被扫描到。
 
-===== file -> src/main/java/com/tjise/config/MyMvcConfig.java
+====== file -> src/main/java/com/tjise/config/MyMvcConfig.java
 [source,java]
 ----
 package com.tjise.config;
@@ -2467,10 +2484,61 @@ public class MyMvcConfig implements WebMvcConfigurer {
 }
 ----
 
+===== 文件上传至本地开发目录
+在 Spring Boot 中接收前端上传的图片并存储在可以通过 URL 访问的目录下。
+
+通常 ##不要## 将图片存储在 `src/main/resources/static` 目录下。这是因为 Spring Boot 默认会在重新编译后才能将 static 目录下的文件作为静态资源提供。也就是说需要重新启动开发环境才能在浏览器中访问上传的资源文件。这样在开发时很不方便，还有在服务器上部署以后，客户端上传的文件也不能实时更新。
+
+下面将前端上传的资源存储在指定的目录 UPLOAD_DIR 下，并且使用前缀 uploads 进行访问。
+
+====== file -> src/main/java/com/tjise/controller/UploadController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Result;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
+@RestController
+public class UploadController {
+    // mkdir uploads
+    private static final String UPLOAD_DIR = "/Users/swot/swot-learning/java/springboot/spring-boot-ketang/general-manager/uploads/";
+
+    @PostMapping("/upload")
+    public Result upload(@RequestParam("image") MultipartFile image) throws IOException {
+        // 可以使用 IDEA 的 debug 模式查看变量
+        String filename = image.getOriginalFilename();  // 获取上传的文件名
+        String[] names = filename.split("\\.");         // 以点切割文件名
+        // \\. 中的第一个 \ 是为了让 Java 编译器理解这是一个反斜杠
+        // \\. 中的第二个 \ 则是在正则表达式中表示字面量的点
+        String extName = names[names.length - 1];       // 获取文件扩展名
+        UUID randomString = UUID.randomUUID();
+        String randomFilename  = randomString + "." + extName;
+        image.transferTo(new File(UPLOAD_DIR, randomFilename));
+        // 前缀路由 uploads 参上面配置内容
+        return Result.success("http://localhost:8080/uploads/" + randomFilename);
+    }
+}
+----
+
 ===== 测试图片上传功能
 1. 运行后台服务程序
 
-2. 使用 postman 或者在网页中测试图片上传
+2. 使用 httpie 或者在网页中测试图片上传
++
+.上传单个文件
+[source, console]
+----
+http POST https://httpbin.org/post \
+     file@/path/to/file.jpg
+----
 
 ===== 文件上传大小限制
 上传文件默认大小为 1M (1048576 bytes)，如果上传超限，则会报错:
@@ -2513,7 +2581,7 @@ spring.servlet.multipart.max-request-size=100MB
 . 开通OSS: 登录阿里云官网。将鼠标移至产品找到并单击对象存储OSS打开OSS产品详情页面。在OSS产品详情页中的单击立即开通。开通服务后，在OSS产品详情页面单击管理控制台直接进入OSS管理控制台界面。您也可以单击位于官网首页右上方菜单栏的控制台，进入阿里云管理控制台首页，然后单击左侧的对象存储OSS菜单进入 https://oss.console.aliyun.com/overview[OSS管理控制台界面]。
 
 . 创建存储空间
-* 新建Bucket，自己命名 ，读写权限为**公共读**
+* 新建 Bucket，自己命名 ，读写权限为**公共读**
 +
 [.thumb]
 image::img/aliyun_oss_create_bucket0.png[]
@@ -2540,9 +2608,9 @@ https://help.aliyun.com/document_detail/32009.html?spm=a2c4g.11186623.6.919.7c26
 ```
 
 ===== OSS 明文文本密钥测试本地文件上传 -- 也叫静态凭证（仅用于测试环境）
-https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#bd4a905a056cr[静态凭证 2025-08-14 16:10:58]
+https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#bd4a905a056cr[静态凭证文档 2025-08-14 16:10:58]
 
-====== 下面是有 main 函数使用 OSSClientBuilder.create() 方式测试 -- 最新方式
+====== 下面是在 main 函数中使用 OSSClientBuilder.create() 方式的测试 -- 最新方式
 
 
 ====== file -> src/test/java/com/tjise/AkDemoTest.java
@@ -2601,7 +2669,7 @@ String filePath= "/Users/swot/Downloads/xianni/1.jpg";
 // 使用DefaultCredentialProvider方法直接设置AK和SK
 CredentialsProvider credentialsProvider = new DefaultCredentialProvider(accessKeyId, accessKeySecret);
 
-// 使用credentialsProvider初始化客户端
+// 创建配置
 ClientBuilderConfiguration clientBuilderConfiguration = new ClientBuilderConfiguration();
 // 显式声明使用 V4 签名算法
 clientBuilderConfiguration.setSignatureVersion(SignVersion.V4);  
@@ -2641,7 +2709,7 @@ try {
 }
 ----
 
-====== 下面是有 @Test 注解使用 OSSClientBuilder().build() 方式测试
+====== 下面是在 test 中使用 @Test 注解的 OSSClientBuilder().build() 方式的测试
 
 
 ====== file -> src/test/java/com/tjise/AliOssTest.java
@@ -2692,7 +2760,7 @@ String objectName = "xian_ni_01.jpg";
 // 如果未指定本地路径，则默认从示例程序所属项目对应本地路径中上传文件流。
 String filePath= "/Users/swot/Downloads/xianni/1.jpg";
 
-// 创建OSSClient实例。
+// 创建 OSSClient 实例
 OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 ----
 
@@ -2722,9 +2790,10 @@ try {
 }
 ----
 
-===== OSS 环境变量密钥测试本地文件上传（适用于生产环境使用环境变量的情况）
+===== OSS 环境变量密钥测试本地文件上传 -- 适用于生产环境使用环境变量的情况
 https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#9c8e8849706wp[配置访问凭证]
-在操作系统中导出两个环境变量，分别是:
+
+.在操作系统中导出两个环境变量，分别是:
 
 ```shell
 # 设置阿里云 OSS 这是 macos 的设置，其他操作系统参考上面官方文档

@@ -1,5 +1,5 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250922161251.1: * @file src/main/java/com/tjise/controller/EmpController.java
+//@+node:swot.20250923082847.1: * @file src/main/java/com/tjise/controller/EmpController.java
 //@@language java
 //@+doc
 // [source,java,linenums]
@@ -7,6 +7,7 @@
 //@@c
 package com.tjise.controller;
 
+import com.tjise.pojo.Emp;
 import com.tjise.pojo.PageBean;
 import com.tjise.pojo.Result;
 import com.tjise.service.EmpService;
@@ -23,7 +24,7 @@ public class EmpController {
     @Autowired
     private EmpService empService;
     //@+others
-    //@+node:swot.20250922161251.2: ** @ignore-node selectPage
+    //@+node:swot.20250923082847.2: ** @ignore-node selectPage
     //@+doc
     // .多条件分页查询
     // [source,java,linenums]
@@ -54,7 +55,7 @@ public class EmpController {
     }
     //@+doc
     // ----
-    //@+node:swot.20241104152539.1: ** deleteEmp
+    //@+node:swot.20250923082847.3: ** @ignore-node deleteEmp
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -63,6 +64,19 @@ public class EmpController {
     @DeleteMapping("/{ids}")
     public Result deleteEmp(@PathVariable List<Integer> ids) {
         empService.deleteEmpByIds(ids);
+        return Result.success();
+    }
+    //@+doc
+    // ----
+    //@+node:swot.20241104152833.2: ** insertEmp
+    //@@language java
+    //@+doc
+    // [source,java,linenums]
+    // ----
+    //@@c
+    @PostMapping
+    public Result insertEmp(@RequestBody Emp emp){
+        empService.insertEmp(emp);
         return Result.success();
     }
     //@+doc

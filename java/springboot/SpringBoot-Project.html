@@ -5065,7 +5065,7 @@ item 的值要和 #{} 中的值一样！
 <td class="tableblock halign-left valign-top"><p class="tableblock">image</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">非必须</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">图像</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">头像</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">deptId</p></td>
@@ -5170,8 +5170,79 @@ item 的值要和 #{} 中的值一样！
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>测试新增员工 api</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>在浏览器的管理端进行新增员工测试。</p>
+</li>
+<li>
+<p>使用 httpie 进行 post 测试。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>http POST :8080/emps \
+  image='' \
+  username='wanglin' \
+  name='王林' \
+  gender:=1 \
+  job:=1 \
+  entrydate='2025-09-23' \
+  deptId:=16</pre>
+</div>
+</div>
 <div class="sect4">
-<h5 id="_新增员工_empcontroller">新增员工 EmpController</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerempcontroller_java_5">file &#8594; src/main/java/com/tjise/controller/EmpController.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Emp</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.PageBean</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Result</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.EmpService</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.format.annotation.DateTimeFormat</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.*</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.time.LocalDate</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@RestController</span>
+<span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/emps&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">EmpController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">EmpService</span><span class="tok-w"> </span><span class="tok-n">empService</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_insertemp">insertEmp</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -5187,8 +5258,35 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_新增员工_empservice">新增员工 EmpService</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_5">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Emp</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.PageBean</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.time.LocalDate</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">EmpService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_insertemp_2">insertEmp</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertEmp</span><span class="tok-p">(</span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-n">emp</span><span class="tok-p">);</span>
@@ -5196,8 +5294,11 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_新增员工_empserviceimpl">新增员工 EmpServiceImpl</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<div class="sect5">
+<h6 id="_insertemp_3">insertEmp</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -5208,7 +5309,7 @@ item 的值要和 #{} 中的值一样！
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertEmp</span><span class="tok-p">(</span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-n">emp</span><span class="tok-p">){</span>
-<span class="tok-w">    </span><span class="tok-c1">// 补全属性</span>
+<span class="tok-w">    </span><span class="tok-c1">// 业务逻辑补全属性</span>
 <span class="tok-w">    </span><span class="tok-n">emp</span><span class="tok-p">.</span><span class="tok-na">setCreateTime</span><span class="tok-p">(</span><span class="tok-n">LocalDateTime</span><span class="tok-p">.</span><span class="tok-na">now</span><span class="tok-p">());</span>
 <span class="tok-w">    </span><span class="tok-n">emp</span><span class="tok-p">.</span><span class="tok-na">setUpdateTime</span><span class="tok-p">(</span><span class="tok-n">LocalDateTime</span><span class="tok-p">.</span><span class="tok-na">now</span><span class="tok-p">());</span>
 <span class="tok-w">    </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">insertEmp</span><span class="tok-p">(</span><span class="tok-n">emp</span><span class="tok-p">);</span>
@@ -5217,16 +5318,20 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_新增员工_empmapper">新增员工 EmpMapper</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_6">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<div class="sect5">
+<h6 id="_insertemp_4">insertEmp</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Insert</span><span class="tok-p">(</span><span class="tok-s">&quot;insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time) &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
-<span class="tok-w">        </span><span class="tok-s">&quot;values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entryDate}, #{deptId}, #{createTime}, #{updateTime})&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-s">&quot;values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptId}, #{createTime}, #{updateTime})&quot;</span><span class="tok-p">)</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertEmp</span><span class="tok-p">(</span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-n">emp</span><span class="tok-p">);</span>
 </pre></div></td></tr></table></div></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -5358,91 +5463,6 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect4">
-<h5 id="_文件上传至本地开发目录">文件上传至本地开发目录</h5>
-<div class="paragraph">
-<p>在 Spring Boot 中接收前端上传的图片并存储在可以通过 URL 访问的目录下。</p>
-</div>
-<div class="paragraph">
-<p>通常 <mark>不要</mark> 将图片存储在 <code>src/main/resources/static</code> 目录下。这是因为 Spring Boot 默认会在重新编译后才能将 static 目录下的文件作为静态资源提供。也就是说需要重新启动开发环境才能在浏览器中访问上传的资源文件。这样在开发时很不方便，还有在服务器上部署以后，客户端上传的文件也不能实时更新。</p>
-</div>
-<div class="paragraph">
-<p>下面将前端上传的资源存储在指定的目录 UPLOAD_DIR 下，并且使用前缀 uploads 进行访问。</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_file_srcmainjavacomtjisecontrolleruploadcontroller_java">file &#8594; src/main/java/com/tjise/controller/UploadController.java</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
-
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Result</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.PostMapping</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RequestParam</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RestController</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.multipart.MultipartFile</span><span class="tok-p">;</span>
-
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.File</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.IOException</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.UUID</span><span class="tok-p">;</span>
-
-
-<span class="tok-nd">@RestController</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">UploadController</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
-<span class="tok-w">    </span><span class="tok-c1">// mkdir uploads</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">UPLOAD_DIR</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;/Users/swot/swot-learn/java/springboot/spring-boot-ketang/general-manager/uploads/&quot;</span><span class="tok-p">;</span>
-
-<span class="tok-w">    </span><span class="tok-nd">@PostMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/upload&quot;</span><span class="tok-p">)</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">upload</span><span class="tok-p">(</span><span class="tok-nd">@RequestParam</span><span class="tok-p">(</span><span class="tok-s">&quot;image&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">MultipartFile</span><span class="tok-w"> </span><span class="tok-n">image</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">filename</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">image</span><span class="tok-p">.</span><span class="tok-na">getOriginalFilename</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 获取上传的文件名</span>
-<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">names</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">filename</span><span class="tok-p">.</span><span class="tok-na">split</span><span class="tok-p">(</span><span class="tok-s">&quot;\\.&quot;</span><span class="tok-p">);</span><span class="tok-w">         </span><span class="tok-c1">// 以点切割文件名</span>
-<span class="tok-w">        </span><span class="tok-c1">// \\. 中的第一个 \ 是为了让 Java 编译器理解这是一个反斜杠</span>
-<span class="tok-w">        </span><span class="tok-c1">// \\. 中的第二个 \ 则是在正则表达式中表示字面量的点</span>
-<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">extName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">names</span><span class="tok-o">[</span><span class="tok-n">names</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-o">]</span><span class="tok-p">;</span><span class="tok-w">       </span><span class="tok-c1">// 获取文件扩展名</span>
-<span class="tok-w">        </span><span class="tok-n">UUID</span><span class="tok-w"> </span><span class="tok-n">randomString</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">UUID</span><span class="tok-p">.</span><span class="tok-na">randomUUID</span><span class="tok-p">();</span>
-<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">randomFilename</span><span class="tok-w">  </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">randomString</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;.&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">extName</span><span class="tok-p">;</span>
-<span class="tok-w">        </span><span class="tok-n">image</span><span class="tok-p">.</span><span class="tok-na">transferTo</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">File</span><span class="tok-p">(</span><span class="tok-n">UPLOAD_DIR</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">randomFilename</span><span class="tok-p">));</span>
-<span class="tok-w">        </span><span class="tok-c1">// 前缀 uploads 参后面配置内容</span>
-<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">(</span><span class="tok-s">&quot;http://localhost:8080/uploads/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">randomFilename</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
-<span class="tok-p">}</span>
-</pre></div></td></tr></table></div></code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
 <h5 id="_文件上传目录映射">文件上传目录映射</h5>
 <div class="paragraph">
 <p>要想实现上述功能，还需要定义一个 spring 的配置类，来指定将哪个目录映射成哪个前缀。
@@ -5502,9 +5522,8 @@ item 的值要和 #{} 中的值一样！
 </li>
 </ul>
 </div>
-</div>
-<div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseconfigmymvcconfig_java">file &#8594; src/main/java/com/tjise/config/MyMvcConfig.java</h5>
+<div class="sect5">
+<h6 id="_file_srcmainjavacomtjiseconfigmymvcconfig_java">file &#8594; src/main/java/com/tjise/config/MyMvcConfig.java</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.config</span><span class="tok-p">;</span>
@@ -5529,6 +5548,90 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_文件上传至本地开发目录">文件上传至本地开发目录</h5>
+<div class="paragraph">
+<p>在 Spring Boot 中接收前端上传的图片并存储在可以通过 URL 访问的目录下。</p>
+</div>
+<div class="paragraph">
+<p>通常 <mark>不要</mark> 将图片存储在 <code>src/main/resources/static</code> 目录下。这是因为 Spring Boot 默认会在重新编译后才能将 static 目录下的文件作为静态资源提供。也就是说需要重新启动开发环境才能在浏览器中访问上传的资源文件。这样在开发时很不方便，还有在服务器上部署以后，客户端上传的文件也不能实时更新。</p>
+</div>
+<div class="paragraph">
+<p>下面将前端上传的资源存储在指定的目录 UPLOAD_DIR 下，并且使用前缀 uploads 进行访问。</p>
+</div>
+<div class="sect5">
+<h6 id="_file_srcmainjavacomtjisecontrolleruploadcontroller_java">file &#8594; src/main/java/com/tjise/controller/UploadController.java</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Result</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.PostMapping</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RequestParam</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RestController</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.multipart.MultipartFile</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.File</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.IOException</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.UUID</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@RestController</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">UploadController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// mkdir uploads</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">UPLOAD_DIR</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;/Users/swot/swot-learning/java/springboot/spring-boot-ketang/general-manager/uploads/&quot;</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@PostMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/upload&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">upload</span><span class="tok-p">(</span><span class="tok-nd">@RequestParam</span><span class="tok-p">(</span><span class="tok-s">&quot;image&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">MultipartFile</span><span class="tok-w"> </span><span class="tok-n">image</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 可以使用 IDEA 的 debug 模式查看变量</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">filename</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">image</span><span class="tok-p">.</span><span class="tok-na">getOriginalFilename</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 获取上传的文件名</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">names</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">filename</span><span class="tok-p">.</span><span class="tok-na">split</span><span class="tok-p">(</span><span class="tok-s">&quot;\\.&quot;</span><span class="tok-p">);</span><span class="tok-w">         </span><span class="tok-c1">// 以点切割文件名</span>
+<span class="tok-w">        </span><span class="tok-c1">// \\. 中的第一个 \ 是为了让 Java 编译器理解这是一个反斜杠</span>
+<span class="tok-w">        </span><span class="tok-c1">// \\. 中的第二个 \ 则是在正则表达式中表示字面量的点</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">extName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">names</span><span class="tok-o">[</span><span class="tok-n">names</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-o">]</span><span class="tok-p">;</span><span class="tok-w">       </span><span class="tok-c1">// 获取文件扩展名</span>
+<span class="tok-w">        </span><span class="tok-n">UUID</span><span class="tok-w"> </span><span class="tok-n">randomString</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">UUID</span><span class="tok-p">.</span><span class="tok-na">randomUUID</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">randomFilename</span><span class="tok-w">  </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">randomString</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;.&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">extName</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-n">image</span><span class="tok-p">.</span><span class="tok-na">transferTo</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">File</span><span class="tok-p">(</span><span class="tok-n">UPLOAD_DIR</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">randomFilename</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-c1">// 前缀路由 uploads 参上面配置内容</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">(</span><span class="tok-s">&quot;http://localhost:8080/uploads/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">randomFilename</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+</div>
+</div>
 <div class="sect4">
 <h5 id="_测试图片上传功能">测试图片上传功能</h5>
 <div class="olist arabic">
@@ -5537,7 +5640,14 @@ item 的值要和 #{} 中的值一样！
 <p>运行后台服务程序</p>
 </li>
 <li>
-<p>使用 postman 或者在网页中测试图片上传</p>
+<p>使用 httpie 或者在网页中测试图片上传</p>
+<div class="listingblock">
+<div class="title">上传单个文件</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http POST https://httpbin.org/post \</span>
+<span class="tok-go">     file@/path/to/file.jpg</span></code></pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
@@ -5617,7 +5727,7 @@ item 的值要和 #{} 中的值一样！
 <div class="ulist">
 <ul>
 <li>
-<p>新建Bucket，自己命名 ，读写权限为<strong>公共读</strong></p>
+<p>新建 Bucket，自己命名 ，读写权限为<strong>公共读</strong></p>
 <div class="imageblock thumb">
 <div class="content">
 <img src="img/aliyun_oss_create_bucket0.png" alt="aliyun oss create bucket0">
@@ -5665,10 +5775,10 @@ item 的值要和 #{} 中的值一样！
 <div class="sect4">
 <h5 id="_oss_明文文本密钥测试本地文件上传也叫静态凭证仅用于测试环境">OSS 明文文本密钥测试本地文件上传&#8201;&#8212;&#8201;也叫静态凭证（仅用于测试环境）</h5>
 <div class="paragraph">
-<p><a href="https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&amp;scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#bd4a905a056cr">静态凭证 2025-08-14 16:10:58</a></p>
+<p><a href="https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&amp;scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#bd4a905a056cr">静态凭证文档 2025-08-14 16:10:58</a></p>
 </div>
 <div class="sect5">
-<h6 id="_下面是有_main_函数使用_ossclientbuilder_create_方式测试最新方式">下面是有 main 函数使用 OSSClientBuilder.create() 方式测试&#8201;&#8212;&#8201;最新方式</h6>
+<h6 id="_下面是在_main_函数中使用_ossclientbuilder_create_方式的测试最新方式">下面是在 main 函数中使用 OSSClientBuilder.create() 方式的测试&#8201;&#8212;&#8201;最新方式</h6>
 
 </div>
 <div class="sect5">
@@ -5732,7 +5842,7 @@ item 的值要和 #{} 中的值一样！
 <span class="tok-c1">// 使用DefaultCredentialProvider方法直接设置AK和SK</span>
 <span class="tok-n">CredentialsProvider</span><span class="tok-w"> </span><span class="tok-n">credentialsProvider</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DefaultCredentialProvider</span><span class="tok-p">(</span><span class="tok-n">accessKeyId</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">accessKeySecret</span><span class="tok-p">);</span>
 
-<span class="tok-c1">// 使用credentialsProvider初始化客户端</span>
+<span class="tok-c1">// 创建配置</span>
 <span class="tok-n">ClientBuilderConfiguration</span><span class="tok-w"> </span><span class="tok-n">clientBuilderConfiguration</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ClientBuilderConfiguration</span><span class="tok-p">();</span>
 <span class="tok-c1">// 显式声明使用 V4 签名算法</span>
 <span class="tok-n">clientBuilderConfiguration</span><span class="tok-p">.</span><span class="tok-na">setSignatureVersion</span><span class="tok-p">(</span><span class="tok-n">SignVersion</span><span class="tok-p">.</span><span class="tok-na">V4</span><span class="tok-p">);</span>
@@ -5776,7 +5886,7 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect5">
-<h6 id="_下面是有_test_注解使用_ossclientbuilder_build_方式测试">下面是有 @Test 注解使用 OSSClientBuilder().build() 方式测试</h6>
+<h6 id="_下面是在_test_中使用_test_注解的_ossclientbuilder_build_方式的测试">下面是在 test 中使用 @Test 注解的 OSSClientBuilder().build() 方式的测试</h6>
 
 </div>
 <div class="sect5">
@@ -5832,7 +5942,7 @@ item 的值要和 #{} 中的值一样！
 <span class="tok-c1">// 如果未指定本地路径，则默认从示例程序所属项目对应本地路径中上传文件流。</span>
 <span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">filePath</span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;/Users/swot/Downloads/xianni/1.jpg&quot;</span><span class="tok-p">;</span>
 
-<span class="tok-c1">// 创建OSSClient实例。</span>
+<span class="tok-c1">// 创建 OSSClient 实例</span>
 <span class="tok-n">OSS</span><span class="tok-w"> </span><span class="tok-n">ossClient</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OSSClientBuilder</span><span class="tok-p">().</span><span class="tok-na">build</span><span class="tok-p">(</span><span class="tok-n">endpoint</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">accessKeyId</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">accessKeySecret</span><span class="tok-p">);</span></code></pre>
 </div>
 </div>
@@ -5867,12 +5977,12 @@ item 的值要和 #{} 中的值一样！
 </div>
 </div>
 <div class="sect4">
-<h5 id="_oss_环境变量密钥测试本地文件上传适用于生产环境使用环境变量的情况">OSS 环境变量密钥测试本地文件上传（适用于生产环境使用环境变量的情况）</h5>
+<h5 id="_oss_环境变量密钥测试本地文件上传适用于生产环境使用环境变量的情况">OSS 环境变量密钥测试本地文件上传&#8201;&#8212;&#8201;适用于生产环境使用环境变量的情况</h5>
 <div class="paragraph">
-<p><a href="https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&amp;scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#9c8e8849706wp">配置访问凭证</a>
-在操作系统中导出两个环境变量，分别是:</p>
+<p><a href="https://help.aliyun.com/zh/oss/developer-reference/oss-java-sdk/?spm=a2c4g.11186623.help-menu-31815.d_19_2_0.2c3914acgyNzrF&amp;scm=20140722.H_32008._.OR_help-T_cn~zh-V_1#9c8e8849706wp">配置访问凭证</a></p>
 </div>
 <div class="listingblock">
+<div class="title">在操作系统中导出两个环境变量，分别是:</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="shell"><span></span><span class="tok-c1"># 设置阿里云 OSS 这是 macos 的设置，其他操作系统参考上面官方文档</span>
 <span class="tok-nb">export</span><span class="tok-w"> </span><span class="tok-nv">OSS_ACCESS_KEY_ID</span><span class="tok-o">=</span><span class="tok-s2">&quot;&quot;</span><span class="tok-o">[</span>REMOVED<span class="tok-o">]</span>
@@ -7276,7 +7386,7 @@ http -v :8080/login username=xxxxxx password=123456</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_5">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_6">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="sect5">
 <h6 id="_login_新增">login 新增</h6>
 <div class="listingblock">
@@ -7287,7 +7397,7 @@ http -v :8080/login username=xxxxxx password=123456</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_6">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_员工登录功能_login_新增">员工登录功能 login &#8594; 新增</h6>
 <div class="ulist">
@@ -7309,7 +7419,7 @@ http -v :8080/login username=xxxxxx password=123456</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_6">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_7">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
 <h6 id="_empmapper">EmpMapper</h6>
 <div class="listingblock">
@@ -8512,7 +8622,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_6">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_7">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -8523,7 +8633,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增_2">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -8537,7 +8647,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_7">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_8">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增_3">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -8831,7 +8941,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_9">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_required_vs_requires_new">deleteEmpByDeptId 根据部门id删除员工 &#8594; REQUIRED vs REQUIRES_NEW</h6>
 <div class="listingblock">
@@ -10325,7 +10435,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_9">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_10">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_insertemp_新增员工">insertEmp 新增员工</h6>
 <div class="listingblock">
@@ -10864,7 +10974,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-22 16:41:35 +0800
+Last updated 2025-09-23 09:40:11 +0800
 </div>
 </div>
 </body>
