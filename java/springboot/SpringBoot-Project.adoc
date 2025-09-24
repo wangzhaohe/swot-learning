@@ -3213,7 +3213,7 @@ spring:
         name: general-manage
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3307/tjise
+        url: jdbc:mysql://localhost:3307/general_manager
         username: root
         password: root
     servlet:
@@ -3378,7 +3378,7 @@ public class AliOSSUtils {
 
 * 请求路径：/emps/{id}
 * 请求方式：GET
-* 接口描述：该接口用于根据主键ID查询员工的信息
+* 接口描述：该接口用于根据主键 ID 查询员工的信息
 
 请求参数格式：路径参数
 
@@ -3440,7 +3440,32 @@ public class AliOSSUtils {
 }
 ```
 
-===== 查询单个员工 EmpController
+===== file -> src/main/java/com/tjise/controller/EmpController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import com.tjise.pojo.Result;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/emps")
+public class EmpController {
+    @Autowired
+    private EmpService empService;
+    @others
+}
+----
+
+====== getEmpById
 [source,java]
 ----
 @GetMapping("/{id}")
@@ -3454,13 +3479,31 @@ public Result getEmpById(@PathVariable Integer id) {
 测试:
 http -v :8080/emps/20
 
-===== 查询单个员工 EmpService
+===== file -> src/main/java/com/tjise/service/EmpService.java
+[source,java,linenums]
+----
+package com.tjise.service;
+
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import java.time.LocalDate;
+import java.util.List;
+
+public interface EmpService {
+    @others
+}
+----
+
+====== getEmpById
 [source,java]
 ----
 public abstract Emp getEmpById(Integer id);
 ----
 
-===== 查询单个员工 EmpServiceImpl
+===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== getEmpById
 [source,java]
 ----
 public Emp getEmpById(Integer id) {
@@ -3469,7 +3512,10 @@ public Emp getEmpById(Integer id) {
 }
 ----
 
-===== 查询单个员工 EmpMapper
+===== file -> src/main/java/com/tjise/mapper/EmpMapper.java
+
+
+====== getEmpById
 [source,java]
 ----
 @Select("select * from emp where id = #{id}")
@@ -5841,7 +5887,7 @@ spring:
         name: mybatis_quickstart-crud
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3307/tjise
+        url: jdbc:mysql://localhost:3307/general_manager
         username: root
         password: root
     servlet:

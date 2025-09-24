@@ -1,5 +1,5 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250923082847.1: * @file src/main/java/com/tjise/controller/EmpController.java
+//@+node:swot.20250924150702.1: * @file src/main/java/com/tjise/controller/EmpController.java
 //@@language java
 //@+doc
 // [source,java,linenums]
@@ -24,7 +24,7 @@ public class EmpController {
     @Autowired
     private EmpService empService;
     //@+others
-    //@+node:swot.20250923082847.2: ** @ignore-node selectPage
+    //@+node:swot.20250924150702.2: ** @ignore-node selectPage
     //@+doc
     // .多条件分页查询
     // [source,java,linenums]
@@ -55,7 +55,7 @@ public class EmpController {
     }
     //@+doc
     // ----
-    //@+node:swot.20250923082847.3: ** @ignore-node deleteEmp
+    //@+node:swot.20250924150702.3: ** @ignore-node deleteEmp
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -68,7 +68,7 @@ public class EmpController {
     }
     //@+doc
     // ----
-    //@+node:swot.20241104152833.2: ** insertEmp
+    //@+node:swot.20250924150702.4: ** @ignore-node insertEmp
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -81,6 +81,23 @@ public class EmpController {
     }
     //@+doc
     // ----
+    //@+node:swot.20241230150625.1: ** getEmpById
+    //@@language java
+    //@+doc
+    // [source,java]
+    // ----
+    //@@c
+    @GetMapping("/{id}")
+    // @PathVariable 获取路径参数
+    public Result getEmpById(@PathVariable Integer id) {
+        Emp emp = empService.getEmpById(id);
+        return Result.success(emp);
+    }
+    //@+doc
+    // ----
+    //
+    // 测试:
+    // http -v :8080/emps/20
     //@-others
 }
 //@+doc

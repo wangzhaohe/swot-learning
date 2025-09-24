@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250923084213.1: * @file src/main/java/com/tjise/mapper/EmpMapper.java
+//@+node:swot.20250924151050.1: * @file src/main/java/com/tjise/mapper/EmpMapper.java
 //@@language java
 //@+others
-//@+node:swot.20250923084213.2: ** @ignore-node import
+//@+node:swot.20250924151050.2: ** @ignore-node import
 package com.tjise.mapper;
 
 import com.tjise.pojo.Emp;
@@ -12,11 +12,11 @@ import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDate;
 import java.util.List;
-//@+node:swot.20250923084213.3: ** @ignore-node interface EmpMapper
+//@+node:swot.20250924151050.3: ** @ignore-node interface EmpMapper
 @Mapper
 public interface EmpMapper {
     //@+others
-    //@+node:swot.20250923084213.4: *3* @ignore-node selectCount & selectpage
+    //@+node:swot.20250924151050.4: *3* @ignore-node selectCount & selectpage
     //@+doc
     // [source,java,linenums]
     // ----
@@ -31,7 +31,7 @@ public interface EmpMapper {
     public abstract List<Emp> selectPage(int offset, Integer pageSize);
     //@+doc
     // ----
-    //@+node:swot.20250923084213.5: *3* @ignore-node list 多条件查询传递多个参数
+    //@+node:swot.20250924151050.5: *3* @ignore-node list 多条件查询传递多个参数
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -46,7 +46,7 @@ public interface EmpMapper {
     );
     //@+doc
     // ----
-    //@+node:swot.20250923084213.6: *3* @ignore-node deleteEmpByIds
+    //@+node:swot.20250924151050.6: *3* @ignore-node deleteEmpByIds
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -56,7 +56,7 @@ public interface EmpMapper {
     //@+doc
     // ----
     //
-    //@+node:swot.20241104152833.5: *3* insertEmp
+    //@+node:swot.20250924151050.7: *3* @ignore-node insertEmp
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -65,6 +65,17 @@ public interface EmpMapper {
     @Insert("insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time) " +
             "values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptId}, #{createTime}, #{updateTime})")
     public abstract void insertEmp(Emp emp);
+    //@+doc
+    // ----
+    //
+    //@+node:swot.20241230135844.6: *3* getEmpById
+    //@@language java
+    //@+doc
+    // [source,java]
+    // ----
+    //@@c
+    @Select("select * from emp where id = #{id}")
+    public abstract Emp getEmpById(Integer id);
     //@+doc
     // ----
     //

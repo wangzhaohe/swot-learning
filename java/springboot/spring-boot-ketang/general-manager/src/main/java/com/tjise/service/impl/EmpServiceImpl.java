@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250923083510.1: * @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+//@+node:swot.20250924150927.1: * @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 //@@language java
 //@+others
-//@+node:swot.20250923083510.2: ** @ignore-node import
+//@+node:swot.20250924150927.2: ** @ignore-node import
 package com.tjise.service.impl;
 
 import com.github.pagehelper.Page;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-//@+node:swot.20250923083510.3: ** @ignore-node class EmpServiceImpl
+//@+node:swot.20250924150927.3: ** @ignore-node class EmpServiceImpl
 //@+doc
 // [source,java,linenums]
 // ----
@@ -27,7 +27,7 @@ public class EmpServiceImpl implements EmpService {
     @Autowired
     private EmpMapper empMapper;
     //@+others
-    //@+node:swot.20250923083510.4: *3* @ignore-node selectPage 多条件查询传递多个参数
+    //@+node:swot.20250924150927.4: *3* @ignore-node selectPage 多条件查询传递多个参数
     //@+doc
     // [source,java,linenums]
     // ----
@@ -54,7 +54,7 @@ public class EmpServiceImpl implements EmpService {
     //
     // <1> 必须紧跟着！！！
     // <2> PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
-    //@+node:swot.20250923083510.5: *3* @ignore-node deleteEmpByIds
+    //@+node:swot.20250924150927.5: *3* @ignore-node deleteEmpByIds
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -66,7 +66,7 @@ public class EmpServiceImpl implements EmpService {
     }
     //@+doc
     // ----
-    //@+node:swot.20241104152833.4: *3* insertEmp
+    //@+node:swot.20250924150927.6: *3* @ignore-node insertEmp
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -81,6 +81,19 @@ public class EmpServiceImpl implements EmpService {
     }
     //@+doc
     // ----
+    //@+node:swot.20241230135844.5: *3* getEmpById
+    //@@language java
+    //@+doc
+    // [source,java]
+    // ----
+    //@@c
+    public Emp getEmpById(Integer id) {
+        Emp emp = empMapper.getEmpById(id);
+        return emp;
+    }
+    //@+doc
+    // ----
+    //
     //@-others
 }
 //@+doc

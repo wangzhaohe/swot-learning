@@ -6638,7 +6638,7 @@ private String bucketName;</p>
 <span class="tok-w">        </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">general-manage</span>
 <span class="tok-w">    </span><span class="tok-nt">datasource</span><span class="tok-p">:</span>
 <span class="tok-w">        </span><span class="tok-nt">driver-class-name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">com.mysql.cj.jdbc.Driver</span>
-<span class="tok-w">        </span><span class="tok-nt">url</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">jdbc:mysql://localhost:3307/tjise</span>
+<span class="tok-w">        </span><span class="tok-nt">url</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">jdbc:mysql://localhost:3307/general_manager</span>
 <span class="tok-w">        </span><span class="tok-nt">username</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
 <span class="tok-w">        </span><span class="tok-nt">password</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
 <span class="tok-w">    </span><span class="tok-nt">servlet</span><span class="tok-p">:</span>
@@ -6824,7 +6824,7 @@ private String bucketName;</p>
 <p>请求方式：GET</p>
 </li>
 <li>
-<p>接口描述：该接口用于根据主键ID查询员工的信息</p>
+<p>接口描述：该接口用于根据主键 ID 查询员工的信息</p>
 </li>
 </ul>
 </div>
@@ -7008,7 +7008,53 @@ private String bucketName;</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_查询单个员工_empcontroller">查询单个员工 EmpController</h5>
+<h5 id="_file_srcmainjavacomtjisecontrollerempcontroller_java_6">file &#8594; src/main/java/com/tjise/controller/EmpController.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.controller</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Emp</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.PageBean</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Result</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service.EmpService</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.format.annotation.DateTimeFormat</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.*</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.time.LocalDate</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@RestController</span>
+<span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/emps&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">EmpController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">EmpService</span><span class="tok-w"> </span><span class="tok-n">empService</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_getempbyid">getEmpById</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/{id}&quot;</span><span class="tok-p">)</span>
@@ -7024,16 +7070,46 @@ private String bucketName;</p>
 http -v :8080/emps/20</p>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_查询单个员工_empservice">查询单个员工 EmpService</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_6">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.Emp</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo.PageBean</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.time.LocalDate</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.List</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">EmpService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_getempbyid_2">getEmpById</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-nf">getEmpById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span></code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_查询单个员工_empserviceimpl">查询单个员工 EmpServiceImpl</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<div class="sect5">
+<h6 id="_getempbyid_3">getEmpById</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-nf">getEmpById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -7043,12 +7119,16 @@ http -v :8080/emps/20</p>
 </div>
 </div>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_查询单个员工_empmapper">查询单个员工 EmpMapper</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_7">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<div class="sect5">
+<h6 id="_getempbyid_4">getEmpById</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Select</span><span class="tok-p">(</span><span class="tok-s">&quot;select * from emp where id = #{id}&quot;</span><span class="tok-p">)</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-nf">getEmpById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -7479,7 +7559,7 @@ http -v :8080/emps/20</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_6">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_7">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="sect5">
 <h6 id="_login_新增">login 新增</h6>
 <div class="listingblock">
@@ -7490,7 +7570,7 @@ http -v :8080/emps/20</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_员工登录功能_login_新增">员工登录功能 login &#8594; 新增</h6>
 <div class="ulist">
@@ -7512,7 +7592,7 @@ http -v :8080/emps/20</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_7">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_8">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
 <h6 id="_empmapper">EmpMapper</h6>
 <div class="listingblock">
@@ -8716,7 +8796,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_7">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceempservice_java_8">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -8727,7 +8807,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_9">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增_2">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -8741,7 +8821,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_8">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
+<h5 id="_file_srcmainjavacomtjisemapperempmapper_java_9">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_新增_3">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
 <div class="listingblock">
@@ -9035,7 +9115,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_9">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_10">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_deleteempbydeptid_根据部门id删除员工_required_vs_requires_new">deleteEmpByDeptId 根据部门id删除员工 &#8594; REQUIRED vs REQUIRES_NEW</h6>
 <div class="listingblock">
@@ -10529,7 +10609,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_10">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
+<h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_11">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
 <h6 id="_insertemp_新增员工">insertEmp 新增员工</h6>
 <div class="listingblock">
@@ -10901,7 +10981,7 @@ after4 -&gt; @Order(66)</pre>
         <span class="tok-n">name</span><span class="tok-p">:</span> <span class="tok-n">mybatis_quickstart</span><span class="tok-o">-</span><span class="tok-n">crud</span>
     <span class="tok-n">datasource</span><span class="tok-p">:</span>
         <span class="tok-n">driver</span><span class="tok-o">-</span><span class="tok-n">class</span><span class="tok-o">-</span><span class="tok-n">name</span><span class="tok-p">:</span> <span class="tok-n">com</span><span class="tok-o">.</span><span class="tok-n">mysql</span><span class="tok-o">.</span><span class="tok-n">cj</span><span class="tok-o">.</span><span class="tok-n">jdbc</span><span class="tok-o">.</span><span class="tok-n">Driver</span>
-        <span class="tok-n">url</span><span class="tok-p">:</span> <span class="tok-n">jdbc</span><span class="tok-p">:</span><span class="tok-n">mysql</span><span class="tok-p">:</span><span class="tok-o">//</span><span class="tok-n">localhost</span><span class="tok-p">:</span><span class="tok-mi">3307</span><span class="tok-o">/</span><span class="tok-n">tjise</span>
+        <span class="tok-n">url</span><span class="tok-p">:</span> <span class="tok-n">jdbc</span><span class="tok-p">:</span><span class="tok-n">mysql</span><span class="tok-p">:</span><span class="tok-o">//</span><span class="tok-n">localhost</span><span class="tok-p">:</span><span class="tok-mi">3307</span><span class="tok-o">/</span><span class="tok-n">general_manager</span>
         <span class="tok-n">username</span><span class="tok-p">:</span> <span class="tok-n">root</span>
         <span class="tok-n">password</span><span class="tok-p">:</span> <span class="tok-n">root</span>
     <span class="tok-n">servlet</span><span class="tok-p">:</span>
@@ -11068,7 +11148,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-24 14:20:16 +0800
+Last updated 2025-09-24 15:17:03 +0800
 </div>
 </div>
 </body>
