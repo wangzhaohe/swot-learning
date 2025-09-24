@@ -3583,7 +3583,32 @@ public abstract Emp getEmpById(Integer id);
 }
 ```
 
-===== 修改单个员工 EmpController
+===== file -> src/main/java/com/tjise/controller/EmpController.java
+[source,java,linenums]
+----
+package com.tjise.controller;
+
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import com.tjise.pojo.Result;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/emps")
+public class EmpController {
+    @Autowired
+    private EmpService empService;
+    @others
+}
+----
+
+====== updateEmp
 [source,java]
 ----
 @PutMapping
@@ -3593,13 +3618,31 @@ public Result updateEmp(@RequestBody Emp emp){
 }
 ----
 
-===== 修改单个员工 EmpService
+===== file -> src/main/java/com/tjise/service/EmpService.java
+[source,java,linenums]
+----
+package com.tjise.service;
+
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import java.time.LocalDate;
+import java.util.List;
+
+public interface EmpService {
+    @others
+}
+----
+
+====== updateEmp
 [source,java]
 ----
 public abstract void updateEmp(Emp emp);
 ----
 
-===== 修改单个员工 EmpServiceImpl
+===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+
+
+====== updateEmp
 [source,java]
 ----
 // emp 封装了要修改的数据
@@ -3610,14 +3653,33 @@ public void updateEmp(Emp emp) {
 }
 ----
 
-===== 修改单个员工 EmpMapper
+===== file -> src/main/java/com/tjise/mapper/EmpMapper.java
+
+
+====== updateEmp
 [source,java]
 ----
 // 因为要判断值是否为空，所以要用到动态 SQL 了
 public void updateEmp(Emp emp);
 ----
 
-===== 修改单个员工 EmpMapper.xml
+===== file -> src/main/resources/com/tjise/mapper/empMapper.xml
+
+
+====== EmpMapper.xml -> 动态SQL
+[source,scss]
+....
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjise.mapper.EmpMapper">
+  @others
+
+</mapper>
+....
+
+====== updateEmp
 ```
 <!-- id 绑定方法名 -->
 <update id="updateEmp">

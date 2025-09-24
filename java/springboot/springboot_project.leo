@@ -379,11 +379,48 @@
 </v>
 </v>
 <v t="swot.20241230135844.7"><vh>16.7 修改单个员工</vh>
-<v t="swot.20241230135844.8"><vh>修改单个员工 EmpController</vh></v>
-<v t="swot.20241230135844.9"><vh>修改单个员工 EmpService</vh></v>
-<v t="swot.20241230135844.10"><vh>修改单个员工 EmpServiceImpl</vh></v>
-<v t="swot.20241230135844.11"><vh>修改单个员工 EmpMapper</vh></v>
-<v t="swot.20241230135844.12"><vh>修改单个员工 EmpMapper.xml</vh></v>
+<v t="swot.20250924160513.1"><vh>file -&gt; src/main/java/com/tjise/controller/EmpController.java</vh>
+<v t="swot.20250924160513.2"><vh>@ignore-node selectPage</vh></v>
+<v t="swot.20250924160513.3"><vh>@ignore-node deleteEmp</vh></v>
+<v t="swot.20250924160513.4"><vh>@ignore-node insertEmp</vh></v>
+<v t="swot.20250924160513.5"><vh>@ignore-node getEmpById</vh></v>
+<v t="swot.20241230135844.8"><vh>updateEmp</vh></v>
+</v>
+<v t="swot.20250924160639.1"><vh>file -&gt; src/main/java/com/tjise/service/EmpService.java</vh>
+<v t="swot.20250924160639.2"><vh>@ignore-node selectPage</vh></v>
+<v t="swot.20250924160639.3"><vh>@ignore-node deleteEmpByIds</vh></v>
+<v t="swot.20250924160639.4"><vh>@ignore-node insertEmp</vh></v>
+<v t="swot.20250924160639.5"><vh>@ignore-node getEmpById</vh></v>
+<v t="swot.20241230135844.9"><vh>updateEmp</vh></v>
+</v>
+<v t="swot.20250924160711.1"><vh>file -&gt; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</vh>
+<v t="swot.20250924160711.2"><vh>@ignore-node import</vh></v>
+<v t="swot.20250924160711.3"><vh>@ignore-node class EmpServiceImpl</vh>
+<v t="swot.20250924160711.4"><vh>@ignore-node selectPage 多条件查询传递多个参数</vh></v>
+<v t="swot.20250924160711.5"><vh>@ignore-node deleteEmpByIds</vh></v>
+<v t="swot.20250924160711.6"><vh>@ignore-node insertEmp</vh></v>
+<v t="swot.20250924160711.7"><vh>@ignore-node getEmpById</vh></v>
+<v t="swot.20241230135844.10"><vh>updateEmp</vh></v>
+</v>
+</v>
+<v t="swot.20250924160811.1"><vh>file -&gt; src/main/java/com/tjise/mapper/EmpMapper.java</vh>
+<v t="swot.20250924160811.2"><vh>@ignore-node import</vh></v>
+<v t="swot.20250924160811.3"><vh>@ignore-node interface EmpMapper</vh>
+<v t="swot.20250924160811.4"><vh>@ignore-node selectCount &amp; selectpage</vh></v>
+<v t="swot.20250924160811.5"><vh>@ignore-node list 多条件查询传递多个参数</vh></v>
+<v t="swot.20250924160811.6"><vh>@ignore-node deleteEmpByIds</vh></v>
+<v t="swot.20250924160811.7"><vh>@ignore-node insertEmp</vh></v>
+<v t="swot.20250924160811.8"><vh>@ignore-node getEmpById</vh></v>
+<v t="swot.20241230135844.11"><vh>updateEmp</vh></v>
+</v>
+</v>
+<v t="swot.20250924161056.1"><vh>file -&gt; src/main/resources/com/tjise/mapper/empMapper.xml</vh>
+<v t="swot.20250924161056.2"><vh>EmpMapper.xml -&gt; 动态SQL</vh>
+<v t="swot.20250924161056.3"><vh>@ignore-node list</vh></v>
+<v t="swot.20250924161056.4"><vh>@ignore-node deleteEmpByIds</vh></v>
+<v t="swot.20241230135844.12"><vh>updateEmp</vh></v>
+</v>
+</v>
 </v>
 </v>
 <v t="swot.20250816093309.1" descendentVnodeUnknownAttributes="7d7100285805000000302e322e3071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d30392d3037710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755805000000302e322e3171197d711a58090000005f6d6f645f74696d65711b4741da2840fa0c9755735809000000302e322e312e312e31711c7d711d285808000000616e6e6f74617465711e7d711f2858080000007072696f7269747971204b02580a000000707269736574646174657121580a000000323032352d30392d3037712275580500000069636f6e7371235d71247d712528680b680c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e677126680e580d000000636c656f2f707269322e706e6771276810681168124b0068134b0268144b0168156816681768187561755809000000302e322e322e312e3171287d7129285808000000616e6e6f74617465712a7d712b2858080000007072696f72697479712c4b03580a00000070726973657464617465712d580a000000323032352d30392d3037712e75580500000069636f6e73712f5d71307d713128680b680c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269332e706e677132680e580d000000636c656f2f707269332e706e6771336810681168124b0068134b0268144b0168156816681768187561755809000000302e322e332e312e3171347d7135285808000000616e6e6f7461746571367d71372858080000007072696f7269747971384b04580a000000707269736574646174657139580a000000323032352d30392d3037713a75580500000069636f6e73713b5d713c7d713d28680b680c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269342e706e67713e680e580d000000636c656f2f707269342e706e67713f6810681168124b0068134b0268144b0168156816681768187561755807000000302e342e302e3071407d7141285808000000616e6e6f7461746571427d71432858080000007072696f7269747971444b01580a000000707269736574646174657145580a000000323032352d30392d3037714675580500000069636f6e7371475d71487d714928680b680c680c680d680e580d000000636c656f2f707269312e706e67714a6810681168124b0068134b0268144b0168156816681768187561755809000000302e352e302e312e30714b7d714c285808000000616e6e6f74617465714d7d714e2858080000007072696f72697479714f4b01580a000000707269736574646174657150580a000000323032352d30392d3037715175580500000069636f6e7371525d71537d715428680b680c680c680d680e580d000000636c656f2f707269312e706e6771556810681168124b0068134b0268144b0168156816681768187561755809000000302e352e302e312e3171567d7157285808000000616e6e6f7461746571587d71592858080000007072696f72697479715a4b02580a00000070726973657464617465715b580a000000323032352d30392d3037715c75580500000069636f6e73715d5d715e7d715f28680b680c680c6826680e580d000000636c656f2f707269322e706e6771606810681168124b0068134b0268144b0168156816681768187561755807000000302e362e302e3171617d7162285808000000616e6e6f7461746571637d71642858080000007072696f7269747971654b01580a000000707269736574646174657166580a000000323032352d30392d3037716775580500000069636f6e7371685d71697d716a28680b680c680c680d680e580d000000636c656f2f707269312e706e67716b6810681168124b0068134b0268144b0168156816681768187561755809000000302e362e302e312e30716c7d716d285808000000616e6e6f74617465716e7d716f2858080000007072696f7269747971704b02580a000000707269736574646174657171580a000000323032352d30392d3037717275580500000069636f6e7371735d71747d717528680b680c680c6826680e580d000000636c656f2f707269322e706e6771766810681168124b0068134b0268144b0168156816681768187561755809000000302e362e302e312e3171777d7178285808000000616e6e6f7461746571797d717a2858080000007072696f72697479717b4b03580a00000070726973657464617465717c580a000000323032352d30392d3037717d75580500000069636f6e73717e5d717f7d718028680b680c680c6832680e580d000000636c656f2f707269332e706e6771816810681168124b0068134b0268144b0168156816681768187561755805000000302e372e3071827d7183285808000000616e6e6f7461746571847d71852858080000007072696f7269747971864b01580a000000707269736574646174657187580a000000323032352d30392d3037718875580500000069636f6e7371895d718a7d718b28680b680c680c680d680e580d000000636c656f2f707269312e706e67718c6810681168124b0068134b0268144b016815681668176818756175752e"><vh>17. 登录校验</vh>
@@ -11334,6 +11371,415 @@ public abstract void insertEmp(Emp emp);
 @doc
 ----
 
+</t>
+<t tx="swot.20250924160513.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.controller;
+
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import com.tjise.pojo.Result;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/emps")
+public class EmpController {
+    @Autowired
+    private EmpService empService;
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250924160513.2">@doc
+.多条件分页查询
+[source,java,linenums]
+----
+@c
+@language java
+/* @RequestParam(default) 设置默认值
+   若不设默认值，且前端又没传递参数 page 和 pageSize
+   则在 service 层对 page 做运算时会报空值异常(NullPointerException) */
+@GetMapping
+public Result selectPage(
+        @RequestParam(defaultValue="1")  Integer page,
+        @RequestParam(defaultValue="10") Integer pageSize,
+        // 多传递了 4 个参数
+        String name,
+        Short gender,
+        @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+        @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
+{
+    // 打印看是否可以取到前端传递的参数，也可以使用 IDEA debug 模式查看
+    System.out.printf(
+        "page=%s, pageSize=%s, name=%s, gender=%s, begin=%s, end=%s%n",
+         page, pageSize, name, gender, begin, end);
+
+    PageBean pageBean = empService.selectPage(
+                        page, pageSize, name, gender, begin, end);
+    return Result.success(pageBean);
+}
+@doc
+----
+</t>
+<t tx="swot.20250924160513.3">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@DeleteMapping("/{ids}")
+public Result deleteEmp(@PathVariable List&lt;Integer&gt; ids) {
+    empService.deleteEmpByIds(ids);
+    return Result.success();
+}
+@doc
+----
+</t>
+<t tx="swot.20250924160513.4">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@PostMapping
+public Result insertEmp(@RequestBody Emp emp){
+    empService.insertEmp(emp);
+    return Result.success();
+}
+@doc
+----
+</t>
+<t tx="swot.20250924160513.5">@language java
+@doc
+[source,java]
+----
+@c
+@GetMapping("/{id}")
+// @PathVariable 获取路径参数
+public Result getEmpById(@PathVariable Integer id) {
+    Emp emp = empService.getEmpById(id);
+    return Result.success(emp);
+}
+@doc
+----
+
+测试:
+http -v :8080/emps/20
+</t>
+<t tx="swot.20250924160639.1">@language java
+@doc
+[source,java,linenums]
+----
+@c
+package com.tjise.service;
+
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import java.time.LocalDate;
+import java.util.List;
+
+public interface EmpService {
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250924160639.2">public abstract PageBean selectPage(
+        Integer page,
+        Integer pageSize,
+        String name,
+        Short gender,
+        LocalDate begin,
+        LocalDate end);
+</t>
+<t tx="swot.20250924160639.3">@language java
+@doc
+[source,java,linenums]
+----
+@c
+void deleteEmpByIds(List&lt;Integer&gt; ids);
+@doc
+----
+
+</t>
+<t tx="swot.20250924160639.4">@language java
+@doc
+[source,java,linenums]
+----
+@c
+void insertEmp(Emp emp);
+@doc
+----
+
+</t>
+<t tx="swot.20250924160639.5">@language java
+@doc
+[source,java]
+----
+@c
+public abstract Emp getEmpById(Integer id);
+@doc
+----
+
+</t>
+<t tx="swot.20250924160711.1">@language java
+@others
+</t>
+<t tx="swot.20250924160711.2">package com.tjise.service.impl;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.tjise.mapper.EmpMapper;
+import com.tjise.pojo.Emp;
+import com.tjise.pojo.PageBean;
+import com.tjise.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+</t>
+<t tx="swot.20250924160711.3">@doc
+[source,java,linenums]
+----
+@c
+@Service  // 把该类的对象交给 IOC 容器管理
+public class EmpServiceImpl implements EmpService {
+    @Autowired
+    private EmpMapper empMapper;
+    @others
+}
+@doc
+----
+</t>
+<t tx="swot.20250924160711.4">@doc
+[source,java,linenums]
+----
+@c
+@language java
+@Override
+public PageBean selectPage(Integer page,
+                           Integer pageSize,
+                           String name,
+                           Short gender,
+                           LocalDate begin,
+                           LocalDate end)
+{
+    // 设置分页查询参数 pageNum: 页码, pageSize: 每页显示数量
+    PageHelper.startPage(page, pageSize);   // 紧跟着的第一个select方法会被分页
+    List&lt;Emp&gt; empList = empMapper.list(name, gender, begin, end);   // 执行查询
+    Page&lt;Emp&gt; p = (Page&lt;Emp&gt;) empList;      // 获取分页结果，将 empList 转成 Page 类型
+
+    // 封装成 PageBean 对象返回
+    return new PageBean(p.getTotal(), p.getResult());
+}
+@doc
+----
+
+&lt;1&gt; 必须紧跟着！！！
+&lt;2&gt; PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
+</t>
+<t tx="swot.20250924160711.5">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@Override
+public void deleteEmpByIds(List&lt;Integer&gt; ids) {
+    empMapper.deleteEmpByIds(ids);
+}
+@doc
+----
+</t>
+<t tx="swot.20250924160711.6">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@Override
+public void insertEmp(Emp emp){
+    // 业务逻辑补全属性
+    emp.setCreateTime(LocalDateTime.now());
+    emp.setUpdateTime(LocalDateTime.now());
+    empMapper.insertEmp(emp);
+}
+@doc
+----
+</t>
+<t tx="swot.20250924160711.7">@language java
+@doc
+[source,java]
+----
+@c
+public Emp getEmpById(Integer id) {
+    Emp emp = empMapper.getEmpById(id);
+    return emp;
+}
+@doc
+----
+
+</t>
+<t tx="swot.20250924160811.1">@language java
+@others
+</t>
+<t tx="swot.20250924160811.2">package com.tjise.mapper;
+
+import com.tjise.pojo.Emp;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.time.LocalDate;
+import java.util.List;
+</t>
+<t tx="swot.20250924160811.3">@Mapper
+public interface EmpMapper {
+    @others
+}
+</t>
+<t tx="swot.20250924160811.4">@doc
+[source,java,linenums]
+----
+@c
+@language java
+// 查询记录总数
+@Select("select count(*) from emp")
+public abstract Long selectCount();
+
+// 查询分页数据
+@Select("select * from emp LIMIT #{offset}, #{pageSize}")
+public abstract List&lt;Emp&gt; selectPage(int offset, Integer pageSize);
+@doc
+----
+</t>
+<t tx="swot.20250924160811.5">@language java
+@doc
+[source,java,linenums]
+----
+@c
+// 使用 PageHelper 并配合条件查询，使用 xml 动态 sql 来实现
+public abstract List&lt;Emp&gt; list(
+        String name,
+        Short gender,
+        LocalDate begin,
+        LocalDate end
+);
+@doc
+----
+</t>
+<t tx="swot.20250924160811.6">@language java
+@doc
+[source,java,linenums]
+----
+@c
+public abstract void deleteEmpByIds(List&lt;Integer&gt; ids);
+@doc
+----
+
+</t>
+<t tx="swot.20250924160811.7">@language java
+@doc
+[source,java,linenums]
+----
+@c
+@Insert("insert into emp (username, name, gender, image, job, entrydate, dept_id, create_time, update_time) " +
+        "values (#{username}, #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptId}, #{createTime}, #{updateTime})")
+public abstract void insertEmp(Emp emp);
+@doc
+----
+
+</t>
+<t tx="swot.20250924160811.8">@language java
+@doc
+[source,java]
+----
+@c
+@Select("select * from emp where id = #{id}")
+public abstract Emp getEmpById(Integer id);
+@doc
+----
+
+</t>
+<t tx="swot.20250924161056.1">@first &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+@language xml
+@others
+</t>
+<t tx="swot.20250924161056.2">@doc
+[source,scss]
+....
+@c
+@language xml
+&lt;!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;
+
+&lt;mapper namespace="com.tjise.mapper.EmpMapper"&gt;
+  @others
+
+&lt;/mapper&gt;
+@doc
+....
+</t>
+<t tx="swot.20250924161056.3">&lt;select id="list" resultType="com.tjise.pojo.Emp"&gt;
+      select * from emp
+      &lt;where&gt;
+          &lt;if test="name != null"&gt;
+              name like concat('%', #{name}, '%')
+          &lt;/if&gt;
+
+          &lt;if test="gender != null"&gt;
+              and gender = #{gender}
+          &lt;/if&gt;
+
+          &lt;if test="begin != null and end != null"&gt;
+              and entrydate between #{begin} and #{end}
+          &lt;/if&gt;
+      &lt;/where&gt;
+      order by update_time desc
+&lt;/select&gt;
+</t>
+<t tx="swot.20250924161056.4">@language java
+@doc
+sql: delete from emp where id in (1, 2, 3);
+
+```
+@c
+&lt;delete id="deleteEmpByIds"&gt;
+    delete from emp where id in
+    &lt;foreach collection="ids" item="id" open="(" close=")" separator=","&gt;
+        #{id}
+    &lt;/foreach&gt;
+&lt;/delete&gt;
+@doc
+```
+
+在 MyBatis 解析后，上面这段 XML 最终会变成一条**完整、可直接执行的 SQL 语句**发送到数据库。  
+以接口传入 `List&lt;Integer&gt; ids = Arrays.asList(1,2,3)` 为例，解析结果等价于：
+
+```sql
+DELETE FROM emp WHERE id IN (1, 2, 3);
+```
+
+具体过程  
+1. `&lt;foreach&gt;` 把集合 `ids` 展开成 `(1,2,3)` 这一段文本。  
+2. 整个 SQL 模板被替换成：  
+   `DELETE FROM emp WHERE id IN ( ?, ?, ? )`  
+   并生成对应的 `PreparedStatement` 参数列表 `[1,2,3]`。  
+3. JDBC 驱动收到的是带占位符的预编译 SQL 和三个参数值，**不会**出现 `"in ('1,2,3')"` 这种字符串拼接错误。
+
+所以，无论你把 `item` 取名 `"id"` 还是 `"aaa"`，最终 SQL 形态都一样：  
+`… IN ( ?, ?, … )`，参数按顺序逐个绑定。
+
+IMPORTANT: item 的值要和 #{} 中的值一样！
 </t>
 </tnodes>
 </leo_file>

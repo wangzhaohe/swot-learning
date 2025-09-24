@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250924151050.1: * @file src/main/java/com/tjise/mapper/EmpMapper.java
+//@+node:swot.20250924160811.1: * @file src/main/java/com/tjise/mapper/EmpMapper.java
 //@@language java
 //@+others
-//@+node:swot.20250924151050.2: ** @ignore-node import
+//@+node:swot.20250924160811.2: ** @ignore-node import
 package com.tjise.mapper;
 
 import com.tjise.pojo.Emp;
@@ -12,11 +12,11 @@ import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDate;
 import java.util.List;
-//@+node:swot.20250924151050.3: ** @ignore-node interface EmpMapper
+//@+node:swot.20250924160811.3: ** @ignore-node interface EmpMapper
 @Mapper
 public interface EmpMapper {
     //@+others
-    //@+node:swot.20250924151050.4: *3* @ignore-node selectCount & selectpage
+    //@+node:swot.20250924160811.4: *3* @ignore-node selectCount & selectpage
     //@+doc
     // [source,java,linenums]
     // ----
@@ -31,7 +31,7 @@ public interface EmpMapper {
     public abstract List<Emp> selectPage(int offset, Integer pageSize);
     //@+doc
     // ----
-    //@+node:swot.20250924151050.5: *3* @ignore-node list 多条件查询传递多个参数
+    //@+node:swot.20250924160811.5: *3* @ignore-node list 多条件查询传递多个参数
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -46,7 +46,7 @@ public interface EmpMapper {
     );
     //@+doc
     // ----
-    //@+node:swot.20250924151050.6: *3* @ignore-node deleteEmpByIds
+    //@+node:swot.20250924160811.6: *3* @ignore-node deleteEmpByIds
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -56,7 +56,7 @@ public interface EmpMapper {
     //@+doc
     // ----
     //
-    //@+node:swot.20250924151050.7: *3* @ignore-node insertEmp
+    //@+node:swot.20250924160811.7: *3* @ignore-node insertEmp
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -68,7 +68,7 @@ public interface EmpMapper {
     //@+doc
     // ----
     //
-    //@+node:swot.20241230135844.6: *3* getEmpById
+    //@+node:swot.20250924160811.8: *3* @ignore-node getEmpById
     //@@language java
     //@+doc
     // [source,java]
@@ -76,6 +76,17 @@ public interface EmpMapper {
     //@@c
     @Select("select * from emp where id = #{id}")
     public abstract Emp getEmpById(Integer id);
+    //@+doc
+    // ----
+    //
+    //@+node:swot.20241230135844.11: *3* updateEmp
+    //@@language java
+    //@+doc
+    // [source,java]
+    // ----
+    //@@c
+    // 因为要判断值是否为空，所以要用到动态 SQL 了
+    public void updateEmp(Emp emp);
     //@+doc
     // ----
     //

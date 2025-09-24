@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250924150927.1: * @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+//@+node:swot.20250924160711.1: * @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 //@@language java
 //@+others
-//@+node:swot.20250924150927.2: ** @ignore-node import
+//@+node:swot.20250924160711.2: ** @ignore-node import
 package com.tjise.service.impl;
 
 import com.github.pagehelper.Page;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-//@+node:swot.20250924150927.3: ** @ignore-node class EmpServiceImpl
+//@+node:swot.20250924160711.3: ** @ignore-node class EmpServiceImpl
 //@+doc
 // [source,java,linenums]
 // ----
@@ -27,7 +27,7 @@ public class EmpServiceImpl implements EmpService {
     @Autowired
     private EmpMapper empMapper;
     //@+others
-    //@+node:swot.20250924150927.4: *3* @ignore-node selectPage 多条件查询传递多个参数
+    //@+node:swot.20250924160711.4: *3* @ignore-node selectPage 多条件查询传递多个参数
     //@+doc
     // [source,java,linenums]
     // ----
@@ -54,7 +54,7 @@ public class EmpServiceImpl implements EmpService {
     //
     // <1> 必须紧跟着！！！
     // <2> PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
-    //@+node:swot.20250924150927.5: *3* @ignore-node deleteEmpByIds
+    //@+node:swot.20250924160711.5: *3* @ignore-node deleteEmpByIds
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -66,7 +66,7 @@ public class EmpServiceImpl implements EmpService {
     }
     //@+doc
     // ----
-    //@+node:swot.20250924150927.6: *3* @ignore-node insertEmp
+    //@+node:swot.20250924160711.6: *3* @ignore-node insertEmp
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -81,7 +81,7 @@ public class EmpServiceImpl implements EmpService {
     }
     //@+doc
     // ----
-    //@+node:swot.20241230135844.5: *3* getEmpById
+    //@+node:swot.20250924160711.7: *3* @ignore-node getEmpById
     //@@language java
     //@+doc
     // [source,java]
@@ -90,6 +90,21 @@ public class EmpServiceImpl implements EmpService {
     public Emp getEmpById(Integer id) {
         Emp emp = empMapper.getEmpById(id);
         return emp;
+    }
+    //@+doc
+    // ----
+    //
+    //@+node:swot.20241230135844.10: *3* updateEmp
+    //@@language java
+    //@+doc
+    // [source,java]
+    // ----
+    //@@c
+    // emp 封装了要修改的数据
+    public void updateEmp(Emp emp) {
+        // 在前端提交的表单中没有更新时间，所以需要后台来补充此属性
+        emp.setUpdateTime(LocalDateTime.now());
+        empMapper.updateEmp(emp);
     }
     //@+doc
     // ----

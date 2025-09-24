@@ -1,5 +1,5 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250924150702.1: * @file src/main/java/com/tjise/controller/EmpController.java
+//@+node:swot.20250924160513.1: * @file src/main/java/com/tjise/controller/EmpController.java
 //@@language java
 //@+doc
 // [source,java,linenums]
@@ -24,7 +24,7 @@ public class EmpController {
     @Autowired
     private EmpService empService;
     //@+others
-    //@+node:swot.20250924150702.2: ** @ignore-node selectPage
+    //@+node:swot.20250924160513.2: ** @ignore-node selectPage
     //@+doc
     // .多条件分页查询
     // [source,java,linenums]
@@ -55,7 +55,7 @@ public class EmpController {
     }
     //@+doc
     // ----
-    //@+node:swot.20250924150702.3: ** @ignore-node deleteEmp
+    //@+node:swot.20250924160513.3: ** @ignore-node deleteEmp
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -68,7 +68,7 @@ public class EmpController {
     }
     //@+doc
     // ----
-    //@+node:swot.20250924150702.4: ** @ignore-node insertEmp
+    //@+node:swot.20250924160513.4: ** @ignore-node insertEmp
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -81,7 +81,7 @@ public class EmpController {
     }
     //@+doc
     // ----
-    //@+node:swot.20241230150625.1: ** getEmpById
+    //@+node:swot.20250924160513.5: ** @ignore-node getEmpById
     //@@language java
     //@+doc
     // [source,java]
@@ -98,6 +98,20 @@ public class EmpController {
     //
     // 测试:
     // http -v :8080/emps/20
+    //@+node:swot.20241230135844.8: ** updateEmp
+    //@@language java
+    //@+doc
+    // [source,java]
+    // ----
+    //@@c
+    @PutMapping
+    public Result updateEmp(@RequestBody Emp emp){
+        empService.updateEmp(emp);
+        return Result.success();
+    }
+    //@+doc
+    // ----
+    //
     //@-others
 }
 //@+doc
