@@ -1,0 +1,39 @@
+#@+leo-ver=5-thin
+#@+node:swot.20241105150535.2: * @file src/main/resources/application.yml
+#@@language python
+#@+doc
+# [source,yaml,linenums]
+# ----
+#@@c
+spring:
+    application:
+        name: general-manage
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3307/tjise
+        username: root
+        password: root
+    servlet:
+        multipart:                  # 上传文件
+            max-file-size: 10MB     # 指定单个文件上传的大小
+            max-request-size: 100MB  # 指定单次请求上传文件的总大小
+
+mybatis:
+    configuration:
+        # 指定mybatis输出日志的位置, 输出控制台
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+        #开启驼峰命名自动映射，即从经典数据库列名 a_column 映射到经典 Java 属性 名 aColumn
+        map-underscore-to-camel-case: true
+
+# --- 阿里云 OSS ---
+# 与之对应引用为 @Vaule("${aliyun.oss.endpoint}")
+# noinspection undefined
+aliyun:
+    oss:
+        endpoint: "https://oss-cn-beijing.aliyuncs.com"
+        accessKeyId: "REMOVED]"
+        accessKeySecret: "[REMOVED]"
+        bucketName: "swot-learn"
+#@+doc
+# ----
+#@-leo
