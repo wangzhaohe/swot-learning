@@ -321,10 +321,10 @@
 <v t="swot.20250814182908.1"><vh>file -&gt; src/test/java/com/tjise/AliOssEnvTest.java</vh></v>
 </v>
 <v t="swot.20241105143814.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d313571077573732e"><vh>16.5.7 OSS 封装工具类</vh>
-<v t="swot.20250814205415.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d313571077573732e"><vh>file -&gt; src/main/java/com/tjise/utils/AliOSSUtils.java</vh></v>
+<v t="swot.20250814205415.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d313571077573732e"><vh>@file src/main/java/com/tjise/utils/AliOSSUtils.java</vh></v>
 </v>
 <v t="swot.20241105144900.1"><vh>16.5.8 OSS 封装工具类的使用 -&gt; 重写图片上传控制类</vh>
-<v t="swot.20241105085808.1"><vh>file -&gt; src/main/java/com/tjise/controller/UploadController.java</vh></v>
+<v t="swot.20241105085808.1"><vh>@file src/main/java/com/tjise/controller/UploadController.java</vh></v>
 </v>
 <v t="swot.20241105145650.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d3135710775735805000000302e302e3071087d7109285808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4b01580a00000070726973657464617465710d580a000000323032352d30392d3039710e75580500000069636f6e73710f5d71107d7111285804000000747970657112580400000066696c657113681358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e677114580700000072656c506174687115580d000000636c656f2f707269312e706e677116580500000077686572657117580e0000006265666f7265486561646c696e6571185807000000796f666673657471194b005807000000786f6666736574711a4b02580400000078706164711b4b0158020000006f6e711c5805000000766e6f6465711d5808000000636c656f49636f6e711e580100000031711f7561755805000000302e312e3071207d7121285808000000616e6e6f7461746571227d71232858080000007072696f7269747971244b02580a000000707269736574646174657125580a000000323032352d30392d3039712675580500000069636f6e7371275d71287d71292868126813681358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67712a6815580d000000636c656f2f707269322e706e67712b6817681868194b00681a4b02681b4b01681c681d681e681f756175752e"><vh>16.5.9 使用 @Value 注解从配置文件引入阿里云 OSS 参数</vh>
 <v t="swot.20241030103328.1" descendentVnodeUnknownAttributes="7d71002858010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d3135710775735803000000302e3071087d7109285808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4b01580a00000070726973657464617465710d580a000000323032352d30392d3039710e75580500000069636f6e73710f5d71107d7111285804000000747970657112580400000066696c657113681358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e677114580700000072656c506174687115580d000000636c656f2f707269312e706e677116580500000077686572657117580e0000006265666f7265486561646c696e6571185807000000796f666673657471194b005807000000786f6666736574711a4b02580400000078706164711b4b0158020000006f6e711c5805000000766e6f6465711d5808000000636c656f49636f6e711e580100000031711f756175752e"><vh>file -&gt; src/main/resources/application.properties</vh>
@@ -1743,7 +1743,8 @@ public void updateDept(Dept dept) {
 @doc
 ----
 </t>
-<t tx="swot.20241104132937.1"></t>
+<t tx="swot.20241104132937.1">
+</t>
 <t tx="swot.20241104133550.1">@language asciidoc
 @nowrap
 查询员工的全部数据（由于员工数据比较多，需要分页显示）
@@ -2535,42 +2536,6 @@ public class MyMvcConfig implements WebMvcConfigurer {
 @doc
 ----
 </t>
-<t tx="swot.20241105085808.1">@language java
-@doc
-[source,java,linenums]
-----
-@c
-package com.tjise.controller;
-
-import com.tjise.pojo.Result;
-import com.tjise.utils.AliOSSUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-
-
-@RestController
-public class UploadController {
-
-    // DI 注入阿里云 OSS AliOSSUtils 的对象
-    @Autowired
-    private AliOSSUtils aliOSSUtils;
-
-    @PostMapping("/upload")
-    public Result upload(@RequestParam("image") MultipartFile image) throws IOException {
-        // 把图片直接上传到阿里云 OSS 服务中
-        String url = aliOSSUtils.upload(image);
-        // 返回 url 地址给前端
-        return Result.success(url);
-    }
-}
-@doc
-----
-</t>
 <t tx="swot.20241105090209.1">1. 运行后台服务程序
 
 2. 使用 httpie 或者在网页中测试图片上传
@@ -2704,7 +2669,7 @@ x-oss-storage-class: Standard
 ....
 </t>
 <t tx="swot.20241105145650.1">@language asciidoc
-1. 在配置文件 application.properties 中增加 4个 aliyun.oss.xxx
+1. 在配置文件 application.properties 中增加 4 个 aliyun.oss.xxx。
 
 2. 为了不用在 AliOSSUtils.java 文件中硬编码配置，给 AliOssUtils 中的私有变量加 @Value 注解，以读取 application.properties 中的配置。
 
@@ -3510,55 +3475,6 @@ public class AliOssEnvTest {
                 ossClient.shutdown();
             }
         }
-    }
-}
-@doc
-----
-</t>
-<t tx="swot.20250814205415.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032352d30382d31357103752e">@language java
-@doc
-[source,java]
-----
-@c
-package com.tjise.utils;
-
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import lombok.Data;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-// 阿里云 OSS 工具类
-// 放入IOC 容器中，不属于 控制层@Controller、业务层@Service、持久层@Repository，所以就用 @Component 吧
-@Component
-@Data
-public class AliOSSUtils {
-    // 这儿的参数是写死的，后面再解决
-    private String endpoint = "https://oss-cn-beijing.aliyuncs.com";
-    private String accessKeyId = "[REMOVED]";
-    private String accessKeySecret = "[REMOVED]";
-    private String bucketName = "swot-learn";
-
-    // 实现上传图片到OSS
-    public String upload(MultipartFile multipartFile) throws IOException {
-        // 获取上传的文件的输入流
-        InputStream inputStream = multipartFile.getInputStream();
-
-        // 避免文件覆盖
-        String fileName = LocalDateTime.now().format(
-            DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")) + multipartFile.getOriginalFilename();
-
-        //上传文件到 OSS（没有使用 region，还是老的方式，建议使用新方式 create，不使用 build）
-        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
-        ossClient.putObject(bucketName, fileName, inputStream);
-
-        //文件访问路径
-        String url = endpoint.split("//")[0] + "//" + bucketName + "." + endpoint.split("//")[1] + "/" + fileName;
-        ossClient.shutdown();  // 关闭 ossClient
-        return url;            // 把上传到 oss 的路径返回
     }
 }
 @doc

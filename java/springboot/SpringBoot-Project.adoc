@@ -2946,7 +2946,7 @@ private AliOSSUtils aliOSSUtils;   // Spring 把容器里的那个对象塞进�
 因为 `upload` 不是静态的，所以我们得先拿到一个 `AliOSSUtils` 对象；最方便的办法就是让 Spring 容器生成并注入这个对象，然后调用它的 `upload` 方法。
 ====
 
-====== file -> src/main/java/com/tjise/utils/AliOSSUtils.java
+====== @file src/main/java/com/tjise/utils/AliOSSUtils.java
 [source,java]
 ----
 package com.tjise.utils;
@@ -2961,12 +2961,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 // 阿里云 OSS 工具类
-// 放入IOC 容器中，不属于 控制层@Controller、业务层@Service、持久层@Repository，所以就用 @Component 吧
+// 放入 IOC 容器中，不属于 控制层@Controller、业务层@Service、持久层@Repository，所以就用 @Component 吧
 @Component
 @Data
 public class AliOSSUtils {
     // 这儿的参数是写死的，后面再解决
     private String endpoint = "https://oss-cn-beijing.aliyuncs.com";
+    // private String accessKeyId = "[REMOVED]";
+    // private String accessKeySecret = "[REMOVED]";
     private String accessKeyId = "[REMOVED]";
     private String accessKeySecret = "[REMOVED]";
     private String bucketName = "swot-learn";
@@ -3036,7 +3038,7 @@ x-oss-server-time: 18
 x-oss-storage-class: Standard
 ....
 
-====== file -> src/main/java/com/tjise/controller/UploadController.java
+====== @file src/main/java/com/tjise/controller/UploadController.java
 [source,java,linenums]
 ----
 package com.tjise.controller;
@@ -3070,7 +3072,7 @@ public class UploadController {
 ----
 
 ===== 16.5.9 使用 @Value 注解从配置文件引入阿里云 OSS 参数
-1. 在配置文件 application.properties 中增加 4个 aliyun.oss.xxx
+1. 在配置文件 application.properties 中增加 4 个 aliyun.oss.xxx。
 
 2. 为了不用在 AliOSSUtils.java 文件中硬编码配置，给 AliOssUtils 中的私有变量加 @Value 注解，以读取 application.properties 中的配置。
 
