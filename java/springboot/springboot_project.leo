@@ -513,7 +513,7 @@
 <v t="swot.20250818115632.1"><vh>file -&gt; src/main/java/com/tjise/filter/LoginCheckedFilter.java</vh>
 <v t="swot.20250818211911.1"><vh>&lt;&lt; import &gt;&gt;</vh></v>
 <v t="swot.20250818212245.1"><vh>public void doFilter</vh></v>
-<v t="swot.20250818212508.1"><vh>private void sendErrorResponse</vh></v>
+<v t="swot.20250818212508.1"><vh>private void sendErrorResponse -&gt; 被 doFilter 调用</vh></v>
 </v>
 <v t="swot.20250818115926.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30392d303771077573732e"><vh>file -&gt; src/main/java/com/tjise/GeneralManagerApplication.java</vh></v>
 </v>
@@ -4378,6 +4378,7 @@ IMPORTANT: 因为要返回 json 给前端，所以需要安装依赖 fastjson2
 </t>
 <t tx="swot.20250818115632.1">@language java
 @doc
+@others
 [source,java]
 ----
 @c
