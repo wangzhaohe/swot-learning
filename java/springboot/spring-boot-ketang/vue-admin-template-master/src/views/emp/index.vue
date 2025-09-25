@@ -111,7 +111,7 @@
              -->
             <el-option
               v-for="item in deptList"
-              :key="item.value"
+              :key="item.id"
               :label="item.name"
               :value="item.id"
             />
@@ -318,7 +318,7 @@ export default {
       selectById(id).then((result) => {
         if (result.data.code == 1) {
           this.emp = result.data.data;
-          this.emp;
+          console.log("this.emp: ", this.emp);
         }
       });
     },
