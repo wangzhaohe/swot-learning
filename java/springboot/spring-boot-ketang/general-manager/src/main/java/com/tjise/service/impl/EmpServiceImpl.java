@@ -1,8 +1,13 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250924160711.1: * @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+//@+node:swot.20241031090121.6: * @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 //@@language java
 //@+others
-//@+node:swot.20250924160711.2: ** @ignore-node import
+//@+node:swot.20250816114028.1: ** @ignore-node import
+//@@language java
+//@+doc
+// [source,java]
+// ----
+//@@c
 package com.tjise.service.impl;
 
 import com.github.pagehelper.Page;
@@ -17,44 +22,35 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-//@+node:swot.20250924160711.3: ** @ignore-node class EmpServiceImpl
 //@+doc
-// [source,java,linenums]
 // ----
-//@@c
+//
+//@+node:swot.20250816114110.1: ** @ignore-node public class EmpServiceImpl
 @Service  // 把该类的对象交给 IOC 容器管理
 public class EmpServiceImpl implements EmpService {
     @Autowired
     private EmpMapper empMapper;
     //@+others
-    //@+node:swot.20250924160711.4: *3* @ignore-node selectPage 多条件查询传递多个参数
-    //@+doc
-    // [source,java,linenums]
-    // ----
-    //@@c
-    //@@language java
+    //@+node:swot.20250817063940.1: *3* @ignore-tree
+    //@+node:swot.20241104151414.1: *4* 分页多条件查询
     @Override
-    public PageBean selectPage(Integer page,
-                               Integer pageSize,
-                               String name,
-                               Short gender,
-                               LocalDate begin,
-                               LocalDate end)
-    {
-        // 设置分页查询参数 pageNum: 页码, pageSize: 每页显示数量
-        PageHelper.startPage(page, pageSize);   // 紧跟着的第一个select方法会被分页
-        List<Emp> empList = empMapper.list(name, gender, begin, end);   // 执行查询
-        Page<Emp> p = (Page<Emp>) empList;      // 获取分页结果，将 empList 转成 Page 类型
+    public PageBean selectPage(Integer page, Integer pageSize, String name, Short gender, LocalDate begin, LocalDate end) {
 
-        // 封装成 PageBean 对象返回
+        /*
+        Long total = empMapper.selectCount();
+
+        int offset = (page - 1) * pageSize;
+        List<Emp> empList = empMapper.selectPage(offset, pageSize);
+        PageBean pageBean = new PageBean(total, empList);
+        return pageBean;
+         */
+
+        PageHelper.startPage(page, pageSize);
+        List<Emp> empList = empMapper.list(name, gender, begin, end);
+        Page<Emp> p = (Page<Emp>) empList;
         return new PageBean(p.getTotal(), p.getResult());
     }
-    //@+doc
-    // ----
-    //
-    // <1> 必须紧跟着！！！
-    // <2> PageHelper 已经帮你做了物理分页，不必担心一次性查全表的问题。
-    //@+node:swot.20250924160711.5: *3* @ignore-node deleteEmpByIds
+    //@+node:swot.20241104155215.1: *4* 删除员工 EmpServiceImpl
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -66,7 +62,7 @@ public class EmpServiceImpl implements EmpService {
     }
     //@+doc
     // ----
-    //@+node:swot.20250924160711.6: *3* @ignore-node insertEmp
+    //@+node:swot.20241104160622.1: *4* 新增员工 EmpServiceImpl
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -74,14 +70,14 @@ public class EmpServiceImpl implements EmpService {
     //@@c
     @Override
     public void insertEmp(Emp emp){
-        // 业务逻辑补全属性
+        // 补全属性
         emp.setCreateTime(LocalDateTime.now());
         emp.setUpdateTime(LocalDateTime.now());
         empMapper.insertEmp(emp);
     }
     //@+doc
     // ----
-    //@+node:swot.20250924160711.7: *3* @ignore-node getEmpById
+    //@+node:swot.20241230135844.5: *4* getEmpById
     //@@language java
     //@+doc
     // [source,java]
@@ -94,7 +90,7 @@ public class EmpServiceImpl implements EmpService {
     //@+doc
     // ----
     //
-    //@+node:swot.20241230135844.10: *3* updateEmp
+    //@+node:swot.20241230135844.10: *4* updateEmp
     //@@language java
     //@+doc
     // [source,java]
@@ -109,9 +105,22 @@ public class EmpServiceImpl implements EmpService {
     //@+doc
     // ----
     //
+    //@+node:swot.20250816113556.1: *3* 员工登录功能 login -> New Add
+    //@@language java
+    //@+doc
+    // * @param emp 包含用户输入的用户名和密码的 Emp 对象
+    //
+    // [source,java]
+    // ----
+    //@@c
+    @Override
+    public Emp login(Emp emp) {
+        Emp e = empMapper.login(emp);
+        return e;
+    }
+    //@+doc
+    // ----
     //@-others
 }
-//@+doc
-// ----
 //@-others
 //@-leo

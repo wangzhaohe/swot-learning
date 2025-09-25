@@ -3807,7 +3807,7 @@ public class LoginController {
 ===== file -> src/main/java/com/tjise/service/EmpService.java
 
 
-====== login 新增
+====== login -> New Add
 [source,java]
 ----
 Emp login(Emp emp);
@@ -3816,7 +3816,7 @@ Emp login(Emp emp);
 ===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 
 
-====== 员工登录功能 login -> 新增
+====== 员工登录功能 login -> New Add
 * @param emp 包含用户输入的用户名和密码的 Emp 对象
 
 [source,java]
@@ -3847,7 +3847,7 @@ public interface EmpMapper {
 }
 ----
 
-====== login
+====== login -> New Add
 .同时查询用户名和密码，返回结果。
 [source,java]
 ----
@@ -3869,14 +3869,25 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
 各部分解析:
 
 * 第一部分：Header(头）， 作用：记录令牌类型、签名算法等。 例如：{"alg":"HS256","type","JWT}
-* 第二部分：Payload(有效载荷），作用：携带一些用户信息及过期时间等。 例如：{“id":"1","username":“Tom"}
-* 第三部分：Signature(签名），作用：防止Token被篡改、确保安全性。 理解：计算出来的签名，一个字符串。
 
-==== pom.xml 新增依赖 JWT
-参考网址: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api/0.12.6
+* 第二部分：Payload(有效载荷），作用：携带一些用户信息及过期时间等。 例如：{“id":"1","username":“Tom"}
+
+* 第三部分：Signature(签名），作用：防止Token 被篡改、确保安全性。 理解：计算出来的签名，一个字符串。
+
+下面介绍使用 JWT 的步骤。
+
+==== file -> pom.xml
+
+
+===== 新增依赖 jjwt -> 有 3 个
+参考网址: 新的 jjwt 分成了 3 个依赖，可以分别引用。
+
+* https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api/0.12.6
+* https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl/0.12.6
+* https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson/0.12.6
 
 [source,scss]
-----
+....
 <!-- 接口层: 编译时需要 -->
 <dependency>
     <groupId>io.jsonwebtoken</groupId>
@@ -3899,7 +3910,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
     <version>0.12.6</version>
     <scope>runtime</scope>
 </dependency>
-----
+....
 
 ==== 测试 JWT 的创建与解析
 
@@ -3930,7 +3941,8 @@ public void generateJwt() {
     SecretKey key = Keys.hmacShaKeyFor("12345678901234567890123456789012".getBytes());
 
     // 3. 构建并签名 JWT（0.12.x 写法）
-    String jwt = Jwts.builder()
+    String jwt = Jwts
+            .builder()
             .signWith(key, Jwts.SIG.HS256)                    // 先密钥，再算法
             .claims(claims)                                   // 设置自定义数据
            // .expiration(new Date(System.currentTimeMillis() + 12 * 3600 * 1000)) // 12h 过期
@@ -3950,13 +3962,14 @@ public void parseJwt() {
     SecretKey key = Keys.hmacShaKeyFor("12345678901234567890123456789012".getBytes());
     try {
         // 2. 创建线程安全的 JwtParser
-        JwtParser parser = Jwts.parser()
+        JwtParser parser = Jwts
+                .parser()
                 .verifyWith(key)   // 指定验证密钥
                 .build();
 
         // 3. 解析 generateJwt() 生成的 JWT 并返回载荷
-        Jws<Claims> jws = parser.parseSignedClaims(
-            "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJsaW11d2FuIiwiZXhwIjoxNzU1MzM5OTczfQ.2uL_v-lYN_SpOxNTlQN8LRVrRtWgThsTZ2RaJFx7Dak");
+        String jwtStr = "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJsaW11d2FuIiwiZXhwIjoxNzU1MzM5OTczfQ.2uL_v-lYN_SpOxNTlQN8LRVrRtWgThsTZ2RaJFx7Dak";
+        Jws<Claims> jws = parser.parseSignedClaims(jwtStr);
         Claims payload = jws.getPayload();// 就是以前版本的 getBody() 方法
         System.out.println(payload);
 
@@ -3980,10 +3993,8 @@ public void parseJwt() {
 [source,java]
 ----
 public class JwtUtils {
-
     private static SecretKey key = Keys.hmacShaKeyFor(
-            "12345678901234567890123456789012".getBytes());
-
+            "12345678901234567890123456789012".getBytes());  // 盐值
     public static Long expire = 1000L * 10;          // 10s , 测试用
     // public static Long expire = - 1000L           // 负 1s 马上过期
     // public static Long expire = 12 * 3600 * 1000L // 12h 过期
@@ -3997,9 +4008,10 @@ public class JwtUtils {
 [source,java]
 ----
 public static String generateJwt(Map<String, Object> claims) {
-    String jwt = Jwts.builder()
-            .signWith(key, Jwts.SIG.HS256)                    // 先密钥，再算法
-            .claims(claims)                                   // 设置自定义数据
+    String jwt = Jwts
+            .builder()
+            .signWith(key, Jwts.SIG.HS256)          // 先密钥，再算法
+            .claims(claims)                         // 设置自定义数据
             .expiration(new Date(System.currentTimeMillis() + expire))
             .compact();  // 生成令牌
     return jwt;

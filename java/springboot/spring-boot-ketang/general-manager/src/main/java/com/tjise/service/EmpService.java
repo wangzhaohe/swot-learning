@@ -1,69 +1,55 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250924160639.1: * @file src/main/java/com/tjise/service/EmpService.java
+//@+node:swot.20241031090121.4: * @file src/main/java/com/tjise/service/EmpService.java
 //@@language java
-//@+doc
-// [source,java,linenums]
-// ----
-//@@c
+//@+others
+//@+node:swot.20250816112818.1: ** @ignore-node import
 package com.tjise.service;
 
 import com.tjise.pojo.Emp;
 import com.tjise.pojo.PageBean;
+
 import java.time.LocalDate;
 import java.util.List;
 
+//@+node:swot.20250816112852.1: ** @ignore-node public interface EmpService
 public interface EmpService {
     //@+others
-    //@+node:swot.20250924160639.2: ** @ignore-node selectPage
+    //@+node:swot.20250817004231.1: *3* @ignore-tree
+    //@+others
+    //@+node:swot.20250816113055.1: *4* selectPage
     public abstract PageBean selectPage(
-            Integer page,
-            Integer pageSize,
-            String name,
-            Short gender,
-            LocalDate begin,
-            LocalDate end);
-    //@+node:swot.20250924160639.3: ** @ignore-node deleteEmpByIds
-    //@@language java
-    //@+doc
-    // [source,java,linenums]
-    // ----
-    //@@c
+        Integer page,
+        Integer pageSize,
+        String name,
+        Short gender,
+        LocalDate begin,
+        LocalDate end
+    );
+    //@+node:swot.20250816113051.1: *4* deleteEmpByIds
     void deleteEmpByIds(List<Integer> ids);
-    //@+doc
-    // ----
-    //
-    //@+node:swot.20250924160639.4: ** @ignore-node insertEmp
-    //@@language java
-    //@+doc
-    // [source,java,linenums]
-    // ----
-    //@@c
-    void insertEmp(Emp emp);
-    //@+doc
-    // ----
-    //
-    //@+node:swot.20250924160639.5: ** @ignore-node getEmpById
-    //@@language java
-    //@+doc
-    // [source,java]
-    // ----
-    //@@c
+
+    //@+node:swot.20250816113047.1: *4* insertEmp
+    void insertEmp(Emp emp);    
+
+    //@+node:swot.20250816113044.1: *4* getEmpById
     public abstract Emp getEmpById(Integer id);
-    //@+doc
-    // ----
-    //
-    //@+node:swot.20241230135844.9: ** updateEmp
+
+    //@+node:swot.20250816113040.1: *4* updateEmp
+    public abstract void updateEmp(Emp emp);
+
+    //@-others
+    //@+node:swot.20250817055301.1: *3* login -> New Add
     //@@language java
     //@+doc
     // [source,java]
     // ----
     //@@c
-    public abstract void updateEmp(Emp emp);
+    Emp login(Emp emp);
     //@+doc
     // ----
     //
     //@-others
 }
-//@+doc
-// ----
+
+//@-others
 //@-leo
