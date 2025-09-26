@@ -60,7 +60,10 @@
 <v t="swot.20250918092758.1"><vh>掌握-后端在全局解决跨域问题</vh>
 <v t="swot.20250918093531.1"><vh>file -&gt; src/main/java/com/tjise/config/CorsConfig.java</vh></v>
 </v>
-<v t="swot.20250918104847.1"><vh>了解-在开发时前端自己处理跨域问题</vh></v>
+<v t="swot.20250918104847.1"><vh>了解-在开发时前端自己处理跨域问题</vh>
+<v t="swot.20250926135343.1"><vh>vue-admin-template-master/.env.development</vh></v>
+<v t="swot.20250926140829.1"><vh>vue-admin-template-master/vue.config.js</vh></v>
+</v>
 <v t="swot.20250918104922.1"><vh>了解-运维在部署时通过 Nginx 反向代理解决跨域</vh></v>
 </v>
 <v t="swot.20241101085903.1"><vh>15.3 删除单个部门</vh>
@@ -3943,6 +3946,8 @@ http -v :8080/emps
 <t tx="swot.20250816125235.1">@language asciidoc
 拦截器 Interceptor 是一种动态拦截方法调用的机制，类似于过滤器。在 Spring 中动态拦截 #控制器 Controller# 中方法的执行。
 
+在实现拦截功能后，您可以使用下面的方式进行测试。
+
 1. 未登录测试拦截器
 * http -v :8080/emps/20
 * http -v :8080/emps
@@ -4372,7 +4377,6 @@ image::img/filterAndInterceptor.png[,900]
 image::img/login_filter.png[login,480]
 
 IMPORTANT: 因为要返回 json 给前端，所以需要安装依赖 fastjson2
-
 </t>
 <t tx="swot.20250818115632.1">@language java
 @doc
@@ -7842,7 +7846,10 @@ operateLogMapper.insert(operateLog);
 ----
 
 </t>
-<t tx="swot.20250831205807.1"></t>
+<t tx="swot.20250831205807.1">@language asciidoc
+IMPORTANT: 如果想要测试后端跨域是否支持，需要将前端的跨域关闭，否则测试不出来。
+
+</t>
 <t tx="swot.20250831205848.1">@language java
 @others
 </t>
@@ -8026,11 +8033,13 @@ public void postHandle(HttpServletRequest request, HttpServletResponse response,
 public boolean preHandle(HttpServletRequest request,
                          HttpServletResponse response,
                          Object handler) throws Exception {
-    System.out.println("Enter preHandle()");
+    System.out.println(
+        "[INTERCEPTOR] " + java.time.LocalDateTime.now() + " - Enter preHandle()");
 
     // 增加处理 CORS 预检请求，这个要加，不加会报错的
     if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-        System.out.println("Handling OPTIONS request");
+        System.out.println(
+            "[INTERCEPTOR] " + java.time.LocalDateTime.now() + " - Handling OPTIONS request");
         response.setStatus(HttpServletResponse.SC_OK);
         return true;
     }
@@ -8119,12 +8128,13 @@ public class LoginCheckedInterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         System.out.println("Enter addCorsMappings()");
-        registry.addMapping("/**")  // 允许所有路由
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
-                .allowedHeaders("*")        // 允许所有头
-                .allowCredentials(true)     // 允许携带 cookie
-                .exposedHeaders("*");       // 暴露所有头
+        registry
+            .addMapping("/**")      // 允许所有路由
+            .allowedOriginPatterns("*")  // 允许任何跨域来源
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
+            .allowedHeaders("*")    // 允许所有头
+            .allowCredentials(true) // 允许携带 cookie
+            .exposedHeaders("*");   // 暴露所有头
     }
 }
 @doc
@@ -8887,6 +8897,7 @@ public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter() {
+        System.out.println("[CORS CONFIG] " + java.time.LocalDateTime.now() + " - Initializing CORS Filter");
         CorsConfiguration config = new CorsConfiguration();
         // 允许所有域名进行跨域调用
         config.addAllowedOriginPattern("*");
@@ -8899,6 +8910,7 @@ public class CorsConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
+        System.out.println("[CORS CONFIG] " + java.time.LocalDateTime.now() + " - CORS Filter configured");
         return new CorsFilter(source);
     }
 }
@@ -8906,7 +8918,8 @@ public class CorsConfig {
 ----
 </t>
 <t tx="swot.20250918104840.1"></t>
-<t tx="swot.20250918104847.1"></t>
+<t tx="swot.20250918104847.1">@language asciidoc
+</t>
 <t tx="swot.20250918104922.1"></t>
 <t tx="swot.20250919083742.1">@language java
 @others
@@ -11785,6 +11798,46 @@ IMPORTANT: item 的值要和 #{} 中的值一样！
     &lt;/build&gt;
 
 &lt;/project&gt;
+</t>
+<t tx="swot.20250926135343.1">@language python
+.开发配置
+[source,python]
+----
+ENV = 'development'  # just a flag
+
+# base api
+VUE_APP_BASE_API = '/api'   # 使用前端跨域
+# VUE_APP_BASE_API = 'http://localhost:8080/'  # 不使用前端跨域
+
+VUE_APP_URL='http://localhost:8080/'  # base url
+----
+</t>
+<t tx="swot.20250926140829.1">@language javascript
+[source,javascript]
+----
+  devServer: {
+    hot: true,
+    port: port,
+    open: true,
+    overlay: {
+      warnings: false,
+      errors: true
+    },
+    // --- 前端自己处理跨域问题 ---
+    proxy: {
+      '/api': {
+        target: process.env.VUE_APP_URL || 'http://localhost:8080',
+        ws: false,
+        secure: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    },
+    // before: require('./mock/mock-server.js')  // 注释掉mock服务器以使用真实API
+  },
+----
 </t>
 </tnodes>
 </leo_file>

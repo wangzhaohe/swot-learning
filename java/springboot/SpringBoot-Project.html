@@ -607,11 +607,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_登录接口调用_jwt_类生成_token_返回给前端">登录接口调用 JWT 类生成 token 返回给前端</a></li>
 </ul>
 </li>
-<li><a href="#_18_统一拦截二选一">18. 统一拦截（二选一）</a>
+<li><a href="#_18_统一过滤或拦截二选一">18. 统一过滤或拦截（二选一）</a>
 <ul class="sectlevel3">
 <li><a href="#_fastjson2_pom_xml_新增依赖">fastjson2 pom.xml 新增依赖</a></li>
 <li><a href="#_过滤器_filter_介绍一下以后使用_interceptor">过滤器 Filter （介绍一下，以后使用 Interceptor）</a></li>
-<li><a href="#_拦截器_interceptorspringboot_使用">拦截器 Interceptor（SpringBoot 使用）</a></li>
+<li><a href="#_拦截器_interceptorspringboot_建议使用">拦截器 Interceptor（SpringBoot 建议使用）</a></li>
 <li><a href="#_同时存在_filter_interceptor_的执行顺序">同时存在 Filter &amp; interceptor 的执行顺序</a></li>
 </ul>
 </li>
@@ -2032,6 +2032,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 
 <span class="tok-w">    </span><span class="tok-nd">@Bean</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">CorsFilter</span><span class="tok-w"> </span><span class="tok-nf">corsFilter</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;[CORS CONFIG] &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">java</span><span class="tok-p">.</span><span class="tok-na">time</span><span class="tok-p">.</span><span class="tok-na">LocalDateTime</span><span class="tok-p">.</span><span class="tok-na">now</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; - Initializing CORS Filter&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-n">CorsConfiguration</span><span class="tok-w"> </span><span class="tok-n">config</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CorsConfiguration</span><span class="tok-p">();</span>
 <span class="tok-w">        </span><span class="tok-c1">// 允许所有域名进行跨域调用</span>
 <span class="tok-w">        </span><span class="tok-n">config</span><span class="tok-p">.</span><span class="tok-na">addAllowedOriginPattern</span><span class="tok-p">(</span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">);</span>
@@ -2044,6 +2045,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 
 <span class="tok-w">        </span><span class="tok-n">UrlBasedCorsConfigurationSource</span><span class="tok-w"> </span><span class="tok-n">source</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">UrlBasedCorsConfigurationSource</span><span class="tok-p">();</span>
 <span class="tok-w">        </span><span class="tok-n">source</span><span class="tok-p">.</span><span class="tok-na">registerCorsConfiguration</span><span class="tok-p">(</span><span class="tok-s">&quot;/**&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">config</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;[CORS CONFIG] &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">java</span><span class="tok-p">.</span><span class="tok-na">time</span><span class="tok-p">.</span><span class="tok-na">LocalDateTime</span><span class="tok-p">.</span><span class="tok-na">now</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; - CORS Filter configured&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CorsFilter</span><span class="tok-p">(</span><span class="tok-n">source</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
@@ -2053,7 +2055,50 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 </div>
 <div class="sect4">
 <h5 id="_了解_在开发时前端自己处理跨域问题">了解-在开发时前端自己处理跨域问题</h5>
+<div class="sect5">
+<h6 id="_vue_admin_template_master_env_development">vue-admin-template-master/.env.development</h6>
+<div class="listingblock">
+<div class="title">开发配置</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">ENV</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;development&#39;</span>  <span class="tok-c1"># just a flag</span>
 
+<span class="tok-c1"># base api</span>
+<span class="tok-n">VUE_APP_BASE_API</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;/api&#39;</span>   <span class="tok-c1"># 使用前端跨域</span>
+<span class="tok-c1"># VUE_APP_BASE_API = &#39;http://localhost:8080/&#39;  # 不使用前端跨域</span>
+
+<span class="tok-n">VUE_APP_URL</span><span class="tok-o">=</span><span class="tok-s1">&#39;http://localhost:8080/&#39;</span>  <span class="tok-c1"># base url</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_vue_admin_template_mastervue_config_js">vue-admin-template-master/vue.config.js</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-w">  </span><span class="tok-nx">devServer</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">hot</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">port</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">port</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">open</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">overlay</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-nx">warnings</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-nx">errors</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span>
+<span class="tok-w">    </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-c1">// --- 前端自己处理跨域问题 ---</span>
+<span class="tok-w">    </span><span class="tok-nx">proxy</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-s1">&#39;/api&#39;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">target</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">env</span><span class="tok-p">.</span><span class="tok-nx">VUE_APP_URL</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-s1">&#39;http://localhost:8080&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">ws</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">secure</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">changeOrigin</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">pathRewrite</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">          </span><span class="tok-s1">&#39;^/api&#39;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">      </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-c1">// before: require(&#39;./mock/mock-server.js&#39;)  // 注释掉mock服务器以使用真实API</span>
+<span class="tok-w">  </span><span class="tok-p">},</span></code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_了解_运维在部署时通过_nginx_反向代理解决跨域">了解-运维在部署时通过 Nginx 反向代理解决跨域</h5>
@@ -7682,8 +7727,7 @@ http -v :8080/emps/20</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-nf">login</span><span class="tok-p">(</span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-n">emp</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">login</span><span class="tok-p">(</span><span class="tok-n">emp</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">login</span><span class="tok-p">(</span><span class="tok-n">emp</span><span class="tok-p">);</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -7916,7 +7960,7 @@ http -v :8080/emps/20</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_generatejwt_生成jwt令牌">generateJwt 生成JWT令牌</h6>
+<h6 id="_generatejwt_生成jwt令牌_登录时生成">generateJwt 生成JWT令牌 &#8594; 登录时生成</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -7939,7 +7983,7 @@ http -v :8080/emps/20</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_parsejwt_解析jwt令牌">parseJWT 解析JWT令牌</h6>
+<h6 id="_parsejwt_解析jwt令牌_前端访问_api_时可能需要解析">parseJWT 解析JWT令牌 &#8594; 前端访问 api 时可能需要解析</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -8000,15 +8044,15 @@ http -v :8080/emps/20</p>
 <span class="tok-w">            </span><span class="tok-c1">// 登录失败返回 NOT_LOGIN 后前端会自动跳转到登录页面</span>
 <span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">error</span><span class="tok-p">(</span><span class="tok-s">&quot;NOT_LOGIN&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-c1">// 登录成功</span>
+<span class="tok-w">            </span><span class="tok-c1">// 登录成功生成 JWT</span>
+<span class="tok-w">            </span><span class="tok-c1">// 需要传入的用户数据</span>
 <span class="tok-w">            </span><span class="tok-n">Map</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Object</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">map</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">HashMap</span><span class="tok-o">&lt;&gt;</span><span class="tok-p">();</span>
 <span class="tok-w">            </span><span class="tok-n">map</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getId</span><span class="tok-p">());</span>
 <span class="tok-w">            </span><span class="tok-n">map</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-s">&quot;username&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getUsername</span><span class="tok-p">());</span>
 <span class="tok-w">            </span><span class="tok-n">map</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-s">&quot;name&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">());</span>
 
-<span class="tok-w">            </span><span class="tok-c1">// 生成令牌并返回给前端</span>
-<span class="tok-w">            </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">jwt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">JwtUtils</span><span class="tok-p">.</span><span class="tok-na">generateJwt</span><span class="tok-p">(</span><span class="tok-n">map</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">(</span><span class="tok-n">jwt</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">jwt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">JwtUtils</span><span class="tok-p">.</span><span class="tok-na">generateJwt</span><span class="tok-p">(</span><span class="tok-n">map</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 生成令牌</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">success</span><span class="tok-p">(</span><span class="tok-n">jwt</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 返回给前端</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
@@ -8026,9 +8070,9 @@ http -v :8080/emps/20</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_18_统一拦截二选一">18. 统一拦截（二选一）</h3>
+<h3 id="_18_统一过滤或拦截二选一">18. 统一过滤或拦截（二选一）</h3>
 <div class="paragraph">
-<p>统一拦截可以把对资源的请求拦截下来，从而实现一些特殊的处理。比如：登陆鉴权、统一编码处理、敏感字符处理等。</p>
+<p>统一过虑或拦截可以把对资源的请求拦截下来，从而实现一些特殊的处理。比如：登陆鉴权、统一编码处理、敏感字符处理等。</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -8080,7 +8124,7 @@ http -v :8080/emps/20</p>
 
 <span class="tok-c1">// 过滤器拦截资源</span>
 <span class="tok-c1">//@WebFilter(urlPatterns = &quot;/emps/*&quot;)  // 拦截部分 api</span>
-<span class="tok-c1">//@WebFilter(urlPatterns = {&quot;/emps/*&quot;, &quot;/users/*&quot;, &quot;/admin/*&quot;})  // 拦截多个路由怎么配置</span>
+<span class="tok-c1">//@WebFilter(urlPatterns = {&quot;/emps/*&quot;, &quot;/users/*&quot;, &quot;/admin/*&quot;})  // 拦截多个路由</span>
 <span class="tok-nd">@WebFilter</span><span class="tok-p">(</span><span class="tok-n">urlPatterns</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;/*&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">LoginCheckedFilter</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">Filter</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-nd">@others</span>
@@ -8091,7 +8135,7 @@ http -v :8080/emps/20</p>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>拦截所有资源
+<td>拦截所有路由资源
 <div class="paragraph">
 <p>为了让 @WebFilter 生效，还需要在启动类增加 @ServletComponentScan，参后面代码。</p>
 </div></td>
@@ -8122,14 +8166,13 @@ http -v :8080/emps/20</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 过滤器，只要资源访问，就会执行该方法</span>
 <span class="tok-nd">@Override</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">doFilter</span><span class="tok-p">(</span>
-<span class="tok-w">        </span><span class="tok-n">ServletRequest</span><span class="tok-w"> </span><span class="tok-n">servletRequest</span><span class="tok-p">,</span>
-<span class="tok-w">        </span><span class="tok-n">ServletResponse</span><span class="tok-w"> </span><span class="tok-n">servletResponse</span><span class="tok-p">,</span>
-<span class="tok-w">        </span><span class="tok-n">FilterChain</span><span class="tok-w"> </span><span class="tok-n">filterChain</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ServletException</span>
-<span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">doFilter</span><span class="tok-p">(</span><span class="tok-n">ServletRequest</span><span class="tok-w"> </span><span class="tok-n">servletRequest</span><span class="tok-p">,</span>
+<span class="tok-w">                     </span><span class="tok-n">ServletResponse</span><span class="tok-w"> </span><span class="tok-n">servletResponse</span><span class="tok-p">,</span>
+<span class="tok-w">                     </span><span class="tok-n">FilterChain</span><span class="tok-w"> </span><span class="tok-n">filterChain</span>
+<span class="tok-w">                     </span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ServletException</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Enter LoginCheckedFilter.doFilter&quot;</span><span class="tok-p">);</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// 将 Servlet 请求对象转换为 HTTP Servlet 请求对象，否则没有相应的调用方法</span>
+<span class="tok-w">    </span><span class="tok-c1">// 将 Servlet 请求对象强转为 HTTP Servlet 请求对象，否则没有相应的调用方法</span>
 <span class="tok-w">    </span><span class="tok-n">HttpServletRequest</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">HttpServletRequest</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">servletRequest</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-n">HttpServletResponse</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">HttpServletResponse</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">servletResponse</span><span class="tok-p">;</span>
 
@@ -8168,7 +8211,7 @@ http -v :8080/emps/20</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_private_void_senderrorresponse">private void sendErrorResponse</h6>
+<h6 id="_private_void_senderrorresponse_被_dofilter_调用">private void sendErrorResponse &#8594; 被 doFilter 调用</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 抽取的自定义方法</span>
@@ -8203,11 +8246,9 @@ http -v :8080/emps/20</p>
 <span class="tok-nd">@ServletComponentScan</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-nd">@SpringBootApplication</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">GeneralManagerApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
-<span class="tok-w">	</span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">		</span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">GeneralManagerApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
-<span class="tok-w">	</span><span class="tok-p">}</span>
-
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">       </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">GeneralManagerApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -8222,13 +8263,17 @@ http -v :8080/emps/20</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_拦截器_interceptorspringboot_使用">拦截器 Interceptor（SpringBoot 使用）</h4>
+<h4 id="_拦截器_interceptorspringboot_建议使用">拦截器 Interceptor（SpringBoot 建议使用）</h4>
 <div class="paragraph">
-<p>拦截器 Interceptor 是一种动态拦截方法调用的机制，类似于过滤器。在 Spring 中动态拦截控制器中方法的执行。</p>
+<p>拦截器 Interceptor 是一种动态拦截方法调用的机制，类似于过滤器。在 Spring 中动态拦截 <mark>控制器 Controller</mark> 中方法的执行。</p>
 </div>
 <div class="paragraph">
+<p>在实现拦截功能后，您可以使用下面的方式进行测试。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
 <p>未登录测试拦截器</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
@@ -8239,11 +8284,11 @@ http -v :8080/emps/20</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
+</li>
+<li>
 <p>登录测试拦截器</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>命令行先保存 TOKEN</p>
 <div class="paragraph">
@@ -8266,6 +8311,9 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <p>再使用该 TOKEN 登录</p>
 <div class="paragraph">
 <p>http :8080/emps/20 "token: $TOKEN"</p>
+</div>
+</li>
+</ol>
 </div>
 </li>
 </ol>
@@ -8384,7 +8432,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect5">
-<h6 id="_senderrorresponse_自定义发送错误响应方法">sendErrorResponse() 自定义发送错误响应方法</h6>
+<h6 id="_senderrorresponse_自定义发送错误响应方法_被_prehandle_调用">sendErrorResponse() 自定义发送错误响应方法 &#8594; 被 preHandle 调用</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 抽取的私有方法</span>
@@ -8431,7 +8479,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 
 <span class="tok-w">    </span><span class="tok-cm">/**</span>
 <span class="tok-cm">     * 注册拦截器方法</span>
-<span class="tok-cm">     * 实现WebMvcConfigurer接口的addInterceptors方法，用于添加自定义拦截器</span>
+<span class="tok-cm">     * 实现 WebMvcConfigurer 接口的 addInterceptors 方法，用于添加自定义拦截器</span>
 <span class="tok-cm">     * @param registry 拦截器注册器</span>
 <span class="tok-cm">     */</span>
 <span class="tok-w">    </span><span class="tok-nd">@Override</span>
@@ -8439,7 +8487,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="tok-w">        </span><span class="tok-n">registry</span><span class="tok-p">.</span><span class="tok-na">addInterceptor</span><span class="tok-p">(</span><span class="tok-n">loginCheckedInterceptor</span><span class="tok-p">)</span>
 <span class="tok-w">                </span><span class="tok-c1">// 添加拦截路径模式，/** 表示拦截所有请求</span>
 <span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">addPathPatterns</span><span class="tok-p">(</span><span class="tok-s">&quot;/**&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">                </span><span class="tok-c1">// 放开登录方法(代码中判断了，所以此处注释了)</span>
+<span class="tok-w">                </span><span class="tok-c1">// 放开登录方法(LoginCheckedInterceptor 代码中判断了，所以此处注释了)</span>
 <span class="tok-w">                </span><span class="tok-c1">//.excludePathPatterns(&quot;/login&quot;);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
@@ -8462,26 +8510,45 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 <div class="sect4">
 <h5 id="_拦截器加允许_cors">拦截器加允许 CORS</h5>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+如果想要测试后端跨域是否支持，需要将前端的跨域关闭，否则测试不出来。
+</td>
+</tr>
+</table>
+</div>
 <div class="sect5">
 <h6 id="_file_srcmainjavacomtjiseinterceptorlogincheckedinterceptor_java_2">file &#8594; src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java</h6>
 
 </div>
 <div class="sect5">
-<h6 id="_override_prehandle">override preHandle</h6>
+<h6 id="_override_prehandle_增加处理_cors_预检请求_options">override preHandle &#8594; 增加处理 CORS 预检请求 OPTIONS</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 目标 api 执行前执行: return true 放行，return false 拦截</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm">* 目标 api 执行前执行:</span>
+<span class="tok-cm">*    return true 放行</span>
+<span class="tok-cm">*    return false 拦截</span>
+<span class="tok-cm">*/</span>
 <span class="tok-nd">@Override</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">preHandle</span><span class="tok-p">(</span><span class="tok-n">HttpServletRequest</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">HttpServletResponse</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Object</span><span class="tok-w"> </span><span class="tok-n">handler</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Enter preHandle()&quot;</span><span class="tok-p">);</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">preHandle</span><span class="tok-p">(</span><span class="tok-n">HttpServletRequest</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">,</span>
+<span class="tok-w">                         </span><span class="tok-n">HttpServletResponse</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-p">,</span>
+<span class="tok-w">                         </span><span class="tok-n">Object</span><span class="tok-w"> </span><span class="tok-n">handler</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span>
+<span class="tok-w">        </span><span class="tok-s">&quot;[INTERCEPTOR] &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">java</span><span class="tok-p">.</span><span class="tok-na">time</span><span class="tok-p">.</span><span class="tok-na">LocalDateTime</span><span class="tok-p">.</span><span class="tok-na">now</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; - Enter preHandle()&quot;</span><span class="tok-p">);</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// 增加处理 CORS 预检请求，这个要加，不加会报错的</span>
 <span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-s">&quot;OPTIONS&quot;</span><span class="tok-p">.</span><span class="tok-na">equalsIgnoreCase</span><span class="tok-p">(</span><span class="tok-n">request</span><span class="tok-p">.</span><span class="tok-na">getMethod</span><span class="tok-p">()))</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Handling OPTIONS request&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-s">&quot;[INTERCEPTOR] &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">java</span><span class="tok-p">.</span><span class="tok-na">time</span><span class="tok-p">.</span><span class="tok-na">LocalDateTime</span><span class="tok-p">.</span><span class="tok-na">now</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; - Handling OPTIONS request&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-n">response</span><span class="tok-p">.</span><span class="tok-na">setStatus</span><span class="tok-p">(</span><span class="tok-n">HttpServletResponse</span><span class="tok-p">.</span><span class="tok-na">SC_OK</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
-
 <span class="tok-w">    </span><span class="tok-c1">// 其他拦截逻辑</span>
 <span class="tok-w">    </span><span class="tok-nd">@others</span>
 <span class="tok-p">}</span></code></pre>
@@ -8501,20 +8568,19 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="tok-cm"> */</span>
 <span class="tok-nd">@Configuration</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">LoginCheckedInterceptorConfig</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">WebMvcConfigurer</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
 <span class="tok-w">    </span><span class="tok-c1">// 其他代码</span>
 <span class="tok-w">    </span><span class="tok-nd">@others</span>
-
 <span class="tok-w">    </span><span class="tok-c1">// 增加允许 CORS</span>
 <span class="tok-w">    </span><span class="tok-nd">@Override</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">addCorsMappings</span><span class="tok-p">(</span><span class="tok-n">CorsRegistry</span><span class="tok-w"> </span><span class="tok-n">registry</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Enter addCorsMappings()&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-n">registry</span><span class="tok-p">.</span><span class="tok-na">addMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/**&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 允许所有路由</span>
-<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">allowedOriginPatterns</span><span class="tok-p">(</span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">)</span>
-<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">allowedMethods</span><span class="tok-p">(</span><span class="tok-s">&quot;GET&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;POST&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;PUT&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;DELETE&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;OPTIONS&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;HEAD&quot;</span><span class="tok-p">)</span>
-<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">allowedHeaders</span><span class="tok-p">(</span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">)</span><span class="tok-w">        </span><span class="tok-c1">// 允许所有头</span>
-<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">allowCredentials</span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">)</span><span class="tok-w">     </span><span class="tok-c1">// 允许携带 cookie</span>
-<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">exposedHeaders</span><span class="tok-p">(</span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">);</span><span class="tok-w">       </span><span class="tok-c1">// 暴露所有头</span>
+<span class="tok-w">        </span><span class="tok-n">registry</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">addMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/**&quot;</span><span class="tok-p">)</span><span class="tok-w">      </span><span class="tok-c1">// 允许所有路由</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">allowedOriginPatterns</span><span class="tok-p">(</span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 允许任何跨域来源</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">allowedMethods</span><span class="tok-p">(</span><span class="tok-s">&quot;GET&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;POST&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;PUT&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;DELETE&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;OPTIONS&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;HEAD&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">allowedHeaders</span><span class="tok-p">(</span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">)</span><span class="tok-w">    </span><span class="tok-c1">// 允许所有头</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">allowCredentials</span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-c1">// 允许携带 cookie</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">exposedHeaders</span><span class="tok-p">(</span><span class="tok-s">&quot;*&quot;</span><span class="tok-p">);</span><span class="tok-w">   </span><span class="tok-c1">// 暴露所有头</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -8661,12 +8727,10 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>使用 try catch 捕获异常后，返回 Result 数据，前端认识此格式。</td>
+<td>使用 try catch 捕获异常后，返回 Result 数据，前端认识此格式。
+在浏览器中再进行测试新增部门「学工部」，前端会给出友好的提示「部门已存在」。</td>
 </tr>
 </table>
-</div>
-<div class="paragraph">
-<p>在浏览器中再进行测试新增部门「学工部」，前端会给出友好的提示「部门已存在」。</p>
 </div>
 </div>
 </div>
@@ -8686,7 +8750,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjisecontrollerdeptcontroller_java_11">file &#8594; src/main/java/com/tjise/controller/DeptController.java</h5>
 <div class="sect5">
-<h6 id="_新增单个部门_insertdept_移除_try_catch_恢复原来代码">新增单个部门 insertDept &#8594; 移除 try catch 恢复原来代码</h6>
+<h6 id="_新增单个部门_insertdept_移除_try_catch_恢复原来代码">新增单个部门 insertDept &#8594; 移除 try catch 恢复原来代码!!!</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@PostMapping</span>
@@ -8708,10 +8772,8 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.ExceptionHandler</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RestControllerAdvice</span><span class="tok-p">;</span>
 
-<span class="tok-cm">/**</span>
-<span class="tok-cm"> * 全局异常处理器</span>
-<span class="tok-cm"> */</span>
-<span class="tok-nd">@RestControllerAdvice</span>
+<span class="tok-w"> </span><span class="tok-c1">// 全局异常处理器</span>
+<span class="tok-nd">@RestControllerAdvice</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">GlobalExceptionHandler</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// @ExceptionHandler(value = {Exception.class})</span>
@@ -8726,16 +8788,37 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>@RestControllerAdvice 注解说明：
+<div class="ulist">
+<ul>
+<li>
+<p>@RestControllerAdvice 是 @ControllerAdvice + @ResponseBody 的组合注解</p>
+</li>
+<li>
+<p>让这个类成为全局异常处理器</p>
+</li>
+<li>
+<p>使得所有异常处理方法返回的结果直接作为 JSON 响应</p>
+</li>
+</ul>
+</div></td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Exception 异常分类</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>运行时异常 : RuntimeException , 编译时无需处理</p>
+<p>运行时异常 : RuntimeException, 编译时无需处理</p>
 </li>
 <li>
-<p>编译时异常 : 非 RuntimeException , 编译时处理</p>
+<p>编译时异常 : 非 RuntimeException, 编译时处理</p>
 </li>
 </ul>
 </div>
@@ -8802,10 +8885,11 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <p>开启事务日志：修改配置文件 <code>src/main/resources/application.yml</code> 增加事务日志功能</p>
 </div>
 <div class="literalblock">
-<div class="title">后端事务日志显示</div>
+<div class="title">后端事务日志显示类似这样</div>
 <div class="content">
-<pre>2025-08-24 11:17:49.601 DEBUG 92701 --- [nio-8080-exec-2] o.s.jdbc.support.JdbcTransactionManager  : Creating new transaction with name [com.tjise.service.impl.DeptServiceImpl.deleteDeptById]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
-
+<pre>// 创建事务
+2025-08-24 11:17:49.601 DEBUG 92701 --- [nio-8080-exec-2] o.s.jdbc.support.JdbcTransactionManager  : Creating new transaction with name [com.tjise.service.impl.DeptServiceImpl.deleteDeptById]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+// 事务回滚
 2025-08-24 11:17:49.621 DEBUG 92701 --- [nio-8080-exec-2] o.s.jdbc.support.JdbcTransactionManager  : Initiating transaction rollback</pre>
 </div>
 </div>
@@ -8828,7 +8912,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_8">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
-<h6 id="_deptserviceimpl_新增_di_empservice">DeptServiceImpl &#8594; 新增 DI empService</h6>
+<h6 id="_deptserviceimpl_为了删除员工新增_di_empservice">DeptServiceImpl &#8594; 为了删除员工新增 DI empService</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -8870,11 +8954,9 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Transactional</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Transactional</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
 <span class="tok-w">    </span><span class="tok-c1">// 删除部门</span>
 <span class="tok-w">    </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
 
@@ -8916,7 +8998,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjiseserviceempservice_java_9">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="sect5">
-<h6 id="_deleteempbydeptid_根据部门id删除员工_新增">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
+<h6 id="_deleteempbydeptid_根据部门_id_删除员工_新增">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; 新增</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">deptId</span><span class="tok-p">);</span></code></pre>
@@ -8927,7 +9009,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_10">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
-<h6 id="_deleteempbydeptid_根据部门id删除员工_新增_2">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
+<h6 id="_deleteempbydeptid_根据部门_id_删除员工_新增_2">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; 新增</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Override</span>
@@ -8941,7 +9023,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjisemapperempmapper_java_10">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
-<h6 id="_deleteempbydeptid_根据部门id删除员工_新增_3">deleteEmpByDeptId 根据部门id删除员工 &#8594; 新增</h6>
+<h6 id="_deleteempbydeptid_根据部门_id_删除员工_新增_3">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; 新增</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Delete</span><span class="tok-p">(</span><span class="tok-s">&quot;delete from emp where dept_id=#{deptId}&quot;</span><span class="tok-p">)</span>
@@ -8985,12 +9067,10 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// @Transactional  // 不会捕获编译时异常，所以不会回滚</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// @Transactional  // 不会捕获编译时异常，所以不会回滚</span>
 <span class="tok-nd">@Transactional</span><span class="tok-p">(</span><span class="tok-n">rollbackFor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
-
 <span class="tok-w">    </span><span class="tok-c1">// 删除部门</span>
 <span class="tok-w">    </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
 
@@ -9008,7 +9088,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>@Transactional 不会感知到编译时异常。</td>
+<td>@Transactional 默认只对运行时异常 (RuntimeException) 回滚，对编译时异常 (Checked Exception) 不回滚。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -9235,7 +9315,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_11">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
-<h6 id="_deleteempbydeptid_根据部门id删除员工_required_vs_requires_new">deleteEmpByDeptId 根据部门id删除员工 &#8594; REQUIRED vs REQUIRES_NEW</h6>
+<h6 id="_deleteempbydeptid_根据部门_id_删除员工_required_vs_requires_new">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; REQUIRED vs REQUIRES_NEW</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -11266,7 +11346,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-25 11:45:22 +0800
+Last updated 2025-09-26 15:04:08 +0800
 </div>
 </div>
 </body>

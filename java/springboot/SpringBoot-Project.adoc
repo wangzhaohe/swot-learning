@@ -738,6 +738,7 @@ public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter() {
+        System.out.println("[CORS CONFIG] " + java.time.LocalDateTime.now() + " - Initializing CORS Filter");
         CorsConfiguration config = new CorsConfiguration();
         // 允许所有域名进行跨域调用
         config.addAllowedOriginPattern("*");
@@ -750,6 +751,7 @@ public class CorsConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
+        System.out.println("[CORS CONFIG] " + java.time.LocalDateTime.now() + " - CORS Filter configured");
         return new CorsFilter(source);
     }
 }
@@ -757,6 +759,46 @@ public class CorsConfig {
 
 ===== 了解-在开发时前端自己处理跨域问题
 
+
+====== vue-admin-template-master/.env.development
+.开发配置
+[source,python]
+----
+ENV = 'development'  # just a flag
+
+# base api
+VUE_APP_BASE_API = '/api'   # 使用前端跨域
+# VUE_APP_BASE_API = 'http://localhost:8080/'  # 不使用前端跨域
+
+VUE_APP_URL='http://localhost:8080/'  # base url
+----
+
+====== vue-admin-template-master/vue.config.js
+[source,javascript]
+----
+  devServer: {
+    hot: true,
+    port: port,
+    open: true,
+    overlay: {
+      warnings: false,
+      errors: true
+    },
+    // --- 前端自己处理跨域问题 ---
+    proxy: {
+      '/api': {
+        target: process.env.VUE_APP_URL || 'http://localhost:8080',
+        ws: false,
+        secure: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    },
+    // before: require('./mock/mock-server.js')  // 注释掉mock服务器以使用真实API
+  },
+----
 
 ===== 了解-运维在部署时通过 Nginx 反向代理解决跨域
 
@@ -3823,8 +3865,7 @@ Emp login(Emp emp);
 ----
 @Override
 public Emp login(Emp emp) {
-    Emp e = empMapper.login(emp);
-    return e;
+    return empMapper.login(emp);
 }
 ----
 
@@ -4002,7 +4043,7 @@ public class JwtUtils {
 }
 ----
 
-====== generateJwt 生成JWT令牌
+====== generateJwt 生成JWT令牌 -> 登录时生成
 * @param claims JWT第二部分负载 payload 中存储的内容
 
 [source,java]
@@ -4018,7 +4059,7 @@ public static String generateJwt(Map<String, Object> claims) {
 }
 ----
 
-====== parseJWT 解析JWT令牌
+====== parseJWT 解析JWT令牌 -> 前端访问 api 时可能需要解析
 * @param jwt JWT令牌
 * @return JWT第二部分负载 payload 中存储的内容
 
@@ -4069,15 +4110,15 @@ public class LoginController {
             // 登录失败返回 NOT_LOGIN 后前端会自动跳转到登录页面
             return Result.error("NOT_LOGIN");
         } else {
-            // 登录成功
+            // 登录成功生成 JWT
+            // 需要传入的用户数据
             Map<String, Object> map = new HashMap<>();
             map.put("id", e.getId());
             map.put("username", e.getUsername());
             map.put("name", e.getName());
 
-            // 生成令牌并返回给前端
-            String jwt = JwtUtils.generateJwt(map);
-            return Result.success(jwt);
+            String jwt = JwtUtils.generateJwt(map); // 生成令牌
+            return Result.success(jwt);  // 返回给前端
         }
     }
 }
@@ -4086,8 +4127,8 @@ public class LoginController {
 使用 httpie 测试登录::    
 http -v post http://localhost:8080/login username=limuwan password=123456
 
-=== 18. 统一拦截（二选一）
-统一拦截可以把对资源的请求拦截下来，从而实现一些特殊的处理。比如：登陆鉴权、统一编码处理、敏感字符处理等。
+=== 18. 统一过滤或拦截（二选一）
+统一过虑或拦截可以把对资源的请求拦截下来，从而实现一些特殊的处理。比如：登陆鉴权、统一编码处理、敏感字符处理等。
 
 .统一拦截流程图
 image::img/login_filter.png[login,480]
@@ -4119,14 +4160,14 @@ http -v :8080/emps
 
 // 过滤器拦截资源
 //@WebFilter(urlPatterns = "/emps/*")  // 拦截部分 api
-//@WebFilter(urlPatterns = {"/emps/*", "/users/*", "/admin/*"})  // 拦截多个路由怎么配置
+//@WebFilter(urlPatterns = {"/emps/*", "/users/*", "/admin/*"})  // 拦截多个路由
 @WebFilter(urlPatterns = "/*")  // <1>
 public class LoginCheckedFilter implements Filter {
     @others
 }
 ----
 
-<1> 拦截所有资源
+<1> 拦截所有路由资源
 +
 为了让 @WebFilter 生效，还需要在启动类增加 @ServletComponentScan，参后面代码。
 
@@ -4151,14 +4192,13 @@ import java.io.IOException;
 ----
 // 过滤器，只要资源访问，就会执行该方法
 @Override
-public void doFilter(
-        ServletRequest servletRequest,
-        ServletResponse servletResponse,
-        FilterChain filterChain) throws IOException, ServletException
-{
+public void doFilter(ServletRequest servletRequest,
+                     ServletResponse servletResponse,
+                     FilterChain filterChain
+                     ) throws IOException, ServletException {
     System.out.println("Enter LoginCheckedFilter.doFilter");
 
-    // 将 Servlet 请求对象转换为 HTTP Servlet 请求对象，否则没有相应的调用方法
+    // 将 Servlet 请求对象强转为 HTTP Servlet 请求对象，否则没有相应的调用方法
     HttpServletRequest request = (HttpServletRequest) servletRequest;
     HttpServletResponse response = (HttpServletResponse) servletResponse;
 
@@ -4195,7 +4235,7 @@ public void doFilter(
 }
 ----
 
-====== private void sendErrorResponse
+====== private void sendErrorResponse -> 被 doFilter 调用
 [source,java]
 ----
 // 抽取的自定义方法
@@ -4227,33 +4267,31 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 @ServletComponentScan  // <1>
 @SpringBootApplication
 public class GeneralManagerApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(GeneralManagerApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+       SpringApplication.run(GeneralManagerApplication.class, args);
+    }
 }
 ----
 
 <1> 新增：在引导类上只用 @ServletComponentScan 开启 Servlet 组件支持。其实就是让 WebFilter 生效
 
-==== 拦截器 Interceptor（SpringBoot 使用）
-拦截器 Interceptor 是一种动态拦截方法调用的机制，类似于过滤器。在 Spring 中动态拦截控制器中方法的执行。
+==== 拦截器 Interceptor（SpringBoot 建议使用）
+拦截器 Interceptor 是一种动态拦截方法调用的机制，类似于过滤器。在 Spring 中动态拦截 #控制器 Controller# 中方法的执行。
 
-未登录测试拦截器
+在实现拦截功能后，您可以使用下面的方式进行测试。
 
+1. 未登录测试拦截器
 * http -v :8080/emps/20
 * http -v :8080/emps
 
-登录测试拦截器
-
-1. 命令行先保存 TOKEN
+2. 登录测试拦截器
+.. 命令行先保存 TOKEN
 +
 TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
 +
 TIP: jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式输出
 
-2. 再使用该 TOKEN 登录
+.. 再使用该 TOKEN 登录
 +
 http :8080/emps/20 "token: $TOKEN"
 
@@ -4341,7 +4379,7 @@ public boolean preHandle(HttpServletRequest request,
 }
 ----
 
-====== sendErrorResponse() 自定义发送错误响应方法
+====== sendErrorResponse() 自定义发送错误响应方法 -> 被 preHandle 调用
 [source,java]
 ----
 // 抽取的私有方法
@@ -4386,7 +4424,7 @@ public class LoginCheckedInterceptorConfig implements WebMvcConfigurer {
 
     /**
      * 注册拦截器方法
-     * 实现WebMvcConfigurer接口的addInterceptors方法，用于添加自定义拦截器
+     * 实现 WebMvcConfigurer 接口的 addInterceptors 方法，用于添加自定义拦截器
      * @param registry 拦截器注册器
      */
     @Override
@@ -4394,7 +4432,7 @@ public class LoginCheckedInterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginCheckedInterceptor)
                 // 添加拦截路径模式，/** 表示拦截所有请求
                 .addPathPatterns("/**");
-                // 放开登录方法(代码中判断了，所以此处注释了)
+                // 放开登录方法(LoginCheckedInterceptor 代码中判断了，所以此处注释了)
                 //.excludePathPatterns("/login");
     }
 }
@@ -4406,26 +4444,33 @@ public class LoginCheckedInterceptorConfig implements WebMvcConfigurer {
 * 可以保护系统资源不被未授权用户访问
 
 ===== 拦截器加允许 CORS
-
+IMPORTANT: 如果想要测试后端跨域是否支持，需要将前端的跨域关闭，否则测试不出来。
 
 ====== file -> src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java
 
 
-====== override preHandle
+====== override preHandle -> 增加处理 CORS 预检请求 OPTIONS
 [source,java]
 ----
-// 目标 api 执行前执行: return true 放行，return false 拦截
+/**
+* 目标 api 执行前执行: 
+*    return true 放行
+*    return false 拦截
+*/
 @Override
-public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    System.out.println("Enter preHandle()");
+public boolean preHandle(HttpServletRequest request,
+                         HttpServletResponse response,
+                         Object handler) throws Exception {
+    System.out.println(
+        "[INTERCEPTOR] " + java.time.LocalDateTime.now() + " - Enter preHandle()");
 
     // 增加处理 CORS 预检请求，这个要加，不加会报错的
     if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-        System.out.println("Handling OPTIONS request");
+        System.out.println(
+            "[INTERCEPTOR] " + java.time.LocalDateTime.now() + " - Handling OPTIONS request");
         response.setStatus(HttpServletResponse.SC_OK);
         return true;
     }
-
     // 其他拦截逻辑
     @others
 }
@@ -4442,20 +4487,19 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
  */
 @Configuration
 public class LoginCheckedInterceptorConfig implements WebMvcConfigurer {
-
     // 其他代码
     @others
-
     // 增加允许 CORS
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         System.out.println("Enter addCorsMappings()");
-        registry.addMapping("/**")  // 允许所有路由
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
-                .allowedHeaders("*")        // 允许所有头
-                .allowCredentials(true)     // 允许携带 cookie
-                .exposedHeaders("*");       // 暴露所有头
+        registry
+            .addMapping("/**")      // 允许所有路由
+            .allowedOriginPatterns("*")  // 允许任何跨域来源
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
+            .allowedHeaders("*")    // 允许所有头
+            .allowCredentials(true) // 允许携带 cookie
+            .exposedHeaders("*");   // 暴露所有头
     }
 }
 ----
@@ -4482,6 +4526,7 @@ image::img/filterAndInterceptor.png[,900]
 ////
 在 macos 中启动 mysql 数据库服务
     sudo /usr/local/mysql/support-files/mysql.server start
+我现在已经使用 docker 来启动 3307 的 MySQL 了。可以不用本地的 MySQL 了。
 ////
 
 1. 启动后端项目
@@ -4525,7 +4570,7 @@ public Result insertDept(@RequestBody Dept dept){
 ----
 
 <1> 使用 try catch 捕获异常后，返回 Result 数据，前端认识此格式。
-
+// 此处我们只是举个栗子，因为捕获到的异常不一定就是「部门已存在」的原因，可能是别的错误导致的。
 在浏览器中再进行测试新增部门「学工部」，前端会给出友好的提示「部门已存在」。
 
 ==== 方案二：全局异常处理器
@@ -4536,7 +4581,7 @@ public Result insertDept(@RequestBody Dept dept){
 ===== file -> src/main/java/com/tjise/controller/DeptController.java
 
 
-====== 新增单个部门 insertDept -> 移除 try catch 恢复原来代码
+====== 新增单个部门 insertDept -> 移除 try catch 恢复原来代码!!!
 [source,java]
 ----
 @PostMapping
@@ -4555,10 +4600,8 @@ import com.tjise.pojo.Result;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/**
- * 全局异常处理器
- */
-@RestControllerAdvice
+ // 全局异常处理器
+@RestControllerAdvice  // <1>
 public class GlobalExceptionHandler {
 
     // @ExceptionHandler(value = {Exception.class})
@@ -4573,10 +4616,16 @@ public class GlobalExceptionHandler {
 }
 ----
 
+<1> @RestControllerAdvice 注解说明：
+
+- @RestControllerAdvice 是 @ControllerAdvice + @ResponseBody 的组合注解
+- 让这个类成为全局异常处理器
+- 使得所有异常处理方法返回的结果直接作为 JSON 响应
+
 Exception 异常分类
 
-*  运行时异常 : RuntimeException , 编译时无需处理
-*  编译时异常 : 非 RuntimeException , 编译时处理
+*  运行时异常 : RuntimeException, 编译时无需处理
+*  编译时异常 : 非 RuntimeException, 编译时处理
 
 === 20. 事务管理
 事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作 要么同时成功，要么同时失败。
@@ -4602,10 +4651,11 @@ Exception 异常分类
 
 开启事务日志：修改配置文件 `src/main/resources/application.yml` 增加事务日志功能
 
-.后端事务日志显示
+.后端事务日志显示类似这样
 ....
+// 创建事务
 2025-08-24 11:17:49.601 DEBUG 92701 --- [nio-8080-exec-2] o.s.jdbc.support.JdbcTransactionManager  : Creating new transaction with name [com.tjise.service.impl.DeptServiceImpl.deleteDeptById]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
-
+// 事务回滚
 2025-08-24 11:17:49.621 DEBUG 92701 --- [nio-8080-exec-2] o.s.jdbc.support.JdbcTransactionManager  : Initiating transaction rollback
 ....
 
@@ -4627,7 +4677,7 @@ logging:
 ===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 
 
-====== DeptServiceImpl -> 新增 DI empService
+====== DeptServiceImpl -> 为了删除员工新增 DI empService
 [source,java,linenums]
 ----
 @Service  // 把该类的对象交给 IOC 容器管理
@@ -4649,7 +4699,6 @@ public class DeptServiceImpl implements DeptService {
 @Transactional  // <2>
 @Override
 public void deleteDeptById(Integer id) {
-
     // 删除部门
     deptMapper.deleteDeptById(id);
 
@@ -4670,7 +4719,7 @@ public void deleteDeptById(Integer id) {
 ===== file -> src/main/java/com/tjise/service/EmpService.java
 
 
-====== deleteEmpByDeptId 根据部门id删除员工 -> 新增
+====== deleteEmpByDeptId 根据部门 id 删除员工 -> 新增
 [source,java]
 ----
 void deleteEmpByDeptId(Integer deptId);
@@ -4679,7 +4728,7 @@ void deleteEmpByDeptId(Integer deptId);
 ===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 
 
-====== deleteEmpByDeptId 根据部门id删除员工 -> 新增
+====== deleteEmpByDeptId 根据部门 id 删除员工 -> 新增
 [source,java]
 ----
 @Override
@@ -4691,7 +4740,7 @@ public void deleteEmpByDeptId(Integer deptId) {
 ===== file -> src/main/java/com/tjise/mapper/EmpMapper.java
 
 
-====== deleteEmpByDeptId 根据部门id删除员工 -> 新增
+====== deleteEmpByDeptId 根据部门 id 删除员工 -> 新增
 [source,java]
 ----
 @Delete("delete from emp where dept_id=#{deptId}")
@@ -4714,7 +4763,6 @@ rollbackFor：控制出现何种异常类型，回滚事务。
 @Transactional(rollbackFor = Exception.class)  // <2>
 @Override
 public void deleteDeptById(Integer id) throws Exception {  // <3>
-
     // 删除部门
     deptMapper.deleteDeptById(id);
 
@@ -4726,7 +4774,7 @@ public void deleteDeptById(Integer id) throws Exception {  // <3>
     empService.deleteEmpByDeptId(id);
 }
 ----
-<1> @Transactional 不会感知到编译时异常。
+<1> @Transactional 默认只对运行时异常 (RuntimeException) 回滚，对编译时异常 (Checked Exception) 不回滚。
 <2> 增加此注解即可实现事务管理，解决 <1> 编译时异常不能回滚的问题。
 <3> 方法中声明一下 throws Exception，否则编译无法通过。
 
@@ -4834,7 +4882,6 @@ public void deleteDeptById(Integer id) throws Exception {
 }
 ----
 <1> 当产生该运行时异常时，看 <2> 的回滚情况。
-
 <2> deleteEmpByDeptId(id) 方法的注解 @Transactional(propagation) 取值不同，会影响 deleteEmpByDeptId(id) 是否回滚。
 +
 * @Transactional(propagation = Propagation.REQUIRED) 会回滚
@@ -4844,7 +4891,7 @@ public void deleteDeptById(Integer id) throws Exception {
 ===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 
 
-====== deleteEmpByDeptId 根据部门id删除员工 -> REQUIRED vs REQUIRES_NEW
+====== deleteEmpByDeptId 根据部门 id 删除员工 -> REQUIRED vs REQUIRES_NEW
 [source,java,linenum]
 ----
 // 此例子中不加 @Transactional 也会回滚，因为 deleteEmpByDeptId(id) 已经被 deleteDeptById() 的事务包含了。
