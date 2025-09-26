@@ -28,9 +28,9 @@ import java.util.Map;
 public class JwtUtils {
     private static SecretKey key = Keys.hmacShaKeyFor(
             "12345678901234567890123456789012".getBytes());  // 盐值
-    public static Long expire = 1000L * 10;          // 10s , 测试用
+//    public static Long expire = 1000L * 10;          // 10s , 测试用
     // public static Long expire = - 1000L           // 负 1s 马上过期
-    // public static Long expire = 12 * 3600 * 1000L // 12h 过期
+     public static Long expire = 12 * 3600 * 1000L;  // 12h 过期
     //@+others
     //@+node:swot.20250816210929.1: *3* generateJwt 生成JWT令牌
     //@+doc
