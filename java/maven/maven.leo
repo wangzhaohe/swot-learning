@@ -52,6 +52,7 @@
 </v>
 </v>
 </v>
+<v t="swot.20250927115424.1"><vh>测试分模块后的项目</vh></v>
 </v>
 <v t="swot.20250827163432.1"><vh>继承关系</vh>
 <v t="swot.20250829160150.1"><vh>创建父模块（接着上面分模块设计继续操作）</vh>
@@ -752,13 +753,13 @@ IMPORTANT: 重新启动 IDEA，否则新导入的模块名称会乱，可能成�
 <t tx="swot.20250829063355.1">@language asciidoc
 1. 找到之前开发的项目，复制到目录 maven-general-manager 中。
 
-2. 打开 IDEA file 菜单选择 Project Structure...，选择 Modules，再点击 + 号选择 Import Module，导入刚刚复制的 general-manager 项目。
+2. 打开 IDEA file 菜单选择 Project Structure...，选择 Modules，再点击 *+* 号选择 Import Module，导入刚刚复制的 general-manager 项目。
 * 可以选择 general-manager 目录。
 * 也可选择 general-manager 目录下的 pom.xml 文件。
 +
 image::img/maven_import_module.png[,800]
 
-3. 运行项目，应该可以正常启动。然后可以使用 postman 或者运行前端项目进行测试一下。
+3. 运行项目，应该可以正常启动。然后可以使用 httpie 或者运行前端项目进行测试一下。
 
 下面创建两个模块 general-pojo 和 general-utils 进行演示。
 </t>
@@ -814,17 +815,21 @@ image::img/maven_missing_dependences.png[]
         &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
         &lt;version&gt;2.7.18&lt;/version&gt;
     &lt;/dependency&gt;
+
     &lt;dependency&gt;
         &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
         &lt;artifactId&gt;lombok&lt;/artifactId&gt;
         &lt;version&gt;1.18.30&lt;/version&gt;
         &lt;optional&gt;true&lt;/optional&gt;
     &lt;/dependency&gt;
+
     &lt;dependency&gt;
         &lt;groupId&gt;com.aliyun.oss&lt;/groupId&gt;
         &lt;artifactId&gt;aliyun-sdk-oss&lt;/artifactId&gt;
         &lt;version&gt;3.17.4&lt;/version&gt;
     &lt;/dependency&gt;
+
+    &lt;!-- 接口层: 编译时需要 --&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
         &lt;artifactId&gt;jjwt-api&lt;/artifactId&gt;
@@ -1046,6 +1051,7 @@ image::img/maven_create_parent_module.png[,800]
     &lt;artifactId&gt;general-pojo&lt;/artifactId&gt;
     &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;
+@language asciidoc
 @doc
 ....
 
@@ -1060,6 +1066,7 @@ image::img/maven_create_parent_module.png[,800]
     &lt;artifactId&gt;general-utils&lt;/artifactId&gt;
     &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;
+@language asciidoc
 @doc
 ....
 
@@ -1087,6 +1094,7 @@ image::img/maven_create_parent_module.png[,800]
     &lt;version&gt;2.7.18&lt;/version&gt;
     &lt;relativePath/&gt; &lt;!-- lookup parent from repository 指从本地仓库查找父模块--&gt;
 &lt;/parent&gt;
+@language asciidoc
 @doc
 ....
 </t>
@@ -1103,10 +1111,14 @@ image::img/maven_create_parent_module.png[,800]
         &lt;optional&gt;true&lt;/optional&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
+@language asciidoc
 @doc
 ....
 
-IMPORTANT: 若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。
+optional 为 true 表示不会将该依赖传递给子模块。
+
+* 子模块想用 lombok，依然得声明，但是不用指定版本了。
+* 若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。
 </t>
 <t tx="swot.20250829205231.1">@language asciidoc
 NOTE: 下面三个子模块中多余的 &lt;groupId&gt; 坐标可以删除，因为都已经在它们的 &lt;parent&gt; 坐标中指定了。
@@ -2368,6 +2380,9 @@ deploy 成功后，可以在私服中看到 jar 包上传成功了。
 
 image::img/maven_deploy_success.png[deploy-success]
 
+</t>
+<t tx="swot.20250927115424.1">@language asciidoc
+运行项目，应该可以正常启动。然后可以使用 httpie 或者运行前端项目进行测试一下。
 </t>
 </tnodes>
 </leo_file>

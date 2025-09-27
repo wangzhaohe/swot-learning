@@ -577,6 +577,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_创建_maven_模块_general_pojo">创建 maven 模块 general-pojo</a></li>
 <li><a href="#_创建_maven_模块_general_utils">创建 maven 模块 general-utils</a></li>
 <li><a href="#_在模块_general_manager_的_pom_xml_中引入新建的两个模块">在模块 general-manager 的 pom.xml 中引入新建的两个模块</a></li>
+<li><a href="#_测试分模块后的项目">测试分模块后的项目</a></li>
 </ul>
 </li>
 <li><a href="#_继承关系">继承关系</a>
@@ -1731,7 +1732,7 @@ scope runtime 指主程序（编译时）只需要依赖 JDBC 接口（属于 ja
 <p>找到之前开发的项目，复制到目录 maven-general-manager 中。</p>
 </li>
 <li>
-<p>打开 IDEA file 菜单选择 Project Structure&#8230;&#8203;，选择 Modules，再点击 + 号选择 Import Module，导入刚刚复制的 general-manager 项目。</p>
+<p>打开 IDEA file 菜单选择 Project Structure&#8230;&#8203;，选择 Modules，再点击 <strong>+</strong> 号选择 Import Module，导入刚刚复制的 general-manager 项目。</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1749,7 +1750,7 @@ scope runtime 指主程序（编译时）只需要依赖 JDBC 接口（属于 ja
 </div>
 </li>
 <li>
-<p>运行项目，应该可以正常启动。然后可以使用 postman 或者运行前端项目进行测试一下。</p>
+<p>运行项目，应该可以正常启动。然后可以使用 httpie 或者运行前端项目进行测试一下。</p>
 </li>
 </ol>
 </div>
@@ -1858,17 +1859,21 @@ scope runtime 指主程序（编译时）只需要依赖 JDBC 接口（属于 ja
 <span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="tok-nt">&lt;/artifactId&gt;</span>
 <span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>2.7.18<span class="tok-nt">&lt;/version&gt;</span>
 <span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+
 <span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
 <span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>org.projectlombok<span class="tok-nt">&lt;/groupId&gt;</span>
 <span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>lombok<span class="tok-nt">&lt;/artifactId&gt;</span>
 <span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>1.18.30<span class="tok-nt">&lt;/version&gt;</span>
 <span class="tok-w">        </span><span class="tok-nt">&lt;optional&gt;</span>true<span class="tok-nt">&lt;/optional&gt;</span>
 <span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+
 <span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
 <span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>com.aliyun.oss<span class="tok-nt">&lt;/groupId&gt;</span>
 <span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>aliyun-sdk-oss<span class="tok-nt">&lt;/artifactId&gt;</span>
 <span class="tok-w">        </span><span class="tok-nt">&lt;version&gt;</span>3.17.4<span class="tok-nt">&lt;/version&gt;</span>
 <span class="tok-w">    </span><span class="tok-nt">&lt;/dependency&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">&lt;!-- 接口层: 编译时需要 --&gt;</span>
 <span class="tok-w">    </span><span class="tok-nt">&lt;dependency&gt;</span>
 <span class="tok-w">        </span><span class="tok-nt">&lt;groupId&gt;</span>io.jsonwebtoken<span class="tok-nt">&lt;/groupId&gt;</span>
 <span class="tok-w">        </span><span class="tok-nt">&lt;artifactId&gt;</span>jjwt-api<span class="tok-nt">&lt;/artifactId&gt;</span>
@@ -1930,6 +1935,12 @@ scope runtime 指主程序（编译时）只需要依赖 JDBC 接口（属于 ja
 <span class="tok-nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_测试分模块后的项目">测试分模块后的项目</h4>
+<div class="paragraph">
+<p>运行项目，应该可以正常启动。然后可以使用 httpie 或者运行前端项目进行测试一下。</p>
 </div>
 </div>
 </div>
@@ -2028,17 +2039,18 @@ scope runtime 指主程序（编译时）只需要依赖 JDBC 接口（属于 ja
 <span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span></code></pre>
 </div>
 </div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>optional 为 true 表示不会将该依赖传递给子模块。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>子模块想用 lombok，依然得声明，但是不用指定版本了。</p>
+</li>
+<li>
+<p>若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -3253,7 +3265,7 @@ under the License.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-09 14:25:41 +0800
+Last updated 2025-09-27 13:16:25 +0800
 </div>
 </div>
 </body>

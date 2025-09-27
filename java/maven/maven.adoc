@@ -539,13 +539,13 @@ IMPORTANT: 重新启动 IDEA，否则新导入的模块名称会乱，可能成�
 ==== 复制之前的 general-manager 项目
 1. 找到之前开发的项目，复制到目录 maven-general-manager 中。
 
-2. 打开 IDEA file 菜单选择 Project Structure...，选择 Modules，再点击 + 号选择 Import Module，导入刚刚复制的 general-manager 项目。
+2. 打开 IDEA file 菜单选择 Project Structure...，选择 Modules，再点击 *+* 号选择 Import Module，导入刚刚复制的 general-manager 项目。
 * 可以选择 general-manager 目录。
 * 也可选择 general-manager 目录下的 pom.xml 文件。
 +
 image::img/maven_import_module.png[,800]
 
-3. 运行项目，应该可以正常启动。然后可以使用 postman 或者运行前端项目进行测试一下。
+3. 运行项目，应该可以正常启动。然后可以使用 httpie 或者运行前端项目进行测试一下。
 
 下面创建两个模块 general-pojo 和 general-utils 进行演示。
 
@@ -601,17 +601,21 @@ image::img/maven_missing_dependences.png[]
         <artifactId>spring-boot-starter-web</artifactId>
         <version>2.7.18</version>
     </dependency>
+
     <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>1.18.30</version>
         <optional>true</optional>
     </dependency>
+
     <dependency>
         <groupId>com.aliyun.oss</groupId>
         <artifactId>aliyun-sdk-oss</artifactId>
         <version>3.17.4</version>
     </dependency>
+
+    <!-- 接口层: 编译时需要 -->
     <dependency>
         <groupId>io.jsonwebtoken</groupId>
         <artifactId>jjwt-api</artifactId>
@@ -662,6 +666,9 @@ image::img/maven_missing_dependences_ok.png[]
     <version>1.0-SNAPSHOT</version>
 </dependency>
 ....
+
+==== 测试分模块后的项目
+运行项目，应该可以正常启动。然后可以使用 httpie 或者运行前端项目进行测试一下。
 
 === 继承关系
 现在三个模块中都有相同的依赖，如 lombok，可以抽取到父模块的 pom.xml 中，只有一份即可。
@@ -720,7 +727,10 @@ image::img/maven_create_parent_module.png[,800]
 </dependencies>
 ....
 
-IMPORTANT: 若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。
+optional 为 true 表示不会将该依赖传递给子模块。
+
+* 子模块想用 lombok，依然得声明，但是不用指定版本了。
+* 若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。
 
 ==== 在子模块的 pom.xml 文件中，配置继承关系
 NOTE: 下面三个子模块中多余的 <groupId> 坐标可以删除，因为都已经在它们的 <parent> 坐标中指定了。
