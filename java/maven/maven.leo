@@ -716,10 +716,10 @@ image::img/maven_module_design.png[,800]
 2. 私服（公司内部服务器）
 3. 中央仓库（全球唯一）
 
-.私服架构示意图
+.私服架构示意图（A、B指开发者电脑）
 image::img/maven_nexus_introduce.png[,800]
 
-TIP: 私服在企业项目开发中，公司只需要一台即可（无需我们自己搭建，会使用即可）。
+TIP: 私服在企业项目开发中，公司只需要一台即可（无需我们自己搭建，运维已经建好了，会使用即可）。
 </t>
 <t tx="swot.20250828071248.1">@language asciidoc
 目前存在的问题：
@@ -1913,6 +1913,7 @@ maven 中可以通过 &lt;modules&gt; 设置当前聚合模块所包含的子模
     &lt;module&gt;../general-pojo&lt;/module&gt;
     &lt;module&gt;../general-utils&lt;/module&gt;
 &lt;/modules&gt;
+@language asciidoc
 @doc
 ....
 
@@ -1963,9 +1964,9 @@ IMPORTANT: 需要参考上面知识点仔细品味！
 
 一句话总结：
 
-- `-proxy` 是帮你去外网“代购”的仓库；
-- `-hosted` 是你自己“生产”的仓库；
-- `-group` 是把上面两类“打包”成一个入口，使用最方便。
+- `proxy` 是帮你去外网“代购”的仓库；
+- `hosted` 是你自己“生产”的仓库；
+- `group` 是把上面两类“打包”成一个入口，使用最方便。
 </t>
 <t tx="swot.20250830163108.1">@language asciidoc
 nexus 下载地址: https://www.sonatype.com/thanks/repo-community-edition
@@ -1975,6 +1976,7 @@ nexus 下载地址: https://www.sonatype.com/thanks/repo-community-edition
 [source,console]
 ----
 cd nexus-3.83.0-08-mac-x86_64/nexus-3.83.0-08/bin
+
 ./nexus start  # 无信息输出方式启动
 ./nexus run    # 有信息输出方式启动
 ./nexus stop   # 停止服务
@@ -1988,7 +1990,8 @@ Your admin user password is located in
 /Users/swot/soft/nexus-3.83.0-08-mac-x86_64/sonatype-work/nexus3/admin.password on the server.
 ....
 
-NOTE: 登录后让改密码，我已经把密码改成了 123456。改完密码后 admin.password 文件就被删除了。
+NOTE: 登录后让改密码，我已经把密码改成了 123456。
+改完密码后 admin.password 文件就被自动删除了。
 </t>
 <t tx="swot.20250830165631.1"></t>
 <t tx="swot.20250830184859.1">@first &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -2411,7 +2414,7 @@ under the License.
       &lt;!-- 因为 maven-public 是 Group，所以只配置它就可以了 --&gt;
       &lt;id&gt;maven-public&lt;/id&gt;
       &lt;!-- &lt;mirrorOf&gt;*&lt;/mirrorOf&gt; --&gt;
-      &lt;!-- *,!central 就是给官方仓库开绿灯，让插件请求绕开私服，避免找不到插件而失败； --&gt;
+      &lt;!-- *,!central 就是给官方仓库开绿灯，让官方仓库的插件请求绕开私服，避免找不到插件而失败； --&gt;
       &lt;!-- 同时保留私服对其它仓库的代理功能，兼顾速度与可用性。 --&gt;
       &lt;mirrorOf&gt;*,!central&lt;/mirrorOf&gt;
       &lt;url&gt;http://localhost:8081/repository/maven-public/&lt;/url&gt;
@@ -2447,6 +2450,10 @@ under the License.
 &lt;/profiles&gt;
 @doc
 ....
+
+这个配置就是告诉 Maven：
+
+“默认启用一个叫 allow-snapshots 的 profile，把我的 Nexus 私服 maven-public 当作依赖仓库，并允许从里面下载 正式版和快照版 的依赖。”
 </t>
 <t tx="swot.20250830212524.1"></t>
 <t tx="swot.20250830212609.1"></t>
