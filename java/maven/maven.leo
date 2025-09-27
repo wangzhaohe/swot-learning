@@ -139,7 +139,10 @@
 <v t="swot.20250830161538.1"><vh>Nexus 预置的仓库（Repository）说明</vh></v>
 <v t="swot.20250830165631.1"><vh>使用私服进行依赖的上传与下载</vh>
 <v t="swot.20250830212609.1"><vh>Maven 原始配置备份</vh>
-<v t="swot.20250830184859.1"><vh>@file /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml</vh></v>
+<v t="swot.20250830184859.1"><vh>file -&gt; /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml</vh>
+<v t="swot.20250830185947.1"><vh>servers 配置用户名和密码</vh></v>
+<v t="swot.20250830185516.1"><vh>mirrors 注释阿里私服 配置公司私服</vh></v>
+</v>
 </v>
 <v t="swot.20250830212524.1"><vh>Maven 配置 Nexus</vh>
 <v t="swot.20250830204720.1"><vh>@ignore-node file -&gt; /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml</vh>
@@ -1094,7 +1097,6 @@ image::img/maven_create_parent_module.png[,800]
     &lt;version&gt;2.7.18&lt;/version&gt;
     &lt;relativePath/&gt; &lt;!-- lookup parent from repository 指从本地仓库查找父模块--&gt;
 &lt;/parent&gt;
-@language asciidoc
 @doc
 ....
 </t>
@@ -1108,17 +1110,12 @@ image::img/maven_create_parent_module.png[,800]
         &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
         &lt;artifactId&gt;lombok&lt;/artifactId&gt;
         &lt;version&gt;1.18.30&lt;/version&gt;
-        &lt;optional&gt;true&lt;/optional&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
-@language asciidoc
 @doc
 ....
 
-optional 为 true 表示不会将该依赖传递给子模块。
-
-* 子模块想用 lombok，依然得声明，但是不用指定版本了。
-* 若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。
+* 若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准（实际上没有必要，一个项目最好版本不一致）。
 </t>
 <t tx="swot.20250829205231.1">@language asciidoc
 NOTE: 下面三个子模块中多余的 &lt;groupId&gt; 坐标可以删除，因为都已经在它们的 &lt;parent&gt; 坐标中指定了。
@@ -1628,6 +1625,8 @@ IMPORTANT: 若父子模块都配置了同一个依赖的不同版本，以子模
         &lt;groupId&gt;com.aliyun.oss&lt;/groupId&gt;
         &lt;artifactId&gt;aliyun-sdk-oss&lt;/artifactId&gt;
     &lt;/dependency&gt;
+
+    &lt;!-- 接口层: 编译时需要 --&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
         &lt;artifactId&gt;jjwt-api&lt;/artifactId&gt;
@@ -1991,6 +1990,267 @@ Your admin user password is located in
 NOTE: 登录后让改密码，我已经把密码改成了 123456。改完密码后 admin.password 文件就被删除了。
 </t>
 <t tx="swot.20250830165631.1"></t>
+<t tx="swot.20250830184859.1">@first &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+@language xml
+&lt;!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+--&gt;
+
+&lt;!--
+ | This is the configuration file for Maven. It can be specified at two levels:
+ |
+ |  1. User Level. This settings.xml file provides configuration for a single user,
+ |                 and is normally provided in ${user.home}/.m2/settings.xml.
+ |
+ |                 NOTE: This location can be overridden with the CLI option:
+ |
+ |                 -s /path/to/user/settings.xml
+ |
+ |  2. Global Level. This settings.xml file provides configuration for all Maven
+ |                 users on a machine (assuming they're all using the same Maven
+ |                 installation). It's normally provided in
+ |                 ${maven.conf}/settings.xml.
+ |
+ |                 NOTE: This location can be overridden with the CLI option:
+ |
+ |                 -gs /path/to/global/settings.xml
+ |
+ | The sections in this sample file are intended to give you a running start at
+ | getting the most out of your Maven installation. Where appropriate, the default
+ | values (values used when the setting is not specified) are provided.
+ |
+ |--&gt;
+&lt;settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd"&gt;
+  &lt;!-- localRepository
+   | The path to the local repository maven will use to store artifacts.
+   |
+   | Default: ${user.home}/.m2/repository
+  &lt;localRepository&gt;/path/to/local/repo&lt;/localRepository&gt;
+  --&gt;
+  &lt;localRepository&gt;/Users/swot/maven/repository&lt;/localRepository&gt;
+
+  &lt;!-- interactiveMode
+   | This will determine whether maven prompts you when it needs input. If set to false,
+   | maven will use a sensible default value, perhaps based on some other setting, for
+   | the parameter in question.
+   |
+   | Default: true
+  &lt;interactiveMode&gt;true&lt;/interactiveMode&gt;
+  --&gt;
+
+  &lt;!-- offline
+   | Determines whether maven should attempt to connect to the network when executing a build.
+   | This will have an effect on artifact downloads, artifact deployment, and others.
+   |
+   | Default: false
+  &lt;offline&gt;false&lt;/offline&gt;
+  --&gt;
+
+  &lt;!-- pluginGroups
+   | This is a list of additional group identifiers that will be searched when resolving plugins by their prefix, i.e.
+   | when invoking a command line like "mvn prefix:goal". Maven will automatically add the group identifiers
+   | "org.apache.maven.plugins" and "org.codehaus.mojo" if these are not already contained in the list.
+   |--&gt;
+  &lt;pluginGroups&gt;
+    &lt;!-- pluginGroup
+     | Specifies a further group identifier to use for plugin lookup.
+    &lt;pluginGroup&gt;com.your.plugins&lt;/pluginGroup&gt;
+    --&gt;
+  &lt;/pluginGroups&gt;
+
+  &lt;!-- TODO Since when can proxies be selected as depicted? --&gt;
+  &lt;!-- proxies
+   | This is a list of proxies which can be used on this machine to connect to the network.
+   | Unless otherwise specified (by system property or command-line switch), the first proxy
+   | specification in this list marked as active will be used.
+   |--&gt;
+  &lt;proxies&gt;
+    &lt;!-- proxy
+     | Specification for one proxy, to be used in connecting to the network.
+     |
+    &lt;proxy&gt;
+      &lt;id&gt;optional&lt;/id&gt;
+      &lt;active&gt;true&lt;/active&gt;
+      &lt;protocol&gt;http&lt;/protocol&gt;
+      &lt;username&gt;proxyuser&lt;/username&gt;
+      &lt;password&gt;proxypass&lt;/password&gt;
+      &lt;host&gt;proxy.host.net&lt;/host&gt;
+      &lt;port&gt;80&lt;/port&gt;
+      &lt;nonProxyHosts&gt;local.net|some.host.com&lt;/nonProxyHosts&gt;
+    &lt;/proxy&gt;
+    --&gt;
+  &lt;/proxies&gt;
+  @others
+  &lt;!-- profiles
+   | This is a list of profiles which can be activated in a variety of ways, and which can modify
+   | the build process. Profiles provided in the settings.xml are intended to provide local machine-
+   | specific paths and repository locations which allow the build to work in the local environment.
+   |
+   | For example, if you have an integration testing plugin - like cactus - that needs to know where
+   | your Tomcat instance is installed, you can provide a variable here such that the variable is
+   | dereferenced during the build process to configure the cactus plugin.
+   |
+   | As noted above, profiles can be activated in a variety of ways. One way - the activeProfiles
+   | section of this document (settings.xml) - will be discussed later. Another way essentially
+   | relies on the detection of a property, either matching a particular value for the property,
+   | or merely testing its existence. Profiles can also be activated by JDK version prefix, where a
+   | value of '1.4' might activate a profile when the build is executed on a JDK version of '1.4.2_07'.
+   | Finally, the list of active profiles can be specified directly from the command line.
+   |
+   | NOTE: For profiles defined in the settings.xml, you are restricted to specifying only artifact
+   |       repositories, plugin repositories, and free-form properties to be used as configuration
+   |       variables for plugins in the POM.
+   |
+   |--&gt;
+  &lt;profiles&gt;
+    &lt;!-- profile
+     | Specifies a set of introductions to the build process, to be activated using one or more of the
+     | mechanisms described above. For inheritance purposes, and to activate profiles via &lt;activatedProfiles/&gt;
+     | or the command line, profiles have to have an ID that is unique.
+     |
+     | An encouraged best practice for profile identification is to use a consistent naming convention
+     | for profiles, such as 'env-dev', 'env-test', 'env-production', 'user-jdcasey', 'user-brett', etc.
+     | This will make it more intuitive to understand what the set of introduced profiles is attempting
+     | to accomplish, particularly when you only have a list of profile id's for debug.
+     |
+     | This profile example uses the JDK version to trigger activation, and provides a JDK-specific repo.
+    &lt;profile&gt;
+      &lt;id&gt;jdk-1.4&lt;/id&gt;
+
+      &lt;activation&gt;
+        &lt;jdk&gt;1.4&lt;/jdk&gt;
+      &lt;/activation&gt;
+
+      &lt;repositories&gt;
+        &lt;repository&gt;
+          &lt;id&gt;jdk14&lt;/id&gt;
+          &lt;name&gt;Repository for JDK 1.4 builds&lt;/name&gt;
+          &lt;url&gt;http://www.myhost.com/maven/jdk14&lt;/url&gt;
+          &lt;layout&gt;default&lt;/layout&gt;
+          &lt;snapshotPolicy&gt;always&lt;/snapshotPolicy&gt;
+        &lt;/repository&gt;
+      &lt;/repositories&gt;
+    &lt;/profile&gt;
+    --&gt;
+
+    &lt;!--
+     | Here is another profile, activated by the property 'target-env' with a value of 'dev', which
+     | provides a specific path to the Tomcat instance. To use this, your plugin configuration might
+     | hypothetically look like:
+     |
+     | ...
+     | &lt;plugin&gt;
+     |   &lt;groupId&gt;org.myco.myplugins&lt;/groupId&gt;
+     |   &lt;artifactId&gt;myplugin&lt;/artifactId&gt;
+     |
+     |   &lt;configuration&gt;
+     |     &lt;tomcatLocation&gt;${tomcatPath}&lt;/tomcatLocation&gt;
+     |   &lt;/configuration&gt;
+     | &lt;/plugin&gt;
+     | ...
+     |
+     | NOTE: If you just wanted to inject this configuration whenever someone set 'target-env' to
+     |       anything, you could just leave off the &lt;value/&gt; inside the activation-property.
+     |
+    &lt;profile&gt;
+      &lt;id&gt;env-dev&lt;/id&gt;
+
+      &lt;activation&gt;
+        &lt;property&gt;
+          &lt;name&gt;target-env&lt;/name&gt;
+          &lt;value&gt;dev&lt;/value&gt;
+        &lt;/property&gt;
+      &lt;/activation&gt;
+
+      &lt;properties&gt;
+        &lt;tomcatPath&gt;/path/to/tomcat/instance&lt;/tomcatPath&gt;
+      &lt;/properties&gt;
+    &lt;/profile&gt;
+    --&gt;
+  &lt;/profiles&gt;
+
+  &lt;!-- activeProfiles
+   | List of profiles that are active for all builds.
+   |
+  &lt;activeProfiles&gt;
+    &lt;activeProfile&gt;alwaysActiveProfile&lt;/activeProfile&gt;
+    &lt;activeProfile&gt;anotherAlwaysActiveProfile&lt;/activeProfile&gt;
+  &lt;/activeProfiles&gt;
+  --&gt;
+&lt;/settings&gt;
+</t>
+<t tx="swot.20250830185516.1">&lt;!-- mirrors
+ | This is a list of mirrors to be used in downloading artifacts from remote repositories.
+ |
+ | It works like this: a POM may declare a repository to use in resolving certain artifacts.
+ | However, this repository may have problems with heavy traffic at times, so people have mirrored
+ | it to several places.
+ |
+ | That repository definition will have a unique id, so we can create a mirror reference for that
+ | repository, to be used as an alternate download site. The mirror site will be the preferred
+ | server for that repository.
+ |--&gt;
+&lt;mirrors&gt;
+  &lt;!-- mirror
+   | Specifies a repository mirror site to use instead of a given repository. The repository that
+   | this mirror serves has an ID that matches the mirrorOf element of this mirror. IDs are used
+   | for inheritance and direct lookup purposes, and must be unique across the set of mirrors.
+   |
+  &lt;mirror&gt;
+   --&gt;
+  &lt;mirror&gt;
+      &lt;id&gt;alimaven&lt;/id&gt;
+      &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
+      &lt;name&gt;阿里云公共仓库&lt;/name&gt;
+      &lt;url&gt;https://maven.aliyun.com/repository/public&lt;/url&gt;
+  &lt;/mirror&gt;
+&lt;/mirrors&gt;
+</t>
+<t tx="swot.20250830185947.1">&lt;!-- servers
+ | This is a list of authentication profiles, keyed by the server-id used within the system.
+ | Authentication profiles can be used whenever maven must make a connection to a remote server.
+ |--&gt;
+&lt;servers&gt;
+  &lt;!-- server
+   | Specifies the authentication information to use when connecting to a particular server, identified by
+   | a unique name within the system (referred to by the 'id' attribute below).
+   |
+   | NOTE: You should either specify username/password OR privateKey/passphrase, since these pairings are
+   |       used together.
+   |
+  &lt;server&gt;
+    &lt;id&gt;deploymentRepo&lt;/id&gt;
+    &lt;username&gt;repouser&lt;/username&gt;
+    &lt;password&gt;repopwd&lt;/password&gt;
+  &lt;/server&gt;
+  --&gt;
+
+  &lt;!-- Another sample, using keys to authenticate.
+  &lt;server&gt;
+    &lt;id&gt;siteServer&lt;/id&gt;
+    &lt;privateKey&gt;/path/to/private/key&lt;/privateKey&gt;
+    &lt;passphrase&gt;optional; leave empty if not used.&lt;/passphrase&gt;
+  &lt;/server&gt;
+  --&gt;
+&lt;/servers&gt;
+</t>
 <t tx="swot.20250830204720.1">@first &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 @language xml
 &lt;!--
