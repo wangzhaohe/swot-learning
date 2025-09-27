@@ -617,8 +617,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_19_异常处理">19. 异常处理</a>
 <ul class="sectlevel3">
-<li><a href="#_方案一在_controller_方法中进行_trycatch_处理">方案一：在 Controller 方法中进行 try…catch 处理</a></li>
-<li><a href="#_方案二全局异常处理器">方案二：全局异常处理器</a></li>
+<li><a href="#_19_1_方案一在_controller_方法中进行_trycatch_处理">19.1 方案一：在 Controller 方法中进行 try…catch 处理</a></li>
+<li><a href="#_19_2_方案二全局异常处理器">19.2 方案二：全局异常处理器</a></li>
 </ul>
 </li>
 <li><a href="#_20_事务管理">20. 事务管理</a>
@@ -633,14 +633,14 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_引子_记录业务层方法的执行耗时并输出到控制台">引子 &#8594; 记录业务层方法的执行耗时，并输出到控制台</a></li>
 <li><a href="#_面向切面_aop_基础">面向切面 AOP 基础</a></li>
 <li><a href="#_面向切面_aop_进阶">面向切面 AOP 进阶</a></li>
-<li><a href="#_面向切面_aop_案例">面向切面 AOP 案例</a></li>
+<li><a href="#_面向切面_aop_案例_操作日志保存到数据库中">面向切面 AOP 案例 &#8594; 操作日志保存到数据库中</a></li>
 </ul>
 </li>
 <li><a href="#_22_redis_数据库应用">22. Redis 数据库应用</a>
 <ul class="sectlevel3">
-<li><a href="#_了解知识点_jedis">了解知识点 jedis</a></li>
-<li><a href="#_登录时将_token_放入_redis_数据库">登录时将 token 放入 Redis 数据库</a></li>
-<li><a href="#_前端请求进行_token_对比">前端请求进行 token 对比</a></li>
+<li><a href="#_22_1_了解知识点_jedis">22.1 了解知识点 jedis</a></li>
+<li><a href="#_22_2_登录时将_token_放入_redis_数据库">22.2 登录时将 token 放入 Redis 数据库</a></li>
+<li><a href="#_22_3_前端请求服务器_api_时进行_token_对比">22.3 前端请求服务器 api 时进行 token 对比</a></li>
 </ul>
 </li>
 </ul>
@@ -8627,7 +8627,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <h3 id="_19_异常处理">19. 异常处理</h3>
 <div class="paragraph">
 <p>目前代码中的异常都是向上抛出的，，如 mapper &#8594; service &#8594; controller，最后到了前端。
-但是前端只认识固定的 Result 格式。所以我们要对异常进行处理。</p>
+但是前端只认识固定的统一响应 Result 格式。所以我们要对异常进行处理。</p>
 </div>
 <div class="paragraph">
 <p>引入有异常的问题：</p>
@@ -8635,7 +8635,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>启动后端项目</p>
+<p>启动后端项目的方式</p>
 <div class="ulist">
 <ul>
 <li>
@@ -8680,7 +8680,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <p>原因是数据库中已经有了 name 为「学工部」的记录，且该 name 字段为 UNIQUE，即不允许有重复字段。</p>
 </li>
 <li>
-<p>前端没有提醒反馈的原因，是前端只认识 Result 格式的消息。不认识 500 错误。</p>
+<p>前端没有提醒反馈的原因，是前端只认识统一响应 Result 格式的消息。不认识 500 错误。</p>
 </li>
 </ul>
 </div>
@@ -8691,7 +8691,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ol>
 </div>
 <div class="sect3">
-<h4 id="_方案一在_controller_方法中进行_trycatch_处理">方案一：在 Controller 方法中进行 try…catch 处理</h4>
+<h4 id="_19_1_方案一在_controller_方法中进行_trycatch_处理">19.1 方案一：在 Controller 方法中进行 try…catch 处理</h4>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -8736,7 +8736,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect3">
-<h4 id="_方案二全局异常处理器">方案二：全局异常处理器</h4>
+<h4 id="_19_2_方案二全局异常处理器">19.2 方案二：全局异常处理器</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -8780,7 +8780,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="tok-w">    </span><span class="tok-nd">@ExceptionHandler</span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 简写形式，此方法可以捕获所有异常</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">handleException</span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 会把拦截的异常传递给此方法的参数 e</span>
 <span class="tok-w">    </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">printStackTrace</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">printStackTrace</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 只是打印了异常信息</span>
 <span class="tok-w">        </span><span class="tok-c1">//return Result.error(e.getMessage());  // 如有需要可以自定义错误信息，本例子省略。</span>
 <span class="tok-w">        </span><span class="tok-c1">// 上面信息太多字符了，用户看不懂，所以只返回一个通用的错误信息</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-p">.</span><span class="tok-na">error</span><span class="tok-p">(</span><span class="tok-s">&quot;处理异常，请稍后重试...&quot;</span><span class="tok-p">);</span>
@@ -9419,14 +9419,10 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
-<span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
-
-<span class="tok-w">    </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">deptList</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">selectAllDept</span><span class="tok-p">();</span>
-
-<span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">     </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">deptList</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">selectAllDept</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 业务代码</span>
+<span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">       </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-w">    </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;方法执行耗时: {} ms&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">end</span><span class="tok-o">-</span><span class="tok-n">begin</span><span class="tok-p">));</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
-
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">deptList</span><span class="tok-p">;</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -9466,14 +9462,10 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-nf">getDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
-<span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
-
-<span class="tok-w">    </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">getDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
-
-<span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">     </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">getDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">      </span><span class="tok-c1">// 业务代码</span>
+<span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">       </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-w">    </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;方法执行耗时: {} ms&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">end</span><span class="tok-o">-</span><span class="tok-n">begin</span><span class="tok-p">));</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
-
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">;</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -9500,7 +9492,9 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect3">
 <h4 id="_面向切面_aop_基础">面向切面 AOP 基础</h4>
 <div class="paragraph">
-<p>AOP：Aspect Oriented Programming（面向切面编程），它的核心思想是将重复的逻辑剥离出来，<mark>在不修改原始逻辑的基础上对原始功能进行增强</mark>。</p>
+<p>AOP：Aspect Oriented Programming（面向切面编程），
+它的核心思想是将重复的逻辑剥离出来，
+<mark>在不修改原始逻辑的基础上对原始功能进行增强</mark>。</p>
 </div>
 <div class="paragraph">
 <p>优势：无侵入、减少重复代码、提高开发效率、维护方便。</p>
@@ -9609,7 +9603,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_定义统计执行耗时操作的切面类">定义统计执行耗时操作的切面类</h5>
+<h5 id="_定义统计执行耗时操作的切面类_timeaspect">定义统计执行耗时操作的切面类 TimeAspect</h5>
 <div class="sect5">
 <h6 id="_file_srcmainjavacomtjiseaoptimeaspect_java">file &#8594; src/main/java/com/tjise/aop/TimeAspect.java</h6>
 <div class="listingblock">
@@ -9629,25 +9623,9 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.aop</span><span class="tok-p">;</span>
-
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.extern.slf4j.Slf4j</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.ProceedingJoinPoint</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.Around</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.Aspect</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Component</span><span class="tok-p">;</span>
-
-<span class="tok-nd">@Slf4j</span>
-<span class="tok-nd">@Component</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Slf4j</span>
 <span class="tok-nd">@Aspect</span><span class="tok-w">     </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-nd">@Component</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">TimeAspect</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 切面类</span>
 <span class="tok-w">    </span><span class="tok-nd">@Around</span><span class="tok-p">(</span><span class="tok-s">&quot;execution(* com.tjise.service.impl.DeptServiceImpl.*(..))&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Object</span><span class="tok-w"> </span><span class="tok-nf">getTime</span><span class="tok-p">(</span><span class="tok-n">ProceedingJoinPoint</span><span class="tok-w"> </span><span class="tok-n">joinPoint</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Throwable</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -9680,7 +9658,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="ulist">
 <ul>
 <li>
-<p>Around 的名称叫通知。</p>
+<p>Around 的名称叫<strong>通知</strong>。</p>
 </li>
 <li>
 <p>第一个星号 * 表示匹配所有方法的返回值类型，即任何方法的返回值类型都能被匹配。</p>
@@ -9709,10 +9687,10 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="ulist">
 <ul>
 <li>
-<p>*：可以通配任意一个 返回值类型、包名、类名、方法名、或任意的一个参数类型</p>
+<p>*：可以通配任意一个 返回值类型、包名、类名、方法名、或任意的一个参数类型。</p>
 </li>
 <li>
-<p>..：可以通配任意层级的包、或任意类型、任意个数的参数</p>
+<p>..：可以通配任意层级的包、或任意类型、任意个数的参数。</p>
 </li>
 </ul>
 </div>
@@ -9732,7 +9710,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect3">
 <h4 id="_面向切面_aop_进阶">面向切面 AOP 进阶</h4>
 <div class="sect4">
-<h5 id="_注释掉上节更改的代码_去掉多余打印_2">注释掉上节更改的代码 &#8594; 去掉多余打印</h5>
+<h5 id="_注释掉上节的两个注解让该切面类失效只让下面的生效">注释掉上节的两个注解（让该切面类失效，只让下面的生效）</h5>
 <div class="sect5">
 <h6 id="_file_srcmainjavacomtjiseaoptimeaspect_java_2">file &#8594; src/main/java/com/tjise/aop/TimeAspect.java</h6>
 
@@ -9780,7 +9758,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_通知类型">通知类型</h5>
+<h5 id="_通知类型知识点">通知类型知识点</h5>
 <div class="sect5">
 <h6 id="_file_srcmainjavacomtjiseaopadvicetypeaspectdemo_java">file &#8594; src/main/java/com/tjise/aop/AdviceTypeAspectDemo.java</h6>
 <div class="listingblock">
@@ -9808,25 +9786,28 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Around</span><span class="tok-p">(</span><span class="tok-s">&quot;execution(* com.tjise.service.impl.DeptServiceImpl.*(..))&quot;</span><span class="tok-p">)</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Object</span><span class="tok-w"> </span><span class="tok-nf">getTime</span><span class="tok-p">(</span><span class="tok-n">ProceedingJoinPoint</span><span class="tok-w"> </span><span class="tok-n">joinPoint</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Throwable</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;around 前&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-n">Object</span><span class="tok-w"> </span><span class="tok-n">obj</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">joinPoint</span><span class="tok-p">.</span><span class="tok-na">proceed</span><span class="tok-p">();</span>
-<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;around 后&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">obj</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;around 前&quot;</span><span class="tok-p">);</span><span class="tok-w">   </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-n">Object</span><span class="tok-w"> </span><span class="tok-n">obj</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">joinPoint</span><span class="tok-p">.</span><span class="tok-na">proceed</span><span class="tok-p">();</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;around 后&quot;</span><span class="tok-p">);</span><span class="tok-w">   </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">obj</span><span class="tok-p">;</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>此注解标注的通知方法在目标方法前、后都有执行代码。</p>
-</li>
-<li>
-<p>此注解修饰的方法必须返回 Object。</p>
-</li>
-<li>
-<p>@Around 需要自己调用 ProceedingJoinPoint.proceed() 来让目标方法执行，其他通知不需要考虑自己调用目标方法执行，因为会自动调用。</p>
-</li>
-</ul>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>此注解 @Around 标注的通知方法在目标方法前、后都有执行代码。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>此注解修饰的方法必须返回 Object。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>@Around 需要自己调用 ProceedingJoinPoint.proceed() 来让目标方法执行，其他通知不需要考虑自己调用目标方法执行，因为会自动调用。</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect5">
@@ -9917,7 +9898,7 @@ after</pre>
 <p>当有多个切面的切点都匹配目标时，多个通知方法都会被执行。</p>
 </div>
 <div class="sect5">
-<h6 id="_注释掉上节更改的代码_去掉多余打印_3">注释掉上节更改的代码 &#8594; 去掉多余打印</h6>
+<h6 id="_注释掉上节的两个注解让该切面类失效只让下面的生效_2">注释掉上节的两个注解（让该切面类失效，只让下面的生效）</h6>
 
 </div>
 <div class="sect5">
@@ -10346,8 +10327,8 @@ after4 -&gt; @Order(66)</pre>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.lang.annotation.RetentionPolicy</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.lang.annotation.Target</span><span class="tok-p">;</span>
 
-<span class="tok-nd">@Target</span><span class="tok-p">(</span><span class="tok-n">ElementType</span><span class="tok-p">.</span><span class="tok-na">METHOD</span><span class="tok-p">)</span>
-<span class="tok-nd">@Retention</span><span class="tok-p">(</span><span class="tok-n">RetentionPolicy</span><span class="tok-p">.</span><span class="tok-na">RUNTIME</span><span class="tok-p">)</span>
+<span class="tok-nd">@Target</span><span class="tok-p">(</span><span class="tok-n">ElementType</span><span class="tok-p">.</span><span class="tok-na">METHOD</span><span class="tok-p">)</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-nd">@Retention</span><span class="tok-p">(</span><span class="tok-n">RetentionPolicy</span><span class="tok-p">.</span><span class="tok-na">RUNTIME</span><span class="tok-p">)</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nd">@interface</span><span class="tok-w"> </span><span class="tok-n">Log</span><span class="tok-w"> </span><span class="tok-p">{}</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
@@ -10357,15 +10338,9 @@ after4 -&gt; @Order(66)</pre>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>自定义标记性注解，用于记录日志。</td>
 </tr>
-</table>
-</div>
-<div class="paragraph">
-<p>这两个元注解不是必须的，但通常建议添加。让我解释一下它们的作用：</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong><code>@Target(ElementType.METHOD)</code></strong></p>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>@Target(ElementType.METHOD)</code>
 <div class="ulist">
 <ul>
 <li>
@@ -10378,10 +10353,11 @@ after4 -&gt; @Order(66)</pre>
 <p>如果不写，注解默认可以用于任何元素类型</p>
 </li>
 </ul>
-</div>
-</li>
-<li>
-<p><strong><code>@Retention(RetentionPolicy.RUNTIME)</code></strong></p>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>@Retention(RetentionPolicy.RUNTIME)</code>
 <div class="ulist">
 <ul>
 <li>
@@ -10394,12 +10370,21 @@ after4 -&gt; @Order(66)</pre>
 <p>如果不写，默认是 <code>CLASS</code> 策略，运行时无法通过反射获取</p>
 </li>
 </ul>
+</div></td>
+</tr>
+</table>
 </div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>在 AOP 场景中，@Before、@After 等注解都需要在运行时被 Spring AOP 框架通过反射读取，所以必须使用 RetentionPolicy.RUNTIME 策略。</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+在 AOP 场景中，@Before、@After 等注解都需要在运行时被 Spring AOP 框架通过反射读取，所以必须使用 RetentionPolicy.RUNTIME 策略。
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect5">
@@ -10417,12 +10402,10 @@ after4 -&gt; @Order(66)</pre>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Transactional</span><span class="tok-p">(</span><span class="tok-n">rollbackFor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Transactional</span><span class="tok-p">(</span><span class="tok-n">rollbackFor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
 <span class="tok-nd">@Override</span>
 <span class="tok-nd">@Log</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
 <span class="tok-w">    </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">     </span><span class="tok-c1">// 删除部门</span>
 <span class="tok-w">    </span><span class="tok-n">empService</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 把此部门的员工删除</span>
 <span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-mi">3</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">);</span><span class="tok-w">         </span><span class="tok-c1">// 运行时异常</span>
@@ -10443,8 +10426,8 @@ after4 -&gt; @Order(66)</pre>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r &#39;.data&#39;)</span>
 <span class="tok-go">http DELETE :8080/depts/1 &quot;token: $TOKEN&quot;  # 会打印 before</span>
-<span class="tok-go">http :8080/depts &quot;token: $TOKEN&quot;    # 不会打印 before</span>
-<span class="tok-go">http :8080/depts/1 &quot;token: $TOKEN&quot;  # 不会打印 before</span></code></pre>
+<span class="tok-go">http :8080/depts &quot;token: $TOKEN&quot;           # 不会打印 before</span>
+<span class="tok-go">http :8080/depts/1 &quot;token: $TOKEN&quot;         # 不会打印 before</span></code></pre>
 </div>
 </div>
 </div>
@@ -10516,7 +10499,7 @@ after4 -&gt; @Order(66)</pre>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>使用 @Pointcut 注解抽取公共的切点表达式为一个方法。</td>
+<td>使用 @Pointcut 注解抽取公共的切点表达式为一个方法，命名为 pt()。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -10537,7 +10520,7 @@ after4 -&gt; @Order(66)</pre>
 <div class="sect4">
 <h5 id="_连接点_joinpoint">连接点 JoinPoint</h5>
 <div class="paragraph">
-<p>连接点简单理解就是 目标方法，在 Spring 中用 JoinPoint 抽象了连接点，用它可以获得方法执行时的相关信息，如方法名、方法参数类型、方法实际参数等等。</p>
+<p>连接点简单理解就是 <strong>目标方法</strong>，在 Spring 中用 JoinPoint 抽象了连接点，用它可以获得方法执行时的相关信息，如方法名、方法参数类型、方法实际参数等等。</p>
 </div>
 <div class="ulist">
 <ul>
@@ -10632,7 +10615,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_面向切面_aop_案例">面向切面 AOP 案例</h4>
+<h4 id="_面向切面_aop_案例_操作日志保存到数据库中">面向切面 AOP 案例 &#8594; 操作日志保存到数据库中</h4>
 <div class="paragraph">
 <p>将前面的部门和员工管理案例中对业务类（service）中的 增、删、改 方法的操作日志保存到数据库（MySQL）中。</p>
 </div>
@@ -10645,7 +10628,7 @@ after4 -&gt; @Order(66)</pre>
 <p>需要对所有业务类中的增、删、改 方法添加统一功能，使用 AOP 技术最为方便，因为不用更改原业务代码。</p>
 </li>
 <li>
-<p>由于增、删、改 方法名没有规律，所以用 execution 不合适，但是可以用 @annotation 注解配合自定义 @Log 注解完成目标方法选取。</p>
+<p>由于增、删、改 方法名没有规律（因为要排除查询的方法），所以用 execution 不合适，但是可以用 @annotation 注解配合自定义 @Log 注解完成目标方法选取。</p>
 </li>
 </ol>
 </div>
@@ -10665,14 +10648,14 @@ after4 -&gt; @Order(66)</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="sql"><span></span><span class="tok-k">create</span><span class="tok-w"> </span><span class="tok-k">table</span><span class="tok-w"> </span><span class="tok-n">operate_log</span><span class="tok-p">(</span>
-<span class="tok-w">    </span><span class="tok-n">id</span><span class="tok-w"> </span><span class="tok-nb">int</span><span class="tok-w"> </span><span class="tok-n">unsigned</span><span class="tok-w"> </span><span class="tok-k">primary</span><span class="tok-w"> </span><span class="tok-k">key</span><span class="tok-w"> </span><span class="tok-n">auto_increment</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;ID&#39;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-n">operate_user</span><span class="tok-w"> </span><span class="tok-nb">int</span><span class="tok-w"> </span><span class="tok-n">unsigned</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;操作人&#39;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-n">operate_time</span><span class="tok-w"> </span><span class="tok-n">datetime</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;操作时间&#39;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-n">class_name</span><span class="tok-w"> </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;操作的类名&#39;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-n">method_name</span><span class="tok-w"> </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;操作的方法名&#39;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-n">method_params</span><span class="tok-w"> </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">1000</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;方法参数&#39;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-n">return_value</span><span class="tok-w"> </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">2000</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;返回值&#39;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-n">cost_time</span><span class="tok-w"> </span><span class="tok-nb">bigint</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;方法执行耗时, 单位:ms&#39;</span>
+<span class="tok-w">    </span><span class="tok-n">id</span><span class="tok-w">            </span><span class="tok-nb">int</span><span class="tok-w"> </span><span class="tok-n">unsigned</span><span class="tok-w"> </span><span class="tok-k">primary</span><span class="tok-w"> </span><span class="tok-k">key</span><span class="tok-w"> </span><span class="tok-n">auto_increment</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;ID&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">operate_user</span><span class="tok-w">  </span><span class="tok-nb">int</span><span class="tok-w"> </span><span class="tok-n">unsigned</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;操作人&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">operate_time</span><span class="tok-w">  </span><span class="tok-n">datetime</span><span class="tok-w">     </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;操作时间&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">class_name</span><span class="tok-w">    </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;操作的类名&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">method_name</span><span class="tok-w">   </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;操作的方法名&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">method_params</span><span class="tok-w"> </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">1000</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;方法参数&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">return_value</span><span class="tok-w">  </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">2000</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;返回值&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-n">cost_time</span><span class="tok-w">     </span><span class="tok-nb">bigint</span><span class="tok-w">       </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;方法执行耗时, 单位:ms&#39;</span>
 <span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">comment</span><span class="tok-w"> </span><span class="tok-s1">&#39;操作日志表&#39;</span><span class="tok-p">;</span></code></pre>
 </div>
 </div>
@@ -10680,7 +10663,7 @@ after4 -&gt; @Order(66)</pre>
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjisepojooperatelog_java">file &#8594; src/main/java/com/tjise/pojo/OperateLog.java</h5>
 <div class="listingblock">
-<div class="title">定义操作日志表对应的实体类</div>
+<div class="title">定义数据库操作日志表对应的实体类</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.pojo</span><span class="tok-p">;</span>
 
@@ -10720,7 +10703,7 @@ after4 -&gt; @Order(66)</pre>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">OperateLogMapper</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-c1">//插入日志数据</span>
 <span class="tok-w">    </span><span class="tok-nd">@Insert</span><span class="tok-p">(</span><span class="tok-s">&quot;insert into operate_log (operate_user, operate_time, class_name, method_name, method_params, return_value, cost_time) &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
-<span class="tok-w">            </span><span class="tok-s">&quot;values (#{operateUser}, #{operateTime}, #{className}, #{methodName}, #{methodParams}, #{returnValue}, #{costTime});&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-s">&quot;values (#{operateUser}, #{operateTime}, #{className}, #{methodName}, #{methodParams}, #{returnValue}, #{costTime})&quot;</span><span class="tok-p">)</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insert</span><span class="tok-p">(</span><span class="tok-n">OperateLog</span><span class="tok-w"> </span><span class="tok-n">log</span><span class="tok-p">);</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -10819,7 +10802,7 @@ after4 -&gt; @Order(66)</pre>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Log</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Log</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertEmp</span><span class="tok-p">(</span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-n">emp</span><span class="tok-p">){</span>
 <span class="tok-w">    </span><span class="tok-c1">// 补全属性</span>
@@ -10844,7 +10827,7 @@ after4 -&gt; @Order(66)</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// emp 封装了要修改的数据</span>
-<span class="tok-nd">@Log</span>
+<span class="tok-nd">@Log</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">updateEmp</span><span class="tok-p">(</span><span class="tok-n">Emp</span><span class="tok-w"> </span><span class="tok-n">emp</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-c1">// 在前端提交的表单中没有更新时间，所以需要后台来补充此属性</span>
@@ -10870,7 +10853,7 @@ after4 -&gt; @Order(66)</pre>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Log</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Log</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByIds</span><span class="tok-p">(</span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Integer</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">ids</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByIds</span><span class="tok-p">(</span><span class="tok-n">ids</span><span class="tok-p">);</span>
@@ -10939,7 +10922,7 @@ after4 -&gt; @Order(66)</pre>
 <span class="tok-nd">@Component</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">LogAspect</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// 含有用户上传的参数，其中有 token 可以解出登录的用户信息，如 id</span>
+<span class="tok-w">    </span><span class="tok-c1">// request 含有用户上传的参数，其中有 token 可以解出登录的用户信息，如 id</span>
 <span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">HttpServletRequest</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">;</span>
 
@@ -10957,6 +10940,7 @@ after4 -&gt; @Order(66)</pre>
 <div class="sect5">
 <h6 id="_1_获取操作人_operateuser">1 获取操作人 operateUser</h6>
 <div class="listingblock">
+<div class="title">解析出已登录用户的 id</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">jwt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">.</span><span class="tok-na">getHeader</span><span class="tok-p">(</span><span class="tok-s">&quot;token&quot;</span><span class="tok-p">);</span>
 <span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">operateUser</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">JwtUtils</span><span class="tok-p">.</span><span class="tok-na">parseJWT</span><span class="tok-p">(</span><span class="tok-n">jwt</span><span class="tok-p">).</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">);</span></code></pre>
@@ -10972,7 +10956,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_3_获取操作方法的类名">3 获取操作方法的类名</h6>
+<h6 id="_3_获取操作方法的类名_classname">3 获取操作方法的类名 className</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">className</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">joinPoint</span><span class="tok-p">.</span><span class="tok-na">getTarget</span><span class="tok-p">().</span><span class="tok-na">getClass</span><span class="tok-p">().</span><span class="tok-na">getName</span><span class="tok-p">();</span></code></pre>
@@ -10980,7 +10964,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_4_获取操作的方法名">4 获取操作的方法名</h6>
+<h6 id="_4_获取操作的方法名_methodname">4 获取操作的方法名 methodName</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">methodName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">joinPoint</span><span class="tok-p">.</span><span class="tok-na">getSignature</span><span class="tok-p">().</span><span class="tok-na">getName</span><span class="tok-p">();</span></code></pre>
@@ -10988,7 +10972,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_5_获取操作的方法参数">5 获取操作的方法参数</h6>
+<h6 id="_5_获取操作的方法参数_methodparams">5 获取操作的方法参数 methodParams</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">methodParams</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Arrays</span><span class="tok-p">.</span><span class="tok-na">toString</span><span class="tok-p">(</span><span class="tok-n">joinPoint</span><span class="tok-p">.</span><span class="tok-na">getArgs</span><span class="tok-p">());</span></code></pre>
@@ -10996,7 +10980,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_6_获取操作方法的返回值">6 获取操作方法的返回值</h6>
+<h6 id="_6_获取操作方法的返回值_returnvalue">6 获取操作方法的返回值 returnValue</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 操作方法执行开始时间</span>
@@ -11008,7 +10992,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_7_获取操作方法执行耗时">7 获取操作方法执行耗时</h6>
+<h6 id="_7_获取操作方法执行耗时_costtime">7 获取操作方法执行耗时 costTime</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">costTime</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-p">;</span></code></pre>
@@ -11041,7 +11025,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_10_返回操作方法执行的结果">10 返回操作方法执行的结果</h6>
+<h6 id="_10_返回操作方法执行的结果_result">10 返回操作方法执行的结果 result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">;</span></code></pre>
@@ -11054,7 +11038,7 @@ after4 -&gt; @Order(66)</pre>
 <div class="sect2">
 <h3 id="_22_redis_数据库应用">22. Redis 数据库应用</h3>
 <div class="sect3">
-<h4 id="_了解知识点_jedis">了解知识点 jedis</h4>
+<h4 id="_22_1_了解知识点_jedis">22.1 了解知识点 jedis</h4>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -11062,7 +11046,7 @@ after4 -&gt; @Order(66)</pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-我们在 Spring Boot 中使用 <code>Spring Boot Starter Data Redis</code>，下面直接使用 jedis 的知识点作为了解即可。
+我们在 Spring Boot 中使用 <code>spring-boot-starter-data-redis</code>，下面是直接使用 jedis 的知识点，作为了解即可。
 </td>
 </tr>
 </table>
@@ -11082,7 +11066,7 @@ after4 -&gt; @Order(66)</pre>
 <div class="title">测试代码</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">Jedis</span><span class="tok-w"> </span><span class="tok-n">jedis</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Jedis</span><span class="tok-p">(</span><span class="tok-s">&quot;127.0.0.1&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">6379</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// SSL 为 false</span>
-<span class="tok-c1">// jedis.auth(&quot;123456&quot;);  // 没有密码则不用写</span>
+<span class="tok-c1">// jedis.auth(&quot;123456&quot;);  // 没有密码则不用写，默认安装的 redis 没有密码</span>
 <span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">pong</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">jedis</span><span class="tok-p">.</span><span class="tok-na">ping</span><span class="tok-p">();</span>
 <span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-n">pong</span><span class="tok-p">);</span><span class="tok-w">   </span><span class="tok-c1">// PONG 表示连接成功</span>
 
@@ -11105,13 +11089,16 @@ after4 -&gt; @Order(66)</pre>
 </table>
 </div>
 <div class="paragraph">
-<p><strong>以上作为了解知识点，下面我们使用 <code>Spring Boot Starter Data Redis</code> 依赖，它的驱动库是 lettuce。</strong></p>
+<p><strong>以上作为了解知识点，下面我们使用 <code>spring-boot-starter-data-redis</code> 依赖，它的驱动库是 lettuce。</strong></p>
+</div>
+<div class="paragraph">
+<p>如果不想使用 lettuce 驱动库，也是可以使用 jedis 驱动库的。</p>
 </div>
 <div class="sidebarblock">
 <div class="content">
 <div class="title">Spring Boot Starter Data Redis 如何使用 jedis 驱动库</div>
 <div class="paragraph">
-<p>如果你想使用 jedis 驱动库，也是可以配合 Spring Boot Starter Data Redis 的，下面是实现的方式（参考资料）。</p>
+<p>如果你想使用 jedis 驱动库，也是可以配合 spring-boot-starter-data-redis 的，下面是实现的方式（参考资料）。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -11138,7 +11125,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_登录时将_token_放入_redis_数据库">登录时将 token 放入 Redis 数据库</h4>
+<h4 id="_22_2_登录时将_token_放入_redis_数据库">22.2 登录时将 token 放入 Redis 数据库</h4>
 <div class="paragraph">
 <p>为什么要将 token 放入 redis 数据库中？</p>
 </div>
@@ -11186,12 +11173,13 @@ after4 -&gt; @Order(66)</pre>
         <span class="tok-n">multipart</span><span class="tok-p">:</span>                  <span class="tok-c1"># 上传文件</span>
             <span class="tok-nb">max</span><span class="tok-o">-</span><span class="tok-n">file</span><span class="tok-o">-</span><span class="tok-n">size</span><span class="tok-p">:</span> <span class="tok-mi">10</span><span class="tok-n">MB</span>     <span class="tok-c1"># 指定单个文件上传的大小</span>
             <span class="tok-nb">max</span><span class="tok-o">-</span><span class="tok-n">request</span><span class="tok-o">-</span><span class="tok-n">size</span><span class="tok-p">:</span> <span class="tok-mi">100</span><span class="tok-n">MB</span>  <span class="tok-c1"># 指定单次请求上传文件的总大小</span>
+
     <span class="tok-c1"># 新增配置 redis</span>
     <span class="tok-n">redis</span><span class="tok-p">:</span>
         <span class="tok-n">database</span><span class="tok-p">:</span> <span class="tok-mi">0</span>
         <span class="tok-n">host</span><span class="tok-p">:</span> <span class="tok-mf">127.0.0.1</span>
         <span class="tok-n">port</span><span class="tok-p">:</span> <span class="tok-mi">6379</span>
-        <span class="tok-c1"># password: 未设置</span></code></pre>
+        <span class="tok-c1"># password: 未设置，默认安装的 redis 没有密码</span></code></pre>
 </div>
 </div>
 </div>
@@ -11248,14 +11236,17 @@ after4 -&gt; @Order(66)</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">stringRedisTemplate</span><span class="tok-p">.</span><span class="tok-na">opsForValue</span><span class="tok-p">().</span><span class="tok-na">set</span><span class="tok-p">(</span>
-<span class="tok-w">        </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getUsername</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">jwt</span><span class="tok-p">,</span><span class="tok-w">   </span><span class="tok-c1">// 将用户名存入 redis</span>
-<span class="tok-w">        </span><span class="tok-n">JwtUtils</span><span class="tok-p">.</span><span class="tok-na">expire</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">TimeUnit</span><span class="tok-p">.</span><span class="tok-na">MILLISECONDS</span><span class="tok-p">);</span></code></pre>
+<span class="tok-w">        </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getUsername</span><span class="tok-p">(),</span><span class="tok-w">       </span><span class="tok-c1">// key，将用户名存入 redis</span>
+<span class="tok-w">        </span><span class="tok-n">jwt</span><span class="tok-p">,</span><span class="tok-w">                   </span><span class="tok-c1">// value</span>
+<span class="tok-w">        </span><span class="tok-n">JwtUtils</span><span class="tok-p">.</span><span class="tok-na">expire</span><span class="tok-p">,</span><span class="tok-w">       </span><span class="tok-c1">// 过期时间</span>
+<span class="tok-w">        </span><span class="tok-n">TimeUnit</span><span class="tok-p">.</span><span class="tok-na">MILLISECONDS</span><span class="tok-w">  </span><span class="tok-c1">// 时间单位</span>
+<span class="tok-p">);</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_api_测试登录查看_redis">api 测试登录查看 redis</h5>
+<h5 id="_登录后查看_redis_保存的_key_值">登录后查看 redis 保存的 key 值</h5>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">使用 httpie 测试登录</dt>
@@ -11270,7 +11261,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_前端请求进行_token_对比">前端请求进行 token 对比</h4>
+<h4 id="_22_3_前端请求服务器_api_时进行_token_对比">22.3 前端请求服务器 api 时进行 token 对比</h4>
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjiseinterceptorlogincheckedinterceptor_java_3">file &#8594; src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java</h5>
 <div class="sect5">
@@ -11317,6 +11308,7 @@ after4 -&gt; @Order(66)</pre>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// 5. 对比 redis 数据库中的值</span>
+<span class="tok-w">          </span><span class="tok-c1">// 如果删除 redis 中用户的键，则能将用户踢出系统</span>
 <span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">username</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">payload</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-s">&quot;username&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">tokenFromRedis</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">stringRedisTemplate</span><span class="tok-p">.</span><span class="tok-na">opsForValue</span><span class="tok-p">()</span>
 <span class="tok-w">                                               </span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">username</span><span class="tok-p">);</span>
@@ -11346,7 +11338,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-26 15:04:08 +0800
+Last updated 2025-09-27 10:58:56 +0800
 </div>
 </div>
 </body>

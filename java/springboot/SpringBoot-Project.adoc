@@ -4519,7 +4519,7 @@ image::img/filterAndInterceptor.png[,900]
 
 === 19. 异常处理
 目前代码中的异常都是向上抛出的，，如 mapper -> service -> controller，最后到了前端。
-但是前端只认识固定的 Result 格式。所以我们要对异常进行处理。
+但是前端只认识固定的统一响应 Result 格式。所以我们要对异常进行处理。
 
 引入有异常的问题：
 
@@ -4529,7 +4529,7 @@ image::img/filterAndInterceptor.png[,900]
 我现在已经使用 docker 来启动 3307 的 MySQL 了。可以不用本地的 MySQL 了。
 ////
 
-1. 启动后端项目
+1. 启动后端项目的方式
 * 选中 src/main/java/com/tjise/GeneralManagerApplication.java
 * 点击鼠标右键 -> Run 'GeneralManager....Main()'
 
@@ -4543,11 +4543,11 @@ image::img/filterAndInterceptor.png[,900]
 * 前端开发者调试模式会显示 http://localhost:9528/api/depts 500 服务器错
 * 后端会显示 `Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '学工部' for key 'dept.name'`
 * 原因是数据库中已经有了 name 为「学工部」的记录，且该 name 字段为 UNIQUE，即不允许有重复字段。
-* 前端没有提醒反馈的原因，是前端只认识 Result 格式的消息。不认识 500 错误。
+* 前端没有提醒反馈的原因，是前端只认识统一响应 Result 格式的消息。不认识 500 错误。
 
 4. 处理异常的方式如下
 
-==== 方案一：在 Controller 方法中进行 try…catch 处理
+==== 19.1 方案一：在 Controller 方法中进行 try…catch 处理
 IMPORTANT: 项目中的每个 controller 都需要改代码，太麻烦了。
 
 ===== file -> src/main/java/com/tjise/controller/DeptController.java
@@ -4573,7 +4573,7 @@ public Result insertDept(@RequestBody Dept dept){
 // 此处我们只是举个栗子，因为捕获到的异常不一定就是「部门已存在」的原因，可能是别的错误导致的。
 在浏览器中再进行测试新增部门「学工部」，前端会给出友好的提示「部门已存在」。
 
-==== 方案二：全局异常处理器
+==== 19.2 方案二：全局异常处理器
 1. 新增单个部门 insertDept -> 移除 try catch 恢复原来代码
 
 2. 定义全局异常处理器，参下面代码。
@@ -4608,7 +4608,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)  // 简写形式，此方法可以捕获所有异常
     public Result handleException(Exception e)  // 会把拦截的异常传递给此方法的参数 e
     {
-        e.printStackTrace();
+        e.printStackTrace();  // 只是打印了异常信息
         //return Result.error(e.getMessage());  // 如有需要可以自定义错误信息，本例子省略。
         // 上面信息太多字符了，用户看不懂，所以只返回一个通用的错误信息
         return Result.error("处理异常，请稍后重试...");
@@ -4941,14 +4941,10 @@ NOTE: 可以对比 Spring Boot 日志进行核实。
 ----
 @Override
 public List<Dept> selectAllDept() {
-
-    long begin = System.currentTimeMillis();  // <1>
-
-    List<Dept> deptList = deptMapper.selectAllDept();
-
-    long end = System.currentTimeMillis();  // <2>
+    long begin = System.currentTimeMillis();     // <1>
+    List<Dept> deptList = deptMapper.selectAllDept();  // 业务代码
+    long end = System.currentTimeMillis();       // <2>
     log.info("方法执行耗时: {} ms", (end-begin));  // <3>
-
     return deptList;
 }
 ----
@@ -4964,14 +4960,10 @@ NOTE: @Slf4j 来自于于 lombok 依赖，包含了记录日志的方法 log。
 ----
 @Override
 public Dept getDeptById(Integer id) {
-
-    long begin = System.currentTimeMillis();  // <1>
-
-    Dept dept = deptMapper.getDeptById(id);
-
-    long end = System.currentTimeMillis();  // <2>
+    long begin = System.currentTimeMillis();     // <1>
+    Dept dept = deptMapper.getDeptById(id);      // 业务代码
+    long end = System.currentTimeMillis();       // <2>
     log.info("方法执行耗时: {} ms", (end-begin));  // <3>
-
     return dept;
 }
 ----
@@ -4981,7 +4973,9 @@ public Dept getDeptById(Integer id) {
 <3> 计算耗时
 
 ==== 面向切面 AOP 基础
-AOP：Aspect Oriented Programming（面向切面编程），它的核心思想是将重复的逻辑剥离出来，##在不修改原始逻辑的基础上对原始功能进行增强##。
+AOP：Aspect Oriented Programming（面向切面编程），
+它的核心思想是将重复的逻辑剥离出来，
+##在不修改原始逻辑的基础上对原始功能进行增强##。
 
 优势：无侵入、减少重复代码、提高开发效率、维护方便。
 
@@ -5047,23 +5041,15 @@ public Dept getDeptById(Integer id) {
 </dependency>
 ....
 
-===== 定义统计执行耗时操作的切面类
+===== 定义统计执行耗时操作的切面类 TimeAspect
 
 
 ====== file -> src/main/java/com/tjise/aop/TimeAspect.java
 [source,java,linenum]
 ----
-package com.tjise.aop;
-
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
-
 @Slf4j
-@Component  // <2>
 @Aspect     // <2>
+@Component  // <2>
 public class TimeAspect {  // 切面类
     @Around("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")  // <3>
     public Object getTime(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -5083,7 +5069,7 @@ public class TimeAspect {  // 切面类
 <2> 标识当前类是一个 AOP 类，并被 IOC 容器管理。
 <3> 配置公共代码作用于哪些目标方法上。通过 execution 中的切入点表达式计算得到切入点，从而找到目标方法。
 +
-- Around 的名称叫通知。
+- Around 的名称叫**通知**。
 - 第一个星号 * 表示匹配所有方法的返回值类型，即任何方法的返回值类型都能被匹配。
 - 第二个星号 * 表示匹配所有方法。
 - .. 表示匹配任意多个参数。
@@ -5093,8 +5079,8 @@ public class TimeAspect {  // 切面类
 ****
 execution(返回值类型 包名.类名.方法名(参数类型))
 
-- *：可以通配任意一个 返回值类型、包名、类名、方法名、或任意的一个参数类型
-- ..：可以通配任意层级的包、或任意类型、任意个数的参数
+- *：可以通配任意一个 返回值类型、包名、类名、方法名、或任意的一个参数类型。
+- ..：可以通配任意层级的包、或任意类型、任意个数的参数。
 ****
 
 .使用 httpie 测试，查看后端日志中已经打印了方法执行耗时
@@ -5105,10 +5091,12 @@ http :8080/depts "token: $TOKEN"
 http :8080/depts/1 "token: $TOKEN"
 ----
 
+// 此处可以补充打印日志
+
 ==== 面向切面 AOP 进阶
 
 
-===== 注释掉上节更改的代码 -> 去掉多余打印
+===== 注释掉上节的两个注解（让该切面类失效，只让下面的生效）
 
 
 ====== file -> src/main/java/com/tjise/aop/TimeAspect.java
@@ -5136,7 +5124,7 @@ public class TimeAspect {  // 切面类
 }
 ----
 
-===== 通知类型
+===== 通知类型知识点
 
 
 ====== file -> src/main/java/com/tjise/aop/AdviceTypeAspectDemo.java
@@ -5163,16 +5151,18 @@ public class AdviceTypeAspectDemo {  // 切面类
 ----
 @Around("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")
 public Object getTime(ProceedingJoinPoint joinPoint) throws Throwable {
-    System.out.println("around 前");
-    Object obj = joinPoint.proceed();
-    System.out.println("around 后");
-    return obj;
+    System.out.println("around 前");   // <1>
+    Object obj = joinPoint.proceed();  // <3>
+    System.out.println("around 后");   // <1>
+    return obj;  // <2>
 }
 ----
 
-* 此注解标注的通知方法在目标方法前、后都有执行代码。
-* 此注解修饰的方法必须返回 Object。
-* @Around 需要自己调用 ProceedingJoinPoint.proceed() 来让目标方法执行，其他通知不需要考虑自己调用目标方法执行，因为会自动调用。
+<1> 此注解 @Around 标注的通知方法在目标方法前、后都有执行代码。
+
+<2> 此注解修饰的方法必须返回 Object。
+
+<3> @Around 需要自己调用 ProceedingJoinPoint.proceed() 来让目标方法执行，其他通知不需要考虑自己调用目标方法执行，因为会自动调用。
 
 ====== @Before -> 了解：此注解标注的通知方法在目标方法前被执行
 [source,java]
@@ -5241,7 +5231,7 @@ after
 ===== 通知执行顺序
 当有多个切面的切点都匹配目标时，多个通知方法都会被执行。
 
-====== 注释掉上节更改的代码 -> 去掉多余打印
+====== 注释掉上节的两个注解（让该切面类失效，只让下面的生效）
 
 
 ====== file -> src/main/java/com/tjise/aop/AdviceTypeAspectDemo.java
@@ -5473,26 +5463,26 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)  // <2>
+@Retention(RetentionPolicy.RUNTIME)  // <3>
 public @interface Log {}  // <1>
 ----
 
 <1> 自定义标记性注解，用于记录日志。
 
-这两个元注解不是必须的，但通常建议添加。让我解释一下它们的作用：
-
-1. **`@Target(ElementType.METHOD)`**
+<2> `@Target(ElementType.METHOD)`
++
 - 指定注解可以应用的目标元素类型
 - `ElementType.METHOD` 表示该注解只能用于方法上
 - 如果不写，注解默认可以用于任何元素类型
 
-2. **`@Retention(RetentionPolicy.RUNTIME)`**
+<3> `@Retention(RetentionPolicy.RUNTIME)`
++
 - 指定注解的保留策略
 - `RetentionPolicy.RUNTIME` 表示注解在运行时仍然可用，可以通过反射获取
 - 如果不写，默认是 `CLASS` 策略，运行时无法通过反射获取
 
-在 AOP 场景中，@Before、@After 等注解都需要在运行时被 Spring AOP 框架通过反射读取，所以必须使用 RetentionPolicy.RUNTIME 策略。
+IMPORTANT: 在 AOP 场景中，@Before、@After 等注解都需要在运行时被 Spring AOP 框架通过反射读取，所以必须使用 RetentionPolicy.RUNTIME 策略。
 
 ====== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 
@@ -5504,7 +5494,6 @@ public @interface Log {}  // <1>
 @Override
 @Log  // <1>
 public void deleteDeptById(Integer id) throws Exception {
-
     deptMapper.deleteDeptById(id);     // 删除部门
     empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
     System.out.println(3 / 0);         // 运行时异常
@@ -5513,13 +5502,14 @@ public void deleteDeptById(Integer id) throws Exception {
 
 <1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
 
+
 .使用 httpie 测试，查看后端日志中已经打印了方法执行耗时
 [source,console]
 ----
 TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
 http DELETE :8080/depts/1 "token: $TOKEN"  # 会打印 before
-http :8080/depts "token: $TOKEN"    # 不会打印 before
-http :8080/depts/1 "token: $TOKEN"  # 不会打印 before
+http :8080/depts "token: $TOKEN"           # 不会打印 before
+http :8080/depts/1 "token: $TOKEN"         # 不会打印 before
 ----
 
 ===== 切点表达式 @PointCut
@@ -5556,7 +5546,7 @@ public class PointcutAspectDemo {
 }
 ----
 
-<1> 使用 @Pointcut 注解抽取公共的切点表达式为一个方法。
+<1> 使用 @Pointcut 注解抽取公共的切点表达式为一个方法，命名为 pt()。
 <2> 引用抽取的方法即可。
 
 .使用 httpie 测试，查看后端日志中已经打印了方法执行耗时
@@ -5568,7 +5558,7 @@ http :8080/depts/1 "token: $TOKEN"  # 会打印 before 和 after
 ----
 
 ===== 连接点 JoinPoint
-连接点简单理解就是 目标方法，在 Spring 中用 JoinPoint 抽象了连接点，用它可以获得方法执行时的相关信息，如方法名、方法参数类型、方法实际参数等等。
+连接点简单理解就是 **目标方法**，在 Spring 中用 JoinPoint 抽象了连接点，用它可以获得方法执行时的相关信息，如方法名、方法参数类型、方法实际参数等等。
 
 * 对于 @Around 通知，获取连接点信息只能使用 ProceedingJoinPoint。
 
@@ -5617,13 +5607,14 @@ http :8080/depts "token: $TOKEN"
 http :8080/depts/1 "token: $TOKEN"
 ----
 
-==== 面向切面 AOP 案例
+==== 面向切面 AOP 案例 -> 操作日志保存到数据库中
 将前面的部门和员工管理案例中对业务类（service）中的 增、删、改 方法的操作日志保存到数据库（MySQL）中。
 
 思路分析：
 
 1. 需要对所有业务类中的增、删、改 方法添加统一功能，使用 AOP 技术最为方便，因为不用更改原业务代码。
-2. 由于增、删、改 方法名没有规律，所以用 execution 不合适，但是可以用 @annotation 注解配合自定义 @Log 注解完成目标方法选取。
+
+2. 由于增、删、改 方法名没有规律（因为要排除查询的方法），所以用 execution 不合适，但是可以用 @annotation 注解配合自定义 @Log 注解完成目标方法选取。
 
 ===== 检查是否在 pom.xml 文件中导入了 AOP 依赖
 [source,xml]
@@ -5638,19 +5629,19 @@ http :8080/depts/1 "token: $TOKEN"
 [source,sql]
 ----
 create table operate_log(
-    id int unsigned primary key auto_increment comment 'ID',
-    operate_user int unsigned comment '操作人',
-    operate_time datetime comment '操作时间',
-    class_name varchar(100) comment '操作的类名',
-    method_name varchar(100) comment '操作的方法名',
-    method_params varchar(1000) comment '方法参数',
-    return_value varchar(2000) comment '返回值',
-    cost_time bigint comment '方法执行耗时, 单位:ms'
+    id            int unsigned primary key auto_increment comment 'ID',
+    operate_user  int unsigned comment '操作人',
+    operate_time  datetime     comment '操作时间',
+    class_name    varchar(100) comment '操作的类名',
+    method_name   varchar(100) comment '操作的方法名',
+    method_params varchar(1000 comment '方法参数',
+    return_value  varchar(2000 comment '返回值',
+    cost_time     bigint       comment '方法执行耗时, 单位:ms'
 ) comment '操作日志表';
 ----
 
 ===== file -> src/main/java/com/tjise/pojo/OperateLog.java
-.定义操作日志表对应的实体类
+.定义数据库操作日志表对应的实体类
 [source,java]
 ----
 package com.tjise.pojo;
@@ -5689,7 +5680,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface OperateLogMapper {
     //插入日志数据
     @Insert("insert into operate_log (operate_user, operate_time, class_name, method_name, method_params, return_value, cost_time) " +
-            "values (#{operateUser}, #{operateTime}, #{className}, #{methodName}, #{methodParams}, #{returnValue}, #{costTime});")
+            "values (#{operateUser}, #{operateTime}, #{className}, #{methodName}, #{methodParams}, #{returnValue}, #{costTime})")
     public void insert(OperateLog log);
 }
 ----
@@ -5748,7 +5739,7 @@ public void deleteDeptById(Integer id) throws Exception {
 ====== insertEmp 新增员工
 [source,java,linenums]
 ----
-@Log
+@Log  // <1>
 @Override
 public void insertEmp(Emp emp){
     // 补全属性
@@ -5764,7 +5755,7 @@ public void insertEmp(Emp emp){
 [source,java]
 ----
 // emp 封装了要修改的数据
-@Log
+@Log  // <1>
 @Override
 public void updateEmp(Emp emp) {
     // 在前端提交的表单中没有更新时间，所以需要后台来补充此属性
@@ -5778,7 +5769,7 @@ public void updateEmp(Emp emp) {
 ====== deleteEmpByIds 删除员工
 [source,java,linenums]
 ----
-@Log
+@Log  // <1>
 @Override
 public void deleteEmpByIds(List<Integer> ids) {
     empMapper.deleteEmpByIds(ids);
@@ -5823,7 +5814,7 @@ import java.util.Arrays;
 @Component
 public class LogAspect {
 
-    // 含有用户上传的参数，其中有 token 可以解出登录的用户信息，如 id
+    // request 含有用户上传的参数，其中有 token 可以解出登录的用户信息，如 id
     @Autowired
     private HttpServletRequest request;
 
@@ -5839,6 +5830,7 @@ public class LogAspect {
 ----
 
 ====== 1 获取操作人 operateUser
+.解析出已登录用户的 id
 [source,java]
 ----
 String jwt = request.getHeader("token");
@@ -5851,25 +5843,25 @@ Integer operateUser = (Integer) JwtUtils.parseJWT(jwt).get("id");
 LocalDateTime operateTime = LocalDateTime.now();
 ----
 
-====== 3 获取操作方法的类名
+====== 3 获取操作方法的类名 className
 [source,java]
 ----
 String className = joinPoint.getTarget().getClass().getName();
 ----
 
-====== 4 获取操作的方法名
+====== 4 获取操作的方法名 methodName
 [source,java]
 ----
 String methodName = joinPoint.getSignature().getName();
 ----
 
-====== 5 获取操作的方法参数
+====== 5 获取操作的方法参数 methodParams
 [source,java]
 ----
 String methodParams = Arrays.toString(joinPoint.getArgs());
 ----
 
-====== 6 获取操作方法的返回值
+====== 6 获取操作方法的返回值 returnValue
 [source,java]
 ----
 long begin = System.currentTimeMillis();  // 操作方法执行开始时间
@@ -5879,7 +5871,7 @@ long end = System.currentTimeMillis();    // 操作方法执行结束时间
 String returnValue = JSONObject.toJSONString(result);
 ----
 
-====== 7 获取操作方法执行耗时
+====== 7 获取操作方法执行耗时 costTime
 [source,java]
 ----
 long costTime = end - begin;
@@ -5906,7 +5898,7 @@ OperateLog operateLog = new OperateLog(
 operateLogMapper.insert(operateLog);
 ----
 
-====== 10 返回操作方法执行的结果
+====== 10 返回操作方法执行的结果 result
 [source,java]
 ----
 return result;
@@ -5915,9 +5907,8 @@ return result;
 === 22. Redis 数据库应用
 
 
-==== 了解知识点 jedis
-IMPORTANT: 我们在 Spring Boot 中使用 `Spring Boot Starter Data Redis`，下面直接使用 jedis 的知识点作为了解即可。
-
+==== 22.1 了解知识点 jedis
+IMPORTANT: 我们在 Spring Boot 中使用 `spring-boot-starter-data-redis`，下面是直接使用 jedis 的知识点，作为了解即可。
 
 .直接使用依赖 jedis
 [source,scss]
@@ -5935,7 +5926,7 @@ IMPORTANT: 我们在 Spring Boot 中使用 `Spring Boot Starter Data Redis`，�
 [source,java]
 ----
 Jedis jedis = new Jedis("127.0.0.1", 6379, false);  // SSL 为 false
-// jedis.auth("123456");  // 没有密码则不用写
+// jedis.auth("123456");  // 没有密码则不用写，默认安装的 redis 没有密码
 String pong = jedis.ping();
 System.out.println(pong);   // PONG 表示连接成功
 
@@ -5947,13 +5938,14 @@ System.out.println(foo);  // swot
 
 NOTE: 其他类型的例子省略。
 
-**以上作为了解知识点，下面我们使用 `Spring Boot Starter Data Redis` 依赖，它的驱动库是 lettuce。**
+**以上作为了解知识点，下面我们使用 `spring-boot-starter-data-redis` 依赖，它的驱动库是 lettuce。**
 
+
+如果不想使用 lettuce 驱动库，也是可以使用 jedis 驱动库的。
 
 .Spring Boot Starter Data Redis 如何使用 jedis 驱动库
 ****
-如果你想使用 jedis 驱动库，也是可以配合 Spring Boot Starter Data Redis 的，下面是实现的方式（参考资料）。
-
+如果你想使用 jedis 驱动库，也是可以配合 spring-boot-starter-data-redis 的，下面是实现的方式（参考资料）。
 
 [source,xml]
 ----
@@ -5977,7 +5969,7 @@ NOTE: 其他类型的例子省略。
 ----
 ****
 
-==== 登录时将 token 放入 Redis 数据库
+==== 22.2 登录时将 token 放入 Redis 数据库
 为什么要将 token 放入 redis 数据库中？
 
 1. 过期时间记录在 token 中，后端无法将用户踢下线。
@@ -6015,12 +6007,13 @@ spring:
         multipart:                  # 上传文件
             max-file-size: 10MB     # 指定单个文件上传的大小
             max-request-size: 100MB  # 指定单次请求上传文件的总大小
+
     # 新增配置 redis
     redis:
         database: 0
         host: 127.0.0.1
         port: 6379
-        # password: 未设置
+        # password: 未设置，默认安装的 redis 没有密码
 ----
 
 ===== file -> src/main/java/com/tjise/controller/LoginController.java
@@ -6071,17 +6064,20 @@ private StringRedisTemplate stringRedisTemplate;
 [source,java]
 ----
 stringRedisTemplate.opsForValue().set(
-        e.getUsername(), jwt,   // 将用户名存入 redis
-        JwtUtils.expire, TimeUnit.MILLISECONDS);
+        e.getUsername(),       // key，将用户名存入 redis
+        jwt,                   // value
+        JwtUtils.expire,       // 过期时间
+        TimeUnit.MILLISECONDS  // 时间单位
+);
 ----
 
-===== api 测试登录查看 redis
+===== 登录后查看 redis 保存的 key 值
 使用 httpie 测试登录::    
 http -v post http://localhost:8080/login username=limuwan password=123456
 
 进入 redis 查看是否有以用户名 limuwan 为 key 的值。
 
-==== 前端请求进行 token 对比
+==== 22.3 前端请求服务器 api 时进行 token 对比
 
 
 ===== file -> src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java
@@ -6128,6 +6124,7 @@ public boolean preHandle(HttpServletRequest request,
     }
 
     // 5. 对比 redis 数据库中的值
+          // 如果删除 redis 中用户的键，则能将用户踢出系统
     String username = (String) payload.get("username");
     String tokenFromRedis = stringRedisTemplate.opsForValue()
                                                .get(username);
