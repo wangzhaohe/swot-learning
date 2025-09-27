@@ -14,6 +14,7 @@
 <v t="swot.20250508161823.1"><vh>Git</vh></v>
 <v t="swot.20250508123546.1"><vh>LEO-Editor</vh></v>
 <v t="swot.20250521144332.1"><vh>Nuxt3</vh></v>
+<v t="swot.20250927110835.1"><vh>Redis</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 </v>
 </v>
@@ -9700,7 +9701,8 @@ TIP: 我们还可以使用 docker 来运行 redis
   `redis-cli [-h host -p port -a password]`
 
 2) 官方 GUI::
-  RedisInsight（跨平台，可视化查询、慢日志、监控）
+  RedisInsight（仅部分开源（社区版功能阉割，企业版收费）） +
+  Tiny RDM（开源（GPL-3.0） https://github.com/tiny-craft/tiny-rdm
 
 3)各语言客户端（TCP 协议，默认 6379）::
 +
@@ -9807,6 +9809,13 @@ image::img/docker_run_nginx_port.png[,600]
 
 .docker_container_nginx
 image::img/docker_container_nginx.png[]
+
+</t>
+<t tx="swot.20250927110835.1">@language asciidoc
+https://github.com/redis/redis
+
+For developers, who are building real-time data-driven applications, Redis is the preferred, fastest, and most feature-rich cache, data structure server, and document and vector query engine.
+
 
 </t>
 </tnodes>
