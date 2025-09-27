@@ -635,6 +635,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_service_itempom_xml_2">file &#8594; service-item/pom.xml</a></li>
 <li><a href="#_file_service_itemsrcmainresourcesapplication_yml_2">file &#8594; service-item/src/main/resources/application.yml</a></li>
 <li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemapplication_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java</a></li>
+<li><a href="#_启动多个_service_item_商品微服务实例">启动多个 service-item 商品微服务实例</a></li>
 </ul>
 </li>
 <li><a href="#_7_4_eureka_中发现商品微服务">7.4 Eureka 中发现商品微服务</a>
@@ -658,7 +659,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_7_6_eureka_集群高可用性">7.6 Eureka 集群（高可用性）</a>
 <ul class="sectlevel3">
 <li><a href="#_配置_eureka">配置 Eureka</a></li>
-<li><a href="#_配置_微服务">配置 微服务</a></li>
+<li><a href="#_配置_微服务2个">配置 微服务(2个)</a></li>
 <li><a href="#_测试高可用性">测试高可用性</a></li>
 </ul>
 </li>
@@ -1479,7 +1480,7 @@ private RestTemplate restTemplate;</pre>
 </div>
 <div class="paragraph">
 <p>httpie 测试:
-http :8082/order/201810300001</p>
+http :8091/order/201810300001</p>
 </div>
 </div>
 <div class="sect2">
@@ -1525,7 +1526,7 @@ public class ServiceOrderApplication {
 <h3 id="_file_service_ordersrcmainresourcesapplication_yml">file &#8594; service-order/src/main/resources/application.yml</h3>
 <div class="paragraph">
 <p>server:
-  port: 8082</p>
+  port: 8091</p>
 </div>
 </div>
 </div>
@@ -1799,7 +1800,7 @@ public class ItemService {
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">server</span><span class="tok-p">:</span>
-  <span class="tok-n">port</span><span class="tok-p">:</span> <span class="tok-mi">8082</span>
+  <span class="tok-n">port</span><span class="tok-p">:</span> <span class="tok-mi">8091</span>
 
 <span class="tok-c1"># 新增 url 配置</span>
 <span class="tok-n">myspcloud</span><span class="tok-p">:</span>
@@ -2307,7 +2308,7 @@ public class EurekaApplication {</p>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.netflix.eureka.EnableEurekaClient</span><span class="tok-p">;</span>
 
 <span class="tok-nd">@SpringBootApplication</span>
-<span class="tok-nd">@EnableEurekaClient</span>
+<span class="tok-nd">@EnableEurekaClient</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ServiceItemApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -2315,6 +2316,38 @@ public class EurekaApplication {</p>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>启用 uereka 客户端注解</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_启动多个_service_item_商品微服务实例">启动多个 service-item 商品微服务实例</h4>
+<div class="paragraph">
+<p>重复操作下面步骤 2 次，一共启动 3 个 service-item 实例。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/serviceItem_copy_config.png" alt="serviceItem copy config">
+</div>
+<div class="title">Figure 1. 复制 service-item 配置</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/serviceItem_copy_config_edit.png" alt="serviceItem copy config edit" width="520">
+</div>
+<div class="title">Figure 2. 编辑 service-item 配置启动新端口</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/three_serviceItem_in_eureka.png" alt="three serviceItem in eureka">
+</div>
+<div class="title">Figure 3. 在 Eureka 中发现有 3 个 service-item 实例已经注册成功</div>
 </div>
 </div>
 </div>
@@ -2336,7 +2369,7 @@ public class EurekaApplication {</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8082/order/201810300001</span></code></pre>
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8091/order/201810300001</span></code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -2390,7 +2423,7 @@ public class EurekaApplication {</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
-<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8082</span></code></pre>
+<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8091</span></code></pre>
 </div>
 </div>
 </div>
@@ -2720,13 +2753,13 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <div class="content">
 <img src="img/eureka_login.png" alt="eureka login" width="800">
 </div>
-<div class="title">Figure 1. 加入用户认证功能后需要登录界面</div>
+<div class="title">Figure 4. 加入用户认证功能后需要登录界面</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/eureka_admin_with_user_and_pass.png" alt="eureka admin with user and pass">
 </div>
-<div class="title">Figure 2. 加入用户认证功能后依然可以注册成功</div>
+<div class="title">Figure 5. 加入用户认证功能后依然可以注册成功</div>
 </div>
 <div class="sect3">
 <h4 id="_file_eurekapom_xml_2">file &#8594; eureka/pom.xml</h4>
@@ -2994,7 +3027,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <div class="content">
 <img src="img/eureka_multi_admin.png" alt="eureka multi admin">
 </div>
-<div class="title">Figure 3. 三个网址内容类似</div>
+<div class="title">Figure 6. 三个网址内容类似</div>
 </div>
 </li>
 </ol>
@@ -3234,7 +3267,7 @@ Docker 已经预留了一个特殊 DNS 名：host.docker.internal<br>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_配置_微服务">配置 微服务</h4>
+<h4 id="_配置_微服务2个">配置 微服务(2个)</h4>
 <div class="sect4">
 <h5 id="_file_service_itemsrcmainresourcesapplication_yml_4">file &#8594; service-item/src/main/resources/application.yml</h5>
 <div class="sidebarblock">
@@ -3306,7 +3339,7 @@ Docker 已经预留了一个特殊 DNS 名：host.docker.internal<br>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
-<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8082</span></code></pre>
+<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8091</span></code></pre>
 </div>
 </div>
 </div>
@@ -3348,7 +3381,7 @@ Docker 已经预留了一个特殊 DNS 名：host.docker.internal<br>
 <h5 id="_1_httpie_测试">1. httpie 测试</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8082/order/201810300001</span></code></pre>
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8091/order/201810300001</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3528,7 +3561,7 @@ public Order queryOrderById(String orderId) throws IOException {
 <h5 id="_4_重启_service_order_后httpie_测试">4. 重启 service-order 后，httpie 测试:</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8082/order/201810300002</span></code></pre>
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8091/order/201810300002</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3582,7 +3615,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-23 00:38:05 +0800
+Last updated 2025-09-27 18:53:03 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

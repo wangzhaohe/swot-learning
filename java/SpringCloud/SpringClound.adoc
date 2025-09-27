@@ -563,7 +563,7 @@ public class OrderController {
 ----
 
 httpie 测试:
-http :8082/order/201810300001
+http :8091/order/201810300001
 
 === file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
 package com.tjise.serviceorder;
@@ -598,7 +598,7 @@ public class ServiceOrderApplication {
 
 === file -> service-order/src/main/resources/application.yml
 server:
-  port: 8082
+  port: 8091
 
 == 5. HTTP 客户端
 
@@ -829,7 +829,7 @@ RestClient 的主要价值在于它提供了一个现代化但又不失简单的
 [source,python]
 ----
 server:
-  port: 8082
+  port: 8091
 
 # 新增 url 配置
 myspcloud:
@@ -1184,7 +1184,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
-@EnableEurekaClient
+@EnableEurekaClient  // <1>
 public class ServiceItemApplication {
 
     public static void main(String[] args) {
@@ -1192,6 +1192,20 @@ public class ServiceItemApplication {
     }
 }
 ----
+
+<1> 启用 uereka 客户端注解
+
+==== 启动多个 service-item 商品微服务实例
+重复操作下面步骤 2 次，一共启动 3 个 service-item 实例。
+
+.复制 service-item 配置
+image::img/serviceItem_copy_config.png[]
+
+.编辑 service-item 配置启动新端口
+image::img/serviceItem_copy_config_edit.png[,520]
+
+.在 Eureka 中发现有 3 个 service-item 实例已经注册成功
+image::img/three_serviceItem_in_eureka.png[]
 
 === 7.4 Eureka 中发现商品微服务
 之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。
@@ -1203,7 +1217,7 @@ image::img/eureka_admin_with_service-order.png[]
 httpie 测试:
 [source,console]
 ----
-http :8082/order/201810300001
+http :8091/order/201810300001
 ----
 
 ==== 7.4.1 file -> service-order/pom.xml
@@ -1251,7 +1265,7 @@ http :8082/order/201810300001
 [source,yaml]
 ----
 server:
-    port: 8082
+    port: 8091
 ----
 
 ===== name
@@ -1870,7 +1884,7 @@ Docker 已经预留了一个特殊 DNS 名：host.docker.internal +
 
 访问 http://localhost:8760/ 会按 nginx 默认的负载均衡访问 3 台 Eureka 服务器。
 
-==== 配置 微服务
+==== 配置 微服务(2个)
 
 
 ===== file -> service-item/src/main/resources/application.yml
@@ -1925,7 +1939,7 @@ eureka:
 [source,yaml]
 ----
 server:
-    port: 8082
+    port: 8091
 ----
 
 ====== name
@@ -1960,7 +1974,7 @@ eureka:
 ===== 1. httpie 测试
 [source,console]
 ----
-http :8082/order/201810300001
+http :8091/order/201810300001
 ----
 +
 ....
@@ -2108,7 +2122,7 @@ public Order queryOrderById(String orderId) throws IOException {
 ===== 4. 重启 service-order 后，httpie 测试:
 [source,console]
 ----
-http :8082/order/201810300002
+http :8091/order/201810300002
 ----
 +
 .测试结果说明 Eureka 高可用无问题

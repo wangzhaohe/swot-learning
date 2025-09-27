@@ -3303,8 +3303,10 @@ Transfer-Encoding: chunked
 image::img/serviceItem_copy_config.png[]
 
 .编辑 service-item 配置启动新端口
-image::img/serviceItem_copy_config_edit.png[,640]
+image::img/serviceItem_copy_config_edit.png[,520]
 
+.在 Eureka 中发现有 3 个 service-item 实例已经注册成功
+image::img/three_serviceItem_in_eureka.png[]
 </t>
 </tnodes>
 </leo_file>
