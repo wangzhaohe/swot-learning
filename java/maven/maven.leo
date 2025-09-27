@@ -113,7 +113,7 @@
 <v t="swot.20250830104620.3"><vh>@ignore-node 1) packaging 指定该父模块打包方式为 pom</vh></v>
 <v t="swot.20250830104620.4"><vh>@ignore-node 2) parent 指定该模块的父模块依赖 Spring Boot 默认的 &lt;parent&gt;</vh></v>
 <v t="swot.20250830104620.5"><vh>properties -&gt; 在此自定义依赖版本变量来统一管理依赖版本号</vh></v>
-<v t="swot.20250830104620.6"><vh>dependency -&gt; 在此引用自定义的依赖版本变量</vh></v>
+<v t="swot.20250830104620.6"><vh>dependency           -&gt; 在此引用自定义的依赖版本变量</vh></v>
 <v t="swot.20250830104620.7"><vh>dependencyManagement -&gt; 在此引用自定义的依赖版本变量</vh></v>
 </v>
 </v>
@@ -1720,10 +1720,8 @@ image::img/maven_self_define_version_variable.png[]
     &lt;dependency&gt;
         &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
         &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-
         &lt;!-- 引用自定义版本号变量 --&gt;
         &lt;version&gt;${lombok.version}&lt;/version&gt;
-        &lt;optional&gt;true&lt;/optional&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
 @doc
@@ -1743,11 +1741,14 @@ IMPORTANT: 若父子模块都配置了同一个依赖的不同版本，以子模
             &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
             &lt;version&gt;2.7.18&lt;/version&gt;
         &lt;/dependency&gt;
+        
+        &lt;!-- 引用自定义版本号变量 --&gt;
         &lt;dependency&gt;
             &lt;groupId&gt;com.aliyun.oss&lt;/groupId&gt;
             &lt;artifactId&gt;aliyun-sdk-oss&lt;/artifactId&gt;
             &lt;version&gt;${oss.version}&lt;/version&gt;
         &lt;/dependency&gt;
+        
         &lt;dependency&gt;
             &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
             &lt;artifactId&gt;jjwt-api&lt;/artifactId&gt;
