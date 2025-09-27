@@ -1463,6 +1463,14 @@ Maven (或者在顶端搜索 maven 也行)</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">jdbc 数据库驱动</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">只在运行时需要</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">import</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">—</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">—</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lombok、spring-cloud-dependencies）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">只在编译期使用</p></td>
+</tr>
 </tbody>
 </table>
 <div class="admonitionblock note">
@@ -2034,21 +2042,14 @@ scope runtime 指主程序（编译时）只需要依赖 JDBC 接口（属于 ja
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.projectlombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">lombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.18.30</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
-<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span><span class="tok-nt">true</span><span class="tok-o">&lt;/</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
 <span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>optional 为 true 表示不会将该依赖传递给子模块。</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
-<p>子模块想用 lombok，依然得声明，但是不用指定版本了。</p>
-</li>
-<li>
-<p>若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。</p>
+<p>若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准（实际上没有必要，一个项目最好版本不一致）。</p>
 </li>
 </ul>
 </div>
@@ -2299,6 +2300,8 @@ relativePath 指定父模块的 pom 文件的相对位置（如果不指定，�
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.aliyun.oss</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">aliyun-sdk-oss</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">接口层</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">编译时需要</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-api</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
@@ -2352,17 +2355,15 @@ relativePath 指定父模块的 pom 文件的相对位置（如果不指定，�
 </div>
 </div>
 <div class="sect4">
-<h5 id="_dependency_在此引用自定义的依赖版本变量">dependency &#8594; 在此引用自定义的依赖版本变量</h5>
+<h5 id="_dependency_在此引用自定义的依赖版本变量">dependency           &#8594; 在此引用自定义的依赖版本变量</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.projectlombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">lombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
-
 <span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">引用自定义版本号变量</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-err">$</span><span class="tok-p">{</span><span class="tok-nt">lombok</span><span class="tok-nc">.version</span><span class="tok-p">}</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
-<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span><span class="tok-nt">true</span><span class="tok-o">&lt;/</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
 <span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span></code></pre>
 </div>
@@ -2418,18 +2419,24 @@ relativePath 指定父模块的 pom 文件的相对位置（如果不指定，�
 <span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span>
-<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
 <span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-web</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">2</span><span class="tok-nc">.7.18</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">引用自定义版本号变量</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
 <span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.aliyun.oss</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">aliyun-sdk-oss</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-err">$</span><span class="tok-p">{</span><span class="tok-nt">oss</span><span class="tok-nc">.version</span><span class="tok-p">}</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
 <span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
 <span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
 <span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.jsonwebtoken</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">jjwt-api</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
@@ -2626,7 +2633,7 @@ relativePath 指定父模块的 pom 文件的相对位置（如果不指定，�
 <div class="content">
 <img src="img/maven_nexus_introduce.png" alt="maven nexus introduce" width="800">
 </div>
-<div class="title">Figure 1. 私服架构示意图</div>
+<div class="title">Figure 1. 私服架构示意图（A、B指开发者电脑）</div>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -2635,7 +2642,7 @@ relativePath 指定父模块的 pom 文件的相对位置（如果不指定，�
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-私服在企业项目开发中，公司只需要一台即可（无需我们自己搭建，会使用即可）。
+私服在企业项目开发中，公司只需要一台即可（无需我们自己搭建，运维已经建好了，会使用即可）。
 </td>
 </tr>
 </table>
@@ -2651,6 +2658,7 @@ relativePath 指定父模块的 pom 文件的相对位置（如果不指定，�
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">cd nexus-3.83.0-08-mac-x86_64/nexus-3.83.0-08/bin</span>
+
 <span class="tok-go">./nexus start  # 无信息输出方式启动</span>
 <span class="tok-go">./nexus run    # 有信息输出方式启动</span>
 <span class="tok-go">./nexus stop   # 停止服务</span></code></pre>
@@ -2673,7 +2681,8 @@ relativePath 指定父模块的 pom 文件的相对位置（如果不指定，�
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-登录后让改密码，我已经把密码改成了 123456。改完密码后 admin.password 文件就被删除了。
+登录后让改密码，我已经把密码改成了 123456。
+改完密码后 admin.password 文件就被自动删除了。
 </td>
 </tr>
 </table>
@@ -2754,13 +2763,13 @@ relativePath 指定父模块的 pom 文件的相对位置（如果不指定，�
 <div class="ulist">
 <ul>
 <li>
-<p><code>-proxy</code> 是帮你去外网“代购”的仓库；</p>
+<p><code>proxy</code> 是帮你去外网“代购”的仓库；</p>
 </li>
 <li>
-<p><code>-hosted</code> 是你自己“生产”的仓库；</p>
+<p><code>hosted</code> 是你自己“生产”的仓库；</p>
 </li>
 <li>
-<p><code>-group</code> 是把上面两类“打包”成一个入口，使用最方便。</p>
+<p><code>group</code> 是把上面两类“打包”成一个入口，使用最方便。</p>
 </li>
 </ul>
 </div>
@@ -2770,7 +2779,7 @@ relativePath 指定父模块的 pom 文件的相对位置（如果不指定，�
 <div class="sect4">
 <h5 id="_maven_原始配置备份">Maven 原始配置备份</h5>
 <div class="sect5">
-<h6 id="_file_usersswotsoftapache_maven_3_9_9confsettings_xml">@file /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml</h6>
+<h6 id="_file_usersswotsoftapache_maven_3_9_9confsettings_xml">file &#8594; /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml</h6>
 <div class="paragraph">
 <p>&lt;!--
 Licensed to the Apache Software Foundation (ASF) under one
@@ -3120,7 +3129,7 @@ under the License.
 <span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">因为</span><span class="tok-w"> </span><span class="tok-nt">maven-public</span><span class="tok-w"> </span><span class="tok-nt">是</span><span class="tok-w"> </span><span class="tok-nt">Group</span><span class="tok-err">，</span><span class="tok-nt">所以只配置它就可以了</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
 <span class="tok-w">      </span><span class="tok-o">&lt;</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span><span class="tok-nt">maven-public</span><span class="tok-o">&lt;/</span><span class="tok-nt">id</span><span class="tok-o">&gt;</span>
 <span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">mirrorOf</span><span class="tok-o">&gt;*&lt;/</span><span class="tok-nt">mirrorOf</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
-<span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">*,!</span><span class="tok-nt">central</span><span class="tok-w"> </span><span class="tok-nt">就是给官方仓库开绿灯</span><span class="tok-err">，</span><span class="tok-nt">让插件请求绕开私服</span><span class="tok-err">，</span><span class="tok-nt">避免找不到插件而失败</span><span class="tok-err">；</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">*,!</span><span class="tok-nt">central</span><span class="tok-w"> </span><span class="tok-nt">就是给官方仓库开绿灯</span><span class="tok-err">，</span><span class="tok-nt">让官方仓库的插件请求绕开私服</span><span class="tok-err">，</span><span class="tok-nt">避免找不到插件而失败</span><span class="tok-err">；</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
 <span class="tok-w">      </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">同时保留私服对其它仓库的代理功能</span><span class="tok-err">，</span><span class="tok-nt">兼顾速度与可用性</span><span class="tok-err">。</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
 <span class="tok-w">      </span><span class="tok-o">&lt;</span><span class="tok-nt">mirrorOf</span><span class="tok-o">&gt;*,!</span><span class="tok-nt">central</span><span class="tok-o">&lt;/</span><span class="tok-nt">mirrorOf</span><span class="tok-o">&gt;</span>
 <span class="tok-w">      </span><span class="tok-o">&lt;</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span><span class="tok-nt">http</span><span class="tok-nd">:</span><span class="tok-o">//</span><span class="tok-nt">localhost</span><span class="tok-nd">:8081</span><span class="tok-o">/</span><span class="tok-nt">repository</span><span class="tok-o">/</span><span class="tok-nt">maven-public</span><span class="tok-o">/&lt;/</span><span class="tok-nt">url</span><span class="tok-o">&gt;</span>
@@ -3154,6 +3163,12 @@ under the License.
 <span class="tok-w">  </span><span class="tok-o">&lt;/</span><span class="tok-nt">profile</span><span class="tok-o">&gt;</span>
 <span class="tok-o">&lt;/</span><span class="tok-nt">profiles</span><span class="tok-o">&gt;</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>这个配置就是告诉 Maven：</p>
+</div>
+<div class="paragraph">
+<p>“默认启用一个叫 allow-snapshots 的 profile，把我的 Nexus 私服 maven-public 当作依赖仓库，并允许从里面下载 正式版和快照版 的依赖。”</p>
 </div>
 </div>
 </div>
@@ -3265,7 +3280,7 @@ under the License.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-27 13:16:25 +0800
+Last updated 2025-09-27 16:39:08 +0800
 </div>
 </div>
 </body>

@@ -434,6 +434,7 @@ public class MavenTest {
 | test         | --     | Y      | --        | junit        | 只在测试时才需要
 | provided      | Y     | Y     | --        | servlet-api   | 比如打 war 包，Web 容器（如 Tomcat）会在运行时提供 servlet-api
 | runtime       | --    | Y     | Y         | jdbc 数据库驱动  | 只在运行时需要
+| import        | Y     | —     | —         | lombok、spring-cloud-dependencies） |只在编译期使用
 |===
 
 NOTE: scope runtime 指主程序（编译时）只需要依赖 JDBC 接口（属于 java.sql 包），而运行时才需要具体的实现（即数据库驱动 Jar 包）。
@@ -722,15 +723,11 @@ image::img/maven_create_parent_module.png[,800]
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>1.18.30</version>
-        <optional>true</optional>
     </dependency>
 </dependencies>
 ....
 
-optional 为 true 表示不会将该依赖传递给子模块。
-
-* 子模块想用 lombok，依然得声明，但是不用指定版本了。
-* 若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。
+* 若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准（实际上没有必要，一个项目最好版本不一致）。
 
 ==== 在子模块的 pom.xml 文件中，配置继承关系
 NOTE: 下面三个子模块中多余的 <groupId> 坐标可以删除，因为都已经在它们的 <parent> 坐标中指定了。
@@ -883,6 +880,8 @@ image::img/maven_dependencyManagement.png[]
         <groupId>com.aliyun.oss</groupId>
         <artifactId>aliyun-sdk-oss</artifactId>
     </dependency>
+
+    <!-- 接口层: 编译时需要 -->
     <dependency>
         <groupId>io.jsonwebtoken</groupId>
         <artifactId>jjwt-api</artifactId>
@@ -926,17 +925,15 @@ image::img/maven_self_define_version_variable.png[]
 </properties>
 ....
 
-===== dependency -> 在此引用自定义的依赖版本变量
+===== dependency           -> 在此引用自定义的依赖版本变量
 [source,scss]
 ....
 <dependencies>
     <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
-
         <!-- 引用自定义版本号变量 -->
         <version>${lombok.version}</version>
-        <optional>true</optional>
     </dependency>
 </dependencies>
 ....
@@ -953,11 +950,14 @@ IMPORTANT: 若父子模块都配置了同一个依赖的不同版本，以子模
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.7.18</version>
         </dependency>
+        
+        <!-- 引用自定义版本号变量 -->
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
             <version>${oss.version}</version>
         </dependency>
+        
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -1053,10 +1053,10 @@ IMPORTANT: 需要参考上面知识点仔细品味！
 2. 私服（公司内部服务器）
 3. 中央仓库（全球唯一）
 
-.私服架构示意图
+.私服架构示意图（A、B指开发者电脑）
 image::img/maven_nexus_introduce.png[,800]
 
-TIP: 私服在企业项目开发中，公司只需要一台即可（无需我们自己搭建，会使用即可）。
+TIP: 私服在企业项目开发中，公司只需要一台即可（无需我们自己搭建，运维已经建好了，会使用即可）。
 
 ==== nexus 安装与运行
 nexus 下载地址: https://www.sonatype.com/thanks/repo-community-edition
@@ -1066,6 +1066,7 @@ nexus 下载地址: https://www.sonatype.com/thanks/repo-community-edition
 [source,console]
 ----
 cd nexus-3.83.0-08-mac-x86_64/nexus-3.83.0-08/bin
+
 ./nexus start  # 无信息输出方式启动
 ./nexus run    # 有信息输出方式启动
 ./nexus stop   # 停止服务
@@ -1079,7 +1080,8 @@ Your admin user password is located in
 /Users/swot/soft/nexus-3.83.0-08-mac-x86_64/sonatype-work/nexus3/admin.password on the server.
 ....
 
-NOTE: 登录后让改密码，我已经把密码改成了 123456。改完密码后 admin.password 文件就被删除了。
+NOTE: 登录后让改密码，我已经把密码改成了 123456。
+改完密码后 admin.password 文件就被自动删除了。
 
 ==== Nexus 预置的仓库（Repository）说明
 这些都是 Nexus 预置的仓库（Repository），按用途可以分三类：代理仓库、托管仓库和仓库组。
@@ -1105,9 +1107,9 @@ NOTE: 登录后让改密码，我已经把密码改成了 123456。改完密码�
 
 一句话总结：
 
-- `-proxy` 是帮你去外网“代购”的仓库；
-- `-hosted` 是你自己“生产”的仓库；
-- `-group` 是把上面两类“打包”成一个入口，使用最方便。
+- `proxy` 是帮你去外网“代购”的仓库；
+- `hosted` 是你自己“生产”的仓库；
+- `group` 是把上面两类“打包”成一个入口，使用最方便。
 
 ==== 使用私服进行依赖的上传与下载
 
@@ -1115,7 +1117,7 @@ NOTE: 登录后让改密码，我已经把密码改成了 123456。改完密码�
 ===== Maven 原始配置备份
 
 
-====== @file /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml
+====== file -> /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -1416,7 +1418,7 @@ under the License.
       <!-- 因为 maven-public 是 Group，所以只配置它就可以了 -->
       <id>maven-public</id>
       <!-- <mirrorOf>*</mirrorOf> -->
-      <!-- *,!central 就是给官方仓库开绿灯，让插件请求绕开私服，避免找不到插件而失败； -->
+      <!-- *,!central 就是给官方仓库开绿灯，让官方仓库的插件请求绕开私服，避免找不到插件而失败； -->
       <!-- 同时保留私服对其它仓库的代理功能，兼顾速度与可用性。 -->
       <mirrorOf>*,!central</mirrorOf>
       <url>http://localhost:8081/repository/maven-public/</url>
@@ -1448,6 +1450,10 @@ under the License.
   </profile>
 </profiles>
 ....
+
+这个配置就是告诉 Maven：
+
+“默认启用一个叫 allow-snapshots 的 profile，把我的 Nexus 私服 maven-public 当作依赖仓库，并允许从里面下载 正式版和快照版 的依赖。”
 
 ===== Maven 聚合父模块配置项目发布到私服
 

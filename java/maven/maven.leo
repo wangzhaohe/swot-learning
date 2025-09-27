@@ -497,6 +497,7 @@ public class MavenTest {
 | test         | --     | Y      | --        | junit        | 只在测试时才需要
 | provided      | Y     | Y     | --        | servlet-api   | 比如打 war 包，Web 容器（如 Tomcat）会在运行时提供 servlet-api
 | runtime       | --    | Y     | Y         | jdbc 数据库驱动  | 只在运行时需要
+| import        | Y     | —     | —         | lombok、spring-cloud-dependencies） |只在编译期使用
 |===
 
 NOTE: scope runtime 指主程序（编译时）只需要依赖 JDBC 接口（属于 java.sql 包），而运行时才需要具体的实现（即数据库驱动 Jar 包）。
