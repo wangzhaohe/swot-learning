@@ -1881,15 +1881,16 @@ public class ServiceItemApplication {
 <t tx="swot.20250918225928.1">@language asciidoc
 之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。
 
-成功注册 service-order 到 eureka 是这样的，如下图
+想要从 Eureka 中发现服务，需要先将 service-order 成功注册到 eureka，如下图是成功注册后的截图。
 
 image::img/eureka_admin_with_service-order.png[]
 
-httpie 测试:
+httpie 测试注册 service-order 到 Eureka 后，也是可以正常运行的:
 [source,console]
 ----
 http :8091/order/201810300001
 ----
+
 </t>
 <t tx="swot.20250919080549.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032352d30392d32317103752e">@first &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 @language xml
