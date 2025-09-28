@@ -636,7 +636,6 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_service_itemsrcmainresourcesapplication_yml_2">file &#8594; service-item/src/main/resources/application.yml</a></li>
 <li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemapplication_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java</a></li>
 <li><a href="#_启动多个_service_item_商品微服务实例">启动多个 service-item 商品微服务实例</a></li>
-<li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</a></li>
 </ul>
 </li>
 <li><a href="#_7_4_eureka_中发现商品微服务">7.4 Eureka 中发现商品微服务</a>
@@ -646,6 +645,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
 <li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_6">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
 <li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
+<li><a href="#_测试_service_item_被负载均衡分配的结果">测试 service-item 被负载均衡分配的结果</a></li>
+<li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</a></li>
 </ul>
 </li>
 <li><a href="#_7_5_eureka_添加用户认证">7.5 Eureka 添加用户认证</a>
@@ -2364,118 +2365,6 @@ public class EurekaApplication {</p>
 </div>
 <div class="title">Figure 3. 在 Eureka 中发现有 3 个 service-item 实例已经注册成功</div>
 </div>
-<div class="paragraph">
-<p>下面代码使用 @Value("${server.port}") 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
-参数启动多个实例的情况下。这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。</p>
-</div>
-<div class="paragraph">
-<p>现在已经修改了 ItemController，在每次请求时会打印当前处理请求的端口号。以下是简单的负载均衡测试方法：</p>
-</div>
-<div class="paragraph">
-<p>负载均衡测试步骤：</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>确认所有服务都已启动：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Eureka Server (端口 8761)</p>
-</li>
-<li>
-<p>3 个 service-item 实例 (端口 8081, 8082, 8083)</p>
-</li>
-<li>
-<p>service-order (端口 8091)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>在 3 个 service-item 实例的控制台分别观察日志输出。</p>
-</li>
-<li>
-<p>通过 service-order 发起请求：</p>
-<div class="literalblock">
-<div class="content">
-<pre># 重复执行以下命令，观察哪个实例在处理请求
-http :8091/order/201810300001</pre>
-</div>
-</div>
-</li>
-<li>
-<p>每次执行上述命令时，观察 3 个 service-item 实例的控制台，您应该会看到类似下面的日志，显示哪个端口在处理请求：</p>
-<div class="literalblock">
-<div class="content">
-<pre>Processing request on port: 8081 for item ID: 1
-Processing request on port: 8083 for item ID: 2
-Processing request on port: 8082 for item ID: 1</pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>这样就能清楚地看到负载均衡在工作，请求被分发到不同的 service-item 实例上。</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</h4>
-<div class="paragraph">
-<p>package com.tjise.serviceitem.controller;</p>
-</div>
-<div class="paragraph">
-<p>import com.tjise.serviceitem.pojo.Item;
-import com.tjise.serviceitem.service.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;</p>
-</div>
-<div class="paragraph">
-<p>import java.util.logging.Logger;</p>
-</div>
-<div class="paragraph">
-<p>@RestController
-public class ItemController {</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>@Autowired
-private ItemService itemService;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>@Value("${server.port}")
-private int serverPort;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>private static final Logger logger = Logger.getLogger(ItemController.class.getName());</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    /**
-     * 对外提供接口服务，查询商品信息
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping(value = "item/{id}")
-    public Item queryItemById(@PathVariable("id") Long id) {
-        // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
-        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
-        System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
-        return this.itemService.queryItemById(id);
-    }
-}</pre>
-</div>
-</div>
 </div>
 </div>
 <div class="sect2">
@@ -2867,6 +2756,121 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <td>使用 WebClient</td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_测试_service_item_被负载均衡分配的结果">测试 service-item 被负载均衡分配的结果</h4>
+<div class="paragraph">
+<p>下面代码使用 @Value("${server.port}") 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
+参数启动多个实例的情况下。这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。</p>
+</div>
+<div class="paragraph">
+<p>现在已经修改了 ItemController，在每次请求时会打印当前处理请求的端口号。以下是简单的负载均衡测试方法：</p>
+</div>
+<div class="paragraph">
+<p>负载均衡测试步骤：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>确认所有服务都已启动：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Eureka Server (端口 8761)</p>
+</li>
+<li>
+<p>3 个 service-item 实例 (端口 8081, 8082, 8083)</p>
+</li>
+<li>
+<p>service-order (端口 8091)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>在 3 个 service-item 实例的控制台分别观察日志输出。</p>
+</li>
+<li>
+<p>通过 service-order 发起请求：</p>
+<div class="literalblock">
+<div class="content">
+<pre># 重复执行以下命令，观察哪个实例在处理请求
+http :8091/order/201810300001</pre>
+</div>
+</div>
+</li>
+<li>
+<p>每次执行上述命令时，观察 3 个 service-item 实例的控制台，应该会看到类似下面的日志，显示哪个端口在处理请求：</p>
+<div class="literalblock">
+<div class="content">
+<pre>Processing request on port: 8081 for item ID: 1
+Processing request on port: 8083 for item ID: 2
+Processing request on port: 8082 for item ID: 1</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>这样就能清楚地看到负载均衡在工作，请求被分发到不同的 service-item 实例上。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</h4>
+<div class="paragraph">
+<p>package com.tjise.serviceitem.controller;</p>
+</div>
+<div class="paragraph">
+<p>import com.tjise.serviceitem.pojo.Item;
+import com.tjise.serviceitem.service.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;</p>
+</div>
+<div class="paragraph">
+<p>import java.util.logging.Logger;</p>
+</div>
+<div class="paragraph">
+<p>@RestController
+public class ItemController {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>@Autowired
+private ItemService itemService;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>@Value("${server.port}")
+private int serverPort;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private static final Logger logger = Logger.getLogger(ItemController.class.getName());</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    /**
+     * 对外提供接口服务，查询商品信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "item/{id}")
+    public Item queryItemById(@PathVariable("id") Long id) {
+        // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
+        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+        System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
+        return this.itemService.queryItemById(id);
+    }
+}</pre>
 </div>
 </div>
 </div>
@@ -3743,7 +3747,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-28 16:39:03 +0800
+Last updated 2025-09-28 16:47:41 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

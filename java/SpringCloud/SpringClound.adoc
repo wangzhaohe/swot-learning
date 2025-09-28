@@ -1222,72 +1222,6 @@ image::img/serviceItem_copy_config_edit_8082.png[,520]
 .在 Eureka 中发现有 3 个 service-item 实例已经注册成功
 image::img/three_serviceItem_in_eureka.png[]
 
-下面代码使用 @Value("${server.port}") 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
-参数启动多个实例的情况下。这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。
-
-现在已经修改了 ItemController，在每次请求时会打印当前处理请求的端口号。以下是简单的负载均衡测试方法：
-
-负载均衡测试步骤：
-
-1. 确认所有服务都已启动：
-  - Eureka Server (端口 8761)
-  - 3 个 service-item 实例 (端口 8081, 8082, 8083)
-  - service-order (端口 8091)
-
-2. 在 3 个 service-item 实例的控制台分别观察日志输出。
-
-3. 通过 service-order 发起请求：
-
-   # 重复执行以下命令，观察哪个实例在处理请求
-   http :8091/order/201810300001
-
-4. 每次执行上述命令时，观察 3 个 service-item 实例的控制台，您应该会看到类似下面的日志，显示哪个端口在处理请求：
-
-   Processing request on port: 8081 for item ID: 1
-   Processing request on port: 8083 for item ID: 2
-   Processing request on port: 8082 for item ID: 1
-
-这样就能清楚地看到负载均衡在工作，请求被分发到不同的 service-item 实例上。
-
-==== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
-package com.tjise.serviceitem.controller;
-
-import com.tjise.serviceitem.pojo.Item;
-import com.tjise.serviceitem.service.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.logging.Logger;
-
-@RestController
-public class ItemController {
-
-    @Autowired
-    private ItemService itemService;
-    
-    @Value("${server.port}")
-    private int serverPort;
-
-    private static final Logger logger = Logger.getLogger(ItemController.class.getName());
-
-    /**
-     * 对外提供接口服务，查询商品信息
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping(value = "item/{id}")
-    public Item queryItemById(@PathVariable("id") Long id) {
-        // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
-        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
-        System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
-        return this.itemService.queryItemById(id);
-    }
-}
-
 === 7.4 Eureka 中发现商品微服务
 之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。
 
@@ -1591,6 +1525,73 @@ public Order queryOrderById(String orderId) throws IOException {
 <1> 使用 RestTemplate
 <2> 使用 OkHttpClient
 <3> 使用 WebClient
+
+==== 测试 service-item 被负载均衡分配的结果
+下面代码使用 @Value("${server.port}") 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
+参数启动多个实例的情况下。这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。
+
+现在已经修改了 ItemController，在每次请求时会打印当前处理请求的端口号。以下是简单的负载均衡测试方法：
+
+负载均衡测试步骤：
+
+1. 确认所有服务都已启动：
+  - Eureka Server (端口 8761)
+  - 3 个 service-item 实例 (端口 8081, 8082, 8083)
+  - service-order (端口 8091)
+
+2. 在 3 个 service-item 实例的控制台分别观察日志输出。
+
+3. 通过 service-order 发起请求：
+
+   # 重复执行以下命令，观察哪个实例在处理请求
+   http :8091/order/201810300001
+
+4. 每次执行上述命令时，观察 3 个 service-item 实例的控制台，应该会看到类似下面的日志，显示哪个端口在处理请求：
+
+   Processing request on port: 8081 for item ID: 1
+   Processing request on port: 8083 for item ID: 2
+   Processing request on port: 8082 for item ID: 1
+
+这样就能清楚地看到负载均衡在工作，请求被分发到不同的 service-item 实例上。
+
+==== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
+package com.tjise.serviceitem.controller;
+
+import com.tjise.serviceitem.pojo.Item;
+import com.tjise.serviceitem.service.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.logging.Logger;
+
+@RestController
+public class ItemController {
+
+    @Autowired
+    private ItemService itemService;
+    
+    @Value("${server.port}")
+    private int serverPort;
+
+    private static final Logger logger = Logger.getLogger(ItemController.class.getName());
+
+    /**
+     * 对外提供接口服务，查询商品信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "item/{id}")
+    public Item queryItemById(@PathVariable("id") Long id) {
+        // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
+        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+        System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
+        return this.itemService.queryItemById(id);
+    }
+}
 
 === 7.5 Eureka 添加用户认证
 在前面的示例中，我们可以看到不需要登录即可访问到 Eureka 服务，这样其实是不安全的。
