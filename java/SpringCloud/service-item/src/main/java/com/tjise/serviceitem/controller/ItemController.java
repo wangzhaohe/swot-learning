@@ -32,7 +32,7 @@ public class ItemController {
      */
     @GetMapping(value = "item/{id}")
     public Item queryItemById(@PathVariable("id") Long id) {
-        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+//        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
         System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
         return this.itemService.queryItemById(id);
     }
