@@ -1,8 +1,8 @@
 #@+leo-ver=5-thin
-#@+node:swot.20250922225949.1: * @file service-order/src/main/resources/application.yml
+#@+node:swot.20250928234534.1: * @file service-order/src/main/resources/application.yml
 #@@language yaml
 #@+others
-#@+node:swot.20250922225949.2: ** port
+#@+node:swot.20250928234534.2: ** port
 #@+doc
 # [source,yaml]
 # ----
@@ -11,18 +11,34 @@ server:
     port: 8091
 #@+doc
 # ----
-#@+node:swot.20250922225949.3: ** name
+#@+node:swot.20250928234534.3: ** spring
 #@+doc
 # [source, yaml]
 # ----
 #@@c
+#@@language yaml
 # 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
 spring:
     application:
         name: app-order
+    # 设置负载均衡策略
+    cloud:
+        loadbalancer:
+            # 为app-item服务指定负载均衡策略
+            instances:
+                app-item:
+                    load-balanced: RANDOM
+#@@language asciidoc
 #@+doc
 # ----
-#@+node:swot.20250922225949.4: ** eureka
+#
+# 负载均衡策略，可选值：
+#
+# - ROUND_ROBIN（默认值）
+# - RANDOM
+# - WEIGHTED_RESPONSE_TIME
+#
+#@+node:swot.20250928234534.4: ** eureka
 #@+doc
 # [source,yaml]
 # ----
@@ -31,8 +47,7 @@ spring:
 eureka:
     client:
         service-url:
-            # defaultZone: http://root:root@127.0.0.1:8761/eureka/
-            defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+            defaultZone: http://127.0.0.1:8761/eureka
         register-with-eureka: true  # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
         fetch-registry: true        # 是否需要从 eureka 上检索服务
     instance:

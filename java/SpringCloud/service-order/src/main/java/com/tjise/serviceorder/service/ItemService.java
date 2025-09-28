@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250920121016.1: * @file service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
+//@+node:swot.20250929000751.1: * @file service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
 //@@language java
 //@+others
-//@+node:swot.20250921083535.1: ** import
+//@+node:swot.20250929000751.2: ** import
 package com.tjise.serviceorder.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-//@+node:swot.20250921083629.1: ** class ItemService
+//@+node:swot.20250929000751.3: ** class ItemService
 //@+doc
 // [source,java]
 // ----
@@ -45,22 +45,38 @@ public class ItemService {  // 商品服务类
     }
     // 包含其他代码
     //@+others
-    //@+node:swot.20250921084241.1: *3* 方式一: RestTemplate -> queryItemById
+    //@+node:swot.20250929000751.4: *3* 方式一: RestTemplate -> queryItemById
     //@+doc
     // [source,java]
     // ----
     //@@c
     //@@language java
     public Item queryItemById(Long id) {
-        return restTemplate.getForObject(
+
+        // 获取实际被选择的实例
+        ServiceInstance serviceInstance = loadBalancerClient.choose("app-item");
+        if (serviceInstance != null) {
+            // String targetUrl = serviceInstance.getUri().toString() + "/item/" + id;
+            // logger.info("Load Balancer: Requesting instance at " +
+                    // serviceInstance.getHost() + ":" + serviceInstance.getPort() +
+                    // " for item ID: " + id);
+            System.out.println("负载均衡选择了端口: " + serviceInstance.getPort());
+        }
+
+        // restTemplate 会自动应用负载均衡，上面的实例选取只是为了能演示出负载均衡的策略。
+        Item item = restTemplate.getForObject(
                 "http://app-item/item/" + id, Item.class);  // <1>
+
+        // logger.info("Load Balancer: Got response fro item ID: " + id +
+                    // ", result: " + (item != null ? "SUCCESS" : "FAILED"));
+        return item;
     }
     //@@language asciidoc
     //@+doc
     // ----
     //
     // <1> app-item 是 service-item 在 Eureka 中注册的服务名。
-    //@+node:swot.20250921115356.1: *3* 方式二: OkHttpClient -> queryItemByIdWithOkHttpClient -> OkHttpClient 本身不支持服务发现功能，需要自己实现
+    //@+node:swot.20250929000751.5: *3* 方式二: OkHttpClient -> queryItemByIdWithOkHttpClient -> OkHttpClient 本身不支持服务发现功能，需要自己实现
     //@+doc
     // [source,java]
     // ----
@@ -83,7 +99,7 @@ public class ItemService {  // 商品服务类
     //@+doc
     // ----
     //
-    //@+node:swot.20250921085305.1: *3* 方式三: WebClient -> queryItemByIdWithWebClient
+    //@+node:swot.20250929000751.6: *3* 方式三: WebClient    -> queryItemByIdWithWebClient
     //@+doc
     // [source,java]
     // ----
