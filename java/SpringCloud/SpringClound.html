@@ -603,9 +603,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_5_5_restclientspring_6_1_才支持目前的_spring_boot_2_7_18_使用的是_spring_5_3_x">5.5  RestClient&#8201;&#8212;&#8201;Spring 6.1 才支持（目前的 Spring Boot 2.7.18 使用的是 Spring 5.3.x）</a></li>
 </ul>
 </li>
-<li><a href="#_6_service_order_url_硬编码问题">6. service-order url 硬编码问题</a>
+<li><a href="#_6_service_order_url_硬编码问题在后面引入_eureka_后不用url直接用名字了">6. service-order url 硬编码问题（在后面引入 Eureka 后不用url，直接用名字了）</a>
 <ul class="sectlevel2">
-<li><a href="#_6_1_解决_service_order_url_硬编码问题使用_value">6.1 解决 service-order url 硬编码问题：使用 @Value</a>
+<li><a href="#_6_1_解决_service_order_url_硬编码问题以_webclient_为例使用_value">6.1 解决 service-order url 硬编码问题：以 WebClient 为例使用 @Value</a>
 <ul class="sectlevel3">
 <li><a href="#_file_service_ordersrcmainresourcesapplication_yml_2">file &#8594; service-order/src/main/resources/application.yml</a></li>
 <li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_5">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
@@ -636,15 +636,16 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_service_itemsrcmainresourcesapplication_yml_2">file &#8594; service-item/src/main/resources/application.yml</a></li>
 <li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemapplication_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java</a></li>
 <li><a href="#_启动多个_service_item_商品微服务实例">启动多个 service-item 商品微服务实例</a></li>
+<li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</a></li>
 </ul>
 </li>
 <li><a href="#_7_4_eureka_中发现商品微服务">7.4 Eureka 中发现商品微服务</a>
 <ul class="sectlevel3">
-<li><a href="#_7_4_1_file_service_orderpom_xml">7.4.1 file &#8594; service-order/pom.xml</a></li>
-<li><a href="#_7_4_2_file_service_ordersrcmainresourcesapplication_yml">7.4.2 file &#8594; service-order/src/main/resources/application.yml</a></li>
-<li><a href="#_7_4_3_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java">7.4.3 file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
-<li><a href="#_7_4_4_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java">7.4.4 file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
-<li><a href="#_7_4_5_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java">7.4.5 file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
+<li><a href="#_file_service_orderpom_xml_4">file &#8594; service-order/pom.xml</a></li>
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_6">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
 </ul>
 </li>
 <li><a href="#_7_5_eureka_添加用户认证">7.5 Eureka 添加用户认证</a>
@@ -653,7 +654,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_eurekasrcmainresourcesapplication_yml_2">file &#8594; eureka/src/main/resources/application.yml</a></li>
 <li><a href="#_file_eurekasrcmainjavacomtjiseeurekaconfwebsecurityconfig_java">file &#8594; eureka/src/main/java/com/tjise/eureka/conf/WebSecurityConfig.java</a></li>
 <li><a href="#_file_service_itemsrcmainresourcesapplication_yml_3">file &#8594; service-item/src/main/resources/application.yml</a></li>
-<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</a></li>
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_4">file &#8594; service-order/src/main/resources/application.yml</a></li>
 </ul>
 </li>
 <li><a href="#_7_6_eureka_集群高可用性">7.6 Eureka 集群（高可用性）</a>
@@ -1776,18 +1777,18 @@ public class ItemService {
 <div class="sect2">
 <h3 id="_5_5_restclientspring_6_1_才支持目前的_spring_boot_2_7_18_使用的是_spring_5_3_x">5.5  RestClient&#8201;&#8212;&#8201;Spring 6.1 才支持（目前的 Spring Boot 2.7.18 使用的是 Spring 5.3.x）</h3>
 <div class="paragraph">
-<p>RestClient 的主要价值在于它提供了一个现代化但又不失简单的 API，结合了 RestTemplate 的易用性和 WebClient 的功能强大，是未来 Spring 应用HTTP客户端调用的推荐选择。</p>
+<p>RestClient 的主要价值在于它提供了一个现代化但又不失简单的 API，结合了 RestTemplate 的易用性和 WebClient 的功能强大，是未来 Spring 应用HTTP 客户端调用的推荐选择。</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_6_service_order_url_硬编码问题">6. service-order url 硬编码问题</h2>
+<h2 id="_6_service_order_url_硬编码问题在后面引入_eureka_后不用url直接用名字了">6. service-order url 硬编码问题（在后面引入 Eureka 后不用url，直接用名字了）</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_6_1_解决_service_order_url_硬编码问题使用_value">6.1 解决 service-order url 硬编码问题：使用 @Value</h3>
+<h3 id="_6_1_解决_service_order_url_硬编码问题以_webclient_为例使用_value">6.1 解决 service-order url 硬编码问题：以 WebClient 为例使用 @Value</h3>
 <div class="paragraph">
-<p>通过以上的测试我们发现，在订单系统中要调用商品微服务中的查询接口来获取数据，在订单微服务中将 url 硬编码到代码中，这样显然不好，因为，运行环境一旦发生变化这个 url 地址将不可用。</p>
+<p>通过以上的测试发现，在订单系统中要调用商品微服务中的查询接口来获取数据，在订单微服务中将 url 硬编码到代码中，这样显然不好，因为，运行环境一旦发生变化这个 url 地址将不可用。</p>
 </div>
 <div class="paragraph">
 <p>如何解决呢？</p>
@@ -1886,35 +1887,46 @@ private String itemUrl;</pre>
  * Spring Boot 应用程序入口点
  */
 @SpringBootApplication
-public class ServiceOrderApplication {</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// 新增 DI 注入 配置的 url
-@Autowired
-private ItemProperties itemProperties;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    public static void main(String[] args) {
-        SpringApplication.run(ServiceOrderApplication.class, args);
-    }
+public class ServiceOrderApplication {
     @others
-}</pre>
+}</p>
+</div>
+<div class="sect5">
+<h6 id="_di_itempropertiesnew_added">DI itemProperties&#8201;&#8212;&#8201;New Added</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 成员注入的方式</span>
+<span class="tok-c1">// @Autowired</span>
+<span class="tok-c1">// private ItemProperties itemProperties;</span>
+
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">ItemProperties</span><span class="tok-w"> </span><span class="tok-n">itemProperties</span><span class="tok-p">;</span>
+<span class="tok-c1">// 单构造器注入，不用 @Autowired</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">ServiceOrderApplication</span><span class="tok-p">(</span><span class="tok-n">ItemProperties</span><span class="tok-w"> </span><span class="tok-n">itemProperties</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">itemProperties</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">itemProperties</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_bean_webclient">@Bean WebClient</h6>
+<h6 id="_public_static_void_main">public static void main</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 直接注入也可以的</span>
-<span class="tok-c1">// public WebClient webClient(ItemServiceProperties properties) {</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ServiceOrderApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_bean_webclientnew_added">@Bean WebClient&#8201;&#8212;&#8201;New Added</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 方法参数注入（直接从 Spring 容器里获取 ItemProperties）</span>
 <span class="tok-nd">@Bean</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-nf">webClient</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-nf">webClient</span><span class="tok-p">(</span><span class="tok-n">ItemProperties</span><span class="tok-w"> </span><span class="tok-n">properties</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">builder</span><span class="tok-p">()</span>
-<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">baseUrl</span><span class="tok-p">(</span><span class="tok-n">itemProperties</span><span class="tok-p">.</span><span class="tok-na">getUrl</span><span class="tok-p">())</span><span class="tok-w">   </span><span class="tok-c1">// 使用注入的 Url</span>
-<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">baseUrl</span><span class="tok-p">(</span><span class="tok-n">properties</span><span class="tok-p">.</span><span class="tok-na">getUrl</span><span class="tok-p">())</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -2339,15 +2351,130 @@ public class EurekaApplication {</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="img/serviceItem_copy_config_edit.png" alt="serviceItem copy config edit" width="520">
+<img src="img/serviceItem_copy_config_edit_8082.png" alt="serviceItem copy config edit 8082" width="520">
 </div>
 <div class="title">Figure 2. 编辑 service-item 配置启动新端口</div>
+</div>
+<div class="paragraph">
+<p>启动 3 个实例，如下图所示：</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="img/three_serviceItem_in_eureka.png" alt="three serviceItem in eureka">
 </div>
 <div class="title">Figure 3. 在 Eureka 中发现有 3 个 service-item 实例已经注册成功</div>
+</div>
+<div class="paragraph">
+<p>下面代码使用 @Value("${server.port}") 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
+参数启动多个实例的情况下。这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。</p>
+</div>
+<div class="paragraph">
+<p>现在已经修改了 ItemController，在每次请求时会打印当前处理请求的端口号。以下是简单的负载均衡测试方法：</p>
+</div>
+<div class="paragraph">
+<p>负载均衡测试步骤：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>确认所有服务都已启动：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Eureka Server (端口 8761)</p>
+</li>
+<li>
+<p>3 个 service-item 实例 (端口 8081, 8082, 8083)</p>
+</li>
+<li>
+<p>service-order (端口 8091)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>在 3 个 service-item 实例的控制台分别观察日志输出。</p>
+</li>
+<li>
+<p>通过 service-order 发起请求：</p>
+<div class="literalblock">
+<div class="content">
+<pre># 重复执行以下命令，观察哪个实例在处理请求
+http :8091/order/201810300001</pre>
+</div>
+</div>
+</li>
+<li>
+<p>每次执行上述命令时，观察 3 个 service-item 实例的控制台，您应该会看到类似下面的日志，显示哪个端口在处理请求：</p>
+<div class="literalblock">
+<div class="content">
+<pre>Processing request on port: 8081 for item ID: 1
+Processing request on port: 8083 for item ID: 2
+Processing request on port: 8082 for item ID: 1</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>这样就能清楚地看到负载均衡在工作，请求被分发到不同的 service-item 实例上。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</h4>
+<div class="paragraph">
+<p>package com.tjise.serviceitem.controller;</p>
+</div>
+<div class="paragraph">
+<p>import com.tjise.serviceitem.pojo.Item;
+import com.tjise.serviceitem.service.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;</p>
+</div>
+<div class="paragraph">
+<p>import java.util.logging.Logger;</p>
+</div>
+<div class="paragraph">
+<p>@RestController
+public class ItemController {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>@Autowired
+private ItemService itemService;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>@Value("${server.port}")
+private int serverPort;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private static final Logger logger = Logger.getLogger(ItemController.class.getName());</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    /**
+     * 对外提供接口服务，查询商品信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "item/{id}")
+    public Item queryItemById(@PathVariable("id") Long id) {
+        // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
+        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+        System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
+        return this.itemService.queryItemById(id);
+    }
+}</pre>
+</div>
 </div>
 </div>
 </div>
@@ -2373,7 +2500,7 @@ public class EurekaApplication {</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_7_4_1_file_service_orderpom_xml">7.4.1 file &#8594; service-order/pom.xml</h4>
+<h4 id="_file_service_orderpom_xml_4">file &#8594; service-order/pom.xml</h4>
 <div class="sect4">
 <h5 id="_properties_version">properties version</h5>
 <div class="listingblock">
@@ -2417,7 +2544,7 @@ public class EurekaApplication {</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_7_4_2_file_service_ordersrcmainresourcesapplication_yml">7.4.2 file &#8594; service-order/src/main/resources/application.yml</h4>
+<h4 id="_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</h4>
 <div class="sect4">
 <h5 id="_port">port</h5>
 <div class="listingblock">
@@ -2458,7 +2585,7 @@ public class EurekaApplication {</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_7_4_3_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java">7.4.3 file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_7">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h4>
 <div class="sect4">
 <h5 id="_class_serviceorderapplication_note下面的三个客户端任选一个即可">class ServiceOrderApplication &#8594; NOTE:下面的三个客户端任选一个即可</h5>
 <div class="listingblock">
@@ -2581,7 +2708,7 @@ public class EurekaApplication {</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_7_4_4_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java">7.4.4 file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h4>
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_6">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h4>
 <div class="sect4">
 <h5 id="_import">import</h5>
 <div class="paragraph">
@@ -2637,7 +2764,8 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">.</span><span class="tok-na">getForObject</span><span class="tok-p">(</span><span class="tok-s">&quot;http://app-item/item/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">.</span><span class="tok-na">getForObject</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-s">&quot;http://app-item/item/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -2651,14 +2779,14 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_方式二_okhttpclient_queryitembyidwithokhttpclient_okhttpclient_本身不支持服务发现功能需要自己实现负载均衡的调用">方式二: OkHttpClient &#8594; queryItemByIdWithOkHttpClient &#8594; OkHttpClient 本身不支持服务发现功能，需要自己实现负载均衡的调用</h6>
+<h6 id="_方式二_okhttpclient_queryitembyidwithokhttpclient_okhttpclient_本身不支持服务发现功能需要自己实现">方式二: OkHttpClient &#8594; queryItemByIdWithOkHttpClient &#8594; OkHttpClient 本身不支持服务发现功能，需要自己实现</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Autowired</span>
 <span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">LoadBalancerClient</span><span class="tok-w"> </span><span class="tok-n">loadBalancerClient</span><span class="tok-p">;</span>
 
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithOkHttpClient</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// 自己实现负载均衡的调用：使用 LoadBalancerClient 获取负载均衡的实例</span>
+<span class="tok-w">    </span><span class="tok-c1">// 使用 LoadBalancerClient 获取负载均衡的实例</span>
 <span class="tok-w">    </span><span class="tok-n">ServiceInstance</span><span class="tok-w"> </span><span class="tok-n">instance</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">loadBalancerClient</span><span class="tok-p">.</span><span class="tok-na">choose</span><span class="tok-p">(</span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">actualUrl</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;http://&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">instance</span><span class="tok-p">.</span><span class="tok-na">getHost</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">instance</span><span class="tok-p">.</span><span class="tok-na">getPort</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;/item/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-n">Request</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Request</span><span class="tok-p">.</span><span class="tok-na">Builder</span><span class="tok-p">().</span><span class="tok-na">url</span><span class="tok-p">(</span><span class="tok-n">actualUrl</span><span class="tok-p">).</span><span class="tok-na">build</span><span class="tok-p">();</span>
@@ -2672,7 +2800,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_方式三_webclient_queryitembyidwithwebclient">方式三: WebClient &#8594; queryItemByIdWithWebClient</h6>
+<h6 id="_方式三_webclient_queryitembyidwithwebclient">方式三: WebClient    &#8594; queryItemByIdWithWebClient</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithWebClient</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -2688,7 +2816,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_7_4_5_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java">7.4.5 file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h4>
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h4>
 <div class="sect4">
 <h5 id="_order_queryorderbyid">Order queryOrderById</h5>
 <div class="listingblock">
@@ -2917,7 +3045,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</h4>
+<h4 id="_file_service_ordersrcmainresourcesapplication_yml_4">file &#8594; service-order/src/main/resources/application.yml</h4>
 <div class="sect4">
 <h5 id="_port_3">port</h5>
 <div class="listingblock">
@@ -3333,7 +3461,7 @@ Docker 已经预留了一个特殊 DNS 名：host.docker.internal<br>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_file_service_ordersrcmainresourcesapplication_yml_4">file &#8594; service-order/src/main/resources/application.yml</h5>
+<h5 id="_file_service_ordersrcmainresourcesapplication_yml_5">file &#8594; service-order/src/main/resources/application.yml</h5>
 <div class="sect5">
 <h6 id="_port_5">port</h6>
 <div class="listingblock">
@@ -3439,7 +3567,7 @@ Transfer-Encoding: chunked
 <p>为了防止是缓存的效果，再创建一个订单 order2，如下。</p>
 </div>
 <div class="sect5">
-<h6 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h6>
+<h6 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_3">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h6>
 
 </div>
 <div class="sect5">
@@ -3615,7 +3743,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-27 18:53:03 +0800
+Last updated 2025-09-28 16:39:03 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

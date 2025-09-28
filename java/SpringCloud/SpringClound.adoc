@@ -813,13 +813,13 @@ public class ItemService {
 ----
 
 === 5.5  RestClient -- Spring 6.1 才支持（目前的 Spring Boot 2.7.18 使用的是 Spring 5.3.x）
-RestClient 的主要价值在于它提供了一个现代化但又不失简单的 API，结合了 RestTemplate 的易用性和 WebClient 的功能强大，是未来 Spring 应用HTTP客户端调用的推荐选择。
+RestClient 的主要价值在于它提供了一个现代化但又不失简单的 API，结合了 RestTemplate 的易用性和 WebClient 的功能强大，是未来 Spring 应用HTTP 客户端调用的推荐选择。
 
-== 6. service-order url 硬编码问题
+== 6. service-order url 硬编码问题（在后面引入 Eureka 后不用url，直接用名字了）
 
 
-=== 6.1 解决 service-order url 硬编码问题：使用 @Value
-通过以上的测试我们发现，在订单系统中要调用商品微服务中的查询接口来获取数据，在订单微服务中将 url 硬编码到代码中，这样显然不好，因为，运行环境一旦发生变化这个 url 地址将不可用。
+=== 6.1 解决 service-order url 硬编码问题：以 WebClient 为例使用 @Value
+通过以上的测试发现，在订单系统中要调用商品微服务中的查询接口来获取数据，在订单微服务中将 url 硬编码到代码中，这样显然不好，因为，运行环境一旦发生变化这个 url 地址将不可用。
 
 如何解决呢？
 
@@ -902,27 +902,40 @@ public class ItemProperties {
  */
 @SpringBootApplication
 public class ServiceOrderApplication {
-
-    // 新增 DI 注入 配置的 url
-    @Autowired
-    private ItemProperties itemProperties;
-
-    public static void main(String[] args) {
-        SpringApplication.run(ServiceOrderApplication.class, args);
-    }
     @others
 }
 
-====== @Bean WebClient
+====== DI itemProperties -- New Added
 [source,java]
 ----
-// 直接注入也可以的
-// public WebClient webClient(ItemServiceProperties properties) {
+// 成员注入的方式
+// @Autowired
+// private ItemProperties itemProperties;
+
+private final ItemProperties itemProperties;
+// 单构造器注入，不用 @Autowired
+public ServiceOrderApplication(ItemProperties itemProperties) {
+    this.itemProperties = itemProperties;
+}
+----
+
+====== public static void main
+[source,java]
+----
+public static void main(String[] args) {
+    SpringApplication.run(ServiceOrderApplication.class, args);
+}
+----
+
+====== @Bean WebClient -- New Added
+[source,java]
+----
+// 方法参数注入（直接从 Spring 容器里获取 ItemProperties）
 @Bean
-public WebClient webClient() {
+public WebClient webClient(ItemProperties properties) {
     return WebClient.builder()
-        .baseUrl(itemProperties.getUrl())   // 使用注入的 Url
-        .build();
+            .baseUrl(properties.getUrl())
+            .build();
 }
 ----
 
@@ -1202,10 +1215,78 @@ public class ServiceItemApplication {
 image::img/serviceItem_copy_config.png[]
 
 .编辑 service-item 配置启动新端口
-image::img/serviceItem_copy_config_edit.png[,520]
+image::img/serviceItem_copy_config_edit_8082.png[,520]
+
+启动 3 个实例，如下图所示：
 
 .在 Eureka 中发现有 3 个 service-item 实例已经注册成功
 image::img/three_serviceItem_in_eureka.png[]
+
+下面代码使用 @Value("${server.port}") 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
+参数启动多个实例的情况下。这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。
+
+现在已经修改了 ItemController，在每次请求时会打印当前处理请求的端口号。以下是简单的负载均衡测试方法：
+
+负载均衡测试步骤：
+
+1. 确认所有服务都已启动：
+  - Eureka Server (端口 8761)
+  - 3 个 service-item 实例 (端口 8081, 8082, 8083)
+  - service-order (端口 8091)
+
+2. 在 3 个 service-item 实例的控制台分别观察日志输出。
+
+3. 通过 service-order 发起请求：
+
+   # 重复执行以下命令，观察哪个实例在处理请求
+   http :8091/order/201810300001
+
+4. 每次执行上述命令时，观察 3 个 service-item 实例的控制台，您应该会看到类似下面的日志，显示哪个端口在处理请求：
+
+   Processing request on port: 8081 for item ID: 1
+   Processing request on port: 8083 for item ID: 2
+   Processing request on port: 8082 for item ID: 1
+
+这样就能清楚地看到负载均衡在工作，请求被分发到不同的 service-item 实例上。
+
+==== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
+package com.tjise.serviceitem.controller;
+
+import com.tjise.serviceitem.pojo.Item;
+import com.tjise.serviceitem.service.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.logging.Logger;
+
+@RestController
+public class ItemController {
+
+    @Autowired
+    private ItemService itemService;
+    
+    @Value("${server.port}")
+    private int serverPort;
+
+    private static final Logger logger = Logger.getLogger(ItemController.class.getName());
+
+    /**
+     * 对外提供接口服务，查询商品信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "item/{id}")
+    public Item queryItemById(@PathVariable("id") Long id) {
+        // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
+        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+        System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
+        return this.itemService.queryItemById(id);
+    }
+}
 
 === 7.4 Eureka 中发现商品微服务
 之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。
@@ -1220,7 +1301,7 @@ httpie 测试:
 http :8091/order/201810300001
 ----
 
-==== 7.4.1 file -> service-order/pom.xml
+==== file -> service-order/pom.xml
 
 
 ===== properties version
@@ -1258,7 +1339,7 @@ http :8091/order/201810300001
 </dependency>
 ....
 
-==== 7.4.2 file -> service-order/src/main/resources/application.yml
+==== file -> service-order/src/main/resources/application.yml
 
 
 ===== port
@@ -1293,7 +1374,7 @@ eureka:
                                     # 这是生产环境的最佳实践。避免主机名解析问题
 ----
 
-==== 7.4.3 file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+==== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
 
 
 ===== class ServiceOrderApplication -> NOTE:下面的三个客户端任选一个即可
@@ -1382,7 +1463,7 @@ WebClient 也需要使用 @LoadBalanced 注解，但需要注解在 WebClient.Bu
 这样设计是为了与 WebClient 的不可变性设计保持一致，同时也提供了更灵活的配置方式。
 ****
 
-==== 7.4.4 file -> service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
+==== file -> service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
 
 
 ===== import
@@ -1433,20 +1514,21 @@ public class ItemService {  // 商品服务类
 [source,java]
 ----
 public Item queryItemById(Long id) {
-    return restTemplate.getForObject("http://app-item/item/" + id, Item.class);  // <1>
+    return restTemplate.getForObject(
+            "http://app-item/item/" + id, Item.class);  // <1>
 }
 ----
 
 <1> app-item 是 service-item 在 Eureka 中注册的服务名。
 
-====== 方式二: OkHttpClient -> queryItemByIdWithOkHttpClient -> OkHttpClient 本身不支持服务发现功能，需要自己实现负载均衡的调用
+====== 方式二: OkHttpClient -> queryItemByIdWithOkHttpClient -> OkHttpClient 本身不支持服务发现功能，需要自己实现
 [source,java]
 ----
 @Autowired
 private LoadBalancerClient loadBalancerClient;
 
 public Item queryItemByIdWithOkHttpClient(Long id) throws IOException {
-    // 自己实现负载均衡的调用：使用 LoadBalancerClient 获取负载均衡的实例
+    // 使用 LoadBalancerClient 获取负载均衡的实例
     ServiceInstance instance = loadBalancerClient.choose("app-item");
     String actualUrl = "http://" + instance.getHost() + ":" + instance.getPort() + "/item/" + id;
     Request request = new Request.Builder().url(actualUrl).build();
@@ -1458,7 +1540,7 @@ public Item queryItemByIdWithOkHttpClient(Long id) throws IOException {
 }
 ----
 
-====== 方式三: WebClient -> queryItemByIdWithWebClient
+====== 方式三: WebClient    -> queryItemByIdWithWebClient
 [source,java]
 ----
 public Item queryItemByIdWithWebClient(Long id) {
@@ -1470,7 +1552,7 @@ public Item queryItemByIdWithWebClient(Long id) {
 }
 ----
 
-==== 7.4.5 file -> service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
+==== file -> service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
 
 
 ===== Order queryOrderById
