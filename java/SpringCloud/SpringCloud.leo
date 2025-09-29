@@ -3565,6 +3565,11 @@ Hystrix 是 Netflix 开源的一个 **延迟和容错库**，主要用于分布�
 * **隔离**：通过线程池或信号量隔离，避免单个依赖拖垮整个系统。
 * **监控**：提供实时指标，帮助运维和调优。
 
+当对特定服务的呼叫达到一定阈值时（Hystrix 中的默认值为 5 秒内的 20 次故障，如 ServiceB 故障了），则启用 fallback 进行处理。
+
+.Fallback
+image::img/hystrix_fallback.png[]
+
 CAUTION: 不过需要注意，Netflix 已经停止对 Hystrix 的维护，推荐使用 **Resilience4j** 等替代方案。
 
 </t>

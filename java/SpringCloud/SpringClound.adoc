@@ -287,7 +287,6 @@ public class ItemController {
     public Item queryItemById(@PathVariable("id") Long id) {
         return this.itemService.queryItemById(id);
     }
-
 }
 
 === file -> service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java
@@ -986,7 +985,7 @@ image::img/create_eureka_module.png[,800]
 </project>
 ....
 
-===== 1. properties 配置项目属性：Java 版本、Spring Boot 和 Spring Cloud 版本
+===== properties 配置项目属性：Java 版本、Spring Boot 和 Spring Cloud 版本
 [source,scss]
 ....
 <properties>
@@ -999,7 +998,7 @@ image::img/create_eureka_module.png[,800]
 </properties>
 ....
 
-===== 2. dependencyManagement 依赖管理：导入 Spring Boot 和 Spring Cloud 的依赖管理
+===== dependencyManagement 依赖管理：导入 Spring Boot 和 Spring Cloud 的依赖管理
 [source,scss]
 ....
 <dependencyManagement>
@@ -1024,7 +1023,7 @@ image::img/create_eureka_module.png[,800]
 </dependencyManagement>
 ....
 
-===== 3. dependencies 项目依赖：添加 Eureka Server 依赖
+===== dependencies 项目依赖：添加 Eureka Server 依赖
 [source,scss]
 ....
 <dependencies>
@@ -1036,7 +1035,7 @@ image::img/create_eureka_module.png[,800]
 </dependencies>
 ....
 
-===== 4. plugins 构建配置：添加 Spring Boot Maven 插件
+===== plugins 构建配置：添加 Spring Boot Maven 插件
 [source,scss]
 ....
 <build>
@@ -1511,9 +1510,9 @@ public Order queryOrderById(String orderId) throws IOException {
     // 遍历订单详情，通过商品微服务查询商品详细数据
     for (OrderDetail orderDetail : orderDetails) {
         // 通过商品微服务查询商品详细数据
-        // Item item = itemService.queryItemById(orderDetail.getItem().getId());  // <1>
+        Item item = itemService.queryItemById(orderDetail.getItem().getId());  // <1>
         // Item item = itemService.queryItemByIdWithOkHttpClient(orderDetail.getItem().getId());  // <2>
-        Item item = itemService.queryItemByIdWithWebClient(orderDetail.getItem().getId());  // <3>
+        // Item item = itemService.queryItemByIdWithWebClient(orderDetail.getItem().getId());  // <3>
         if (null == item) {
             continue;
         }
@@ -1526,7 +1525,7 @@ public Order queryOrderById(String orderId) throws IOException {
 <2> 使用 OkHttpClient
 <3> 使用 WebClient
 
-==== 测试 service-item 被负载均衡分配的结果
+=== 7.5 测试 service-item 被负载均衡分配的结果
 下面代码使用 @Value("${server.port}") 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
 参数启动多个实例的情况下。这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。
 
@@ -1554,7 +1553,10 @@ public Order queryOrderById(String orderId) throws IOException {
 
 这样就能清楚地看到负载均衡在工作，请求被分发到不同的 service-item 实例上。
 
-==== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
+==== 7.5.1 只在 service-item 的不同实例中打印端口调用信息
+
+
+===== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
 package com.tjise.serviceitem.controller;
 
 import com.tjise.serviceitem.pojo.Item;
@@ -1593,7 +1595,115 @@ public class ItemController {
     }
 }
 
-=== 7.5 Eureka 添加用户认证
+==== 7.5.2 在 service-order 中集中打印负载均衡端口调用信息
+
+
+===== file -> service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
+
+
+====== import
+package com.tjise.serviceorder.service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tjise.serviceorder.pojo.Item;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.io.IOException;
+
+====== class ItemService
+[source,java]
+----
+// 根据商品 ID 查询商品信息：通过 REST 调用商品微服务获取商品详细数据
+@Service
+public class ItemService {  // 商品服务类
+    @Autowired
+    private RestTemplate restTemplate;
+
+    private final WebClient webClient;
+    private final OkHttpClient okHttpClient;
+    private final ObjectMapper objectMapper;  // 可支持 json 序列化
+
+    // 单个构造方法注入
+    public ItemService(
+            WebClient webClient,
+            @Autowired(required = false) OkHttpClient okHttpClient,
+            @Autowired(required = false) ObjectMapper objectMapper) {
+        this.webClient = webClient;
+        this.okHttpClient = okHttpClient;
+        this.objectMapper = objectMapper;
+    }
+    // 包含其他代码
+    @others
+}
+----
+
+====== 方式一: RestTemplate -> queryItemById
+[source,java]
+----
+public Item queryItemById(Long id) {
+
+    // 获取实际被选择的实例
+    ServiceInstance serviceInstance = loadBalancerClient.choose("app-item");
+    if (serviceInstance != null) {
+        // String targetUrl = serviceInstance.getUri().toString() + "/item/" + id;
+        // logger.info("Load Balancer: Requesting instance at " +
+                // serviceInstance.getHost() + ":" + serviceInstance.getPort() +
+                // " for item ID: " + id);
+        System.out.println("负载均衡选择了端口: " + serviceInstance.getPort());
+    }
+
+    // restTemplate 会自动应用负载均衡，上面的实例选取只是为了能演示出负载均衡的策略。
+    Item item = restTemplate.getForObject(
+            "http://app-item/item/" + id, Item.class);  // <1>
+
+    // logger.info("Load Balancer: Got response fro item ID: " + id +
+                // ", result: " + (item != null ? "SUCCESS" : "FAILED"));
+    return item;
+}
+----
+
+<1> app-item 是 service-item 在 Eureka 中注册的服务名。
+
+====== 方式二: OkHttpClient -> queryItemByIdWithOkHttpClient -> OkHttpClient 本身不支持服务发现功能，需要自己实现
+[source,java]
+----
+@Autowired
+private LoadBalancerClient loadBalancerClient;
+
+public Item queryItemByIdWithOkHttpClient(Long id) throws IOException {
+    // 使用 LoadBalancerClient 获取负载均衡的实例
+    ServiceInstance instance = loadBalancerClient.choose("app-item");
+    String actualUrl = "http://" + instance.getHost() + ":" + instance.getPort() + "/item/" + id;
+    Request request = new Request.Builder().url(actualUrl).build();
+    try (Response response = okHttpClient.newCall(request).execute()) {  // 执行 OkHttpClient 调用
+        String json = response.body().string();  // 读取响应体
+        // 使用注入的 objectMapper 反序列化成 JSON 字符串
+        return objectMapper.readValue(json, Item.class);
+    }
+}
+----
+
+====== 方式三: WebClient    -> queryItemByIdWithWebClient
+[source,java]
+----
+public Item queryItemByIdWithWebClient(Long id) {
+    return webClient.get()
+                    .uri("/{id}", id)
+                    .retrieve()
+                    .bodyToMono(Item.class)
+                    .block();
+}
+----
+
+=== 7.6 Eureka 添加用户认证
 在前面的示例中，我们可以看到不需要登录即可访问到 Eureka 服务，这样其实是不安全的。
 所以需要为 Eureka 添加用户认证功能。
 
@@ -1766,7 +1876,7 @@ eureka:
                                     # 这是生产环境的最佳实践。避免主机名解析问题
 ----
 
-=== 7.6 Eureka 集群（高可用性）
+=== 7.7 Eureka 集群（高可用性）
 前面的测试发现，Eureka 服务是一个单点服务，在生产环境就会出现单点故障，为了确保 Eureka 服务的高可用，需要搭建 Eureka 服务的集群。
 
 1. sudo vim /etc/hosts 增加 3 个主机名
@@ -2054,7 +2164,7 @@ eureka:
 ==== 测试高可用性
 
 
-===== 1. httpie 测试
+===== httpie 测试
 [source,console]
 ----
 http :8091/order/201810300001
@@ -2098,10 +2208,10 @@ Transfer-Encoding: chunked
 }
 ....
 
-===== 2. 停止一个 eureka 服务再测试
+===== 停止一个 eureka 服务再测试
 停掉端口为 8761 的 eureka 服务，再测试应该还是能正常访问的。
 
-===== 3. 创建新订单再测试
+===== 创建新订单再测试
 为了防止是缓存的效果，再创建一个订单 order2，如下。
 
 ====== file -> service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
@@ -2202,7 +2312,7 @@ public Order queryOrderById(String orderId) throws IOException {
     return order;
 }
 
-===== 4. 重启 service-order 后，httpie 测试:
+===== 重启 service-order 后，httpie 测试:
 [source,console]
 ----
 http :8091/order/201810300002
@@ -2246,4 +2356,35 @@ Transfer-Encoding: chunked
     "userId": 2
 }
 ....
+
+== 容错保护：Hystrix
+
+
+=== 雪崩效应
+在微服务架构中通常会有多个服务层调用，基础服务的故障可能会导致级联故障，进而造成整个系统不可用的情况，这种现象被称为服务雪崩效应。
+
+服务雪崩效应是一种因“服务提供者”的不可用导致“服务消费者”的不可用，并将不可用逐渐放大的过程。
+
+如下图所示：A 作为服务提供者，B 为 A 的服务消费者，C 和 D 是 B 的服务消费者。A 不可用引起了 B 的不可用，并将不可用像滚雪球一样放大到 C 和 D 时，雪崩效应就形成了。
+
+image::img/avalanche.png[,600]
+
+=== Hystrix 简介
+https://github.com/Netflix/Hystrix/
+
+Hystrix 是 Netflix 开源的一个 **延迟和容错库**，主要用于分布式系统中依赖服务的调用保护。它通过 **断路器（Circuit Breaker）**、**线程隔离**、**信号量隔离** 等机制，防止级联失败和“雪崩效应”。
+
+主要功能包括：
+
+* **断路器**：当依赖服务持续失败时，快速返回，避免耗尽资源。
+* **降级（Fallback）**：在调用失败时提供默认结果或备用逻辑。
+* **隔离**：通过线程池或信号量隔离，避免单个依赖拖垮整个系统。
+* **监控**：提供实时指标，帮助运维和调优。
+
+当对特定服务的呼叫达到一定阈值时（Hystrix 中的默认值为 5 秒内的 20 次故障，如 ServiceB 故障了），则启用 fallback 进行处理。
+
+.Fallback
+image::img/hystrix_fallback.png[]
+
+CAUTION: 不过需要注意，Netflix 已经停止对 Hystrix 的维护，推荐使用 **Resilience4j** 等替代方案。
 
