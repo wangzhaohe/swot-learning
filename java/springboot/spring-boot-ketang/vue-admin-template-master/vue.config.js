@@ -37,17 +37,17 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    // proxy: {
-    //   '/api': {
-    //     target: process.env.VUE_APP_URL || 'http://localhost:8080',
-    //     ws: false,
-    //     secure: false,
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/api': ''
-    //     }
-    //   }
-    // },
+    proxy: {
+      '/api': {
+        target: process.env.VUE_APP_URL || 'http://localhost:8080',
+        ws: false,
+        secure: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    },
     // before: require('./mock/mock-server.js')  // 注释掉mock服务器以使用真实API
   },
   configureWebpack: {
