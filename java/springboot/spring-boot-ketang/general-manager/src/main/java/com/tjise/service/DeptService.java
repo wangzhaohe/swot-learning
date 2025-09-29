@@ -1,9 +1,11 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250919162323.1: * @file src/main/java/com/tjise/service/DeptService.java
+//@+node:swot.20250824154850.1: * @file src/main/java/com/tjise/service/DeptService.java
+//@@language java
+//@+others
+//@+node:swot.20250824154850.3: ** DeptService
 //@@language java
 //@+doc
-// 定义该接口目的是为了用类的多态实现 controller 层左边解耦。
-//
+// .src/main/java/com/tjise/service/DeptService.java
 // [source,java,linenums]
 // ----
 //@@c
@@ -13,18 +15,21 @@ import com.tjise.pojo.Dept;
 import java.util.List;
 
 public interface DeptService {
+
     public abstract List<Dept> selectAllDept();
 
-    // 抽象方法：返回删除的影响行数 int，用于判断是否删除成功
-    public abstract int deleteDeptById(Integer id);
+    public abstract int deleteDeptById(Integer id) throws Exception;  // <1>
 
     public abstract void insertDept(Dept dept);
-    
+
     public abstract Dept getDeptById(Integer id);
-    
-    // 新增更新单个部门
+
     public abstract void updateDept(Dept dept);
 }
 //@+doc
 // ----
+//
+// <1> 对应于 src/main/java/com/tjise/service/impl/DeptServiceImpl.java，方法中也要声明一下 throws Exception，否则编译无法通过。
+//@-others
+
 //@-leo

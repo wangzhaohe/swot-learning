@@ -4765,7 +4765,7 @@ public int deleteEmpByDeptId(Integer deptId) {
 int deleteEmpByDeptId(Integer deptId);
 ----
 
-==== @Transactional(rollbackFor)
+==== @Transactional(rollbackFor) 了解
 rollbackFor：控制出现何种异常类型，回滚事务。
 
 * 默认情况下，只有出现 RuntimeException 才回滚异常。
@@ -4840,7 +4840,7 @@ public Result deleteDeptById(@PathVariable Integer id) throws Exception {  // <1
 
 <1> 对应于 src/main/java/com/tjise/service/DeptService.java，方法中也要声明一下 throws Exception，否则编译无法通过。
 
-==== @Transactional(propagation)
+==== @Transactional(propagation) 事务传播
 *propagation*：事务传播行为，指的就是当一个事务方法被另一个事务方法调用时，这个事务方法应该如何进行事务控制。
 
 [cols="1,2,2"]
@@ -4892,11 +4892,12 @@ NOTE: 前两个属性常用
 ----
 @Transactional(rollbackFor = Exception.class)
 @Override
-public void deleteDeptById(Integer id) throws Exception {
+public int deleteDeptById(Integer id) throws Exception {
 
     deptMapper.deleteDeptById(id);     // 删除部门
-    empService.deleteEmpByDeptId(id);  // 把此部门的员工删除  // <2>
+    int delInt = empService.deleteEmpByDeptId(id);  // 把此部门的员工删除  // <2>
     System.out.println(3 / 0);         // 运行时异常  // <1>
+    return delInt;
 }
 ----
 <1> 当产生该运行时异常时，看 <2> 的回滚情况。
@@ -4915,12 +4916,11 @@ public void deleteDeptById(Integer id) throws Exception {
 // 此例子中不加 @Transactional 也会回滚，因为 deleteEmpByDeptId(id) 已经被 deleteDeptById() 的事务包含了。
 
 // @Transactional  // <1>
-@Transactional(propagation = Propagation.REQUIRED)  // 这是默认值，同上  // <1>
-
-// @Transactional(propagation = Propagation.REQUIRES_NEW)  // <2>
+// @Transactional(propagation = Propagation.REQUIRED)  // 这是默认值，同上  // <1>
+@Transactional(propagation = Propagation.REQUIRES_NEW)  // <2>
 @Override
-public void deleteEmpByDeptId(Integer deptId) {
-    empMapper.deleteEmpByDeptId(deptId);
+public int deleteEmpByDeptId(Integer deptId) {
+    return empMapper.deleteEmpByDeptId(deptId);
 }
 ----
 

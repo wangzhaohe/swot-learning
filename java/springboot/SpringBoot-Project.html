@@ -624,8 +624,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_20_事务管理">20. 事务管理</a>
 <ul class="sectlevel3">
 <li><a href="#_transactional_举例根据部门_id_删除员工">@Transactional 举例根据部门 id 删除员工</a></li>
-<li><a href="#_transactionalrollbackfor">@Transactional(rollbackFor)</a></li>
-<li><a href="#_transactionalpropagation">@Transactional(propagation)</a></li>
+<li><a href="#_transactionalrollbackfor_了解">@Transactional(rollbackFor) 了解</a></li>
+<li><a href="#_transactionalpropagation_事务传播">@Transactional(propagation) 事务传播</a></li>
 </ul>
 </li>
 <li><a href="#_21_面向切面_aop">21. 面向切面 AOP</a>
@@ -9091,7 +9091,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect3">
-<h4 id="_transactionalrollbackfor">@Transactional(rollbackFor)</h4>
+<h4 id="_transactionalrollbackfor_了解">@Transactional(rollbackFor) 了解</h4>
 <div class="paragraph">
 <p>rollbackFor：控制出现何种异常类型，回滚事务。</p>
 </div>
@@ -9238,7 +9238,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect3">
-<h4 id="_transactionalpropagation">@Transactional(propagation)</h4>
+<h4 id="_transactionalpropagation_事务传播">@Transactional(propagation) 事务传播</h4>
 <div class="paragraph">
 <p><strong>propagation</strong>：事务传播行为，指的就是当一个事务方法被另一个事务方法调用时，这个事务方法应该如何进行事务控制。</p>
 </div>
@@ -9331,13 +9331,15 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Transactional</span><span class="tok-p">(</span><span class="tok-n">rollbackFor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Transactional</span><span class="tok-p">(</span><span class="tok-n">rollbackFor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
 <span class="tok-nd">@Override</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
 <span class="tok-w">    </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">     </span><span class="tok-c1">// 删除部门</span>
-<span class="tok-w">    </span><span class="tok-n">empService</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 把此部门的员工删除  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">    </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">delInt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">empService</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 把此部门的员工删除  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-mi">3</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">);</span><span class="tok-w">         </span><span class="tok-c1">// 运行时异常  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">delInt</span><span class="tok-p">;</span>
 <span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
@@ -9375,24 +9377,22 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <h6 id="_deleteempbydeptid_根据部门_id_删除员工_required_vs_requires_new">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; REQUIRED vs REQUIRES_NEW</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// 此例子中不加 @Transactional 也会回滚，因为 deleteEmpByDeptId(id) 已经被 deleteDeptById() 的事务包含了。</span>
+<pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// 此例子中不加 @Transactional 也会回滚，因为 deleteEmpByDeptId(id) 已经被 deleteDeptById() 的事务包含了。</span>
 
 <span class="tok-c1">// @Transactional  </span><i class="conum" data-value="1"></i><b>(1)</b>
-<span class="tok-nd">@Transactional</span><span class="tok-p">(</span><span class="tok-n">propagation</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Propagation</span><span class="tok-p">.</span><span class="tok-na">REQUIRED</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 这是默认值，同上  </span><i class="conum" data-value="1"></i><b>(1)</b>
-
-<span class="tok-c1">// @Transactional(propagation = Propagation.REQUIRES_NEW)  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-c1">// @Transactional(propagation = Propagation.REQUIRED)  // 这是默认值，同上  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-nd">@Transactional</span><span class="tok-p">(</span><span class="tok-n">propagation</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Propagation</span><span class="tok-p">.</span><span class="tok-na">REQUIRES_NEW</span><span class="tok-p">)</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-nd">@Override</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">deptId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">deptId</span><span class="tok-p">);</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">deptId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">deptId</span><span class="tok-p">);</span>
 <span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
@@ -11395,7 +11395,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-29 10:20:25 +0800
+Last updated 2025-09-29 11:13:55 +0800
 </div>
 </div>
 </body>
