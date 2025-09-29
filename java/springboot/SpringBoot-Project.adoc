@@ -4946,23 +4946,27 @@ NOTE: 可以对比 Spring Boot 日志进行核实。
 === 21. 面向切面 AOP
 
 
-==== 引子 -> 记录业务层方法的执行耗时，并输出到控制台
-拿出两个方法举例能说明问题即可。
+==== 引子 -> 需求: 记录业务层方法的执行耗时，并输出到控制台
+拿出两个方法举例（查询部门列表和获取单个部门），能说明问题即可。
 从下面的代码更改中，可以发现每个方法中都存在重复的代码 <1> <2> <3>。
+而且加的执行耗时代码还侵入了代码的业务逻辑中。
 所以引出 AOP 的应用。
 
 ===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 
 
-====== 查询部门列表 -> 计算执行耗时
+====== 查询部门列表 selectAllDept -> 计算执行耗时
 [source,java]
 ----
 @Override
 public List<Dept> selectAllDept() {
+
     long begin = System.currentTimeMillis();     // <1>
     List<Dept> deptList = deptMapper.selectAllDept();  // 业务代码
     long end = System.currentTimeMillis();       // <2>
-    log.info("方法执行耗时: {} ms", (end-begin));  // <3>
+
+    log.info("方法执行耗时: {} ms", (end - begin));  // <3>
+
     return deptList;
 }
 ----
@@ -4973,15 +4977,18 @@ public List<Dept> selectAllDept() {
 
 NOTE: @Slf4j 来自于于 lombok 依赖，包含了记录日志的方法 log。
 
-====== 获取单个部门 -> 计算执行耗时
+====== 获取单个部门 getDeptById -> 计算执行耗时
 [source,java]
 ----
 @Override
 public Dept getDeptById(Integer id) {
+
     long begin = System.currentTimeMillis();     // <1>
     Dept dept = deptMapper.getDeptById(id);      // 业务代码
     long end = System.currentTimeMillis();       // <2>
-    log.info("方法执行耗时: {} ms", (end-begin));  // <3>
+
+    log.info("方法执行耗时: {} ms", (end - begin));  // <3>
+
     return dept;
 }
 ----
@@ -5003,7 +5010,7 @@ AOP：Aspect Oriented Programming（面向切面编程），
 ====== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 
 
-====== 查询部门列表 -> 计算执行耗时
+====== 查询部门列表 selectAllDept -> 计算执行耗时
 [source,java]
 ----
 @Override
@@ -5026,7 +5033,7 @@ public List<Dept> selectAllDept() {
 
 NOTE: @Slf4j 来自于于 lombok 依赖，包含了记录日志的方法 log。
 
-====== 获取单个部门 -> 计算执行耗时
+====== 获取单个部门 getDeptById -> 计算执行耗时
 [source,java]
 ----
 @Override
@@ -5152,8 +5159,7 @@ package com.tjise.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -5181,6 +5187,8 @@ public Object getTime(ProceedingJoinPoint joinPoint) throws Throwable {
 <2> 此注解修饰的方法必须返回 Object。
 
 <3> @Around 需要自己调用 ProceedingJoinPoint.proceed() 来让目标方法执行，其他通知不需要考虑自己调用目标方法执行，因为会自动调用。
+
+NOTE: 其他通知类型完全可以使用 @Around 来代替，比如使用 try ... catch 可以代替 @AfterReturning 和 @AfterThrowing。
 
 ====== @Before -> 了解：此注解标注的通知方法在目标方法前被执行
 [source,java]
@@ -5229,7 +5237,7 @@ http :8080/depts "token: $TOKEN"
 ....
 around 前
 before
-显示其他内容
+显示其他内容，如数据库操作打印等等
 afterReturning
 after
 around 后
@@ -5281,7 +5289,7 @@ http :8080/depts "token: $TOKEN"
 ....
 before1 -> 目标前的通知方法：字母排名靠前的先执行
 before2
-其他打印内容
+其他打印内容，如数据库日志打印
 after2
 after1 -> 目标后的通知方法：字母排名靠前的后执行
 ....
@@ -5293,8 +5301,10 @@ package com.tjise.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -5325,8 +5335,10 @@ package com.tjise.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -5921,6 +5933,12 @@ operateLogMapper.insert(operateLog);
 ----
 return result;
 ----
+
+==== ------
+
+
+==== 解决AOP执行耗时打印2行时间问题
+
 
 === 22. Redis 数据库应用
 

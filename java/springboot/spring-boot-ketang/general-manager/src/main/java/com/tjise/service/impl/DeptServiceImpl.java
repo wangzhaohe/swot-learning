@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250825105800.1: * @file src/main/java/com/tjise/service/impl/DeptServiceImpl.java
+//@+node:swot.20250825165833.1: * @file src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 //@@language java
 //@+others
-//@+node:swot.20250825105800.2: ** @ignore-node import
+//@+node:swot.20250825165833.2: ** @ignore-node import
 package com.tjise.service.impl;
 
 import com.tjise.mapper.DeptMapper;
@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-//@+node:swot.20250825105800.3: ** @ignore-node DeptServiceImpl
+//@+node:swot.20250825165833.3: ** @ignore-node DeptServiceImpl
 //@@language java
 //@+doc
 // [source,java,linenums]
@@ -37,8 +37,8 @@ public class DeptServiceImpl implements DeptService {
     @Autowired
     private EmpService empService;  // 新增
     //@+others
-    //@+node:swot.20250825105800.4: *3* @ignore-tree
-    //@+node:swot.20250825105800.6: *4* 新增部门
+    //@+node:swot.20250825165833.4: *3* @ignore-tree
+    //@+node:swot.20250825165833.5: *4* 新增部门
     @Override
     public void insertDept(Dept dept) {
         // 指定 createTime & updateTime
@@ -47,14 +47,14 @@ public class DeptServiceImpl implements DeptService {
         // 方法调用不用写类型 Dept
         deptMapper.insertDept(dept);
     }
-    //@+node:swot.20250825105800.8: *4* 修改部门
+    //@+node:swot.20250825165833.6: *4* 修改部门
     @Override
     public void updateDept(Dept dept) {
         // 补全属性
         dept.setUpdateTime(LocalDateTime.now());
         deptMapper.updateDept(dept);
     }
-    //@+node:swot.20250825105800.9: *4* deleteDeptById 删除单个部门及其员工
+    //@+node:swot.20250825165833.7: *4* deleteDeptById 删除单个部门及其员工
     //@+doc
     // [source,java,linenum]
     // ----
@@ -79,7 +79,7 @@ public class DeptServiceImpl implements DeptService {
     // * @Transactional(propagation = Propagation.REQUIRED) 会回滚
     // * @Transactional(propagation = Propagation.REQUIRES_NEW) 不会回滚
     // * deleteEmpByDeptId(id) 不加 @Transactional 也会回滚，因为 deleteEmpByDeptId(id) 已经被 deleteDeptById() 的事务包含了。
-    //@+node:swot.20250825105800.5: *3* 查询部门列表 selectAllDept -> 计算执行耗时
+    //@+node:swot.20250825165833.8: *3* 查询部门列表 selectAllDept -> 计算执行耗时
     //@+doc
     // [source,java]
     // ----
@@ -88,11 +88,12 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public List<Dept> selectAllDept() {
 
-        long begin = System.currentTimeMillis();     // <1>
-        List<Dept> deptList = deptMapper.selectAllDept();  // 业务代码
-        long end = System.currentTimeMillis();       // <2>
+        // long begin = System.currentTimeMillis();  // <1>
 
-        log.info("方法执行耗时: {} ms", (end - begin));  // <3>
+        List<Dept> deptList = deptMapper.selectAllDept();
+
+        // long end = System.currentTimeMillis();  // <2>
+        // log.info("方法执行耗时: {} ms", (end-begin));  // <3>
 
         return deptList;
     }
@@ -104,7 +105,7 @@ public class DeptServiceImpl implements DeptService {
     // <3> 计算耗时
     //
     // NOTE: @Slf4j 来自于于 lombok 依赖，包含了记录日志的方法 log。
-    //@+node:swot.20250825105800.7: *3* 获取单个部门 getDeptById -> 计算执行耗时
+    //@+node:swot.20250825165833.9: *3* 获取单个部门 getDeptById -> 计算执行耗时
     //@+doc
     // [source,java]
     // ----
@@ -113,11 +114,12 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public Dept getDeptById(Integer id) {
 
-        long begin = System.currentTimeMillis();     // <1>
-        Dept dept = deptMapper.getDeptById(id);      // 业务代码
-        long end = System.currentTimeMillis();       // <2>
+        // long begin = System.currentTimeMillis();  // <1>
 
-        log.info("方法执行耗时: {} ms", (end - begin));  // <3>
+        Dept dept = deptMapper.getDeptById(id);
+
+        // long end = System.currentTimeMillis();  // <2>
+        // log.info("方法执行耗时: {} ms", (end-begin));  // <3>
 
         return dept;
     }

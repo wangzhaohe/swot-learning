@@ -630,10 +630,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_21_面向切面_aop">21. 面向切面 AOP</a>
 <ul class="sectlevel3">
-<li><a href="#_引子_记录业务层方法的执行耗时并输出到控制台">引子 &#8594; 记录业务层方法的执行耗时，并输出到控制台</a></li>
+<li><a href="#_引子_需求_记录业务层方法的执行耗时并输出到控制台">引子 &#8594; 需求: 记录业务层方法的执行耗时，并输出到控制台</a></li>
 <li><a href="#_面向切面_aop_基础">面向切面 AOP 基础</a></li>
 <li><a href="#_面向切面_aop_进阶">面向切面 AOP 进阶</a></li>
 <li><a href="#_面向切面_aop_案例_操作日志保存到数据库中">面向切面 AOP 案例 &#8594; 操作日志保存到数据库中</a></li>
+<li><a href="#">------</a></li>
+<li><a href="#_解决aop执行耗时打印2行时间问题">解决AOP执行耗时打印2行时间问题</a></li>
 </ul>
 </li>
 <li><a href="#_22_redis_数据库应用">22. Redis 数据库应用</a>
@@ -9462,24 +9464,28 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect2">
 <h3 id="_21_面向切面_aop">21. 面向切面 AOP</h3>
 <div class="sect3">
-<h4 id="_引子_记录业务层方法的执行耗时并输出到控制台">引子 &#8594; 记录业务层方法的执行耗时，并输出到控制台</h4>
+<h4 id="_引子_需求_记录业务层方法的执行耗时并输出到控制台">引子 &#8594; 需求: 记录业务层方法的执行耗时，并输出到控制台</h4>
 <div class="paragraph">
-<p>拿出两个方法举例能说明问题即可。
+<p>拿出两个方法举例（查询部门列表和获取单个部门），能说明问题即可。
 从下面的代码更改中，可以发现每个方法中都存在重复的代码 &lt;1&gt; &lt;2&gt; &lt;3&gt;。
+而且加的执行耗时代码还侵入了代码的业务逻辑中。
 所以引出 AOP 的应用。</p>
 </div>
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_11">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
-<h6 id="_查询部门列表_计算执行耗时">查询部门列表 &#8594; 计算执行耗时</h6>
+<h6 id="_查询部门列表_selectalldept_计算执行耗时">查询部门列表 selectAllDept &#8594; 计算执行耗时</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
 <span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">     </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-w">    </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">deptList</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">selectAllDept</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 业务代码</span>
 <span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">       </span><i class="conum" data-value="2"></i><b>(2)</b>
-<span class="tok-w">    </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;方法执行耗时: {} ms&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">end</span><span class="tok-o">-</span><span class="tok-n">begin</span><span class="tok-p">));</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+
+<span class="tok-w">    </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;方法执行耗时: {} ms&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">end</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-p">));</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">deptList</span><span class="tok-p">;</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -9514,15 +9520,18 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect5">
-<h6 id="_获取单个部门_计算执行耗时">获取单个部门 &#8594; 计算执行耗时</h6>
+<h6 id="_获取单个部门_getdeptbyid_计算执行耗时">获取单个部门 getDeptById &#8594; 计算执行耗时</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Override</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-nf">getDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
 <span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">     </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-w">    </span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">getDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">      </span><span class="tok-c1">// 业务代码</span>
 <span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span><span class="tok-w">       </span><i class="conum" data-value="2"></i><b>(2)</b>
-<span class="tok-w">    </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;方法执行耗时: {} ms&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">end</span><span class="tok-o">-</span><span class="tok-n">begin</span><span class="tok-p">));</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+
+<span class="tok-w">    </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;方法执行耗时: {} ms&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">end</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-n">begin</span><span class="tok-p">));</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">;</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -9563,7 +9572,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 
 </div>
 <div class="sect5">
-<h6 id="_查询部门列表_计算执行耗时_2">查询部门列表 &#8594; 计算执行耗时</h6>
+<h6 id="_查询部门列表_selectalldept_计算执行耗时_2">查询部门列表 selectAllDept &#8594; 计算执行耗时</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Override</span>
@@ -9610,7 +9619,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect5">
-<h6 id="_获取单个部门_计算执行耗时_2">获取单个部门 &#8594; 计算执行耗时</h6>
+<h6 id="_获取单个部门_getdeptbyid_计算执行耗时_2">获取单个部门 getDeptById &#8594; 计算执行耗时</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Override</span>
@@ -9824,8 +9833,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.extern.slf4j.Slf4j</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.ProceedingJoinPoint</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.Around</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.Aspect</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.*</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Component</span><span class="tok-p">;</span>
 
 <span class="tok-nd">@Slf4j</span>
@@ -9863,6 +9871,18 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
 <td>@Around 需要自己调用 ProceedingJoinPoint.proceed() 来让目标方法执行，其他通知不需要考虑自己调用目标方法执行，因为会自动调用。</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+其他通知类型完全可以使用 @Around 来代替，比如使用 try &#8230;&#8203; catch 可以代替 @AfterReturning 和 @AfterThrowing。
+</td>
 </tr>
 </table>
 </div>
@@ -9924,7 +9944,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="content">
 <pre>around 前
 before
-显示其他内容
+显示其他内容，如数据库操作打印等等
 afterReturning
 after
 around 后</pre>
@@ -10003,7 +10023,7 @@ after</pre>
 <div class="content">
 <pre>before1 -&gt; 目标前的通知方法：字母排名靠前的先执行
 before2
-其他打印内容
+其他打印内容，如数据库日志打印
 after2
 after1 -&gt; 目标后的通知方法：字母排名靠前的后执行</pre>
 </div>
@@ -10037,12 +10057,16 @@ after1 -&gt; 目标后的通知方法：字母排名靠前的后执行</pre>
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.aop</span><span class="tok-p">;</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.aop</span><span class="tok-p">;</span>
 
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.extern.slf4j.Slf4j</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.ProceedingJoinPoint</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.After</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.Around</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.Aspect</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.Before</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Component</span><span class="tok-p">;</span>
 
 <span class="tok-nd">@Slf4j</span>
@@ -10102,12 +10126,16 @@ after1 -&gt; 目标后的通知方法：字母排名靠前的后执行</pre>
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.aop</span><span class="tok-p">;</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.aop</span><span class="tok-p">;</span>
 
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.extern.slf4j.Slf4j</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.ProceedingJoinPoint</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.After</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.Around</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.Aspect</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.aspectj.lang.annotation.Before</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Component</span><span class="tok-p">;</span>
 
 <span class="tok-nd">@Slf4j</span>
@@ -11091,6 +11119,14 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="">------</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_解决aop执行耗时打印2行时间问题">解决AOP执行耗时打印2行时间问题</h4>
+
+</div>
 </div>
 <div class="sect2">
 <h3 id="_22_redis_数据库应用">22. Redis 数据库应用</h3>
@@ -11395,7 +11431,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-29 11:13:55 +0800
+Last updated 2025-09-29 17:02:37 +0800
 </div>
 </div>
 </body>
