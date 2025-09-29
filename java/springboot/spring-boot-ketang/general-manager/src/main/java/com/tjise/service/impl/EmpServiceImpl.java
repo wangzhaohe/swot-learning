@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20241031090121.6: * @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
+//@+node:swot.20250824082002.1: * @file src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 //@@language java
 //@+others
-//@+node:swot.20250816114028.1: ** @ignore-node import
+//@+node:swot.20250824082002.2: ** @ignore-node import
 //@@language java
 //@+doc
 // [source,java]
@@ -25,14 +25,14 @@ import java.util.List;
 //@+doc
 // ----
 //
-//@+node:swot.20250816114110.1: ** @ignore-node public class EmpServiceImpl
+//@+node:swot.20250824082002.3: ** @ignore-node public class EmpServiceImpl
 @Service  // 把该类的对象交给 IOC 容器管理
 public class EmpServiceImpl implements EmpService {
     @Autowired
     private EmpMapper empMapper;
     //@+others
-    //@+node:swot.20250817063940.1: *3* @ignore-tree
-    //@+node:swot.20241104151414.1: *4* 分页多条件查询
+    //@+node:swot.20250824082002.4: *3* @ignore-tree
+    //@+node:swot.20250824082002.5: *4* 分页多条件查询
     @Override
     public PageBean selectPage(Integer page, Integer pageSize, String name, Short gender, LocalDate begin, LocalDate end) {
 
@@ -50,7 +50,7 @@ public class EmpServiceImpl implements EmpService {
         Page<Emp> p = (Page<Emp>) empList;
         return new PageBean(p.getTotal(), p.getResult());
     }
-    //@+node:swot.20241104155215.1: *4* 删除员工 EmpServiceImpl
+    //@+node:swot.20250824082002.6: *4* 删除员工 EmpServiceImpl
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -62,7 +62,7 @@ public class EmpServiceImpl implements EmpService {
     }
     //@+doc
     // ----
-    //@+node:swot.20241104160622.1: *4* 新增员工 EmpServiceImpl
+    //@+node:swot.20250824082002.7: *4* 新增员工 EmpServiceImpl
     //@@language java
     //@+doc
     // [source,java,linenums]
@@ -77,7 +77,7 @@ public class EmpServiceImpl implements EmpService {
     }
     //@+doc
     // ----
-    //@+node:swot.20241230135844.5: *4* getEmpById
+    //@+node:swot.20250824082002.8: *4* 查询单个员工 EmpServiceImpl
     //@@language java
     //@+doc
     // [source,java]
@@ -90,7 +90,7 @@ public class EmpServiceImpl implements EmpService {
     //@+doc
     // ----
     //
-    //@+node:swot.20241230135844.10: *4* updateEmp
+    //@+node:swot.20250824082002.9: *4* 修改单个员工 EmpServiceImpl
     //@@language java
     //@+doc
     // [source,java]
@@ -105,14 +105,14 @@ public class EmpServiceImpl implements EmpService {
     //@+doc
     // ----
     //
-    //@+node:swot.20250816113556.1: *3* 员工登录功能 login -> New Add
-    //@@language java
+    //@+node:swot.20250824082002.10: *4* 员工登录功能 login
     //@+doc
     // * @param emp 包含用户输入的用户名和密码的 Emp 对象
     //
     // [source,java]
     // ----
     //@@c
+    //@@language java
     @Override
     public Emp login(Emp emp) {
         Emp e = empMapper.login(emp);
@@ -120,6 +120,19 @@ public class EmpServiceImpl implements EmpService {
     }
     //@+doc
     // ----
+    //@+node:swot.20250824082609.1: *3* deleteEmpByDeptId 根据部门 id 删除员工 -> 新增
+    //@+doc
+    // [source,java]
+    // ----
+    //@@c
+    //@@language java
+    @Override
+    public int deleteEmpByDeptId(Integer deptId) {
+        return empMapper.deleteEmpByDeptId(deptId);
+    }
+    //@+doc
+    // ----
+    //
     //@-others
 }
 //@-others

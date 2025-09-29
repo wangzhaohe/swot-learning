@@ -1502,7 +1502,7 @@ public interface DeptService {
 ===== file -> src/main/java/com/tjise/service/impl/DeptServiceImpl.java
 
 
-====== DeptServiceImpl -> 实现接口
+====== updateDept
 [source,java,linenums]
 ----
 @Override
@@ -4573,7 +4573,7 @@ public Result insertDept(@RequestBody Dept dept){
 // 此处我们只是举个栗子，因为捕获到的异常不一定就是「部门已存在」的原因，可能是别的错误导致的。
 在浏览器中再进行测试新增部门「学工部」，前端会给出友好的提示「部门已存在」。
 
-==== 19.2 方案二：全局异常处理器
+==== 19.2 方案二：全局异常处理器（常用）
 1. 新增单个部门 insertDept -> 移除 try catch 恢复原来代码
 
 2. 定义全局异常处理器，参下面代码。
@@ -4605,7 +4605,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     // @ExceptionHandler(value = {Exception.class})
-    @ExceptionHandler(Exception.class)  // 简写形式，此方法可以捕获所有异常
+    @ExceptionHandler(Exception.class)  // 简写形式，此方法可以捕获所有异常  // <2>
     public Result handleException(Exception e)  // 会把拦截的异常传递给此方法的参数 e
     {
         e.printStackTrace();  // 只是打印了异常信息
@@ -4622,6 +4622,8 @@ public class GlobalExceptionHandler {
 - 让这个类成为全局异常处理器
 - 使得所有异常处理方法返回的结果直接作为 JSON 响应
 
+<2> 告诉方法要捕获哪些异常
++
 Exception 异常分类
 
 *  运行时异常 : RuntimeException, 编译时无需处理
@@ -4638,7 +4640,7 @@ Exception 异常分类
 
 [NOTE]
 ====
-* 普通的 insert，update，delete 会默认执行 commit。
+* 普通的 SQL 操作，如 insert，update，delete 会默认执行 commit 提交事务。
 * *Spring Boot 中使用 @Transactional 注解则会自动管理事务。*
 ====
 
@@ -4659,7 +4661,7 @@ Exception 异常分类
 2025-08-24 11:17:49.621 DEBUG 92701 --- [nio-8080-exec-2] o.s.jdbc.support.JdbcTransactionManager  : Initiating transaction rollback
 ....
 
-==== @Transactional
+==== @Transactional 举例根据部门 id 删除员工
 
 
 ===== file -> src/main/resources/application.yml
@@ -4688,24 +4690,35 @@ public class DeptServiceImpl implements DeptService {
     private DeptMapper deptMapper;
 
     @Autowired
-    private EmpService empService;  // 新增
+    private EmpService empService;  // New Added
     @others
 }
 ----
 
 ====== deleteDeptById 删除单个部门及其员工
+[caption=]
+.测试事务: 2 个条件，分为 4 种情况如下表所示
+[cols="1,2,2",options="header"]
+|===
+|@Transactional     | System.out.println(3/0) 异常       | 功能
+|不加 @Transactional | 也不加 System.out.println(3/0) 异常 | 可以正常删除部门及其下的所有员工
+|不加 @Transactional | 但是加 System.out.println(3/0) 异常 |可以正常删除部门，但是部门下的所有员工无法删除
+|加 @Transactional  | 也加 System.out.println(3/0) 异常   |则部门及其下的所有员工不会删除（回滚了）
+|加 @Transactional  | 不加 System.out.println(3/0) 异常   |则部门及其下的所有员工会被正常删除
+|===
+
 [source,java,linenum]
 ----
 @Transactional  // <2>
 @Override
-public void deleteDeptById(Integer id) {
+public int deleteDeptById(Integer id) {
     // 删除部门
     deptMapper.deleteDeptById(id);
 
-    System.out.println(3/0);  // <1>
+    // System.out.println(3/0);  // <1>
 
     // 把此部门的员工删除
-    empService.deleteEmpByDeptId(id);
+    return empService.deleteEmpByDeptId(id);  // int 类型
 }
 ----
 
@@ -4714,16 +4727,21 @@ public void deleteDeptById(Integer id) {
 +
 * 注解：@Transactional
 * 位置：可放在业务（service）层的方法上、类上、接口上。#实际开发中经常加在方法上。#
-* 作用：将当前方法交给 spring 进行事务管理，方法执行前，开启事务；成功执行完毕，提交事务；出现异常，回滚事务。
+* 作用：将当前方法交给 spring 进行事务管理。
+** 方法执行前开启事务；
+** 成功执行完毕，提交事务；
+** 出现异常，回滚事务。
 
 ===== file -> src/main/java/com/tjise/service/EmpService.java
 
 
-====== deleteEmpByDeptId 根据部门 id 删除员工 -> 新增
+====== deleteEmpByDeptId 根据部门 id 删除员工 -> New
 [source,java]
 ----
-void deleteEmpByDeptId(Integer deptId);
+int deleteEmpByDeptId(Integer deptId);
 ----
+
+因为是要删除员工，所以很合理地应该将删除员工的功能放在 EmpService 中。
 
 ===== file -> src/main/java/com/tjise/service/impl/EmpServiceImpl.java
 
@@ -4732,8 +4750,8 @@ void deleteEmpByDeptId(Integer deptId);
 [source,java]
 ----
 @Override
-public void deleteEmpByDeptId(Integer deptId) {
-    empMapper.deleteEmpByDeptId(deptId);
+public int deleteEmpByDeptId(Integer deptId) {
+    return empMapper.deleteEmpByDeptId(deptId);
 }
 ----
 
@@ -4744,7 +4762,7 @@ public void deleteEmpByDeptId(Integer deptId) {
 [source,java]
 ----
 @Delete("delete from emp where dept_id=#{deptId}")
-void deleteEmpByDeptId(Integer deptId);
+int deleteEmpByDeptId(Integer deptId);
 ----
 
 ==== @Transactional(rollbackFor)
@@ -4759,10 +4777,10 @@ rollbackFor：控制出现何种异常类型，回滚事务。
 ====== deleteDeptById 删除单个部门及其员工
 [source,java,linenum]
 ----
-// @Transactional  // 不会捕获编译时异常，所以不会回滚
+// @Transactional  // 不会捕获编译时异常，所以不会回滚  // <1>
 @Transactional(rollbackFor = Exception.class)  // <2>
 @Override
-public void deleteDeptById(Integer id) throws Exception {  // <3>
+public int deleteDeptById(Integer id) throws Exception {  // <3>
     // 删除部门
     deptMapper.deleteDeptById(id);
 
@@ -4771,7 +4789,7 @@ public void deleteDeptById(Integer id) throws Exception {  // <3>
     }
 
     // 把此部门的员工删除
-    empService.deleteEmpByDeptId(id);
+    return empService.deleteEmpByDeptId(id);
 }
 ----
 <1> @Transactional 默认只对运行时异常 (RuntimeException) 回滚，对编译时异常 (Checked Exception) 不回滚。
@@ -4793,9 +4811,9 @@ import java.util.List;
 public interface DeptService {
 
     public abstract List<Dept> selectAllDept();
-    
-    public abstract void deleteDeptById(Integer id) throws Exception;  // <1>
-    
+
+    public abstract int deleteDeptById(Integer id) throws Exception;  // <1>
+
     public abstract void insertDept(Dept dept);
 
     public abstract Dept getDeptById(Integer id);

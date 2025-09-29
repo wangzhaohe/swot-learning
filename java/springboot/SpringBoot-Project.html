@@ -618,12 +618,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_19_异常处理">19. 异常处理</a>
 <ul class="sectlevel3">
 <li><a href="#_19_1_方案一在_controller_方法中进行_trycatch_处理">19.1 方案一：在 Controller 方法中进行 try…catch 处理</a></li>
-<li><a href="#_19_2_方案二全局异常处理器">19.2 方案二：全局异常处理器</a></li>
+<li><a href="#_19_2_方案二全局异常处理器常用">19.2 方案二：全局异常处理器（常用）</a></li>
 </ul>
 </li>
 <li><a href="#_20_事务管理">20. 事务管理</a>
 <ul class="sectlevel3">
-<li><a href="#_transactional">@Transactional</a></li>
+<li><a href="#_transactional_举例根据部门_id_删除员工">@Transactional 举例根据部门 id 删除员工</a></li>
 <li><a href="#_transactionalrollbackfor">@Transactional(rollbackFor)</a></li>
 <li><a href="#_transactionalpropagation">@Transactional(propagation)</a></li>
 </ul>
@@ -3527,7 +3527,7 @@ Package:   com.ecommerce.platform.userservice</code></pre>
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjiseserviceimpldeptserviceimpl_java_7">file &#8594; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</h5>
 <div class="sect5">
-<h6 id="_deptserviceimpl_实现接口">DeptServiceImpl &#8594; 实现接口</h6>
+<h6 id="_updatedept_2">updateDept</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -8736,7 +8736,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect3">
-<h4 id="_19_2_方案二全局异常处理器">19.2 方案二：全局异常处理器</h4>
+<h4 id="_19_2_方案二全局异常处理器常用">19.2 方案二：全局异常处理器（常用）</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -8777,7 +8777,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">GlobalExceptionHandler</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// @ExceptionHandler(value = {Exception.class})</span>
-<span class="tok-w">    </span><span class="tok-nd">@ExceptionHandler</span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 简写形式，此方法可以捕获所有异常</span>
+<span class="tok-w">    </span><span class="tok-nd">@ExceptionHandler</span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 简写形式，此方法可以捕获所有异常  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Result</span><span class="tok-w"> </span><span class="tok-nf">handleException</span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 会把拦截的异常传递给此方法的参数 e</span>
 <span class="tok-w">    </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">printStackTrace</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 只是打印了异常信息</span>
@@ -8807,8 +8807,9 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </ul>
 </div></td>
 </tr>
-</table>
-</div>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>告诉方法要捕获哪些异常
 <div class="paragraph">
 <p>Exception 异常分类</p>
 </div>
@@ -8821,6 +8822,9 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <p>编译时异常 : 非 RuntimeException, 编译时处理</p>
 </li>
 </ul>
+</div></td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -8856,7 +8860,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="ulist">
 <ul>
 <li>
-<p>普通的 insert，update，delete 会默认执行 commit。</p>
+<p>普通的 SQL 操作，如 insert，update，delete 会默认执行 commit 提交事务。</p>
 </li>
 <li>
 <p><strong>Spring Boot 中使用 @Transactional 注解则会自动管理事务。</strong></p>
@@ -8894,7 +8898,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 </div>
 <div class="sect3">
-<h4 id="_transactional">@Transactional</h4>
+<h4 id="_transactional_举例根据部门_id_删除员工">@Transactional 举例根据部门 id 删除员工</h4>
 <div class="sect4">
 <h5 id="_file_srcmainresourcesapplication_yml_2">file &#8594; src/main/resources/application.yml</h5>
 <div class="sect5">
@@ -8933,7 +8937,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">DeptMapper</span><span class="tok-w"> </span><span class="tok-n">deptMapper</span><span class="tok-p">;</span>
 
 <span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">EmpService</span><span class="tok-w"> </span><span class="tok-n">empService</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 新增</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">EmpService</span><span class="tok-w"> </span><span class="tok-n">empService</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// New Added</span>
 <span class="tok-w">    </span><span class="tok-nd">@others</span>
 <span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
@@ -8942,6 +8946,43 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 </div>
 <div class="sect5">
 <h6 id="_deletedeptbyid_删除单个部门及其员工">deleteDeptById 删除单个部门及其员工</h6>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">测试事务: 2 个条件，分为 4 种情况如下表所示</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">@Transactional</th>
+<th class="tableblock halign-left valign-top">System.out.println(3/0) 异常</th>
+<th class="tableblock halign-left valign-top">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">不加 @Transactional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">也不加 System.out.println(3/0) 异常</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">可以正常删除部门及其下的所有员工</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">不加 @Transactional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">但是加 System.out.println(3/0) 异常</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">可以正常删除部门，但是部门下的所有员工无法删除</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">加 @Transactional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">也加 System.out.println(3/0) 异常</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">则部门及其下的所有员工不会删除（回滚了）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">加 @Transactional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">不加 System.out.println(3/0) 异常</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">则部门及其下的所有员工会被正常删除</p></td>
+</tr>
+</tbody>
+</table>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -8956,14 +8997,14 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="normal">10</span>
 <span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nd">@Transactional</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-nd">@Override</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-c1">// 删除部门</span>
 <span class="tok-w">    </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
 
-<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-mi">3</span><span class="tok-o">/</span><span class="tok-mi">0</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-c1">// System.out.println(3/0);  </span><i class="conum" data-value="1"></i><b>(1)</b>
 
 <span class="tok-w">    </span><span class="tok-c1">// 把此部门的员工删除</span>
-<span class="tok-w">    </span><span class="tok-n">empService</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">empService</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// int 类型</span>
 <span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
@@ -8986,7 +9027,20 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <p>位置：可放在业务（service）层的方法上、类上、接口上。<mark>实际开发中经常加在方法上。</mark></p>
 </li>
 <li>
-<p>作用：将当前方法交给 spring 进行事务管理，方法执行前，开启事务；成功执行完毕，提交事务；出现异常，回滚事务。</p>
+<p>作用：将当前方法交给 spring 进行事务管理。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>方法执行前开启事务；</p>
+</li>
+<li>
+<p>成功执行完毕，提交事务；</p>
+</li>
+<li>
+<p>出现异常，回滚事务。</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div></td>
@@ -8998,23 +9052,26 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjiseserviceempservice_java_9">file &#8594; src/main/java/com/tjise/service/EmpService.java</h5>
 <div class="sect5">
-<h6 id="_deleteempbydeptid_根据部门_id_删除员工_新增">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; 新增</h6>
+<h6 id="_deleteempbydeptid_根据部门_id_删除员工_new">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; New</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">deptId</span><span class="tok-p">);</span></code></pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">deptId</span><span class="tok-p">);</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>因为是要删除员工，所以很合理地应该将删除员工的功能放在 EmpService 中。</p>
 </div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjiseserviceimplempserviceimpl_java_10">file &#8594; src/main/java/com/tjise/service/impl/EmpServiceImpl.java</h5>
 <div class="sect5">
-<h6 id="_deleteempbydeptid_根据部门_id_删除员工_新增_2">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; 新增</h6>
+<h6 id="_deleteempbydeptid_根据部门_id_删除员工_新增">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; 新增</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Override</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">deptId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">deptId</span><span class="tok-p">);</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">deptId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">empMapper</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">deptId</span><span class="tok-p">);</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -9023,11 +9080,11 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjisemapperempmapper_java_10">file &#8594; src/main/java/com/tjise/mapper/EmpMapper.java</h5>
 <div class="sect5">
-<h6 id="_deleteempbydeptid_根据部门_id_删除员工_新增_3">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; 新增</h6>
+<h6 id="_deleteempbydeptid_根据部门_id_删除员工_新增_2">deleteEmpByDeptId 根据部门 id 删除员工 &#8594; 新增</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Delete</span><span class="tok-p">(</span><span class="tok-s">&quot;delete from emp where dept_id=#{deptId}&quot;</span><span class="tok-p">)</span>
-<span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">deptId</span><span class="tok-p">);</span></code></pre>
+<span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">deptId</span><span class="tok-p">);</span></code></pre>
 </div>
 </div>
 </div>
@@ -9067,10 +9124,10 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// @Transactional  // 不会捕获编译时异常，所以不会回滚</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-c1">// @Transactional  // 不会捕获编译时异常，所以不会回滚  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-nd">@Transactional</span><span class="tok-p">(</span><span class="tok-n">rollbackFor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-nd">@Override</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
 <span class="tok-w">    </span><span class="tok-c1">// 删除部门</span>
 <span class="tok-w">    </span><span class="tok-n">deptMapper</span><span class="tok-p">.</span><span class="tok-na">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
 
@@ -9079,7 +9136,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// 把此部门的员工删除</span>
-<span class="tok-w">    </span><span class="tok-n">empService</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">empService</span><span class="tok-p">.</span><span class="tok-na">deleteEmpByDeptId</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
 <span class="tok-p">}</span>
 </pre></div></td></tr></table></div></code></pre>
 </div>
@@ -9134,7 +9191,7 @@ jq -r '.data': 从返回的 JSON 响应中提取 data 字段并以原始格式�
 
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Dept</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">selectAllDept</span><span class="tok-p">();</span>
 
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-p">;</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">deleteDeptById</span><span class="tok-p">(</span><span class="tok-n">Integer</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-p">;</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">insertDept</span><span class="tok-p">(</span><span class="tok-n">Dept</span><span class="tok-w"> </span><span class="tok-n">dept</span><span class="tok-p">);</span>
 
@@ -11338,7 +11395,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-27 10:58:56 +0800
+Last updated 2025-09-29 10:20:25 +0800
 </div>
 </div>
 </body>

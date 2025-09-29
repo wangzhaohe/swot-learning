@@ -1,13 +1,12 @@
 #@+leo-ver=5-thin
-#@+node:swot.20241105150535.2: * @file src/main/resources/application.yml
-#@@language python
-#@+doc
-# [source,yaml,linenums]
-# ----
-#@@c
+#@+node:swot.20250824105727.1: * @file src/main/resources/application.yml
+#@@language yaml
+#@+others
+#@+node:swot.20250824113646.1: ** @ignore-tree 
+#@+node:swot.20250824113607.1: *3* spring
 spring:
     application:
-        name: general-manage
+        name: mybatis_quickstart-crud
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://localhost:3307/general_manager
@@ -17,15 +16,14 @@ spring:
         multipart:                  # 上传文件
             max-file-size: 10MB     # 指定单个文件上传的大小
             max-request-size: 100MB  # 指定单次请求上传文件的总大小
-
+#@+node:swot.20250824113555.1: *3* mybatis
 mybatis:
     configuration:
         # 指定mybatis输出日志的位置, 输出控制台
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
         #开启驼峰命名自动映射，即从经典数据库列名 a_column 映射到经典 Java 属性 名 aColumn
         map-underscore-to-camel-case: true
-
-# --- 阿里云 OSS ---
+#@+node:swot.20250824113509.1: *3* 阿里云 OSS
 # 与之对应引用为 @Vaule("${aliyun.oss.endpoint}")
 # noinspection undefined
 aliyun:
@@ -34,6 +32,17 @@ aliyun:
         accessKeyId: "[REMOVED]"
         accessKeySecret: "[REMOVED]"
         bucketName: "swot-learn"
+#@+node:swot.20250824113328.1: ** 开启事务日志 logging
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
+logging:
+    level:
+        # noinspection undefined
+        org.springframework.jdbc.support.JdbcTransactionManager: debug
 #@+doc
 # ----
+#@-others
 #@-leo
