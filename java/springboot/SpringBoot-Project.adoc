@@ -3745,7 +3745,7 @@ public void updateEmp(Emp emp);
 === 17. 登录校验
 
 
-==== api 登录文档
+==== 17.1 api 登录文档
 [discrete]
 ===== 基本信息
 
@@ -3817,14 +3817,14 @@ public void updateEmp(Emp emp);
 }
 ----
 
-==== httpie 测试
+==== 17.2 httpie 测试
 成功测试::
 http -v :8080/login username=limuwan password=123456
 
 失败测试::
 http -v :8080/login username=xxxxxx password=123456
 
-==== 创建后端登录代码
+==== 17.3 创建后端登录代码
 
 
 ===== file -> src/main/java/com/tjise/controller/LoginController.java
@@ -3896,7 +3896,7 @@ public interface EmpMapper {
 Emp login(Emp emp);
 ----
 
-==== JWT 简介
+==== 17.4 JWT 简介
 JSON Web Token（JWT）是一个开放的行业标准（RFC 7519），它定义了一种简洁的、自包含的协议格式，用于在通信双方传递json对象，传递的信息经过数字签名可以被验证和信任。
 
 * 官网： https://jwt.io/
@@ -3917,10 +3917,13 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
 
 下面介绍使用 JWT 的步骤。
 
-==== file -> pom.xml
+==== 17.5 导入依赖 jjwt
 
 
-===== 新增依赖 jjwt -> 有 3 个
+===== file -> pom.xml
+
+
+====== 新增依赖 jjwt -> 有 3 个
 参考网址: 新的 jjwt 分成了 3 个依赖，可以分别引用。
 
 * https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api/0.12.6
@@ -3953,7 +3956,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
 </dependency>
 ....
 
-==== 测试 JWT 的创建与解析
+==== 17.6 测试 JWT 的创建与解析
 
 
 ===== file -> src/test/java/com/tjise/JWTTest.java
@@ -4024,7 +4027,7 @@ public void parseJwt() {
 }
 ----
 
-==== 封装 JWT 类
+==== 17.7 封装 JWT 类
 
 
 ===== file -> src/main/java/com/tjise/utils/JwtUtils.java
@@ -4089,7 +4092,7 @@ public static Claims parseJWT(String jwt) {
 }
 ----
 
-==== 登录接口调用 JWT 类生成 token 返回给前端
+==== 17.8 登录接口调用 JWT 类生成 token 返回给前端
 
 
 ===== file -> src/main/java/com/tjise/controller/LoginController.java
@@ -4126,6 +4129,279 @@ public class LoginController {
 
 使用 httpie 测试登录::    
 http -v post http://localhost:8080/login username=limuwan password=123456
+
+==== 17.9 Redis 数据库应用
+
+
+===== 17.9.1 了解知识点 jedis
+IMPORTANT: 我们在 Spring Boot 中使用 `spring-boot-starter-data-redis`，不会直接使用下面的 jedis 驱动库，此处 jedis 作为了解即可。
+
+.直接使用依赖 jedis
+[source,scss]
+....
+<!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+<dependency>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+    <version>5.2.0</version>
+</dependency>
+....
+
+.测试代码
+[source,java]
+----
+Jedis jedis = new Jedis("127.0.0.1", 6379, false);  // SSL 为 false
+// jedis.auth("123456");  // 没有密码则不用写，默认安装的 redis 没有密码
+String pong = jedis.ping();
+System.out.println(pong);   // PONG 表示连接成功
+
+// 测试一下字符串设置
+jedis.set("name", "swot");
+String foo = jedis.get("name");
+System.out.println(foo);  // swot
+----
+
+NOTE: 其他类型的例子省略。
+
+**以上作为了解知识点，下面我们使用 `spring-boot-starter-data-redis` 依赖，它的驱动库是 lettuce。**
+
+
+如果不想使用 lettuce 驱动库，也是可以使用 jedis 驱动库。
+
+.Spring Boot Starter Data Redis 如何使用 jedis 驱动库
+****
+如果你想使用 jedis 驱动库，也是可以配合 spring-boot-starter-data-redis 的，下面是实现的方式（参考资料）。
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+    <!-- 不使用 lettuce 驱动库了 -->
+    <exclusions>
+        <exclusion>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+
+<!-- 再显式引入 Jedis 驱动库 -->
+<dependency>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+</dependency>
+----
+****
+
+===== 17.9.2 登录时将 token 放入 Redis 数据库
+为什么要将 token 放入 redis 数据库中？有以下不完美的地方。
+
+1. 过期时间记录在 token 中，后端无法将用户踢下线。
+
+2. 如果后端想能将登录的用户踢下线，可以将 token 存入关系型数据库中，如 MySQL，但是相对来说又太慢了。
+
+所以复用 redis 数据库快的特点做平衡，即能保证功能，也能速度很快。
+
+====== file -> pom.xml
+
+
+====== 增加依赖 redis
+[source,scss]
+....
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
+<!-- spring-boot-starter-parent 中已经指定了相应可用的版本 -->
+<dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+....
+
+====== file -> src/main/resources/application.yml
+
+
+====== spring 新增配置 redis
+[source,python]
+----
+spring:
+    application:
+        name: mybatis_quickstart-crud
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3307/general_manager
+        username: root
+        password: root
+    servlet:
+        multipart:                  # 上传文件
+            max-file-size: 10MB     # 指定单个文件上传的大小
+            max-request-size: 100MB  # 指定单次请求上传文件的总大小
+
+    # --- New Added 配置 redis ---
+    redis:
+        database: 0
+        host: 127.0.0.1
+        port: 6379
+        # password: 未设置，默认安装的 redis 没有密码
+----
+
+====== file -> src/main/java/com/tjise/controller/LoginController.java
+[source,java]
+----
+@RestController
+public class LoginController {
+
+    @Autowired
+    private EmpService empService;
+
+    << 注入 redis 对象 >>
+
+    @PostMapping("/login")
+    public Result login(@RequestBody Emp emp) {
+        // 登录，去数据库验证用户名和密码
+        Emp e = empService.login(emp);
+
+        if (e == null) {
+            // 登录失败返回 NOT_LOGIN 后前端会自动跳转到登录页面
+            return Result.error("NOT_LOGIN");
+        } else {
+            // 登录成功
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", e.getId());
+            map.put("username", e.getUsername());
+            map.put("name", e.getName());
+
+            // 生成令牌并返回给前端
+            String jwt = JwtUtils.generateJwt(map);
+
+            << 将 jwt token 存入 redis 数据库 >>
+
+            return Result.success(jwt);
+        }
+    }
+}
+----
+
+====== << 注入 redis 对象 >>
+[source,java]
+----
+@Autowired
+private StringRedisTemplate stringRedisTemplate;
+----
+
+====== << 将 jwt token 存入 redis 数据库 >>
+[source,java]
+----
+stringRedisTemplate.opsForValue().set(
+        e.getUsername(),       // key，将用户名 username 存入 redis
+        jwt,                   // value，将 token 存入 redis
+        JwtUtils.expire,       // 过期时间
+        TimeUnit.MILLISECONDS  // 时间单位
+);
+----
+
+====== 登录后查看 redis 保存的 key 值
+使用 httpie 测试登录::    
+http -v post http://localhost:8080/login username=limuwan password=123456
+
+进入 redis 查看是否有以用户名 limuwan 为 key 的值。
+
+===== 17.9.3 前端请求服务器 api 时在后端进行 token 对比
+
+
+====== file -> src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java
+
+
+====== 注入 redis 对象
+[source,java]
+----
+@Autowired
+private StringRedisTemplate stringRedisTemplate;
+----
+
+====== preHandle 目标 api 执行前执行: return true 放行，return false 拦截
+[source,java]
+----
+@Override
+public boolean preHandle(HttpServletRequest request,
+                         HttpServletResponse response,
+                         Object handler) throws Exception {
+    System.out.println("Enter preHandle()");
+
+    // 1. 获取请求路由
+    String url = request.getRequestURL().toString();
+
+    // 2. 判断请求的路由是否包含 login
+    if (url.contains("login")) {
+        return true;  // 放行去访问 login api
+    }
+
+    // 3. 获取请求头中的令牌 token
+    String jwt = request.getHeader("token");
+    if (jwt == null) {  // 返回登录页面
+        sendErrorResponse(response);
+        return false;  // 拦截直接给客户端响应 200 结束
+    }
+    // ---------- 更新代码开始 ------
+    // 4. 解析令牌
+    Claims payload;
+    try {
+        payload = JwtUtils.parseJWT(jwt);
+    } catch (Exception e) {
+        sendErrorResponse(response);
+        return false;
+    }
+
+    // 5. 对比 redis 数据库中的值
+          // 如果删除 redis 中用户的键，则能将用户踢出系统
+    String username = (String) payload.get("username");
+    String tokenFromRedis = stringRedisTemplate.opsForValue()
+                                               .get(username);
+    // 如果为 null 说明该用户不在线（如未注册、key过期、被删除踢下线）
+    // tokenFromRedis 与 jwt 不相等，说明 jwt 提供的是非法用户
+    if (tokenFromRedis == null || !tokenFromRedis.equals(jwt)) {
+        sendErrorResponse(response);
+        return false;
+    }
+    // ---------- 更新代码结束 ------
+    return true;   // 放行去执行 api
+}
+----
+
+.使用 httpie 测试，查看后端日志中打印结果
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+http :8080/depts "token: $TOKEN"
+http :8080/depts/1 "token: $TOKEN"
+----
+
+===== 17.9.4 测试功能
+1. 使用用户 limuwan 正常登录系统
++
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+----
+
+2. 访问部门列表
++
+.可以正常访问
+[source,console]
+----
+http :8080/depts "token: $TOKEN"
+----
+
+3. 从 redis 数据库中删除 key `limuwan`
++
+image::img/redis_delete_key.png[,800]
+
+4. 还是使用原来的 token 去访问部门列表
++
+.不允许访问 NOT_LOGIN
+[source,console]
+----
+http :8080/depts "token: $TOKEN"
+----
 
 === 18. 统一过滤或拦截（二选一）
 统一过虑或拦截可以把对资源的请求拦截下来，从而实现一些特殊的处理。比如：登陆鉴权、统一编码处理、敏感字符处理等。
@@ -5921,278 +6197,5 @@ operateLogMapper.insert(operateLog);
 ----
 // @Around 注解的方法必须返回对象
 return result;
-----
-
-=== 22. Redis 数据库应用
-
-
-==== 22.1 了解知识点 jedis
-IMPORTANT: 我们在 Spring Boot 中使用 `spring-boot-starter-data-redis`，不会直接使用下面的 jedis 驱动库，此处 jedis 作为了解即可。
-
-.直接使用依赖 jedis
-[source,scss]
-....
-<!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
-<dependency>
-    <groupId>redis.clients</groupId>
-    <artifactId>jedis</artifactId>
-    <version>5.2.0</version>
-</dependency>
-....
-
-.测试代码
-[source,java]
-----
-Jedis jedis = new Jedis("127.0.0.1", 6379, false);  // SSL 为 false
-// jedis.auth("123456");  // 没有密码则不用写，默认安装的 redis 没有密码
-String pong = jedis.ping();
-System.out.println(pong);   // PONG 表示连接成功
-
-// 测试一下字符串设置
-jedis.set("name", "swot");
-String foo = jedis.get("name");
-System.out.println(foo);  // swot
-----
-
-NOTE: 其他类型的例子省略。
-
-**以上作为了解知识点，下面我们使用 `spring-boot-starter-data-redis` 依赖，它的驱动库是 lettuce。**
-
-
-如果不想使用 lettuce 驱动库，也是可以使用 jedis 驱动库。
-
-.Spring Boot Starter Data Redis 如何使用 jedis 驱动库
-****
-如果你想使用 jedis 驱动库，也是可以配合 spring-boot-starter-data-redis 的，下面是实现的方式（参考资料）。
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-data-redis</artifactId>
-    <!-- 不使用 lettuce 驱动库了 -->
-    <exclusions>
-        <exclusion>
-            <groupId>io.lettuce</groupId>
-            <artifactId>lettuce-core</artifactId>
-        </exclusion>
-    </exclusions>
-</dependency>
-
-<!-- 再显式引入 Jedis 驱动库 -->
-<dependency>
-    <groupId>redis.clients</groupId>
-    <artifactId>jedis</artifactId>
-</dependency>
-----
-****
-
-==== 22.2 登录时将 token 放入 Redis 数据库
-为什么要将 token 放入 redis 数据库中？有以下不完美的地方。
-
-1. 过期时间记录在 token 中，后端无法将用户踢下线。
-
-2. 如果后端想能将登录的用户踢下线，可以将 token 存入关系型数据库中，如 MySQL，但是相对来说又太慢了。
-
-所以复用 redis 数据库快的特点做平衡，即能保证功能，也能速度很快。
-
-===== file -> pom.xml
-
-
-====== 增加依赖 redis
-[source,scss]
-....
-<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
-<!-- spring-boot-starter-parent 中已经指定了相应可用的版本 -->
-<dependency>
-   <groupId>org.springframework.boot</groupId>
-   <artifactId>spring-boot-starter-data-redis</artifactId>
-</dependency>
-....
-
-===== file -> src/main/resources/application.yml
-
-
-====== spring 新增配置 redis
-[source,python]
-----
-spring:
-    application:
-        name: mybatis_quickstart-crud
-    datasource:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3307/general_manager
-        username: root
-        password: root
-    servlet:
-        multipart:                  # 上传文件
-            max-file-size: 10MB     # 指定单个文件上传的大小
-            max-request-size: 100MB  # 指定单次请求上传文件的总大小
-
-    # --- New Added 配置 redis ---
-    redis:
-        database: 0
-        host: 127.0.0.1
-        port: 6379
-        # password: 未设置，默认安装的 redis 没有密码
-----
-
-===== file -> src/main/java/com/tjise/controller/LoginController.java
-[source,java]
-----
-@RestController
-public class LoginController {
-
-    @Autowired
-    private EmpService empService;
-
-    << 注入 redis 对象 >>
-
-    @PostMapping("/login")
-    public Result login(@RequestBody Emp emp) {
-        // 登录，去数据库验证用户名和密码
-        Emp e = empService.login(emp);
-
-        if (e == null) {
-            // 登录失败返回 NOT_LOGIN 后前端会自动跳转到登录页面
-            return Result.error("NOT_LOGIN");
-        } else {
-            // 登录成功
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", e.getId());
-            map.put("username", e.getUsername());
-            map.put("name", e.getName());
-
-            // 生成令牌并返回给前端
-            String jwt = JwtUtils.generateJwt(map);
-
-            << 将 jwt token 存入 redis 数据库 >>
-
-            return Result.success(jwt);
-        }
-    }
-}
-----
-
-====== << 注入 redis 对象 >>
-[source,java]
-----
-@Autowired
-private StringRedisTemplate stringRedisTemplate;
-----
-
-====== << 将 jwt token 存入 redis 数据库 >>
-[source,java]
-----
-stringRedisTemplate.opsForValue().set(
-        e.getUsername(),       // key，将用户名 username 存入 redis
-        jwt,                   // value，将 token 存入 redis
-        JwtUtils.expire,       // 过期时间
-        TimeUnit.MILLISECONDS  // 时间单位
-);
-----
-
-===== 登录后查看 redis 保存的 key 值
-使用 httpie 测试登录::    
-http -v post http://localhost:8080/login username=limuwan password=123456
-
-进入 redis 查看是否有以用户名 limuwan 为 key 的值。
-
-==== 22.3 前端请求服务器 api 时在后端进行 token 对比
-
-
-===== file -> src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java
-
-
-====== 注入 redis 对象
-[source,java]
-----
-@Autowired
-private StringRedisTemplate stringRedisTemplate;
-----
-
-====== preHandle 目标 api 执行前执行: return true 放行，return false 拦截
-[source,java]
-----
-@Override
-public boolean preHandle(HttpServletRequest request,
-                         HttpServletResponse response,
-                         Object handler) throws Exception {
-    System.out.println("Enter preHandle()");
-
-    // 1. 获取请求路由
-    String url = request.getRequestURL().toString();
-
-    // 2. 判断请求的路由是否包含 login
-    if (url.contains("login")) {
-        return true;  // 放行去访问 login api
-    }
-
-    // 3. 获取请求头中的令牌 token
-    String jwt = request.getHeader("token");
-    if (jwt == null) {  // 返回登录页面
-        sendErrorResponse(response);
-        return false;  // 拦截直接给客户端响应 200 结束
-    }
-    // ---------- 更新代码开始 ------
-    // 4. 解析令牌
-    Claims payload;
-    try {
-        payload = JwtUtils.parseJWT(jwt);
-    } catch (Exception e) {
-        sendErrorResponse(response);
-        return false;
-    }
-
-    // 5. 对比 redis 数据库中的值
-          // 如果删除 redis 中用户的键，则能将用户踢出系统
-    String username = (String) payload.get("username");
-    String tokenFromRedis = stringRedisTemplate.opsForValue()
-                                               .get(username);
-    // 如果为 null 说明该用户不在线（如未注册、key过期、被删除踢下线）
-    // tokenFromRedis 与 jwt 不相等，说明 jwt 提供的是非法用户
-    if (tokenFromRedis == null || !tokenFromRedis.equals(jwt)) {
-        sendErrorResponse(response);
-        return false;
-    }
-    // ---------- 更新代码结束 ------
-    return true;   // 放行去执行 api
-}
-----
-
-.使用 httpie 测试，查看后端日志中打印结果
-[source,console]
-----
-TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
-http :8080/depts "token: $TOKEN"
-http :8080/depts/1 "token: $TOKEN"
-----
-
-==== 22.4 测试功能
-1. 使用用户 limuwan 正常登录系统
-+
-[source,console]
-----
-TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
-----
-
-2. 访问部门列表
-+
-.可以正常访问
-[source,console]
-----
-http :8080/depts "token: $TOKEN"
-----
-
-3. 从 redis 数据库中删除 key `limuwan`
-+
-image::img/redis_delete_key.png[,800]
-
-4. 还是使用原来的 token 去访问部门列表
-+
-.不允许访问 NOT_LOGIN
-[source,console]
-----
-http :8080/depts "token: $TOKEN"
 ----
 
