@@ -4946,7 +4946,7 @@ NOTE: 可以对比 Spring Boot 日志进行核实。
 === 21. 面向切面 AOP
 
 
-==== 引子 -> 需求: 记录业务层方法的执行耗时，并输出到控制台
+==== 21.1 引子 -> 需求: 记录业务层方法的执行耗时，并输出到控制台
 拿出两个方法举例（查询部门列表和获取单个部门），能说明问题即可。
 从下面的代码更改中，可以发现每个方法中都存在重复的代码 <1> <2> <3>。
 而且加的执行耗时代码还侵入了代码的业务逻辑中。
@@ -4997,7 +4997,7 @@ public Dept getDeptById(Integer id) {
 <2> 结束时间
 <3> 计算耗时
 
-==== 面向切面 AOP 基础
+==== 21.2 面向切面 AOP 基础
 AOP：Aspect Oriented Programming（面向切面编程），
 它的核心思想是将重复的逻辑剥离出来，
 ##在不修改原始逻辑的基础上对原始功能进行增强##。
@@ -5118,10 +5118,10 @@ http :8080/depts/1 "token: $TOKEN"
 
 // 此处可以补充打印日志
 
-==== 面向切面 AOP 进阶
+==== 21.3 面向切面 AOP 进阶
 
 
-===== 注释掉上节的两个注解（让该切面类失效，只让下面的生效）
+===== 21.3.1 注释掉上节的两个注解（让该切面类失效，只让下面的生效）
 
 
 ====== file -> src/main/java/com/tjise/aop/TimeAspect.java
@@ -5149,7 +5149,7 @@ public class TimeAspect {  // 切面类
 }
 ----
 
-===== 通知类型知识点
+===== 21.3.2 通知类型知识点
 
 
 ====== file -> src/main/java/com/tjise/aop/AdviceTypeAspectDemo.java
@@ -5254,7 +5254,7 @@ afterThrowing
 after
 ....
 
-===== 通知执行顺序
+===== 21.3.3 通知执行顺序
 当有多个切面的切点都匹配目标时，多个通知方法都会被执行。
 
 ====== 注释掉上节的两个注解（让该切面类失效，只让下面的生效）
@@ -5454,9 +5454,9 @@ public class AdviceOrderAspectDemo4 {  // 切面类
 
 <1> 用小数字注解类名
 
-===== 切点表达式 @annotation()
+===== 21.3.4 切点表达式 @annotation()
 除了使用 execution() 切点表达式，
-还可以使用 @annotation() 切点表达式来根据目标方法是否有注解来进行匹配。
+还可以使用 @annotation() 切点表达式来 *根据目标方法是否有注解* 来进行匹配。
 
 ====== file -> src/main/java/com/tjise/aop/AnnotationAspectDemo.java
 [source,java,linenum]
@@ -5473,7 +5473,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class AnnotationAspectDemo {
 
-    // @Before：此注解标注的方法在目标方法前被执行。
+    // @Before：此注解标注的方法，在目标方法前被执行。
     @Before("@annotation(com.tjise.annotation.Log)")  // <1>
     public void before() {
         System.out.println("before");
@@ -5481,7 +5481,7 @@ public class AnnotationAspectDemo {
 }
 ----
 
-<1> 使用 @annotation() 切点表达式来根据目标方法是否有注解来进行匹配。
+<1> 使用 @annotation() 切点表达式来 *根据目标方法是否有注解* 来进行匹配。
 
 ====== file -> src/main/java/com/tjise/annotation/Log.java
 [source,java]
@@ -5509,7 +5509,7 @@ public @interface Log {}  // <1>
 <3> `@Retention(RetentionPolicy.RUNTIME)`
 +
 - 指定注解的保留策略
-- `RetentionPolicy.RUNTIME` 表示注解在运行时仍然可用，可以通过反射获取
+- `RetentionPolicy.RUNTIME` 表示注解在 *运行时* 仍然可用，可以通过反射获取
 - 如果不写，默认是 `CLASS` 策略，运行时无法通过反射获取
 
 IMPORTANT: 在 AOP 场景中，@Before、@After 等注解都需要在运行时被 Spring AOP 框架通过反射读取，所以必须使用 RetentionPolicy.RUNTIME 策略。
@@ -5520,30 +5520,30 @@ IMPORTANT: 在 AOP 场景中，@Before、@After 等注解都需要在运行时�
 ====== deleteDeptById 删除单个部门及其员工
 [source,java,linenum]
 ----
+@Log  // <1>
 @Transactional(rollbackFor = Exception.class)
 @Override
-@Log  // <1>
-public void deleteDeptById(Integer id) throws Exception {
+public int deleteDeptById(Integer id) throws Exception {
     deptMapper.deleteDeptById(id);     // 删除部门
-    empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
+    int delInt = empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
     System.out.println(3 / 0);         // 运行时异常
+    return delInt;
 }
 ----
 
-<1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
+<1> 给方法增加自定义注解 @Log，让 @annotation() 切点表达式可以找到该方法。
 
-
-.使用 httpie 测试，查看后端日志中已经打印了方法执行耗时
+.使用 httpie 测试，查看后端日志
 [source,console]
 ----
 TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
-http DELETE :8080/depts/1 "token: $TOKEN"  # 会打印 before
+http DELETE :8080/depts/1 "token: $TOKEN"  # 有 @Log 注解，会打印 before
 http :8080/depts "token: $TOKEN"           # 不会打印 before
 http :8080/depts/1 "token: $TOKEN"         # 不会打印 before
 ----
 
-===== 切点表达式 @PointCut
-该注解的作用是将公共的切点表达式抽取出来，需要用到时引用该切点表达式即可。
+===== 21.3.5 切点表达式 @Pointcut
+该注解的作用是将 *公共的切点表达式* 抽取出来，在需要用到时，引用该切点表达式即可。
 
 ====== file -> src/main/java/com/tjise/aop/PointcutAspectDemo.java
 [source,java,linenum]
@@ -5560,18 +5560,18 @@ import org.springframework.stereotype.Component;
 public class PointcutAspectDemo {
 
     @Pointcut("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")  // <1>
-    public void pt(){}
+    public void pt(){} // 自定义名称，可以理解为 pointcut 简写
 
     // @Before：此注解标注的通知方法在目标方法前被执行。
     @Before("pt()")  // <2>
     public void before() {
-        System.out.println("before");
+        System.out.println("before by @Pointcut");
     }
 
     // @After ：此注解标注的通知方法在目标方法后被执行，无论是否有异常。
     @After("pt()")  // <2>
     public void after() {
-        System.out.println("after");
+        System.out.println("after by @Pointcut");
     }
 }
 ----
@@ -5583,11 +5583,11 @@ public class PointcutAspectDemo {
 [source,console]
 ----
 TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
-http :8080/depts "token: $TOKEN"    # 会打印 before 和 after
-http :8080/depts/1 "token: $TOKEN"  # 会打印 before 和 after
+http :8080/depts "token: $TOKEN"    # 会打印 before  by @Pointcut 和 after by @Pointcut
+http :8080/depts/1 "token: $TOKEN"  # 会打印 before  by @Pointcut 和 after by @Pointcut
 ----
 
-===== 连接点 JoinPoint
+===== 21.3.6 连接点 JoinPoint
 连接点简单理解就是 **目标方法**，在 Spring 中用 JoinPoint 抽象了连接点，用它可以获得方法执行时的相关信息，如方法名、方法参数类型、方法实际参数等等。
 
 * 对于 @Around 通知，获取连接点信息只能使用 ProceedingJoinPoint。
@@ -5637,7 +5637,7 @@ http :8080/depts "token: $TOKEN"
 http :8080/depts/1 "token: $TOKEN"
 ----
 
-==== 面向切面 AOP 案例 -> 操作日志保存到数据库中
+==== 21.4 面向切面 AOP 案例 -> 增删改操作日志保存到数据库中
 将前面的部门和员工管理案例中对业务类（service）中的 增、删、改 方法的操作日志保存到数据库（MySQL）中。
 
 思路分析：
@@ -5655,7 +5655,7 @@ http :8080/depts/1 "token: $TOKEN"
 </dependency>
 ....
 
-===== 创建数据库操作日志表 operate_log
+===== 创建数据库增删改的操作日志表 operate_log
 [source,sql]
 ----
 create table operate_log(
@@ -5808,7 +5808,7 @@ public void deleteEmpByIds(List<Integer> ids) {
 
 <1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
 
-====== deleteEmpByDeptId 根据部门id删除员工
+====== deleteEmpByDeptId 根据部门 id 删除员工
 [source,java,linenum]
 ----
 @Transactional
@@ -5822,24 +5822,11 @@ public void deleteEmpByDeptId(Integer deptId) {
 <1> 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
 
 ===== file -> src/main/java/com/tjise/aop/LogAspect.java
+
+
+====== class LogAspect
 [source,java]
 ----
-package com.tjise.aop;
-
-import com.alibaba.fastjson2.JSONObject;
-import com.tjise.mapper.OperateLogMapper;
-import com.tjise.utils.JwtUtils;
-import com.tjise.pojo.OperateLog;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-
 @Aspect
 @Component
 public class LogAspect {
@@ -5853,13 +5840,14 @@ public class LogAspect {
     private OperateLogMapper operateLogMapper;
 
     @Around("@annotation(com.tjise.annotation.Log)")
-    public Object logServiceCURD(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logServiceCUD(ProceedingJoinPoint joinPoint) throws Throwable {
+        // CUD 表示 CRUD 排除了查询的业务
         @others
     } 
 }
 ----
 
-====== 1 获取操作人 operateUser
+====== 1 获取操作人 operateUser -> 通过 token 获取登录用户 id
 .解析出已登录用户的 id
 [source,java]
 ----
@@ -5867,31 +5855,31 @@ String jwt = request.getHeader("token");
 Integer operateUser = (Integer) JwtUtils.parseJWT(jwt).get("id");
 ----
 
-====== 2 获取操作时间 operateTime
+====== 2 获取操作时间 operateTime -> 取服务器当前操作时间
 [source,java]
 ----
 LocalDateTime operateTime = LocalDateTime.now();
 ----
 
-====== 3 获取操作方法的类名 className
+====== 3 获取操作方法的类名 className     -> joinPoint
 [source,java]
 ----
 String className = joinPoint.getTarget().getClass().getName();
 ----
 
-====== 4 获取操作的方法名 methodName
+====== 4 获取操作的方法名 methodName      -> joinPoint
 [source,java]
 ----
 String methodName = joinPoint.getSignature().getName();
 ----
 
-====== 5 获取操作的方法参数 methodParams
+====== 5 获取操作的方法参数 methodParams  -> joinPoint
 [source,java]
 ----
 String methodParams = Arrays.toString(joinPoint.getArgs());
 ----
 
-====== 6 获取操作方法的返回值 returnValue
+====== 6 获取操作方法的返回值 returnValue -> joinPoint
 [source,java]
 ----
 long begin = System.currentTimeMillis();  // 操作方法执行开始时间
@@ -5901,13 +5889,13 @@ long end = System.currentTimeMillis();    // 操作方法执行结束时间
 String returnValue = JSONObject.toJSONString(result);
 ----
 
-====== 7 获取操作方法执行耗时 costTime
+====== 7 获取操作方法执行耗时 costTime    -> end - begin
 [source,java]
 ----
 long costTime = end - begin;
 ----
 
-====== 8 获取的数据封装成 OperateLog 对象
+====== 8 获取的数据封装成 OperateLog 对象 -> new OperateLog
 [source,java]
 ----
 OperateLog operateLog = new OperateLog(
@@ -5922,7 +5910,7 @@ OperateLog operateLog = new OperateLog(
 );
 ----
 
-====== 9 将封装的 OperateLog 对象插入数据库表 operate_log 中
+====== 9 将封装的 OperateLog 对象插入数据库表 operate_log 中 -> mapper
 [source,java]
 ----
 operateLogMapper.insert(operateLog);
@@ -5931,14 +5919,9 @@ operateLogMapper.insert(operateLog);
 ====== 10 返回操作方法执行的结果 result
 [source,java]
 ----
+// @Around 注解的方法必须返回对象
 return result;
 ----
-
-==== ------
-
-
-==== 解决AOP执行耗时打印2行时间问题
-
 
 === 22. Redis 数据库应用
 

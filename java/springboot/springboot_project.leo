@@ -822,16 +822,16 @@
 </v>
 </v>
 </v>
-<v t="swot.20250826103953.1"><vh>21.3.5 切点表达式 @PointCut</vh>
+<v t="swot.20250826103953.1"><vh>21.3.5 切点表达式 @Pointcut</vh>
 <v t="swot.20250826104547.1"><vh>file -&gt; src/main/java/com/tjise/aop/PointcutAspectDemo.java</vh></v>
 </v>
 <v t="swot.20250826111958.1"><vh>21.3.6 连接点 JoinPoint</vh>
 <v t="swot.20250826122200.1"><vh>file -&gt; src/main/java/com/tjise/aop/JoinPointAspect.java</vh></v>
 </v>
 </v>
-<v t="swot.20250823201333.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3471017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d3236710775735807000000302e342e312e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30382d3234710e7573752e"><vh>21.4 面向切面 AOP 案例 -&gt; 操作日志保存到数据库中</vh>
+<v t="swot.20250823201333.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3471017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d3236710775735807000000302e342e312e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30382d3234710e7573752e"><vh>21.4 面向切面 AOP 案例 -&gt; 增删改操作日志保存到数据库中</vh>
 <v t="swot.20250826213729.1"><vh>检查是否在 pom.xml 文件中导入了 AOP 依赖</vh></v>
-<v t="swot.20250826205302.1"><vh>创建数据库操作日志表 operate_log</vh></v>
+<v t="swot.20250826205302.1"><vh>创建数据库增删改的操作日志表 operate_log</vh></v>
 <v t="swot.20250826210125.1"><vh>file -&gt; src/main/java/com/tjise/pojo/OperateLog.java</vh></v>
 <v t="swot.20250826211301.1"><vh>file -&gt; src/main/java/com/tjise/mapper/OperateLogMapper.java</vh></v>
 <v t="swot.20250826215506.1" descendentVnodeUnknownAttributes="7d71002858010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d3236710775735805000000302e312e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30382d3234710e7573752e"><vh>file -&gt; src/main/java/com/tjise/service/impl/DeptServiceImpl.java</vh>
@@ -857,20 +857,23 @@
 <v t="swot.20250826221444.7"><vh>insertEmp 新增员工</vh></v>
 <v t="swot.20250826221444.9"><vh>updateEmp 修改单个员工</vh></v>
 <v t="swot.20250826221444.6"><vh>deleteEmpByIds 删除员工</vh></v>
-<v t="swot.20250826221444.11"><vh>deleteEmpByDeptId 根据部门id删除员工</vh></v>
+<v t="swot.20250826221444.11"><vh>deleteEmpByDeptId 根据部门 id 删除员工</vh></v>
 </v>
 </v>
 <v t="swot.20250826233540.1"><vh>file -&gt; src/main/java/com/tjise/aop/LogAspect.java</vh>
-<v t="swot.20250826235039.1"><vh>1 获取操作人 operateUser</vh></v>
-<v t="swot.20250827001323.1"><vh>2 获取操作时间 operateTime</vh></v>
-<v t="swot.20250827083742.1"><vh>3 获取操作方法的类名 className</vh></v>
-<v t="swot.20250827085745.1"><vh>4 获取操作的方法名 methodName</vh></v>
-<v t="swot.20250827091752.1"><vh>5 获取操作的方法参数 methodParams</vh></v>
-<v t="swot.20250827091958.1"><vh>6 获取操作方法的返回值 returnValue</vh></v>
-<v t="swot.20250827105531.1"><vh>7 获取操作方法执行耗时 costTime</vh></v>
-<v t="swot.20250827111836.1"><vh>8 获取的数据封装成 OperateLog 对象</vh></v>
-<v t="swot.20250827113326.1"><vh>9 将封装的 OperateLog 对象插入数据库表 operate_log 中</vh></v>
+<v t="swot.20250930093415.1"><vh>@ignore-node import</vh></v>
+<v t="swot.20250930093548.1"><vh>class LogAspect</vh>
+<v t="swot.20250826235039.1"><vh>1 获取操作人 operateUser -&gt; 通过 token 获取登录用户 id</vh></v>
+<v t="swot.20250827001323.1"><vh>2 获取操作时间 operateTime -&gt; 取服务器当前操作时间</vh></v>
+<v t="swot.20250827083742.1"><vh>3 获取操作方法的类名 className     -&gt; joinPoint</vh></v>
+<v t="swot.20250827085745.1"><vh>4 获取操作的方法名 methodName      -&gt; joinPoint</vh></v>
+<v t="swot.20250827091752.1"><vh>5 获取操作的方法参数 methodParams  -&gt; joinPoint</vh></v>
+<v t="swot.20250827091958.1"><vh>6 获取操作方法的返回值 returnValue -&gt; joinPoint</vh></v>
+<v t="swot.20250827105531.1"><vh>7 获取操作方法执行耗时 costTime    -&gt; end - begin</vh></v>
+<v t="swot.20250827111836.1"><vh>8 获取的数据封装成 OperateLog 对象 -&gt; new OperateLog</vh></v>
+<v t="swot.20250827113326.1"><vh>9 将封装的 OperateLog 对象插入数据库表 operate_log 中 -&gt; mapper</vh></v>
 <v t="swot.20250827111333.1"><vh>10 返回操作方法执行的结果 result</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -7057,7 +7060,7 @@ after
 </t>
 <t tx="swot.20250825220409.1">@language asciidoc
 除了使用 execution() 切点表达式，
-还可以使用 @annotation() 切点表达式来根据目标方法是否有注解来进行匹配。
+还可以使用 @annotation() 切点表达式来 *根据目标方法是否有注解* 来进行匹配。
 
 </t>
 <t tx="swot.20250826094005.1" annotate="7d71002858080000007072696f7269747971014b02580a000000707269736574646174657102580a000000323032352d30392d32377103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e677104580700000072656c506174687105580d000000636c656f2f707269322e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e">@doc
@@ -7089,7 +7092,7 @@ public @interface Log {}  // &lt;1&gt;
 &lt;3&gt; `@Retention(RetentionPolicy.RUNTIME)`
 +
 - 指定注解的保留策略
-- `RetentionPolicy.RUNTIME` 表示注解在运行时仍然可用，可以通过反射获取
+- `RetentionPolicy.RUNTIME` 表示注解在 *运行时* 仍然可用，可以通过反射获取
 - 如果不写，默认是 `CLASS` 策略，运行时无法通过反射获取
 
 IMPORTANT: 在 AOP 场景中，@Before、@After 等注解都需要在运行时被 Spring AOP 框架通过反射读取，所以必须使用 RetentionPolicy.RUNTIME 策略。
@@ -7158,26 +7161,26 @@ public void updateDept(Dept dept) {
 ----
 @c
 @language java
+@Log  // &lt;1&gt;
 @Transactional(rollbackFor = Exception.class)
 @Override
-@Log  // &lt;1&gt;
-public void deleteDeptById(Integer id) throws Exception {
+public int deleteDeptById(Integer id) throws Exception {
     deptMapper.deleteDeptById(id);     // 删除部门
-    empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
+    int delInt = empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
     System.out.println(3 / 0);         // 运行时异常
+    return delInt;
 }
 @language asciidoc
 @doc
 ----
 
-&lt;1&gt; 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
+&lt;1&gt; 给方法增加自定义注解 @Log，让 @annotation() 切点表达式可以找到该方法。
 
-
-.使用 httpie 测试，查看后端日志中已经打印了方法执行耗时
+.使用 httpie 测试，查看后端日志
 [source,console]
 ----
 TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
-http DELETE :8080/depts/1 "token: $TOKEN"  # 会打印 before
+http DELETE :8080/depts/1 "token: $TOKEN"  # 有 @Log 注解，会打印 before
 http :8080/depts "token: $TOKEN"           # 不会打印 before
 http :8080/depts/1 "token: $TOKEN"         # 不会打印 before
 ----
@@ -7236,20 +7239,19 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class AnnotationAspectDemo {
 
-    // @Before：此注解标注的方法在目标方法前被执行。
+    // @Before：此注解标注的方法，在目标方法前被执行。
     @Before("@annotation(com.tjise.annotation.Log)")  // &lt;1&gt;
     public void before() {
         System.out.println("before");
     }
 }
-@language asciidoc
 @doc
 ----
 
-&lt;1&gt; 使用 @annotation() 切点表达式来根据目标方法是否有注解来进行匹配。
+&lt;1&gt; 使用 @annotation() 切点表达式来 *根据目标方法是否有注解* 来进行匹配。
 </t>
 <t tx="swot.20250826103953.1">@language asciidoc
-该注解的作用是将公共的切点表达式抽取出来，需要用到时引用该切点表达式即可。
+该注解的作用是将 *公共的切点表达式* 抽取出来，在需要用到时，引用该切点表达式即可。
 </t>
 <t tx="swot.20250826104547.1">@doc
 [source,java,linenum]
@@ -7268,18 +7270,18 @@ import org.springframework.stereotype.Component;
 public class PointcutAspectDemo {
 
     @Pointcut("execution(* com.tjise.service.impl.DeptServiceImpl.*(..))")  // &lt;1&gt;
-    public void pt(){}
+    public void pt(){} // 自定义名称，可以理解为 pointcut 简写
 
     // @Before：此注解标注的通知方法在目标方法前被执行。
     @Before("pt()")  // &lt;2&gt;
     public void before() {
-        System.out.println("before");
+        System.out.println("before by @Pointcut");
     }
 
     // @After ：此注解标注的通知方法在目标方法后被执行，无论是否有异常。
     @After("pt()")  // &lt;2&gt;
     public void after() {
-        System.out.println("after");
+        System.out.println("after by @Pointcut");
     }
 }
 @language asciidoc
@@ -7293,8 +7295,8 @@ public class PointcutAspectDemo {
 [source,console]
 ----
 TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
-http :8080/depts "token: $TOKEN"    # 会打印 before 和 after
-http :8080/depts/1 "token: $TOKEN"  # 会打印 before 和 after
+http :8080/depts "token: $TOKEN"    # 会打印 before  by @Pointcut 和 after by @Pointcut
+http :8080/depts/1 "token: $TOKEN"  # 会打印 before  by @Pointcut 和 after by @Pointcut
 ----
 </t>
 <t tx="swot.20250826111958.1">@language asciidoc
@@ -7715,46 +7717,8 @@ public void updateEmp(Emp emp) {
 
 &lt;1&gt; 给方法增加自定义注解，让 @annotation() 切点表达式可以找到该方法。
 </t>
-<t tx="swot.20250826233540.1">@doc
-[source,java]
-----
-@c
-@language java
-package com.tjise.aop;
-
-import com.alibaba.fastjson2.JSONObject;
-import com.tjise.mapper.OperateLogMapper;
-import com.tjise.utils.JwtUtils;
-import com.tjise.pojo.OperateLog;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-
-@Aspect
-@Component
-public class LogAspect {
-
-    // request 含有用户上传的参数，其中有 token 可以解出登录的用户信息，如 id
-    @Autowired
-    private HttpServletRequest request;
-
-    // 把 OperateLogMapper 接口的实现类对象注入
-    @Autowired
-    private OperateLogMapper operateLogMapper;
-
-    @Around("@annotation(com.tjise.annotation.Log)")
-    public Object logServiceCURD(ProceedingJoinPoint joinPoint) throws Throwable {
-        @others
-    } 
-}
-@doc
-----
+<t tx="swot.20250826233540.1">@language java
+@others
 </t>
 <t tx="swot.20250826235039.1">@doc
 .解析出已登录用户的 id
@@ -7836,6 +7800,7 @@ long costTime = end - begin;
 ----
 @c
 @language java
+// @Around 注解的方法必须返回对象
 return result;
 @doc
 ----
@@ -11877,6 +11842,47 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+</t>
+<t tx="swot.20250930093415.1">package com.tjise.aop;
+
+import com.alibaba.fastjson2.JSONObject;
+import com.tjise.mapper.OperateLogMapper;
+import com.tjise.utils.JwtUtils;
+import com.tjise.pojo.OperateLog;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+</t>
+<t tx="swot.20250930093548.1">@doc
+[source,java]
+----
+@c
+@Aspect
+@Component
+public class LogAspect {
+
+    // request 含有用户上传的参数，其中有 token 可以解出登录的用户信息，如 id
+    @Autowired
+    private HttpServletRequest request;
+
+    // 把 OperateLogMapper 接口的实现类对象注入
+    @Autowired
+    private OperateLogMapper operateLogMapper;
+
+    @Around("@annotation(com.tjise.annotation.Log)")
+    public Object logServiceCUD(ProceedingJoinPoint joinPoint) throws Throwable {
+        // CUD 表示 CRUD 排除了查询的业务
+        @others
+    } 
+}
+@doc
+----
 </t>
 </tnodes>
 </leo_file>
