@@ -5927,7 +5927,7 @@ return result;
 
 
 ==== 22.1 了解知识点 jedis
-IMPORTANT: 我们在 Spring Boot 中使用 `spring-boot-starter-data-redis`，下面是直接使用 jedis 的知识点，作为了解即可。
+IMPORTANT: 我们在 Spring Boot 中使用 `spring-boot-starter-data-redis`，不会直接使用下面的 jedis 驱动库，此处 jedis 作为了解即可。
 
 .直接使用依赖 jedis
 [source,scss]
@@ -5939,7 +5939,6 @@ IMPORTANT: 我们在 Spring Boot 中使用 `spring-boot-starter-data-redis`，�
     <version>5.2.0</version>
 </dependency>
 ....
-
 
 .测试代码
 [source,java]
@@ -5960,7 +5959,7 @@ NOTE: 其他类型的例子省略。
 **以上作为了解知识点，下面我们使用 `spring-boot-starter-data-redis` 依赖，它的驱动库是 lettuce。**
 
 
-如果不想使用 lettuce 驱动库，也是可以使用 jedis 驱动库的。
+如果不想使用 lettuce 驱动库，也是可以使用 jedis 驱动库。
 
 .Spring Boot Starter Data Redis 如何使用 jedis 驱动库
 ****
@@ -5989,11 +5988,11 @@ NOTE: 其他类型的例子省略。
 ****
 
 ==== 22.2 登录时将 token 放入 Redis 数据库
-为什么要将 token 放入 redis 数据库中？
+为什么要将 token 放入 redis 数据库中？有以下不完美的地方。
 
 1. 过期时间记录在 token 中，后端无法将用户踢下线。
 
-2. 如果将 token 存入关系型数据库中，如 MySQL，则太慢了。
+2. 如果后端想能将登录的用户踢下线，可以将 token 存入关系型数据库中，如 MySQL，但是相对来说又太慢了。
 
 所以复用 redis 数据库快的特点做平衡，即能保证功能，也能速度很快。
 
@@ -6030,7 +6029,7 @@ spring:
             max-file-size: 10MB     # 指定单个文件上传的大小
             max-request-size: 100MB  # 指定单次请求上传文件的总大小
 
-    # 新增配置 redis
+    # --- New Added 配置 redis ---
     redis:
         database: 0
         host: 127.0.0.1
@@ -6086,8 +6085,8 @@ private StringRedisTemplate stringRedisTemplate;
 [source,java]
 ----
 stringRedisTemplate.opsForValue().set(
-        e.getUsername(),       // key，将用户名存入 redis
-        jwt,                   // value
+        e.getUsername(),       // key，将用户名 username 存入 redis
+        jwt,                   // value，将 token 存入 redis
         JwtUtils.expire,       // 过期时间
         TimeUnit.MILLISECONDS  // 时间单位
 );
@@ -6099,7 +6098,7 @@ http -v post http://localhost:8080/login username=limuwan password=123456
 
 进入 redis 查看是否有以用户名 limuwan 为 key 的值。
 
-==== 22.3 前端请求服务器 api 时进行 token 对比
+==== 22.3 前端请求服务器 api 时在后端进行 token 对比
 
 
 ===== file -> src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java
@@ -6150,6 +6149,8 @@ public boolean preHandle(HttpServletRequest request,
     String username = (String) payload.get("username");
     String tokenFromRedis = stringRedisTemplate.opsForValue()
                                                .get(username);
+    // 如果为 null 说明该用户不在线（如未注册、key过期、被删除踢下线）
+    // tokenFromRedis 与 jwt 不相等，说明 jwt 提供的是非法用户
     if (tokenFromRedis == null || !tokenFromRedis.equals(jwt)) {
         sendErrorResponse(response);
         return false;
@@ -6165,5 +6166,33 @@ public boolean preHandle(HttpServletRequest request,
 TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
 http :8080/depts "token: $TOKEN"
 http :8080/depts/1 "token: $TOKEN"
+----
+
+==== 22.4 测试功能
+1. 使用用户 limuwan 正常登录系统
++
+[source,console]
+----
+TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r '.data')
+----
+
+2. 访问部门列表
++
+.可以正常访问
+[source,console]
+----
+http :8080/depts "token: $TOKEN"
+----
+
+3. 从 redis 数据库中删除 key `limuwan`
++
+image::img/redis_delete_key.png[,800]
+
+4. 还是使用原来的 token 去访问部门列表
++
+.不允许访问 NOT_LOGIN
+[source,console]
+----
+http :8080/depts "token: $TOKEN"
 ----
 

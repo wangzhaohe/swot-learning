@@ -640,7 +640,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_22_1_了解知识点_jedis">22.1 了解知识点 jedis</a></li>
 <li><a href="#_22_2_登录时将_token_放入_redis_数据库">22.2 登录时将 token 放入 Redis 数据库</a></li>
-<li><a href="#_22_3_前端请求服务器_api_时进行_token_对比">22.3 前端请求服务器 api 时进行 token 对比</a></li>
+<li><a href="#_22_3_前端请求服务器_api_时在后端进行_token_对比">22.3 前端请求服务器 api 时在后端进行 token 对比</a></li>
+<li><a href="#_22_4_测试功能">22.4 测试功能</a></li>
 </ul>
 </li>
 </ul>
@@ -11120,7 +11121,7 @@ after4 -&gt; @Order(66)</pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-我们在 Spring Boot 中使用 <code>spring-boot-starter-data-redis</code>，下面是直接使用 jedis 的知识点，作为了解即可。
+我们在 Spring Boot 中使用 <code>spring-boot-starter-data-redis</code>，不会直接使用下面的 jedis 驱动库，此处 jedis 作为了解即可。
 </td>
 </tr>
 </table>
@@ -11166,7 +11167,7 @@ after4 -&gt; @Order(66)</pre>
 <p><strong>以上作为了解知识点，下面我们使用 <code>spring-boot-starter-data-redis</code> 依赖，它的驱动库是 lettuce。</strong></p>
 </div>
 <div class="paragraph">
-<p>如果不想使用 lettuce 驱动库，也是可以使用 jedis 驱动库的。</p>
+<p>如果不想使用 lettuce 驱动库，也是可以使用 jedis 驱动库。</p>
 </div>
 <div class="sidebarblock">
 <div class="content">
@@ -11201,7 +11202,7 @@ after4 -&gt; @Order(66)</pre>
 <div class="sect3">
 <h4 id="_22_2_登录时将_token_放入_redis_数据库">22.2 登录时将 token 放入 Redis 数据库</h4>
 <div class="paragraph">
-<p>为什么要将 token 放入 redis 数据库中？</p>
+<p>为什么要将 token 放入 redis 数据库中？有以下不完美的地方。</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -11209,7 +11210,7 @@ after4 -&gt; @Order(66)</pre>
 <p>过期时间记录在 token 中，后端无法将用户踢下线。</p>
 </li>
 <li>
-<p>如果将 token 存入关系型数据库中，如 MySQL，则太慢了。</p>
+<p>如果后端想能将登录的用户踢下线，可以将 token 存入关系型数据库中，如 MySQL，但是相对来说又太慢了。</p>
 </li>
 </ol>
 </div>
@@ -11251,7 +11252,7 @@ after4 -&gt; @Order(66)</pre>
             <span class="tok-nb">max</span><span class="tok-o">-</span><span class="tok-n">file</span><span class="tok-o">-</span><span class="tok-n">size</span><span class="tok-p">:</span> <span class="tok-mi">10</span><span class="tok-n">MB</span>     <span class="tok-c1"># 指定单个文件上传的大小</span>
             <span class="tok-nb">max</span><span class="tok-o">-</span><span class="tok-n">request</span><span class="tok-o">-</span><span class="tok-n">size</span><span class="tok-p">:</span> <span class="tok-mi">100</span><span class="tok-n">MB</span>  <span class="tok-c1"># 指定单次请求上传文件的总大小</span>
 
-    <span class="tok-c1"># 新增配置 redis</span>
+    <span class="tok-c1"># --- New Added 配置 redis ---</span>
     <span class="tok-n">redis</span><span class="tok-p">:</span>
         <span class="tok-n">database</span><span class="tok-p">:</span> <span class="tok-mi">0</span>
         <span class="tok-n">host</span><span class="tok-p">:</span> <span class="tok-mf">127.0.0.1</span>
@@ -11313,8 +11314,8 @@ after4 -&gt; @Order(66)</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">stringRedisTemplate</span><span class="tok-p">.</span><span class="tok-na">opsForValue</span><span class="tok-p">().</span><span class="tok-na">set</span><span class="tok-p">(</span>
-<span class="tok-w">        </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getUsername</span><span class="tok-p">(),</span><span class="tok-w">       </span><span class="tok-c1">// key，将用户名存入 redis</span>
-<span class="tok-w">        </span><span class="tok-n">jwt</span><span class="tok-p">,</span><span class="tok-w">                   </span><span class="tok-c1">// value</span>
+<span class="tok-w">        </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getUsername</span><span class="tok-p">(),</span><span class="tok-w">       </span><span class="tok-c1">// key，将用户名 username 存入 redis</span>
+<span class="tok-w">        </span><span class="tok-n">jwt</span><span class="tok-p">,</span><span class="tok-w">                   </span><span class="tok-c1">// value，将 token 存入 redis</span>
 <span class="tok-w">        </span><span class="tok-n">JwtUtils</span><span class="tok-p">.</span><span class="tok-na">expire</span><span class="tok-p">,</span><span class="tok-w">       </span><span class="tok-c1">// 过期时间</span>
 <span class="tok-w">        </span><span class="tok-n">TimeUnit</span><span class="tok-p">.</span><span class="tok-na">MILLISECONDS</span><span class="tok-w">  </span><span class="tok-c1">// 时间单位</span>
 <span class="tok-p">);</span></code></pre>
@@ -11338,7 +11339,7 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_22_3_前端请求服务器_api_时进行_token_对比">22.3 前端请求服务器 api 时进行 token 对比</h4>
+<h4 id="_22_3_前端请求服务器_api_时在后端进行_token_对比">22.3 前端请求服务器 api 时在后端进行 token 对比</h4>
 <div class="sect4">
 <h5 id="_file_srcmainjavacomtjiseinterceptorlogincheckedinterceptor_java_3">file &#8594; src/main/java/com/tjise/interceptor/LoginCheckedInterceptor.java</h5>
 <div class="sect5">
@@ -11389,6 +11390,8 @@ after4 -&gt; @Order(66)</pre>
 <span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">username</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">payload</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-s">&quot;username&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">tokenFromRedis</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">stringRedisTemplate</span><span class="tok-p">.</span><span class="tok-na">opsForValue</span><span class="tok-p">()</span>
 <span class="tok-w">                                               </span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">username</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-c1">// 如果为 null 说明该用户不在线（如未注册、key过期、被删除踢下线）</span>
+<span class="tok-w">    </span><span class="tok-c1">// tokenFromRedis 与 jwt 不相等，说明 jwt 提供的是非法用户</span>
 <span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">tokenFromRedis</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-o">!</span><span class="tok-n">tokenFromRedis</span><span class="tok-p">.</span><span class="tok-na">equals</span><span class="tok-p">(</span><span class="tok-n">jwt</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">sendErrorResponse</span><span class="tok-p">(</span><span class="tok-n">response</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">;</span>
@@ -11409,13 +11412,54 @@ after4 -&gt; @Order(66)</pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_22_4_测试功能">22.4 测试功能</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>使用用户 limuwan 正常登录系统</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">TOKEN=$(http POST :8080/login username=limuwan password=123456 | jq -r &#39;.data&#39;)</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>访问部门列表</p>
+<div class="listingblock">
+<div class="title">可以正常访问</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8080/depts &quot;token: $TOKEN&quot;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>从 redis 数据库中删除 key <code>limuwan</code></p>
+<div class="imageblock">
+<div class="content">
+<img src="img/redis_delete_key.png" alt="redis delete key" width="800">
+</div>
+</div>
+</li>
+<li>
+<p>还是使用原来的 token 去访问部门列表</p>
+<div class="listingblock">
+<div class="title">不允许访问 NOT_LOGIN</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8080/depts &quot;token: $TOKEN&quot;</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-30 11:31:40 +0800
+Last updated 2025-09-30 14:56:47 +0800
 </div>
 </div>
 </body>
