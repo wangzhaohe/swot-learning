@@ -5638,7 +5638,7 @@ http :8080/depts/1 "token: $TOKEN"
 ----
 
 ==== 21.4 面向切面 AOP 案例 -> 增删改操作日志保存到数据库中
-将前面的部门和员工管理案例中对业务类（service）中的 增、删、改 方法的操作日志保存到数据库（MySQL）中。
+将前面的部门和员工管理案例中对业务类（service）中的 增、删、改（注意没有查询操作）方法的操作日志保存到数据库（MySQL）中。
 
 思路分析：
 
@@ -5660,18 +5660,18 @@ http :8080/depts/1 "token: $TOKEN"
 ----
 create table operate_log(
     id            int unsigned primary key auto_increment comment 'ID',
-    operate_user  int unsigned comment '操作人',
-    operate_time  datetime     comment '操作时间',
-    class_name    varchar(100) comment '操作的类名',
-    method_name   varchar(100) comment '操作的方法名',
-    method_params varchar(1000 comment '方法参数',
-    return_value  varchar(2000 comment '返回值',
-    cost_time     bigint       comment '方法执行耗时, 单位:ms'
+    operate_user  int unsigned  comment '操作人ID',
+    operate_time  datetime      comment '操作时间',
+    class_name    varchar(100)  comment '操作的类名',
+    method_name   varchar(100)  comment '操作的方法名',
+    method_params varchar(1000) comment '方法参数',
+    return_value  varchar(2000) comment '返回值',
+    cost_time     bigint        comment '方法执行耗时, 单位:ms'
 ) comment '操作日志表';
 ----
 
 ===== file -> src/main/java/com/tjise/pojo/OperateLog.java
-.定义数据库操作日志表对应的实体类
+.定义数据库操作日志表 operate_log 对应的实体类
 [source,java]
 ----
 package com.tjise.pojo;
@@ -5711,7 +5711,7 @@ public interface OperateLogMapper {
     //插入日志数据
     @Insert("insert into operate_log (operate_user, operate_time, class_name, method_name, method_params, return_value, cost_time) " +
             "values (#{operateUser}, #{operateTime}, #{className}, #{methodName}, #{methodParams}, #{returnValue}, #{costTime})")
-    public void insert(OperateLog log);
+    public void insert(OperateLog log);  // 从 service 传入实体类对象
 }
 ----
 
@@ -5754,10 +5754,10 @@ public void updateDept(Dept dept) {
 @Transactional(rollbackFor = Exception.class)
 @Override
 @Log  // <1>
-public void deleteDeptById(Integer id) throws Exception {
+public int deleteDeptById(Integer id) throws Exception {
 
     deptMapper.deleteDeptById(id);     // 删除部门
-    empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
+    return empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
 }
 ----
 
@@ -5814,8 +5814,8 @@ public void deleteEmpByIds(List<Integer> ids) {
 @Transactional
 @Log  // <1>
 @Override
-public void deleteEmpByDeptId(Integer deptId) {
-    empMapper.deleteEmpByDeptId(deptId);
+public int deleteEmpByDeptId(Integer deptId) {
+    return empMapper.deleteEmpByDeptId(deptId);
 }
 ----
 
@@ -5841,7 +5841,7 @@ public class LogAspect {
 
     @Around("@annotation(com.tjise.annotation.Log)")
     public Object logServiceCUD(ProceedingJoinPoint joinPoint) throws Throwable {
-        // CUD 表示 CRUD 排除了查询的业务
+        // CUD 表示 CRUD 排除了查询的 READ 业务
         @others
     } 
 }
@@ -5883,7 +5883,7 @@ String methodParams = Arrays.toString(joinPoint.getArgs());
 [source,java]
 ----
 long begin = System.currentTimeMillis();  // 操作方法执行开始时间
-Object result = joinPoint.proceed();      // 有异常就抛出
+Object result = joinPoint.proceed();      // 执行方法，有异常就抛出
 long end = System.currentTimeMillis();    // 操作方法执行结束时间
 // 对象转字符串
 String returnValue = JSONObject.toJSONString(result);
@@ -5992,12 +5992,15 @@ NOTE: 其他类型的例子省略。
 为什么要将 token 放入 redis 数据库中？
 
 1. 过期时间记录在 token 中，后端无法将用户踢下线。
-2. 将 token 存入关系型数据库中，太慢了。
+
+2. 如果将 token 存入关系型数据库中，如 MySQL，则太慢了。
+
+所以复用 redis 数据库快的特点做平衡，即能保证功能，也能速度很快。
 
 ===== file -> pom.xml
 
 
-====== redis
+====== 增加依赖 redis
 [source,scss]
 ....
 <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->

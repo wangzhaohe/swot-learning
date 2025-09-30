@@ -888,7 +888,7 @@
 <v t="swot.20250906181440.5"><vh>fastjson2</vh></v>
 <v t="swot.20250906181440.6" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30392d303671077573732e"><vh>aop</vh></v>
 </v>
-<v t="swot.20250906182038.1" descendentVnodeUnknownAttributes="7d710058010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d30392d3036710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>redis</vh></v>
+<v t="swot.20250906182038.1" descendentVnodeUnknownAttributes="7d710058010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d30392d3036710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>增加依赖 redis</vh></v>
 </v>
 </v>
 </v>
@@ -4867,7 +4867,7 @@ Package:   com.ecommerce.platform.userservice
 </t>
 <t tx="swot.20250823201332.1"></t>
 <t tx="swot.20250823201333.1">@language asciidoc
-将前面的部门和员工管理案例中对业务类（service）中的 增、删、改 方法的操作日志保存到数据库（MySQL）中。
+将前面的部门和员工管理案例中对业务类（service）中的 增、删、改（注意没有查询操作）方法的操作日志保存到数据库（MySQL）中。
 
 思路分析：
 
@@ -7360,19 +7360,19 @@ http :8080/depts/1 "token: $TOKEN"
 @language sql
 create table operate_log(
     id            int unsigned primary key auto_increment comment 'ID',
-    operate_user  int unsigned comment '操作人',
-    operate_time  datetime     comment '操作时间',
-    class_name    varchar(100) comment '操作的类名',
-    method_name   varchar(100) comment '操作的方法名',
-    method_params varchar(1000 comment '方法参数',
-    return_value  varchar(2000 comment '返回值',
-    cost_time     bigint       comment '方法执行耗时, 单位:ms'
+    operate_user  int unsigned  comment '操作人ID',
+    operate_time  datetime      comment '操作时间',
+    class_name    varchar(100)  comment '操作的类名',
+    method_name   varchar(100)  comment '操作的方法名',
+    method_params varchar(1000) comment '方法参数',
+    return_value  varchar(2000) comment '返回值',
+    cost_time     bigint        comment '方法执行耗时, 单位:ms'
 ) comment '操作日志表';
 @doc
 ----
 </t>
 <t tx="swot.20250826210125.1">@doc
-.定义数据库操作日志表对应的实体类
+.定义数据库操作日志表 operate_log 对应的实体类
 [source,java]
 ----
 @c
@@ -7417,7 +7417,7 @@ public interface OperateLogMapper {
     //插入日志数据
     @Insert("insert into operate_log (operate_user, operate_time, class_name, method_name, method_params, return_value, cost_time) " +
             "values (#{operateUser}, #{operateTime}, #{className}, #{methodName}, #{methodParams}, #{returnValue}, #{costTime})")
-    public void insert(OperateLog log);
+    public void insert(OperateLog log);  // 从 service 传入实体类对象
 }
 @doc
 ----
@@ -7555,10 +7555,10 @@ public List&lt;Dept&gt; selectAllDept() {
 @Transactional(rollbackFor = Exception.class)
 @Override
 @Log  // &lt;1&gt;
-public void deleteDeptById(Integer id) throws Exception {
+public int deleteDeptById(Integer id) throws Exception {
 
     deptMapper.deleteDeptById(id);     // 删除部门
-    empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
+    return empService.deleteEmpByDeptId(id);  // 把此部门的员工删除
 }
 @language asciidoc
 @doc
@@ -7592,8 +7592,8 @@ public Emp login(Emp emp) {
 @Transactional
 @Log  // &lt;1&gt;
 @Override
-public void deleteEmpByDeptId(Integer deptId) {
-    empMapper.deleteEmpByDeptId(deptId);
+public int deleteEmpByDeptId(Integer deptId) {
+    return empMapper.deleteEmpByDeptId(deptId);
 }
 @language asciidoc
 @doc
@@ -7777,7 +7777,7 @@ String methodParams = Arrays.toString(joinPoint.getArgs());
 @c
 @language java
 long begin = System.currentTimeMillis();  // 操作方法执行开始时间
-Object result = joinPoint.proceed();      // 有异常就抛出
+Object result = joinPoint.proceed();      // 执行方法，有异常就抛出
 long end = System.currentTimeMillis();    // 操作方法执行结束时间
 // 对象转字符串
 String returnValue = JSONObject.toJSONString(result);
@@ -8145,8 +8145,10 @@ public void addInterceptors(InterceptorRegistry registry){
 为什么要将 token 放入 redis 数据库中？
 
 1. 过期时间记录在 token 中，后端无法将用户踢下线。
-2. 将 token 存入关系型数据库中，太慢了。
 
+2. 如果将 token 存入关系型数据库中，如 MySQL，则太慢了。
+
+所以复用 redis 数据库快的特点做平衡，即能保证功能，也能速度很快。
 </t>
 <t tx="swot.20250906160928.1"></t>
 <t tx="swot.20250906161437.1"></t>
@@ -11877,7 +11879,7 @@ public class LogAspect {
 
     @Around("@annotation(com.tjise.annotation.Log)")
     public Object logServiceCUD(ProceedingJoinPoint joinPoint) throws Throwable {
-        // CUD 表示 CRUD 排除了查询的业务
+        // CUD 表示 CRUD 排除了查询的 READ 业务
         @others
     } 
 }
