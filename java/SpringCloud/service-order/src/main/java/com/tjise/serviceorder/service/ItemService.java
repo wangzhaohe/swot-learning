@@ -64,7 +64,6 @@ public class ItemService {  // 商品服务类
         }
 
         // restTemplate 会自动应用负载均衡，上面的实例选取只是为了能演示出负载均衡的策略。
-        // 当服务不可用时，RestTemplate 会抛出异常，让断路器捕获
         Item item = restTemplate.getForObject(
                 "http://app-item/item/" + id, Item.class);  // <1>
 
@@ -77,7 +76,7 @@ public class ItemService {  // 商品服务类
     // ----
     //
     // <1> app-item 是 service-item 在 Eureka 中注册的服务名。
-    //@+node:swot.20251001074653.5: *3* @ignore-node 方式二: OkHttpClient -> queryItemByIdWithOkHttpClient -> OkHttpClient 本身不支持服务发现功能，需要自己实现
+    //@+node:swot.20251001074653.5: *3* 方式二: OkHttpClient -> queryItemByIdWithOkHttpClient -> OkHttpClient 本身不支持服务发现功能，需要自己实现
     //@+doc
     // [source,java]
     // ----
