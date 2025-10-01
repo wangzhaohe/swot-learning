@@ -2445,18 +2445,21 @@ NOTE: 实际生产要宽松一些的。
 
 
 ===== class OrderService
+[source,java]
+----
 /**
  * 订单服务类
  * 提供订单查询功能，并通过调用商品服务获取商品详细信息
  */
 @Service
 public class OrderService {
-    
+
     @Autowired
     private CircuitBreakerRegistry circuitBreakerRegistry;
-    
+
     @others
 }
+----
 
 ====== Item queryItemByIdWithCircuitBreaker
 [source,java]
@@ -2495,6 +2498,8 @@ public Item queryItemByIdFallback(Long id, Throwable throwable) {
 ----
 
 ====== queryOrderById
+[source,java]
+----
 // 注入商品服务，用于查询商品详细信息
 @Autowired
 private ItemService itemService;
@@ -2532,6 +2537,7 @@ public Order queryOrderById(String orderId) throws IOException {
     }
     return order;
 }
+----
 
 ==== 测试 Resilience4j
 测试步骤：

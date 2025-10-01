@@ -15,16 +15,21 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 //@+node:swot.20251001110527.3: ** class OrderService
+//@+doc
+// [source,java]
+// ----
+//@@c
+//@@language java
 /**
  * 订单服务类
  * 提供订单查询功能，并通过调用商品服务获取商品详细信息
  */
 @Service
 public class OrderService {
-    
+
     @Autowired
     private CircuitBreakerRegistry circuitBreakerRegistry;
-    
+
     //@+others
     //@+node:swot.20251001110527.4: *3* @ignore-tree ORDER_DATA 模拟数据
     // 使用静态Map模拟数据库存储订单数据
@@ -122,6 +127,11 @@ public class OrderService {
     // ----
     //
     //@+node:swot.20251001110527.7: *3* queryOrderById
+    //@+doc
+    // [source,java]
+    // ----
+    //@@c
+    //@@language java
     // 注入商品服务，用于查询商品详细信息
     @Autowired
     private ItemService itemService;
@@ -159,7 +169,12 @@ public class OrderService {
         }
         return order;
     }
+    //@+doc
+    // ----
     //@-others
 }
+//@+doc
+// ----
+//
 //@-others
 //@-leo

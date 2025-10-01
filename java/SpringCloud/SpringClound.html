@@ -4031,24 +4031,20 @@ Transfer-Encoding: chunked
 <h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_4">@file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h4>
 <div class="sect4">
 <h5 id="_class_orderservice_3">class OrderService</h5>
-<div class="paragraph">
-<p>/**
- * 订单服务类
- * 提供订单查询功能，并通过调用商品服务获取商品详细信息
- */
-@Service
-public class OrderService {</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>@Autowired
-private CircuitBreakerRegistry circuitBreakerRegistry;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    @others
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务类</span>
+<span class="tok-cm"> * 提供订单查询功能，并通过调用商品服务获取商品详细信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">CircuitBreakerRegistry</span><span class="tok-w"> </span><span class="tok-n">circuitBreakerRegistry</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 <div class="sect5">
@@ -4093,45 +4089,45 @@ private CircuitBreakerRegistry circuitBreakerRegistry;</pre>
 </div>
 <div class="sect5">
 <h6 id="_queryorderbyid_3">queryOrderById</h6>
-<div class="paragraph">
-<p>@Autowired
-private ItemService itemService;
-/**
- * 根据订单ID查询订单数据
- *
- * @param orderId 订单ID
- * @return Order 订单信息，包含完整的商品详情
- */
-public Order queryOrderById(String orderId) throws IOException {
-    // 从模拟数据库中查询订单
-    Order order = ORDER_DATA.get(orderId);
-    if (null == order) {
-        return null;
-    }
-    // 获取订单详情列表
-    List&lt;OrderDetail&gt; orderDetails = order.getOrderDetails();</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>    // 遍历订单详情，通过商品微服务查询商品详细数据
-    for (OrderDetail orderDetail : orderDetails) {
-        // 通过商品微服务查询商品详细数据
-        try {
-            Item item = queryItemByIdWithCircuitBreaker(orderDetail.getItem().getId());
-            if (null == item) {
-                continue;
-            }
-            // 将查询到的商品详细信息设置到订单详情中
-            orderDetail.setItem(item);
-        } catch (Exception e) {
-            // 如果断路器抛出异常，使用降级商品
-            // 注意：这里不再打印日志，因为 queryItemByIdWithCircuitBreaker 中已经处理了异常
-            Item fallbackItem = queryItemByIdFallback(orderDetail.getItem().getId(), e);
-            orderDetail.setItem(fallbackItem);
-        }
-    }
-    return order;
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 注入商品服务，用于查询商品详细信息</span>
+<span class="tok-nd">@Autowired</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 根据订单ID查询订单数据</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * @param orderId 订单ID</span>
+<span class="tok-cm"> * @return Order 订单信息，包含完整的商品详情</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 从模拟数据库中查询订单</span>
+<span class="tok-w">    </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 获取订单详情列表</span>
+<span class="tok-w">    </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderDetails</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 遍历订单详情，通过商品微服务查询商品详细数据</span>
+<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">OrderDetail</span><span class="tok-w"> </span><span class="tok-n">orderDetail</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 通过商品微服务查询商品详细数据</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">queryItemByIdWithCircuitBreaker</span><span class="tok-p">(</span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">());</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-k">continue</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-c1">// 将查询到的商品详细信息设置到订单详情中</span>
+<span class="tok-w">            </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 如果断路器抛出异常，使用降级商品</span>
+<span class="tok-w">            </span><span class="tok-c1">// 注意：这里不再打印日志，因为 queryItemByIdWithCircuitBreaker 中已经处理了异常</span>
+<span class="tok-w">            </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">fallbackItem</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">queryItemByIdFallback</span><span class="tok-p">(</span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">fallbackItem</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -4273,7 +4269,7 @@ public Order queryOrderById(String orderId) throws IOException {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-01 18:33:20 +0800
+Last updated 2025-10-01 18:48:56 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
