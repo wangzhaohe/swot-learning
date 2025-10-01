@@ -3647,9 +3647,6 @@ Docker 已经预留了一个特殊 DNS 名：host.docker.internal<br>
 <pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8091/order/201810300001</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>+</p>
-</div>
 <div class="literalblock">
 <div class="content">
 <pre>HTTP/1.1 200
@@ -3707,115 +3704,121 @@ Transfer-Encoding: chunked
 </div>
 <div class="sect5">
 <h6 id="_class_orderservice_2">class OrderService</h6>
-<div class="paragraph">
-<p>/**
- * 订单服务类
- * 提供订单查询功能，并通过调用商品服务获取商品详细信息
- */
-@Service
-public class OrderService {
-    @others
-}</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务类</span>
+<span class="tok-cm"> * 提供订单查询功能，并通过调用商品服务获取商品详细信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_order_data_模拟数据_2">ORDER_DATA 模拟数据</h6>
-<div class="paragraph">
-<p>private static final Map&lt;String, Order&gt; ORDER_DATA = new HashMap&lt;String, Order&gt;();
-static {
-    // 模拟数据库，构造测试数据
-    @others
-}</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 使用静态Map模拟数据库存储订单数据</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">Map</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">ORDER_DATA</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">HashMap</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-o">&gt;</span><span class="tok-p">();</span>
+<span class="tok-c1">// 初始化订单数据</span>
+<span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 模拟数据库，构造测试数据</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_第一个订单_order">第一个订单 order</h6>
-<div class="paragraph">
-<p>Order order = new Order();
-order.setOrderId("201810300001");
-order.setCreateDate(new Date());
-order.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
-order.setUserId(1L);
-List&lt;OrderDetail&gt; orderDetails = new ArrayList&lt;OrderDetail&gt;();</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-p">();</span>
+<span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">setOrderId</span><span class="tok-p">(</span><span class="tok-s">&quot;201810300001&quot;</span><span class="tok-p">);</span>
+<span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">setCreateDate</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Date</span><span class="tok-p">());</span>
+<span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">setUpdateDate</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getCreateDate</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// 真会偷懒呀</span>
+<span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">setUserId</span><span class="tok-p">(</span><span class="tok-mi">1L</span><span class="tok-p">);</span>
+<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-p">();</span>
+
+<span class="tok-c1">// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）</span>
+<span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-mi">1L</span><span class="tok-p">);</span>
+<span class="tok-n">orderDetails</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">));</span>
+
+<span class="tok-c1">// 创建第二个商品详情</span>
+<span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-mi">2L</span><span class="tok-p">);</span>
+<span class="tok-n">orderDetails</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">));</span>
+
+<span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">setOrderDetails</span><span class="tok-p">(</span><span class="tok-n">orderDetails</span><span class="tok-p">);</span>
+
+<span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">);</span></code></pre>
 </div>
-<div class="paragraph">
-<p>Item item = new Item();
-item.setId(1L);
-orderDetails.add(new OrderDetail(order.getOrderId(), item));</p>
-</div>
-<div class="paragraph">
-<p>item = new Item();
-item.setId(2L);
-orderDetails.add(new OrderDetail(order.getOrderId(), item));</p>
-</div>
-<div class="paragraph">
-<p>order.setOrderDetails(orderDetails);</p>
-</div>
-<div class="paragraph">
-<p>ORDER_DATA.put(order.getOrderId(), order);</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_第二个订单_order2">第二个订单 order2</h6>
-<div class="paragraph">
-<p>Order order2 = new Order();
-order2.setOrderId("201810300002");
-order2.setCreateDate(new Date());
-order2.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
-order2.setUserId(2L);
-List&lt;OrderDetail&gt; orderDetails2 = new ArrayList&lt;OrderDetail&gt;();</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order2</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-p">();</span>
+<span class="tok-n">order2</span><span class="tok-p">.</span><span class="tok-na">setOrderId</span><span class="tok-p">(</span><span class="tok-s">&quot;201810300002&quot;</span><span class="tok-p">);</span>
+<span class="tok-n">order2</span><span class="tok-p">.</span><span class="tok-na">setCreateDate</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Date</span><span class="tok-p">());</span>
+<span class="tok-n">order2</span><span class="tok-p">.</span><span class="tok-na">setUpdateDate</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getCreateDate</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// 真会偷懒呀</span>
+<span class="tok-n">order2</span><span class="tok-p">.</span><span class="tok-na">setUserId</span><span class="tok-p">(</span><span class="tok-mi">2L</span><span class="tok-p">);</span>
+<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails2</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-p">();</span>
+
+<span class="tok-c1">// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）</span>
+<span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item2</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item2</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-mi">3L</span><span class="tok-p">);</span>
+<span class="tok-n">orderDetails2</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order2</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item2</span><span class="tok-p">));</span>
+
+<span class="tok-c1">// 创建第二个商品详情</span>
+<span class="tok-n">item2</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item2</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-mi">4L</span><span class="tok-p">);</span>
+<span class="tok-n">orderDetails2</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order2</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item2</span><span class="tok-p">));</span>
+
+<span class="tok-n">order2</span><span class="tok-p">.</span><span class="tok-na">setOrderDetails</span><span class="tok-p">(</span><span class="tok-n">orderDetails2</span><span class="tok-p">);</span>
+
+<span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-n">order2</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">order2</span><span class="tok-p">);</span></code></pre>
 </div>
-<div class="paragraph">
-<p>Item item2 = new Item();
-item2.setId(3L);
-orderDetails2.add(new OrderDetail(order2.getOrderId(), item2));</p>
-</div>
-<div class="paragraph">
-<p>item2 = new Item();
-item2.setId(4L);
-orderDetails2.add(new OrderDetail(order2.getOrderId(), item2));</p>
-</div>
-<div class="paragraph">
-<p>order2.setOrderDetails(orderDetails2);</p>
-</div>
-<div class="paragraph">
-<p>ORDER_DATA.put(order2.getOrderId(), order2);</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_queryorderbyid_2">queryOrderById</h6>
-<div class="paragraph">
-<p>@Autowired
-private ItemService itemService;
-/**
- * 根据订单ID查询订单数据
- *
- * @param orderId 订单ID
- * @return Order 订单信息，包含完整的商品详情
- */
-public Order queryOrderById(String orderId) throws IOException {
-    // 从模拟数据库中查询订单
-    Order order = ORDER_DATA.get(orderId);
-    if (null == order) {
-        return null;
-    }
-    // 获取订单详情列表
-    List&lt;OrderDetail&gt; orderDetails = order.getOrderDetails();</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>    // 遍历订单详情，通过商品微服务查询商品详细数据
-    for (OrderDetail orderDetail : orderDetails) {
-        // 通过商品微服务查询商品详细数据
-        Item item = itemService.queryItemById(orderDetail.getItem().getId());
-        if (null == item) {
-            continue;
-        }
-        // 将查询到的商品详细信息设置到订单详情中
-        orderDetail.setItem(item);
-    }
-    return order;
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 注入商品服务，用于查询商品详细信息</span>
+<span class="tok-nd">@Autowired</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 根据订单ID查询订单数据</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * @param orderId 订单ID</span>
+<span class="tok-cm"> * @return Order 订单信息，包含完整的商品详情</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 从模拟数据库中查询订单</span>
+<span class="tok-w">    </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 获取订单详情列表</span>
+<span class="tok-w">    </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderDetails</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 遍历订单详情，通过商品微服务查询商品详细数据</span>
+<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">OrderDetail</span><span class="tok-w"> </span><span class="tok-n">orderDetail</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 通过商品微服务查询商品详细数据</span>
+<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">continue</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-c1">// 将查询到的商品详细信息设置到订单详情中</span>
+<span class="tok-w">        </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -3827,11 +3830,8 @@ public Order queryOrderById(String orderId) throws IOException {
 <pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8091/order/201810300002</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>+
-.测试结果说明 Eureka 高可用无问题</p>
-</div>
 <div class="literalblock">
+<div class="title">测试结果说明 Eureka 高可用无问题</div>
 <div class="content">
 <pre>HTTP/1.1 200
 Connection: keep-alive
@@ -4269,7 +4269,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-01 18:48:56 +0800
+Last updated 2025-10-01 21:19:37 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

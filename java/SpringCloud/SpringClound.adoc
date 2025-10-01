@@ -2156,7 +2156,7 @@ eureka:
 ----
 http :8091/order/201810300001
 ----
-+
+
 ....
 HTTP/1.1 200
 Connection: keep-alive
@@ -2205,6 +2205,8 @@ Transfer-Encoding: chunked
 
 
 ====== class OrderService
+[source,java]
+----
 /**
  * 订单服务类
  * 提供订单查询功能，并通过调用商品服务获取商品详细信息
@@ -2213,8 +2215,11 @@ Transfer-Encoding: chunked
 public class OrderService {
     @others
 }
+----
 
 ====== ORDER_DATA 模拟数据
+[source,java]
+----
 // 使用静态Map模拟数据库存储订单数据
 private static final Map<String, Order> ORDER_DATA = new HashMap<String, Order>();
 // 初始化订单数据
@@ -2222,8 +2227,11 @@ static {
     // 模拟数据库，构造测试数据
     @others
 }
+----
 
 ====== 第一个订单 order
+[source,java]
+----
 Order order = new Order();
 order.setOrderId("201810300001");
 order.setCreateDate(new Date());
@@ -2244,8 +2252,11 @@ orderDetails.add(new OrderDetail(order.getOrderId(), item));
 order.setOrderDetails(orderDetails);
 
 ORDER_DATA.put(order.getOrderId(), order);
+----
 
 ====== 第二个订单 order2
+[source,java]
+----
 Order order2 = new Order();
 order2.setOrderId("201810300002");
 order2.setCreateDate(new Date());
@@ -2266,8 +2277,11 @@ orderDetails2.add(new OrderDetail(order2.getOrderId(), item2));
 order2.setOrderDetails(orderDetails2);
 
 ORDER_DATA.put(order2.getOrderId(), order2);
+----
 
 ====== queryOrderById
+[source,java]
+----
 // 注入商品服务，用于查询商品详细信息
 @Autowired
 private ItemService itemService;
@@ -2298,13 +2312,14 @@ public Order queryOrderById(String orderId) throws IOException {
     }
     return order;
 }
+----
 
 ===== 重启 service-order 后，httpie 测试:
 [source,console]
 ----
 http :8091/order/201810300002
 ----
-+
+
 .测试结果说明 Eureka 高可用无问题
 ....
 HTTP/1.1 200

@@ -3136,7 +3136,12 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 </t>
-<t tx="swot.20250923002644.3">/**
+<t tx="swot.20250923002644.3">@doc
+[source,java]
+----
+@c
+@language java
+/**
  * 订单服务类
  * 提供订单查询功能，并通过调用商品服务获取商品详细信息
  */
@@ -3144,16 +3149,32 @@ import java.util.*;
 public class OrderService {
     @others
 }
+@doc
+----
+
 </t>
-<t tx="swot.20250923002644.4">// 使用静态Map模拟数据库存储订单数据
+<t tx="swot.20250923002644.4">@doc
+[source,java]
+----
+@c
+@language java
+// 使用静态Map模拟数据库存储订单数据
 private static final Map&lt;String, Order&gt; ORDER_DATA = new HashMap&lt;String, Order&gt;();
 // 初始化订单数据
 static {
     // 模拟数据库，构造测试数据
     @others
 }
+@doc
+----
+
 </t>
-<t tx="swot.20250923002644.5">Order order = new Order();
+<t tx="swot.20250923002644.5">@doc
+[source,java]
+----
+@c
+@language java
+Order order = new Order();
 order.setOrderId("201810300001");
 order.setCreateDate(new Date());
 order.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
@@ -3173,8 +3194,16 @@ orderDetails.add(new OrderDetail(order.getOrderId(), item));
 order.setOrderDetails(orderDetails);
 
 ORDER_DATA.put(order.getOrderId(), order);
+@doc
+----
+
 </t>
-<t tx="swot.20250923002644.6" annotate="7d71002858080000007072696f7269747971014b01580a000000707269736574646174657102580a000000323032352d30392d32377103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e677104580700000072656c506174687105580d000000636c656f2f707269312e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e">Order order2 = new Order();
+<t tx="swot.20250923002644.6" annotate="7d71002858080000007072696f7269747971014b01580a000000707269736574646174657102580a000000323032352d30392d32377103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e677104580700000072656c506174687105580d000000636c656f2f707269312e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e">@doc
+[source,java]
+----
+@c
+@language java
+Order order2 = new Order();
 order2.setOrderId("201810300002");
 order2.setCreateDate(new Date());
 order2.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
@@ -3194,8 +3223,16 @@ orderDetails2.add(new OrderDetail(order2.getOrderId(), item2));
 order2.setOrderDetails(orderDetails2);
 
 ORDER_DATA.put(order2.getOrderId(), order2);
+@doc
+----
+
 </t>
-<t tx="swot.20250923002644.7">// 注入商品服务，用于查询商品详细信息
+<t tx="swot.20250923002644.7">@doc
+[source,java]
+----
+@c
+@language java
+// 注入商品服务，用于查询商品详细信息
 @Autowired
 private ItemService itemService;
 /**
@@ -3225,12 +3262,15 @@ public Order queryOrderById(String orderId) throws IOException {
     }
     return order;
 }
+@doc
+----
+
 </t>
 <t tx="swot.20250923003436.1">[source,console]
 ----
 http :8091/order/201810300001
 ----
-+
+
 ....
 HTTP/1.1 200
 Connection: keep-alive
@@ -3277,7 +3317,7 @@ Transfer-Encoding: chunked
 ----
 http :8091/order/201810300002
 ----
-+
+
 .测试结果说明 Eureka 高可用无问题
 ....
 HTTP/1.1 200
