@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250929000751.1: * @file service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
+//@+node:swot.20251001074653.1: * @file service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
 //@@language java
 //@+others
-//@+node:swot.20250929000751.2: ** import
+//@+node:swot.20251001074653.2: ** @ignore-node import
 package com.tjise.serviceorder.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-//@+node:swot.20250929000751.3: ** class ItemService
+//@+node:swot.20251001074653.3: ** class ItemService
 //@+doc
 // [source,java]
 // ----
@@ -29,7 +29,9 @@ import java.io.IOException;
 public class ItemService {  // 商品服务类
     @Autowired
     private RestTemplate restTemplate;
-
+    // 包含其他代码
+    //@+others
+    //@+node:swot.20251001084311.1: *3* @ignore-node ItemService 单个构造方法注入
     private final WebClient webClient;
     private final OkHttpClient okHttpClient;
     private final ObjectMapper objectMapper;  // 可支持 json 序列化
@@ -43,9 +45,7 @@ public class ItemService {  // 商品服务类
         this.okHttpClient = okHttpClient;
         this.objectMapper = objectMapper;
     }
-    // 包含其他代码
-    //@+others
-    //@+node:swot.20250929000751.4: *3* 方式一: RestTemplate -> queryItemById
+    //@+node:swot.20251001112815.1: *3* 方式一: RestTemplate -> queryItemById
     //@+doc
     // [source,java]
     // ----
@@ -76,7 +76,7 @@ public class ItemService {  // 商品服务类
     // ----
     //
     // <1> app-item 是 service-item 在 Eureka 中注册的服务名。
-    //@+node:swot.20250929000751.5: *3* 方式二: OkHttpClient -> queryItemByIdWithOkHttpClient -> OkHttpClient 本身不支持服务发现功能，需要自己实现
+    //@+node:swot.20251001074653.5: *3* @ignore-node 方式二: OkHttpClient -> queryItemByIdWithOkHttpClient -> OkHttpClient 本身不支持服务发现功能，需要自己实现
     //@+doc
     // [source,java]
     // ----
@@ -99,7 +99,7 @@ public class ItemService {  // 商品服务类
     //@+doc
     // ----
     //
-    //@+node:swot.20250929000751.6: *3* 方式三: WebClient    -> queryItemByIdWithWebClient
+    //@+node:swot.20251001074653.6: *3* 方式三: WebClient    -> queryItemByIdWithWebClient
     //@+doc
     // [source,java]
     // ----
@@ -110,12 +110,10 @@ public class ItemService {  // 商品服务类
                         .uri("/{id}", id)
                         .retrieve()
                         .bodyToMono(Item.class)
-                        .block();
+                        .block();  // 在同步方法中使用 block
     }
     //@+doc
     // ----
-    //
-    //
     //@-others
 }
 //@@language asciidoc
