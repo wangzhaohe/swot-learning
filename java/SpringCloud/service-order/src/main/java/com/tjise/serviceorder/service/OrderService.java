@@ -8,7 +8,8 @@ package com.tjise.serviceorder.service;
 import com.tjise.serviceorder.pojo.Order;
 import com.tjise.serviceorder.pojo.OrderDetail;
 import com.tjise.serviceorder.pojo.Item;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
@@ -20,6 +21,10 @@ import java.util.*;
  */
 @Service
 public class OrderService {
+    
+    @Autowired
+    private CircuitBreakerRegistry circuitBreakerRegistry;
+    
     //@+others
     //@+node:swot.20251001110527.4: *3* @ignore-tree ORDER_DATA 模拟数据
     // 使用静态Map模拟数据库存储订单数据
@@ -79,10 +84,16 @@ public class OrderService {
     //@@c
     //@@language java
     // name 对应 application.yml 中的配置
-    @CircuitBreaker(name = "OrderService", fallbackMethod = "queryItemByIdFallback")
     public Item queryItemByIdWithCircuitBreaker(Long id) {
-        // return itemService.queryItemById(id);
-        return itemService.queryItemByIdWithWebClient(id);
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("OrderService");
+        return circuitBreaker.executeSupplier(() -> {
+            try {
+                return itemService.queryItemById(id);
+            } catch (Exception e) {
+                // 如果发生异常，调用降级方法
+                return queryItemByIdFallback(id, e);
+            }
+        });
     }
     //@+doc
     // ----

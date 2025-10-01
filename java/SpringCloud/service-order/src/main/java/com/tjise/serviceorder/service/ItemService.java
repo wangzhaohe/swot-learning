@@ -64,6 +64,7 @@ public class ItemService {  // 商品服务类
         }
 
         // restTemplate 会自动应用负载均衡，上面的实例选取只是为了能演示出负载均衡的策略。
+        // 当服务不可用时，RestTemplate 会抛出异常，让断路器捕获
         Item item = restTemplate.getForObject(
                 "http://app-item/item/" + id, Item.class);  // <1>
 
@@ -106,11 +107,19 @@ public class ItemService {  // 商品服务类
     //@@c
     //@@language java
     public Item queryItemByIdWithWebClient(Long id) {
-        return webClient.get()
-                        .uri("/{id}", id)
-                        .retrieve()
-                        .bodyToMono(Item.class)
-                        .block();  // 在同步方法中使用 block
+        try {
+            return webClient.get()
+                            .uri("/{id}", id)
+                            .retrieve()
+                            .bodyToMono(Item.class)
+                            .block();  // 在同步方法中使用 block
+        } catch (org.springframework.web.reactive.function.client.WebClientResponseException.ServiceUnavailable e) {
+            // 当负载均衡找不到服务实例时，抛出 RuntimeException 让断路器捕获
+            throw new RuntimeException("Service app-item is unavailable", e);
+        } catch (org.springframework.web.reactive.function.client.WebClientResponseException e) {
+            // 其他 WebClient 异常也转换为 RuntimeException
+            throw new RuntimeException("WebClient request failed", e);
+        }
     }
     //@+doc
     // ----
