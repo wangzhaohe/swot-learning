@@ -86,14 +86,18 @@ public class OrderService {
     // name 对应 application.yml 中的配置
     public Item queryItemByIdWithCircuitBreaker(Long id) {
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("OrderService");
-        return circuitBreaker.executeSupplier(() -> {
-            try {
-                return itemService.queryItemByIdWithWebClient(id);
-            } catch (Exception e) {
-                // 如果发生异常，调用降级方法
-                return queryItemByIdFallback(id, e);
-            }
-        });
+        System.out.println("=== 断路器状态: " + circuitBreaker.getState() + " ===");
+        System.out.println("=== 断路器失败率: " + circuitBreaker.getMetrics().getFailureRate() + " ===");
+        System.out.println("=== 断路器调用次数: " + circuitBreaker.getMetrics().getNumberOfBufferedCalls() + " ===");
+
+        try {
+            Item result = circuitBreaker.executeSupplier(() -> itemService.queryItemByIdWithWebClient(id));
+            System.out.println("=== WebClient 调用成功 ===");
+            return result;
+        } catch (Exception e) {
+            System.out.println("=== 断路器抛出异常: " + e.getClass().getSimpleName() + " - " + e.getMessage() + " ===");
+            throw e;
+        }
     }
     //@+doc
     // ----
@@ -139,12 +143,19 @@ public class OrderService {
         // 遍历订单详情，通过商品微服务查询商品详细数据
         for (OrderDetail orderDetail : orderDetails) {
             // 通过商品微服务查询商品详细数据
-            Item item = queryItemByIdWithCircuitBreaker(orderDetail.getItem().getId());
-            if (null == item) {
-                continue;
+            try {
+                Item item = queryItemByIdWithCircuitBreaker(orderDetail.getItem().getId());
+                if (null == item) {
+                    continue;
+                }
+                // 将查询到的商品详细信息设置到订单详情中
+                orderDetail.setItem(item);
+            } catch (Exception e) {
+                // 如果断路器抛出异常，使用降级商品
+                // 注意：这里不再打印日志，因为 queryItemByIdWithCircuitBreaker 中已经处理了异常
+                Item fallbackItem = queryItemByIdFallback(orderDetail.getItem().getId(), e);
+                orderDetail.setItem(fallbackItem);
             }
-            // 将查询到的商品详细信息设置到订单详情中
-            orderDetail.setItem(item);
         }
         return order;
     }

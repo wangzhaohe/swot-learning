@@ -51,14 +51,17 @@ resilience4j:
   circuitbreaker:
     instances:
       OrderService:
-        sliding-window-size: 2                  # 只需2次调用就可以计算失败率
-        failure-rate-threshold: 40  # 2次中有1次失败就跳闸，大于等于40%，容易触发
-        wait-duration-in-open-state: 5s         # 5秒后就会进入半开状态，快速验证
-        permitted-number-of-calls-in-half-open-state: 1  # 半开状态只允许1次调用
-        sliding-window-type: COUNT_BASED        # 基于调用次数，易于预测
+        sliding-window-size: 5                  # 需要5次调用来计算失败率
+        failure-rate-threshold: 50              # 50%失败率才跳闸
+        wait-duration-in-open-state: 10s        # 10秒后进入半开状态
+        permitted-number-of-calls-in-half-open-state: 2  # 半开状态允许2次调用
+        sliding-window-type: COUNT_BASED        # 基于调用次数
         record-exceptions:                      # 哪些异常算失败
+          - org.springframework.web.reactive.function.client.WebClientResponseException
           - java.lang.RuntimeException
           - java.io.IOException
+        ignore-exceptions:                      # 忽略的异常类型
+          - java.lang.IllegalArgumentException
 #@+doc
 # ----
 #
@@ -70,8 +73,7 @@ resilience4j:
 # |===
 # | 场景    | 测试配置 | 生产配置
 # | 窗口大小 | 5 次调用 | 100次调用
-# | 故障阈值 | 40%     | 75%
-# | 跳闸条件 | 2/5失败  | 75/100失败
+# | 故障阈值 | 50%     | 75%
 # | 恢复时间 | 10 秒   | 60秒
 # | 目的    | 快速验证 | 稳定运行
 # |===
