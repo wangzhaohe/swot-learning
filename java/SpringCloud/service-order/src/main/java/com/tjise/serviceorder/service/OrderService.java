@@ -88,7 +88,7 @@ public class OrderService {
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("OrderService");
         return circuitBreaker.executeSupplier(() -> {
             try {
-                return itemService.queryItemById(id);
+                return itemService.queryItemByIdWithWebClient(id);
             } catch (Exception e) {
                 // 如果发生异常，调用降级方法
                 return queryItemByIdFallback(id, e);

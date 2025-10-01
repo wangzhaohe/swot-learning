@@ -107,19 +107,11 @@ public class ItemService {  // 商品服务类
     //@@c
     //@@language java
     public Item queryItemByIdWithWebClient(Long id) {
-        try {
-            return webClient.get()
-                            .uri("/{id}", id)
-                            .retrieve()
-                            .bodyToMono(Item.class)
-                            .block();  // 在同步方法中使用 block
-        } catch (org.springframework.web.reactive.function.client.WebClientResponseException.ServiceUnavailable e) {
-            // 当负载均衡找不到服务实例时，抛出 RuntimeException 让断路器捕获
-            throw new RuntimeException("Service app-item is unavailable", e);
-        } catch (org.springframework.web.reactive.function.client.WebClientResponseException e) {
-            // 其他 WebClient 异常也转换为 RuntimeException
-            throw new RuntimeException("WebClient request failed", e);
-        }
+        return webClient.get()
+                        .uri("/{id}", id)
+                        .retrieve()
+                        .bodyToMono(Item.class)
+                        .block();  // 在同步方法中使用 block
     }
     //@+doc
     // ----
