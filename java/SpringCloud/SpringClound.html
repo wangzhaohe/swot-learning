@@ -671,10 +671,17 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
-<li><a href="#_容错保护hystrix">容错保护：Hystrix</a>
+<li><a href="#_8_容错保护resilience4j">8. 容错保护：Resilience4j</a>
 <ul class="sectlevel2">
 <li><a href="#_雪崩效应">雪崩效应</a></li>
-<li><a href="#_hystrix_简介">Hystrix 简介</a></li>
+<li><a href="#_resilience4j_快速入门">Resilience4j 快速入门</a>
+<ul class="sectlevel3">
+<li><a href="#_file_service_orderpom_xml_5">@file service-order/pom.xml</a></li>
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_6">@file service-order/src/main/resources/application.yml</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_4">@file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
+<li><a href="#_测试_resilience4j">测试 Resilience4j</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -2920,20 +2927,6 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemService</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 商品服务类</span>
 <span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">;</span>
-
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-w"> </span><span class="tok-n">okHttpClient</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">ObjectMapper</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 可支持 json 序列化</span>
-
-<span class="tok-w">    </span><span class="tok-c1">// 单个构造方法注入</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">ItemService</span><span class="tok-p">(</span>
-<span class="tok-w">            </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">,</span>
-<span class="tok-w">            </span><span class="tok-nd">@Autowired</span><span class="tok-p">(</span><span class="tok-n">required</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">OkHttpClient</span><span class="tok-w"> </span><span class="tok-n">okHttpClient</span><span class="tok-p">,</span>
-<span class="tok-w">            </span><span class="tok-nd">@Autowired</span><span class="tok-p">(</span><span class="tok-n">required</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">ObjectMapper</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">webClient</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">;</span>
-<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">okHttpClient</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">okHttpClient</span><span class="tok-p">;</span>
-<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">objectMapper</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-c1">// 包含其他代码</span>
 <span class="tok-w">    </span><span class="tok-nd">@others</span>
 <span class="tok-p">}</span></code></pre>
@@ -3005,7 +2998,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">uri</span><span class="tok-p">(</span><span class="tok-s">&quot;/{id}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span>
 <span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">retrieve</span><span class="tok-p">()</span>
 <span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">bodyToMono</span><span class="tok-p">(</span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
-<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">block</span><span class="tok-p">();</span>
+<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">block</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 在同步方法中使用 block</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -3883,7 +3876,7 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect1">
-<h2 id="_容错保护hystrix">容错保护：Hystrix</h2>
+<h2 id="_8_容错保护resilience4j">8. 容错保护：Resilience4j</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_雪崩效应">雪崩效应</h3>
@@ -3903,52 +3896,376 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect2">
-<h3 id="_hystrix_简介">Hystrix 简介</h3>
-<div class="paragraph">
-<p><a href="https://github.com/Netflix/Hystrix/" class="bare">https://github.com/Netflix/Hystrix/</a></p>
+<h3 id="_resilience4j_快速入门">Resilience4j 快速入门</h3>
+<div class="sect3">
+<h4 id="_file_service_orderpom_xml_5">@file service-order/pom.xml</h4>
+<div class="sect4">
+<h5 id="_resilience4j_依赖">resilience4j 依赖</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.github.resilience4j</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">resilience4j-spring-boot2</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.7.0</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainresourcesapplication_yml_6">@file service-order/src/main/resources/application.yml</h4>
+<div class="sect4">
+<h5 id="_port_6">port</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8091</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_name_6">name</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)</span>
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">app-order</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_eureka_6">eureka</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># 服务注册到 eureka 注册中心的地址</span>
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-c1"># defaultZone: http://root:root@127.0.0.1:8761/eureka/</span>
+<span class="tok-w">            </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/</span>
+<span class="tok-w">        </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">  </span><span class="tok-c1"># 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心</span>
+<span class="tok-w">        </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">        </span><span class="tok-c1"># 是否需要从 eureka 上检索服务</span>
+<span class="tok-w">    </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">prefer-ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">     </span><span class="tok-c1"># 使用 IP地址 注册而不是主机名</span>
+<span class="tok-w">        </span><span class="tok-nt">ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">127.0.0.1</span><span class="tok-w">       </span><span class="tok-c1"># 客户端在注册时使用自己的 IP，而不是主机名</span>
+<span class="tok-w">                                    </span><span class="tok-c1"># 这是生产环境的最佳实践。避免主机名解析问题</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_resilience4j">resilience4j</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">resilience4j</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">circuitbreaker</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">instances</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">OrderService</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">sliding-window-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">5</span><span class="tok-w">                  </span><span class="tok-c1"># 需要 5次调用来计算失败率</span>
+<span class="tok-w">        </span><span class="tok-nt">failure-rate-threshold</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">50</span><span class="tok-w">              </span><span class="tok-c1"># 50% 失败率才跳闸</span>
+<span class="tok-w">        </span><span class="tok-nt">wait-duration-in-open-state</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10s</span><span class="tok-w">        </span><span class="tok-c1"># 10 秒后进入半开状态</span>
+<span class="tok-w">        </span><span class="tok-nt">permitted-number-of-calls-in-half-open-state</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">2</span><span class="tok-w">     </span><span class="tok-c1"># 半开状态允许 2 次调用</span>
+<span class="tok-w">        </span><span class="tok-nt">sliding-window-type</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">COUNT_BASED</span><span class="tok-w">        </span><span class="tok-c1"># 基于调用次数</span>
+<span class="tok-w">        </span><span class="tok-nt">record-exceptions</span><span class="tok-p">:</span><span class="tok-w">                      </span><span class="tok-c1"># 哪些异常算失败</span>
+<span class="tok-w">          </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">org.springframework.web.reactive.function.client.WebClientResponseException</span>
+<span class="tok-w">          </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">java.lang.RuntimeException</span>
+<span class="tok-w">          </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">java.io.IOException</span>
+<span class="tok-w">        </span><span class="tok-nt">ignore-exceptions</span><span class="tok-p">:</span><span class="tok-w">                      </span><span class="tok-c1"># 忽略的异常类型</span>
+<span class="tok-w">          </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">java.lang.IllegalArgumentException</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+实际生产要宽松一些的。
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>Hystrix 是 Netflix 开源的一个 <strong>延迟和容错库</strong>，主要用于分布式系统中依赖服务的调用保护。它通过 <strong>断路器（Circuit Breaker）</strong>、<strong>线程隔离</strong>、<strong>信号量隔离</strong> 等机制，防止级联失败和“雪崩效应”。</p>
+<p>测试 vs 生产</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">场景</th>
+<th class="tableblock halign-left valign-top">测试配置</th>
+<th class="tableblock halign-left valign-top">生产配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">窗口大小</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5 次调用</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100次调用</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">故障阈值</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">50%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">75%</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">恢复时间</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10 秒</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">60秒</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">目的</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">快速验证</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">稳定运行</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_4">@file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h4>
+<div class="sect4">
+<h5 id="_class_orderservice_3">class OrderService</h5>
+<div class="paragraph">
+<p>/**
+ * 订单服务类
+ * 提供订单查询功能，并通过调用商品服务获取商品详细信息
+ */
+@Service
+public class OrderService {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>@Autowired
+private CircuitBreakerRegistry circuitBreakerRegistry;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    @others
+}</pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_item_queryitembyidwithcircuitbreaker">Item queryItemByIdWithCircuitBreaker</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// name 对应 application.yml 中的配置</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithCircuitBreaker</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">CircuitBreaker</span><span class="tok-w"> </span><span class="tok-n">circuitBreaker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">circuitBreakerRegistry</span><span class="tok-p">.</span><span class="tok-na">circuitBreaker</span><span class="tok-p">(</span><span class="tok-s">&quot;OrderService&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 断路器状态: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">getState</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; ===&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 断路器失败率: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">getMetrics</span><span class="tok-p">().</span><span class="tok-na">getFailureRate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; ===&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 断路器调用次数: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">getMetrics</span><span class="tok-p">().</span><span class="tok-na">getNumberOfBufferedCalls</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; ===&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">executeSupplier</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemByIdWithWebClient</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== WebClient 调用成功 ===&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 断路器抛出异常: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getClass</span><span class="tok-p">().</span><span class="tok-na">getSimpleName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; - &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; ===&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_item_queryitembyidfallback_断路器降级方法">Item queryItemByIdFallback 断路器降级方法</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 断路器降级方法</span>
+<span class="tok-cm"> * @param id 商品 ID</span>
+<span class="tok-cm"> * @param throwable 抛出的异常</span>
+<span class="tok-cm"> * @return 降级后的默认商品信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdFallback</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Throwable</span><span class="tok-w"> </span><span class="tok-n">throwable</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=======CircuitBreaker 降级处理，原因：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">throwable</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;查询商品信息出错&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_queryorderbyid_3">queryOrderById</h6>
+<div class="paragraph">
+<p>@Autowired
+private ItemService itemService;
+/**
+ * 根据订单ID查询订单数据
+ *
+ * @param orderId 订单ID
+ * @return Order 订单信息，包含完整的商品详情
+ */
+public Order queryOrderById(String orderId) throws IOException {
+    // 从模拟数据库中查询订单
+    Order order = ORDER_DATA.get(orderId);
+    if (null == order) {
+        return null;
+    }
+    // 获取订单详情列表
+    List&lt;OrderDetail&gt; orderDetails = order.getOrderDetails();</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    // 遍历订单详情，通过商品微服务查询商品详细数据
+    for (OrderDetail orderDetail : orderDetails) {
+        // 通过商品微服务查询商品详细数据
+        try {
+            Item item = queryItemByIdWithCircuitBreaker(orderDetail.getItem().getId());
+            if (null == item) {
+                continue;
+            }
+            // 将查询到的商品详细信息设置到订单详情中
+            orderDetail.setItem(item);
+        } catch (Exception e) {
+            // 如果断路器抛出异常，使用降级商品
+            // 注意：这里不再打印日志，因为 queryItemByIdWithCircuitBreaker 中已经处理了异常
+            Item fallbackItem = queryItemByIdFallback(orderDetail.getItem().getId(), e);
+            orderDetail.setItem(fallbackItem);
+        }
+    }
+    return order;
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_测试_resilience4j">测试 Resilience4j</h4>
+<div class="paragraph">
+<p>测试步骤：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>启动 Eureka 服务注册中心</p>
+</li>
+<li>
+<p>启动 service-item 服务（也可以不启动）</p>
+</li>
+<li>
+<p>启动 service-order 服务</p>
+</li>
+<li>
+<p>关闭 service-item 服务（这样调用会失败）</p>
+</li>
+<li>
+<p>调用 order 服务的相关接口</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http :8091/order/201810300001</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>重复调用几次（超过 failure-rate-threshold 设置的阈值）</p>
+</li>
+<li>
+<p>观察日志输出，应该会看到降级方法被调用</p>
+<div class="literalblock">
+<div class="title">输出结果如下</div>
+<div class="content">
+<pre>2025-10-01 17:17:40.308  INFO 4711 --- [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-10-01 17:17:40.309  INFO 4711 --- [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+=== 断路器状态: CLOSED ===
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 0 ===
+2025-10-01 17:17:40.437  WARN 4711 --- [nio-8091-exec-1] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:17:40.438  WARN 4711 --- [nio-8091-exec-1] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN
+=== 断路器状态: CLOSED ===
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 1 ===
+2025-10-01 17:17:40.478  WARN 4711 --- [nio-8091-exec-1] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:17:40.478  WARN 4711 --- [nio-8091-exec-1] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN
+=== 断路器状态: CLOSED ===
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 2 ===
+2025-10-01 17:18:04.135  WARN 4711 --- [nio-8091-exec-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:18:04.135  WARN 4711 --- [nio-8091-exec-3] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN
+=== 断路器状态: CLOSED ===
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 3 ===
+2025-10-01 17:18:04.136  WARN 4711 --- [nio-8091-exec-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:18:04.136  WARN 4711 --- [nio-8091-exec-3] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN
+=== 断路器状态: CLOSED ===
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 4 ===
+2025-10-01 17:18:10.612  WARN 4711 --- [nio-8091-exec-5] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:18:10.612  WARN 4711 --- [nio-8091-exec-5] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN
+=== 断路器状态: OPEN ===  --&gt; 断路器已经是打开状态了
+=== 断路器失败率: 100.0 ===
+=== 断路器调用次数: 5 ===  --&gt; 第 5 次才开始计算的
+=== 断路器抛出异常: CallNotPermittedException - CircuitBreaker 'OrderService' is OPEN and does not permit further calls ===
+=======CircuitBreaker 降级处理，原因：CircuitBreaker 'OrderService' is OPEN and does not permit further calls
+--&gt; 不会进行实际的网络调用了，断路器直接返回降级结果
+=== 断路器状态: OPEN ===
+=== 断路器失败率: 100.0 ===
+=== 断路器调用次数: 5 ===
+2025-10-01 17:18:37.444  WARN 4711 --- [nio-8091-exec-7] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:18:37.444  WARN 4711 --- [nio-8091-exec-7] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN
+=== 断路器状态: HALF_OPEN ===  --&gt; 10s 以后断路器就变成半开状态，且允许 2 次实际的网络调用，可以看见负载均衡又起作用了。
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 1 ===
+2025-10-01 17:18:37.446  WARN 4711 --- [nio-8091-exec-7] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:18:37.446  WARN 4711 --- [nio-8091-exec-7] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN
+=== 断路器状态: OPEN ===
+=== 断路器失败率: 100.0 ===  --&gt; 2 次调用都失败了，断路器又打开了
+=== 断路器调用次数: 2 ===
+2025-10-01 17:19:07.312  WARN 4711 --- [nio-8091-exec-9] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:19:07.312  WARN 4711 --- [nio-8091-exec-9] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN
+=== 断路器状态: HALF_OPEN ===  --&gt; 10s 以后又变成了半开状态，如此反复吧......
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 1 ===</pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>主要功能包括：</p>
+<p>这个日志完美展示了：</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>断路器</strong>：当依赖服务持续失败时，快速返回，避免耗尽资源。</p>
+<p>✅ 断路器状态管理：CLOSED → OPEN → HALF_OPEN</p>
 </li>
 <li>
-<p><strong>降级（Fallback）</strong>：在调用失败时提供默认结果或备用逻辑。</p>
+<p>✅ 阈值触发机制： 失败率达到50%时跳闸</p>
 </li>
 <li>
-<p><strong>隔离</strong>：通过线程池或信号量隔离，避免单个依赖拖垮整个系统。</p>
+<p>✅ 自动恢复尝试： 定期试探服务可用性</p>
 </li>
 <li>
-<p><strong>监控</strong>：提供实时指标，帮助运维和调优。</p>
+<p>✅ 性能优化：OPEN状态时避免无效调用</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>当对特定服务的呼叫达到一定阈值时（Hystrix 中的默认值为 5 秒内的 20 次故障，如 ServiceB 故障了），则启用 fallback 进行处理。</p>
+<p>断路器完全按照设计工作，在系统层面提供了有效的故障保护和自动恢复机制！</p>
 </div>
-<div class="imageblock">
-<div class="content">
-<img src="img/hystrix_fallback.png" alt="hystrix fallback">
-</div>
-<div class="title">Figure 7. Fallback</div>
-</div>
-<div class="admonitionblock caution">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-caution" title="Caution"></i>
-</td>
-<td class="content">
-不过需要注意，Netflix 已经停止对 Hystrix 的维护，推荐使用 <strong>Resilience4j</strong> 等替代方案。
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -3956,7 +4273,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-29 17:18:02 +0800
+Last updated 2025-10-01 18:33:20 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

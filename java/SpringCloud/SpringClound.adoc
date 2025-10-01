@@ -1382,6 +1382,7 @@ public WebClient webClient(WebClient.Builder builder) {
         .baseUrl("http://app-item/item")  // 使用 eureka 注册中心调用(去注册中心查找服务 app-item，这种方式必须先开启负载均衡 @LoadBalanced)
         .build();
 }
+
 ----
 
 .总结
@@ -1626,20 +1627,6 @@ import java.io.IOException;
 public class ItemService {  // 商品服务类
     @Autowired
     private RestTemplate restTemplate;
-
-    private final WebClient webClient;
-    private final OkHttpClient okHttpClient;
-    private final ObjectMapper objectMapper;  // 可支持 json 序列化
-
-    // 单个构造方法注入
-    public ItemService(
-            WebClient webClient,
-            @Autowired(required = false) OkHttpClient okHttpClient,
-            @Autowired(required = false) ObjectMapper objectMapper) {
-        this.webClient = webClient;
-        this.okHttpClient = okHttpClient;
-        this.objectMapper = objectMapper;
-    }
     // 包含其他代码
     @others
 }
@@ -1699,7 +1686,7 @@ public Item queryItemByIdWithWebClient(Long id) {
                     .uri("/{id}", id)
                     .retrieve()
                     .bodyToMono(Item.class)
-                    .block();
+                    .block();  // 在同步方法中使用 block
 }
 ----
 
@@ -2357,7 +2344,7 @@ Transfer-Encoding: chunked
 }
 ....
 
-== 容错保护：Hystrix
+== 8. 容错保护：Resilience4j
 
 
 === 雪崩效应
@@ -2369,22 +2356,278 @@ Transfer-Encoding: chunked
 
 image::img/avalanche.png[,600]
 
-=== Hystrix 简介
-https://github.com/Netflix/Hystrix/
+=== Resilience4j 快速入门
 
-Hystrix 是 Netflix 开源的一个 **延迟和容错库**，主要用于分布式系统中依赖服务的调用保护。它通过 **断路器（Circuit Breaker）**、**线程隔离**、**信号量隔离** 等机制，防止级联失败和“雪崩效应”。
 
-主要功能包括：
+==== @file service-order/pom.xml
 
-* **断路器**：当依赖服务持续失败时，快速返回，避免耗尽资源。
-* **降级（Fallback）**：在调用失败时提供默认结果或备用逻辑。
-* **隔离**：通过线程池或信号量隔离，避免单个依赖拖垮整个系统。
-* **监控**：提供实时指标，帮助运维和调优。
 
-当对特定服务的呼叫达到一定阈值时（Hystrix 中的默认值为 5 秒内的 20 次故障，如 ServiceB 故障了），则启用 fallback 进行处理。
+===== resilience4j 依赖
+[source,scss]
+....
+<dependency>
+    <groupId>io.github.resilience4j</groupId>
+    <artifactId>resilience4j-spring-boot2</artifactId>
+    <version>1.7.0</version>
+</dependency>
+....
 
-.Fallback
-image::img/hystrix_fallback.png[]
+==== @file service-order/src/main/resources/application.yml
 
-CAUTION: 不过需要注意，Netflix 已经停止对 Hystrix 的维护，推荐使用 **Resilience4j** 等替代方案。
+
+===== port
+[source,yaml]
+----
+server:
+    port: 8091
+----
+
+===== name
+[source, yaml]
+----
+# 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
+spring:
+    application:
+        name: app-order
+----
+
+===== eureka
+[source,yaml]
+----
+# 服务注册到 eureka 注册中心的地址
+eureka:
+    client:
+        service-url:
+            # defaultZone: http://root:root@127.0.0.1:8761/eureka/
+            defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+        register-with-eureka: true  # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
+        fetch-registry: true        # 是否需要从 eureka 上检索服务
+    instance:
+        prefer-ip-address: true     # 使用 IP地址 注册而不是主机名
+        ip-address: 127.0.0.1       # 客户端在注册时使用自己的 IP，而不是主机名
+                                    # 这是生产环境的最佳实践。避免主机名解析问题
+----
+
+===== resilience4j
+[source,yaml]
+----
+resilience4j:
+  circuitbreaker:
+    instances:
+      OrderService:
+        sliding-window-size: 5                  # 需要 5次调用来计算失败率
+        failure-rate-threshold: 50              # 50% 失败率才跳闸
+        wait-duration-in-open-state: 10s        # 10 秒后进入半开状态
+        permitted-number-of-calls-in-half-open-state: 2     # 半开状态允许 2 次调用
+        sliding-window-type: COUNT_BASED        # 基于调用次数
+        record-exceptions:                      # 哪些异常算失败
+          - org.springframework.web.reactive.function.client.WebClientResponseException
+          - java.lang.RuntimeException
+          - java.io.IOException
+        ignore-exceptions:                      # 忽略的异常类型
+          - java.lang.IllegalArgumentException
+----
+
+NOTE: 实际生产要宽松一些的。
+
+[caption=]
+测试 vs 生产
+[cols="1,1,1",options="header"]
+|===
+| 场景    | 测试配置 | 生产配置
+| 窗口大小 | 5 次调用 | 100次调用
+| 故障阈值 | 50%     | 75%
+| 恢复时间 | 10 秒   | 60秒
+| 目的    | 快速验证 | 稳定运行
+|===
+
+==== @file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
+
+
+===== class OrderService
+/**
+ * 订单服务类
+ * 提供订单查询功能，并通过调用商品服务获取商品详细信息
+ */
+@Service
+public class OrderService {
+    
+    @Autowired
+    private CircuitBreakerRegistry circuitBreakerRegistry;
+    
+    @others
+}
+
+====== Item queryItemByIdWithCircuitBreaker
+[source,java]
+----
+// name 对应 application.yml 中的配置
+public Item queryItemByIdWithCircuitBreaker(Long id) {
+    CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("OrderService");
+    System.out.println("=== 断路器状态: " + circuitBreaker.getState() + " ===");
+    System.out.println("=== 断路器失败率: " + circuitBreaker.getMetrics().getFailureRate() + " ===");
+    System.out.println("=== 断路器调用次数: " + circuitBreaker.getMetrics().getNumberOfBufferedCalls() + " ===");
+
+    try {
+        Item result = circuitBreaker.executeSupplier(() -> itemService.queryItemByIdWithWebClient(id));
+        System.out.println("=== WebClient 调用成功 ===");
+        return result;
+    } catch (Exception e) {
+        System.out.println("=== 断路器抛出异常: " + e.getClass().getSimpleName() + " - " + e.getMessage() + " ===");
+        throw e;
+    }
+}
+----
+
+====== Item queryItemByIdFallback 断路器降级方法
+[source,java]
+----
+/**
+ * 断路器降级方法
+ * @param id 商品 ID
+ * @param throwable 抛出的异常
+ * @return 降级后的默认商品信息
+ */
+public Item queryItemByIdFallback(Long id, Throwable throwable) {
+    System.out.println("=======CircuitBreaker 降级处理，原因：" + throwable.getMessage());
+    return new Item(id, "查询商品信息出错", null, null, null);
+}
+----
+
+====== queryOrderById
+// 注入商品服务，用于查询商品详细信息
+@Autowired
+private ItemService itemService;
+/**
+ * 根据订单ID查询订单数据
+ * 
+ * @param orderId 订单ID
+ * @return Order 订单信息，包含完整的商品详情
+ */
+public Order queryOrderById(String orderId) throws IOException {
+    // 从模拟数据库中查询订单
+    Order order = ORDER_DATA.get(orderId);
+    if (null == order) {
+        return null;
+    }
+    // 获取订单详情列表
+    List<OrderDetail> orderDetails = order.getOrderDetails();
+
+    // 遍历订单详情，通过商品微服务查询商品详细数据
+    for (OrderDetail orderDetail : orderDetails) {
+        // 通过商品微服务查询商品详细数据
+        try {
+            Item item = queryItemByIdWithCircuitBreaker(orderDetail.getItem().getId());
+            if (null == item) {
+                continue;
+            }
+            // 将查询到的商品详细信息设置到订单详情中
+            orderDetail.setItem(item);
+        } catch (Exception e) {
+            // 如果断路器抛出异常，使用降级商品
+            // 注意：这里不再打印日志，因为 queryItemByIdWithCircuitBreaker 中已经处理了异常
+            Item fallbackItem = queryItemByIdFallback(orderDetail.getItem().getId(), e);
+            orderDetail.setItem(fallbackItem);
+        }
+    }
+    return order;
+}
+
+==== 测试 Resilience4j
+测试步骤：
+
+1. 启动 Eureka 服务注册中心
+2. 启动 service-item 服务（也可以不启动）
+3. 启动 service-order 服务
+4. 关闭 service-item 服务（这样调用会失败）
+5. 调用 order 服务的相关接口
++
+[source,console]
+----
+http :8091/order/201810300001
+----
+
+5. 重复调用几次（超过 failure-rate-threshold 设置的阈值）
+
+6. 观察日志输出，应该会看到降级方法被调用
++
+.输出结果如下
+....
+2025-10-01 17:17:40.308  INFO 4711 --- [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-10-01 17:17:40.309  INFO 4711 --- [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+=== 断路器状态: CLOSED ===
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 0 ===
+2025-10-01 17:17:40.437  WARN 4711 --- [nio-8091-exec-1] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:17:40.438  WARN 4711 --- [nio-8091-exec-1] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN 
+=== 断路器状态: CLOSED ===
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 1 ===
+2025-10-01 17:17:40.478  WARN 4711 --- [nio-8091-exec-1] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:17:40.478  WARN 4711 --- [nio-8091-exec-1] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN 
+=== 断路器状态: CLOSED ===
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 2 ===
+2025-10-01 17:18:04.135  WARN 4711 --- [nio-8091-exec-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:18:04.135  WARN 4711 --- [nio-8091-exec-3] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN 
+=== 断路器状态: CLOSED ===
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 3 ===
+2025-10-01 17:18:04.136  WARN 4711 --- [nio-8091-exec-3] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:18:04.136  WARN 4711 --- [nio-8091-exec-3] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN 
+=== 断路器状态: CLOSED ===
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 4 ===
+2025-10-01 17:18:10.612  WARN 4711 --- [nio-8091-exec-5] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:18:10.612  WARN 4711 --- [nio-8091-exec-5] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN 
+=== 断路器状态: OPEN ===  --> 断路器已经是打开状态了
+=== 断路器失败率: 100.0 ===
+=== 断路器调用次数: 5 ===  --> 第 5 次才开始计算的
+=== 断路器抛出异常: CallNotPermittedException - CircuitBreaker 'OrderService' is OPEN and does not permit further calls ===
+=======CircuitBreaker 降级处理，原因：CircuitBreaker 'OrderService' is OPEN and does not permit further calls
+--> 不会进行实际的网络调用了，断路器直接返回降级结果
+=== 断路器状态: OPEN ===
+=== 断路器失败率: 100.0 ===
+=== 断路器调用次数: 5 ===
+2025-10-01 17:18:37.444  WARN 4711 --- [nio-8091-exec-7] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:18:37.444  WARN 4711 --- [nio-8091-exec-7] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN 
+=== 断路器状态: HALF_OPEN ===  --> 10s 以后断路器就变成半开状态，且允许 2 次实际的网络调用，可以看见负载均衡又起作用了。
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 1 ===
+2025-10-01 17:18:37.446  WARN 4711 --- [nio-8091-exec-7] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:18:37.446  WARN 4711 --- [nio-8091-exec-7] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN 
+=== 断路器状态: OPEN ===
+=== 断路器失败率: 100.0 ===  --> 2 次调用都失败了，断路器又打开了
+=== 断路器调用次数: 2 ===
+2025-10-01 17:19:07.312  WARN 4711 --- [nio-8091-exec-9] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: app-item
+2025-10-01 17:19:07.312  WARN 4711 --- [nio-8091-exec-9] eactorLoadBalancerExchangeFilterFunction : LoadBalancer does not contain an instance for the service app-item
+=== 断路器抛出异常: ServiceUnavailable - 503 Service Unavailable from UNKNOWN  ===
+=======CircuitBreaker 降级处理，原因：503 Service Unavailable from UNKNOWN 
+=== 断路器状态: HALF_OPEN ===  --> 10s 以后又变成了半开状态，如此反复吧......
+=== 断路器失败率: -1.0 ===
+=== 断路器调用次数: 1 ===
+....
+
+这个日志完美展示了：
+
+- ✅ 断路器状态管理：CLOSED → OPEN → HALF_OPEN
+- ✅ 阈值触发机制： 失败率达到50%时跳闸
+- ✅ 自动恢复尝试： 定期试探服务可用性
+- ✅ 性能优化：OPEN状态时避免无效调用
+
+断路器完全按照设计工作，在系统层面提供了有效的故障保护和自动恢复机制！
 
