@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20251005174948.1: * @file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
+//@+node:swot.20251005215932.1: * @file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
 //@@language java
 //@+others
-//@+node:swot.20251005174948.2: ** @ignore-node import
+//@+node:swot.20251005215932.2: ** @ignore-node import
 package com.tjise.serviceorder.service;
 
 import com.tjise.serviceorder.client.ItemFeignClient;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
-//@+node:swot.20251005174948.3: ** class OrderService
+//@+node:swot.20251005215932.3: ** class OrderService
 //@+doc
 // [source,java]
 // ----
@@ -35,14 +35,14 @@ public class OrderService {
     ItemFeignClient itemFeignClient;  // --- New Added ---
 
     //@+others
-    //@+node:swot.20251005174948.4: *3* @ignore-node  ORDER_DATA 模拟数据
+    //@+node:swot.20251005215932.4: *3* @ignore-node  ORDER_DATA 模拟数据
     // 使用静态Map模拟数据库存储订单数据
     private static final Map<String, Order> ORDER_DATA = new HashMap<String, Order>();
     // 初始化订单数据
     static {
         // 模拟数据库，构造测试数据
         //@+others
-        //@+node:swot.20251005174948.5: *4* @ignore-node 第一个订单 order
+        //@+node:swot.20251005215932.5: *4* @ignore-node 第一个订单 order
         Order order = new Order();
         order.setOrderId("201810300001");
         order.setCreateDate(new Date());
@@ -64,7 +64,7 @@ public class OrderService {
         order.setOrderDetails(orderDetails);
 
         ORDER_DATA.put(order.getOrderId(), order);
-        //@+node:swot.20251005174948.6: *4* @ignore-node 第二个订单 order2
+        //@+node:swot.20251005215932.6: *4* @ignore-node 第二个订单 order2
         Order order2 = new Order();
         order2.setOrderId("201810300002");
         order2.setCreateDate(new Date());
@@ -85,7 +85,7 @@ public class OrderService {
         order2.setOrderDetails(orderDetails2);
 
         ORDER_DATA.put(order2.getOrderId(), order2);
-        //@+node:swot.20251005174948.7: *4* 第三个订单 order3 -- item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常
+        //@+node:swot.20251005215932.7: *4* @ignore-node 第三个订单 order3 -- item3.setId(-1L) 设为 -1 ItemController.java 会抛出异常
         //@+doc
         // [source,java]
         // ----
@@ -114,9 +114,34 @@ public class OrderService {
         //@+doc
         // ----
         //
+        //@+node:swot.20251005220026.1: *4* 第四个订单 order4 -- item4.setId(-1L) 设为 -1 ItemController.java 会抛出异常
+        //@+doc
+        // [source,java]
+        // ----
+        //@@c
+        //@@language java
+        Order order4 = new Order();
+        order4.setOrderId("201810300004");
+        order4.setCreateDate(new Date());
+        order4.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
+        order4.setUserId(4L);
+        List<OrderDetail> orderDetails4 = new ArrayList<OrderDetail>();
+
+        // 创建一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）
+        Item item4 = new Item();
+        item4.setId(-1L);          // --- 注意这里设置了 -1 哟! ---
+        orderDetails4.add(new OrderDetail(order4.getOrderId(), item4));  // <1>
+
+        order4.setOrderDetails(orderDetails4);
+
+        ORDER_DATA.put(order4.getOrderId(), order4);
+        //@+doc
+        // ----
+        //
+        // <1> 就创建一个商品，逐个累加计数，方便查看断路器的状态，不会跳数字。
         //@-others
     }
-    //@+node:swot.20251005174948.8: *3* Item queryItemByIdWithCircuitBreaker -- 主要更改的代码
+    //@+node:swot.20251005215932.8: *3* @ignore-node Item queryItemByIdWithCircuitBreaker
     //@+doc
     // [source,java]
     // ----
@@ -131,26 +156,7 @@ public class OrderService {
     }
     //@+doc
     // ----
-    //@+node:swot.20251005174948.9: *3* Item queryItemByIdFallback 断路器降级方法 -- 应该是没用了
-    //@+doc
-    // [source,java]
-    // ----
-    //@@c
-    //@@language java
-    /**
-     * 断路器降级方法
-     * @param id 商品 ID
-     * @param throwable 抛出的异常
-     * @return 降级后的默认商品信息
-     */
-    public Item queryItemByIdFallback(Long id, Throwable throwable) {
-        System.out.println("=======CircuitBreaker 降级处理，原因：" + throwable.getMessage());
-        return new Item(id, "查询商品信息出错", null, null, null);
-    }
-    //@+doc
-    // ----
-    //
-    //@+node:swot.20251005174948.10: *3* Order queryOrderById
+    //@+node:swot.20251005215932.10: *3* @ignore-node Order queryOrderById
     //@+doc
     // [source,java]
     // ----
@@ -177,7 +183,7 @@ public class OrderService {
         // 遍历订单详情，通过商品微服务查询商品详细数据
         for (OrderDetail orderDetail : orderDetails) {
             // 通过商品微服务查询商品详细数据
-            try {
+            // try {
                 Item item = queryItemByIdWithCircuitBreaker(
                     orderDetail.getItem().getId()
                 );
@@ -186,13 +192,13 @@ public class OrderService {
                 }
                 // 将查询到的商品详细信息设置到订单详情中
                 orderDetail.setItem(item);
-            } catch (Exception e) {
-                // 如果断路器抛出异常，使用降级商品
-                Item fallbackItem = queryItemByIdFallback(
-                    orderDetail.getItem().getId(), e
-                );
-                orderDetail.setItem(fallbackItem);
-            }
+            // } catch (Exception e) {
+                // // 如果断路器抛出异常，使用降级商品
+                // Item fallbackItem = queryItemByIdFallback(
+                    // orderDetail.getItem().getId(), e
+                // );
+                // orderDetail.setItem(fallbackItem);
+            // }
         }
         return order;
     }
