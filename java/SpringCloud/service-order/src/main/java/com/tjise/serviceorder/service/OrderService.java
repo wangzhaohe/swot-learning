@@ -1,20 +1,22 @@
 //@+leo-ver=5-thin
-//@+node:swot.20251001110527.1: * @file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
+//@+node:swot.20251005124609.19: * @file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
 //@@language java
 //@+others
-//@+node:swot.20251001110527.2: ** @ignore-node import
+//@+node:swot.20251005124609.20: ** @ignore-node import
 package com.tjise.serviceorder.service;
 
+import com.tjise.serviceorder.client.ItemFeignClient;
 import com.tjise.serviceorder.pojo.Order;
 import com.tjise.serviceorder.pojo.OrderDetail;
 import com.tjise.serviceorder.pojo.Item;
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
-//@+node:swot.20251001110527.3: ** class OrderService
+//@+node:swot.20251005124609.21: ** class OrderService
 //@+doc
 // [source,java]
 // ----
@@ -28,17 +30,21 @@ import java.util.*;
 public class OrderService {
 
     @Autowired
-    private CircuitBreakerRegistry circuitBreakerRegistry;
+    // private CircuitBreakerRegistry circuitBreakerRegistry;
+    private CircuitBreakerFactory circuitBreakerFactory;
+    
+    @Autowired
+    ItemFeignClient itemFeignClient;  // --- New Added ---
 
     //@+others
-    //@+node:swot.20251001110527.4: *3* @ignore-tree ORDER_DATA 模拟数据
+    //@+node:swot.20251005124609.22: *3* @ignore-node  ORDER_DATA 模拟数据
     // 使用静态Map模拟数据库存储订单数据
     private static final Map<String, Order> ORDER_DATA = new HashMap<String, Order>();
     // 初始化订单数据
     static {
         // 模拟数据库，构造测试数据
         //@+others
-        //@+node:swot.20251001110527.5: *4* 第一个订单 order
+        //@+node:swot.20251005124609.23: *4* @ignore-node 第一个订单 order
         Order order = new Order();
         order.setOrderId("201810300001");
         order.setCreateDate(new Date());
@@ -48,6 +54,7 @@ public class OrderService {
 
         // 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）
         Item item = new Item();
+        // item.setId(1L);
         item.setId(1L);
         orderDetails.add(new OrderDetail(order.getOrderId(), item));
 
@@ -59,7 +66,7 @@ public class OrderService {
         order.setOrderDetails(orderDetails);
 
         ORDER_DATA.put(order.getOrderId(), order);
-        //@+node:swot.20251001110527.6: *4* 第二个订单 order2
+        //@+node:swot.20251005124609.24: *4* @ignore-node 第二个订单 order2
         Order order2 = new Order();
         order2.setOrderId("201810300002");
         order2.setCreateDate(new Date());
@@ -80,34 +87,57 @@ public class OrderService {
         order2.setOrderDetails(orderDetails2);
 
         ORDER_DATA.put(order2.getOrderId(), order2);
+        //@+node:swot.20251005124609.25: *4* 第三个订单 order3 -- item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常
+        //@+doc
+        // [source,java]
+        // ----
+        //@@c
+        //@@language java
+        Order order3 = new Order();
+        order3.setOrderId("201810300003");
+        order3.setCreateDate(new Date());
+        order3.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
+        order3.setUserId(3L);
+        List<OrderDetail> orderDetails3 = new ArrayList<OrderDetail>();
+
+        // 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）
+        Item item3 = new Item();
+        item3.setId(-1L);          // --- 注意这里设置了 -1 哟! ---
+        orderDetails3.add(new OrderDetail(order3.getOrderId(), item3));
+
+        // 创建第二个商品详情
+        item3 = new Item();
+        item3.setId(6L);
+        orderDetails3.add(new OrderDetail(order3.getOrderId(), item3));
+
+        order3.setOrderDetails(orderDetails3);
+
+        ORDER_DATA.put(order3.getOrderId(), order3);
+        //@+doc
+        // ----
+        //
         //@-others
     }
-    //@+node:swot.20251001115941.1: *3* Item queryItemByIdWithCircuitBreaker
+    //@+node:swot.20251005124609.26: *3* Item queryItemByIdWithCircuitBreaker
     //@+doc
     // [source,java]
     // ----
     //@@c
     //@@language java
-    // name 对应 application.yml 中的配置
     public Item queryItemByIdWithCircuitBreaker(Long id) {
-        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("OrderService");
-        System.out.println("=== 断路器状态: " + circuitBreaker.getState() + " ===");
-        System.out.println("=== 断路器失败率: " + circuitBreaker.getMetrics().getFailureRate() + " ===");
-        System.out.println("=== 断路器调用次数: " + circuitBreaker.getMetrics().getNumberOfBufferedCalls() + " ===");
-
-        try {
-            Item result = circuitBreaker.executeSupplier(() -> itemService.queryItemByIdWithWebClient(id));
-            System.out.println("=== WebClient 调用成功 ===");
-            return result;
-        } catch (Exception e) {
-            System.out.println("=== 断路器抛出异常: " + e.getClass().getSimpleName() + " - " + e.getMessage() + " ===");
-            throw e;
-        }
+        // Using Spring Cloud Circuit Breaker with CircuitBreakerFactory
+        return circuitBreakerFactory.create("OrderService").run(
+            () -> {
+                Item result = itemFeignClient.queryItemById(id);  // 使用 feign
+                System.out.println("result:" + result);
+                return result;
+            },
+            throwable -> queryItemByIdFallback(id, throwable)
+        );
     }
     //@+doc
     // ----
-    //
-    //@+node:swot.20251001083156.1: *3* Item queryItemByIdFallback 断路器降级方法
+    //@+node:swot.20251005124609.27: *3* Item queryItemByIdFallback 断路器降级方法
     //@+doc
     // [source,java]
     // ----
@@ -126,7 +156,7 @@ public class OrderService {
     //@+doc
     // ----
     //
-    //@+node:swot.20251001110527.7: *3* queryOrderById
+    //@+node:swot.20251005124609.28: *3* Order queryOrderById
     //@+doc
     // [source,java]
     // ----
@@ -154,7 +184,9 @@ public class OrderService {
         for (OrderDetail orderDetail : orderDetails) {
             // 通过商品微服务查询商品详细数据
             try {
-                Item item = queryItemByIdWithCircuitBreaker(orderDetail.getItem().getId());
+                Item item = queryItemByIdWithCircuitBreaker(
+                    orderDetail.getItem().getId()
+                );
                 if (null == item) {
                     continue;
                 }
@@ -162,8 +194,9 @@ public class OrderService {
                 orderDetail.setItem(item);
             } catch (Exception e) {
                 // 如果断路器抛出异常，使用降级商品
-                // 注意：这里不再打印日志，因为 queryItemByIdWithCircuitBreaker 中已经处理了异常
-                Item fallbackItem = queryItemByIdFallback(orderDetail.getItem().getId(), e);
+                Item fallbackItem = queryItemByIdFallback(
+                    orderDetail.getItem().getId(), e
+                );
                 orderDetail.setItem(fallbackItem);
             }
         }
@@ -175,6 +208,5 @@ public class OrderService {
 }
 //@+doc
 // ----
-//
 //@-others
 //@-leo
