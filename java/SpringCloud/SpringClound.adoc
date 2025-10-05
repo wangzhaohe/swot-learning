@@ -3329,7 +3329,7 @@ public class OrderService {
 }
 ----
 
-====== 第三个订单 order3 -- item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常
+====== 第三个订单 order3 -- item3.setId(-1L) 设为 -1 ItemController.java 会抛出异常
 [source,java]
 ----
 Order order3 = new Order();
@@ -3366,7 +3366,7 @@ public Item queryItemByIdWithCircuitBreaker(Long id) {
 }
 ----
 
-====== Item queryItemByIdFallback 断路器降级方法 -- 应该是没用了
+====== Item queryItemByIdFallback 断路器降级方法 -- 没用了，可以删除了
 [source,java]
 ----
 /**
@@ -3429,8 +3429,38 @@ public Order queryOrderById(String orderId) throws IOException {
 === 开启 Spring Boot Actuator
 启动应用后，您可以访问以下端点：
 
-- http://localhost:8091/actuator/health - 查看断路器健康状态
-- http://localhost:8091/actuator/circuitbreakerevents - 查看断路器事件历史
+- http :8091/order/201810300004
++
+....
+HTTP/1.1 200
+Connection: keep-alive
+Content-Type: application/json
+Date: Sun, 05 Oct 2025 14:15:05 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+{
+    "createDate": "2025-10-05T14:14:44.090+00:00",
+    "orderDetails": [
+        {
+            "item": {
+                "desc": null,
+                "id": -1,
+                "pic": null,
+                "price": null,
+                "title": "Feign 降级商品"
+            },
+            "orderId": "201810300004"
+        }
+    ],
+    "orderId": "201810300004",
+    "updateDate": "2025-10-05T14:14:44.089+00:00",
+    "userId": 4
+}
+....
+
+- http :8091/actuator/health - 查看断路器健康状态
+- http :8091/actuator/circuitbreakerevents - 查看断路器事件历史
 
 ==== file -> service-order/pom.xml
 
@@ -3462,4 +3492,52 @@ management:
     circuitbreakers:
       enabled: true  # 启用断路器健康检查
 ----
+
+==== file -> service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
+
+
+===== class OrderService
+[source,java]
+----
+/**
+ * 订单服务类
+ * 提供订单查询功能，并通过调用商品服务获取商品详细信息
+ */
+@Service
+public class OrderService {
+
+    // @Autowired
+    // private CircuitBreakerRegistry circuitBreakerRegistry;
+    // private CircuitBreakerFactory circuitBreakerFactory;  // 更改为工厂模式
+    
+    @Autowired
+    ItemFeignClient itemFeignClient;  // --- New Added ---
+
+    @others
+}
+----
+
+====== 第四个订单 order4 -- item4.setId(-1L) 设为 -1 ItemController.java 会抛出异常
+[source,java]
+----
+Order order4 = new Order();
+order4.setOrderId("201810300004");
+order4.setCreateDate(new Date());
+order4.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
+order4.setUserId(4L);
+List<OrderDetail> orderDetails4 = new ArrayList<OrderDetail>();
+
+// 创建一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）
+Item item4 = new Item();
+item4.setId(-1L);          // --- 注意这里设置了 -1 哟! ---
+orderDetails4.add(new OrderDetail(order4.getOrderId(), item4));  // <1>
+
+order4.setOrderDetails(orderDetails4);
+
+ORDER_DATA.put(order4.getOrderId(), order4);
+----
+
+<1> 就创建一个商品，逐个累加计数，方便查看断路器的状态，不会跳数字，能看到半开状态 HALF_OPEN。
++
+image::img/actuator_health.png[]
 

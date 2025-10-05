@@ -707,6 +707,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_file_service_orderpom_xml_8">file &#8594; service-order/pom.xml</a></li>
 <li><a href="#_file_service_ordersrcmainresourcesapplication_yml_8">file &#8594; service-order/src/main/resources/application.yml</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_8">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
 </ul>
 </li>
 </ul>
@@ -5237,7 +5238,7 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect5">
-<h6 id="_第三个订单_order3item5_setid_1l_设为_1_itemcontroller_java_会抛出异常_3">第三个订单 order3&#8201;&#8212;&#8201;item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常</h6>
+<h6 id="_第三个订单_order3item3_setid_1l_设为_1_itemcontroller_java_会抛出异常">第三个订单 order3&#8201;&#8212;&#8201;item3.setId(-1L) 设为 -1 ItemController.java 会抛出异常</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-p">();</span>
@@ -5278,7 +5279,7 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect5">
-<h6 id="_item_queryitembyidfallback_断路器降级方法应该是没用了">Item queryItemByIdFallback 断路器降级方法&#8201;&#8212;&#8201;应该是没用了</h6>
+<h6 id="_item_queryitembyidfallback_断路器降级方法没用了可以删除了">Item queryItemByIdFallback 断路器降级方法&#8201;&#8212;&#8201;没用了，可以删除了</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
@@ -5352,10 +5353,42 @@ Transfer-Encoding: chunked
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://localhost:8091/actuator/health" class="bare">http://localhost:8091/actuator/health</a> - 查看断路器健康状态</p>
+<p>http :8091/order/201810300004</p>
+<div class="literalblock">
+<div class="content">
+<pre>HTTP/1.1 200
+Connection: keep-alive
+Content-Type: application/json
+Date: Sun, 05 Oct 2025 14:15:05 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+{
+    "createDate": "2025-10-05T14:14:44.090+00:00",
+    "orderDetails": [
+        {
+            "item": {
+                "desc": null,
+                "id": -1,
+                "pic": null,
+                "price": null,
+                "title": "Feign 降级商品"
+            },
+            "orderId": "201810300004"
+        }
+    ],
+    "orderId": "201810300004",
+    "updateDate": "2025-10-05T14:14:44.089+00:00",
+    "userId": 4
+}</pre>
+</div>
+</div>
 </li>
 <li>
-<p><a href="http://localhost:8091/actuator/circuitbreakerevents" class="bare">http://localhost:8091/actuator/circuitbreakerevents</a> - 查看断路器事件历史</p>
+<p>http :8091/actuator/health - 查看断路器健康状态</p>
+</li>
+<li>
+<p>http :8091/actuator/circuitbreakerevents - 查看断路器事件历史</p>
 </li>
 </ul>
 </div>
@@ -5394,13 +5427,74 @@ Transfer-Encoding: chunked
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_8">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h4>
+<div class="sect4">
+<h5 id="_class_orderservice_7">class OrderService</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务类</span>
+<span class="tok-cm"> * 提供订单查询功能，并通过调用商品服务获取商品详细信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// @Autowired</span>
+<span class="tok-w">    </span><span class="tok-c1">// private CircuitBreakerRegistry circuitBreakerRegistry;</span>
+<span class="tok-w">    </span><span class="tok-c1">// private CircuitBreakerFactory circuitBreakerFactory;  // 更改为工厂模式</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-n">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// --- New Added ---</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_第四个订单_order4item4_setid_1l_设为_1_itemcontroller_java_会抛出异常">第四个订单 order4&#8201;&#8212;&#8201;item4.setId(-1L) 设为 -1 ItemController.java 会抛出异常</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order4</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-p">();</span>
+<span class="tok-n">order4</span><span class="tok-p">.</span><span class="tok-na">setOrderId</span><span class="tok-p">(</span><span class="tok-s">&quot;201810300004&quot;</span><span class="tok-p">);</span>
+<span class="tok-n">order4</span><span class="tok-p">.</span><span class="tok-na">setCreateDate</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Date</span><span class="tok-p">());</span>
+<span class="tok-n">order4</span><span class="tok-p">.</span><span class="tok-na">setUpdateDate</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getCreateDate</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// 真会偷懒呀</span>
+<span class="tok-n">order4</span><span class="tok-p">.</span><span class="tok-na">setUserId</span><span class="tok-p">(</span><span class="tok-mi">4L</span><span class="tok-p">);</span>
+<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails4</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-p">();</span>
+
+<span class="tok-c1">// 创建一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）</span>
+<span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item4</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item4</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mi">1L</span><span class="tok-p">);</span><span class="tok-w">          </span><span class="tok-c1">// --- 注意这里设置了 -1 哟! ---</span>
+<span class="tok-n">orderDetails4</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order4</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item4</span><span class="tok-p">));</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+
+<span class="tok-n">order4</span><span class="tok-p">.</span><span class="tok-na">setOrderDetails</span><span class="tok-p">(</span><span class="tok-n">orderDetails4</span><span class="tok-p">);</span>
+
+<span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-n">order4</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">order4</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>就创建一个商品，逐个累加计数，方便查看断路器的状态，不会跳数字，能看到半开状态 HALF_OPEN。
+<div class="imageblock">
+<div class="content">
+<img src="img/actuator_health.png" alt="actuator health">
+</div>
+</div></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-05 21:55:53 +0800
+Last updated 2025-10-05 22:22:42 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
