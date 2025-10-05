@@ -1,5 +1,5 @@
 //@+leo-ver=5-thin
-//@+node:swot.20251005124609.18: * @file service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java
+//@+node:swot.20251005174444.1: * @file service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java
 //@+doc
 // [source,java]
 // ----
@@ -12,7 +12,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "app-item")
+// 要访问的在 Eureka 中的服务名，并指定实现该接口的降级类名
+@FeignClient(name = "app-item", fallback = ItemFallback.class)
 public interface ItemFeignClient {
     @GetMapping("/item/{id}")
     Item queryItemById(@PathVariable("id") Long id);

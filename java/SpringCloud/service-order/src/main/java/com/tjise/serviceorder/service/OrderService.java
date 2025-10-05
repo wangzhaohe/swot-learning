@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20251005124609.19: * @file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
+//@+node:swot.20251005174948.1: * @file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
 //@@language java
 //@+others
-//@+node:swot.20251005124609.20: ** @ignore-node import
+//@+node:swot.20251005174948.2: ** @ignore-node import
 package com.tjise.serviceorder.service;
 
 import com.tjise.serviceorder.client.ItemFeignClient;
@@ -10,13 +10,11 @@ import com.tjise.serviceorder.pojo.Order;
 import com.tjise.serviceorder.pojo.OrderDetail;
 import com.tjise.serviceorder.pojo.Item;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
-import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
-//@+node:swot.20251005124609.21: ** class OrderService
+//@+node:swot.20251005174948.3: ** class OrderService
 //@+doc
 // [source,java]
 // ----
@@ -29,22 +27,22 @@ import java.util.*;
 @Service
 public class OrderService {
 
-    @Autowired
+    // @Autowired
     // private CircuitBreakerRegistry circuitBreakerRegistry;
-    private CircuitBreakerFactory circuitBreakerFactory;  // 更改为工厂模式
+    // private CircuitBreakerFactory circuitBreakerFactory;  // 更改为工厂模式
     
     @Autowired
     ItemFeignClient itemFeignClient;  // --- New Added ---
 
     //@+others
-    //@+node:swot.20251005124609.22: *3* @ignore-node  ORDER_DATA 模拟数据
+    //@+node:swot.20251005174948.4: *3* @ignore-node  ORDER_DATA 模拟数据
     // 使用静态Map模拟数据库存储订单数据
     private static final Map<String, Order> ORDER_DATA = new HashMap<String, Order>();
     // 初始化订单数据
     static {
         // 模拟数据库，构造测试数据
         //@+others
-        //@+node:swot.20251005124609.23: *4* @ignore-node 第一个订单 order
+        //@+node:swot.20251005174948.5: *4* @ignore-node 第一个订单 order
         Order order = new Order();
         order.setOrderId("201810300001");
         order.setCreateDate(new Date());
@@ -66,7 +64,7 @@ public class OrderService {
         order.setOrderDetails(orderDetails);
 
         ORDER_DATA.put(order.getOrderId(), order);
-        //@+node:swot.20251005124609.24: *4* @ignore-node 第二个订单 order2
+        //@+node:swot.20251005174948.6: *4* @ignore-node 第二个订单 order2
         Order order2 = new Order();
         order2.setOrderId("201810300002");
         order2.setCreateDate(new Date());
@@ -87,7 +85,7 @@ public class OrderService {
         order2.setOrderDetails(orderDetails2);
 
         ORDER_DATA.put(order2.getOrderId(), order2);
-        //@+node:swot.20251005124609.25: *4* 第三个订单 order3 -- item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常
+        //@+node:swot.20251005174948.7: *4* 第三个订单 order3 -- item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常
         //@+doc
         // [source,java]
         // ----
@@ -118,26 +116,22 @@ public class OrderService {
         //
         //@-others
     }
-    //@+node:swot.20251005124609.26: *3* Item queryItemByIdWithCircuitBreaker
+    //@+node:swot.20251005174948.8: *3* Item queryItemByIdWithCircuitBreaker -- 主要更改的代码
     //@+doc
     // [source,java]
     // ----
     //@@c
     //@@language java
     public Item queryItemByIdWithCircuitBreaker(Long id) {
-        // Using Spring Cloud Circuit Breaker with CircuitBreakerFactory
-        return circuitBreakerFactory.create("OrderService").run(
-            () -> {
-                Item result = itemFeignClient.queryItemById(id);  // 使用 feign
-                System.out.println("result:" + result);
-                return result;
-            },
-            throwable -> queryItemByIdFallback(id, throwable)
-        );
+
+        // 简化为直接调用，断路器由 Feign 自动处理
+        Item result = itemFeignClient.queryItemById(id);  // 使用 feign
+        System.out.println("result:" + result);
+        return result;
     }
     //@+doc
     // ----
-    //@+node:swot.20251005124609.27: *3* Item queryItemByIdFallback 断路器降级方法
+    //@+node:swot.20251005174948.9: *3* Item queryItemByIdFallback 断路器降级方法 -- 应该是没用了
     //@+doc
     // [source,java]
     // ----
@@ -156,7 +150,7 @@ public class OrderService {
     //@+doc
     // ----
     //
-    //@+node:swot.20251005124609.28: *3* Order queryOrderById
+    //@+node:swot.20251005174948.10: *3* Order queryOrderById
     //@+doc
     // [source,java]
     // ----
