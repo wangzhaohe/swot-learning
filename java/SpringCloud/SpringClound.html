@@ -676,10 +676,37 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_雪崩效应">雪崩效应</a></li>
 <li><a href="#_resilience4j_快速入门">Resilience4j 快速入门</a>
 <ul class="sectlevel3">
-<li><a href="#_file_service_orderpom_xml_5">@file service-order/pom.xml</a></li>
-<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_6">@file service-order/src/main/resources/application.yml</a></li>
-<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_4">@file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
+<li><a href="#_file_service_orderpom_xml_5">file &#8594; service-order/pom.xml</a></li>
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_6">file &#8594; service-order/src/main/resources/application.yml</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_4">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
 <li><a href="#_测试_resilience4j">测试 Resilience4j</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_9_feign_客户端声明式_rest_调用">9. Feign 客户端（声明式 REST 调用）</a>
+<ul class="sectlevel2">
+<li><a href="#_feign_与其它客户端差异与关系">Feign 与其它客户端差异与关系</a></li>
+<li><a href="#_feign_与其它客户端在微服务架构中的使用场景">Feign 与其它客户端在微服务架构中的使用场景</a></li>
+<li><a href="#_feign_与其它客户端代码示例对比">Feign 与其它客户端代码示例对比</a>
+<ul class="sectlevel3">
+<li><a href="#_项目中使用的_resttemplate_方式">项目中使用的 RestTemplate 方式</a></li>
+<li><a href="#_项目中使用的_webclient_方式">项目中使用的 WebClient 方式</a></li>
+<li><a href="#_项目中使用的_feign_方式">项目中使用的 Feign 方式</a></li>
+</ul>
+</li>
+<li><a href="#_各自优势和适用场景总结">各自优势和适用场景总结</a></li>
+<li><a href="#_feign_客户端入门">Feign 客户端入门</a>
+<ul class="sectlevel3">
+<li><a href="#_1_直接使用断路器_resilience4j纯手工">1) 直接使用断路器 Resilience4j（纯手工）</a></li>
+<li><a href="#_2_使用自带断路器_resilience4jspringcloud_自带在服务层更细粒度控制">2) 使用自带断路器 Resilience4j（SpringCloud 自带，在服务层更细粒度控制）</a></li>
+<li><a href="#_3_使用自带断路器_feignfeign_集成_springcloud_自带的断路器不需要在服务层手动管理断路器">3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器，不需要在服务层手动管理断路器）</a></li>
+</ul>
+</li>
+<li><a href="#_开启_spring_boot_actuator">开启 Spring Boot Actuator</a>
+<ul class="sectlevel3">
+<li><a href="#_file_service_orderpom_xml_8">file &#8594; service-order/pom.xml</a></li>
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_8">file &#8594; service-order/src/main/resources/application.yml</a></li>
 </ul>
 </li>
 </ul>
@@ -3897,8 +3924,21 @@ Transfer-Encoding: chunked
 </div>
 <div class="sect2">
 <h3 id="_resilience4j_快速入门">Resilience4j 快速入门</h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+我们是启了负载均衡的，所以不能使用注解的方式来使用 queryItemByIdFallback，会被负载均衡给拦截掉。
+只能使用手动通过 circuitBreakerRegistry 的方式来启用断路器 Resilience4j，这点要注意了。因为通过多次调试发现，Resilience4j 不起作用的原因就在这儿了。
+</td>
+</tr>
+</table>
+</div>
 <div class="sect3">
-<h4 id="_file_service_orderpom_xml_5">@file service-order/pom.xml</h4>
+<h4 id="_file_service_orderpom_xml_5">file &#8594; service-order/pom.xml</h4>
 <div class="sect4">
 <h5 id="_resilience4j_依赖">resilience4j 依赖</h5>
 <div class="listingblock">
@@ -3913,7 +3953,7 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_service_ordersrcmainresourcesapplication_yml_6">@file service-order/src/main/resources/application.yml</h4>
+<h4 id="_file_service_ordersrcmainresourcesapplication_yml_6">file &#8594; service-order/src/main/resources/application.yml</h4>
 <div class="sect4">
 <h5 id="_port_6">port</h5>
 <div class="listingblock">
@@ -4028,7 +4068,7 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_4">@file service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h4>
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_4">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h4>
 <div class="sect4">
 <h5 id="_class_orderservice_3">class OrderService</h5>
 <div class="listingblock">
@@ -4266,10 +4306,1101 @@ Transfer-Encoding: chunked
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_9_feign_客户端声明式_rest_调用">9. Feign 客户端（声明式 REST 调用）</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>虽然使用了 WebClient 或 RestTemplate + @LoadBalanced + Resilience4j 可以实现负载均衡和容错处理，但是这个编码在实现大量业务时会显得太过于冗余（如，多参数的URL拼接）。</p>
+</div>
+<div class="paragraph">
+<p>思考：有没有更加优雅的实现呢？有，那就是 Feign。</p>
+</div>
+<div class="sect2">
+<h3 id="_feign_与其它客户端差异与关系">Feign 与其它客户端差异与关系</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>基本概念差异</p>
+<div class="paragraph">
+<p>Feign:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>是一个声明式的 Web 服务客户端</p>
+</li>
+<li>
+<p>通过注解驱动，将 HTTP 请求抽象为接口方法</p>
+</li>
+<li>
+<p>本质上是对 HTTP 客户端的高层次封装</p>
+</li>
+<li>
+<p>专注于微服务间的通信</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>WebClient/RestTemplate:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>是底层的 HTTP 客户端工具</p>
+</li>
+<li>
+<p>RestTemplate 是同步阻塞的</p>
+</li>
+<li>
+<p>WebClient 是响应式异步的</p>
+</li>
+<li>
+<p>提供基础的 HTTP 操作能力</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>关系梳理</p>
+<div class="paragraph">
+<p>实际上，Feign 与其他工具的关系是：Feign 是一个抽象层，它可以使用不同的底层 HTTP 客户端实现：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>默认使用 HttpURLConnection</p>
+</li>
+<li>
+<p>可以配置使用 Apache HttpClient</p>
+</li>
+<li>
+<p>可以配置使用 OkHttp</p>
+</li>
+<li>
+<p>甚至可以与 WebClient 集成</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>但是，Feign 不能直接使用 RestTemplate 或 WebClient 作为其底层实现，因为它们的设计理念不同。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_feign_与其它客户端在微服务架构中的使用场景">Feign 与其它客户端在微服务架构中的使用场景</h3>
+<div class="paragraph">
+<p>Feign 专为微服务设计:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>与 Eureka、LoadBalancer 无缝集成</p>
+</li>
+<li>
+<p>内置负载均衡支持</p>
+</li>
+<li>
+<p>提供声明式服务调用</p>
+</li>
+<li>
+<p>天然支持熔断器模式</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>WebClient/RestTemplate 需要额外配置:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>RestTemplate: 需要 @LoadBalanced 注解与服务发现集成</p>
+</li>
+<li>
+<p>WebClient: 需要手动配置与 LoadBalancer 的集成</p>
+</li>
+<li>
+<p>都需要额外配置熔断机制</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_feign_与其它客户端代码示例对比">Feign 与其它客户端代码示例对比</h3>
+<div class="sect3">
+<h4 id="_项目中使用的_resttemplate_方式">项目中使用的 RestTemplate 方式</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">.</span><span class="tok-na">getForObject</span><span class="tok-p">(</span>
+<span class="tok-w">                </span><span class="tok-s">&quot;http://app-item/item/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_项目中使用的_webclient_方式">项目中使用的 WebClient 方式</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 单构造器注入</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">ItemService</span><span class="tok-p">(</span><span class="tok-n">WebClient</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">webClient</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithWebClient</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">uri</span><span class="tok-p">(</span><span class="tok-s">&quot;/{id}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">retrieve</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">bodyToMono</span><span class="tok-p">(</span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 类似于 js Promise</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">block</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_项目中使用的_feign_方式">项目中使用的 Feign 方式</h4>
+<div class="paragraph">
+<p>先展示一下，具体内容参后面详细步骤。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 要访问的在 Eureka 中的服务名，并指定实现该接口的降级类名</span>
+<span class="tok-nd">@FeignClient</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">fallback</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ItemFallback</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_各自优势和适用场景总结">各自优势和适用场景总结</h3>
+<div class="paragraph">
+<p>Feign 优势:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>声明式接口: 代码简洁，像调用本地方法</p>
+</li>
+<li>
+<p>开箱即用: 自动集成负载均衡、熔断器</p>
+</li>
+<li>
+<p>微服务友好的: 与 Spring Cloud 生态无缝集成</p>
+</li>
+<li>
+<p>配置简单: 通过注解和配置文件即可完成大部分配置</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>WebClient/RestTemplate 优势:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>灵活性: 完全控制 HTTP 请求的每个细节</p>
+</li>
+<li>
+<p>通用性: 不仅适用于微服务，也适用于一般 HTTP 客户端场景</p>
+</li>
+<li>
+<p>响应式: WebClient 支持非阻塞异步编程</p>
+</li>
+<li>
+<p>性能: 底层控制，理论上性能更高</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>关系总结:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Feign 是面向微服务的高级抽象层</p>
+</li>
+<li>
+<p>WebClient/RestTemplate 是通用的底层 HTTP 客户端</p>
+</li>
+<li>
+<p>三者解决的问题层次不同</p>
+</li>
+<li>
+<p>Feign 自动处理了很多微服务特有的问题（负载均衡、熔断等）</p>
+</li>
+<li>
+<p>WebClient/RestTemplate 需要手动配置这些微服务特性</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>在你的 Spring Cloud 微服务项目中，Feign 提供了更优雅的解决方案，减少了样板代码，让开发者更专注于业务逻辑。</p>
+</div>
+<div class="paragraph">
+<p>总的来说，Feign 与 WebClient/RestTemplate 并不是直接竞争关系，而是解决不同层次问题的工具。Feign 更专注于微服务间的声明式通信，而 WebClient/RestTemplate 是更通用的 HTTP 客户端工具。在微服务架构中，Feign 提供了更高层次的抽象和更好的开发体验。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_feign_客户端入门">Feign 客户端入门</h3>
+<div class="sect3">
+<h4 id="_1_直接使用断路器_resilience4j纯手工">1) 直接使用断路器 Resilience4j（纯手工）</h4>
+<div class="paragraph">
+<p>正常测试</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>http :8091/order/201810300001</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>item5 id 为 -1，会抛出异常，查看 8091 打印</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>http :8091/order/201810300003</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_file_service_orderpom_xml_6">file &#8594; service-order/pom.xml</h5>
+<div class="sect5">
+<h6 id="_openfeign">openfeign</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-starter-openfeign</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_8">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h5>
+<div class="sect5">
+<h6 id="_class_serviceorderapplication_enablefeignclients">class ServiceOrderApplication &#8594; @EnableFeignClients</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务启动类，Spring Boot 应用程序入口点。</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@SpringBootApplication</span>
+<span class="tok-nd">@EnableEurekaClient</span><span class="tok-w">  </span><span class="tok-c1">// 启用 Eureka 客户端功能</span>
+<span class="tok-nd">@EnableFeignClients</span><span class="tok-w">  </span><span class="tok-c1">// --- New Added --- 会初始化和配置 feign</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ServiceOrderApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ServiceOrderApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 包含其他代码</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">负载均衡使用拦截器原理：</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>拦截请求URL</p>
+</li>
+<li>
+<p>识别服务名</p>
+</li>
+<li>
+<p>通过服务发现获取实际地址</p>
+</li>
+<li>
+<p>替换URL并发起请求</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderclientitemfeignclient_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.client</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.openfeign.FeignClient</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.GetMapping</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.PathVariable</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@FeignClient</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 要访问的在 Eureka 中的服务名</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_5">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h5>
+<div class="sect5">
+<h6 id="_class_orderservice_4">class OrderService</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务类</span>
+<span class="tok-cm"> * 提供订单查询功能，并通过调用商品服务获取商品详细信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">CircuitBreakerRegistry</span><span class="tok-w"> </span><span class="tok-n">circuitBreakerRegistry</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-n">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// --- New Added ---</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_第三个订单_order3item5_setid_1l_设为_1_itemcontroller_java_会抛出异常">第三个订单 order3&#8201;&#8212;&#8201;item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-p">();</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setOrderId</span><span class="tok-p">(</span><span class="tok-s">&quot;201810300003&quot;</span><span class="tok-p">);</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setCreateDate</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Date</span><span class="tok-p">());</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setUpdateDate</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getCreateDate</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// 真会偷懒呀</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setUserId</span><span class="tok-p">(</span><span class="tok-mi">3L</span><span class="tok-p">);</span>
+<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-p">();</span>
+
+<span class="tok-c1">// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）</span>
+<span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item3</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mi">1L</span><span class="tok-p">);</span><span class="tok-w">          </span><span class="tok-c1">// --- 注意这里设置了 -1 哟! ---</span>
+<span class="tok-n">orderDetails3</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item3</span><span class="tok-p">));</span>
+
+<span class="tok-c1">// 创建第二个商品详情</span>
+<span class="tok-n">item3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item3</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-mi">6L</span><span class="tok-p">);</span>
+<span class="tok-n">orderDetails3</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item3</span><span class="tok-p">));</span>
+
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setOrderDetails</span><span class="tok-p">(</span><span class="tok-n">orderDetails3</span><span class="tok-p">);</span>
+
+<span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">order3</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_item_queryitembyidwithcircuitbreaker_2">Item queryItemByIdWithCircuitBreaker</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// name 对应 application.yml 中的配置</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithCircuitBreaker</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">CircuitBreaker</span><span class="tok-w"> </span><span class="tok-n">circuitBreaker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">circuitBreakerRegistry</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">circuitBreaker</span><span class="tok-p">(</span><span class="tok-s">&quot;OrderService&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 断路器状态: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
+<span class="tok-w">            </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">getState</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 断路器失败率: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
+<span class="tok-w">            </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">getMetrics</span><span class="tok-p">().</span><span class="tok-na">getFailureRate</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 断路器调用次数: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
+<span class="tok-w">            </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">getMetrics</span><span class="tok-p">().</span><span class="tok-na">getNumberOfBufferedCalls</span><span class="tok-p">());</span>
+
+<span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// Item result = circuitBreaker.executeSupplier(</span>
+<span class="tok-w">            </span><span class="tok-c1">// () -&gt; itemService.queryItemByIdWithWebClient(id));</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 启用断路器</span>
+<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">executeSupplier</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 使用 feign</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;result:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 断路器抛出异常: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span>
+<span class="tok-w">                </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getClass</span><span class="tok-p">().</span><span class="tok-na">getSimpleName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span>
+<span class="tok-w">                </span><span class="tok-s">&quot; - &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_item_queryitembyidfallback_断路器降级方法_2">Item queryItemByIdFallback 断路器降级方法</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 断路器降级方法</span>
+<span class="tok-cm"> * @param id 商品 ID</span>
+<span class="tok-cm"> * @param throwable 抛出的异常</span>
+<span class="tok-cm"> * @return 降级后的默认商品信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdFallback</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Throwable</span><span class="tok-w"> </span><span class="tok-n">throwable</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=======CircuitBreaker 降级处理，原因：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">throwable</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;查询商品信息出错&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_order_queryorderbyid_2">Order queryOrderById</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 注入商品服务，用于查询商品详细信息</span>
+<span class="tok-nd">@Autowired</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 根据订单ID查询订单数据</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * @param orderId 订单ID</span>
+<span class="tok-cm"> * @return Order 订单信息，包含完整的商品详情</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 从模拟数据库中查询订单</span>
+<span class="tok-w">    </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 获取订单详情列表</span>
+<span class="tok-w">    </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderDetails</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 遍历订单详情，通过商品微服务查询商品详细数据</span>
+<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">OrderDetail</span><span class="tok-w"> </span><span class="tok-n">orderDetail</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 通过商品微服务查询商品详细数据</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">queryItemByIdWithCircuitBreaker</span><span class="tok-p">(</span>
+<span class="tok-w">                </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-k">continue</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-c1">// 将查询到的商品详细信息设置到订单详情中</span>
+<span class="tok-w">            </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 如果断路器抛出异常，使用降级商品</span>
+<span class="tok-w">            </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">fallbackItem</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">queryItemByIdFallback</span><span class="tok-p">(</span>
+<span class="tok-w">                </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">e</span>
+<span class="tok-w">            </span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">fallbackItem</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_3">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</h5>
+<div class="sect5">
+<h6 id="_public_class_itemcontrollernew_added_当_id_为_1_时抛出异常">public class ItemController&#8201;&#8212;&#8201;New Added 当 ID 为 -1 时抛出异常</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@RestController</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Value</span><span class="tok-p">(</span><span class="tok-s">&quot;${server.port}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">serverPort</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">Logger</span><span class="tok-w"> </span><span class="tok-n">logger</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Logger</span><span class="tok-p">.</span><span class="tok-na">getLogger</span><span class="tok-p">(</span><span class="tok-n">ItemController</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">());</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 对外提供接口服务，查询商品信息</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @param id</span>
+<span class="tok-cm">     * @return</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。</span>
+<span class="tok-w">        </span><span class="tok-n">logger</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;Handling request on port: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">serverPort</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; for item ID: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Processing request on port: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">serverPort</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; for item ID: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// -- New Added Begin --- 测试用例，当 ID 为 -1 时抛出异常</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 触发异常测试，ID 为 -1 ===&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">RuntimeException</span><span class="tok-p">(</span><span class="tok-s">&quot;服务内部错误&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-c1">// -- New Added End --</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 正常返回</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_使用自带断路器_resilience4jspringcloud_自带在服务层更细粒度控制">2) 使用自带断路器 Resilience4j（SpringCloud 自带，在服务层更细粒度控制）</h4>
+<div class="paragraph">
+<p>正常测试</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>http :8091/order/201810300001</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>item5 id 为 -1，会抛出异常，查看 8091 打印</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>http :8091/order/201810300003</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_file_service_orderpom_xml_7">file &#8594; service-order/pom.xml</h5>
+<div class="sect5">
+<h6 id="_resilience4j_注释掉不用">resilience4j 注释掉不用</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.github.resilience4j</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">resilience4j-spring-boot2</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.7.0</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_spring_cloud_resilience4j">spring-cloud-&#8230;&#8203;resilience4j</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-o">&lt;</span><span class="tok-n">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-n">groupId</span><span class="tok-o">&gt;</span><span class="tok-n">org</span><span class="tok-p">.</span><span class="tok-na">springframework</span><span class="tok-p">.</span><span class="tok-na">cloud</span><span class="tok-o">&lt;/</span><span class="tok-n">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-n">artifactId</span><span class="tok-o">&gt;</span><span class="tok-n">spring</span><span class="tok-o">-</span><span class="tok-n">cloud</span><span class="tok-o">-</span><span class="tok-n">starter</span><span class="tok-o">-</span><span class="tok-n">circuitbreaker</span><span class="tok-o">-</span><span class="tok-n">resilience4j</span><span class="tok-o">&lt;/</span><span class="tok-n">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-n">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_6">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h5>
+<div class="sect5">
+<h6 id="_class_orderservice_5">class OrderService</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务类</span>
+<span class="tok-cm"> * 提供订单查询功能，并通过调用商品服务获取商品详细信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-c1">// private CircuitBreakerRegistry circuitBreakerRegistry;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">CircuitBreakerFactory</span><span class="tok-w"> </span><span class="tok-n">circuitBreakerFactory</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 更改为工厂模式</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-n">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// --- New Added ---</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_第三个订单_order3item5_setid_1l_设为_1_itemcontroller_java_会抛出异常_2">第三个订单 order3&#8201;&#8212;&#8201;item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-p">();</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setOrderId</span><span class="tok-p">(</span><span class="tok-s">&quot;201810300003&quot;</span><span class="tok-p">);</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setCreateDate</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Date</span><span class="tok-p">());</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setUpdateDate</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getCreateDate</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// 真会偷懒呀</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setUserId</span><span class="tok-p">(</span><span class="tok-mi">3L</span><span class="tok-p">);</span>
+<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-p">();</span>
+
+<span class="tok-c1">// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）</span>
+<span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item3</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mi">1L</span><span class="tok-p">);</span><span class="tok-w">          </span><span class="tok-c1">// --- 注意这里设置了 -1 哟! ---</span>
+<span class="tok-n">orderDetails3</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item3</span><span class="tok-p">));</span>
+
+<span class="tok-c1">// 创建第二个商品详情</span>
+<span class="tok-n">item3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item3</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-mi">6L</span><span class="tok-p">);</span>
+<span class="tok-n">orderDetails3</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item3</span><span class="tok-p">));</span>
+
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setOrderDetails</span><span class="tok-p">(</span><span class="tok-n">orderDetails3</span><span class="tok-p">);</span>
+
+<span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">order3</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_item_queryitembyidwithcircuitbreaker主要更改的代码">Item queryItemByIdWithCircuitBreaker&#8201;&#8212;&#8201;主要更改的代码</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithCircuitBreaker</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// Using Spring Cloud Circuit Breaker with CircuitBreakerFactory</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">circuitBreakerFactory</span><span class="tok-p">.</span><span class="tok-na">create</span><span class="tok-p">(</span><span class="tok-s">&quot;OrderService&quot;</span><span class="tok-p">).</span><span class="tok-na">run</span><span class="tok-p">(</span>
+<span class="tok-w">        </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 使用 feign</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;result:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-n">throwable</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">queryItemByIdFallback</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">throwable</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_item_queryitembyidfallback_断路器降级方法_3">Item queryItemByIdFallback 断路器降级方法</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 断路器降级方法</span>
+<span class="tok-cm"> * @param id 商品 ID</span>
+<span class="tok-cm"> * @param throwable 抛出的异常</span>
+<span class="tok-cm"> * @return 降级后的默认商品信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdFallback</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Throwable</span><span class="tok-w"> </span><span class="tok-n">throwable</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=======CircuitBreaker 降级处理，原因：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">throwable</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;查询商品信息出错&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_order_queryorderbyid_3">Order queryOrderById</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 注入商品服务，用于查询商品详细信息</span>
+<span class="tok-nd">@Autowired</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 根据订单ID查询订单数据</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * @param orderId 订单ID</span>
+<span class="tok-cm"> * @return Order 订单信息，包含完整的商品详情</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 从模拟数据库中查询订单</span>
+<span class="tok-w">    </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 获取订单详情列表</span>
+<span class="tok-w">    </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderDetails</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 遍历订单详情，通过商品微服务查询商品详细数据</span>
+<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">OrderDetail</span><span class="tok-w"> </span><span class="tok-n">orderDetail</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 通过商品微服务查询商品详细数据</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">queryItemByIdWithCircuitBreaker</span><span class="tok-p">(</span>
+<span class="tok-w">                </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-k">continue</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-c1">// 将查询到的商品详细信息设置到订单详情中</span>
+<span class="tok-w">            </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 如果断路器抛出异常，使用降级商品</span>
+<span class="tok-w">            </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">fallbackItem</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">queryItemByIdFallback</span><span class="tok-p">(</span>
+<span class="tok-w">                </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">e</span>
+<span class="tok-w">            </span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">fallbackItem</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_9">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h5>
+<div class="sect5">
+<h6 id="_class_serviceorderapplication_enablefeignclients_2">class ServiceOrderApplication &#8594; @EnableFeignClients</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务启动类，Spring Boot 应用程序入口点。</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@SpringBootApplication</span>
+<span class="tok-nd">@EnableEurekaClient</span><span class="tok-w">  </span><span class="tok-c1">// 启用 Eureka 客户端功能</span>
+<span class="tok-nd">@EnableFeignClients</span><span class="tok-w">  </span><span class="tok-c1">// --- New Added --- 会初始化和配置 feign</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ServiceOrderApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ServiceOrderApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 包含其他代码</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">负载均衡使用拦截器原理：</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>拦截请求URL</p>
+</li>
+<li>
+<p>识别服务名</p>
+</li>
+<li>
+<p>通过服务发现获取实际地址</p>
+</li>
+<li>
+<p>替换URL并发起请求</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_3_使用自带断路器_feignfeign_集成_springcloud_自带的断路器不需要在服务层手动管理断路器">3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器，不需要在服务层手动管理断路器）</h4>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainresourcesapplication_yml_7">file &#8594; service-order/src/main/resources/application.yml</h5>
+<div class="sect5">
+<h6 id="_feign_开启断路器">feign 开启断路器</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">feign</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">circuitbreaker</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_resilience4j_要改_orderservice_app_item">resilience4j 要改 OrderService &#8594; app-item</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">resilience4j</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">circuitbreaker</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">instances</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-c1"># OrderService:  这里就要改成与 Feign 要使用的 Eureka 服务名一样才行，如下面改成 app-item</span>
+<span class="tok-w">      </span><span class="tok-nt">app-item</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">sliding-window-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">5</span><span class="tok-w">                  </span><span class="tok-c1"># 需要 5次调用来计算失败率</span>
+<span class="tok-w">        </span><span class="tok-nt">failure-rate-threshold</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">50</span><span class="tok-w">              </span><span class="tok-c1"># 50% 失败率才跳闸</span>
+<span class="tok-w">        </span><span class="tok-nt">wait-duration-in-open-state</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10s</span><span class="tok-w">        </span><span class="tok-c1"># 10 秒后进入半开状态</span>
+<span class="tok-w">        </span><span class="tok-nt">permitted-number-of-calls-in-half-open-state</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">2</span><span class="tok-w">     </span><span class="tok-c1"># 半开状态允许 2 次调用</span>
+<span class="tok-w">        </span><span class="tok-nt">sliding-window-type</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">COUNT_BASED</span><span class="tok-w">        </span><span class="tok-c1"># 基于调用次数</span>
+<span class="tok-w">        </span><span class="tok-nt">record-exceptions</span><span class="tok-p">:</span><span class="tok-w">                      </span><span class="tok-c1"># 哪些异常算失败</span>
+<span class="tok-w">          </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">org.springframework.web.reactive.function.client.WebClientResponseException</span>
+<span class="tok-w">          </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">java.lang.RuntimeException</span>
+<span class="tok-w">          </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">java.io.IOException</span>
+<span class="tok-w">        </span><span class="tok-nt">ignore-exceptions</span><span class="tok-p">:</span><span class="tok-w">                      </span><span class="tok-c1"># 忽略的异常类型</span>
+<span class="tok-w">          </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">java.lang.IllegalArgumentException</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+实际生产要宽松一些的。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>测试 vs 生产</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">场景</th>
+<th class="tableblock halign-left valign-top">测试配置</th>
+<th class="tableblock halign-left valign-top">生产配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">窗口大小</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5 次调用</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100次调用</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">故障阈值</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">50%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">75%</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">恢复时间</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10 秒</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">60秒</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">目的</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">快速验证</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">稳定运行</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderclientitemfeignclient_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.client</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.openfeign.FeignClient</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.GetMapping</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.PathVariable</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 要访问的在 Eureka 中的服务名，并指定实现该接口的降级类名</span>
+<span class="tok-nd">@FeignClient</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">fallback</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ItemFallback</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderclientitemfallback_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/client/ItemFallback.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.client</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Component</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Component</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemFallback</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== ItemFallback.queryItemById 被调用 ===&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;Feign 降级商品&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_7">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h5>
+<div class="sect5">
+<h6 id="_class_orderservice_6">class OrderService</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务类</span>
+<span class="tok-cm"> * 提供订单查询功能，并通过调用商品服务获取商品详细信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// @Autowired</span>
+<span class="tok-w">    </span><span class="tok-c1">// private CircuitBreakerRegistry circuitBreakerRegistry;</span>
+<span class="tok-w">    </span><span class="tok-c1">// private CircuitBreakerFactory circuitBreakerFactory;  // 更改为工厂模式</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-n">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// --- New Added ---</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_第三个订单_order3item5_setid_1l_设为_1_itemcontroller_java_会抛出异常_3">第三个订单 order3&#8201;&#8212;&#8201;item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-p">();</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setOrderId</span><span class="tok-p">(</span><span class="tok-s">&quot;201810300003&quot;</span><span class="tok-p">);</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setCreateDate</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Date</span><span class="tok-p">());</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setUpdateDate</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getCreateDate</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// 真会偷懒呀</span>
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setUserId</span><span class="tok-p">(</span><span class="tok-mi">3L</span><span class="tok-p">);</span>
+<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-p">();</span>
+
+<span class="tok-c1">// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）</span>
+<span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item3</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mi">1L</span><span class="tok-p">);</span><span class="tok-w">          </span><span class="tok-c1">// --- 注意这里设置了 -1 哟! ---</span>
+<span class="tok-n">orderDetails3</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item3</span><span class="tok-p">));</span>
+
+<span class="tok-c1">// 创建第二个商品详情</span>
+<span class="tok-n">item3</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item3</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-mi">6L</span><span class="tok-p">);</span>
+<span class="tok-n">orderDetails3</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item3</span><span class="tok-p">));</span>
+
+<span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">setOrderDetails</span><span class="tok-p">(</span><span class="tok-n">orderDetails3</span><span class="tok-p">);</span>
+
+<span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-n">order3</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">order3</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_item_queryitembyidwithcircuitbreaker主要更改的代码_2">Item queryItemByIdWithCircuitBreaker&#8201;&#8212;&#8201;主要更改的代码</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithCircuitBreaker</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 简化为直接调用，断路器由 Feign 自动处理</span>
+<span class="tok-w">    </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 使用 feign</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;result:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_item_queryitembyidfallback_断路器降级方法应该是没用了">Item queryItemByIdFallback 断路器降级方法&#8201;&#8212;&#8201;应该是没用了</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 断路器降级方法</span>
+<span class="tok-cm"> * @param id 商品 ID</span>
+<span class="tok-cm"> * @param throwable 抛出的异常</span>
+<span class="tok-cm"> * @return 降级后的默认商品信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdFallback</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Throwable</span><span class="tok-w"> </span><span class="tok-n">throwable</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=======CircuitBreaker 降级处理，原因：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">throwable</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;查询商品信息出错&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_order_queryorderbyid_4">Order queryOrderById</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 注入商品服务，用于查询商品详细信息</span>
+<span class="tok-nd">@Autowired</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 根据订单ID查询订单数据</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * @param orderId 订单ID</span>
+<span class="tok-cm"> * @return Order 订单信息，包含完整的商品详情</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 从模拟数据库中查询订单</span>
+<span class="tok-w">    </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 获取订单详情列表</span>
+<span class="tok-w">    </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderDetails</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 遍历订单详情，通过商品微服务查询商品详细数据</span>
+<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">OrderDetail</span><span class="tok-w"> </span><span class="tok-n">orderDetail</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 通过商品微服务查询商品详细数据</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">queryItemByIdWithCircuitBreaker</span><span class="tok-p">(</span>
+<span class="tok-w">                </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-k">continue</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-c1">// 将查询到的商品详细信息设置到订单详情中</span>
+<span class="tok-w">            </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 如果断路器抛出异常，使用降级商品</span>
+<span class="tok-w">            </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">fallbackItem</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">queryItemByIdFallback</span><span class="tok-p">(</span>
+<span class="tok-w">                </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">e</span>
+<span class="tok-w">            </span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">fallbackItem</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_开启_spring_boot_actuator">开启 Spring Boot Actuator</h3>
+<div class="paragraph">
+<p>启动应用后，您可以访问以下端点：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://localhost:8091/actuator/health" class="bare">http://localhost:8091/actuator/health</a> - 查看断路器健康状态</p>
+</li>
+<li>
+<p><a href="http://localhost:8091/actuator/circuitbreakerevents" class="bare">http://localhost:8091/actuator/circuitbreakerevents</a> - 查看断路器事件历史</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_file_service_orderpom_xml_8">file &#8594; service-order/pom.xml</h4>
+<div class="sect4">
+<h5 id="_actuator">actuator</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-actuator</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainresourcesapplication_yml_8">file &#8594; service-order/src/main/resources/application.yml</h4>
+<div class="sect4">
+<h5 id="_management">management</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">management</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">endpoints</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">web</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">exposure</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">include</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">health,info,circuitbreakerevents</span><span class="tok-w">  </span><span class="tok-c1"># 暴露断路器事件端点</span>
+<span class="tok-w">  </span><span class="tok-nt">endpoint</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">health</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">show-details</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">always</span>
+<span class="tok-w">  </span><span class="tok-nt">health</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">circuitbreakers</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">  </span><span class="tok-c1"># 启用断路器健康检查</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-01 21:19:37 +0800
+Last updated 2025-10-05 21:55:53 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
