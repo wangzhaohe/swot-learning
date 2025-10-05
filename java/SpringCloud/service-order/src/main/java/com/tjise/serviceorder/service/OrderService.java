@@ -31,7 +31,7 @@ public class OrderService {
 
     @Autowired
     // private CircuitBreakerRegistry circuitBreakerRegistry;
-    private CircuitBreakerFactory circuitBreakerFactory;
+    private CircuitBreakerFactory circuitBreakerFactory;  // 更改为工厂模式
     
     @Autowired
     ItemFeignClient itemFeignClient;  // --- New Added ---
