@@ -473,8 +473,8 @@
 <v t="swot.20251006093428.1" descendentVnodeUnknownAttributes="7d71005805000000302e312e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d31302d303371077573732e"><vh>Feign 知识点</vh>
 <v t="swot.20251006132325.1"><vh>发送请求基本使用步骤（总结未使用断路器 Resilience4j 的步骤）</vh></v>
 <v t="swot.20251006093504.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d31302d303371077573732e"><vh>调用第三方API</vh>
-<v t="swot.20251006224019.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d31302d303371077573732e"><vh>file -&gt; service-order/src/main/java/com/tjise/serviceorder/client/WeatherFeignClient.java</vh></v>
-<v t="swot.20251006230036.1"><vh>file -&gt; service-order/src/test/java/com/tjise/serviceorder/WeatherTest.java</vh></v>
+<v t="swot.20251006224019.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d31302d303371077573732e"><vh>@file service-order/src/main/java/com/tjise/serviceorder/client/WeatherFeignClient.java</vh></v>
+<v t="swot.20251006230036.1"><vh>@file service-order/src/test/java/com/tjise/serviceorder/WeatherTest.java</vh></v>
 </v>
 <v t="swot.20251006093535.1"><vh>日志功能</vh></v>
 <v t="swot.20251006093547.1"><vh>超时控制</vh></v>
@@ -6349,54 +6349,6 @@ public Item queryItemByIdWithCircuitBreaker(Long id) {
     System.out.println("result:" + result);
     return result;
 }
-----
-
-</t>
-<t tx="swot.20251006224019.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032352d31302d30337103752e">@doc
-[source,java]
-----
-@c
-@language java
-package com.tjise.serviceorder.client;
-
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-// weather-client 是自己随便起的名字，在这儿没具体作用
-// url 是第三方 API 的域名，有 url 则是第三方 API
-@FeignClient(name = "weather-client", url = "http://t.weather.sojson.com")
-public interface WeatherFeignClient {
-    @GetMapping("/api/weather/city/{citycode}")
-    String getWeather(@PathVariable("citycode") Long citycode);
-}
-@doc
-----
-</t>
-<t tx="swot.20251006230036.1">@doc
-[source,java]
-----
-@c
-@language java
-package com.tjise.serviceorder;
-
-import com.tjise.serviceorder.client.WeatherFeignClient;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-public class WeatherTest {
-    @Autowired
-    private WeatherFeignClient weatherFeignClient;
-
-    @Test
-    void testGetWeather() {
-        String weather = weatherFeignClient.getWeather(101030100L);
-        System.out.println("weather: "  + weather);
-    }
-}
-@doc
 ----
 
 </t>

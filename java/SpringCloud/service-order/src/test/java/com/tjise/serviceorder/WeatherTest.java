@@ -19,7 +19,7 @@ public class WeatherTest {
 
     @Test
     void testGetWeather() {
-        String weather = weatherFeignClient.getWeather(101030100L);
+        String weather = weatherFeignClient.getWeather("101030100");
         System.out.println("weather: "  + weather);
     }
 }
