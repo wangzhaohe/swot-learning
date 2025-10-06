@@ -708,6 +708,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_发送请求基本使用步骤总结未使用断路器_resilience4j_的步骤">发送请求基本使用步骤（总结未使用断路器 Resilience4j 的步骤）</a></li>
 <li><a href="#_调用第三方api">调用第三方API</a></li>
+<li><a href="#_面试题_客户端负载均衡与服务端负载均衡的区别是什么">面试题: 客户端负载均衡与服务端负载均衡的区别是什么？</a></li>
 <li><a href="#_日志功能">日志功能</a></li>
 <li><a href="#_超时控制">超时控制</a></li>
 <li><a href="#_重试机制">重试机制</a></li>
@@ -5619,7 +5620,7 @@ Transfer-Encoding: chunked
 <span class="tok-nd">@FeignClient</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;weather-client&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">url</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;http://t.weather.sojson.com&quot;</span><span class="tok-p">)</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">WeatherFeignClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/api/weather/city/{citycode}&quot;</span><span class="tok-p">)</span>
-<span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">getWeather</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;citycode&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">citycode</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">getWeather</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;citycode&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">citycode</span><span class="tok-p">);</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -5642,11 +5643,22 @@ Transfer-Encoding: chunked
 
 <span class="tok-w">    </span><span class="tok-nd">@Test</span>
 <span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">testGetWeather</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">weather</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">weatherFeignClient</span><span class="tok-p">.</span><span class="tok-na">getWeather</span><span class="tok-p">(</span><span class="tok-mi">101030100L</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">weather</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">weatherFeignClient</span><span class="tok-p">.</span><span class="tok-na">getWeather</span><span class="tok-p">(</span><span class="tok-s">&quot;101030100&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;weather: &quot;</span><span class="tok-w">  </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">weather</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_面试题_客户端负载均衡与服务端负载均衡的区别是什么">面试题: 客户端负载均衡与服务端负载均衡的区别是什么？</h4>
+<div class="paragraph">
+<p>看下面的图就明白了</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/client_and_server_balanced.png" alt="client and server balanced" width="700">
 </div>
 </div>
 </div>
@@ -5676,7 +5688,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-06 23:21:59 +0800
+Last updated 2025-10-06 23:55:38 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

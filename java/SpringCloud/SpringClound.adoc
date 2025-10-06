@@ -3634,7 +3634,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "weather-client", url = "http://t.weather.sojson.com")
 public interface WeatherFeignClient {
     @GetMapping("/api/weather/city/{citycode}")
-    String getWeather(@PathVariable("citycode") Long citycode);
+    String getWeather(@PathVariable("citycode") String citycode);
 }
 ----
 
@@ -3655,11 +3655,16 @@ public class WeatherTest {
 
     @Test
     void testGetWeather() {
-        String weather = weatherFeignClient.getWeather(101030100L);
+        String weather = weatherFeignClient.getWeather("101030100");
         System.out.println("weather: "  + weather);
     }
 }
 ----
+
+==== 面试题: 客户端负载均衡与服务端负载均衡的区别是什么？
+看下面的图就明白了
+
+image::img/client_and_server_balanced.png[,700]
 
 ==== 日志功能
 
