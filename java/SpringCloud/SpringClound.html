@@ -701,13 +701,18 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_1_直接使用断路器_resilience4j纯手工">1) 直接使用断路器 Resilience4j（纯手工）</a></li>
 <li><a href="#_2_使用自带断路器_resilience4jspringcloud_自带在服务层更细粒度控制">2) 使用自带断路器 Resilience4j（SpringCloud 自带，在服务层更细粒度控制）</a></li>
 <li><a href="#_3_使用自带断路器_feignfeign_集成_springcloud_自带的断路器不需要在服务层手动管理断路器">3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器，不需要在服务层手动管理断路器）</a></li>
+<li><a href="#_开启_spring_boot_actuator_查看断路器状态">开启 Spring Boot Actuator 查看断路器状态</a></li>
 </ul>
 </li>
-<li><a href="#_开启_spring_boot_actuator">开启 Spring Boot Actuator</a>
+<li><a href="#_feign_知识点">Feign 知识点</a>
 <ul class="sectlevel3">
-<li><a href="#_file_service_orderpom_xml_8">file &#8594; service-order/pom.xml</a></li>
-<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_8">file &#8594; service-order/src/main/resources/application.yml</a></li>
-<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_8">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</a></li>
+<li><a href="#_发送请求基本使用步骤总结未使用断路器_resilience4j_的步骤">发送请求基本使用步骤（总结未使用断路器 Resilience4j 的步骤）</a></li>
+<li><a href="#_调用第三方api">调用第三方API</a></li>
+<li><a href="#_日志功能">日志功能</a></li>
+<li><a href="#_超时控制">超时控制</a></li>
+<li><a href="#_重试机制">重试机制</a></li>
+<li><a href="#_拦截器">拦截器</a></li>
+<li><a href="#_fallback_兜底返回">fallback 兜底返回</a></li>
 </ul>
 </li>
 </ul>
@@ -4476,11 +4481,11 @@ Transfer-Encoding: chunked
 <div class="sect3">
 <h4 id="_项目中使用的_feign_方式">项目中使用的 Feign 方式</h4>
 <div class="paragraph">
-<p>先展示一下，具体内容参后面详细步骤。</p>
+<p>先展示一下，具体内容参后面详细步骤。注意：这是发送请求哟！</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 要访问的在 Eureka 中的服务名，并指定实现该接口的降级类名</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 要访问在 Eureka 中的服务名，并指定实现该接口的降级类名</span>
 <span class="tok-nd">@FeignClient</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">fallback</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ItemFallback</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/item/{id}&quot;</span><span class="tok-p">)</span>
@@ -4574,7 +4579,7 @@ Transfer-Encoding: chunked
 </ul>
 </div>
 <div class="paragraph">
-<p>item5 id 为 -1，会抛出异常，查看 8091 打印</p>
+<p>item3 id 为 -1，会抛出异常，查看 8091 打印</p>
 </div>
 <div class="ulist">
 <ul>
@@ -4727,6 +4732,7 @@ Transfer-Encoding: chunked
 <span class="tok-w">            </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">getMetrics</span><span class="tok-p">().</span><span class="tok-na">getNumberOfBufferedCalls</span><span class="tok-p">());</span>
 
 <span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 这是之前使用 WebClient 的方式</span>
 <span class="tok-w">        </span><span class="tok-c1">// Item result = circuitBreaker.executeSupplier(</span>
 <span class="tok-w">            </span><span class="tok-c1">// () -&gt; itemService.queryItemByIdWithWebClient(id));</span>
 
@@ -4868,7 +4874,7 @@ Transfer-Encoding: chunked
 </ul>
 </div>
 <div class="paragraph">
-<p>item5 id 为 -1，会抛出异常，查看 8091 打印</p>
+<p>item3 id 为 -1，会抛出异常，查看 8091 打印</p>
 </div>
 <div class="ulist">
 <ul>
@@ -4961,6 +4967,7 @@ Transfer-Encoding: chunked
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithCircuitBreaker</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-c1">// Using Spring Cloud Circuit Breaker with CircuitBreakerFactory</span>
+<span class="tok-w">    </span><span class="tok-c1">// 使用 Factory 创建断路器</span>
 <span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">circuitBreakerFactory</span><span class="tok-p">.</span><span class="tok-na">create</span><span class="tok-p">(</span><span class="tok-s">&quot;OrderService&quot;</span><span class="tok-p">).</span><span class="tok-na">run</span><span class="tok-p">(</span>
 <span class="tok-w">        </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 使用 feign</span>
@@ -5038,53 +5045,49 @@ Transfer-Encoding: chunked
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_9">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h5>
-<div class="sect5">
-<h6 id="_class_serviceorderapplication_enablefeignclients_2">class ServiceOrderApplication &#8594; @EnableFeignClients</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
-<span class="tok-cm"> * 订单服务启动类，Spring Boot 应用程序入口点。</span>
-<span class="tok-cm"> */</span>
-<span class="tok-nd">@SpringBootApplication</span>
-<span class="tok-nd">@EnableEurekaClient</span><span class="tok-w">  </span><span class="tok-c1">// 启用 Eureka 客户端功能</span>
-<span class="tok-nd">@EnableFeignClients</span><span class="tok-w">  </span><span class="tok-c1">// --- New Added --- 会初始化和配置 feign</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ServiceOrderApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ServiceOrderApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
-<span class="tok-w">    </span><span class="tok-c1">// 包含其他代码</span>
-<span class="tok-w">    </span><span class="tok-nd">@others</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-<div class="sidebarblock">
-<div class="content">
-<div class="title">负载均衡使用拦截器原理：</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>拦截请求URL</p>
-</li>
-<li>
-<p>识别服务名</p>
-</li>
-<li>
-<p>通过服务发现获取实际地址</p>
-</li>
-<li>
-<p>替换URL并发起请求</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_3_使用自带断路器_feignfeign_集成_springcloud_自带的断路器不需要在服务层手动管理断路器">3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器，不需要在服务层手动管理断路器）</h4>
+<div class="paragraph">
+<p>正常测试</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>http :8091/order/201810300001</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>item3 id 为 -1，会抛出异常，查看 8091 打印，可以查看断路器工作状态的切换。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>http :8091/order/201810300003</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>查看负载均衡情况：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>把 8081 | 8082 | 8083 端口的服务都启动。</p>
+</li>
+<li>
+<p>发送上面的命令查看各个端口的微服务是否有日志打印。</p>
+<div class="literalblock">
+<div class="title">日志类似于这样</div>
+<div class="content">
+<pre>2025-10-06 18:33:17.112  INFO 91339 --- [nio-8082-exec-3] c.t.s.controller.ItemController          : Handling request on port: 8082 for item ID: 2
+Processing request on port: 8082 for item ID: 2</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
 <div class="sect4">
 <h5 id="_file_service_ordersrcmainresourcesapplication_yml_7">file &#8594; service-order/src/main/resources/application.yml</h5>
 <div class="sect5">
@@ -5344,9 +5347,8 @@ Transfer-Encoding: chunked
 </div>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_开启_spring_boot_actuator">开启 Spring Boot Actuator</h3>
+<div class="sect3">
+<h4 id="_开启_spring_boot_actuator_查看断路器状态">开启 Spring Boot Actuator 查看断路器状态</h4>
 <div class="paragraph">
 <p>启动应用后，您可以访问以下端点：</p>
 </div>
@@ -5392,10 +5394,10 @@ Transfer-Encoding: chunked
 </li>
 </ul>
 </div>
-<div class="sect3">
-<h4 id="_file_service_orderpom_xml_8">file &#8594; service-order/pom.xml</h4>
 <div class="sect4">
-<h5 id="_actuator">actuator</h5>
+<h5 id="_file_service_orderpom_xml_8">file &#8594; service-order/pom.xml</h5>
+<div class="sect5">
+<h6 id="_actuator">actuator</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
@@ -5406,10 +5408,10 @@ Transfer-Encoding: chunked
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_file_service_ordersrcmainresourcesapplication_yml_8">file &#8594; service-order/src/main/resources/application.yml</h4>
 <div class="sect4">
-<h5 id="_management">management</h5>
+<h5 id="_file_service_ordersrcmainresourcesapplication_yml_8">file &#8594; service-order/src/main/resources/application.yml</h5>
+<div class="sect5">
+<h6 id="_management">management</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">management</span><span class="tok-p">:</span>
@@ -5427,10 +5429,10 @@ Transfer-Encoding: chunked
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_8">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h4>
 <div class="sect4">
-<h5 id="_class_orderservice_7">class OrderService</h5>
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java_8">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h5>
+<div class="sect5">
+<h6 id="_class_orderservice_7">class OrderService</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
@@ -5449,6 +5451,7 @@ Transfer-Encoding: chunked
 
 <span class="tok-w">    </span><span class="tok-nd">@others</span>
 <span class="tok-p">}</span></code></pre>
+</div>
 </div>
 </div>
 <div class="sect5">
@@ -5479,7 +5482,7 @@ Transfer-Encoding: chunked
 <td>就创建一个商品，逐个累加计数，方便查看断路器的状态，不会跳数字，能看到半开状态 HALF_OPEN。
 <div class="imageblock">
 <div class="content">
-<img src="img/actuator_health.png" alt="actuator health">
+<img src="img/actuator_health.png" alt="actuator health" width="900">
 </div>
 </div></td>
 </tr>
@@ -5489,12 +5492,191 @@ Transfer-Encoding: chunked
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_feign_知识点">Feign 知识点</h3>
+<div class="paragraph">
+<p>Declarative rest Client 声明式 rest 客户端（之前叫编程式 rest 客户端，如 RestTemplate）。</p>
+</div>
+<div class="paragraph">
+<p>注解驱动</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>指定远程地址: @FeignClient</p>
+</li>
+<li>
+<p>指定请求方式: @GetMapping @PostMapping @DeleteMapping &#8230;&#8203;</p>
+</li>
+<li>
+<p>指定携带数据: @PathVariable(路径参数) @RequestHeader @RequestParam @RequestBody &#8230;&#8203;</p>
+</li>
+<li>
+<p>指定结果返回: 封装成的响应模型，如商品对象 Item</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_发送请求基本使用步骤总结未使用断路器_resilience4j_的步骤">发送请求基本使用步骤（总结未使用断路器 Resilience4j 的步骤）</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>引入依赖 openfeign</p>
+<div class="listingblock">
+<div class="title">service-order/pom.xml</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-starter-openfeign</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>启动类开启 openfeign 远程调用功能 &#8594; @EnableFeignClients</p>
+<div class="listingblock">
+<div class="title">service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@SpringBootApplication</span>
+<span class="tok-nd">@EnableEurekaClient</span><span class="tok-w">  </span><span class="tok-c1">// 启用 Eureka 客户端功能</span>
+<span class="tok-nd">@EnableFeignClients</span><span class="tok-w">  </span><span class="tok-c1">// --- New Added --- 会初始化和配置 feign</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ServiceOrderApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ServiceOrderApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 包含其他代码</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>定义 feign 客户端接口</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 要访问的在 Eureka 中的服务名，feign 已经实现了负载均衡，不用再写 @LoadBalanced</span>
+<span class="tok-c1">// 会自动注入 ItemFeignClient 对象到 IOC 容器中，后面使用时直接 @Autowired 即可</span>
+<span class="tok-nd">@FeignClient</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 使用 MVC 的注解，在 controller 上是接收请求，在 FeignClient 上是发送请求</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-c1">// 接收到的数据封装成商品对象 Item</span>
+<span class="tok-w">    </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// id 由下往上传递</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>使用注入的 itemFeignClient（不要忘记先使用 @Autowired 注入）</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithCircuitBreaker</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 简化为直接调用，断路器由 Feign 自动处理</span>
+<span class="tok-w">    </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 使用 feign</span>
+<span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;result:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_调用第三方api">调用第三方API</h4>
+<div class="paragraph">
+<p>测试天气 api
+<a href="http://t.weather.sojson.com/api/weather/city/101030100" class="bare">http://t.weather.sojson.com/api/weather/city/101030100</a></p>
+</div>
+<div class="paragraph">
+<p>citycode.json 文件下载:
+<a href="https://github.com/LS-KR/China-Citycode/blob/main/citycode.json" class="bare">https://github.com/LS-KR/China-Citycode/blob/main/citycode.json</a></p>
+</div>
+<div class="listingblock">
+<div class="title">通过 url 判断为第三方 API</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// weather-client 是自己随便起的名字，在这儿没具体作用</span>
+<span class="tok-c1">// url 是第三方 API 的域名，有 url 则是第三方 API</span>
+<span class="tok-nd">@FeignClient</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;weather-client&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">url</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;http://t.weather.sojson.com&quot;</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这里只是最简单的一个 API，您可以自己找个复杂的 API 去练习一下，比如有 @PathVariable(路径参数) @RequestHeader @RequestParam @RequestBody &#8230;&#8203;</p>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderclientweatherfeignclient_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/client/WeatherFeignClient.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.client</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.openfeign.FeignClient</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.GetMapping</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.PathVariable</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// weather-client 是自己随便起的名字，在这儿没具体作用</span>
+<span class="tok-c1">// url 是第三方 API 的域名，有 url 则是第三方 API</span>
+<span class="tok-nd">@FeignClient</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;weather-client&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">url</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;http://t.weather.sojson.com&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">WeatherFeignClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/api/weather/city/{citycode}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">getWeather</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;citycode&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">citycode</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrctestjavacomtjiseserviceorderweathertest_java">file &#8594; service-order/src/test/java/com/tjise/serviceorder/WeatherTest.java</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.client.WeatherFeignClient</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.junit.jupiter.api.Test</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.test.context.SpringBootTest</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@SpringBootTest</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">WeatherTest</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">WeatherFeignClient</span><span class="tok-w"> </span><span class="tok-n">weatherFeignClient</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Test</span>
+<span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">testGetWeather</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">weather</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">weatherFeignClient</span><span class="tok-p">.</span><span class="tok-na">getWeather</span><span class="tok-p">(</span><span class="tok-mi">101030100L</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;weather: &quot;</span><span class="tok-w">  </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">weather</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_日志功能">日志功能</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_超时控制">超时控制</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_重试机制">重试机制</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_拦截器">拦截器</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_fallback_兜底返回">fallback 兜底返回</h4>
+
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-05 22:22:42 +0800
+Last updated 2025-10-06 23:21:59 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -2745,11 +2745,11 @@ public class ItemService {
 ----
 
 ==== 项目中使用的 Feign 方式
-先展示一下，具体内容参后面详细步骤。
+先展示一下，具体内容参后面详细步骤。注意：这是发送请求哟！
 
 [source,java]
 ----
-// 要访问的在 Eureka 中的服务名，并指定实现该接口的降级类名
+// 要访问在 Eureka 中的服务名，并指定实现该接口的降级类名
 @FeignClient(name = "app-item", fallback = ItemFallback.class)
 public interface ItemFeignClient {
     @GetMapping("/item/{id}")
@@ -2792,7 +2792,7 @@ WebClient/RestTemplate 优势:
 
 * http :8091/order/201810300001 
 
-item5 id 为 -1，会抛出异常，查看 8091 打印
+item3 id 为 -1，会抛出异常，查看 8091 打印
 
 * http :8091/order/201810300003
 
@@ -2917,6 +2917,7 @@ public Item queryItemByIdWithCircuitBreaker(Long id) {
             circuitBreaker.getMetrics().getNumberOfBufferedCalls());
 
     try {
+        // 这是之前使用 WebClient 的方式
         // Item result = circuitBreaker.executeSupplier(
             // () -> itemService.queryItemByIdWithWebClient(id));
 
@@ -3041,7 +3042,7 @@ public class ItemController {
 
 * http :8091/order/201810300001 
 
-item5 id 为 -1，会抛出异常，查看 8091 打印
+item3 id 为 -1，会抛出异常，查看 8091 打印
 
 * http :8091/order/201810300003
 
@@ -3121,6 +3122,7 @@ ORDER_DATA.put(order3.getOrderId(), order3);
 ----
 public Item queryItemByIdWithCircuitBreaker(Long id) {
     // Using Spring Cloud Circuit Breaker with CircuitBreakerFactory
+    // 使用 Factory 创建断路器
     return circuitBreakerFactory.create("OrderService").run(
         () -> {
             Item result = itemFeignClient.queryItemById(id);  // 使用 feign
@@ -3192,37 +3194,27 @@ public Order queryOrderById(String orderId) throws IOException {
 }
 ----
 
-===== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
-
-
-====== class ServiceOrderApplication -> @EnableFeignClients
-[source,java]
-----
-/**
- * 订单服务启动类，Spring Boot 应用程序入口点。
- */
-@SpringBootApplication
-@EnableEurekaClient  // 启用 Eureka 客户端功能
-@EnableFeignClients  // --- New Added --- 会初始化和配置 feign
-public class ServiceOrderApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(ServiceOrderApplication.class, args);
-    }
-    // 包含其他代码
-    @others
-}
-----
-
-.负载均衡使用拦截器原理：
-****
-1. 拦截请求URL
-2. 识别服务名
-3. 通过服务发现获取实际地址
-4. 替换URL并发起请求
-****
-
 ==== 3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器，不需要在服务层手动管理断路器）
+正常测试
 
+* http :8091/order/201810300001
+
+item3 id 为 -1，会抛出异常，查看 8091 打印，可以查看断路器工作状态的切换。
+
+* http :8091/order/201810300003
+
+
+查看负载均衡情况：
+
+1. 把 8081 | 8082 | 8083 端口的服务都启动。
+
+2. 发送上面的命令查看各个端口的微服务是否有日志打印。
++
+.日志类似于这样
+....
+2025-10-06 18:33:17.112  INFO 91339 --- [nio-8082-exec-3] c.t.s.controller.ItemController          : Handling request on port: 8082 for item ID: 2
+Processing request on port: 8082 for item ID: 2
+....
 
 ===== file -> service-order/src/main/resources/application.yml
 
@@ -3426,7 +3418,7 @@ public Order queryOrderById(String orderId) throws IOException {
 }
 ----
 
-=== 开启 Spring Boot Actuator
+==== 开启 Spring Boot Actuator 查看断路器状态
 启动应用后，您可以访问以下端点：
 
 - http :8091/order/201810300004
@@ -3462,10 +3454,10 @@ Transfer-Encoding: chunked
 - http :8091/actuator/health - 查看断路器健康状态
 - http :8091/actuator/circuitbreakerevents - 查看断路器事件历史
 
-==== file -> service-order/pom.xml
+===== file -> service-order/pom.xml
 
 
-===== actuator
+====== actuator
 [source,scss]
 ....
 <dependency>
@@ -3474,10 +3466,10 @@ Transfer-Encoding: chunked
 </dependency>
 ....
 
-==== file -> service-order/src/main/resources/application.yml
+===== file -> service-order/src/main/resources/application.yml
 
 
-===== management
+====== management
 [source,yaml]
 ----
 management:
@@ -3493,10 +3485,10 @@ management:
       enabled: true  # 启用断路器健康检查
 ----
 
-==== file -> service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
+===== file -> service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
 
 
-===== class OrderService
+====== class OrderService
 [source,java]
 ----
 /**
@@ -3539,5 +3531,148 @@ ORDER_DATA.put(order4.getOrderId(), order4);
 
 <1> 就创建一个商品，逐个累加计数，方便查看断路器的状态，不会跳数字，能看到半开状态 HALF_OPEN。
 +
-image::img/actuator_health.png[]
+image::img/actuator_health.png[,900]
+
+=== Feign 知识点
+Declarative rest Client 声明式 rest 客户端（之前叫编程式 rest 客户端，如 RestTemplate）。
+
+注解驱动
+
+- 指定远程地址: @FeignClient
+- 指定请求方式: @GetMapping @PostMapping @DeleteMapping ...
+- 指定携带数据: @PathVariable(路径参数) @RequestHeader @RequestParam @RequestBody ...
+- 指定结果返回: 封装成的响应模型，如商品对象 Item
+
+==== 发送请求基本使用步骤（总结未使用断路器 Resilience4j 的步骤）
+. 引入依赖 openfeign
++
+.service-order/pom.xml
+[source,scss]
+....
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-openfeign</artifactId>
+</dependency>
+....
+
+
+. 启动类开启 openfeign 远程调用功能 -> @EnableFeignClients
++
+.service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+[source,java]
+----
+@SpringBootApplication
+@EnableEurekaClient  // 启用 Eureka 客户端功能
+@EnableFeignClients  // --- New Added --- 会初始化和配置 feign
+public class ServiceOrderApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceOrderApplication.class, args);
+    }
+    // 包含其他代码
+    @others
+}
+----
+
+
+. 定义 feign 客户端接口
++
+[source,java]
+----
+// 要访问的在 Eureka 中的服务名，feign 已经实现了负载均衡，不用再写 @LoadBalanced
+// 会自动注入 ItemFeignClient 对象到 IOC 容器中，后面使用时直接 @Autowired 即可
+@FeignClient(name = "app-item")
+public interface ItemFeignClient {
+    // 使用 MVC 的注解，在 controller 上是接收请求，在 FeignClient 上是发送请求
+    @GetMapping("/item/{id}")
+    // 接收到的数据封装成商品对象 Item
+    Item queryItemById(@PathVariable("id") Long id);  // id 由下往上传递
+}
+----
+
+
+. 使用注入的 itemFeignClient（不要忘记先使用 @Autowired 注入）
++
+[source,java]
+----
+public Item queryItemByIdWithCircuitBreaker(Long id) {
+
+    // 简化为直接调用，断路器由 Feign 自动处理
+    Item result = itemFeignClient.queryItemById(id);  // 使用 feign
+    System.out.println("result:" + result);
+    return result;
+}
+----
+
+==== 调用第三方API
+测试天气 api
+http://t.weather.sojson.com/api/weather/city/101030100
+
+citycode.json 文件下载:
+https://github.com/LS-KR/China-Citycode/blob/main/citycode.json
+
+.通过 url 判断为第三方 API
+[source,java]
+----
+// weather-client 是自己随便起的名字，在这儿没具体作用
+// url 是第三方 API 的域名，有 url 则是第三方 API
+@FeignClient(name = "weather-client", url = "http://t.weather.sojson.com")
+----
+
+这里只是最简单的一个 API，您可以自己找个复杂的 API 去练习一下，比如有 @PathVariable(路径参数) @RequestHeader @RequestParam @RequestBody ...
+
+===== file -> service-order/src/main/java/com/tjise/serviceorder/client/WeatherFeignClient.java
+[source,java]
+----
+package com.tjise.serviceorder.client;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+// weather-client 是自己随便起的名字，在这儿没具体作用
+// url 是第三方 API 的域名，有 url 则是第三方 API
+@FeignClient(name = "weather-client", url = "http://t.weather.sojson.com")
+public interface WeatherFeignClient {
+    @GetMapping("/api/weather/city/{citycode}")
+    String getWeather(@PathVariable("citycode") Long citycode);
+}
+----
+
+===== file -> service-order/src/test/java/com/tjise/serviceorder/WeatherTest.java
+[source,java]
+----
+package com.tjise.serviceorder;
+
+import com.tjise.serviceorder.client.WeatherFeignClient;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+public class WeatherTest {
+    @Autowired
+    private WeatherFeignClient weatherFeignClient;
+
+    @Test
+    void testGetWeather() {
+        String weather = weatherFeignClient.getWeather(101030100L);
+        System.out.println("weather: "  + weather);
+    }
+}
+----
+
+==== 日志功能
+
+
+==== 超时控制
+
+
+==== 重试机制
+
+
+==== 拦截器
+
+
+==== fallback 兜底返回
+
 
