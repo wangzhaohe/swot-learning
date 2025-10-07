@@ -3667,7 +3667,45 @@ public class WeatherTest {
 image::img/client_and_server_balanced.png[,700]
 
 ==== 日志功能
+参考文档:
+https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/#feign-logging
 
+.打开 feign 日志前
+image::img/feign_before_open_log.png[]
+
+.打开 feign 日志后
+image::img/feign_after_open_log.png[]
+
+下面是开启 Feign 日志的方法。
+
+===== @file service-order/src/main/resources/application.yml
+
+
+====== logging
+[source,yaml]
+----
+logging:
+    level:
+        com.tjise.serviceorder.client: debug
+----
+
+===== @file service-order/src/main/java/com/tjise/serviceorder/config/FeignConfig.java
+[source,java]
+----
+package com.tjise.serviceorder.config;
+
+import feign.Logger;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class FeignConfig {
+    @Bean
+    Logger.Level feignLoggerLevel() {
+        return Logger.Level.FULL;
+    }
+}
+----
 
 ==== 超时控制
 
