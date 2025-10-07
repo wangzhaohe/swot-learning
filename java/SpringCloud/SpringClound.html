@@ -700,7 +700,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_1_直接使用断路器_resilience4j纯手工">1) 直接使用断路器 Resilience4j（纯手工）</a></li>
 <li><a href="#_2_使用自带断路器_resilience4jspringcloud_自带在服务层更细粒度控制">2) 使用自带断路器 Resilience4j（SpringCloud 自带，在服务层更细粒度控制）</a></li>
-<li><a href="#_3_使用自带断路器_feignfeign_集成_springcloud_自带的断路器不需要在服务层手动管理断路器">3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器，不需要在服务层手动管理断路器）</a></li>
+<li><a href="#_3_使用自带断路器_feignfeign_集成_springcloud_自带的断路器_resilience4j不需要在服务层手动管理断路器">3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器 Resilience4j，不需要在服务层手动管理断路器）</a></li>
 <li><a href="#_开启_spring_boot_actuator_查看断路器状态">开启 Spring Boot Actuator 查看断路器状态</a></li>
 </ul>
 </li>
@@ -5048,7 +5048,7 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect3">
-<h4 id="_3_使用自带断路器_feignfeign_集成_springcloud_自带的断路器不需要在服务层手动管理断路器">3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器，不需要在服务层手动管理断路器）</h4>
+<h4 id="_3_使用自带断路器_feignfeign_集成_springcloud_自带的断路器_resilience4j不需要在服务层手动管理断路器">3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器 Resilience4j，不需要在服务层手动管理断路器）</h4>
 <div class="paragraph">
 <p>正常测试</p>
 </div>
@@ -5731,6 +5731,136 @@ Transfer-Encoding: chunked
 </div>
 <div class="title">Figure 10. 超时控制分类</div>
 </div>
+<div class="sect4">
+<h5 id="_测试默认_readtimeout_60s_超时注意要关闭_feign_断路器功能">测试默认 readTimeout 60s 超时（注意要关闭 feign 断路器功能）</h5>
+<div class="paragraph">
+<p>下面先模拟查询商品微服务返回超时 readTimeout 大于 FeignClient 默认的 60s，设置为 100s，这样可以模拟出超时的效果来。</p>
+</div>
+<div class="paragraph">
+<p>测试步骤：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>启动 Eureka-server 注册中心</p>
+</li>
+<li>
+<p>启动 service-item 微服务</p>
+</li>
+<li>
+<p>启动 service-order 微服务</p>
+</li>
+<li>
+<p>访问下面链接会在 60s 超时</p>
+<div class="ulist">
+<ul>
+<li>
+<p>http :8091/order/201810300001</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>HTTP/1.1 500
+Connection: close
+Content-Type: application/json
+Date: Tue, 07 Oct 2025 12:28:55 GMT
+Transfer-Encoding: chunked
+
+{
+    "error": "Internal Server Error",
+    "path": "/order/201810300001",
+    "status": 500,
+    "timestamp": "2025-10-07T12:28:55.156+00:00"
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">微服务 service-order 显示 readTimeout</div>
+<div class="content">
+<pre>java.net.SocketTimeoutException: Read timed out -&gt; 显示读取超时了
+	at java.net.SocketInputStream.socketRead0(Native Method) ~[na:1.8.0_301]
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116) ~[na:1.8.0_301]
+	at java.net.SocketInputStream.read(SocketInputStream.java:171) ~[na:1.8.0_301]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[na:1.8.0_301]
+	at java.io.BufferedInputStream.fill(BufferedInputStream.java:246) ~[na:1.8.0_301]
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:286) ~[na:1.8.0_301]
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345) ~[na:1.8.0_301]
+	at sun.net.www.http.HttpClient.parseHTTPHeader(HttpClient.java:735) ~[na:1.8.0_301]</pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemservice_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/service/ItemService.java</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_item_queryitembyid_增加超时_100s_模拟">Item queryItemById &#8594; 增加超时 100s 模拟</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 模拟实现商品查询</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * @param id</span>
+<span class="tok-cm"> * @return</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 模拟超时 100s 大于 FeignClient 默认的 60s 超时，可以实现 FeignClient readTimeout 效果。</span>
+<span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">TimeUnit</span><span class="tok-p">.</span><span class="tok-na">SECONDS</span><span class="tok-p">.</span><span class="tok-na">sleep</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">InterruptedException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">RuntimeException</span><span class="tok-p">(</span><span class="tok-n">e</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_file_service_ordersrcmainresourcesapplication_yml_10">file &#8594; service-order/src/main/resources/application.yml</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_feign_关闭断路器_如果开启spring_cloud_设置了_5s_默认的慢超时">feign 关闭断路器 &#8594; 如果开启，Spring Cloud 设置了 5s 默认的慢超时</h6>
+<div class="listingblock">
+<div class="title">注释 feign 的断路器功能才能测出来我们自定义的 readTimeout 60s</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># feign:</span>
+<span class="tok-w">  </span><span class="tok-c1"># circuitbreaker:</span>
+<span class="tok-w">    </span><span class="tok-c1"># enabled: true</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在`Resilience4JCircuitBreakerFactory`或`Resilience4JAutoConfiguration`类中，Spring Cloud 会覆盖 Resilience4j 的默认配置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Configuration</span>
+<span class="tok-nd">@ConditionalOnClass</span><span class="tok-p">(</span><span class="tok-n">CircuitBreaker</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Resilience4JAutoConfiguration</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Bean</span>
+<span class="tok-w">    </span><span class="tok-nd">@ConditionalOnMissingBean</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">CircuitBreakerConfig</span><span class="tok-w"> </span><span class="tok-nf">circuitBreakerConfig</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">CircuitBreakerConfig</span><span class="tok-p">.</span><span class="tok-na">custom</span><span class="tok-p">()</span>
+<span class="tok-w">            </span><span class="tok-c1">// Spring Cloud 会设置更严格的默认值</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">slowCallDurationThreshold</span><span class="tok-p">(</span><span class="tok-n">Duration</span><span class="tok-p">.</span><span class="tok-na">ofSeconds</span><span class="tok-p">(</span><span class="tok-mi">5</span><span class="tok-p">))</span><span class="tok-w">  </span><span class="tok-c1">// 这里设置为5秒</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">slowCallRateThreshold</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-na">build</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_newheadline">newHeadline</h5>
+
+</div>
 </div>
 <div class="sect3">
 <h4 id="_重试机制">重试机制</h4>
@@ -5750,7 +5880,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-07 12:40:58 +0800
+Last updated 2025-10-07 20:36:15 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -3194,7 +3194,7 @@ public Order queryOrderById(String orderId) throws IOException {
 }
 ----
 
-==== 3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器，不需要在服务层手动管理断路器）
+==== 3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器 Resilience4j，不需要在服务层手动管理断路器）
 正常测试
 
 * http :8091/order/201810300001
@@ -3713,6 +3713,107 @@ image::img/feign_timeout.png[,800]
 
 .超时控制分类
 image::img/feign_timeout_category.png[,800]
+
+===== 测试默认 readTimeout 60s 超时（注意要关闭 feign 断路器功能）
+下面先模拟查询商品微服务返回超时 readTimeout 大于 FeignClient 默认的 60s，设置为 100s，这样可以模拟出超时的效果来。
+
+测试步骤：
+
+. 启动 Eureka-server 注册中心
+. 启动 service-item 微服务
+. 启动 service-order 微服务
+
+. 访问下面链接会在 60s 超时
+* http :8091/order/201810300001
+
+....
+HTTP/1.1 500
+Connection: close
+Content-Type: application/json
+Date: Tue, 07 Oct 2025 12:28:55 GMT
+Transfer-Encoding: chunked
+
+{
+    "error": "Internal Server Error",
+    "path": "/order/201810300001",
+    "status": 500,
+    "timestamp": "2025-10-07T12:28:55.156+00:00"
+}
+....
+
+
+.微服务 service-order 显示 readTimeout
+....
+java.net.SocketTimeoutException: Read timed out -> 显示读取超时了
+	at java.net.SocketInputStream.socketRead0(Native Method) ~[na:1.8.0_301]
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116) ~[na:1.8.0_301]
+	at java.net.SocketInputStream.read(SocketInputStream.java:171) ~[na:1.8.0_301]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[na:1.8.0_301]
+	at java.io.BufferedInputStream.fill(BufferedInputStream.java:246) ~[na:1.8.0_301]
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:286) ~[na:1.8.0_301]
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345) ~[na:1.8.0_301]
+	at sun.net.www.http.HttpClient.parseHTTPHeader(HttpClient.java:735) ~[na:1.8.0_301]
+....
+
+====== file -> service-item/src/main/java/com/tjise/serviceitem/service/ItemService.java
+
+
+====== Item queryItemById -> 增加超时 100s 模拟
+[source,java]
+----
+/**
+ * 模拟实现商品查询
+ *
+ * @param id
+ * @return
+ */
+public Item queryItemById(Long id) {
+
+    // 模拟超时 100s 大于 FeignClient 默认的 60s 超时，可以实现 FeignClient readTimeout 效果。
+    try {
+        TimeUnit.SECONDS.sleep(100);
+    } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+    }
+
+    return ITEM_MAP.get(id);
+}
+----
+
+====== file -> service-order/src/main/resources/application.yml
+
+
+====== feign 关闭断路器 -> 如果开启，Spring Cloud 设置了 5s 默认的慢超时
+.注释 feign 的断路器功能才能测出来我们自定义的 readTimeout 60s
+[source,yaml]
+----
+# feign:
+  # circuitbreaker:
+    # enabled: true
+----
+
+在`Resilience4JCircuitBreakerFactory`或`Resilience4JAutoConfiguration`类中，Spring Cloud 会覆盖 Resilience4j 的默认配置：
+
+[source,java]
+----
+@Configuration
+@ConditionalOnClass(CircuitBreaker.class)
+public class Resilience4JAutoConfiguration {
+    
+    @Bean
+    @ConditionalOnMissingBean
+    public CircuitBreakerConfig circuitBreakerConfig() {
+        return CircuitBreakerConfig.custom()
+            // Spring Cloud 会设置更严格的默认值
+            .slowCallDurationThreshold(Duration.ofSeconds(5))  // 这里设置为5秒
+            .slowCallRateThreshold(100)
+            .build();
+    }
+}
+----
+
+===== newHeadline
+
 
 ==== 重试机制
 

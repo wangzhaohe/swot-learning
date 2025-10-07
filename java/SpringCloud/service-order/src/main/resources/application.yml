@@ -1,9 +1,9 @@
 #@+leo-ver=5-thin
-#@+node:swot.20251007085454.1: * @file service-order/src/main/resources/application.yml
+#@+node:swot.20251007173755.1: * @file service-order/src/main/resources/application.yml
 #@@language yaml
 #@+others
-#@+node:swot.20251007085454.2: ** @ignore-tree 
-#@+node:swot.20251007085454.3: *3* port
+#@+node:swot.20251007173755.2: ** @ignore-tree 
+#@+node:swot.20251007173755.3: *3* port
 #@+doc
 # [source,yaml]
 # ----
@@ -12,7 +12,7 @@ server:
     port: 8091
 #@+doc
 # ----
-#@+node:swot.20251007085454.4: *3* spring
+#@+node:swot.20251007173755.4: *3* spring
 #@+doc
 # [source, yaml]
 # ----
@@ -21,13 +21,9 @@ server:
 spring:
     application:
         name: app-order
-    cloud:
-        circuitbreaker:
-            resilience4j:
-                enabled: true
 #@+doc
 # ----
-#@+node:swot.20251007085454.5: *3* eureka
+#@+node:swot.20251007173755.5: *3* eureka
 #@+doc
 # [source,yaml]
 # ----
@@ -43,44 +39,31 @@ eureka:
     instance:
         prefer-ip-address: true     # 使用 IP地址 注册而不是主机名
         ip-address: 127.0.0.1       # 客户端在注册时使用自己的 IP，而不是主机名
-        # 这是生产环境的最佳实践。避免主机名解析问题
+                                    # 这是生产环境的最佳实践。避免主机名解析问题
 #@+doc
 # ----
-#@+node:swot.20251007085454.6: *3* feign 开启断路器
-#@+doc
-# [source,yaml]
-# ----
-#@@c
-#@@language yaml
-feign:
-    circuitbreaker:
-        enabled: true
-#@+doc
-# ----
-#
-#@+node:swot.20251007085454.7: *3* resilience4j -- 修改成 configs: default
+#@+node:swot.20251007173755.7: *3* resilience4j 要改 OrderService -> app-item
 #@+doc
 # [source,yaml]
 # ----
 #@@c
 #@@language yaml
 resilience4j:
-    circuitbreaker:
-        configs:
-            default: # --New 让 SpringCloud 自动管理服务名，否则找不到断路器
-                sliding-window-size: 5                  # 需要 5次调用来计算失败率
-                failure-rate-threshold: 50              # 50% 失败率才跳闸
-                wait-duration-in-open-state: 10s        # 10 秒后进入半开状态
-                permitted-number-of-calls-in-half-open-state: 2     # 半开状态允许 2 次调用
-                sliding-window-type: COUNT_BASED        # 基于调用次数
-                record-exceptions: # 哪些异常算失败
-                    - org.springframework.web.client.HttpServerErrorException
-                    - org.springframework.web.client.ResourceAccessException
-                    - java.lang.RuntimeException
-                    - java.io.IOException
-                ignore-exceptions: # 忽略的异常类型
-                    - java.lang.IllegalArgumentException
-                register-health-indicator: true         # --New 启用健康检查
+  circuitbreaker:
+    instances:
+      # OrderService:  这里就要改成与 Feign 要使用的 Eureka 服务名一样才行，如下面改成 app-item
+      app-item:
+        sliding-window-size: 5                  # 需要 5次调用来计算失败率
+        failure-rate-threshold: 50              # 50% 失败率才跳闸
+        wait-duration-in-open-state: 10s        # 10 秒后进入半开状态
+        permitted-number-of-calls-in-half-open-state: 2     # 半开状态允许 2 次调用
+        sliding-window-type: COUNT_BASED        # 基于调用次数
+        record-exceptions:                      # 哪些异常算失败
+          - org.springframework.web.reactive.function.client.WebClientResponseException
+          - java.lang.RuntimeException
+          - java.io.IOException
+        ignore-exceptions:                      # 忽略的异常类型
+          - java.lang.IllegalArgumentException
 #@+doc
 # ----
 #
@@ -96,37 +79,38 @@ resilience4j:
 # | 恢复时间 | 10 秒   | 60秒
 # | 目的    | 快速验证 | 稳定运行
 # |===
-#@+node:swot.20251007085454.8: *3* management
+#@+node:swot.20251007173755.6: ** feign 关闭断路器 -> 如果开启，Spring Cloud 设置了 5s 默认的慢超时
 #@+doc
+# .注释 feign 的断路器功能才能测出来我们自定义的 readTimeout 60s
 # [source,yaml]
 # ----
 #@@c
 #@@language yaml
-management:
-    endpoints:
-        web:
-            exposure:
-                include: health,info,circuitbreakerevents  # 暴露断路器事件端点
-    endpoint:
-        health:
-            show-details: always
-    health:
-        circuitbreakers:
-            enabled: true  # 启用断路器健康检查
+# feign:
+  # circuitbreaker:
+    # enabled: true
 #@+doc
 # ----
 #
-#@+node:swot.20251007085454.9: ** logging
-#@+doc
-# [source,yaml]
-# ----
-#@@c
-#@@language yaml
-logging:
-    level:
-        com.tjise.serviceorder.client: debug
-#@+doc
-# ----
+# 在`Resilience4JCircuitBreakerFactory`或`Resilience4JAutoConfiguration`类中，Spring Cloud 会覆盖 Resilience4j 的默认配置：
 #
+# [source,java]
+# ----
+#@@language java
+# @Configuration
+# @ConditionalOnClass(CircuitBreaker.class)
+# public class Resilience4JAutoConfiguration {
+#
+#     @Bean
+#     @ConditionalOnMissingBean
+#     public CircuitBreakerConfig circuitBreakerConfig() {
+#         return CircuitBreakerConfig.custom()
+#             // Spring Cloud 会设置更严格的默认值
+#             .slowCallDurationThreshold(Duration.ofSeconds(5))  // 这里设置为5秒
+#             .slowCallRateThreshold(100)
+#             .build();
+#     }
+# }
+# ----
 #@-others
 #@-leo

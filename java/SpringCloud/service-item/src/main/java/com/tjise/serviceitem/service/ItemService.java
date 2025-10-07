@@ -1,16 +1,21 @@
 //@+leo-ver=5-thin
-//@+node:swot.20250912112243.1: * @file service-item/src/main/java/com/tjise/serviceitem/service/ItemService.java
+//@+node:swot.20251007151619.1: * @file service-item/src/main/java/com/tjise/serviceitem/service/ItemService.java
 //@@language java
+//@+others
+//@+node:swot.20251007175915.1: ** @ignore-node import
 package com.tjise.serviceitem.service;
 
 import com.tjise.serviceitem.pojo.Item;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+//@+node:swot.20251007180040.1: ** @ignore-node class ItemService
 @Service
 public class ItemService {
-
+    //@+others
+    //@+node:swot.20251007180157.1: *3* @ignore-node ITEM_MAP
     private static final Map<Long, Item> ITEM_MAP = new HashMap<Long, Item>();
 
     static {// 准备一些静态数据，模拟数据库，只是为了简单而已
@@ -25,7 +30,12 @@ public class ItemService {
         ITEM_MAP.put(9L, new Item(9L, "商品9", "http://图片9", "商品描述9", 9000L));
         ITEM_MAP.put(10L, new Item(10L, "商品10", "http://图片10", "商品描述10", 10000L));
     }
-
+    //@+node:swot.20251007180253.1: *3* Item queryItemById -> 增加超时 100s 模拟
+    //@+doc
+    // [source,java]
+    // ----
+    //@@c
+    //@@language java
     /**
      * 模拟实现商品查询
      *
@@ -33,8 +43,20 @@ public class ItemService {
      * @return
      */
     public Item queryItemById(Long id) {
+
+        // 模拟超时 100s 大于 FeignClient 默认的 60s 超时，可以实现 FeignClient readTimeout 效果。
+        try {
+            TimeUnit.SECONDS.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return ITEM_MAP.get(id);
     }
-
+    //@+doc
+    // ----
+    //
+    //@-others
 }
+//@-others
 //@-leo
