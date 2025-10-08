@@ -2430,6 +2430,7 @@ eureka:
 resilience4j:
   circuitbreaker:
     instances:
+      # OrderService 这个名称是在代码中创建 CircuitBreaker 实例时指定的标识符，配置中的名称必须与代码中的名称完全一致才能生效。
       OrderService:
         sliding-window-size: 5                  # 需要 5次调用来计算失败率
         failure-rate-threshold: 50              # 50% 失败率才跳闸
@@ -2784,7 +2785,7 @@ WebClient/RestTemplate 优势:
 
 总的来说，Feign 与 WebClient/RestTemplate 并不是直接竞争关系，而是解决不同层次问题的工具。Feign 更专注于微服务间的声明式通信，而 WebClient/RestTemplate 是更通用的 HTTP 客户端工具。在微服务架构中，Feign 提供了更高层次的抽象和更好的开发体验。
 
-=== Feign 客户端入门
+=== Feign 客户端配合断路器入门
 
 
 ==== 1) 直接使用断路器 Resilience4j（纯手工）
@@ -3464,6 +3465,12 @@ Transfer-Encoding: chunked
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-actuator</artifactId>
 </dependency>
+
+<!-- Spring Retry -->
+<dependency>
+    <groupId>org.springframework.retry</groupId>
+    <artifactId>spring-retry</artifactId>
+</dependency>
 ....
 
 ===== file -> service-order/src/main/resources/application.yml
@@ -3899,6 +3906,9 @@ Processing request on port: 8081 for item ID: 1
 Processing request on port: 8081 for item ID: 1
 ....
 
+===== 只是重试没有兜底返回（不能使用断路器）
+
+
 .重试规则
 ****
 https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/#spring-cloud-feign-overriding-defaults
@@ -3938,9 +3948,9 @@ public Default() {
 
 **核心参数：**
 
-- `maxAttempts: 5` - **最多重试5次**（包含初始请求）
 - `period: 100L` - **基础延时100毫秒**
 - `maxPeriod: 1000L` - **最大延时1000毫秒**（1秒）
+- `maxAttempts: 5` - **最多重试5次**（包含初始请求）
 
 延时机制
 
@@ -3980,7 +3990,7 @@ public Default() {
 这种**指数退避+最大限制**的策略既能给服务恢复时间，又避免了无限等待和雪崩效应。
 ****
 
-===== @file service-order/src/main/java/com/tjise/serviceorder/config/FeignConfig.java
+====== file -> service-order/src/main/java/com/tjise/serviceorder/config/FeignConfig.java
 
 
 ====== Retryer retryer -> New Added 重试机制
@@ -3992,7 +4002,7 @@ Retryer retryer() {
 }
 ----
 
-===== @file service-order/src/main/resources/application.yml
+====== file -> service-order/src/main/resources/application.yml
 
 
 ====== spring -> import application-feign.yml
@@ -4012,14 +4022,124 @@ spring:
 ----
 
 ====== feign 开启断路器（测试时需要关闭 feign 断路器功能）
-connectTimeout & readTimeout 以配置为准，如 readTimeout 不再是 spring cloud 断路器的默认值 5s。
-所以在测试时，是否开启该功能则没有影响了。
-
 [source,yaml]
 ----
 # feign:
     # circuitbreaker:
         # enabled: true
+----
+
+===== spring Retry 重试加 fallback 兜底返回（未使用断路器）-- 理解
+
+
+====== file -> service-order/pom.xml
+
+
+====== retry
+[source,scss]
+....
+<dependency>
+    <groupId>org.springframework.retry</groupId>
+    <artifactId>spring-retry</artifactId>
+</dependency>
+....
+
+====== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+
+
+====== class ServiceOrderApplication -> @EnableFeignClients
+[source,java]
+----
+/**
+ * 订单服务启动类，Spring Boot 应用程序入口点。
+ */
+@SpringBootApplication
+@EnableEurekaClient  // 启用 Eureka 客户端功能
+@EnableFeignClients  // 会初始化和配置 feign
+@EnableRetry         // --- New Added --- 启用Spring Retry支持
+public class ServiceOrderApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceOrderApplication.class, args);
+    }
+    // 包含其他代码
+    @others
+}
+----
+
+.负载均衡使用拦截器原理：
+****
+1. 拦截请求URL
+2. 识别服务名
+3. 通过服务发现获取实际地址
+4. 替换URL并发起请求
+****
+
+====== file -> service-order/src/main/java/com/tjise/serviceorder/service/ElegantRetryService.java
+
+
+====== class ElegantRetryService
+[source,java]
+----
+@Slf4j
+@Service
+public class ElegantRetryService {
+
+    @Autowired
+    private ItemFeignClient itemFeignClient;
+    
+    /**
+     * 优雅的重试实现 - 使用Spring Retry注解
+     * 策略：重试5次 -> 如果都失败 -> 返回降级结果
+     */
+    @Retryable(
+        value = {RuntimeException.class},
+        maxAttempts = 5,
+        backoff = @Backoff(delay = 500)
+    )
+    public Item getItemWithElegantRetry(String itemId) {
+        Long id = Long.parseLong(itemId);
+        log.info("尝试调用商品服务，商品ID: {}", id);
+        return itemFeignClient.queryItemById(id);
+    }
+    
+    /**
+     * 降级方法 - 当重试5次都失败时调用，是通过 @Recover 找到 fallbackItem 的
+     */
+    @Recover
+    public Item fallbackItem(RuntimeException e, String itemId) {
+        Long id = Long.parseLong(itemId);
+        log.warn("重试5次后仍然失败，返回降级结果，异常: {}", e.getMessage());
+        return new Item(id, "降级商品", null, "服务暂时不可用", 0L);
+    }
+}
+----
+
+====== file -> service-order/src/main/java/com/tjise/serviceorder/controller/ElegantRetryController.java
+
+
+====== class ElegantRetryController
+[source,java]
+----
+@Slf4j
+@RestController
+@RequestMapping("/elegant")
+public class ElegantRetryController {
+
+    @Autowired
+    private ElegantRetryService elegantRetryService;
+
+    /**
+     * 测试优雅的重试机制
+     * 策略：重试5次 -> 如果都失败 -> 返回降级结果
+     */
+    @GetMapping("/item/{id}")
+    public Item getItemWithElegantRetry(@PathVariable String id) {
+        log.info("开始调用优雅重试服务，商品ID: {}", id);
+        Item result = elegantRetryService.getItemWithElegantRetry(id);
+        log.info("最终结果: {}", result);
+        return result;
+    }
+}
 ----
 
 ==== 拦截器

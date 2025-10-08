@@ -696,7 +696,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </li>
 <li><a href="#_各自优势和适用场景总结">各自优势和适用场景总结</a></li>
-<li><a href="#_feign_客户端入门">Feign 客户端入门</a>
+<li><a href="#_feign_客户端配合断路器入门">Feign 客户端配合断路器入门</a>
 <ul class="sectlevel3">
 <li><a href="#_1_直接使用断路器_resilience4j纯手工">1) 直接使用断路器 Resilience4j（纯手工）</a></li>
 <li><a href="#_2_使用自带断路器_resilience4jspringcloud_自带在服务层更细粒度控制">2) 使用自带断路器 Resilience4j（SpringCloud 自带，在服务层更细粒度控制）</a></li>
@@ -4007,6 +4007,7 @@ Transfer-Encoding: chunked
 <pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">resilience4j</span><span class="tok-p">:</span>
 <span class="tok-w">  </span><span class="tok-nt">circuitbreaker</span><span class="tok-p">:</span>
 <span class="tok-w">    </span><span class="tok-nt">instances</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-c1"># OrderService 这个名称是在代码中创建 CircuitBreaker 实例时指定的标识符，配置中的名称必须与代码中的名称完全一致才能生效。</span>
 <span class="tok-w">      </span><span class="tok-nt">OrderService</span><span class="tok-p">:</span>
 <span class="tok-w">        </span><span class="tok-nt">sliding-window-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">5</span><span class="tok-w">                  </span><span class="tok-c1"># 需要 5次调用来计算失败率</span>
 <span class="tok-w">        </span><span class="tok-nt">failure-rate-threshold</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">50</span><span class="tok-w">              </span><span class="tok-c1"># 50% 失败率才跳闸</span>
@@ -4566,7 +4567,7 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect2">
-<h3 id="_feign_客户端入门">Feign 客户端入门</h3>
+<h3 id="_feign_客户端配合断路器入门">Feign 客户端配合断路器入门</h3>
 <div class="sect3">
 <h4 id="_1_直接使用断路器_resilience4j纯手工">1) 直接使用断路器 Resilience4j（纯手工）</h4>
 <div class="paragraph">
@@ -5404,6 +5405,12 @@ Transfer-Encoding: chunked
 <pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-actuator</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">Spring</span><span class="tok-w"> </span><span class="tok-nt">Retry</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.retry</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-retry</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
 <span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
 </div>
 </div>
@@ -5962,6 +5969,8 @@ Processing request on port: 8081 for item ID: 1
 Processing request on port: 8081 for item ID: 1</pre>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_只是重试没有兜底返回不能使用断路器">只是重试没有兜底返回（不能使用断路器）</h5>
 <div class="sidebarblock">
 <div class="content">
 <div class="title">重试规则</div>
@@ -6010,13 +6019,13 @@ Processing request on port: 8081 for item ID: 1</pre>
 <div class="ulist">
 <ul>
 <li>
-<p><code>maxAttempts: 5</code> - <strong>最多重试5次</strong>（包含初始请求）</p>
-</li>
-<li>
 <p><code>period: 100L</code> - <strong>基础延时100毫秒</strong></p>
 </li>
 <li>
 <p><code>maxPeriod: 1000L</code> - <strong>最大延时1000毫秒</strong>（1秒）</p>
+</li>
+<li>
+<p><code>maxAttempts: 5</code> - <strong>最多重试5次</strong>（包含初始请求）</p>
 </li>
 </ul>
 </div>
@@ -6107,8 +6116,10 @@ Processing request on port: 8081 for item ID: 1</pre>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderconfigfeignconfig_java_2">@file service-order/src/main/java/com/tjise/serviceorder/config/FeignConfig.java</h5>
+<div class="sect5">
+<h6 id="_file_service_ordersrcmainjavacomtjiseserviceorderconfigfeignconfig_java_2">file &#8594; service-order/src/main/java/com/tjise/serviceorder/config/FeignConfig.java</h6>
+
+</div>
 <div class="sect5">
 <h6 id="_retryer_retryer_new_added_重试机制">Retryer retryer &#8594; New Added 重试机制</h6>
 <div class="listingblock">
@@ -6120,9 +6131,10 @@ Processing request on port: 8081 for item ID: 1</pre>
 </div>
 </div>
 </div>
+<div class="sect5">
+<h6 id="_file_service_ordersrcmainresourcesapplication_yml_12">file &#8594; service-order/src/main/resources/application.yml</h6>
+
 </div>
-<div class="sect4">
-<h5 id="_file_service_ordersrcmainresourcesapplication_yml_12">@file service-order/src/main/resources/application.yml</h5>
 <div class="sect5">
 <h6 id="_spring_import_application_feign_yml_2">spring &#8594; import application-feign.yml</h6>
 <div class="listingblock">
@@ -6143,15 +6155,149 @@ Processing request on port: 8081 for item ID: 1</pre>
 </div>
 <div class="sect5">
 <h6 id="_feign_开启断路器测试时需要关闭_feign_断路器功能">feign 开启断路器（测试时需要关闭 feign 断路器功能）</h6>
-<div class="paragraph">
-<p>connectTimeout &amp; readTimeout 以配置为准，如 readTimeout 不再是 spring cloud 断路器的默认值 5s。
-所以在测试时，是否开启该功能则没有影响了。</p>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># feign:</span>
 <span class="tok-w">    </span><span class="tok-c1"># circuitbreaker:</span>
 <span class="tok-w">        </span><span class="tok-c1"># enabled: true</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_spring_retry_重试加_fallback_兜底返回未使用断路器_理解">spring Retry 重试加 fallback 兜底返回（未使用断路器）-- 理解</h5>
+<div class="sect5">
+<h6 id="_file_service_orderpom_xml_9">file &#8594; service-order/pom.xml</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_retry">retry</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.retry</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-retry</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java_9">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_class_serviceorderapplication_enablefeignclients_2">class ServiceOrderApplication &#8594; @EnableFeignClients</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务启动类，Spring Boot 应用程序入口点。</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@SpringBootApplication</span>
+<span class="tok-nd">@EnableEurekaClient</span><span class="tok-w">  </span><span class="tok-c1">// 启用 Eureka 客户端功能</span>
+<span class="tok-nd">@EnableFeignClients</span><span class="tok-w">  </span><span class="tok-c1">// 会初始化和配置 feign</span>
+<span class="tok-nd">@EnableRetry</span><span class="tok-w">         </span><span class="tok-c1">// --- New Added --- 启用Spring Retry支持</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ServiceOrderApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ServiceOrderApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 包含其他代码</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">负载均衡使用拦截器原理：</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>拦截请求URL</p>
+</li>
+<li>
+<p>识别服务名</p>
+</li>
+<li>
+<p>通过服务发现获取实际地址</p>
+</li>
+<li>
+<p>替换URL并发起请求</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceelegantretryservice_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ElegantRetryService.java</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_class_elegantretryservice">class ElegantRetryService</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Slf4j</span>
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ElegantRetryService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 优雅的重试实现 - 使用Spring Retry注解</span>
+<span class="tok-cm">     * 策略：重试5次 -&gt; 如果都失败 -&gt; 返回降级结果</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@Retryable</span><span class="tok-p">(</span>
+<span class="tok-w">        </span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-n">RuntimeException</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-n">maxAttempts</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-n">backoff</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nd">@Backoff</span><span class="tok-p">(</span><span class="tok-n">delay</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">500</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">getItemWithElegantRetry</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">itemId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-p">.</span><span class="tok-na">parseLong</span><span class="tok-p">(</span><span class="tok-n">itemId</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;尝试调用商品服务，商品ID: {}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">itemFeignClient</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 降级方法 - 当重试5次都失败时调用，是通过 @Recover 找到 fallbackItem 的</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@Recover</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">fallbackItem</span><span class="tok-p">(</span><span class="tok-n">RuntimeException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">itemId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-p">.</span><span class="tok-na">parseLong</span><span class="tok-p">(</span><span class="tok-n">itemId</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">warn</span><span class="tok-p">(</span><span class="tok-s">&quot;重试5次后仍然失败，返回降级结果，异常: {}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;降级商品&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;服务暂时不可用&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-n">L</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_file_service_ordersrcmainjavacomtjiseserviceordercontrollerelegantretrycontroller_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/controller/ElegantRetryController.java</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_class_elegantretrycontroller">class ElegantRetryController</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Slf4j</span>
+<span class="tok-nd">@RestController</span>
+<span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/elegant&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ElegantRetryController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ElegantRetryService</span><span class="tok-w"> </span><span class="tok-n">elegantRetryService</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 测试优雅的重试机制</span>
+<span class="tok-cm">     * 策略：重试5次 -&gt; 如果都失败 -&gt; 返回降级结果</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">getItemWithElegantRetry</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;开始调用优雅重试服务，商品ID: {}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">elegantRetryService</span><span class="tok-p">.</span><span class="tok-na">getItemWithElegantRetry</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;最终结果: {}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -6171,7 +6317,7 @@ Processing request on port: 8081 for item ID: 1</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-08 11:00:05 +0800
+Last updated 2025-10-08 20:07:43 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

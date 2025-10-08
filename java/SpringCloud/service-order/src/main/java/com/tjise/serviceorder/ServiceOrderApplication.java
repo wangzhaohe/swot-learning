@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20251005124609.12: * @file service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+//@+node:swot.20251008193926.1: * @file service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
 //@@language java
 //@+others
-//@+node:swot.20251005124609.13: ** @ignore-node import
+//@+node:swot.20251008193926.2: ** @ignore-node import
 package com.tjise.serviceorder;
 
 import com.tjise.serviceorder.utils.ItemProperties;
@@ -15,11 +15,12 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import java.util.concurrent.TimeUnit;
-//@+node:swot.20251005124609.14: ** class ServiceOrderApplication -> @EnableFeignClients
+//@+node:swot.20251008193926.3: ** class ServiceOrderApplication -> @EnableFeignClients
 //@+doc
 // [source,java]
 // ----
@@ -29,14 +30,15 @@ import java.util.concurrent.TimeUnit;
  */
 @SpringBootApplication
 @EnableEurekaClient  // 启用 Eureka 客户端功能
-@EnableFeignClients  // --- New Added --- 会初始化和配置 feign
+@EnableFeignClients  // 会初始化和配置 feign
+@EnableRetry         // --- New Added --- 启用Spring Retry支持
 public class ServiceOrderApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServiceOrderApplication.class, args);
     }
     // 包含其他代码
     //@+others
-    //@+node:swot.20251005124609.15: *3* @ignore-node RestTemplate
+    //@+node:swot.20251008193926.4: *3* @ignore-node RestTemplate
     //@+doc
     // [source,java]
     // ----
@@ -55,7 +57,7 @@ public class ServiceOrderApplication {
     }
     //@+doc
     // ----
-    //@+node:swot.20251005124609.16: *3* @ignore-node OkHttpClient 不支持 @LoadBalanced
+    //@+node:swot.20251008193926.5: *3* @ignore-node OkHttpClient 不支持 @LoadBalanced
     //@+doc
     // [source,java]
     // ----
@@ -71,7 +73,7 @@ public class ServiceOrderApplication {
     //@+doc
     // ----
     //
-    //@+node:swot.20251005124609.17: *3* @ignore-node WebClient
+    //@+node:swot.20251008193926.6: *3* @ignore-node WebClient
     //@+doc
     //@@nowrap
     // [source,java]
