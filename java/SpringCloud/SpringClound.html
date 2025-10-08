@@ -5929,7 +5929,154 @@ Transfer-Encoding: chunked
 </div>
 <div class="sect3">
 <h4 id="_重试机制">重试机制</h4>
+<div class="paragraph">
+<p>远程调用超时失败后，还可以进行多次尝试。如果某次成功返回 ok，如果多次依然失败则结束调用，返回错误。</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">重试规则</div>
+<div class="paragraph">
+<p><a href="https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/#spring-cloud-feign-overriding-defaults" class="bare">https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/#spring-cloud-feign-overriding-defaults</a></p>
+</div>
+<div class="literalblock">
+<div class="title">spring 官网说 openfeign 默认没有开启重试机制</div>
+<div class="content">
+<pre>A bean of Retryer.NEVER_RETRY with the type Retryer is created by default, which will disable retrying. Notice this retrying behavior is different from the Feign default one, where it will automatically retry IOExceptions, treating them as transient network related exceptions, and any RetryableException thrown from an ErrorDecoder.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>openfeign 的重试规则源码:
+/Users/swot/maven/repository/io/github/openfeign/feign-core/11.10/feign-core-11.10.jar!/feign/Retryer.class</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Default</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">Retryer</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">maxAttempts</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">period</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">maxPeriod</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">attempt</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">sleptForMillis</span><span class="tok-p">;</span>
 
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">Default</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">(</span><span class="tok-mi">100L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">TimeUnit</span><span class="tok-p">.</span><span class="tok-na">SECONDS</span><span class="tok-p">.</span><span class="tok-na">toMillis</span><span class="tok-p">(</span><span class="tok-mi">1L</span><span class="tok-p">),</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这是 OpenFeign 的默认重试器实现，详细解释它的重试规则和延时机制：</p>
+</div>
+<div class="listingblock">
+<div class="title">重试规则参数</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">Default</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">(</span><span class="tok-mi">100L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">TimeUnit</span><span class="tok-p">.</span><span class="tok-na">SECONDS</span><span class="tok-p">.</span><span class="tok-na">toMillis</span><span class="tok-p">(</span><span class="tok-mi">1L</span><span class="tok-p">),</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
+<span class="tok-c1">// 参数含义：period, maxPeriod, maxAttempts</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>核心参数：</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>maxAttempts: 5</code> - <strong>最多重试5次</strong>（包含初始请求）</p>
+</li>
+<li>
+<p><code>period: 100L</code> - <strong>基础延时100毫秒</strong></p>
+</li>
+<li>
+<p><code>maxPeriod: 1000L</code> - <strong>最大延时1000毫秒</strong>（1秒）</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>延时机制</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>固定延时 + 指数退避</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>第1次重试：等待 <code>100ms</code></p>
+</li>
+<li>
+<p>第2次重试：等待 <code>100ms × 2 = 200ms</code></p>
+</li>
+<li>
+<p>第3次重试：等待 <code>100ms × 2² = 400ms</code></p>
+</li>
+<li>
+<p>第4次重试：等待 <code>100ms × 2³ = 800ms</code></p>
+</li>
+<li>
+<p>第5次重试：等待 <code>100ms × 2⁴ = 1600ms</code> → <strong>限制为1000ms</strong></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>最大延时限制</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>即使计算出的延时超过 <code>maxPeriod(1000ms)</code>，实际等待时间也不会超过1秒。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>重试场景，这个重试器在以下情况会触发重试：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>HTTP连接超时</p>
+</li>
+<li>
+<p>服务端返回5xx错误</p>
+</li>
+<li>
+<p>网络IO异常等可重试的异常</p>
+</li>
+</ul>
+</div>
+<div class="literalblock">
+<div class="title">使用示例</div>
+<div class="content">
+<pre>// 如果服务调用失败，重试过程如下：
+第1次请求 → 失败 → 等待100ms
+第2次请求 → 失败 → 等待200ms
+第3次请求 → 失败 → 等待400ms
+第4次请求 → 失败 → 等待800ms
+第5次请求 → 失败 → 停止重试，抛出异常</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>注意事项</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>总重试次数 = 初始请求 + 4次重试</strong></p>
+</li>
+<li>
+<p><strong>不适合所有场景</strong>：对于非幂等操作（POST、PUT）要谨慎使用</p>
+</li>
+<li>
+<p>可以通过自定义 <code>Retryer</code> 实现来修改重试策略</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>这种<strong>指数退避+最大限制</strong>的策略既能给服务恢复时间，又避免了无限等待和雪崩效应。</p>
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_拦截器">拦截器</h4>
@@ -5945,7 +6092,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-08 09:20:59 +0800
+Last updated 2025-10-08 09:52:58 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

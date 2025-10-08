@@ -527,7 +527,9 @@
 </v>
 </v>
 </v>
-<v t="swot.20251006093556.1"><vh>重试机制</vh></v>
+<v t="swot.20251006093556.1"><vh>重试机制</vh>
+<v t="swot.20251008094332.1"><vh>@no-head 重试规则 sidebar</vh></v>
+</v>
 <v t="swot.20251006093619.1"><vh>拦截器</vh></v>
 <v t="swot.20251006093630.1"><vh>fallback 兜底返回</vh></v>
 </v>
@@ -6351,7 +6353,9 @@ image::img/feign_timeout.png[,800]
 image::img/feign_timeout_category.png[,800]
 
 </t>
-<t tx="swot.20251006093556.1"></t>
+<t tx="swot.20251006093556.1">@language asciidoc
+远程调用超时失败后，还可以进行多次尝试。如果某次成功返回 ok，如果多次依然失败则结束调用，返回错误。
+</t>
 <t tx="swot.20251006093619.1"></t>
 <t tx="swot.20251006093630.1"></t>
 <t tx="swot.20251006132325.1">@language asciidoc
@@ -6995,6 +6999,87 @@ feign:
                 # loggerLevel: full
 @doc
 ----
+</t>
+<t tx="swot.20251008094332.1">.重试规则
+****
+https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/#spring-cloud-feign-overriding-defaults
+
+.spring 官网说 openfeign 默认没有开启重试机制
+....
+A bean of Retryer.NEVER_RETRY with the type Retryer is created by default, which will disable retrying. Notice this retrying behavior is different from the Feign default one, where it will automatically retry IOExceptions, treating them as transient network related exceptions, and any RetryableException thrown from an ErrorDecoder.
+....
+
+openfeign 的重试规则源码:
+/Users/swot/maven/repository/io/github/openfeign/feign-core/11.10/feign-core-11.10.jar!/feign/Retryer.class
+
+[source,java]
+----
+@language java
+public static class Default implements Retryer {
+    private final int maxAttempts;
+    private final long period;
+    private final long maxPeriod;
+    int attempt;
+    long sleptForMillis;
+
+    public Default() {
+        this(100L, TimeUnit.SECONDS.toMillis(1L), 5);
+    }
+----
+
+这是 OpenFeign 的默认重试器实现，详细解释它的重试规则和延时机制：
+
+.重试规则参数
+[source,java]
+----
+public Default() {
+    this(100L, TimeUnit.SECONDS.toMillis(1L), 5);
+}
+// 参数含义：period, maxPeriod, maxAttempts
+----
+
+**核心参数：**
+
+- `maxAttempts: 5` - **最多重试5次**（包含初始请求）
+- `period: 100L` - **基础延时100毫秒**
+- `maxPeriod: 1000L` - **最大延时1000毫秒**（1秒）
+
+延时机制
+
+1. **固定延时 + 指数退避**
+- 第1次重试：等待 `100ms`
+- 第2次重试：等待 `100ms × 2 = 200ms`  
+- 第3次重试：等待 `100ms × 2² = 400ms`
+- 第4次重试：等待 `100ms × 2³ = 800ms`
+- 第5次重试：等待 `100ms × 2⁴ = 1600ms` → **限制为1000ms**
+
+2. **最大延时限制**
+- 即使计算出的延时超过 `maxPeriod(1000ms)`，实际等待时间也不会超过1秒。
+
+重试场景，这个重试器在以下情况会触发重试：
+
+- HTTP连接超时
+- 服务端返回5xx错误
+- 网络IO异常等可重试的异常
+
+.使用示例
+....
+// 如果服务调用失败，重试过程如下：
+第1次请求 → 失败 → 等待100ms
+第2次请求 → 失败 → 等待200ms  
+第3次请求 → 失败 → 等待400ms
+第4次请求 → 失败 → 等待800ms
+第5次请求 → 失败 → 停止重试，抛出异常
+....
+
+**注意事项**
+
+- **总重试次数 = 初始请求 + 4次重试**
+- **不适合所有场景**：对于非幂等操作（POST、PUT）要谨慎使用
+- 可以通过自定义 `Retryer` 实现来修改重试策略
+
+这种**指数退避+最大限制**的策略既能给服务恢复时间，又避免了无限等待和雪崩效应。
+****
 </t>
 </tnodes>
 </leo_file>
