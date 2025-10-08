@@ -41,7 +41,7 @@ public class ItemController {
     @GetMapping(value = "item/{id}")
     public Item queryItemById(@PathVariable("id") Long id) {
         // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
-        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+//        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
         System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
         
         // -- New Added Begin --- 测试用例，当 ID 为 -1 时抛出异常

@@ -3872,6 +3872,33 @@ feign:
 ==== 重试机制
 远程调用超时失败后，还可以进行多次尝试。如果某次成功返回 ok，如果多次依然失败则结束调用，返回错误。
 
+测试：
+[source,console]
+----
+> http :8091/order/201810300001
+HTTP/1.1 500
+Connection: close
+Content-Type: application/json
+Date: Wed, 08 Oct 2025 02:40:29 GMT
+Transfer-Encoding: chunked
+
+{
+    "error": "Internal Server Error",
+    "path": "/order/201810300001",
+    "status": 500,
+    "timestamp": "2025-10-08T02:40:29.444+00:00"
+}
+----
+
+.微服务 service-item 8081 打印尝试了 5 次
+....
+Processing request on port: 8081 for item ID: 1
+Processing request on port: 8081 for item ID: 1
+Processing request on port: 8081 for item ID: 1
+Processing request on port: 8081 for item ID: 1
+Processing request on port: 8081 for item ID: 1
+....
+
 .重试规则
 ****
 https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/#spring-cloud-feign-overriding-defaults
@@ -3952,6 +3979,48 @@ public Default() {
 
 这种**指数退避+最大限制**的策略既能给服务恢复时间，又避免了无限等待和雪崩效应。
 ****
+
+===== @file service-order/src/main/java/com/tjise/serviceorder/config/FeignConfig.java
+
+
+====== Retryer retryer -> New Added 重试机制
+[source,java]
+----
+@Bean
+Retryer retryer() {
+    return new Retryer.Default();
+}
+----
+
+===== @file service-order/src/main/resources/application.yml
+
+
+====== spring -> import application-feign.yml
+[source, yaml]
+----
+spring:
+    config:
+        # -- New Added import application-feign.yml 文件 --
+        import: application-feign.yml
+    application:
+        # 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
+        name: app-order
+    cloud:
+        circuitbreaker:
+            resilience4j:
+                enabled: true
+----
+
+====== feign 开启断路器（测试时需要关闭 feign 断路器功能）
+connectTimeout & readTimeout 以配置为准，如 readTimeout 不再是 spring cloud 断路器的默认值 5s。
+所以在测试时，是否开启该功能则没有影响了。
+
+[source,yaml]
+----
+# feign:
+    # circuitbreaker:
+        # enabled: true
+----
 
 ==== 拦截器
 

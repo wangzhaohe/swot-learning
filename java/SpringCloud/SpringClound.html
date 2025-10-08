@@ -5932,6 +5932,36 @@ Transfer-Encoding: chunked
 <div class="paragraph">
 <p>远程调用超时失败后，还可以进行多次尝试。如果某次成功返回 ok，如果多次依然失败则结束调用，返回错误。</p>
 </div>
+<div class="paragraph">
+<p>测试：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">&gt; http :8091/order/201810300001</span>
+<span class="tok-go">HTTP/1.1 500</span>
+<span class="tok-go">Connection: close</span>
+<span class="tok-go">Content-Type: application/json</span>
+<span class="tok-go">Date: Wed, 08 Oct 2025 02:40:29 GMT</span>
+<span class="tok-go">Transfer-Encoding: chunked</span>
+
+<span class="tok-go">{</span>
+<span class="tok-go">    &quot;error&quot;: &quot;Internal Server Error&quot;,</span>
+<span class="tok-go">    &quot;path&quot;: &quot;/order/201810300001&quot;,</span>
+<span class="tok-go">    &quot;status&quot;: 500,</span>
+<span class="tok-go">    &quot;timestamp&quot;: &quot;2025-10-08T02:40:29.444+00:00&quot;</span>
+<span class="tok-go">}</span></code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">微服务 service-item 8081 打印尝试了 5 次</div>
+<div class="content">
+<pre>Processing request on port: 8081 for item ID: 1
+Processing request on port: 8081 for item ID: 1
+Processing request on port: 8081 for item ID: 1
+Processing request on port: 8081 for item ID: 1
+Processing request on port: 8081 for item ID: 1</pre>
+</div>
+</div>
 <div class="sidebarblock">
 <div class="content">
 <div class="title">重试规则</div>
@@ -6077,6 +6107,55 @@ Transfer-Encoding: chunked
 </div>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderconfigfeignconfig_java_2">@file service-order/src/main/java/com/tjise/serviceorder/config/FeignConfig.java</h5>
+<div class="sect5">
+<h6 id="_retryer_retryer_new_added_重试机制">Retryer retryer &#8594; New Added 重试机制</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Bean</span>
+<span class="tok-n">Retryer</span><span class="tok-w"> </span><span class="tok-nf">retryer</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Retryer</span><span class="tok-p">.</span><span class="tok-na">Default</span><span class="tok-p">();</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_service_ordersrcmainresourcesapplication_yml_12">@file service-order/src/main/resources/application.yml</h5>
+<div class="sect5">
+<h6 id="_spring_import_application_feign_yml_2">spring &#8594; import application-feign.yml</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">config</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-c1"># -- New Added import application-feign.yml 文件 --</span>
+<span class="tok-w">        </span><span class="tok-nt">import</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">application-feign.yml</span>
+<span class="tok-w">    </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-c1"># 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)</span>
+<span class="tok-w">        </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">app-order</span>
+<span class="tok-w">    </span><span class="tok-nt">cloud</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">circuitbreaker</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-nt">resilience4j</span><span class="tok-p">:</span>
+<span class="tok-w">                </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_feign_开启断路器测试时需要关闭_feign_断路器功能">feign 开启断路器（测试时需要关闭 feign 断路器功能）</h6>
+<div class="paragraph">
+<p>connectTimeout &amp; readTimeout 以配置为准，如 readTimeout 不再是 spring cloud 断路器的默认值 5s。
+所以在测试时，是否开启该功能则没有影响了。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># feign:</span>
+<span class="tok-w">    </span><span class="tok-c1"># circuitbreaker:</span>
+<span class="tok-w">        </span><span class="tok-c1"># enabled: true</span></code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_拦截器">拦截器</h4>
@@ -6092,7 +6171,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-08 10:04:35 +0800
+Last updated 2025-10-08 11:00:05 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
