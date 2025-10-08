@@ -1,0 +1,27 @@
+#@+leo-ver=5-thin
+#@+node:swot.20251008064516.1: * @file service-order/src/main/resources/application-feign.yml
+#@@language yaml
+#@+others
+#@+node:swot.20251008064516.2: ** spring -> 专门定义 openfeign 会被 application.yml 导入
+#@+doc
+# [source, yaml]
+# ----
+#@@c
+feign:
+    client:
+        config:
+            # 默认设置
+            default:
+                connectTimeout: 5000
+                readTimeout: 5000
+
+            # -- NOTE: feignName 写要调用的微服务名，会覆盖 default 默认设置 --
+            app-item:
+                connectTimeout: 3000
+                readTimeout: 2000
+                # 优先级低于 config/FeignConfig.java 中的 Logger.Level
+                # loggerLevel: full
+#@+doc
+# ----
+#@-others
+#@-leo

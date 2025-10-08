@@ -4,13 +4,13 @@
 :stem: latexmath
 :toc:
 :toc: right
-:toc-title: Table of Contents
+:toc-title: 目录
 :toclevels: 3
 
 = Spring Cloud 微服务
 
 ++++
-<button id="toggleButton">Table of Contents</button>
+<button id="toggleButton">目录开关</button>
 <script>
     // 获取按钮和 div 元素
     const toggleButton = document.getElementById('toggleButton');
@@ -3725,7 +3725,7 @@ image::img/feign_timeout_category.png[,800]
 
 . 访问下面链接会在 60s 超时
 * http :8091/order/201810300001
-
++
 ....
 HTTP/1.1 500
 Connection: close
@@ -3740,8 +3740,7 @@ Transfer-Encoding: chunked
     "timestamp": "2025-10-07T12:28:55.156+00:00"
 }
 ....
-
-
++
 .微服务 service-order 显示 readTimeout
 ....
 java.net.SocketTimeoutException: Read timed out -> 显示读取超时了
@@ -3792,7 +3791,9 @@ public Item queryItemById(Long id) {
     # enabled: true
 ----
 
-在`Resilience4JCircuitBreakerFactory`或`Resilience4JAutoConfiguration`类中，Spring Cloud 会覆盖 Resilience4j 的默认配置：
+.参考知识
+****
+在 Resilience4JCircuitBreakerFactory 或 Resilience4JAutoConfiguration 类中，Spring Cloud 会覆盖 Resilience4j 的默认配置：
 
 [source,java]
 ----
@@ -3811,9 +3812,62 @@ public class Resilience4JAutoConfiguration {
     }
 }
 ----
+****
 
-===== newHeadline
+===== 配置 connectTimeout 和 readTimeout
 
+
+====== file -> service-order/src/main/resources/application.yml
+
+
+====== spring -> import application-feign.yml
+[source, yaml]
+----
+spring:
+    config:
+        # -- New Added import application-feign.yml 文件 --
+        import: application-feign.yml
+    application:
+        # 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
+        name: app-order
+    cloud:
+        circuitbreaker:
+            resilience4j:
+                enabled: true
+----
+
+====== feign 开启断路器（测试时不用再关闭 feign 断路器功能）
+connectTimeout & readTimeout 以配置为准，如 readTimeout 不再是 spring cloud 断路器的默认值 5s。
+所以在测试时，是否开启该功能则没有影响了。
+
+[source,yaml]
+----
+feign:
+    circuitbreaker:
+        enabled: true
+----
+
+====== file -> service-order/src/main/resources/application-feign.yml
+
+
+====== spring -> 专门定义 openfeign 会被 application.yml 导入
+[source, yaml]
+----
+feign:
+    client:
+        config:
+            # 默认设置
+            default:
+                connectTimeout: 5000
+                readTimeout: 5000
+
+            # -- NOTE: feignName 写要调用的微服务名，会覆盖 default 默认设置 --
+            app-item:
+                connectTimeout: 3000
+                readTimeout: 2000
+                # 优先级低于 config/FeignConfig.java 中的 Logger.Level
+                # loggerLevel: full
+----
 
 ==== 重试机制
 
