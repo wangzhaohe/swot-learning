@@ -5996,23 +5996,23 @@ Transfer-Encoding: chunked
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>固定延时 + 指数退避</strong></p>
+<p>指数退避策略（OpenFeign 使用 1.5倍指数退避 算法）</p>
 <div class="ulist">
 <ul>
 <li>
-<p>第1次重试：等待 <code>100ms</code></p>
+<p>第1次重试：等待 100ms × 1.5⁰ = 100ms</p>
 </li>
 <li>
-<p>第2次重试：等待 <code>100ms × 2 = 200ms</code></p>
+<p>第2次重试：等待 100ms × 1.5¹ = 150ms</p>
 </li>
 <li>
-<p>第3次重试：等待 <code>100ms × 2² = 400ms</code></p>
+<p>第3次重试：等待 100ms × 1.5² = 225ms</p>
 </li>
 <li>
-<p>第4次重试：等待 <code>100ms × 2³ = 800ms</code></p>
+<p>第4次重试：等待 100ms × 1.5³ ≈ 338ms</p>
 </li>
 <li>
-<p>第5次重试：等待 <code>100ms × 2⁴ = 1600ms</code> → <strong>限制为1000ms</strong></p>
+<p>第5次重试：等待 100ms × 1.5⁴ ≈ 506ms</p>
 </li>
 </ul>
 </div>
@@ -6050,14 +6050,14 @@ Transfer-Encoding: chunked
 <div class="content">
 <pre>// 如果服务调用失败，重试过程如下：
 第1次请求 → 失败 → 等待100ms
-第2次请求 → 失败 → 等待200ms
-第3次请求 → 失败 → 等待400ms
-第4次请求 → 失败 → 等待800ms
+第2次请求 → 失败 → 等待150ms
+第3次请求 → 失败 → 等待225ms
+第4次请求 → 失败 → 等待338ms
 第5次请求 → 失败 → 停止重试，抛出异常</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>注意事项</p>
+<p><strong>注意事项</strong></p>
 </div>
 <div class="ulist">
 <ul>
@@ -6092,7 +6092,7 @@ Transfer-Encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-08 09:52:58 +0800
+Last updated 2025-10-08 10:04:35 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
