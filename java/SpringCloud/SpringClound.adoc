@@ -4142,7 +4142,113 @@ public class ElegantRetryController {
 }
 ----
 
-==== 拦截器
+==== 请求和响应拦截器
+image::img/feign_interceptor.png[,800]
+
+测试发送
+http -v :8091/elegant/item/1
+
+.在 service-item 微服务打印 header 内容
+....
+header token = 1ea826d5-3c48-4e5b-890d-a00f59e8a92a
+Processing request on port: 8081 for item ID: 1
+....
+
+===== file -> service-order/src/main/java/com/tjise/serviceorder/interceptor/XTokenRequestInterceptor.java
+[source,java]
+----
+package com.tjise.serviceorder.interceptor;
+
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
+import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+
+@Component  // -- New Added -- 会自动应用 IOC 容器中的 RequestInterceptor 组件
+public class XTokenRequestInterceptor implements RequestInterceptor {
+    /**
+     * 请求拦截器
+     * @param requestTemplate 请求模板
+     */
+    @Override
+    public void apply(RequestTemplate requestTemplate) {
+        System.out.println("请求拦截器...");
+//        requestTemplate.header("X-Token", "123456");
+        requestTemplate.header("X-Token", UUID.randomUUID().toString());
+    }
+}
+----
+
+===== file -> service-item/src/main/java/com/tjise/serviceitem/service/ItemService.java
+
+
+====== Item queryItemById -> 注释模拟超时代码
+[source,java]
+----
+/**
+ * 模拟实现商品查询
+ *
+ * @param id
+ * @return
+ */
+public Item queryItemById(Long id) {
+
+    // 模拟超时 100s 大于 FeignClient 默认的 60s 超时，可以实现 FeignClient readTimeout 效果。
+    // try {
+        // TimeUnit.SECONDS.sleep(100);
+    // } catch (InterruptedException e) {
+        // throw new RuntimeException(e);
+    // }
+
+    return ITEM_MAP.get(id);
+}
+----
+
+===== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
+
+
+====== public class ItemController
+[source,java]
+----
+@RestController
+public class ItemController {
+
+    @Autowired
+    private ItemService itemService;
+    
+    @Value("${server.port}")
+    private int serverPort;
+
+    private static final Logger logger = Logger.getLogger(
+                         ItemController.class.getName());
+    /**
+     * 对外提供接口服务，查询商品信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "item/{id}")
+    public Item queryItemById(@PathVariable("id") Long id,
+                              HttpServletRequest request) {
+        String header = request.getHeader("X-Token");
+        System.out.println("header token = " + header);
+        // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
+//        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+        System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
+        
+        // -- New Added Begin --- 测试用例，当 ID 为 -1 时抛出异常
+        if (id == -1) {
+            System.out.println("=== 触发异常测试，ID 为 -1 ===");
+            throw new RuntimeException("服务内部错误");
+        }
+        // -- New Added End -- 
+        return this.itemService.queryItemById(id);  // 正常返回
+    }
+}
+----
+
+===== newHeadline
 
 
 ==== fallback 兜底返回
