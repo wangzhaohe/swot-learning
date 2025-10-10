@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class ItemFallback implements ItemFeignClient {
     @Override
     public Item queryItemById(Long id) {
-        System.out.println("=== ItemFallback.queryItemById 被调用 ===");
+        System.out.println("=== ItemFallback.queryItemById 兜底回调被调用 ===");
         return new Item(id, "Feign 降级商品", null, null, null);
     }
 }

@@ -41,7 +41,7 @@
 * *优点*：开发、测试、部署简单。
 * *缺点*：
   ** 复杂性高：代码庞大，耦合度高，维护困难。
-  ** 技术栈僵化：难以引入新的技术或框架。
+  ** 技术栈僵化：难以引入新的技术或框架。比如多种语言开发。
   ** 扩展性差：无法针对特定模块进行扩展，必须扩展整个应用。
   ** 部署不灵活：一个小修改就需要重新部署整个应用，风险高。
   ** 可靠性低：一个微小的问题可能导致整个应用崩溃。
@@ -71,14 +71,14 @@
 . 配置管理：如何统一管理所有服务的配置，并实现动态更新？
 . 负载均衡：如何将请求合理地分发到多个服务实例上？
 . 容错与熔断：如何防止一个服务故障导致整个系统雪崩？
-. API网关：如何为外部客户端提供一个统一的入口，并处理跨切面问题（认证、限流、路由）？
+. API 网关：如何为外部客户端提供一个统一的入口，并处理跨切面问题（认证、限流、路由）？
 . 分布式事务：如何保证跨多个服务的数据一致性？
 . 监控与链路追踪：如何跟踪一个请求穿越多个服务的全过程，以便排查问题？
 
 === 1.3 Spring Cloud？
 1. 定义
 +
-Spring Cloud 是一套基于 Spring Boot的 #微服务生态工具集#。它提供了一系列 #标准化的工具和组件#，用于快速解决微服务架构中的常见问题（如上述挑战），让我们能更专注于业务逻辑的开发。
+Spring Cloud 是一套基于 Spring Boot 的 #微服务生态工具集#。它提供了一系列 #标准化的工具和组件#，用于快速解决微服务架构中的常见问题（如上述挑战），让我们能更专注于业务逻辑的开发。
 +
 *简单来说*：Spring Boot 让开发单个微服务变得简单，而 Spring Cloud 让 #管理和协调# 这些微服务变得简单。
 
@@ -88,7 +88,7 @@ Spring Cloud 是一套基于 Spring Boot的 #微服务生态工具集#。它提�
 Spring Cloud 通过封装 *Netflix*、*Alibaba* 等公司成熟的微服务解决方案，提供了 *开箱即用* 的分布式系统开发体验。
 
 === 1.4 Cloud 的核心组件/子项目
-Spring Cloud是一个“全家桶”，包含众多组件，以下是其中最核心的几个：
+Spring Cloud 是一个“全家桶”，包含众多组件，以下是其中最核心的几个：
 
 [cols="1,3,2", options="header"]
 |===
@@ -96,23 +96,23 @@ Spring Cloud是一个“全家桶”，包含众多组件，以下是其中最�
 | 功能
 | 比喻
 
-| *Eureka / Nacos*
+| *Eureka（国外） / Nacos（国内）*
 | *服务发现与注册*：服务提供者启动后向注册中心注册自己的地址，消费者从注册中心拉取服务列表。
 | *电话簿*：服务在这里注册和查找彼此的地址。
 
-| *Ribbon / LoadBalancer*
+| *Ribbon（弃用） / LoadBalancer*
 | *客户端负载均衡*：从服务列表中选择一个实例，将请求分发过去。
 | *导游*：在多个相同的服务实例中，选择一个带你去。
 
-| *Feign / OpenFeign*
+| *Feign（停止维护）/ OpenFeign*
 | *声明式HTTP客户端*：基于接口和注解的方式调用远程服务，像调用本地方法一样简单。
 | *翻译官*：帮你自动完成HTTP请求的组装和发送。
 
-| *Hystrix / Sentinel*
+| *Hystrix（停止维护）/ Sentinel*
 | *熔断器*：当服务调用失败率达到阈值时，快速失败（熔断），防止雪崩效应，并提供服务降级。
 | *保险丝*：电流过大（故障太多）自动熔断，保护整个电路（系统）。
 
-| *Zuul / Gateway*
+| *Zuul(停止/未开源) / Gateway*
 | *API网关*：所有外部请求的统一入口，负责路由、过滤、认证、限流、监控等。
 | *前台/门卫*：所有访客必须经过这里，由它决定谁可以进、去哪里。
 
@@ -236,7 +236,7 @@ public class ItemService {
 
     private static final Map<Long, Item> ITEM_MAP = new HashMap<Long, Item>();
 
-    static {// 准备一些静态数据，模拟数据库，只是为了简单而已
+    static {// 准备一些静态数据，模拟数据库，只是为了简单而已，这样就不用 mapper 层了。
         ITEM_MAP.put(1L, new Item(1L, "商品1", "http://图片1", "商品描述1", 1000L));
         ITEM_MAP.put(2L, new Item(2L, "商品2", "http://图片2", "商品描述2", 2000L));
         ITEM_MAP.put(3L, new Item(3L, "商品3", "http://图片3", "商品描述3", 3000L));
@@ -358,6 +358,45 @@ server:
     </build>
 </project>
 
+=== file -> service-order/src/main/java/com/tjise/serviceorder/pojo/Order.java
+.订单实体类 Order
+[source,java]
+----
+package com.tjise.serviceorder.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.Date;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Order {
+    private String orderId;
+    private Long userId;
+    private Date createDate;
+    private Date updateDate;
+    private List<OrderDetail> orderDetails;  // 包含多个商品
+}
+----
+
+=== file -> service-order/src/main/java/com/tjise/serviceorder/pojo/OrderDetail.java
+package com.tjise.serviceorder.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderDetail {
+    private String orderId;
+    private Item item;
+}
+
 === file -> service-order/src/main/java/com/tjise/serviceorder/pojo/Item.java
 .商品实体类 Item
 [source,java]
@@ -380,44 +419,42 @@ public class Item {
 }
 ----
 
-=== file -> service-order/src/main/java/com/tjise/serviceorder/pojo/Order.java
-.订单实体类 Order
+=== file -> service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
 [source,java]
 ----
-package com.tjise.serviceorder.pojo;
+package com.tjise.serviceorder.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.util.Date;
-import java.util.List;
+import com.tjise.serviceorder.pojo.Order;
+import com.tjise.serviceorder.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Order {
-    private String orderId;
-    private Long userId;
-    private Date createDate;
-    private Date updateDate;
-    private List<OrderDetail> orderDetails;
+/**
+ * 订单控制器
+ * 处理订单相关的HTTP请求
+ */
+@RestController
+public class OrderController {
+    
+    // 注入订单服务
+    @Autowired
+    private OrderService orderService;
+
+    /**
+     * 根据订单ID查询订单信息
+     * 
+     * @param orderId 订单ID
+     * @return Order 订单信息
+     */
+    @GetMapping(value = "order/{orderId}")
+    public Order queryOrderById(@PathVariable("orderId") String orderId) {
+        return orderService.queryOrderById(orderId);
+    }
 }
 ----
 
-=== file -> service-order/src/main/java/com/tjise/serviceorder/pojo/OrderDetail.java
-package com.tjise.serviceorder.pojo;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class OrderDetail {
-    private String orderId;
-    private Item item;
-}
+httpie 测试:
+http :8091/order/201810300001
 
 === file -> service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
 
@@ -526,43 +563,6 @@ public class ItemService {
                 + id, Item.class);
     }
 }
-
-=== file -> service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
-[source,java]
-----
-package com.tjise.serviceorder.controller;
-
-import com.tjise.serviceorder.pojo.Order;
-import com.tjise.serviceorder.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-/**
- * 订单控制器
- * 处理订单相关的HTTP请求
- */
-@RestController
-public class OrderController {
-    
-    // 注入订单服务
-    @Autowired
-    private OrderService orderService;
-
-    /**
-     * 根据订单ID查询订单信息
-     * 
-     * @param orderId 订单ID
-     * @return Order 订单信息
-     */
-    @GetMapping(value = "order/{orderId}")
-    public Order queryOrderById(@PathVariable("orderId") String orderId) {
-        return orderService.queryOrderById(orderId);
-    }
-}
-----
-
-httpie 测试:
-http :8091/order/201810300001
 
 === file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
 package com.tjise.serviceorder;
@@ -2788,7 +2788,7 @@ WebClient/RestTemplate 优势:
 === Feign 客户端配合断路器入门
 
 
-==== 1) 直接使用断路器 Resilience4j（纯手工）
+==== 1) 直接使用断路器 Resilience4j (纯手工)
 正常测试
 
 * http :8091/order/201810300001 
@@ -3292,7 +3292,7 @@ import org.springframework.stereotype.Component;
 public class ItemFallback implements ItemFeignClient {
     @Override
     public Item queryItemById(Long id) {
-        System.out.println("=== ItemFallback.queryItemById 被调用 ===");
+        System.out.println("=== ItemFallback.queryItemById 兜底回调被调用 ===");
         return new Item(id, "Feign 降级商品", null, null, null);
     }
 }
@@ -4248,9 +4248,98 @@ public class ItemController {
 }
 ----
 
-===== newHeadline
+==== 兜底返回 -> Feign with Sentinel fallback
+image::img/feign_fallback.png[,800]
+
+前面已经实现过了。参考「使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器 Resilience4j，不需要在服务层手动管理断路器）」。
 
 
-==== fallback 兜底返回
+下面我们再看如何使用熔断框架 Sentinel 如何实现 Feign 的兜底返回。
 
+.测试结果
+....
+> http :8091/order/201810300004
+HTTP/1.1 200
+Connection: keep-alive
+Content-Type: application/json
+Date: Fri, 10 Oct 2025 06:28:19 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+{
+    "createDate": "2025-10-10T06:27:52.828+00:00",
+    "orderDetails": [
+        {
+            "item": {
+                "desc": null,
+                "id": -1,
+                "pic": null,
+                "price": null,
+                "title": "Feign 降级商品"
+            },
+            "orderId": "201810300004"
+        }
+    ],
+    "orderId": "201810300004",
+    "updateDate": "2025-10-10T06:27:52.826+00:00",
+    "userId": 4
+}
+....
+
+===== file -> service-order/pom.xml
+
+
+====== Sentinel
+[source,scss]
+....
+<dependency>
+    <groupId>com.alibaba.cloud</groupId>
+    <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+    <version>2021.0.5.0</version>
+</dependency>
+....
+
+===== file -> service-order/src/main/resources/application.yml
+
+
+====== spring -> 停用 spring cloud 集成的 resilience4j 断路器
+[source, yaml]
+----
+spring:
+    config:
+        import: application-feign.yml
+    application:
+        # 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
+        name: app-order
+    cloud:
+        # 使用 spring cloud 集成的 resilience4j
+        circuitbreaker:
+            resilience4j:
+                enabled: false
+        # sentinel:
+            # transport:
+                # dashboard: localhost:8858  # Sentinel 控制台地址
+            # eager: true  # 立即初始化 Sentinel
+----
+
+====== feign 开启断路器 -> 测试时需要开启 sentinel 支持 feign 断路器功能
+[source,yaml]
+----
+feign:
+    # 直接使用 resilience4j
+    # circuitbreaker:
+        # enabled: true
+    sentinel:
+        enabled: true
+----
+
+== 10. Sentinel
+
+
+=== docker 开启 sentinel-dashboard
+image::img/sentinel_dashboard186.png[]
+
+image::img/sentinel_dashboard186_run.png[]
+
+image::img/sentinel_dashboard186_admin.png[]
 
