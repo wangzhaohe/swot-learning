@@ -1764,6 +1764,15 @@ scale 1.2
 </t>
 <t tx="swot.20250509113701.1">https://mermaid.js.org/
 
+安装与 @mermaid-js/mermaid-cli 兼容的 puppeteer
+
+    pnpm add puppeteer@^23 -g
+    验证安装：
+    node -e "console.log(require('puppeteer').executablePath())"
+    输出 Chromium 的路径，说明安装成功
+    /Users/swot/.cache/puppeteer/chrome/mac-131.0.6778.204/chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing
+
+
 安装 mermaid-cli:
 
     npm install -g @mermaid-js/mermaid-cli
