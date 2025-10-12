@@ -4636,7 +4636,7 @@ graph LR
 
 
 ===== spring
-[source,scss]
+[source,yaml]
 ....
 spring:
   cloud:
@@ -4798,7 +4798,50 @@ public interface ItemFeignClient {
 ----
 
 === Gateway - 路由 - 工作原理
+[mermaid, target=img/mermaid-2025-10-12-221421, format=svg]
+....
+flowchart TD
+    A[请求] -->|进入| B[Spring Cloud Gateway]
+    B --> C[路由规则匹配]
+    C -->|匹配| D[Gateway HandlerMapping]
+    D --> E[Gateway WebHandler]
+    E -->|转发| F[Filter链]
+    F --> G[目的地]
+    G -->|响应| F
+    F -->|返回| E
+    E -->|处理完成| B
+    B -->|离开| H[响应]
 
+    subgraph SpringCloudGatewayInternal[In Spring Cloud Gateway]
+        D
+        E
+        F
+        G
+    end
+
+    classDef internal fill:#f9f,stroke:#333,stroke-width:2px;
+    class SpringCloudGatewayInternal internal;
+
+    style A fill:#ffcccb,stroke:#333,stroke-width:2px;  // Light Pink
+    style B fill:#add8e6,stroke:#333,stroke-width:2px;  // Light Blue
+    style C fill:#ffff99,stroke:#333,stroke-width:2px;  // Light Yellow
+    style D fill:#d3d3e2,stroke:#333,stroke-width:2px;  // Light Purple
+    style E fill:#c0ffc0,stroke:#333,stroke-width:2px;  // Light Green
+    style F fill:#ffcc80,stroke:#333,stroke-width:2px;  // Light Orange
+    style G fill:#ffccff,stroke:#333,stroke-width:2px;  // Light Magenta
+    style H fill:#e0ffff,stroke:#333,stroke-width:2px;  // Light Cyan
+
+    linkStyle 0 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 1 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 2 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 3 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 4 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 5 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 6 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 7 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 8 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 9 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+....
 
 === Gateway - 断言 - 长短写法
 

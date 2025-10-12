@@ -8563,12 +8563,59 @@ graph LR
     B --&gt;|/api/product/**| D[service-product]
 ....
 
+
 </t>
-<t tx="swot.20251012084923.1"></t>
+<t tx="swot.20251012084923.1">@language asciidoc
+[mermaid, target=img/mermaid-2025-10-12-221421, format=svg]
+....
+flowchart TD
+    A[请求] --&gt;|进入| B[Spring Cloud Gateway]
+    B --&gt; C[路由规则匹配]
+    C --&gt;|匹配| D[Gateway HandlerMapping]
+    D --&gt; E[Gateway WebHandler]
+    E --&gt;|转发| F[Filter链]
+    F --&gt; G[目的地]
+    G --&gt;|响应| F
+    F --&gt;|返回| E
+    E --&gt;|处理完成| B
+    B --&gt;|离开| H[响应]
+
+    subgraph SpringCloudGatewayInternal[In Spring Cloud Gateway]
+        D
+        E
+        F
+        G
+    end
+
+    classDef internal fill:#f9f,stroke:#333,stroke-width:2px;
+    class SpringCloudGatewayInternal internal;
+
+    style A fill:#ffcccb,stroke:#333,stroke-width:2px;  // Light Pink
+    style B fill:#add8e6,stroke:#333,stroke-width:2px;  // Light Blue
+    style C fill:#ffff99,stroke:#333,stroke-width:2px;  // Light Yellow
+    style D fill:#d3d3e2,stroke:#333,stroke-width:2px;  // Light Purple
+    style E fill:#c0ffc0,stroke:#333,stroke-width:2px;  // Light Green
+    style F fill:#ffcc80,stroke:#333,stroke-width:2px;  // Light Orange
+    style G fill:#ffccff,stroke:#333,stroke-width:2px;  // Light Magenta
+    style H fill:#e0ffff,stroke:#333,stroke-width:2px;  // Light Cyan
+
+    linkStyle 0 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 1 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 2 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 3 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 4 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 5 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 6 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 7 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 8 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+    linkStyle 9 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+....
+</t>
 <t tx="swot.20251012084942.1"></t>
 <t tx="swot.20251012084952.1"></t>
 <t tx="swot.20251012084959.1"></t>
-<t tx="swot.20251012085012.1"></t>
+<t tx="swot.20251012085012.1">@language asciidoc
+</t>
 <t tx="swot.20251012085023.1"></t>
 <t tx="swot.20251012085032.1"></t>
 <t tx="swot.20251012085042.1"></t>
