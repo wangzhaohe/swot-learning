@@ -718,11 +718,49 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
-<li><a href="#_10_sentinel">10. Sentinel</a>
+<li><a href="#_10_服务保护_sentinel">10. 服务保护 Sentinel</a>
 <ul class="sectlevel2">
 <li><a href="#_docker_开启_sentinel_dashboard">docker 开启 sentinel-dashboard</a></li>
 </ul>
 </li>
+<li><a href="#_11_服务网关_gateway">11. 服务网关 Gateway</a>
+<ul class="sectlevel2">
+<li><a href="#_gateway_网关功能">Gateway - 网关功能</a></li>
+<li><a href="#_gateway_网关分类">Gateway - 网关分类</a></li>
+<li><a href="#_gateway_创建网关">Gateway - 创建网关</a>
+<ul class="sectlevel3">
+<li><a href="#_file_gatewaypom_xml">file &#8594; gateway/pom.xml</a></li>
+<li><a href="#_file_gatewaysrcmainresourcesapplication_yml">file &#8594; gateway/src/main/resources/application.yml</a></li>
+<li><a href="#_file_gatewaysrcmainjavacomtjisegatewaygatewaymainapplication_java">file &#8594; gateway/src/main/java/com/tjise/gateway/GatewayMainApplication.java</a></li>
+</ul>
+</li>
+<li><a href="#_gateway_路由_规则配置">Gateway - 路由 - 规则配置</a>
+<ul class="sectlevel3">
+<li><a href="#_file_gatewaysrcmainresourcesapplication_route_yml">@file gateway/src/main/resources/application-route.yml</a></li>
+<li><a href="#_file_gatewaysrcmainresourcesapplication_yml_2">@file gateway/src/main/resources/application.yml</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceordercontrollerordercontroller_java_2">@file service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java</a></li>
+<li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_5">@file service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderclientitemfeignclient_java_3">file &#8594; service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java</a></li>
+</ul>
+</li>
+<li><a href="#_gateway_路由_工作原理">Gateway - 路由 - 工作原理</a></li>
+<li><a href="#_gateway_断言_长短写法">Gateway - 断言 - 长短写法</a></li>
+<li><a href="#_gateway_断言_query">Gateway - 断言 - Query</a></li>
+<li><a href="#_gateway_断言_自定义断言工厂">Gateway - 断言 - 自定义断言工厂</a></li>
+<li><a href="#_gateway_过滤器_基本使用">Gateway - 过滤器 - 基本使用</a></li>
+<li><a href="#_gateway_过滤器_默认filter">Gateway - 过滤器 - 默认filter</a></li>
+<li><a href="#_gateway_过滤器_globalfilter">Gateway - 过滤器 - GlobalFilter</a></li>
+<li><a href="#_gateway_过滤器_自定义过滤器工厂">Gateway - 过滤器 - 自定义过滤器工厂</a></li>
+<li><a href="#_gateway_扩展_全局跨域">Gateway - 扩展 - 全局跨域</a>
+<ul class="sectlevel3">
+<li><a href="#_常见问题">常见问题</a></li>
+</ul>
+</li>
+<li><a href="#_gateway_总结">Gateway - 总结</a></li>
+</ul>
+</li>
+<li><a href="#_12_分布式事务_seata">12. 分布式事务 Seata</a></li>
+<li><a href="#_13_服务部署">13. 服务部署</a></li>
 </ul>
 </div>
 </div>
@@ -1007,228 +1045,192 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="sect2">
 <h3 id="_file_service_itempom_xml">file &#8594; service-item/pom.xml</h3>
-<div class="paragraph">
-<p>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 <a href="https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt" class="bare">https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt</a>;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-    &lt;parent&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-        &lt;version&gt;2.7.18&lt;/version&gt;
-        &lt;relativePath/&gt; &lt;!-- lookup parent from repository -&#8594;
-    &lt;/parent&gt;
-    &lt;groupId&gt;com.tjise&lt;/groupId&gt;
-    &lt;artifactId&gt;service-item&lt;/artifactId&gt;
-    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-    &lt;name&gt;service-item&lt;/name&gt;
-    &lt;description&gt;service-item&lt;/description&gt;
-    &lt;properties&gt;
-        &lt;java.version&gt;1.8&lt;/java.version&gt;
-    &lt;/properties&gt;
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-        &lt;/dependency&gt;</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;</pre>
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;?</span><span class="tok-nt">xml</span><span class="tok-w"> </span><span class="tok-nt">version</span><span class="tok-o">=</span><span class="tok-s2">&quot;1.0&quot;</span><span class="tok-w"> </span><span class="tok-nt">encoding</span><span class="tok-o">=</span><span class="tok-s2">&quot;UTF-8&quot;</span><span class="tok-o">?&gt;</span></code></pre>
 </div>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>    &lt;!-- Lombok --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-        &lt;optional&gt;true&lt;/optional&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;</pre>
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">project</span><span class="tok-w"> </span><span class="tok-nt">xmlns</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://maven.apache.org/POM/4.0.0&quot;</span><span class="tok-w"> </span><span class="tok-nt">xmlns</span><span class="tok-nd">:xsi</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+<span class="tok-w">         </span><span class="tok-nt">xsi</span><span class="tok-nd">:schemaLocation</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">modelVersion</span><span class="tok-o">&gt;</span><span class="tok-nt">4</span><span class="tok-nc">.0.0</span><span class="tok-o">&lt;/</span><span class="tok-nt">modelVersion</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-parent</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">2</span><span class="tok-nc">.7.18</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">relativePath</span><span class="tok-o">/&gt;</span><span class="tok-w"> </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">lookup</span><span class="tok-w"> </span><span class="tok-nt">parent</span><span class="tok-w"> </span><span class="tok-nt">from</span><span class="tok-w"> </span><span class="tok-nt">repository</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">service-item</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.0-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">name</span><span class="tok-o">&gt;</span><span class="tok-nt">service-item</span><span class="tok-o">&lt;/</span><span class="tok-nt">name</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">description</span><span class="tok-o">&gt;</span><span class="tok-nt">service-item</span><span class="tok-o">&lt;/</span><span class="tok-nt">description</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">java</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.8</span><span class="tok-o">&lt;/</span><span class="tok-nt">java</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-web</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-test</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">test</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">Lombok</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.projectlombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">lombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span><span class="tok-nt">true</span><span class="tok-o">&lt;/</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">build</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">plugins</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">plugin</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-maven-plugin</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;/</span><span class="tok-nt">plugin</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">plugins</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">build</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">project</span><span class="tok-o">&gt;</span></code></pre>
 </div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;build&gt;
-    &lt;plugins&gt;
-        &lt;plugin&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-        &lt;/plugin&gt;
-    &lt;/plugins&gt;
-&lt;/build&gt;</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>&lt;/project&gt;</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_file_service_itemsrcmainjavacomtjiseserviceitempojoitem_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/pojo/Item.java</h3>
-<div class="paragraph">
-<p>package com.tjise.serviceitem.pojo;</p>
-</div>
-<div class="paragraph">
-<p>import lombok.Data;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;</p>
-</div>
-<div class="paragraph">
-<p>@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Item {</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>private Long id;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>private String title;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>private String pic;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>private String desc;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    private Long price;
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem.pojo</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.Data</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.AllArgsConstructor</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.NoArgsConstructor</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Data</span>
+<span class="tok-nd">@NoArgsConstructor</span>
+<span class="tok-nd">@AllArgsConstructor</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Item</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">title</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">pic</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">desc</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">price</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemservice_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/service/ItemService.java</h3>
-<div class="paragraph">
-<p>package com.tjise.serviceitem.service;</p>
-</div>
-<div class="paragraph">
-<p>import com.tjise.serviceitem.pojo.Item;
-import org.springframework.stereotype.Service;
-import java.util.HashMap;
-import java.util.Map;</p>
-</div>
-<div class="paragraph">
-<p>@Service
-public class ItemService {</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>private static final Map&lt;Long, Item&gt; ITEM_MAP = new HashMap&lt;Long, Item&gt;();</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Service</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.HashMap</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.Map</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">Map</span><span class="tok-o">&lt;</span><span class="tok-n">Long</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">ITEM_MAP</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">HashMap</span><span class="tok-o">&lt;</span><span class="tok-n">Long</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-o">&gt;</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-c1">// 准备一些静态数据，模拟数据库，只是为了简单而已，这样就不用 mapper 层了。</span>
+<span class="tok-w">        </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-mi">1L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-mi">1L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品1&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;http://图片1&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品描述1&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">1000L</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-mi">2L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-mi">2L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品2&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;http://图片2&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品描述2&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">2000L</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-mi">3L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-mi">3L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品3&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;http://图片3&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品描述3&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">3000L</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-mi">4L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-mi">4L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品4&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;http://图片4&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品描述4&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">4000L</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-mi">5L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-mi">5L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品5&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;http://图片5&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品描述5&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">5000L</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-mi">6L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-mi">6L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品6&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;http://图片6&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品描述6&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">6000L</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-mi">7L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-mi">7L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品7&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;http://图片7&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品描述7&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">7000L</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-mi">8L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-mi">8L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品8&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;http://图片8&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品描述8&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">8000L</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-mi">9L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-mi">9L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品9&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;http://图片9&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品描述9&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">9000L</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-mi">10L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">(</span><span class="tok-mi">10L</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品10&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;http://图片10&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;商品描述10&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">10000L</span><span class="tok-p">));</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 模拟实现商品查询</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @param id</span>
+<span class="tok-cm">     * @return</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">ITEM_MAP</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-p">}</span></code></pre>
 </div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>static {// 准备一些静态数据，模拟数据库，只是为了简单而已，这样就不用 mapper 层了。
-    ITEM_MAP.put(1L, new Item(1L, "商品1", "http://图片1", "商品描述1", 1000L));
-    ITEM_MAP.put(2L, new Item(2L, "商品2", "http://图片2", "商品描述2", 2000L));
-    ITEM_MAP.put(3L, new Item(3L, "商品3", "http://图片3", "商品描述3", 3000L));
-    ITEM_MAP.put(4L, new Item(4L, "商品4", "http://图片4", "商品描述4", 4000L));
-    ITEM_MAP.put(5L, new Item(5L, "商品5", "http://图片5", "商品描述5", 5000L));
-    ITEM_MAP.put(6L, new Item(6L, "商品6", "http://图片6", "商品描述6", 6000L));
-    ITEM_MAP.put(7L, new Item(7L, "商品7", "http://图片7", "商品描述7", 7000L));
-    ITEM_MAP.put(8L, new Item(8L, "商品8", "http://图片8", "商品描述8", 8000L));
-    ITEM_MAP.put(9L, new Item(9L, "商品9", "http://图片9", "商品描述9", 9000L));
-    ITEM_MAP.put(10L, new Item(10L, "商品10", "http://图片10", "商品描述10", 10000L));
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>/**
- * 模拟实现商品查询
- *
- * @param id
- * @return
- */
-public Item queryItemById(Long id) {
-    return ITEM_MAP.get(id);
-}</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>}</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</h3>
-<div class="paragraph">
-<p>package com.tjise.serviceitem.controller;</p>
-</div>
-<div class="paragraph">
-<p>import com.tjise.serviceitem.pojo.Item;
-import com.tjise.serviceitem.service.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;</p>
-</div>
-<div class="paragraph">
-<p>@RestController
-public class ItemController {</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>@Autowired
-private ItemService itemService;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    /**
-     * 对外提供接口服务，查询商品信息
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping(value = "item/{id}")
-    public Item queryItemById(@PathVariable("id") Long id) {
-        return this.itemService.queryItemById(id);
-    }
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem.controller</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem.service.ItemService</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.GetMapping</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.PathVariable</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RestController</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@RestController</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 对外提供接口服务，查询商品信息</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @param id</span>
+<span class="tok-cm">     * @return</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_file_service_itemsrcmainjavacomtjiseserviceitemserviceitemapplication_java">file &#8594; service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java</h3>
-<div class="paragraph">
-<p>package com.tjise.serviceitem;</p>
-</div>
-<div class="paragraph">
-<p>import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;</p>
-</div>
-<div class="paragraph">
-<p>@SpringBootApplication
-public class ServiceItemApplication {</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>    public static void main(String[] args) {
-        SpringApplication.run(ServiceItemApplication.class, args);
-    }
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.SpringApplication</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@SpringBootApplication</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ServiceItemApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ServiceItemApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_file_service_itemsrcmainresourcesapplication_yml">file &#8594; service-item/src/main/resources/application.yml</h3>
-<div class="paragraph">
-<p>server:
-  port: 8081</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8081</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1238,61 +1240,59 @@ public class ServiceItemApplication {</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_file_service_orderpom_xml">file &#8594; service-order/pom.xml</h3>
-<div class="paragraph">
-<p>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 <a href="https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt" class="bare">https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt</a>;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-    &lt;parent&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-        &lt;version&gt;2.7.18&lt;/version&gt;
-        &lt;relativePath/&gt; &lt;!-- lookup parent from repository -&#8594;
-    &lt;/parent&gt;
-    &lt;groupId&gt;com.tjise&lt;/groupId&gt;
-    &lt;artifactId&gt;service-order&lt;/artifactId&gt;
-    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-    &lt;name&gt;service-order&lt;/name&gt;
-    &lt;description&gt;service-order&lt;/description&gt;
-    &lt;properties&gt;
-        &lt;java.version&gt;1.8&lt;/java.version&gt;
-    &lt;/properties&gt;
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-        &lt;/dependency&gt;</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;</pre>
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;?</span><span class="tok-nt">xml</span><span class="tok-w"> </span><span class="tok-nt">version</span><span class="tok-o">=</span><span class="tok-s2">&quot;1.0&quot;</span><span class="tok-w"> </span><span class="tok-nt">encoding</span><span class="tok-o">=</span><span class="tok-s2">&quot;UTF-8&quot;</span><span class="tok-o">?&gt;</span></code></pre>
 </div>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>    &lt;!-- Lombok --&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-        &lt;optional&gt;true&lt;/optional&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    &lt;build&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/build&gt;
-&lt;/project&gt;</pre>
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">project</span><span class="tok-w"> </span><span class="tok-nt">xmlns</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://maven.apache.org/POM/4.0.0&quot;</span><span class="tok-w"> </span><span class="tok-nt">xmlns</span><span class="tok-nd">:xsi</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+<span class="tok-w">         </span><span class="tok-nt">xsi</span><span class="tok-nd">:schemaLocation</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">modelVersion</span><span class="tok-o">&gt;</span><span class="tok-nt">4</span><span class="tok-nc">.0.0</span><span class="tok-o">&lt;/</span><span class="tok-nt">modelVersion</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-parent</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">2</span><span class="tok-nc">.7.18</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">relativePath</span><span class="tok-o">/&gt;</span><span class="tok-w"> </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">lookup</span><span class="tok-w"> </span><span class="tok-nt">parent</span><span class="tok-w"> </span><span class="tok-nt">from</span><span class="tok-w"> </span><span class="tok-nt">repository</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">service-order</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.0-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">name</span><span class="tok-o">&gt;</span><span class="tok-nt">service-order</span><span class="tok-o">&lt;/</span><span class="tok-nt">name</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">description</span><span class="tok-o">&gt;</span><span class="tok-nt">service-order</span><span class="tok-o">&lt;/</span><span class="tok-nt">description</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">java</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.8</span><span class="tok-o">&lt;/</span><span class="tok-nt">java</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-web</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-test</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">test</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">Lombok</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.projectlombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">lombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span><span class="tok-nt">true</span><span class="tok-o">&lt;/</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">build</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">plugins</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">plugin</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-maven-plugin</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;/</span><span class="tok-nt">plugin</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">plugins</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">build</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">project</span><span class="tok-o">&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -1324,22 +1324,22 @@ public class ServiceItemApplication {</p>
 </div>
 <div class="sect2">
 <h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderpojoorderdetail_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/pojo/OrderDetail.java</h3>
-<div class="paragraph">
-<p>package com.tjise.serviceorder.pojo;</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.pojo</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.AllArgsConstructor</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.Data</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.NoArgsConstructor</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@Data</span>
+<span class="tok-nd">@NoArgsConstructor</span>
+<span class="tok-nd">@AllArgsConstructor</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderDetail</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
 </div>
-<div class="paragraph">
-<p>import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;</p>
-</div>
-<div class="paragraph">
-<p>@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class OrderDetail {
-    private String orderId;
-    private Item item;
-}</p>
 </div>
 </div>
 <div class="sect2">
@@ -1395,7 +1395,7 @@ public class OrderDetail {
 <span class="tok-cm">     * @return Order 订单信息</span>
 <span class="tok-cm">     */</span>
 <span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;order/{orderId}&quot;</span><span class="tok-p">)</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;orderId&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;orderId&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">orderService</span><span class="tok-p">.</span><span class="tok-na">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
@@ -1410,87 +1410,93 @@ http :8091/order/201810300001</p>
 <h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderservice_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java</h3>
 <div class="sect3">
 <h4 id="_class_orderservice">class OrderService</h4>
-<div class="paragraph">
-<p>/**
- * 订单服务类
- * 提供订单查询功能，并通过调用商品服务获取商品详细信息
- */
-@Service
-public class OrderService {
-    @others
-}</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务类</span>
+<span class="tok-cm"> * 提供订单查询功能，并通过调用商品服务获取商品详细信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_order_data_模拟数据">ORDER_DATA 模拟数据</h5>
-<div class="paragraph">
-<p>private static final Map&lt;String, Order&gt; ORDER_DATA = new HashMap&lt;String, Order&gt;();
-static {
-    // 模拟数据库，构造测试数据
-    @others
-}</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 使用静态Map模拟数据库存储订单数据</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">Map</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">ORDER_DATA</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">HashMap</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-o">&gt;</span><span class="tok-p">();</span>
+<span class="tok-c1">// 初始化订单数据</span>
+<span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 模拟数据库，构造测试数据</span>
+<span class="tok-w">    </span><span class="tok-nd">@others</span>
+<span class="tok-p">}</span></code></pre>
+</div>
 </div>
 <div class="sect5">
 <h6 id="_订单_order">订单 order</h6>
-<div class="paragraph">
-<p>Order order = new Order();
-order.setOrderId("201810300001");
-order.setCreateDate(new Date());
-order.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
-order.setUserId(1L);
-List&lt;OrderDetail&gt; orderDetails = new ArrayList&lt;OrderDetail&gt;();</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-p">();</span>
+<span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">setOrderId</span><span class="tok-p">(</span><span class="tok-s">&quot;201810300001&quot;</span><span class="tok-p">);</span>
+<span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">setCreateDate</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Date</span><span class="tok-p">());</span>
+<span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">setUpdateDate</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getCreateDate</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// 真会偷懒呀</span>
+<span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">setUserId</span><span class="tok-p">(</span><span class="tok-mi">1L</span><span class="tok-p">);</span>
+<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-p">();</span>
+
+<span class="tok-c1">// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）</span>
+<span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-mi">1L</span><span class="tok-p">);</span>
+<span class="tok-n">orderDetails</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">));</span>
+
+<span class="tok-c1">// 创建第二个商品详情</span>
+<span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">();</span>
+<span class="tok-n">item</span><span class="tok-p">.</span><span class="tok-na">setId</span><span class="tok-p">(</span><span class="tok-mi">2L</span><span class="tok-p">);</span>
+<span class="tok-n">orderDetails</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">OrderDetail</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">));</span>
+
+<span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">setOrderDetails</span><span class="tok-p">(</span><span class="tok-n">orderDetails</span><span class="tok-p">);</span>
+
+<span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">put</span><span class="tok-p">(</span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderId</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">);</span></code></pre>
 </div>
-<div class="paragraph">
-<p>Item item = new Item();
-item.setId(1L);
-orderDetails.add(new OrderDetail(order.getOrderId(), item));</p>
-</div>
-<div class="paragraph">
-<p>item = new Item();
-item.setId(2L);
-orderDetails.add(new OrderDetail(order.getOrderId(), item));</p>
-</div>
-<div class="paragraph">
-<p>order.setOrderDetails(orderDetails);</p>
-</div>
-<div class="paragraph">
-<p>ORDER_DATA.put(order.getOrderId(), order);</p>
 </div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_queryorderbyid">queryOrderById</h5>
-<div class="paragraph">
-<p>@Autowired
-private ItemService itemService;
-/**
- * 根据订单ID查询订单数据
- *
- * @param orderId 订单ID
- * @return Order 订单信息，包含完整的商品详情
- */
-public Order queryOrderById(String orderId) throws IOException {
-    // 从模拟数据库中查询订单
-    Order order = ORDER_DATA.get(orderId);
-    if (null == order) {
-        return null;
-    }
-    // 获取订单详情列表
-    List&lt;OrderDetail&gt; orderDetails = order.getOrderDetails();</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>    // 遍历订单详情，通过商品微服务查询商品详细数据
-    for (OrderDetail orderDetail : orderDetails) {
-        // 通过商品微服务查询商品详细数据
-        Item item = itemService.queryItemById(orderDetail.getItem().getId());
-        if (null == item) {
-            continue;
-        }
-        // 将查询到的商品详细信息设置到订单详情中
-        orderDetail.setItem(item);
-    }
-    return order;
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 注入商品服务，用于查询商品详细信息</span>
+<span class="tok-nd">@Autowired</span>
+<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 根据订单ID查询订单数据</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * @param orderId 订单ID</span>
+<span class="tok-cm"> * @return Order 订单信息，包含完整的商品详情</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 从模拟数据库中查询订单</span>
+<span class="tok-w">    </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ORDER_DATA</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 获取订单详情列表</span>
+<span class="tok-w">    </span><span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">OrderDetail</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">.</span><span class="tok-na">getOrderDetails</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 遍历订单详情，通过商品微服务查询商品详细数据</span>
+<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">OrderDetail</span><span class="tok-w"> </span><span class="tok-n">orderDetail</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">orderDetails</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 通过商品微服务查询商品详细数据</span>
+<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">getItem</span><span class="tok-p">().</span><span class="tok-na">getId</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">continue</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-c1">// 将查询到的商品详细信息设置到订单详情中</span>
+<span class="tok-w">        </span><span class="tok-n">orderDetail</span><span class="tok-p">.</span><span class="tok-na">setItem</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">order</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -1498,91 +1504,84 @@ public Order queryOrderById(String orderId) throws IOException {
 </div>
 <div class="sect2">
 <h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h3>
-<div class="paragraph">
-<p>package com.tjise.serviceorder.service;</p>
-</div>
-<div class="paragraph">
-<p>import com.tjise.serviceorder.pojo.Item;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;</p>
-</div>
-<div class="paragraph">
-<p>/**
- * 商品服务类
- * 通过 REST 方式调用商品微服务获取商品信息
- */
-@Service
-public class ItemService {</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>// Spring 框架对 RESTful 方式的 http 请求做了封装，来简化操作
-@Autowired
-private RestTemplate restTemplate;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    /**
-     * 根据商品 ID 查询商品信息
-     * 通过 REST 调用商品微服务获取商品详细数据
-     *
-     * @param id 商品ID
-     * @return Item 商品信息
-     */
-    public Item queryItemById(Long id) {
-        return restTemplate.getForObject("http://127.0.0.1:8081/item/"
-                + id, Item.class);
-    }
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.service</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Service</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.client.RestTemplate</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 商品服务类</span>
+<span class="tok-cm"> * 通过 REST 方式调用商品微服务获取商品信息</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@Service</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemService</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// Spring 框架对 RESTful 方式的 http 请求做了封装，来简化操作</span>
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 根据商品 ID 查询商品信息</span>
+<span class="tok-cm">     * 通过 REST 调用商品微服务获取商品详细数据</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @param id 商品ID</span>
+<span class="tok-cm">     * @return Item 商品信息</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">.</span><span class="tok-na">getForObject</span><span class="tok-p">(</span><span class="tok-s">&quot;http://127.0.0.1:8081/item/&quot;</span>
+<span class="tok-w">                </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceorderapplication_java">file &#8594; service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java</h3>
-<div class="paragraph">
-<p>package com.tjise.serviceorder;</p>
-</div>
-<div class="paragraph">
-<p>import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;</p>
-</div>
-<div class="paragraph">
-<p>/**
- * 订单服务启动类
- * Spring Boot 应用程序入口点
- */
-@SpringBootApplication
-public class ServiceOrderApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(ServiceOrderApplication.class, args);
-    }</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>    /**
-     * 创建RestTemplate实例
-     * 用于调用其他微服务
-     *
-     * @return RestTemplate
-     */
-    @Bean
-    public RestTemplate restTemplate() {
-        // 可以在这里添加拦截器来统一处理URL前缀
-        return new RestTemplate();
-    }
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.SpringApplication</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.context.annotation.Bean</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.client.RestTemplate</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单服务启动类</span>
+<span class="tok-cm"> * Spring Boot 应用程序入口点</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@SpringBootApplication</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ServiceOrderApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ServiceOrderApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 创建RestTemplate实例</span>
+<span class="tok-cm">     * 用于调用其他微服务</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @return RestTemplate</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@Bean</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-nf">restTemplate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 可以在这里添加拦截器来统一处理URL前缀</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_file_service_ordersrcmainresourcesapplication_yml">file &#8594; service-order/src/main/resources/application.yml</h3>
-<div class="paragraph">
-<p>server:
-  port: 8091</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8091</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -6406,19 +6405,20 @@ Processing request on port: 8081 for item ID: 1</pre>
 <span class="tok-cm">     */</span>
 <span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;item/{id}&quot;</span><span class="tok-p">)</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span>
-<span class="tok-w">                              </span><span class="tok-n">HttpServletRequest</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                              </span><span class="tok-n">HttpServletRequest</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-w">  </span><span class="tok-c1">// -- New Added Start --</span>
+<span class="tok-w">    </span><span class="tok-p">){</span>
 <span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">header</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">.</span><span class="tok-na">getHeader</span><span class="tok-p">(</span><span class="tok-s">&quot;X-Token&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;header token = &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">header</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// -- New Added End --</span>
+
 <span class="tok-w">        </span><span class="tok-c1">// 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。</span>
-<span class="tok-c1">//        logger.info(&quot;Handling request on port: &quot; + serverPort + &quot; for item ID: &quot; + id);</span>
+<span class="tok-w">        </span><span class="tok-c1">// logger.info(&quot;Handling request on port: &quot; + serverPort + &quot; for item ID: &quot; + id);</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Processing request on port: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">serverPort</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; for item ID: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
 
-<span class="tok-w">        </span><span class="tok-c1">// -- New Added Begin --- 测试用例，当 ID 为 -1 时抛出异常</span>
 <span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 触发异常测试，ID 为 -1 ===&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">            </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">RuntimeException</span><span class="tok-p">(</span><span class="tok-s">&quot;服务内部错误&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
-<span class="tok-w">        </span><span class="tok-c1">// -- New Added End --</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 正常返回</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
@@ -6529,7 +6529,7 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect1">
-<h2 id="_10_sentinel">10. Sentinel</h2>
+<h2 id="_10_服务保护_sentinel">10. 服务保护 Sentinel</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_docker_开启_sentinel_dashboard">docker 开启 sentinel-dashboard</h3>
@@ -6551,10 +6551,581 @@ Transfer-Encoding: chunked
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_11_服务网关_gateway">11. 服务网关 Gateway</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_gateway_网关功能">Gateway - 网关功能</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/gateway_overview.png" alt="gateway overview" width="800">
+</div>
+</div>
+<div class="paragraph">
+<p>上图中展示的是 Spring Cloud Gateway 的功能，以下是每个功能的简短描述：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>统一入口</strong>：所有外部请求通过单一网关进入系统，简化客户端访问。</p>
+</li>
+<li>
+<p><strong>请求路由</strong>：根据请求的URL、Header等信息，将请求转发到正确的服务。</p>
+</li>
+<li>
+<p><strong>负载均衡</strong>：在多个服务实例之间分配请求，提高系统的可用性和容错性。</p>
+</li>
+<li>
+<p><strong>流量控制</strong>：限制请求的流量，防止系统过载，保障服务的稳定性。</p>
+</li>
+<li>
+<p><strong>身份认证</strong>：验证请求的合法性，确保只有授权的用户可以访问服务。</p>
+</li>
+<li>
+<p><strong>协议转换</strong>：支持不同协议之间的转换，如HTTP到HTTPS，或HTTP1到HTTP2。</p>
+</li>
+<li>
+<p><strong>系统监控</strong>：监控网关的运行状态，收集请求的统计信息，便于性能分析。</p>
+</li>
+<li>
+<p><strong>安全防护</strong>：提供安全机制，如防止DDoS攻击，保护系统免受恶意攻击。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gateway_网关分类">Gateway - 网关分类</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-2025-10-12-170255.svg" alt="mermaid 2025 10 12 170255" width="586" height="280">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Spring Cloud Gateway Reactive Server</strong>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>基于反应式编程模型，使用 Netty 服务器作为底层 HTTP 服务器。</p>
+</li>
+<li>
+<p>适用于需要高性能和高并发处理能力的场景。</p>
+</li>
+<li>
+<p>支持异步非阻塞 I/O 操作，可以更好地利用资源。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Spring Cloud Gateway Server MVC</strong>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>基于传统的 Spring MVC 模型，使用 Tomcat 或 Jetty 作为底层 HTTP 服务器。</p>
+</li>
+<li>
+<p>更适合传统的 Spring 应用和需要同步处理的场景。</p>
+</li>
+<li>
+<p>易于与现有的 Spring MVC 应用集成。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>两者都提供了路由、过滤器等功能，但底层实现和性能特点有所不同。
+<mark>推荐使用 Reactive Server。</mark></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gateway_创建网关">Gateway - 创建网关</h3>
+<div class="paragraph">
+<p>如下图创建模块 gateway</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/gateway_create.png" alt="gateway create" width="1000">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaypom_xml">file &#8594; gateway/pom.xml</h4>
+<div class="sect4">
+<h5 id="_project_从_service_item_复制过来的增加_gateway_即可注意模块名要改一下">project 从 service-item 复制过来的，增加 gateway 即可（注意模块名要改一下）</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">project</span><span class="tok-w"> </span><span class="tok-nt">xmlns</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://maven.apache.org/POM/4.0.0&quot;</span><span class="tok-w"> </span><span class="tok-nt">xmlns</span><span class="tok-nd">:xsi</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+<span class="tok-w">         </span><span class="tok-nt">xsi</span><span class="tok-nd">:schemaLocation</span><span class="tok-o">=</span><span class="tok-s2">&quot;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">modelVersion</span><span class="tok-o">&gt;</span><span class="tok-nt">4</span><span class="tok-nc">.0.0</span><span class="tok-o">&lt;/</span><span class="tok-nt">modelVersion</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-parent</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">2</span><span class="tok-nc">.7.18</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">relativePath</span><span class="tok-o">/&gt;</span><span class="tok-w"> </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">lookup</span><span class="tok-w"> </span><span class="tok-nt">parent</span><span class="tok-w"> </span><span class="tok-nt">from</span><span class="tok-w"> </span><span class="tok-nt">repository</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">parent</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">com</span><span class="tok-nc">.tjise</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">gateway</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.0-SNAPSHOT</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">name</span><span class="tok-o">&gt;</span><span class="tok-nt">gateway</span><span class="tok-o">&lt;/</span><span class="tok-nt">name</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">description</span><span class="tok-o">&gt;</span><span class="tok-nt">gateway</span><span class="tok-o">&lt;/</span><span class="tok-nt">description</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">java</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.8</span><span class="tok-o">&lt;/</span><span class="tok-nt">java</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">spring-cloud</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span><span class="tok-nt">2021</span><span class="tok-nc">.0.8</span><span class="tok-o">&lt;/</span><span class="tok-nt">spring-cloud</span><span class="tok-nc">.version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">properties</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-dependencies</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-err">$</span><span class="tok-p">{</span><span class="tok-nt">spring-cloud</span><span class="tok-nc">.version</span><span class="tok-p">}</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">type</span><span class="tok-o">&gt;</span><span class="tok-nt">pom</span><span class="tok-o">&lt;/</span><span class="tok-nt">type</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">import</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependencyManagement</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">@</span><span class="tok-nt">others</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">添加Spring</span><span class="tok-w"> </span><span class="tok-nt">Boot</span><span class="tok-w"> </span><span class="tok-nt">Test依赖</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-test</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span><span class="tok-nt">test</span><span class="tok-o">&lt;/</span><span class="tok-nt">scope</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">Lombok</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.projectlombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">lombok</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span><span class="tok-nt">true</span><span class="tok-o">&lt;/</span><span class="tok-nt">optional</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">添加Eureka客户端依赖</span><span class="tok-err">，</span><span class="tok-nt">用于将服务注册到Eureka</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-starter-netflix-eureka-client</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">dependencies</span><span class="tok-o">&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">build</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;</span><span class="tok-nt">plugins</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;</span><span class="tok-nt">plugin</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">                </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-maven-plugin</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">            </span><span class="tok-o">&lt;/</span><span class="tok-nt">plugin</span><span class="tok-o">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">&lt;/</span><span class="tok-nt">plugins</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;/</span><span class="tok-nt">build</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">project</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_gateway">gateway</h6>
+<div class="paragraph">
+<p>如果使用了 Reactive Server，则需要改
+spring-boot-starter-web 为
+spring-boot-starter-webflux</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-starter-gateway</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_更改为_spring_boot_webflux依赖_for_gateway">更改为 Spring Boot WebFlux依赖 for Gateway</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-webflux</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_引入负载均衡_loadbalancer">引入负载均衡 loadbalancer</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-starter-loadbalancer</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainresourcesapplication_yml">file &#8594; gateway/src/main/resources/application.yml</h4>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>name 和 instance 两者都有重要作用，缺一不可：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>spring.application.name：服务的逻辑名称，用于服务发现和负载均衡</p>
+</li>
+<li>
+<p>eureka.instance 配置：实例的网络地址，用于实际通信</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_port_7">port</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1">### 服务端口号(本身是一个web项目)</span>
+<span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8001</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_name_7">name</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1">### 起个名字作为服务名称(该服务注册到eureka注册中心的名称，比如商品服务)</span>
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">gateway</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_eureka_7">eureka</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1">### 服务注册到 eureka 注册中心的地址</span>
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-c1"># defaultZone: http://root:root@127.0.0.1:8761/eureka/</span>
+<span class="tok-w">            </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/</span>
+<span class="tok-w">        </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w"> </span><span class="tok-c1"># 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心</span>
+<span class="tok-w">        </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">       </span><span class="tok-c1"># 是否需要从 eureka 上检索服务</span>
+
+<span class="tok-w">    </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">prefer-ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">    </span><span class="tok-c1"># 使用IP地址注册而不是主机名</span>
+<span class="tok-w">        </span><span class="tok-nt">ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">127.0.0.1</span><span class="tok-w">      </span><span class="tok-c1"># 客户端在注册时使用自己的IP，而不是主机名。</span>
+<span class="tok-w">                                   </span><span class="tok-c1"># 这是生产环境的最佳实践，避免主机名解析问题。</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainjavacomtjisegatewaygatewaymainapplication_java">file &#8594; gateway/src/main/java/com/tjise/gateway/GatewayMainApplication.java</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.gateway</span><span class="tok-p">;</span>
+
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.SpringApplication</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.netflix.eureka.EnableEurekaClient</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@SpringBootApplication</span>
+<span class="tok-nd">@EnableEurekaClient</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">GatewayMainApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">GatewayMainApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gateway_路由_规则配置">Gateway - 路由 - 规则配置</h3>
+<div class="paragraph">
+<p>实现功能如下，客户端通过 gateway 向不同的服务（service-order 和 service-product）发送请求的流程。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-2025-10-12-183606.svg" alt="mermaid 2025 10 12 183606" width="630" height="174">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainresourcesapplication_route_yml">@file gateway/src/main/resources/application-route.yml</h4>
+<div class="sect4">
+<h5 id="_spring">spring</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-nt">spring</span><span class="tok-nd">:</span>
+<span class="tok-w">  </span><span class="tok-nt">cloud</span><span class="tok-nd">:</span>
+<span class="tok-w">    </span><span class="tok-nt">gateway</span><span class="tok-nd">:</span>
+<span class="tok-w">      </span><span class="tok-nt">routes</span><span class="tok-nd">:</span>
+<span class="tok-w">        </span><span class="tok-nt">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">order-route</span>
+<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">lb</span><span class="tok-nd">:</span><span class="tok-o">//</span><span class="tok-nt">app-order</span>
+<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-nd">:</span>
+<span class="tok-w">            </span><span class="tok-nt">-</span><span class="tok-w"> </span><span class="tok-nt">Path</span><span class="tok-o">=/</span><span class="tok-nt">api</span><span class="tok-o">/</span><span class="tok-nt">order</span><span class="tok-o">/**</span>
+<span class="tok-w">        </span><span class="tok-nt">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">item-route</span>
+<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">lb</span><span class="tok-nd">:</span><span class="tok-o">//</span><span class="tok-nt">app-item</span>
+<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-nd">:</span>
+<span class="tok-w">            </span><span class="tok-nt">-</span><span class="tok-w"> </span><span class="tok-nt">Path</span><span class="tok-o">=/</span><span class="tok-nt">api</span><span class="tok-o">/</span><span class="tok-nt">item</span><span class="tok-o">/**</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainresourcesapplication_yml_2">@file gateway/src/main/resources/application.yml</h4>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>name 和 instance 两者都有重要作用，缺一不可：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>spring.application.name：服务的逻辑名称，用于服务发现和负载均衡</p>
+</li>
+<li>
+<p>eureka.instance 配置：实例的网络地址，用于实际通信</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_port_8">port</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1">### 服务端口号(本身是一个web项目)</span>
+<span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8001</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_includenew_added">include&#8201;&#8212;&#8201;New Added&#8201;&#8212;&#8201;</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1">### 起个名字作为服务名称(该服务注册到eureka注册中心的名称，比如商品服务)</span>
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">gateway</span>
+<span class="tok-w">    </span><span class="tok-c1"># -- New Added --</span>
+<span class="tok-w">    </span><span class="tok-nt">profiles</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">include</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">route</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_eureka_8">eureka</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1">### 服务注册到 eureka 注册中心的地址</span>
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-c1"># defaultZone: http://root:root@127.0.0.1:8761/eureka/</span>
+<span class="tok-w">            </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/</span>
+<span class="tok-w">        </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w"> </span><span class="tok-c1"># 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心</span>
+<span class="tok-w">        </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">       </span><span class="tok-c1"># 是否需要从 eureka 上检索服务</span>
+
+<span class="tok-w">    </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">prefer-ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">    </span><span class="tok-c1"># 使用IP地址注册而不是主机名</span>
+<span class="tok-w">        </span><span class="tok-nt">ip-address</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">127.0.0.1</span><span class="tok-w">      </span><span class="tok-c1"># 客户端在注册时使用自己的IP，而不是主机名。</span>
+<span class="tok-w">                                   </span><span class="tok-c1"># 这是生产环境的最佳实践，避免主机名解析问题。</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceordercontrollerordercontroller_java_2">@file service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java</h4>
+<div class="sect4">
+<h5 id="_class_ordercontrollernew_addedrequestmappingapiorder">class OrderController&#8201;&#8212;&#8201;New Added&#8201;&#8212;&#8201;@RequestMapping("/api/order")</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单控制器</span>
+<span class="tok-cm"> * 处理订单相关的HTTP请求</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/api&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// -- New Added --</span>
+<span class="tok-nd">@RestController</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 注入订单服务</span>
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">OrderService</span><span class="tok-w"> </span><span class="tok-n">orderService</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 根据订单ID查询订单信息</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @param orderId 订单ID</span>
+<span class="tok-cm">     * @return Order 订单信息</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;order/{orderId}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;orderId&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">orderService</span><span class="tok-p">.</span><span class="tok-na">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>httpie 测试:
+http :8091/order/201810300001</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_5">@file service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</h4>
+<div class="sect4">
+<h5 id="_public_class_itemcontrollernew_addedrequestmappingapiitem">public class ItemController&#8201;&#8212;&#8201;New Added&#8201;&#8212;&#8201;@RequestMapping("/api/item")</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@RequestMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/api&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// -- New Added --</span>
+<span class="tok-nd">@RestController</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Value</span><span class="tok-p">(</span><span class="tok-s">&quot;${server.port}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">serverPort</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">Logger</span><span class="tok-w"> </span><span class="tok-n">logger</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Logger</span><span class="tok-p">.</span><span class="tok-na">getLogger</span><span class="tok-p">(</span>
+<span class="tok-w">                         </span><span class="tok-n">ItemController</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 对外提供接口服务，查询商品信息</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @param id</span>
+<span class="tok-cm">     * @return</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span>
+<span class="tok-w">                              </span><span class="tok-n">HttpServletRequest</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-w">  </span><span class="tok-c1">// -- New Added Start --</span>
+<span class="tok-w">    </span><span class="tok-p">){</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">header</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">.</span><span class="tok-na">getHeader</span><span class="tok-p">(</span><span class="tok-s">&quot;X-Token&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;header token = &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">header</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// -- New Added End --</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。</span>
+<span class="tok-w">        </span><span class="tok-c1">// logger.info(&quot;Handling request on port: &quot; + serverPort + &quot; for item ID: &quot; + id);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Processing request on port: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">serverPort</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; for item ID: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 触发异常测试，ID 为 -1 ===&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">RuntimeException</span><span class="tok-p">(</span><span class="tok-s">&quot;服务内部错误&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 正常返回</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderclientitemfeignclient_java_3">file &#8594; service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.client</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.openfeign.FeignClient</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.GetMapping</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.PathVariable</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 要访问的在 Eureka 中的服务名，并指定实现该接口的降级类名</span>
+<span class="tok-nd">@FeignClient</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">fallback</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ItemFallback</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/api/item/{id}&quot;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// -- New Added -- /api</span>
+<span class="tok-w">    </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gateway_路由_工作原理">Gateway - 路由 - 工作原理</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_gateway_断言_长短写法">Gateway - 断言 - 长短写法</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_gateway_断言_query">Gateway - 断言 - Query</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_gateway_断言_自定义断言工厂">Gateway - 断言 - 自定义断言工厂</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_gateway_过滤器_基本使用">Gateway - 过滤器 - 基本使用</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_gateway_过滤器_默认filter">Gateway - 过滤器 - 默认filter</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_gateway_过滤器_globalfilter">Gateway - 过滤器 - GlobalFilter</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_gateway_过滤器_自定义过滤器工厂">Gateway - 过滤器 - 自定义过滤器工厂</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_gateway_扩展_全局跨域">Gateway - 扩展 - 全局跨域</h3>
+<div class="sect3">
+<h4 id="_常见问题">常见问题</h4>
+<div class="qlist qanda">
+<ol>
+<li>
+<p><em>我知道在浏览器中使用 ajax 访问后端服务的 api 有跨域问题，想问在浏览器的地址栏直接输入后端的 api 会有跨域问题吗？</em></p>
+<p>答：没有跨域问题。
+浏览器的“跨域限制”（即同源策略 + CORS 校验）只在前端脚本（JavaScript）发起网络请求时才会触发，
+比如通过 XMLHttpRequest、fetch()、axios 等方式发起的请求。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gateway_总结">Gateway - 总结</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_12_分布式事务_seata">12. 分布式事务 Seata</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_13_服务部署">13. 服务部署</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-2025-10-12-105950.svg" alt="mermaid 2025 10 12 105950" width="818" height="688">
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-10 15:03:36 +0800
+Last updated 2025-10-12 21:30:05 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

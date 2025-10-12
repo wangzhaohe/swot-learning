@@ -1,0 +1,134 @@
+<!--@+leo-ver=5-thin-->
+<!--@+node:swot.20251012174737.1: * @file gateway/pom.xml-->
+<!--@@language xml-->
+<!--@+others-->
+<!--@+node:swot.20251012174935.1: ** project 从 service-item 复制过来的，增加 gateway 即可（注意模块名要改一下）-->
+<!--@+doc-->
+<!--
+[source,scss]
+....
+-->
+<!--@@c-->
+<!--@@language xml-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.18</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.tjise</groupId>
+    <artifactId>gateway</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>gateway</name>
+    <description>gateway</description>
+    <properties>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>2021.0.8</spring-cloud.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!--@+others-->
+        <!--@+node:swot.20251012175011.1: *3* gateway-->
+        <!--@+doc-->
+        <!--
+        如果使用了 Reactive Server，则需要改
+        spring-boot-starter-web 为
+        spring-boot-starter-webflux
+
+        [source,scss]
+        ....
+        -->
+        <!--@@c-->
+        <!--@@language xml-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+        <!--@+doc-->
+        <!--
+        ....
+        -->
+        <!--@+node:swot.20251012182055.1: *3* 更改为 Spring Boot WebFlux依赖 for Gateway-->
+        <!--@+doc-->
+        <!--
+        [source,scss]
+        ....
+        -->
+        <!--@@c-->
+        <!--@@language xml-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <!--@+doc-->
+        <!--
+        ....
+        -->
+        <!--@+node:swot.20251012191840.1: *3* 引入负载均衡 loadbalancer-->
+        <!--@+doc-->
+        <!--
+        [source,scss]
+        ....
+        -->
+        <!--@@c-->
+        <!--@@language xml-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <!--@+doc-->
+        <!--
+        ....
+        -->
+        <!--@-others-->
+        <!-- 添加Spring Boot Test依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- 添加Eureka客户端依赖，用于将服务注册到Eureka -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+<!--@+doc-->
+<!--
+....
+-->
+<!--@-others-->
+<!--@-leo-->

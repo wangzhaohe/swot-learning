@@ -151,6 +151,13 @@ image::img/create_empty_project.png[,800]
 http :8081/item/1
 
 === file -> service-item/pom.xml
+[source,scss]
+....
+<?xml version="1.0" encoding="UTF-8"?>
+....
+
+[source,scss]
+....
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -196,11 +203,12 @@ http :8081/item/1
             </plugin>
         </plugins>
     </build>
-
-
 </project>
+....
 
 === file -> service-item/src/main/java/com/tjise/serviceitem/pojo/Item.java
+[source,java]
+----
 package com.tjise.serviceitem.pojo;
 
 import lombok.Data;
@@ -222,8 +230,11 @@ public class Item {
     
     private Long price;
 }
+----
 
 === file -> service-item/src/main/java/com/tjise/serviceitem/service/ItemService.java
+[source,java]
+----
 package com.tjise.serviceitem.service;
 
 import com.tjise.serviceitem.pojo.Item;
@@ -260,8 +271,11 @@ public class ItemService {
     }
 
 }
+----
 
 === file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
+[source,java]
+----
 package com.tjise.serviceitem.controller;
 
 import com.tjise.serviceitem.pojo.Item;
@@ -288,8 +302,11 @@ public class ItemController {
         return this.itemService.queryItemById(id);
     }
 }
+----
 
 === file -> service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java
+[source,java]
+----
 package com.tjise.serviceitem;
 
 import org.springframework.boot.SpringApplication;
@@ -302,15 +319,26 @@ public class ServiceItemApplication {
         SpringApplication.run(ServiceItemApplication.class, args);
     }
 }
+----
 
 === file -> service-item/src/main/resources/application.yml
+[source,yaml]
+----
 server:
-  port: 8081
+    port: 8081
+----
 
 == 4. 创建订单微服务模块 service-order
 
 
 === file -> service-order/pom.xml
+[source,scss]
+....
+<?xml version="1.0" encoding="UTF-8"?>
+....
+
+[source,scss]
+....
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -357,6 +385,7 @@ server:
         </plugins>
     </build>
 </project>
+....
 
 === file -> service-order/src/main/java/com/tjise/serviceorder/pojo/Order.java
 .订单实体类 Order
@@ -383,6 +412,8 @@ public class Order {
 ----
 
 === file -> service-order/src/main/java/com/tjise/serviceorder/pojo/OrderDetail.java
+[source,java]
+----
 package com.tjise.serviceorder.pojo;
 
 import lombok.AllArgsConstructor;
@@ -396,6 +427,7 @@ public class OrderDetail {
     private String orderId;
     private Item item;
 }
+----
 
 === file -> service-order/src/main/java/com/tjise/serviceorder/pojo/Item.java
 .商品实体类 Item
@@ -447,7 +479,7 @@ public class OrderController {
      * @return Order 订单信息
      */
     @GetMapping(value = "order/{orderId}")
-    public Order queryOrderById(@PathVariable("orderId") String orderId) {
+    public Order queryOrderById(@PathVariable("orderId") String orderId) throws IOException {
         return orderService.queryOrderById(orderId);
     }
 }
@@ -460,6 +492,8 @@ http :8091/order/201810300001
 
 
 ==== class OrderService
+[source,java]
+----
 /**
  * 订单服务类
  * 提供订单查询功能，并通过调用商品服务获取商品详细信息
@@ -468,8 +502,11 @@ http :8091/order/201810300001
 public class OrderService {
     @others
 }
+----
 
 ===== ORDER_DATA 模拟数据
+[source,java]
+----
 // 使用静态Map模拟数据库存储订单数据
 private static final Map<String, Order> ORDER_DATA = new HashMap<String, Order>();
 // 初始化订单数据
@@ -478,7 +515,11 @@ static {
     @others
 }
 
+----
+
 ====== 订单 order
+[source,java]
+----
 Order order = new Order();
 order.setOrderId("201810300001");
 order.setCreateDate(new Date());
@@ -500,7 +541,11 @@ order.setOrderDetails(orderDetails);
 
 ORDER_DATA.put(order.getOrderId(), order);
 
+----
+
 ===== queryOrderById
+[source,java]
+----
 // 注入商品服务，用于查询商品详细信息
 @Autowired
 private ItemService itemService;
@@ -532,7 +577,11 @@ public Order queryOrderById(String orderId) throws IOException {
     return order;
 }
 
+----
+
 === file -> service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
+[source,java]
+----
 package com.tjise.serviceorder.service;
 
 import com.tjise.serviceorder.pojo.Item;
@@ -563,8 +612,11 @@ public class ItemService {
                 + id, Item.class);
     }
 }
+----
 
 === file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
+[source,java]
+----
 package com.tjise.serviceorder;
 
 import org.springframework.boot.SpringApplication;
@@ -594,10 +646,14 @@ public class ServiceOrderApplication {
         return new RestTemplate();
     }
 }
+----
 
 === file -> service-order/src/main/resources/application.yml
+[source,yaml]
+----
 server:
-  port: 8091
+    port: 8091
+----
 
 == 5. HTTP 客户端
 
@@ -4230,19 +4286,20 @@ public class ItemController {
      */
     @GetMapping(value = "item/{id}")
     public Item queryItemById(@PathVariable("id") Long id,
-                              HttpServletRequest request) {
+                              HttpServletRequest request  // -- New Added Start --
+    ){
         String header = request.getHeader("X-Token");
         System.out.println("header token = " + header);
+        // -- New Added End --
+
         // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
-//        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+        // logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
         System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
-        
-        // -- New Added Begin --- 测试用例，当 ID 为 -1 时抛出异常
+
         if (id == -1) {
             System.out.println("=== 触发异常测试，ID 为 -1 ===");
             throw new RuntimeException("服务内部错误");
         }
-        // -- New Added End -- 
         return this.itemService.queryItemById(id);  // 正常返回
     }
 }
@@ -4333,7 +4390,7 @@ feign:
         enabled: true
 ----
 
-== 10. Sentinel
+== 10. 服务保护 Sentinel
 
 
 === docker 开启 sentinel-dashboard
@@ -4342,4 +4399,474 @@ image::img/sentinel_dashboard186.png[]
 image::img/sentinel_dashboard186_run.png[]
 
 image::img/sentinel_dashboard186_admin.png[]
+
+== 11. 服务网关 Gateway
+
+
+=== Gateway - 网关功能
+image::img/gateway_overview.png[,800]
+
+上图中展示的是 Spring Cloud Gateway 的功能，以下是每个功能的简短描述：
+
+1. **统一入口**：所有外部请求通过单一网关进入系统，简化客户端访问。
+
+2. **请求路由**：根据请求的URL、Header等信息，将请求转发到正确的服务。
+
+3. **负载均衡**：在多个服务实例之间分配请求，提高系统的可用性和容错性。
+
+4. **流量控制**：限制请求的流量，防止系统过载，保障服务的稳定性。
+
+5. **身份认证**：验证请求的合法性，确保只有授权的用户可以访问服务。
+
+6. **协议转换**：支持不同协议之间的转换，如HTTP到HTTPS，或HTTP1到HTTP2。
+
+7. **系统监控**：监控网关的运行状态，收集请求的统计信息，便于性能分析。
+
+8. **安全防护**：提供安全机制，如防止DDoS攻击，保护系统免受恶意攻击。
+
+=== Gateway - 网关分类
+[mermaid, target=img/mermaid-2025-10-12-170255, format=svg]
+....
+graph TD
+    subgraph reactiveGateway [Spring Cloud Gateway<br>Reactive Server]
+    end
+    subgraph mvcGateway [Spring Cloud Gateway<br>Server MVC]
+    end
+
+    reactiveGateway -->|group:<br>org.springframework.cloud| reactive[artifactId:<br>spring-cloud-starter-gateway]
+    mvcGateway -->|group:<br>org.springframework.cloud| mvc[artifactId:<br>spring-cloud-starter-gateway-mvc]
+....
+
+1. **Spring Cloud Gateway Reactive Server**:
+   - 基于反应式编程模型，使用 Netty 服务器作为底层 HTTP 服务器。
+   - 适用于需要高性能和高并发处理能力的场景。
+   - 支持异步非阻塞 I/O 操作，可以更好地利用资源。
+
+2. **Spring Cloud Gateway Server MVC**:
+   - 基于传统的 Spring MVC 模型，使用 Tomcat 或 Jetty 作为底层 HTTP 服务器。
+   - 更适合传统的 Spring 应用和需要同步处理的场景。
+   - 易于与现有的 Spring MVC 应用集成。
+
+两者都提供了路由、过滤器等功能，但底层实现和性能特点有所不同。
+#推荐使用 Reactive Server。#
+
+=== Gateway - 创建网关
+如下图创建模块 gateway
+
+image::img/gateway_create.png[,1000]
+
+==== file -> gateway/pom.xml
+
+
+===== project 从 service-item 复制过来的，增加 gateway 即可（注意模块名要改一下）
+[source,scss]
+....
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.18</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.tjise</groupId>
+    <artifactId>gateway</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>gateway</name>
+    <description>gateway</description>
+    <properties>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>2021.0.8</spring-cloud.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        @others
+        <!-- 添加Spring Boot Test依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- 添加Eureka客户端依赖，用于将服务注册到Eureka -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+....
+
+====== gateway
+如果使用了 Reactive Server，则需要改
+spring-boot-starter-web 为
+spring-boot-starter-webflux
+
+[source,scss]
+....
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-gateway</artifactId>
+</dependency>
+....
+
+====== 更改为 Spring Boot WebFlux依赖 for Gateway
+[source,scss]
+....
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+....
+
+====== 引入负载均衡 loadbalancer
+[source,scss]
+....
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+</dependency>
+....
+
+==== file -> gateway/src/main/resources/application.yml
+****
+name 和 instance 两者都有重要作用，缺一不可：
+
+- spring.application.name：服务的逻辑名称，用于服务发现和负载均衡
+- eureka.instance 配置：实例的网络地址，用于实际通信
+
+即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。
+****
+
+===== port
+[source,yaml]
+----
+### 服务端口号(本身是一个web项目)
+server:
+    port: 8001
+----
+
+===== name
+[source,yaml]
+----
+### 起个名字作为服务名称(该服务注册到eureka注册中心的名称，比如商品服务)
+spring:
+    application:
+        name: gateway
+----
+
+===== eureka
+[source,yaml]
+----
+### 服务注册到 eureka 注册中心的地址
+eureka:
+    client:
+        service-url:
+            # defaultZone: http://root:root@127.0.0.1:8761/eureka/
+            defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+        register-with-eureka: true # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
+        fetch-registry: true       # 是否需要从 eureka 上检索服务
+
+    instance:
+        prefer-ip-address: true    # 使用IP地址注册而不是主机名
+        ip-address: 127.0.0.1      # 客户端在注册时使用自己的IP，而不是主机名。
+                                   # 这是生产环境的最佳实践，避免主机名解析问题。
+----
+
+==== file -> gateway/src/main/java/com/tjise/gateway/GatewayMainApplication.java
+[source,java]
+----
+package com.tjise.gateway;
+
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+
+@SpringBootApplication
+@EnableEurekaClient
+public class GatewayMainApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(GatewayMainApplication.class, args);
+    }
+}
+----
+
+=== Gateway - 路由 - 规则配置
+实现功能如下，客户端通过 gateway 向不同的服务（service-order 和 service-product）发送请求的流程。
+
+[mermaid, target=img/mermaid-2025-10-12-183606, format=svg]
+....
+graph LR
+    A[浏览器] --> B[gateway]
+    B -->|/api/order/**  | C[service-order]
+    B -->|/api/product/**| D[service-product]
+....
+
+==== @file gateway/src/main/resources/application-route.yml
+
+
+===== spring
+[source,scss]
+....
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: order-route
+          uri: lb://app-order
+          predicates:
+            - Path=/api/order/**
+        - id: item-route
+          uri: lb://app-item
+          predicates:
+            - Path=/api/item/**
+....
+
+==== @file gateway/src/main/resources/application.yml
+****
+name 和 instance 两者都有重要作用，缺一不可：
+
+- spring.application.name：服务的逻辑名称，用于服务发现和负载均衡
+- eureka.instance 配置：实例的网络地址，用于实际通信
+
+即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。
+****
+
+===== port
+[source,yaml]
+----
+### 服务端口号(本身是一个web项目)
+server:
+    port: 8001
+----
+
+===== include -- New Added --
+[source,yaml]
+----
+### 起个名字作为服务名称(该服务注册到eureka注册中心的名称，比如商品服务)
+spring:
+    application:
+        name: gateway
+    # -- New Added --
+    profiles:
+        include: route
+----
+
+===== eureka
+[source,yaml]
+----
+### 服务注册到 eureka 注册中心的地址
+eureka:
+    client:
+        service-url:
+            # defaultZone: http://root:root@127.0.0.1:8761/eureka/
+            defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+        register-with-eureka: true # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
+        fetch-registry: true       # 是否需要从 eureka 上检索服务
+
+    instance:
+        prefer-ip-address: true    # 使用IP地址注册而不是主机名
+        ip-address: 127.0.0.1      # 客户端在注册时使用自己的IP，而不是主机名。
+                                   # 这是生产环境的最佳实践，避免主机名解析问题。
+----
+
+==== @file service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
+
+
+===== class OrderController -- New Added -- @RequestMapping("/api/order")
+[source,java]
+----
+/**
+ * 订单控制器
+ * 处理订单相关的HTTP请求
+ */
+@RequestMapping("/api")  // -- New Added --
+@RestController
+public class OrderController {
+
+    // 注入订单服务
+    @Autowired
+    private OrderService orderService;
+
+    /**
+     * 根据订单ID查询订单信息
+     *
+     * @param orderId 订单ID
+     * @return Order 订单信息
+     */
+    @GetMapping(value = "order/{orderId}")
+    public Order queryOrderById(@PathVariable("orderId") String orderId) throws IOException {
+        return orderService.queryOrderById(orderId);
+    }
+}
+----
+
+httpie 测试:
+http :8091/order/201810300001
+
+==== @file service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
+
+
+===== public class ItemController -- New Added -- @RequestMapping("/api/item")
+[source,java]
+----
+@RequestMapping("/api")  // -- New Added --
+@RestController
+public class ItemController {
+
+    @Autowired
+    private ItemService itemService;
+    
+    @Value("${server.port}")
+    private int serverPort;
+
+    private static final Logger logger = Logger.getLogger(
+                         ItemController.class.getName());
+    /**
+     * 对外提供接口服务，查询商品信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "item/{id}")
+    public Item queryItemById(@PathVariable("id") Long id,
+                              HttpServletRequest request  // -- New Added Start --
+    ){
+        String header = request.getHeader("X-Token");
+        System.out.println("header token = " + header);
+        // -- New Added End --
+
+        // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
+        // logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+        System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
+
+        if (id == -1) {
+            System.out.println("=== 触发异常测试，ID 为 -1 ===");
+            throw new RuntimeException("服务内部错误");
+        }
+        return this.itemService.queryItemById(id);  // 正常返回
+    }
+}
+----
+
+==== file -> service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java
+[source,java]
+----
+package com.tjise.serviceorder.client;
+
+import com.tjise.serviceorder.pojo.Item;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+// 要访问的在 Eureka 中的服务名，并指定实现该接口的降级类名
+@FeignClient(name = "app-item", fallback = ItemFallback.class)
+public interface ItemFeignClient {
+    @GetMapping("/api/item/{id}")  // -- New Added -- /api
+    Item queryItemById(@PathVariable("id") Long id);
+}
+----
+
+=== Gateway - 路由 - 工作原理
+
+
+=== Gateway - 断言 - 长短写法
+
+
+=== Gateway - 断言 - Query
+
+
+=== Gateway - 断言 - 自定义断言工厂
+
+
+=== Gateway - 过滤器 - 基本使用
+
+
+=== Gateway - 过滤器 - 默认filter
+
+
+=== Gateway - 过滤器 - GlobalFilter
+
+
+=== Gateway - 过滤器 - 自定义过滤器工厂
+
+
+=== Gateway - 扩展 - 全局跨域
+
+
+==== 常见问题
+[qanda]
+我知道在浏览器中使用 ajax 访问后端服务的 api 有跨域问题，想问在浏览器的地址栏直接输入后端的 api 会有跨域问题吗？::
+
+答：没有跨域问题。
+浏览器的“跨域限制”（即同源策略 + CORS 校验）只在前端脚本（JavaScript）发起网络请求时才会触发，
+比如通过 XMLHttpRequest、fetch()、axios 等方式发起的请求。
+
+=== Gateway - 总结
+
+
+== 12. 分布式事务 Seata
+
+
+== 13. 服务部署
+[mermaid, target=img/mermaid-2025-10-12-105950, format=svg]
+....
+flowchart TD
+
+    Client[客户端请求<br/>https://api.company.com]
+
+    subgraph NginxLayer [第一层: Nginx 静态负载均衡]
+        Nginx[Nginx<br/>基于配置文件的负载均衡]
+    end
+
+    subgraph GatewayLayer [第二层: Gateway 动态集群]
+        G1[Gateway 实例1]
+        G2[Gateway 实例2]
+        G3[Gateway 实例3]
+        %% 横向排列
+        G1 --> G2 --> G3
+    end
+
+    subgraph MicroserviceLayer [第三层: 微服务集群]
+        User[用户服务<br>192.168.1.10:8080<br>192.168.1.11:8081]
+        Order[订单服务<br>192.168.1.12:8082<br>192.168.1.13:8083]
+        Product[商品服务<br>192.168.1.14:8084]
+        %% 横向排列
+        User --> Order --> Product
+    end
+
+    Client --> NginxLayer
+    NginxLayer --> GatewayLayer
+    GatewayLayer --> MicroserviceLayer
+....
 
