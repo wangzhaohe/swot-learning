@@ -207,6 +207,7 @@ http :8081/item/1
 ....
 
 === file -> service-item/src/main/java/com/tjise/serviceitem/pojo/Item.java
+.创建商品实体类
 [source,java]
 ----
 package com.tjise.serviceitem.pojo;
@@ -219,15 +220,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
-    
     private Long id;
-    
     private String title;
-    
     private String pic;
-    
     private String desc;
-    
     private Long price;
 }
 ----
@@ -261,7 +257,7 @@ public class ItemService {
     }
 
     /**
-     * 模拟实现商品查询
+     * 模拟实现商品查询，可供 Controller 层调用
      *
      * @param id
      * @return
@@ -305,6 +301,7 @@ public class ItemController {
 ----
 
 === file -> service-item/src/main/java/com/tjise/serviceitem/ServiceItemApplication.java
+.启动类
 [source,java]
 ----
 package com.tjise.serviceitem;
@@ -322,6 +319,7 @@ public class ServiceItemApplication {
 ----
 
 === file -> service-item/src/main/resources/application.yml
+.配置文件
 [source,yaml]
 ----
 server:
@@ -329,7 +327,8 @@ server:
 ----
 
 == 4. 创建订单微服务模块 service-order
-
+httpie 测试:
+http :8091/order/201810300001
 
 === file -> service-order/pom.xml
 [source,scss]
@@ -412,6 +411,7 @@ public class Order {
 ----
 
 === file -> service-order/src/main/java/com/tjise/serviceorder/pojo/OrderDetail.java
+.订单中单个商品详情
 [source,java]
 ----
 package com.tjise.serviceorder.pojo;
@@ -430,7 +430,7 @@ public class OrderDetail {
 ----
 
 === file -> service-order/src/main/java/com/tjise/serviceorder/pojo/Item.java
-.商品实体类 Item
+.商品实体类 Item（与商品模块中的 Item 相同）
 [source,java]
 ----
 package com.tjise.serviceorder.pojo;
@@ -484,9 +484,6 @@ public class OrderController {
     }
 }
 ----
-
-httpie 测试:
-http :8091/order/201810300001
 
 === file -> service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java
 
@@ -548,6 +545,7 @@ ORDER_DATA.put(order.getOrderId(), order);
 ----
 // 注入商品服务，用于查询商品详细信息
 @Autowired
+// NOTE: 本模块的 ItemService，不是 service-item 中的 ItemService
 private ItemService itemService;
 /**
  * 根据订单ID查询订单数据
@@ -566,8 +564,8 @@ public Order queryOrderById(String orderId) throws IOException {
 
     // 遍历订单详情，通过商品微服务查询商品详细数据
     for (OrderDetail orderDetail : orderDetails) {
-        // 通过商品微服务查询商品详细数据
-        Item item = itemService.queryItemById(orderDetail.getItem().getId());
+        // 通过商品微服务查询商品详细数据(itemService是本模块自己的)
+        Item item = itemService.queryItemById(orderDetail.getItem().getId());  // 传入商品 Item id
         if (null == item) {
             continue;
         }
@@ -649,6 +647,7 @@ public class ServiceOrderApplication {
 ----
 
 === file -> service-order/src/main/resources/application.yml
+.配置文件
 [source,yaml]
 ----
 server:
@@ -661,6 +660,9 @@ server:
 === 5.1 RestTemplate -- Spring 提供的传统同步 HTTP 客户端
 前面演示的是 方式一：字段注入（需要 @Autowired），
 下面演示一下使用 方式二单个构造函数注入的例子。
+
+httpie 测试:
+http :8091/order/201810300001
 
 ==== file -> service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
 
@@ -680,6 +682,7 @@ public class ItemService {
 ----
 private final RestTemplate restTemplate;
 public ItemService(RestTemplate restTemplate) {
+    // this.resttemplate 是上面定义的属性
     this.restTemplate = restTemplate;
 }
 ----
@@ -687,13 +690,16 @@ public ItemService(RestTemplate restTemplate) {
 === 5.2 RestTemplate + OkHttp 可以兼容老代码
 为了兼容老的 RestTemplate 代码，也可以在 RestTemplate 中配置 OkHttp。
 
+httpie 测试:
+http :8091/order/201810300001
+
 ==== file -> service-order/pom.xml
 
 
 ===== okhttp 依赖
 [source,scss]
 ....
-<!-- 使用 Spring Boot 管理的版本： -->
+<!-- 使用 Spring Boot 管理的版本 -->
 <dependency>
     <groupId>com.squareup.okhttp3</groupId>
     <artifactId>okhttp</artifactId>
@@ -738,6 +744,9 @@ public ItemService(RestTemplate restTemplate) {  // 单个构造函数
 
 === 5.3 OkHttp -- 单独使用 Square 开源的高性能 HTTP 客户端
 OkHttp 的异步 API 在应用程序层面实现了与 Node.js 类似的高并发编程模型：通过非阻塞 I/O 和回调机制，最大化利用少量线程来处理海量网络连接，从而高效地处理高并发 HTTP 请求。
+
+httpie 测试:
+http :8091/order/201810300001
 
 ==== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
 
@@ -795,13 +804,38 @@ public class ItemService {
             String json = response.body().string();
             // 使用注入的 objectMapper 反序列化成 JSON 字符串
             return objectMapper.readValue(json, Item.class);
-        }
+        }  // 这里会自动调用资源的 close() 方法
     }
 }
 ----
 
 === 5.4 WebClient  -- Spring WebFlux 提供的响应式 HTTP 客户端
+WebClient 简介
 
+**WebClient** 是 Spring WebFlux 库提供的**非阻塞、响应式 HTTP 客户端**，用于构建反应式应用程序。它是传统 `RestTemplate` 的现代替代品，专为函数式编程、流畅的 API 设计和异步处理而设计。
+
+核心特点
+
+1. **响应式与非阻塞**：
+  基于 Project Reactor，它使用 `Mono` 和 `Flux` 作为返回类型，允许您以声明式方式组合异步操作，而不会阻塞线程。这极大地提高了应用程序的并发能力和资源利用率。
+  
+2. **流畅的接口**：
+  其 API 设计流畅易用，允许您通过方法链轻松地构建请求、设置头部、指定正文和处理响应。
+  
+3. **支持同步与异步**：
+  虽然本质上是异步的，但它也提供了阻塞当前线程以等待结果的方法（不推荐在响应式链中使用），使其在需要时也能适应同步场景。
+  
+4. **与 Spring 生态无缝集成**：
+  可以轻松地与 Spring Security、WebFlux 服务器端以及其他 Spring 组件集成。
+  
+总结
+
+简而言之，**WebClient 是现代 Spring 应用中进行 HTTP 通信的首选工具**。尤其当您构建基于 Spring WebFlux 的响应式微服务时，它是实现服务间高效、非阻塞通信的关键组件。
+
+***
+
+httpie 测试:
+http :8091/order/201810300001
 
 ==== file -> service-order/pom.xml
 
@@ -4632,7 +4666,7 @@ graph LR
     B -->|/api/product/**| D[service-product]
 ....
 
-==== @file gateway/src/main/resources/application-route.yml
+==== file -> gateway/src/main/resources/application-route.yml
 
 
 ===== spring
@@ -4652,7 +4686,7 @@ spring:
             - Path=/api/item/**
 ....
 
-==== @file gateway/src/main/resources/application.yml
+==== file -> gateway/src/main/resources/application.yml
 ****
 name 和 instance 两者都有重要作用，缺一不可：
 
@@ -4700,7 +4734,7 @@ eureka:
                                    # 这是生产环境的最佳实践，避免主机名解析问题。
 ----
 
-==== @file service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
+==== file -> service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
 
 
 ===== class OrderController -- New Added -- @RequestMapping("/api/order")
@@ -4734,7 +4768,7 @@ public class OrderController {
 httpie 测试:
 http :8091/order/201810300001
 
-==== @file service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
+==== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
 
 
 ===== public class ItemController -- New Added -- @RequestMapping("/api/item")
@@ -4801,8 +4835,8 @@ public interface ItemFeignClient {
 [mermaid, target=img/mermaid-2025-10-12-221421, format=svg]
 ....
 flowchart TD
-    A[请求] -->|进入| B[Spring Cloud Gateway]
-    B --> C[路由规则匹配]
+    A[前端请求] -->|进入| B[Spring Cloud Gateway]
+    B --> C[路由规则按序匹配]
     C -->|匹配| D[Gateway HandlerMapping]
     D --> E[Gateway WebHandler]
     E -->|转发| F[Filter链]
@@ -4810,7 +4844,7 @@ flowchart TD
     G -->|响应| F
     F -->|返回| E
     E -->|处理完成| B
-    B -->|离开| H[响应]
+    B -->|离开| H[响应前端]
 
     subgraph SpringCloudGatewayInternal[In Spring Cloud Gateway]
         D
@@ -4841,6 +4875,36 @@ flowchart TD
     linkStyle 7 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
     linkStyle 8 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
     linkStyle 9 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
+....
+
+==== file -> gateway/src/main/resources/application-route.yml
+
+
+===== spring 兜底路由 - Path=/**
+[source,yaml]
+....
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: order-route
+          uri: lb://app-order
+          predicates:
+            - Path=/api/order/**
+          order: 1
+
+        - id: item-route
+          uri: lb://app-item
+          predicates:
+            - Path=/api/item/**
+          order: 2
+
+        # 兜底路由
+        - id: bing-route
+          uri: https://cn.bing.com/
+          predicates:
+            - Path=/**
+          order: 2
 ....
 
 === Gateway - 断言 - 长短写法
