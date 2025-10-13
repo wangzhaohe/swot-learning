@@ -748,7 +748,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_gatewaysrcmainresourcesapplication_route_yml_2">file &#8594; gateway/src/main/resources/application-route.yml</a></li>
 </ul>
 </li>
-<li><a href="#_gateway_断言_长短写法">Gateway - 断言 - 长短写法</a></li>
+<li><a href="#_gateway_断言_长短写法短写法见上例">Gateway - 断言 - 长短写法（短写法见上例）</a>
+<ul class="sectlevel3">
+<li><a href="#_file_gatewaysrcmainresourcesapplication_route_yml_3">file &#8594; gateway/src/main/resources/application-route.yml</a></li>
+</ul>
+</li>
 <li><a href="#_gateway_断言_query">Gateway - 断言 - Query</a></li>
 <li><a href="#_gateway_断言_自定义断言工厂">Gateway - 断言 - 自定义断言工厂</a></li>
 <li><a href="#_gateway_过滤器_基本使用">Gateway - 过滤器 - 基本使用</a></li>
@@ -7115,7 +7119,7 @@ http :8091/order/201810300001</p>
 <h3 id="_gateway_路由_工作原理">Gateway - 路由 - 工作原理</h3>
 <div class="imageblock">
 <div class="content">
-<img src="img/mermaid-2025-10-12-221421.svg" alt="mermaid 2025 10 12 221421" width="556" height="864">
+<img src="img/mermaid-2025-10-12-221421.svg" alt="mermaid 2025 10 12 221421" width="576" height="864">
 </div>
 </div>
 <div class="sect3">
@@ -7130,8 +7134,10 @@ http :8091/order/201810300001</p>
 <span class="tok-w">      </span><span class="tok-nt">routes</span><span class="tok-p">:</span>
 <span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">order-route</span>
 <span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">lb://app-order</span>
+<span class="tok-w">          </span><span class="tok-c1"># -- 短写法 --</span>
 <span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
 <span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path=/api/order/**</span>
+<span class="tok-w">          </span><span class="tok-c1"># -- 短写法结束 --</span>
 <span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1</span>
 
 <span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">item-route</span>
@@ -7145,15 +7151,81 @@ http :8091/order/201810300001</p>
 <span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">https://cn.bing.com/</span>
 <span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
 <span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path=/**</span>
-<span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">2</span></code></pre>
+<span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">3</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>order: 控制路由的匹配顺序。默认是从上到下的顺序。</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_gateway_断言_长短写法">Gateway - 断言 - 长短写法</h3>
+<h3 id="_gateway_断言_长短写法短写法见上例">Gateway - 断言 - 长短写法（短写法见上例）</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>文档查看断言类型:
+<a href="https://docs.spring.io/spring-cloud-gateway/docs/3.1.9/reference/html/#gateway-request-predicates-factories" class="bare">https://docs.spring.io/spring-cloud-gateway/docs/3.1.9/reference/html/#gateway-request-predicates-factories</a></p>
+<div class="imageblock">
+<div class="content">
+<img src="img/gateway_predicate_category_0.png" alt="gateway predicate category 0">
+</div>
+</div>
+</li>
+<li>
+<p>在 IDEA 中查看断言类型:
+Shift Shift &#8594; classs &#8594; routePredicateFactory 打开是个接口</p>
+<div class="paragraph">
+<p>如下图去掉 RoutePredicateFactory 剩下的就是断言的名字</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/gateway_predicate_category.png" alt="gateway predicate category">
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainresourcesapplication_route_yml_3">file &#8594; gateway/src/main/resources/application-route.yml</h4>
+<div class="sect4">
+<h5 id="_spring_长写法_name_args">spring 长写法 - name args</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">cloud</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">gateway</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">routes</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">order-route</span>
+<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">lb://app-order</span>
+<span class="tok-w">          </span><span class="tok-c1"># -- 长写法 --</span>
+<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path</span>
+<span class="tok-w">              </span><span class="tok-nt">args</span><span class="tok-p">:</span>
+<span class="tok-w">                </span><span class="tok-nt">patterns</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/api/order/**</span>
+<span class="tok-w">          </span><span class="tok-c1"># -- 长写法结束 --</span>
+<span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1</span>
 
+<span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">item-route</span>
+<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">lb://app-item</span>
+<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path=/api/item/**</span>
+<span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">2</span>
+
+<span class="tok-w">        </span><span class="tok-c1"># 兜底路由</span>
+<span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">bing-route</span>
+<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">https://cn.bing.com/</span>
+<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path=/**</span>
+<span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">3</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>order: 控制路由的匹配顺序。默认是从上到下的顺序。</p>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_gateway_断言_query">Gateway - 断言 - Query</h3>
@@ -7220,7 +7292,7 @@ http :8091/order/201810300001</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-13 14:38:17 +0800
+Last updated 2025-10-13 16:09:01 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -4837,7 +4837,7 @@ public interface ItemFeignClient {
 ....
 flowchart TD
     A[前端请求] -->|进入| B[Spring Cloud Gateway]
-    B --> C[路由规则按序匹配]
+    B --> C[Route路由规则按序匹配]
     C -->|匹配| D[Gateway HandlerMapping]
     D --> E[Gateway WebHandler]
     E -->|转发| F[Filter链]
@@ -4890,8 +4890,10 @@ spring:
       routes:
         - id: order-route
           uri: lb://app-order
+          # -- 短写法 --
           predicates:
             - Path=/api/order/**
+          # -- 短写法结束 --
           order: 1
 
         - id: item-route
@@ -4905,11 +4907,60 @@ spring:
           uri: https://cn.bing.com/
           predicates:
             - Path=/**
-          order: 2
+          order: 3
 ....
 
-=== Gateway - 断言 - 长短写法
+order: 控制路由的匹配顺序。默认是从上到下的顺序。
 
+=== Gateway - 断言 - 长短写法（短写法见上例）
+1. 文档查看断言类型:
+https://docs.spring.io/spring-cloud-gateway/docs/3.1.9/reference/html/#gateway-request-predicates-factories
++
+image::img/gateway_predicate_category_0.png[]
+
+
+2. 在 IDEA 中查看断言类型:
+Shift Shift -> classs -> routePredicateFactory 打开是个接口
++
+如下图去掉 RoutePredicateFactory 剩下的就是断言的名字
++
+image::img/gateway_predicate_category.png[]
+
+==== file -> gateway/src/main/resources/application-route.yml
+
+
+===== spring 长写法 - name args
+[source,yaml]
+....
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: order-route
+          uri: lb://app-order
+          # -- 长写法 --
+          predicates:
+            - name: Path
+              args:
+                patterns: /api/order/**
+          # -- 长写法结束 --
+          order: 1
+
+        - id: item-route
+          uri: lb://app-item
+          predicates:
+            - Path=/api/item/**
+          order: 2
+
+        # 兜底路由
+        - id: bing-route
+          uri: https://cn.bing.com/
+          predicates:
+            - Path=/**
+          order: 3
+....
+
+order: 控制路由的匹配顺序。默认是从上到下的顺序。
 
 === Gateway - 断言 - Query
 
