@@ -1850,7 +1850,7 @@ public class ItemService {
 server:
   port: 8091
 
-# 新增 url 配置
+# 新增 url 配置，名字自己决定。
 myspcloud:
   item:
     url: http://127.0.0.1:8081/item/
@@ -2039,6 +2039,7 @@ public OkHttpClient okHttpClient() {
 public WebClient webClient(ItemProperties properties) {
     return WebClient.builder()
             .baseUrl(properties.getUrl())
+            // .baseUrl(this.itemProperties.getUrl())
             .build();
 }
 @doc
