@@ -1,8 +1,9 @@
 #@+leo-ver=5-thin
-#@+node:swot.20251012223319.1: * @file gateway/src/main/resources/application-route.yml
+#@+node:swot.20251014133126.1: * @file gateway/src/main/resources/application-route.yml
 #@@language yaml
 #@+others
-#@+node:swot.20251012223319.2: ** spring
+#@+node:swot.20251014133126.2: ** spring
+#@@tabwidth -2
 #@+doc
 # [source,yaml]
 # ....
@@ -14,18 +15,52 @@ spring:
       routes:
         - id: order-route
           uri: lb://app-order
+          # -- 长写法 --
           predicates:
-            - Path=/api/order/**
+            - name: Path
+              args:
+                patterns: /api/order/**
+          # -- 长写法结束 --
+          order: 1
+          filters:  # /api/a/b -> /a/b  <1>
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
         - id: item-route
           uri: lb://app-item
           predicates:
             - Path=/api/item/**
+          order: 2
+          filters:  # 同上
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+        #@+others
+        #@+node:swot.20251014133126.3: *3* @ignore-node Query 请求参数
         # 兜底路由
         - id: bing-route
           uri: https://cn.bing.com/
           predicates:
-            - Path=/**
+            - name: Path
+              args:
+                patterns: /search
+            - name: Query
+              args:  # # IDEA 中按 Shift Shift -> classes -> QueryRoutePredicateFactory 可发现定义了下面两个属性
+                param: q
+                regexp: haha
+          order: 3
+
+        #@+doc
+        # 所有的断言都匹配才能放行。
+        #
+        #@-others
 #@+doc
 # ....
+#
+# order: 控制路由的匹配顺序。默认是从上到下的顺序。
+#
+# <1> filter 中 RewritePath 的作用是将请求路径进行重写。具体来说，它将 /api/ 开头的路径重写为去掉 /api/ 前缀后的路径。
+# +
+# * /api/?：匹配以 /api/ 开头的路径，? 表示 / 是可选的。
+# * (?<segment>.*)：这是一个捕获组，捕获 /api/ 之后的所有内容，命名为 segment。
+# * , /$\{segment}：这是替换后的路径，/$\{segment} 表示将捕获的 segment 替换到新的路径中。
+# * 假设请求路径为 /api/a/b，RewritePath 会将其重写为 /a/b。
 #@-others
 #@-leo

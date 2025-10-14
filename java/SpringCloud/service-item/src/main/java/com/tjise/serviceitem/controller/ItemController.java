@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20251012204604.1: * @file service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
+//@+node:swot.20251014134434.1: * @file service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
 //@@language java
 //@+others
-//@+node:swot.20251012204604.2: ** @ignore-node import
+//@+node:swot.20251014134434.2: ** @ignore-node import
 package com.tjise.serviceitem.controller;
 
 import com.tjise.serviceitem.pojo.Item;
@@ -18,13 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.soap.MimeHeaders;
 import java.util.logging.Logger;
 
-//@+node:swot.20251012204604.3: ** public class ItemController -- New Added -- @RequestMapping("/api/item")
+//@+node:swot.20251014134434.3: ** public class ItemController -- New Added -- @RequestMapping("/api/item")
 //@+doc
 // [source,java]
 // ----
 //@@c
 //@@language java
-@RequestMapping("/api")  // -- New Added --
+// @RequestMapping("/api")  // 不要了
 @RestController
 public class ItemController {
 
@@ -42,7 +42,7 @@ public class ItemController {
      * @param id
      * @return
      */
-    @GetMapping(value = "item/{id}")
+    @GetMapping(value = "/item/{id}")
     public Item queryItemById(@PathVariable("id") Long id,
                               HttpServletRequest request  // -- New Added Start --
     ){

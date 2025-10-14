@@ -638,7 +638,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_启动多个_service_item_商品微服务实例">启动多个 service-item 商品微服务实例</a></li>
 </ul>
 </li>
-<li><a href="#_7_4_eureka_中发现商品微服务">7.4 Eureka 中发现商品微服务</a>
+<li><a href="#_7_4_eureka_中发现商品微服务_app_item">7.4 Eureka 中发现商品微服务 app-item</a>
 <ul class="sectlevel3">
 <li><a href="#_file_service_orderpom_xml_4">file &#8594; service-order/pom.xml</a></li>
 <li><a href="#_file_service_ordersrcmainresourcesapplication_yml_3">file &#8594; service-order/src/main/resources/application.yml</a></li>
@@ -718,12 +718,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
-<li><a href="#_10_服务保护_sentinel">10. 服务保护 Sentinel</a>
-<ul class="sectlevel2">
-<li><a href="#_docker_开启_sentinel_dashboard">docker 开启 sentinel-dashboard</a></li>
-</ul>
-</li>
-<li><a href="#_11_服务网关_gateway">11. 服务网关 Gateway</a>
+<li><a href="#_10_服务网关_gateway">10. 服务网关 Gateway</a>
 <ul class="sectlevel2">
 <li><a href="#_gateway_网关功能">Gateway - 网关功能</a></li>
 <li><a href="#_gateway_网关分类">Gateway - 网关分类</a></li>
@@ -753,9 +748,25 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_gatewaysrcmainresourcesapplication_route_yml_3">file &#8594; gateway/src/main/resources/application-route.yml</a></li>
 </ul>
 </li>
-<li><a href="#_gateway_断言_query">Gateway - 断言 - Query</a></li>
-<li><a href="#_gateway_断言_自定义断言工厂">Gateway - 断言 - 自定义断言工厂</a></li>
-<li><a href="#_gateway_过滤器_基本使用">Gateway - 过滤器 - 基本使用</a></li>
+<li><a href="#_gateway_断言_query">Gateway - 断言 - Query</a>
+<ul class="sectlevel3">
+<li><a href="#_file_gatewaysrcmainresourcesapplication_route_yml_4">file &#8594; gateway/src/main/resources/application-route.yml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_兜底路由">兜底路由</a>
+<ul class="sectlevel2">
+<li><a href="#_gateway_断言_自定义断言工厂高级">Gateway - 断言 - 自定义断言工厂（高级）</a></li>
+<li><a href="#_gateway_过滤器_基本使用">Gateway - 过滤器 - 基本使用</a>
+<ul class="sectlevel3">
+<li><a href="#_file_gatewaysrcmainresourcesapplication_yml_3">file &#8594; gateway/src/main/resources/application.yml</a></li>
+<li><a href="#_file_gatewaysrcmainresourcesapplication_route_yml_5">file &#8594; gateway/src/main/resources/application-route.yml</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceordercontrollerordercontroller_java_3">file &#8594; service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java</a></li>
+<li><a href="#_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_6">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</a></li>
+<li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderclientitemfeignclient_java_4">file &#8594; service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java</a></li>
+</ul>
+</li>
 <li><a href="#_gateway_过滤器_默认filter">Gateway - 过滤器 - 默认filter</a></li>
 <li><a href="#_gateway_过滤器_globalfilter">Gateway - 过滤器 - GlobalFilter</a></li>
 <li><a href="#_gateway_过滤器_自定义过滤器工厂">Gateway - 过滤器 - 自定义过滤器工厂</a></li>
@@ -765,10 +776,15 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </li>
 <li><a href="#_gateway_总结">Gateway - 总结</a></li>
+<li><a href="#_11_服务保护_sentinel">11. 服务保护 Sentinel</a>
+<ul class="sectlevel2">
+<li><a href="#_docker_开启_sentinel_dashboard">docker 开启 sentinel-dashboard</a></li>
 </ul>
 </li>
 <li><a href="#_12_分布式事务_seata">12. 分布式事务 Seata</a></li>
 <li><a href="#_13_服务部署">13. 服务部署</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -2241,26 +2257,24 @@ public class ServiceOrderApplication {
 </div>
 <div class="sect3">
 <h4 id="_file_eurekasrcmainresourcesapplication_yml">file &#8594; eureka/src/main/resources/application.yml</h4>
-<div class="paragraph">
-<p>server:
-  port: 8761  # 1. Eureka Server端口设置为8761（默认端口）</p>
-</div>
-<div class="paragraph">
-<p>eureka:
-  instance:
-    hostname: localhost  # 2. 设置主机名为localhost
-  client:
-    register-with-eureka: false  # 3. Eureka Server不向自己注册
-    fetch-registry: false        # 4. Eureka 自己不需要获取服务注册信息
-    service-url:
-      # 5. 设置 Eureka Server 的访问地址
-      defaultZone: <a href="http://${eureka.instance.hostname}:${server.port}/eureka/" class="bare">http://${eureka.instance.hostname}:${server.port}/eureka/</a></p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>server:
-  enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭，但是会有红色警告提示，属于正常）
-                                   # 设置成 false 后保证服务不可用时及时剔除相应的微服务，易测试。</pre>
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8761</span><span class="tok-w">  </span><span class="tok-c1"># 1. Eureka Server 端口设置为 8761（默认端口）</span>
+
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">hostname</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">localhost</span><span class="tok-w">  </span><span class="tok-c1"># 2. 设置主机名为 localhost</span>
+<span class="tok-w">  </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span><span class="tok-w">  </span><span class="tok-c1"># 3. Eureka Server 不向自己注册</span>
+<span class="tok-w">    </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span><span class="tok-w">        </span><span class="tok-c1"># 4. Eureka 自己不需要获取服务注册信息</span>
+<span class="tok-w">    </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-c1"># 5. 设置 Eureka Server 的访问地址</span>
+<span class="tok-w">      </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://${eureka.instance.hostname}:${server.port}/eureka/</span>
+
+<span class="tok-w">  </span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">enable-self-preservation</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span><span class="tok-w">  </span><span class="tok-c1"># 6. 关闭自我保护机制（开发环境建议关闭，但是会有红色警告提示，属于正常）</span>
+<span class="tok-w">                                     </span><span class="tok-c1"># 设置成 false 后保证服务不可用时及时剔除相应的微服务，易测试。</span></code></pre>
 </div>
 </div>
 </div>
@@ -2303,6 +2317,9 @@ public class ServiceOrderApplication {
 </li>
 </ul>
 </div>
+</li>
+<li>
+<p><mark>可以直接在 IDEA 中运行启动类</mark></p>
 </li>
 </ol>
 </div>
@@ -2383,7 +2400,7 @@ public class ServiceOrderApplication {
     <span class="tok-n">application</span><span class="tok-p">:</span>
         <span class="tok-n">name</span><span class="tok-p">:</span> <span class="tok-n">app</span><span class="tok-o">-</span><span class="tok-n">item</span>
 
-<span class="tok-c1">### 服务注册到eureka注册中心的地址</span>
+<span class="tok-c1">### 服务注册到 eureka 注册中心的地址</span>
 <span class="tok-n">eureka</span><span class="tok-p">:</span>
     <span class="tok-n">client</span><span class="tok-p">:</span>
         <span class="tok-n">service</span><span class="tok-o">-</span><span class="tok-n">url</span><span class="tok-p">:</span>
@@ -2393,9 +2410,9 @@ public class ServiceOrderApplication {
         <span class="tok-c1">### 是否需要从 eureka 上检索服务</span>
         <span class="tok-n">fetch</span><span class="tok-o">-</span><span class="tok-n">registry</span><span class="tok-p">:</span> <span class="tok-n">true</span>
     <span class="tok-n">instance</span><span class="tok-p">:</span>
-        <span class="tok-c1"># 使用IP地址注册而不是主机名</span>
+        <span class="tok-c1"># 使用 IP 地址注册而不是主机名</span>
         <span class="tok-n">prefer</span><span class="tok-o">-</span><span class="tok-n">ip</span><span class="tok-o">-</span><span class="tok-n">address</span><span class="tok-p">:</span> <span class="tok-n">true</span>
-        <span class="tok-c1"># 客户端在注册时使用自己的IP，而不是主机名，是生产环境的最佳实践。避免主机名解析问题</span>
+        <span class="tok-c1"># 客户端在注册时使用自己的IP，而不是主机名，是生产环境的最佳实践。避免主机名 DNS 解析问题</span>
         <span class="tok-n">ip</span><span class="tok-o">-</span><span class="tok-n">address</span><span class="tok-p">:</span> <span class="tok-mf">127.0.0.1</span></code></pre>
 </div>
 </div>
@@ -2452,6 +2469,9 @@ public class ServiceOrderApplication {
 <div class="sect3">
 <h4 id="_启动多个_service_item_商品微服务实例">启动多个 service-item 商品微服务实例</h4>
 <div class="paragraph">
+<p>先启动刚刚配置的 service-item，查看是否运行正常。如运行正常，继续下面操作。</p>
+</div>
+<div class="paragraph">
 <p>重复操作下面步骤 2 次，一共启动 3 个 service-item 实例。</p>
 </div>
 <div class="imageblock">
@@ -2478,7 +2498,7 @@ public class ServiceOrderApplication {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_7_4_eureka_中发现商品微服务">7.4 Eureka 中发现商品微服务</h3>
+<h3 id="_7_4_eureka_中发现商品微服务_app_item">7.4 Eureka 中发现商品微服务 app-item</h3>
 <div class="paragraph">
 <p>之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。</p>
 </div>
@@ -2662,7 +2682,7 @@ public class ServiceOrderApplication {
 <h6 id="_webclient_4">WebClient</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 配置负载均衡的 WebClient.Builder</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 配置负载均衡的 WebClient.Builder，注意这里要改成 Builder 的形式才可以</span>
 <span class="tok-nd">@Bean</span>
 <span class="tok-nd">@LoadBalanced</span><span class="tok-w"> </span><span class="tok-c1">// new -&gt; 使用负载均衡</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">WebClient</span><span class="tok-p">.</span><span class="tok-na">Builder</span><span class="tok-w"> </span><span class="tok-nf">loadBalancedWebClientBuilder</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -6586,30 +6606,7 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect1">
-<h2 id="_10_服务保护_sentinel">10. 服务保护 Sentinel</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_docker_开启_sentinel_dashboard">docker 开启 sentinel-dashboard</h3>
-<div class="imageblock">
-<div class="content">
-<img src="img/sentinel_dashboard186.png" alt="sentinel dashboard186">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="img/sentinel_dashboard186_run.png" alt="sentinel dashboard186 run">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="img/sentinel_dashboard186_admin.png" alt="sentinel dashboard186 admin">
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_11_服务网关_gateway">11. 服务网关 Gateway</h2>
+<h2 id="_10_服务网关_gateway">10. 服务网关 Gateway</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_gateway_网关功能">Gateway - 网关功能</h3>
@@ -6707,6 +6704,10 @@ Transfer-Encoding: chunked
 <div class="content">
 <img src="img/gateway_create.png" alt="gateway create" width="1000">
 </div>
+</div>
+<div class="paragraph">
+<p>测试访问网关
+http :8001/</p>
 </div>
 <div class="sect3">
 <h4 id="_file_gatewaypom_xml">file &#8594; gateway/pom.xml</h4>
@@ -6914,6 +6915,10 @@ spring-boot-starter-webflux</p>
 <div class="content">
 <img src="img/mermaid-2025-10-12-183606.svg" alt="mermaid 2025 10 12 183606" width="630" height="174">
 </div>
+</div>
+<div class="paragraph">
+<p>测试：
+http :8001/api/order/201810300001</p>
 </div>
 <div class="sect3">
 <h4 id="_file_gatewaysrcmainresourcesapplication_route_yml">file &#8594; gateway/src/main/resources/application-route.yml</h4>
@@ -7179,25 +7184,42 @@ Shift Shift &#8594; classs &#8594; routePredicateFactory 打开是个接口</p>
 </div>
 </div>
 </li>
+<li>
+<p>断言类型解释</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/gateway_predicate_category_1.png" alt="gateway predicate category 1">
+</div>
+</div>
+</li>
 </ol>
+</div>
+<div class="paragraph">
+<p>测试：
+http :8001/api/order/201810300001</p>
 </div>
 <div class="sect3">
 <h4 id="_file_gatewaysrcmainresourcesapplication_route_yml_3">file &#8594; gateway/src/main/resources/application-route.yml</h4>
 <div class="sect4">
 <h5 id="_spring_长写法_name_args">spring 长写法 - name args</h5>
+<div class="paragraph">
+<p>长短写法文档:
+<a href="https://cloud.spring.io/spring-cloud-gateway/reference/html/#fully-expanded-arguments" class="bare">https://cloud.spring.io/spring-cloud-gateway/reference/html/#fully-expanded-arguments</a></p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">spring</span><span class="tok-p">:</span>
 <span class="tok-w">  </span><span class="tok-nt">cloud</span><span class="tok-p">:</span>
 <span class="tok-w">    </span><span class="tok-nt">gateway</span><span class="tok-p">:</span>
-<span class="tok-w">      </span><span class="tok-nt">routes</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">routes</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># IDEA中点击可以查看属性定义</span>
 <span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">order-route</span>
 <span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">lb://app-order</span>
 <span class="tok-w">          </span><span class="tok-c1"># -- 长写法 --</span>
 <span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
 <span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path</span>
-<span class="tok-w">              </span><span class="tok-nt">args</span><span class="tok-p">:</span>
+<span class="tok-w">              </span><span class="tok-nt">args</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># IDEA 中按 Shift Shift -&gt; classes -&gt; PathRoutePredicateFactory 可发现定义了下面两个属性</span>
 <span class="tok-w">                </span><span class="tok-nt">patterns</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/api/order/**</span>
+<span class="tok-w">                </span><span class="tok-nt">matchTrailingSlash</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">  </span><span class="tok-c1"># 默认 true,是否匹配最后的 /</span>
 <span class="tok-w">          </span><span class="tok-c1"># -- 长写法结束 --</span>
 <span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1</span>
 
@@ -7223,15 +7245,287 @@ Shift Shift &#8594; classs &#8594; routePredicateFactory 打开是个接口</p>
 </div>
 <div class="sect2">
 <h3 id="_gateway_断言_query">Gateway - 断言 - Query</h3>
+<div class="paragraph">
+<p>测试可以放行到
+http :8001/search?q=haha</p>
+</div>
+<div class="paragraph">
+<p>其它的则不通报 404:
+http :8001/search?q=wowo</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+用浏览器则可以看到网页的渲染内容。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainresourcesapplication_route_yml_4">file &#8594; gateway/src/main/resources/application-route.yml</h4>
+<div class="sect4">
+<h5 id="_query_请求参数">Query 请求参数</h5>
 
 </div>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_兜底路由" class="sect0">兜底路由</h1>
+<div class="ulist">
+<ul>
+<li>
+<p>id: bing-route
+uri: <a href="https://cn.bing.com/" class="bare">https://cn.bing.com/</a>
+predicates:</p>
+</li>
+<li>
+<p>name: Path
+args:
+  patterns: /search</p>
+</li>
+<li>
+<p>name: Query
+    args:  # # IDEA 中按 Shift Shift &#8594; classes &#8594; QueryRoutePredicateFactory 可发现定义了下面两个属性
+      param: q
+      regexp: haha
+order: 3</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>所有的断言都匹配才能放行。</p>
+</div>
 <div class="sect2">
-<h3 id="_gateway_断言_自定义断言工厂">Gateway - 断言 - 自定义断言工厂</h3>
-
+<h3 id="_gateway_断言_自定义断言工厂高级">Gateway - 断言 - 自定义断言工厂（高级）</h3>
+<div class="paragraph">
+<p>本课件忽略！可以参考该视频去实现:
+<a href="https://www.bilibili.com/video/BV1UJc2ezEFU?spm_id_from=333.788.player.switch&amp;vd_source=392e2829ea8e40de989be86888026747&amp;p=57" class="bare">https://www.bilibili.com/video/BV1UJc2ezEFU?spm_id_from=333.788.player.switch&amp;vd_source=392e2829ea8e40de989be86888026747&amp;p=57</a></p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_gateway_过滤器_基本使用">Gateway - 过滤器 - 基本使用</h3>
+<div class="paragraph">
+<p>过滤器工厂名
+<a href="https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories" class="bare">https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/gateway_filter_1.png" alt="gateway filter 1" width="800">
+</div>
+</div>
+<div class="paragraph">
+<p>常用的过滤器工厂 rewritepath
+<a href="https://cloud.spring.io/spring-cloud-gateway/reference/html/#the-rewritepath-gatewayfilter-factory" class="bare">https://cloud.spring.io/spring-cloud-gateway/reference/html/#the-rewritepath-gatewayfilter-factory</a></p>
+</div>
+<div class="paragraph">
+<p>因为前面我们在网关的配置中都加了 /api，
+这样在每个微服务中都需要加 /api，如果微服务多了，就会冗余，且很麻烦，
+下面我们使用过滤器来简化该操作。</p>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainresourcesapplication_yml_3">file &#8594; gateway/src/main/resources/application.yml</h4>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>name 和 instance 两者都有重要作用，缺一不可：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>spring.application.name：服务的逻辑名称，用于服务发现和负载均衡</p>
+</li>
+<li>
+<p>eureka.instance 配置：实例的网络地址，用于实际通信</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_logging_new_added_为了调试增加日志">logging --New Added-- 为了调试增加日志</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">logging</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">level</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">org.springframework.cloud.gateway</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DEBUG</span>
+<span class="tok-w">    </span><span class="tok-nt">org.springframework.cloud.gateway.route</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">TRACE</span>
+<span class="tok-w">    </span><span class="tok-nt">org.springframework.cloud.gateway.handler</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DEBUG</span>
+<span class="tok-w">    </span><span class="tok-nt">reactor.netty.http.client</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DEBUG</span>
+<span class="tok-w">    </span><span class="tok-nt">reactor.netty.http.server</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DEBUG</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainresourcesapplication_route_yml_5">file &#8594; gateway/src/main/resources/application-route.yml</h4>
+<div class="sect4">
+<h5 id="_spring_2">spring</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">cloud</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">gateway</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">routes</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">order-route</span>
+<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">lb://app-order</span>
+<span class="tok-w">          </span><span class="tok-c1"># -- 长写法 --</span>
+<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path</span>
+<span class="tok-w">              </span><span class="tok-nt">args</span><span class="tok-p">:</span>
+<span class="tok-w">                </span><span class="tok-nt">patterns</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/api/order/**</span>
+<span class="tok-w">          </span><span class="tok-c1"># -- 长写法结束 --</span>
+<span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1</span>
+<span class="tok-w">          </span><span class="tok-nt">filters</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># /api/a/b -&gt; /a/b  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">RewritePath=/api/(?&lt;segment&gt;.*), /$\{segment}</span>
 
+<span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">item-route</span>
+<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">lb://app-item</span>
+<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path=/api/item/**</span>
+<span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">2</span>
+<span class="tok-w">          </span><span class="tok-nt">filters</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># 同上</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">RewritePath=/api/(?&lt;segment&gt;.*), /$\{segment}</span>
+<span class="tok-w">        </span><span class="tok-err">@</span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">others</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>order: 控制路由的匹配顺序。默认是从上到下的顺序。</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>filter 中 RewritePath 的作用是将请求路径进行重写。具体来说，它将 /api/ 开头的路径重写为去掉 /api/ 前缀后的路径。
+<div class="ulist">
+<ul>
+<li>
+<p>/api/?：匹配以 /api/ 开头的路径，? 表示 / 是可选的。</p>
+</li>
+<li>
+<p>(?&lt;segment&gt;.*)：这是一个捕获组，捕获 /api/ 之后的所有内容，命名为 segment。</p>
+</li>
+<li>
+<p>, /${segment}：这是替换后的路径，/${segment} 表示将捕获的 segment 替换到新的路径中。</p>
+</li>
+<li>
+<p>假设请求路径为 /api/a/b，RewritePath 会将其重写为 /a/b。</p>
+</li>
+</ul>
+</div></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceordercontrollerordercontroller_java_3">file &#8594; service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java</h4>
+<div class="sect4">
+<h5 id="_class_ordercontrollernew_addedrequestmappingapiorder_2">class OrderController&#8201;&#8212;&#8201;New Added&#8201;&#8212;&#8201;@RequestMapping("/api/order")</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 订单控制器</span>
+<span class="tok-cm"> * 处理订单相关的HTTP请求</span>
+<span class="tok-cm"> */</span>
+<span class="tok-c1">// @RequestMapping(&quot;/api&quot;)  // -- 不要了</span>
+<span class="tok-nd">@RestController</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">OrderController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 注入订单服务</span>
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">OrderService</span><span class="tok-w"> </span><span class="tok-n">orderService</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 根据订单ID查询订单信息</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @param orderId 订单ID</span>
+<span class="tok-cm">     * @return Order 订单信息</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;/order/{orderId}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Order</span><span class="tok-w"> </span><span class="tok-nf">queryOrderById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;orderId&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">orderId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">orderService</span><span class="tok-p">.</span><span class="tok-na">queryOrderById</span><span class="tok-p">(</span><span class="tok-n">orderId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_6">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</h4>
+<div class="sect4">
+<h5 id="_public_class_itemcontrollernew_addedrequestmappingapiitem_2">public class ItemController&#8201;&#8212;&#8201;New Added&#8201;&#8212;&#8201;@RequestMapping("/api/item")</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @RequestMapping(&quot;/api&quot;)  // 不要了</span>
+<span class="tok-nd">@RestController</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Value</span><span class="tok-p">(</span><span class="tok-s">&quot;${server.port}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">serverPort</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">Logger</span><span class="tok-w"> </span><span class="tok-n">logger</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Logger</span><span class="tok-p">.</span><span class="tok-na">getLogger</span><span class="tok-p">(</span>
+<span class="tok-w">                         </span><span class="tok-n">ItemController</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 对外提供接口服务，查询商品信息</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @param id</span>
+<span class="tok-cm">     * @return</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;/item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span>
+<span class="tok-w">                              </span><span class="tok-n">HttpServletRequest</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-w">  </span><span class="tok-c1">// -- New Added Start --</span>
+<span class="tok-w">    </span><span class="tok-p">){</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">header</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">.</span><span class="tok-na">getHeader</span><span class="tok-p">(</span><span class="tok-s">&quot;X-Token&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;header token = &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">header</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// -- New Added End --</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。</span>
+<span class="tok-w">        </span><span class="tok-c1">// logger.info(&quot;Handling request on port: &quot; + serverPort + &quot; for item ID: &quot; + id);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Processing request on port: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">serverPort</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; for item ID: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 触发异常测试，ID 为 -1 ===&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">RuntimeException</span><span class="tok-p">(</span><span class="tok-s">&quot;服务内部错误&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 正常返回</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainjavacomtjiseserviceorderclientitemfeignclient_java_4">file &#8594; service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.client</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceorder.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.openfeign.FeignClient</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.GetMapping</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.PathVariable</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 要访问的在 Eureka 中的服务名，并指定实现该接口的降级类名</span>
+<span class="tok-nd">@FeignClient</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">fallback</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ItemFallback</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">interface</span> <span class="tok-nc">ItemFeignClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// @GetMapping(&quot;/api/item/{id}&quot;)  // 不要了</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-s">&quot;/item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_gateway_过滤器_默认filter">Gateway - 过滤器 - 默认filter</h3>
@@ -7265,6 +7559,27 @@ Shift Shift &#8594; classs &#8594; routePredicateFactory 打开是个接口</p>
 <h3 id="_gateway_总结">Gateway - 总结</h3>
 
 </div>
+<div class="sect1">
+<h2 id="_11_服务保护_sentinel">11. 服务保护 Sentinel</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_docker_开启_sentinel_dashboard">docker 开启 sentinel-dashboard</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/sentinel_dashboard186.png" alt="sentinel dashboard186">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/sentinel_dashboard186_run.png" alt="sentinel dashboard186 run">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/sentinel_dashboard186_admin.png" alt="sentinel dashboard186 admin">
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -7286,7 +7601,7 @@ Shift Shift &#8594; classs &#8594; routePredicateFactory 打开是个接口</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-13 16:36:04 +0800
+Last updated 2025-10-14 15:30:57 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

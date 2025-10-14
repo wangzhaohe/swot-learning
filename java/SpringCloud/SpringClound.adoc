@@ -1165,14 +1165,16 @@ public class EurekaApplication {
 ----
 
 ==== file -> eureka/src/main/resources/application.yml
+[source,yaml]
+....
 server:
-  port: 8761  # 1. Eureka Server端口设置为8761（默认端口）
+  port: 8761  # 1. Eureka Server 端口设置为 8761（默认端口）
 
 eureka:
   instance:
-    hostname: localhost  # 2. 设置主机名为localhost
+    hostname: localhost  # 2. 设置主机名为 localhost
   client:
-    register-with-eureka: false  # 3. Eureka Server不向自己注册
+    register-with-eureka: false  # 3. Eureka Server 不向自己注册
     fetch-registry: false        # 4. Eureka 自己不需要获取服务注册信息
     service-url:
       # 5. 设置 Eureka Server 的访问地址
@@ -1181,6 +1183,7 @@ eureka:
   server:
     enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭，但是会有红色警告提示，属于正常）
                                      # 设置成 false 后保证服务不可用时及时剔除相应的微服务，易测试。
+....
 
 ==== 启动 Eureka Server 并测试网页管理端
 现在可以通过以下命令启动 Eureka Server：
@@ -1194,6 +1197,8 @@ eureka:
 . 或者先打包再运行
 * mvn clean package
 * java -jar target/eureka-1.0-SNAPSHOT.jar
+
+. #可以直接在 IDEA 中运行启动类#
 
 启动后访问 http://localhost:8761 即可看到 Eureka Server 的管理界面。
 
@@ -1254,7 +1259,7 @@ spring:
     application:
         name: app-item
 
-### 服务注册到eureka注册中心的地址
+### 服务注册到 eureka 注册中心的地址
 eureka:
     client:
         service-url:
@@ -1264,9 +1269,9 @@ eureka:
         ### 是否需要从 eureka 上检索服务
         fetch-registry: true
     instance:
-        # 使用IP地址注册而不是主机名
+        # 使用 IP 地址注册而不是主机名
         prefer-ip-address: true
-        # 客户端在注册时使用自己的IP，而不是主机名，是生产环境的最佳实践。避免主机名解析问题
+        # 客户端在注册时使用自己的IP，而不是主机名，是生产环境的最佳实践。避免主机名 DNS 解析问题
         ip-address: 127.0.0.1
 ----
 
@@ -1301,6 +1306,8 @@ public class ServiceItemApplication {
 <1> 启用 uereka 客户端注解
 
 ==== 启动多个 service-item 商品微服务实例
+先启动刚刚配置的 service-item，查看是否运行正常。如运行正常，继续下面操作。
+
 重复操作下面步骤 2 次，一共启动 3 个 service-item 实例。
 
 .复制 service-item 配置
@@ -1314,7 +1321,7 @@ image::img/serviceItem_copy_config_edit_8082.png[,520]
 .在 Eureka 中发现有 3 个 service-item 实例已经注册成功
 image::img/three_serviceItem_in_eureka.png[]
 
-=== 7.4 Eureka 中发现商品微服务
+=== 7.4 Eureka 中发现商品微服务 app-item
 之前我们在订单系统中是将商品微服务的地址进行了硬编码，现在，由于已经将商品服务注册到 Eureka 中，所以，只需要从 Eureka 中发现服务即可。
 
 想要从 Eureka 中发现服务，需要先将 service-order 成功注册到 eureka，如下图是成功注册后的截图。
@@ -1461,7 +1468,7 @@ public OkHttpClient okHttpClient() {
 ====== WebClient
 [source,java]
 ----
-// 配置负载均衡的 WebClient.Builder
+// 配置负载均衡的 WebClient.Builder，注意这里要改成 Builder 的形式才可以
 @Bean
 @LoadBalanced // new -> 使用负载均衡
 public WebClient.Builder loadBalancedWebClientBuilder() {
@@ -4427,17 +4434,7 @@ feign:
         enabled: true
 ----
 
-== 10. 服务保护 Sentinel
-
-
-=== docker 开启 sentinel-dashboard
-image::img/sentinel_dashboard186.png[]
-
-image::img/sentinel_dashboard186_run.png[]
-
-image::img/sentinel_dashboard186_admin.png[]
-
-== 11. 服务网关 Gateway
+== 10. 服务网关 Gateway
 
 
 === Gateway - 网关功能
@@ -4491,6 +4488,9 @@ graph TD
 如下图创建模块 gateway
 
 image::img/gateway_create.png[,1000]
+
+测试访问网关
+http :8001/
 
 ==== file -> gateway/pom.xml
 
@@ -4668,6 +4668,10 @@ graph LR
     B -->|/api/order/**  | C[service-order]
     B -->|/api/product/**| D[service-product]
 ....
+
+
+测试：
+http :8001/api/order/201810300001
 
 ==== file -> gateway/src/main/resources/application-route.yml
 
@@ -4928,23 +4932,35 @@ Shift Shift -> classs -> routePredicateFactory 打开是个接口
 +
 image::img/gateway_predicate_category.png[]
 
+3. 断言类型解释
++
+image::img/gateway_predicate_category_1.png[]
+
+
+测试：
+http :8001/api/order/201810300001
+
 ==== file -> gateway/src/main/resources/application-route.yml
 
 
 ===== spring 长写法 - name args
+长短写法文档:
+https://cloud.spring.io/spring-cloud-gateway/reference/html/#fully-expanded-arguments
+
 [source,yaml]
 ....
 spring:
   cloud:
     gateway:
-      routes:
+      routes:  # IDEA中点击可以查看属性定义
         - id: order-route
           uri: lb://app-order
           # -- 长写法 --
           predicates:
             - name: Path
-              args:
+              args:  # IDEA 中按 Shift Shift -> classes -> PathRoutePredicateFactory 可发现定义了下面两个属性
                 patterns: /api/order/**
+                matchTrailingSlash: true  # 默认 true,是否匹配最后的 /
           # -- 长写法结束 --
           order: 1
 
@@ -4965,13 +4981,207 @@ spring:
 order: 控制路由的匹配顺序。默认是从上到下的顺序。
 
 === Gateway - 断言 - Query
+测试可以放行到
+http :8001/search?q=haha
+
+其它的则不通报 404:
+http :8001/search?q=wowo
+
+NOTE: 用浏览器则可以看到网页的渲染内容。
+
+==== file -> gateway/src/main/resources/application-route.yml
 
 
-=== Gateway - 断言 - 自定义断言工厂
+===== Query 请求参数
+# 兜底路由
+- id: bing-route
+  uri: https://cn.bing.com/
+  predicates:
+    - name: Path
+      args:
+        patterns: /search
+    - name: Query
+      args:  # # IDEA 中按 Shift Shift -> classes -> QueryRoutePredicateFactory 可发现定义了下面两个属性
+        param: q
+        regexp: haha
+  order: 3
 
+所有的断言都匹配才能放行。
+
+=== Gateway - 断言 - 自定义断言工厂（高级）
+本课件忽略！可以参考该视频去实现:
+https://www.bilibili.com/video/BV1UJc2ezEFU?spm_id_from=333.788.player.switch&vd_source=392e2829ea8e40de989be86888026747&p=57
 
 === Gateway - 过滤器 - 基本使用
+过滤器工厂名
+https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories
 
+image::img/gateway_filter_1.png[,800]
+
+常用的过滤器工厂 rewritepath
+https://cloud.spring.io/spring-cloud-gateway/reference/html/#the-rewritepath-gatewayfilter-factory
+
+因为前面我们在网关的配置中都加了 /api，
+这样在每个微服务中都需要加 /api，如果微服务多了，就会冗余，且很麻烦，
+下面我们使用过滤器来简化该操作。
+
+==== file -> gateway/src/main/resources/application.yml
+****
+name 和 instance 两者都有重要作用，缺一不可：
+
+- spring.application.name：服务的逻辑名称，用于服务发现和负载均衡
+- eureka.instance 配置：实例的网络地址，用于实际通信
+
+即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。
+****
+
+===== logging --New Added-- 为了调试增加日志
+[source,yaml]
+----
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway.route: TRACE
+    org.springframework.cloud.gateway.handler: DEBUG
+    reactor.netty.http.client: DEBUG
+    reactor.netty.http.server: DEBUG
+----
+
+==== file -> gateway/src/main/resources/application-route.yml
+
+
+===== spring
+[source,yaml]
+....
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: order-route
+          uri: lb://app-order
+          # -- 长写法 --
+          predicates:
+            - name: Path
+              args:
+                patterns: /api/order/**
+          # -- 长写法结束 --
+          order: 1
+          filters:  # /api/a/b -> /a/b  <1>
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
+        - id: item-route
+          uri: lb://app-item
+          predicates:
+            - Path=/api/item/**
+          order: 2
+          filters:  # 同上
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+        @others
+....
+
+order: 控制路由的匹配顺序。默认是从上到下的顺序。
+
+<1> filter 中 RewritePath 的作用是将请求路径进行重写。具体来说，它将 /api/ 开头的路径重写为去掉 /api/ 前缀后的路径。
++
+* /api/?：匹配以 /api/ 开头的路径，? 表示 / 是可选的。
+* (?<segment>.*)：这是一个捕获组，捕获 /api/ 之后的所有内容，命名为 segment。
+* , /$\{segment}：这是替换后的路径，/$\{segment} 表示将捕获的 segment 替换到新的路径中。
+* 假设请求路径为 /api/a/b，RewritePath 会将其重写为 /a/b。
+
+==== file -> service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
+
+
+===== class OrderController -- New Added -- @RequestMapping("/api/order")
+[source,java]
+----
+/**
+ * 订单控制器
+ * 处理订单相关的HTTP请求
+ */
+// @RequestMapping("/api")  // -- 不要了
+@RestController
+public class OrderController {
+
+    // 注入订单服务
+    @Autowired
+    private OrderService orderService;
+
+    /**
+     * 根据订单ID查询订单信息
+     *
+     * @param orderId 订单ID
+     * @return Order 订单信息
+     */
+    @GetMapping(value = "/order/{orderId}")
+    public Order queryOrderById(@PathVariable("orderId") String orderId) throws IOException {
+        return orderService.queryOrderById(orderId);
+    }
+}
+----
+
+==== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
+
+
+===== public class ItemController -- New Added -- @RequestMapping("/api/item")
+[source,java]
+----
+// @RequestMapping("/api")  // 不要了
+@RestController
+public class ItemController {
+
+    @Autowired
+    private ItemService itemService;
+    
+    @Value("${server.port}")
+    private int serverPort;
+
+    private static final Logger logger = Logger.getLogger(
+                         ItemController.class.getName());
+    /**
+     * 对外提供接口服务，查询商品信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/item/{id}")
+    public Item queryItemById(@PathVariable("id") Long id,
+                              HttpServletRequest request  // -- New Added Start --
+    ){
+        String header = request.getHeader("X-Token");
+        System.out.println("header token = " + header);
+        // -- New Added End --
+
+        // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
+        // logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+        System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
+
+        if (id == -1) {
+            System.out.println("=== 触发异常测试，ID 为 -1 ===");
+            throw new RuntimeException("服务内部错误");
+        }
+        return this.itemService.queryItemById(id);  // 正常返回
+    }
+}
+----
+
+==== file -> service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java
+[source,java]
+----
+package com.tjise.serviceorder.client;
+
+import com.tjise.serviceorder.pojo.Item;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+// 要访问的在 Eureka 中的服务名，并指定实现该接口的降级类名
+@FeignClient(name = "app-item", fallback = ItemFallback.class)
+public interface ItemFeignClient {
+    // @GetMapping("/api/item/{id}")  // 不要了
+    @GetMapping("/item/{id}")
+    Item queryItemById(@PathVariable("id") Long id);
+}
+----
 
 === Gateway - 过滤器 - 默认filter
 
@@ -4995,6 +5205,16 @@ order: 控制路由的匹配顺序。默认是从上到下的顺序。
 
 === Gateway - 总结
 
+
+== 11. 服务保护 Sentinel
+
+
+=== docker 开启 sentinel-dashboard
+image::img/sentinel_dashboard186.png[]
+
+image::img/sentinel_dashboard186_run.png[]
+
+image::img/sentinel_dashboard186_admin.png[]
 
 == 12. 分布式事务 Seata
 

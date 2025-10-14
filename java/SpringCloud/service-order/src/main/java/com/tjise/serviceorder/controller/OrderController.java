@@ -1,8 +1,8 @@
 //@+leo-ver=5-thin
-//@+node:swot.20251012202932.1: * @file service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
+//@+node:swot.20251014134428.1: * @file service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
 //@@language java
 //@+others
-//@+node:swot.20251012203322.1: ** @ignore-node import
+//@+node:swot.20251014134428.2: ** @ignore-node import
 package com.tjise.serviceorder.controller;
 
 import com.tjise.serviceorder.pojo.Order;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-//@+node:swot.20251012203351.1: ** class OrderController -- New Added -- @RequestMapping("/api/order")
+//@+node:swot.20251014134428.3: ** class OrderController -- New Added -- @RequestMapping("/api/order")
 //@+doc
 // [source,java]
 // ----
@@ -21,7 +21,7 @@ import java.io.IOException;
  * 订单控制器
  * 处理订单相关的HTTP请求
  */
-@RequestMapping("/api")  // -- New Added --
+// @RequestMapping("/api")  // -- 不要了
 @RestController
 public class OrderController {
 
@@ -35,7 +35,7 @@ public class OrderController {
      * @param orderId 订单ID
      * @return Order 订单信息
      */
-    @GetMapping(value = "order/{orderId}")
+    @GetMapping(value = "/order/{orderId}")
     public Order queryOrderById(@PathVariable("orderId") String orderId) throws IOException {
         return orderService.queryOrderById(orderId);
     }
@@ -43,9 +43,6 @@ public class OrderController {
 //@@language asciidoc
 //@+doc
 // ----
-//
-// httpie 测试:
-// http :8091/order/201810300001
 //@-others
 //@+doc
 //@-leo
