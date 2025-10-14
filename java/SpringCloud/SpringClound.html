@@ -2894,10 +2894,11 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <h3 id="_7_5_测试_service_item_被负载均衡分配的结果">7.5 测试 service-item 被负载均衡分配的结果</h3>
 <div class="paragraph">
 <p>下面代码使用 @Value("${server.port}") 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
-参数启动多个实例的情况下。这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。</p>
+参数启动多个实例的情况下也可以。
+这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。</p>
 </div>
 <div class="paragraph">
-<p>现在已经修改了 ItemController，在每次请求时会打印当前处理请求的端口号。以下是简单的负载均衡测试方法：</p>
+<p>如下面修改 ItemController，在每次请求时会打印当前处理请求的端口号。以下是简单的负载均衡测试方法：</p>
 </div>
 <div class="paragraph">
 <p>负载均衡测试步骤：</p>
@@ -2951,58 +2952,46 @@ Processing request on port: 8082 for item ID: 1</pre>
 <h4 id="_7_5_1_只在_service_item_的不同实例中打印端口调用信息">7.5.1 只在 service-item 的不同实例中打印端口调用信息</h4>
 <div class="sect4">
 <h5 id="_file_service_itemsrcmainjavacomtjiseserviceitemcontrolleritemcontroller_java_2">file &#8594; service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java</h5>
-<div class="paragraph">
-<p>package com.tjise.serviceitem.controller;</p>
-</div>
-<div class="paragraph">
-<p>import com.tjise.serviceitem.pojo.Item;
-import com.tjise.serviceitem.service.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;</p>
-</div>
-<div class="paragraph">
-<p>import java.util.logging.Logger;</p>
-</div>
-<div class="paragraph">
-<p>@RestController
-public class ItemController {</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>@Autowired
-private ItemService itemService;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>@Value("${server.port}")
-private int serverPort;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>private static final Logger logger = Logger.getLogger(ItemController.class.getName());</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    /**
-     * 对外提供接口服务，查询商品信息
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping(value = "item/{id}")
-    public Item queryItemById(@PathVariable("id") Long id) {
-        // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
-        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
-        System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
-        return this.itemService.queryItemById(id);
-    }
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem.controller</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem.pojo.Item</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceitem.service.ItemService</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Autowired</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.beans.factory.annotation.Value</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.GetMapping</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.PathVariable</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.bind.annotation.RestController</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.logging.Logger</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@RestController</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemController</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ItemService</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// --New Added--</span>
+<span class="tok-w">    </span><span class="tok-nd">@Value</span><span class="tok-p">(</span><span class="tok-s">&quot;${server.port}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">serverPort</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">Logger</span><span class="tok-w"> </span><span class="tok-n">logger</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Logger</span><span class="tok-p">.</span><span class="tok-na">getLogger</span><span class="tok-p">(</span><span class="tok-n">ItemController</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">());</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 对外提供接口服务，查询商品信息</span>
+<span class="tok-cm">     *</span>
+<span class="tok-cm">     * @param id</span>
+<span class="tok-cm">     * @return</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nd">@GetMapping</span><span class="tok-p">(</span><span class="tok-n">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;item/{id}&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-nd">@PathVariable</span><span class="tok-p">(</span><span class="tok-s">&quot;id&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。</span>
+<span class="tok-w">        </span><span class="tok-c1">// logger.info(&quot;Handling request on port: &quot; + serverPort + &quot; for item ID: &quot; + id);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;Processing request on port: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">serverPort</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; for item ID: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemById</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -3012,49 +3001,12 @@ private int serverPort;</pre>
 <div class="sect4">
 <h5 id="_file_service_ordersrcmainjavacomtjiseserviceorderserviceitemservice_java_7">file &#8594; service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java</h5>
 <div class="sect5">
-<h6 id="_import_2">import</h6>
-<div class="paragraph">
-<p>package com.tjise.serviceorder.service;</p>
-</div>
-<div class="paragraph">
-<p>import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tjise.serviceorder.pojo.Item;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;</p>
-</div>
-<div class="paragraph">
-<p>import java.io.IOException;</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_class_itemservice_3">class ItemService</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 根据商品 ID 查询商品信息：通过 REST 调用商品微服务获取商品详细数据</span>
-<span class="tok-nd">@Service</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ItemService</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 商品服务类</span>
-<span class="tok-w">    </span><span class="tok-nd">@Autowired</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">RestTemplate</span><span class="tok-w"> </span><span class="tok-n">restTemplate</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-c1">// 包含其他代码</span>
-<span class="tok-w">    </span><span class="tok-nd">@others</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect5">
 <h6 id="_方式一_resttemplate_queryitembyid_2">方式一: RestTemplate &#8594; queryItemById</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// 获取实际被选择的实例</span>
+<span class="tok-w">    </span><span class="tok-c1">// 获取实际被选择的实例，这里只是打印一下。实际上 restTemplate 会自动使用负载均衡获取实例的。</span>
 <span class="tok-w">    </span><span class="tok-n">ServiceInstance</span><span class="tok-w"> </span><span class="tok-n">serviceInstance</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">loadBalancerClient</span><span class="tok-p">.</span><span class="tok-na">choose</span><span class="tok-p">(</span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">serviceInstance</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-c1">// String targetUrl = serviceInstance.getUri().toString() + &quot;/item/&quot; + id;</span>
@@ -3081,41 +3033,6 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <td>app-item 是 service-item 在 Eureka 中注册的服务名。</td>
 </tr>
 </table>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_方式二_okhttpclient_queryitembyidwithokhttpclient_okhttpclient_本身不支持服务发现功能需要自己实现_2">方式二: OkHttpClient &#8594; queryItemByIdWithOkHttpClient &#8594; OkHttpClient 本身不支持服务发现功能，需要自己实现</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-nd">@Autowired</span>
-<span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">LoadBalancerClient</span><span class="tok-w"> </span><span class="tok-n">loadBalancerClient</span><span class="tok-p">;</span>
-
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithOkHttpClient</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// 使用 LoadBalancerClient 获取负载均衡的实例</span>
-<span class="tok-w">    </span><span class="tok-n">ServiceInstance</span><span class="tok-w"> </span><span class="tok-n">instance</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">loadBalancerClient</span><span class="tok-p">.</span><span class="tok-na">choose</span><span class="tok-p">(</span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">actualUrl</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;http://&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">instance</span><span class="tok-p">.</span><span class="tok-na">getHost</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;:&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">instance</span><span class="tok-p">.</span><span class="tok-na">getPort</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;/item/&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-n">Request</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Request</span><span class="tok-p">.</span><span class="tok-na">Builder</span><span class="tok-p">().</span><span class="tok-na">url</span><span class="tok-p">(</span><span class="tok-n">actualUrl</span><span class="tok-p">).</span><span class="tok-na">build</span><span class="tok-p">();</span>
-<span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Response</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">okHttpClient</span><span class="tok-p">.</span><span class="tok-na">newCall</span><span class="tok-p">(</span><span class="tok-n">request</span><span class="tok-p">).</span><span class="tok-na">execute</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 执行 OkHttpClient 调用</span>
-<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">json</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-p">.</span><span class="tok-na">body</span><span class="tok-p">().</span><span class="tok-na">string</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 读取响应体</span>
-<span class="tok-w">        </span><span class="tok-c1">// 使用注入的 objectMapper 反序列化成 JSON 字符串</span>
-<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">objectMapper</span><span class="tok-p">.</span><span class="tok-na">readValue</span><span class="tok-p">(</span><span class="tok-n">json</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_方式三_webclient_queryitembyidwithwebclient_2">方式三: WebClient    &#8594; queryItemByIdWithWebClient</h6>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemByIdWithWebClient</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">webClient</span><span class="tok-p">.</span><span class="tok-na">get</span><span class="tok-p">()</span>
-<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">uri</span><span class="tok-p">(</span><span class="tok-s">&quot;/{id}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span>
-<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">retrieve</span><span class="tok-p">()</span>
-<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">bodyToMono</span><span class="tok-p">(</span><span class="tok-n">Item</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">)</span>
-<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-na">block</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 在同步方法中使用 block</span>
-<span class="tok-p">}</span></code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -7327,6 +7244,46 @@ order: 3</p>
 这样在每个微服务中都需要加 /api，如果微服务多了，就会冗余，且很麻烦，
 下面我们使用过滤器来简化该操作。</p>
 </div>
+<div class="literalblock">
+<div class="title">测试能正常返回订单数据且有新添加的响应头:</div>
+<div class="content">
+<pre>http :8001/api/order/201810300001
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Tue, 14 Oct 2025 07:51:58 GMT
+X-Response-Red: Blue  ### -- 有了新添加的响应关
+transfer-encoding: chunked
+
+{
+    "createDate": "2025-10-14T06:11:43.104+00:00",
+    "orderDetails": [
+        {
+            "item": {
+                "desc": "商品描述1",
+                "id": 1,
+                "pic": "http://图片1",
+                "price": 1000,
+                "title": "商品1"
+            },
+            "orderId": "201810300001"
+        },
+        {
+            "item": {
+                "desc": "商品描述2",
+                "id": 2,
+                "pic": "http://图片2",
+                "price": 2000,
+                "title": "商品2"
+            },
+            "orderId": "201810300001"
+        }
+    ],
+    "orderId": "201810300001",
+    "updateDate": "2025-10-14T06:11:43.104+00:00",
+    "userId": 1
+}</pre>
+</div>
+</div>
 <div class="sect3">
 <h4 id="_file_gatewaysrcmainresourcesapplication_yml_3">file &#8594; gateway/src/main/resources/application.yml</h4>
 <div class="sidebarblock">
@@ -7383,8 +7340,11 @@ order: 3</p>
 <span class="tok-w">                </span><span class="tok-nt">patterns</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/api/order/**</span>
 <span class="tok-w">          </span><span class="tok-c1"># -- 长写法结束 --</span>
 <span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1</span>
+<span class="tok-w">          </span><span class="tok-c1"># --New Added Start--</span>
 <span class="tok-w">          </span><span class="tok-nt">filters</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># /api/a/b -&gt; /a/b  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">RewritePath=/api/(?&lt;segment&gt;.*), /$\{segment}</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">AddResponseHeader=X-Response-Red, Blue</span>
+<span class="tok-w">          </span><span class="tok-c1"># --New Added End--</span>
 
 <span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">item-route</span>
 <span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">lb://app-item</span>
@@ -7601,7 +7561,7 @@ order: 3</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-14 15:30:57 +0800
+Last updated 2025-10-14 16:05:06 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

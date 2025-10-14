@@ -1,8 +1,8 @@
 #@+leo-ver=5-thin
-#@+node:swot.20251014133126.1: * @file gateway/src/main/resources/application-route.yml
+#@+node:swot.20251014171931.1: * @file gateway/src/main/resources/application-route.yml
 #@@language yaml
 #@+others
-#@+node:swot.20251014133126.2: ** spring
+#@+node:swot.20251014171931.2: ** spring
 #@@tabwidth -2
 #@+doc
 # [source,yaml]
@@ -12,6 +12,12 @@
 spring:
   cloud:
     gateway:
+
+      # --New Added Start--
+      default-filters:
+        - AddResponseHeader=X-Response-Default-Red, Default-Blue
+      # --New Added End--
+
       routes:
         - id: order-route
           uri: lb://app-order
@@ -22,11 +28,9 @@ spring:
                 patterns: /api/order/**
           # -- 长写法结束 --
           order: 1
-          # --New Added Start--
           filters:  # /api/a/b -> /a/b  <1>
             - RewritePath=/api/(?<segment>.*), /$\{segment}
             - AddResponseHeader=X-Response-Red, Blue
-          # --New Added End--
 
         - id: item-route
           uri: lb://app-item
@@ -36,7 +40,7 @@ spring:
           filters:  # 同上
             - RewritePath=/api/(?<segment>.*), /$\{segment}
         #@+others
-        #@+node:swot.20251014133126.3: *3* @ignore-node Query 请求参数
+        #@+node:swot.20251014171931.3: *3* @ignore-node Query 请求参数
         # 兜底路由
         - id: bing-route
           uri: https://cn.bing.com/

@@ -1628,9 +1628,10 @@ public Order queryOrderById(String orderId) throws IOException {
 
 === 7.5 测试 service-item 被负载均衡分配的结果
 下面代码使用 @Value("${server.port}") 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
-参数启动多个实例的情况下。这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。
+参数启动多个实例的情况下也可以。
+这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。
 
-现在已经修改了 ItemController，在每次请求时会打印当前处理请求的端口号。以下是简单的负载均衡测试方法：
+如下面修改 ItemController，在每次请求时会打印当前处理请求的端口号。以下是简单的负载均衡测试方法：
 
 负载均衡测试步骤：
 
@@ -1658,6 +1659,8 @@ public Order queryOrderById(String orderId) throws IOException {
 
 
 ===== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
+[source,java]
+----
 package com.tjise.serviceitem.controller;
 
 import com.tjise.serviceitem.pojo.Item;
@@ -1676,6 +1679,7 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
     
+    // --New Added--
     @Value("${server.port}")
     private int serverPort;
 
@@ -1690,11 +1694,12 @@ public class ItemController {
     @GetMapping(value = "item/{id}")
     public Item queryItemById(@PathVariable("id") Long id) {
         // 增加了日志打印功能，方便查看是哪个 service-item 提供的服务。
-        logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
+        // logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
         System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
         return this.itemService.queryItemById(id);
     }
 }
+----
 
 ==== 7.5.2 在 service-order 中集中打印负载均衡端口调用信息
 
@@ -1702,42 +1707,12 @@ public class ItemController {
 ===== file -> service-order/src/main/java/com/tjise/serviceorder/service/ItemService.java
 
 
-====== import
-package com.tjise.serviceorder.service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tjise.serviceorder.pojo.Item;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import java.io.IOException;
-
-====== class ItemService
-[source,java]
-----
-// 根据商品 ID 查询商品信息：通过 REST 调用商品微服务获取商品详细数据
-@Service
-public class ItemService {  // 商品服务类
-    @Autowired
-    private RestTemplate restTemplate;
-    // 包含其他代码
-    @others
-}
-----
-
 ====== 方式一: RestTemplate -> queryItemById
 [source,java]
 ----
 public Item queryItemById(Long id) {
 
-    // 获取实际被选择的实例
+    // 获取实际被选择的实例，这里只是打印一下。实际上 restTemplate 会自动使用负载均衡获取实例的。
     ServiceInstance serviceInstance = loadBalancerClient.choose("app-item");
     if (serviceInstance != null) {
         // String targetUrl = serviceInstance.getUri().toString() + "/item/" + id;
@@ -1758,37 +1733,6 @@ public Item queryItemById(Long id) {
 ----
 
 <1> app-item 是 service-item 在 Eureka 中注册的服务名。
-
-====== 方式二: OkHttpClient -> queryItemByIdWithOkHttpClient -> OkHttpClient 本身不支持服务发现功能，需要自己实现
-[source,java]
-----
-@Autowired
-private LoadBalancerClient loadBalancerClient;
-
-public Item queryItemByIdWithOkHttpClient(Long id) throws IOException {
-    // 使用 LoadBalancerClient 获取负载均衡的实例
-    ServiceInstance instance = loadBalancerClient.choose("app-item");
-    String actualUrl = "http://" + instance.getHost() + ":" + instance.getPort() + "/item/" + id;
-    Request request = new Request.Builder().url(actualUrl).build();
-    try (Response response = okHttpClient.newCall(request).execute()) {  // 执行 OkHttpClient 调用
-        String json = response.body().string();  // 读取响应体
-        // 使用注入的 objectMapper 反序列化成 JSON 字符串
-        return objectMapper.readValue(json, Item.class);
-    }
-}
-----
-
-====== 方式三: WebClient    -> queryItemByIdWithWebClient
-[source,java]
-----
-public Item queryItemByIdWithWebClient(Long id) {
-    return webClient.get()
-                    .uri("/{id}", id)
-                    .retrieve()
-                    .bodyToMono(Item.class)
-                    .block();  // 在同步方法中使用 block
-}
-----
 
 === 7.6 Eureka 添加用户认证
 在前面的示例中，我们可以看到不需要登录即可访问到 Eureka 服务，这样其实是不安全的。
@@ -5025,6 +4969,45 @@ https://cloud.spring.io/spring-cloud-gateway/reference/html/#the-rewritepath-gat
 这样在每个微服务中都需要加 /api，如果微服务多了，就会冗余，且很麻烦，
 下面我们使用过滤器来简化该操作。
 
+.测试能正常返回订单数据且有新添加的响应头:
+....
+http :8001/api/order/201810300001
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Tue, 14 Oct 2025 07:51:58 GMT
+X-Response-Red: Blue  ### -- 有了新添加的响应关
+transfer-encoding: chunked
+
+{
+    "createDate": "2025-10-14T06:11:43.104+00:00",
+    "orderDetails": [
+        {
+            "item": {
+                "desc": "商品描述1",
+                "id": 1,
+                "pic": "http://图片1",
+                "price": 1000,
+                "title": "商品1"
+            },
+            "orderId": "201810300001"
+        },
+        {
+            "item": {
+                "desc": "商品描述2",
+                "id": 2,
+                "pic": "http://图片2",
+                "price": 2000,
+                "title": "商品2"
+            },
+            "orderId": "201810300001"
+        }
+    ],
+    "orderId": "201810300001",
+    "updateDate": "2025-10-14T06:11:43.104+00:00",
+    "userId": 1
+}
+....
+
 ==== file -> gateway/src/main/resources/application.yml
 ****
 name 和 instance 两者都有重要作用，缺一不可：
@@ -5066,8 +5049,11 @@ spring:
                 patterns: /api/order/**
           # -- 长写法结束 --
           order: 1
+          # --New Added Start--
           filters:  # /api/a/b -> /a/b  <1>
             - RewritePath=/api/(?<segment>.*), /$\{segment}
+            - AddResponseHeader=X-Response-Red, Blue
+          # --New Added End--
 
         - id: item-route
           uri: lb://app-item
