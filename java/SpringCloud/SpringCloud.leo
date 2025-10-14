@@ -8769,6 +8769,45 @@ https://cloud.spring.io/spring-cloud-gateway/reference/html/#the-rewritepath-gat
 因为前面我们在网关的配置中都加了 /api，
 这样在每个微服务中都需要加 /api，如果微服务多了，就会冗余，且很麻烦，
 下面我们使用过滤器来简化该操作。
+
+.测试能正常返回订单数据且有新添加的响应头:
+....
+http :8001/api/order/201810300001
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Tue, 14 Oct 2025 07:51:58 GMT
+X-Response-Red: Blue  ### -- 有了新添加的响应关
+transfer-encoding: chunked
+
+{
+    "createDate": "2025-10-14T06:11:43.104+00:00",
+    "orderDetails": [
+        {
+            "item": {
+                "desc": "商品描述1",
+                "id": 1,
+                "pic": "http://图片1",
+                "price": 1000,
+                "title": "商品1"
+            },
+            "orderId": "201810300001"
+        },
+        {
+            "item": {
+                "desc": "商品描述2",
+                "id": 2,
+                "pic": "http://图片2",
+                "price": 2000,
+                "title": "商品2"
+            },
+            "orderId": "201810300001"
+        }
+    ],
+    "orderId": "201810300001",
+    "updateDate": "2025-10-14T06:11:43.104+00:00",
+    "userId": 1
+}
+....
 </t>
 <t tx="swot.20251012085023.1"></t>
 <t tx="swot.20251012085032.1"></t>
@@ -9410,8 +9449,11 @@ spring:
                 patterns: /api/order/**
           # -- 长写法结束 --
           order: 1
+          # --New Added Start--
           filters:  # /api/a/b -&gt; /a/b  &lt;1&gt;
             - RewritePath=/api/(?&lt;segment&gt;.*), /$\{segment}
+            - AddResponseHeader=X-Response-Red, Blue
+          # --New Added End--
 
         - id: item-route
           uri: lb://app-item

@@ -22,8 +22,11 @@ spring:
                 patterns: /api/order/**
           # -- 长写法结束 --
           order: 1
+          # --New Added Start--
           filters:  # /api/a/b -> /a/b  <1>
             - RewritePath=/api/(?<segment>.*), /$\{segment}
+            - AddResponseHeader=X-Response-Red, Blue
+          # --New Added End--
 
         - id: item-route
           uri: lb://app-item
