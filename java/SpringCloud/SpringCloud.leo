@@ -2244,7 +2244,7 @@ eureka:
 * mvn clean package
 * java -jar target/eureka-1.0-SNAPSHOT.jar
 
-. 可以直接在 IDEA 中运行启动类
+. #可以直接在 IDEA 中运行启动类#
 
 启动后访问 http://localhost:8761 即可看到 Eureka Server 的管理界面。
 
@@ -8698,9 +8698,14 @@ Shift Shift -&gt; classs -&gt; routePredicateFactory 打开是个接口
 +
 image::img/gateway_predicate_category.png[]
 
+3. 断言类型解释
++
+image::img/gateway_predicate_category_1.png[]
 
 </t>
-<t tx="swot.20251012084952.1"></t>
+<t tx="swot.20251012084952.1">@language asciidoc
+
+</t>
 <t tx="swot.20251012084959.1"></t>
 <t tx="swot.20251012085012.1">@language asciidoc
 </t>
