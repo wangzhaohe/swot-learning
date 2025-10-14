@@ -1030,8 +1030,7 @@ public WebClient webClient(ItemProperties properties) {
 ----
 
 == 7. 引入微服务注册、发现机制
-* 问题：商品微服务 ip 发生变更则需要更改订单微服务的配置文件
-* 问题：商品微服务有多个，订单微服务该链接哪个？
+* 问题：商品微服务 ip 发生变更则需要更改订单微服务的配置文件，如果商品微服务有多个，订单微服务该链接哪个？
 
 从而引入微服务注册、发现机制，如下。
 
@@ -1039,7 +1038,7 @@ image::img/service_register.png[,640]
 
 1. 服务提供者将服务注册到注册中心
 2. 服务消费者通过注册中心查找服务
-3. 查找到服务后进行调用（这里就是无需硬编码 url 的解决方案）
+3. 查找到服务后进行调用（这里就是无需硬编码 url 的解决方案，取服务名即可）
 4. 服务的消费者与服务注册中心保持心跳连接，一旦服务提供者的地址发生变更时，注册中心会通知服务消费者
 
 === 7.1 Eureka 介绍
@@ -1049,9 +1048,9 @@ Eureka 是 Netfix 开源的服务发现组件，本身是一个基于 REST 的�
 
 * Eureka Client 是一个 java 客户端，用于简化与 Eureka Server 的交互，客户端同时也有一个内置的、使用轮询(round-robin)负载算法的负载均衡器。
 
-* 在应用启动后，将会向 Eureka Server 发送心跳,默认周期为 30 秒，如果 Eureka Server 在多个心跳周期内没有接收到某个节点的心跳，Eureka Server 将会从服务注册表中把这个服务节点移除(默认90秒)。
+* 在应用启动后，将会向 Eureka Server 发送心跳，默认周期为 30 秒，如果 Eureka Server 在多个心跳周期内没有接收到某个节点的心跳，Eureka Server 将会从服务注册表中把这个服务节点移除(默认90秒)。
 
-* Eureka Server 之间通过复制的方式完成数据的同步，Eureka 还提供了客户端缓存机制，即使所有的 Eureka Server 都挂掉，客户端依然可以利用缓存中的信息消费其他服务的 API。
+* 多个 Eureka Server 之间通过复制的方式完成数据的同步，Eureka 还提供了客户端缓存机制，即使所有的 Eureka Server 都挂掉，客户端依然可以利用缓存中的信息消费其他服务的 API。
 
 综上，Eureka 通过心跳检查、客户端缓存等机制，确保了系统的高可用性、灵活性和可伸缩性。
 
@@ -1076,7 +1075,7 @@ image::img/create_eureka_module.png[,800]
 </project>
 ....
 
-===== properties 配置项目属性：Java 版本、Spring Boot 和 Spring Cloud 版本
+===== 1 properties 配置项目属性：Java 版本、Spring Boot 和 Spring Cloud 版本
 [source,scss]
 ....
 <properties>
@@ -1089,7 +1088,7 @@ image::img/create_eureka_module.png[,800]
 </properties>
 ....
 
-===== dependencyManagement 依赖管理：导入 Spring Boot 和 Spring Cloud 的依赖管理
+===== 2 dependencyManagement 依赖管理：导入 Spring Boot 和 Spring Cloud 的依赖管理
 [source,scss]
 ....
 <dependencyManagement>
@@ -1102,7 +1101,7 @@ image::img/create_eureka_module.png[,800]
             <type>pom</type>
             <scope>import</scope>
         </dependency>
-        <!-- Spring Cloud依赖管理 -->
+        <!-- Spring Cloud 依赖管理 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-dependencies</artifactId>
@@ -1114,7 +1113,7 @@ image::img/create_eureka_module.png[,800]
 </dependencyManagement>
 ....
 
-===== dependencies 项目依赖：添加 Eureka Server 依赖
+===== 3 dependencies 项目依赖：添加 Eureka Server 依赖
 [source,scss]
 ....
 <dependencies>
@@ -1126,7 +1125,7 @@ image::img/create_eureka_module.png[,800]
 </dependencies>
 ....
 
-===== plugins 构建配置：添加 Spring Boot Maven 插件
+===== 4 plugins 构建配置：添加 Spring Boot Maven 插件
 [source,scss]
 ....
 <build>
@@ -1142,6 +1141,8 @@ image::img/create_eureka_module.png[,800]
 ....
 
 ==== file -> eureka/src/main/java/com/tjise/eureka/EurekaApplication.java
+[source,java]
+----
 package com.tjise.eureka;
 
 import org.springframework.boot.SpringApplication;
@@ -1161,6 +1162,7 @@ public class EurekaApplication {
         SpringApplication.run(EurekaApplication.class, args);
     }
 }
+----
 
 ==== file -> eureka/src/main/resources/application.yml
 server:

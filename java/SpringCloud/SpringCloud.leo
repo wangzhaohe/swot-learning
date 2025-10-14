@@ -135,10 +135,10 @@
 <v t="swot.20250916133305.1"><vh>7.1 Eureka 介绍</vh></v>
 <v t="swot.20250916134236.1"><vh>7.2 Eureka Server 的创建</vh>
 <v t="swot.20250916141123.1"><vh>file -&gt; eureka/pom.xml</vh>
-<v t="swot.20250916152133.1"><vh>properties 配置项目属性：Java 版本、Spring Boot 和 Spring Cloud 版本</vh></v>
-<v t="swot.20250916152144.1"><vh>dependencyManagement 依赖管理：导入 Spring Boot 和 Spring Cloud 的依赖管理</vh></v>
-<v t="swot.20250916152233.1"><vh>dependencies 项目依赖：添加 Eureka Server 依赖</vh></v>
-<v t="swot.20250916152243.1"><vh>plugins 构建配置：添加 Spring Boot Maven 插件</vh></v>
+<v t="swot.20250916152133.1"><vh>1 properties 配置项目属性：Java 版本、Spring Boot 和 Spring Cloud 版本</vh></v>
+<v t="swot.20250916152144.1"><vh>2 dependencyManagement 依赖管理：导入 Spring Boot 和 Spring Cloud 的依赖管理</vh></v>
+<v t="swot.20250916152233.1"><vh>3 dependencies 项目依赖：添加 Eureka Server 依赖</vh></v>
+<v t="swot.20250916152243.1"><vh>4 plugins 构建配置：添加 Spring Boot Maven 插件</vh></v>
 </v>
 <v t="swot.20250916155249.1"><vh>file -&gt; eureka/src/main/java/com/tjise/eureka/EurekaApplication.java</vh></v>
 <v t="swot.20250916160550.1"><vh>file -&gt; eureka/src/main/resources/application.yml</vh></v>
@@ -2051,8 +2051,7 @@ public WebClient webClient(ItemProperties properties) {
 
 </t>
 <t tx="swot.20250916132736.1">@language asciidoc
-* 问题：商品微服务 ip 发生变更则需要更改订单微服务的配置文件
-* 问题：商品微服务有多个，订单微服务该链接哪个？
+* 问题：商品微服务 ip 发生变更则需要更改订单微服务的配置文件，如果商品微服务有多个，订单微服务该链接哪个？
 
 从而引入微服务注册、发现机制，如下。
 
@@ -2060,7 +2059,7 @@ image::img/service_register.png[,640]
 
 1. 服务提供者将服务注册到注册中心
 2. 服务消费者通过注册中心查找服务
-3. 查找到服务后进行调用（这里就是无需硬编码 url 的解决方案）
+3. 查找到服务后进行调用（这里就是无需硬编码 url 的解决方案，取服务名即可）
 4. 服务的消费者与服务注册中心保持心跳连接，一旦服务提供者的地址发生变更时，注册中心会通知服务消费者
 
 </t>
@@ -2071,9 +2070,9 @@ Eureka 是 Netfix 开源的服务发现组件，本身是一个基于 REST 的�
 
 * Eureka Client 是一个 java 客户端，用于简化与 Eureka Server 的交互，客户端同时也有一个内置的、使用轮询(round-robin)负载算法的负载均衡器。
 
-* 在应用启动后，将会向 Eureka Server 发送心跳,默认周期为 30 秒，如果 Eureka Server 在多个心跳周期内没有接收到某个节点的心跳，Eureka Server 将会从服务注册表中把这个服务节点移除(默认90秒)。
+* 在应用启动后，将会向 Eureka Server 发送心跳，默认周期为 30 秒，如果 Eureka Server 在多个心跳周期内没有接收到某个节点的心跳，Eureka Server 将会从服务注册表中把这个服务节点移除(默认90秒)。
 
-* Eureka Server 之间通过复制的方式完成数据的同步，Eureka 还提供了客户端缓存机制，即使所有的 Eureka Server 都挂掉，客户端依然可以利用缓存中的信息消费其他服务的 API。
+* 多个 Eureka Server 之间通过复制的方式完成数据的同步，Eureka 还提供了客户端缓存机制，即使所有的 Eureka Server 都挂掉，客户端依然可以利用缓存中的信息消费其他服务的 API。
 
 综上，Eureka 通过心跳检查、客户端缓存等机制，确保了系统的高可用性、灵活性和可伸缩性。
 </t>
@@ -2134,7 +2133,7 @@ image::img/create_eureka_module.png[,800]
             &lt;type&gt;pom&lt;/type&gt;
             &lt;scope&gt;import&lt;/scope&gt;
         &lt;/dependency&gt;
-        &lt;!-- Spring Cloud依赖管理 --&gt;
+        &lt;!-- Spring Cloud 依赖管理 --&gt;
         &lt;dependency&gt;
             &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
             &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
@@ -2180,7 +2179,11 @@ image::img/create_eureka_module.png[,800]
 @doc
 ....
 </t>
-<t tx="swot.20250916155249.1">@language java
+<t tx="swot.20250916155249.1">@doc
+[source,java]
+----
+@c
+@language java
 package com.tjise.eureka;
 
 import org.springframework.boot.SpringApplication;
@@ -2200,16 +2203,23 @@ public class EurekaApplication {
         SpringApplication.run(EurekaApplication.class, args);
     }
 }
+@doc
+----
+
 </t>
-<t tx="swot.20250916160550.1">@language python
+<t tx="swot.20250916160550.1">@doc
+[source,yaml]
+....
+@c
+@language yaml
 server:
-  port: 8761  # 1. Eureka Server端口设置为8761（默认端口）
+  port: 8761  # 1. Eureka Server 端口设置为 8761（默认端口）
 
 eureka:
   instance:
-    hostname: localhost  # 2. 设置主机名为localhost
+    hostname: localhost  # 2. 设置主机名为 localhost
   client:
-    register-with-eureka: false  # 3. Eureka Server不向自己注册
+    register-with-eureka: false  # 3. Eureka Server 不向自己注册
     fetch-registry: false        # 4. Eureka 自己不需要获取服务注册信息
     service-url:
       # 5. 设置 Eureka Server 的访问地址
@@ -2218,6 +2228,8 @@ eureka:
   server:
     enable-self-preservation: false  # 6. 关闭自我保护机制（开发环境建议关闭，但是会有红色警告提示，属于正常）
                                      # 设置成 false 后保证服务不可用时及时剔除相应的微服务，易测试。
+@doc
+....
 </t>
 <t tx="swot.20250917094025.1">@language asciidoc
 现在可以通过以下命令启动 Eureka Server：
@@ -2231,6 +2243,8 @@ eureka:
 . 或者先打包再运行
 * mvn clean package
 * java -jar target/eureka-1.0-SNAPSHOT.jar
+
+. 可以直接在 IDEA 中运行启动类
 
 启动后访问 http://localhost:8761 即可看到 Eureka Server 的管理界面。
 
