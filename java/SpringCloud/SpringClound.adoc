@@ -1915,6 +1915,7 @@ TIP: Eureka 集群自身的高可用是通过节点间对等复制实现的，�
 
 1. sudo vim /etc/hosts 增加 3 个主机名
 +
+.Windows、Linux、MacOS 都需要更改 hosts
 [source,shell]
 ----
 127.0.0.1 eureka1
@@ -2418,8 +2419,10 @@ Transfer-Encoding: chunked
 
 image::img/avalanche.png[,600]
 
+下面我们使用 Resilience4j 依赖，来解决服务雪崩效应。
+
 === Resilience4j 快速入门
-IMPORTANT: 我们是启了负载均衡的，所以不能使用注解的方式来使用 queryItemByIdFallback，会被负载均衡给拦截掉。
+IMPORTANT: 提前说明一下，我们是 #启了负载均衡# 的，所以 #不能使用注解# 的方式来使用 queryItemByIdFallback, 会被负载均衡给拦截掉。
 只能使用手动通过 circuitBreakerRegistry 的方式来启用断路器 Resilience4j，这点要注意了。因为通过多次调试发现，Resilience4j 不起作用的原因就在这儿了。
 
 ==== file -> service-order/pom.xml
@@ -2431,6 +2434,7 @@ IMPORTANT: 我们是启了负载均衡的，所以不能使用注解的方式来
 <dependency>
     <groupId>io.github.resilience4j</groupId>
     <artifactId>resilience4j-spring-boot2</artifactId>
+    <!-- 兼容 Spring Boot 2.7.18 -->
     <version>1.7.0</version>
 </dependency>
 ....
@@ -2479,8 +2483,8 @@ resilience4j:
     instances:
       # OrderService 这个名称是在代码中创建 CircuitBreaker 实例时指定的标识符，配置中的名称必须与代码中的名称完全一致才能生效。
       OrderService:
-        sliding-window-size: 5                  # 需要 5次调用来计算失败率
-        failure-rate-threshold: 50              # 50% 失败率才跳闸
+        sliding-window-size: 5                  # 需要 5 次调用来计算失败率
+        failure-rate-threshold: 50              # 大于等于 50% 失败率才跳闸
         wait-duration-in-open-state: 10s        # 10 秒后进入半开状态
         permitted-number-of-calls-in-half-open-state: 2     # 半开状态允许 2 次调用
         sliding-window-type: COUNT_BASED        # 基于调用次数
@@ -2499,7 +2503,7 @@ NOTE: 实际生产要宽松一些的。
 [cols="1,1,1",options="header"]
 |===
 | 场景    | 测试配置 | 生产配置
-| 窗口大小 | 5 次调用 | 100次调用
+| 窗口大小 | 5 次调用 | 100 次调用
 | 故障阈值 | 50%     | 75%
 | 恢复时间 | 10 秒   | 60秒
 | 目的    | 快速验证 | 稳定运行
@@ -2536,7 +2540,9 @@ public Item queryItemByIdWithCircuitBreaker(Long id) {
     System.out.println("=== 断路器调用次数: " + circuitBreaker.getMetrics().getNumberOfBufferedCalls() + " ===");
 
     try {
-        Item result = circuitBreaker.executeSupplier(() -> itemService.queryItemByIdWithWebClient(id));
+        Item result = circuitBreaker.executeSupplier(
+            () -> itemService.queryItemByIdWithWebClient(id)
+        );
         System.out.println("=== WebClient 调用成功 ===");
         return result;
     } catch (Exception e) {
@@ -5268,13 +5274,119 @@ spring cloud gateway GlobalFilter 与 default-filters 的使用区别。
 
 * 修改特定路由的请求/响应（如添加特定头、重写路径）、为特定路由设置限流 这类与业务路由紧密相关的逻辑，使用 default-filters 在配置文件中声明，使得路由配置更加清晰和易于管理。
 
-=== Gateway - 过滤器 - 自定义过滤器工厂
+官网文档:
+https://cloud.spring.io/spring-cloud-gateway/reference/html/#global-filters
 
+我们来做一个功能，计算一个请求响应的时间。
+
+测试:
+http :8001/api/order/201810300001
+
+.gateway 服务端打印测试结果
+....
+2025-10-15 11:53:07.163  INFO 79701 --- [ctor-http-nio-3] c.t.g.filter.ResponseTimeGlobalFilter    : 请求『http://localhost:8001/api/order/201810300001』开始：时间：1760500387163
+2025-10-15 11:53:07.169 DEBUG 79701 --- [ctor-http-nio-3] r.netty.http.client.HttpClientConnect    : [f5090559-1, L:/127.0.0.1:63650 - R:/127.0.0.1:8091] Handler is being applied: {uri=http://127.0.0.1:8091/order/201810300001, method=GET}
+2025-10-15 11:53:07.184 DEBUG 79701 --- [ctor-http-nio-3] r.n.http.client.HttpClientOperations     : [f5090559-1, L:/127.0.0.1:63650 - R:/127.0.0.1:8091] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 200 
+Content-Type: <filtered>
+Transfer-Encoding: <filtered>
+Date: <filtered>
+2025-10-15 11:53:07.184  INFO 79701 --- [ctor-http-nio-3] c.t.g.filter.ResponseTimeGlobalFilter    : 请求『http://localhost:8001/api/order/201810300001』结束：时间：1760500387184，耗时：21ms
+....
+
+==== file -> gateway/src/main/java/com/tjise/gateway/filter/ResponseTimeGlobalFilter.java
+package com.tjise.gateway.filter;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.Ordered;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+// 全局 filter 只需要放在 IOC Bean 容器中即可，不用再注入。
+@Component
+@Slf4j
+public class ResponseTimeGlobalFilter implements GlobalFilter, Ordered {
+
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
+        ServerHttpResponse response = exchange.getResponse();
+        String uri = request.getURI().toString();
+        long start= System.currentTimeMillis();
+        log.info("请求『{}』开始：时间：{}", uri, start);
+
+        Mono<Void> filter = chain.filter(exchange)   // 放行请求
+                .doFinally((result)->{      // 响应式编程的异步链式调用
+                    long end = System.currentTimeMillis();
+                    log.info("请求『{}』结束：时间：{}，耗时：{}ms", uri, end, end-start);
+                });
+        return filter;
+    }
+
+    @Override
+    public int getOrder() {
+        return 0;  // 数字越小，优先级越高
+    }
+}
+
+=== Gateway - 过滤器 - 自定义过滤器工厂（高级）
+本课件忽略！可以参考该视频去实现:
+https://www.bilibili.com/video/BV1UJc2ezEFU?spm_id_from=333.788.videopod.episodes&vd_source=392e2829ea8e40de989be86888026747&p=61
 
 === Gateway - 扩展 - 全局跨域
+https://cloud.spring.io/spring-cloud-gateway/reference/html/#cors-configuration
+
+支持所有的微服务允许前端浏览器跨域。
 
 
-==== 常见问题
+.httpie 发送预检的正确返回
+.....
+http OPTIONS http://localhost:8001/api/order/201810300001 \
+  Origin:http://localhost:3000 \
+  Access-Control-Request-Method:GET \
+  Cookie:"sessionid=abc123"
+
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Methods: GET
+Access-Control-Allow-Origin: http://localhost:3000
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+content-length: 0
+....
+
+==== file -> gateway/src/main/resources/application-route.yml
+
+
+===== spring
+[source,yaml]
+....
+spring:
+  cloud:
+    gateway:
+      # 全局跨域
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns:
+              - "http://*"           # 所有 HTTP 域名
+              - "https://*"          # 所有 HTTPS 域名
+              - "http://localhost:*" # 本地开发环境
+              - "http://127.0.0.1:*" # 本地 IP
+              - "http://*.example.com" # 子域名匹配
+            allow-credentials: true
+            allowed-methods: "*"
+            allowed-headers: "*"
+      @others
+....
+
+==== 跨域常见问题
 [qanda]
 我知道在浏览器中使用 ajax 访问后端服务的 api 有跨域问题，想问在浏览器的地址栏直接输入后端的 api 会有跨域问题吗？::
 

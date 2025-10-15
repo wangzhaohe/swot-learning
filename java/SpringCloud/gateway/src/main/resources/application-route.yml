@@ -1,8 +1,8 @@
 #@+leo-ver=5-thin
-#@+node:swot.20251014171931.1: * @file gateway/src/main/resources/application-route.yml
+#@+node:swot.20251015135553.1: * @file gateway/src/main/resources/application-route.yml
 #@@language yaml
 #@+others
-#@+node:swot.20251014171931.2: ** spring
+#@+node:swot.20251015135553.2: ** spring
 #@@tabwidth -2
 #@+doc
 # [source,yaml]
@@ -12,12 +12,27 @@
 spring:
   cloud:
     gateway:
-
-      # --New Added Start--
+      # 全局跨域
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns:
+              - "http://*"           # 所有 HTTP 域名
+              - "https://*"          # 所有 HTTPS 域名
+              - "http://localhost:*" # 本地开发环境
+              - "http://127.0.0.1:*" # 本地 IP
+              - "http://*.example.com" # 子域名匹配
+            allow-credentials: true
+            allowed-methods: "*"
+            allowed-headers: "*"
+      #@+others
+      #@+node:swot.20251015135851.1: *3* @ignore-node default-filters
+      #@@language yaml
       default-filters:
         - AddResponseHeader=X-Response-Default-Red, Default-Blue
-      # --New Added End--
 
+      #@+node:swot.20251015135916.1: *3* @ignore-tree routes
+      #@@language yaml
       routes:
         - id: order-route
           uri: lb://app-order
@@ -40,7 +55,8 @@ spring:
           filters:  # 同上
             - RewritePath=/api/(?<segment>.*), /$\{segment}
         #@+others
-        #@+node:swot.20251014171931.3: *3* @ignore-node Query 请求参数
+        #@+node:swot.20251015135553.3: *4* Query 请求参数
+        #@@language yaml
         # 兜底路由
         - id: bing-route
           uri: https://cn.bing.com/
@@ -58,16 +74,20 @@ spring:
         # 所有的断言都匹配才能放行。
         #
         #@-others
+
+      #@@language asciidoc
+      #@+doc
+      # order: 控制路由的匹配顺序。默认是从上到下的顺序。
+      #
+      # <1> filter 中 RewritePath 的作用是将请求路径进行重写。具体来说，它将 /api/ 开头的路径重写为去掉 /api/ 前缀后的路径。
+      # +
+      # * /api/?：匹配以 /api/ 开头的路径，? 表示 / 是可选的。
+      # * (?<segment>.*)：这是一个捕获组，捕获 /api/ 之后的所有内容，命名为 segment。
+      # * , /$\{segment}：这是替换后的路径，/$\{segment} 表示将捕获的 segment 替换到新的路径中。
+      # * 假设请求路径为 /api/a/b，RewritePath 会将其重写为 /a/b。
+      #
+      #@-others
 #@+doc
 # ....
-#
-# order: 控制路由的匹配顺序。默认是从上到下的顺序。
-#
-# <1> filter 中 RewritePath 的作用是将请求路径进行重写。具体来说，它将 /api/ 开头的路径重写为去掉 /api/ 前缀后的路径。
-# +
-# * /api/?：匹配以 /api/ 开头的路径，? 表示 / 是可选的。
-# * (?<segment>.*)：这是一个捕获组，捕获 /api/ 之后的所有内容，命名为 segment。
-# * , /$\{segment}：这是替换后的路径，/$\{segment} 表示将捕获的 segment 替换到新的路径中。
-# * 假设请求路径为 /api/a/b，RewritePath 会将其重写为 /a/b。
 #@-others
 #@-leo

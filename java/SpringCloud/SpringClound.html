@@ -772,21 +772,13 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_gatewaysrcmainresourcesapplication_route_yml_6">file &#8594; gateway/src/main/resources/application-route.yml</a></li>
 </ul>
 </li>
-<li><a href="#_gateway_过滤器_globalfilter">Gateway - 过滤器 - GlobalFilter</a></li>
-<li><a href="#_gateway_过滤器_自定义过滤器工厂">Gateway - 过滤器 - 自定义过滤器工厂</a></li>
-<li><a href="#_gateway_扩展_全局跨域">Gateway - 扩展 - 全局跨域</a>
+<li><a href="#_gateway_过滤器_globalfilter">Gateway - 过滤器 - GlobalFilter</a>
 <ul class="sectlevel3">
-<li><a href="#_常见问题">常见问题</a></li>
+<li><a href="#_file_gatewaysrcmainjavacomtjisegatewayfilterresponsetimeglobalfilter_java">file &#8594; gateway/src/main/java/com/tjise/gateway/filter/ResponseTimeGlobalFilter.java</a></li>
 </ul>
 </li>
-<li><a href="#_gateway_总结">Gateway - 总结</a></li>
-<li><a href="#_11_服务保护_sentinel">11. 服务保护 Sentinel</a>
-<ul class="sectlevel2">
-<li><a href="#_docker_开启_sentinel_dashboard">docker 开启 sentinel-dashboard</a></li>
-</ul>
-</li>
-<li><a href="#_12_分布式事务_seata">12. 分布式事务 Seata</a></li>
-<li><a href="#_13_服务部署">13. 服务部署</a></li>
+<li><a href="#_gateway_过滤器_自定义过滤器工厂高级">Gateway - 过滤器 - 自定义过滤器工厂（高级）</a></li>
+<li><a href="#_gateway_扩展_全局跨域">Gateway - 扩展 - 全局跨域</a></li>
 </ul>
 </li>
 </ul>
@@ -3281,6 +3273,7 @@ Eureka 集群自身的高可用是通过节点间对等复制实现的，而基�
 <li>
 <p>sudo vim /etc/hosts 增加 3 个主机名</p>
 <div class="listingblock">
+<div class="title">Windows、Linux、MacOS 都需要更改 hosts</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="shell"><span></span><span class="tok-m">127</span>.0.0.1<span class="tok-w"> </span>eureka1
 <span class="tok-m">127</span>.0.0.1<span class="tok-w"> </span>eureka2
@@ -3942,6 +3935,9 @@ Transfer-Encoding: chunked
 <img src="img/avalanche.png" alt="avalanche" width="600">
 </div>
 </div>
+<div class="paragraph">
+<p>下面我们使用 Resilience4j 依赖，来解决服务雪崩效应。</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_resilience4j_快速入门">Resilience4j 快速入门</h3>
@@ -3952,7 +3948,7 @@ Transfer-Encoding: chunked
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-我们是启了负载均衡的，所以不能使用注解的方式来使用 queryItemByIdFallback，会被负载均衡给拦截掉。
+提前说明一下，我们是 <mark>启了负载均衡</mark> 的，所以 <mark>不能使用注解</mark> 的方式来使用 queryItemByIdFallback, 会被负载均衡给拦截掉。
 只能使用手动通过 circuitBreakerRegistry 的方式来启用断路器 Resilience4j，这点要注意了。因为通过多次调试发现，Resilience4j 不起作用的原因就在这儿了。
 </td>
 </tr>
@@ -3967,6 +3963,7 @@ Transfer-Encoding: chunked
 <pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">io</span><span class="tok-nc">.github.resilience4j</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">resilience4j-spring-boot2</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">兼容</span><span class="tok-w"> </span><span class="tok-nt">Spring</span><span class="tok-w"> </span><span class="tok-nt">Boot</span><span class="tok-w"> </span><span class="tok-nt">2</span><span class="tok-nc">.7.18</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
 <span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span><span class="tok-nt">1</span><span class="tok-nc">.7.0</span><span class="tok-o">&lt;/</span><span class="tok-nt">version</span><span class="tok-o">&gt;</span>
 <span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
 </div>
@@ -4023,8 +4020,8 @@ Transfer-Encoding: chunked
 <span class="tok-w">    </span><span class="tok-nt">instances</span><span class="tok-p">:</span>
 <span class="tok-w">      </span><span class="tok-c1"># OrderService 这个名称是在代码中创建 CircuitBreaker 实例时指定的标识符，配置中的名称必须与代码中的名称完全一致才能生效。</span>
 <span class="tok-w">      </span><span class="tok-nt">OrderService</span><span class="tok-p">:</span>
-<span class="tok-w">        </span><span class="tok-nt">sliding-window-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">5</span><span class="tok-w">                  </span><span class="tok-c1"># 需要 5次调用来计算失败率</span>
-<span class="tok-w">        </span><span class="tok-nt">failure-rate-threshold</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">50</span><span class="tok-w">              </span><span class="tok-c1"># 50% 失败率才跳闸</span>
+<span class="tok-w">        </span><span class="tok-nt">sliding-window-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">5</span><span class="tok-w">                  </span><span class="tok-c1"># 需要 5 次调用来计算失败率</span>
+<span class="tok-w">        </span><span class="tok-nt">failure-rate-threshold</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">50</span><span class="tok-w">              </span><span class="tok-c1"># 大于等于 50% 失败率才跳闸</span>
 <span class="tok-w">        </span><span class="tok-nt">wait-duration-in-open-state</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10s</span><span class="tok-w">        </span><span class="tok-c1"># 10 秒后进入半开状态</span>
 <span class="tok-w">        </span><span class="tok-nt">permitted-number-of-calls-in-half-open-state</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">2</span><span class="tok-w">     </span><span class="tok-c1"># 半开状态允许 2 次调用</span>
 <span class="tok-w">        </span><span class="tok-nt">sliding-window-type</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">COUNT_BASED</span><span class="tok-w">        </span><span class="tok-c1"># 基于调用次数</span>
@@ -4068,7 +4065,7 @@ Transfer-Encoding: chunked
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">窗口大小</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">5 次调用</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">100次调用</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100 次调用</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">故障阈值</p></td>
@@ -4121,7 +4118,9 @@ Transfer-Encoding: chunked
 <span class="tok-w">    </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== 断路器调用次数: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">getMetrics</span><span class="tok-p">().</span><span class="tok-na">getNumberOfBufferedCalls</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; ===&quot;</span><span class="tok-p">);</span>
 
 <span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">executeSupplier</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemByIdWithWebClient</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">circuitBreaker</span><span class="tok-p">.</span><span class="tok-na">executeSupplier</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">itemService</span><span class="tok-p">.</span><span class="tok-na">queryItemByIdWithWebClient</span><span class="tok-p">(</span><span class="tok-n">id</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;=== WebClient 调用成功 ===&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">result</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -7632,74 +7631,204 @@ transfer-encoding: chunked
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>官网文档:
+<a href="https://cloud.spring.io/spring-cloud-gateway/reference/html/#global-filters" class="bare">https://cloud.spring.io/spring-cloud-gateway/reference/html/#global-filters</a></p>
+</div>
+<div class="paragraph">
+<p>我们来做一个功能，计算一个请求响应的时间。</p>
+</div>
+<div class="paragraph">
+<p>测试:
+http :8001/api/order/201810300001</p>
+</div>
+<div class="literalblock">
+<div class="title">gateway 服务端打印测试结果</div>
+<div class="content">
+<pre>2025-10-15 11:53:07.163  INFO 79701 --- [ctor-http-nio-3] c.t.g.filter.ResponseTimeGlobalFilter    : 请求『http://localhost:8001/api/order/201810300001』开始：时间：1760500387163
+2025-10-15 11:53:07.169 DEBUG 79701 --- [ctor-http-nio-3] r.netty.http.client.HttpClientConnect    : [f5090559-1, L:/127.0.0.1:63650 - R:/127.0.0.1:8091] Handler is being applied: {uri=http://127.0.0.1:8091/order/201810300001, method=GET}
+2025-10-15 11:53:07.184 DEBUG 79701 --- [ctor-http-nio-3] r.n.http.client.HttpClientOperations     : [f5090559-1, L:/127.0.0.1:63650 - R:/127.0.0.1:8091] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 200
+Content-Type: &lt;filtered&gt;
+Transfer-Encoding: &lt;filtered&gt;
+Date: &lt;filtered&gt;
+2025-10-15 11:53:07.184  INFO 79701 --- [ctor-http-nio-3] c.t.g.filter.ResponseTimeGlobalFilter    : 请求『http://localhost:8001/api/order/201810300001』结束：时间：1760500387184，耗时：21ms</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainjavacomtjisegatewayfilterresponsetimeglobalfilter_java">file &#8594; gateway/src/main/java/com/tjise/gateway/filter/ResponseTimeGlobalFilter.java</h4>
+<div class="paragraph">
+<p>package com.tjise.gateway.filter;</p>
+</div>
+<div class="paragraph">
+<p>import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.Ordered;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;</p>
+</div>
+<div class="paragraph">
+<p>@Component
+@Slf4j
+public class ResponseTimeGlobalFilter implements GlobalFilter, Ordered {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>@Override
+public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    ServerHttpRequest request = exchange.getRequest();
+    ServerHttpResponse response = exchange.getResponse();
+    String uri = request.getURI().toString();
+    long start= System.currentTimeMillis();
+    log.info("请求『{}』开始：时间：{}", uri, start);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    Mono&lt;Void&gt; filter = chain.filter(exchange)   // 放行请求
+            .doFinally((result)-&gt;{      // 响应式编程的异步链式调用
+                long end = System.currentTimeMillis();
+                log.info("请求『{}』结束：时间：{}，耗时：{}ms", uri, end, end-start);
+            });
+    return filter;
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    @Override
+    public int getOrder() {
+        return 0;  // 数字越小，优先级越高
+    }
+}</pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_gateway_过滤器_自定义过滤器工厂">Gateway - 过滤器 - 自定义过滤器工厂</h3>
-
+<h3 id="_gateway_过滤器_自定义过滤器工厂高级">Gateway - 过滤器 - 自定义过滤器工厂（高级）</h3>
+<div class="paragraph">
+<p>本课件忽略！可以参考该视频去实现:
+<a href="https://www.bilibili.com/video/BV1UJc2ezEFU?spm_id_from=333.788.videopod.episodes&amp;vd_source=392e2829ea8e40de989be86888026747&amp;p=61" class="bare">https://www.bilibili.com/video/BV1UJc2ezEFU?spm_id_from=333.788.videopod.episodes&amp;vd_source=392e2829ea8e40de989be86888026747&amp;p=61</a></p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_gateway_扩展_全局跨域">Gateway - 扩展 - 全局跨域</h3>
-<div class="sect3">
-<h4 id="_常见问题">常见问题</h4>
-<div class="qlist qanda">
-<ol>
-<li>
-<p><em>我知道在浏览器中使用 ajax 访问后端服务的 api 有跨域问题，想问在浏览器的地址栏直接输入后端的 api 会有跨域问题吗？</em></p>
-<p>答：没有跨域问题。
+<div class="paragraph">
+<p><a href="https://cloud.spring.io/spring-cloud-gateway/reference/html/#cors-configuration" class="bare">https://cloud.spring.io/spring-cloud-gateway/reference/html/#cors-configuration</a></p>
+</div>
+<div class="paragraph">
+<p>支持所有的微服务允许前端浏览器跨域。</p>
+</div>
+<div class="literalblock">
+<div class="title">httpie 发送预检的正确返回</div>
+<div class="content">
+<pre>http OPTIONS http://localhost:8001/api/order/201810300001 \
+  Origin:http://localhost:3000 \
+  Access-Control-Request-Method:GET \
+  Cookie:"sessionid=abc123"
+
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Methods: GET
+Access-Control-Allow-Origin: http://localhost:3000
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+content-length: 0
+....
+
+==== file -&gt; gateway/src/main/resources/application-route.yml
+
+
+===== spring
+[source,yaml]
+....
+spring:
+  cloud:
+    gateway:
+      # 全局跨域
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns:
+              - "http://*"           # 所有 HTTP 域名
+              - "https://*"          # 所有 HTTPS 域名
+              - "http://localhost:*" # 本地开发环境
+              - "http://127.0.0.1:*" # 本地 IP
+              - "http://*.example.com" # 子域名匹配
+            allow-credentials: true
+            allowed-methods: "*"
+            allowed-headers: "*"
+      @others
+....
+
+==== 跨域常见问题
+[qanda]
+我知道在浏览器中使用 ajax 访问后端服务的 api 有跨域问题，想问在浏览器的地址栏直接输入后端的 api 会有跨域问题吗？::
+
+答：没有跨域问题。
 浏览器的“跨域限制”（即同源策略 + CORS 校验）只在前端脚本（JavaScript）发起网络请求时才会触发，
-比如通过 XMLHttpRequest、fetch()、axios 等方式发起的请求。</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_gateway_总结">Gateway - 总结</h3>
+比如通过 XMLHttpRequest、fetch()、axios 等方式发起的请求。
 
-</div>
-<div class="sect1">
-<h2 id="_11_服务保护_sentinel">11. 服务保护 Sentinel</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_docker_开启_sentinel_dashboard">docker 开启 sentinel-dashboard</h3>
-<div class="imageblock">
-<div class="content">
-<img src="img/sentinel_dashboard186.png" alt="sentinel dashboard186">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="img/sentinel_dashboard186_run.png" alt="sentinel dashboard186 run">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="img/sentinel_dashboard186_admin.png" alt="sentinel dashboard186 admin">
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_12_分布式事务_seata">12. 分布式事务 Seata</h2>
-<div class="sectionbody">
+=== Gateway - 总结
 
-</div>
-</div>
-<div class="sect1">
-<h2 id="_13_服务部署">13. 服务部署</h2>
-<div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<img src="img/mermaid-2025-10-12-105950.svg" alt="mermaid 2025 10 12 105950" width="818" height="688">
-</div>
+
+== 11. 服务保护 Sentinel
+
+
+=== docker 开启 sentinel-dashboard
+image::img/sentinel_dashboard186.png[]
+
+image::img/sentinel_dashboard186_run.png[]
+
+image::img/sentinel_dashboard186_admin.png[]
+
+== 12. 分布式事务 Seata
+
+
+== 13. 服务部署
+[mermaid, target=img/mermaid-2025-10-12-105950, format=svg]
+....
+flowchart TD
+
+    Client[客户端请求&lt;br/&gt;https://api.company.com]
+
+    subgraph NginxLayer [第一层: Nginx 静态负载均衡]
+        Nginx[Nginx&lt;br/&gt;基于配置文件的负载均衡]
+    end
+
+    subgraph GatewayLayer [第二层: Gateway 动态集群]
+        G1[Gateway 实例1]
+        G2[Gateway 实例2]
+        G3[Gateway 实例3]
+        %% 横向排列
+        G1 --&gt; G2 --&gt; G3
+    end
+
+    subgraph MicroserviceLayer [第三层: 微服务集群]
+        User[用户服务&lt;br&gt;192.168.1.10:8080&lt;br&gt;192.168.1.11:8081]
+        Order[订单服务&lt;br&gt;192.168.1.12:8082&lt;br&gt;192.168.1.13:8083]
+        Product[商品服务&lt;br&gt;192.168.1.14:8084]
+        %% 横向排列
+        User --&gt; Order --&gt; Product
+    end
+
+    Client --&gt; NginxLayer
+    NginxLayer --&gt; GatewayLayer
+    GatewayLayer --&gt; MicroserviceLayer
+....</pre>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-15 08:27:53 +0800
+Last updated 2025-10-15 14:27:15 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
