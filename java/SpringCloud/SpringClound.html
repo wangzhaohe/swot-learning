@@ -767,7 +767,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_service_ordersrcmainjavacomtjiseserviceorderclientitemfeignclient_java_4">file &#8594; service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java</a></li>
 </ul>
 </li>
-<li><a href="#_gateway_过滤器_默认filter">Gateway - 过滤器 - 默认filter</a></li>
+<li><a href="#_gateway_过滤器_默认filter_default_filters">Gateway - 过滤器 - 默认filter &#8594; default-filters</a>
+<ul class="sectlevel3">
+<li><a href="#_file_gatewaysrcmainresourcesapplication_route_yml_6">file &#8594; gateway/src/main/resources/application-route.yml</a></li>
+</ul>
+</li>
 <li><a href="#_gateway_过滤器_globalfilter">Gateway - 过滤器 - GlobalFilter</a></li>
 <li><a href="#_gateway_过滤器_自定义过滤器工厂">Gateway - 过滤器 - 自定义过滤器工厂</a></li>
 <li><a href="#_gateway_扩展_全局跨域">Gateway - 扩展 - 全局跨域</a>
@@ -2893,7 +2897,7 @@ import org.springframework.web.reactive.function.client.WebClient;</p>
 <div class="sect2">
 <h3 id="_7_5_测试_service_item_被负载均衡分配的结果">7.5 测试 service-item 被负载均衡分配的结果</h3>
 <div class="paragraph">
-<p>下面代码使用 @Value("${server.port}") 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
+<p>下面代码会使用 <code>@Value("${server.port}")</code> 可以获取到运行时的实际端口号，即使是在通过 Edit Configuration 传递 --server.port=8082 或 8083
 参数启动多个实例的情况下也可以。
 这是 Spring Boot 的一个强大功能，它会自动解析运行时的实际配置值。</p>
 </div>
@@ -3005,7 +3009,7 @@ Processing request on port: 8082 for item ID: 1</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-nf">queryItemById</span><span class="tok-p">(</span><span class="tok-n">Long</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
+<span class="tok-w">    </span><span class="tok-c1">// NOTE: service-order/src/main/java/com/tjise/serviceorder/service/OrderService.java 里面调用的是本方法才行。</span>
 <span class="tok-w">    </span><span class="tok-c1">// 获取实际被选择的实例，这里只是打印一下。实际上 restTemplate 会自动使用负载均衡获取实例的。</span>
 <span class="tok-w">    </span><span class="tok-n">ServiceInstance</span><span class="tok-w"> </span><span class="tok-n">serviceInstance</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">loadBalancerClient</span><span class="tok-p">.</span><span class="tok-na">choose</span><span class="tok-p">(</span><span class="tok-s">&quot;app-item&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">serviceInstance</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -3257,6 +3261,18 @@ Processing request on port: 8082 for item ID: 1</pre>
 </div>
 <div class="sect2">
 <h3 id="_7_7_eureka_集群高可用性">7.7 Eureka 集群（高可用性）</h3>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Eureka 集群自身的高可用是通过节点间对等复制实现的，而基于 Eureka 的应用服务负载均衡是由客户端组件（如 Ribbon/LoadBalancer）实现的。
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>前面的测试发现，Eureka 服务是一个单点服务，在生产环境就会出现单点故障，为了确保 Eureka 服务的高可用，需要搭建 Eureka 服务的集群。</p>
 </div>
@@ -3362,38 +3378,6 @@ Processing request on port: 8082 for item ID: 1</pre>
 <div class="sect3">
 <h4 id="_配置_eureka">配置 Eureka</h4>
 <div class="sect4">
-<h5 id="_file_eurekasrcmainresourcesapplication_peer2_yml">file &#8594; eureka/src/main/resources/application-peer2.yml</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
-<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8762</span>
-
-<span class="tok-nt">spring</span><span class="tok-p">:</span>
-<span class="tok-w">  </span><span class="tok-nt">application</span><span class="tok-p">:</span>
-<span class="tok-w">    </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">eureka-server-clustered</span>
-<span class="tok-w">  </span><span class="tok-nt">security</span><span class="tok-p">:</span>
-<span class="tok-w">    </span><span class="tok-nt">basic</span><span class="tok-p">:</span>
-<span class="tok-w">      </span><span class="tok-nt">enable</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
-<span class="tok-w">    </span><span class="tok-nt">user</span><span class="tok-p">:</span>
-<span class="tok-w">      </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
-<span class="tok-w">      </span><span class="tok-nt">password</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
-
-<span class="tok-nt">eureka</span><span class="tok-p">:</span>
-<span class="tok-w">  </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
-<span class="tok-w">    </span><span class="tok-nt">hostname</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">eureka2</span>
-<span class="tok-w">  </span><span class="tok-nt">client</span><span class="tok-p">:</span>
-<span class="tok-w">    </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
-<span class="tok-w">    </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
-<span class="tok-w">    </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
-<span class="tok-w">      </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@eureka1:8761/eureka/,http://root:root@eureka3:8763/eureka/</span>
-<span class="tok-w">  </span><span class="tok-nt">server</span><span class="tok-p">:</span>
-<span class="tok-w">    </span><span class="tok-nt">enable-self-preservation</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
-<span class="tok-w">    </span><span class="tok-c1"># Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。</span>
-<span class="tok-w">    </span><span class="tok-nt">eviction-interval-timer-in-ms</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10000</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
 <h5 id="_file_eurekasrcmainresourcesapplication_peer1_yml">file &#8594; eureka/src/main/resources/application-peer1.yml</h5>
 <div class="listingblock">
 <div class="content">
@@ -3418,6 +3402,38 @@ Processing request on port: 8082 for item ID: 1</pre>
 <span class="tok-w">    </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
 <span class="tok-w">    </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
 <span class="tok-w">      </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/</span>
+<span class="tok-w">  </span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">enable-self-preservation</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
+<span class="tok-w">    </span><span class="tok-c1"># Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。</span>
+<span class="tok-w">    </span><span class="tok-nt">eviction-interval-timer-in-ms</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10000</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_file_eurekasrcmainresourcesapplication_peer2_yml">file &#8594; eureka/src/main/resources/application-peer2.yml</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8762</span>
+
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">eureka-server-clustered</span>
+<span class="tok-w">  </span><span class="tok-nt">security</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">basic</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">enable</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">user</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
+<span class="tok-w">      </span><span class="tok-nt">password</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">root</span>
+
+<span class="tok-nt">eureka</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">instance</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">hostname</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">eureka2</span>
+<span class="tok-w">  </span><span class="tok-nt">client</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">register-with-eureka</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">fetch-registry</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-nt">service-url</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">defaultZone</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://root:root@eureka1:8761/eureka/,http://root:root@eureka3:8763/eureka/</span>
 <span class="tok-w">  </span><span class="tok-nt">server</span><span class="tok-p">:</span>
 <span class="tok-w">    </span><span class="tok-nt">enable-self-preservation</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
 <span class="tok-w">    </span><span class="tok-c1"># Eureka Server 的核心配置参数，用于控制服务失效实例的清理频率 10s。</span>
@@ -3458,7 +3474,7 @@ Processing request on port: 8082 for item ID: 1</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_反例_创建_nginx_容器实现访问_eureka_3_台服务器集群的负载均衡会引入_nginx_单点故障问题">反例: 创建 nginx 容器实现访问 Eureka 3 台服务器集群的负载均衡（会引入 nginx 单点故障问题）</h5>
+<h5 id="_反例_创建_nginx_容器实现访问_eureka_3_台服务器集群的负载均衡会引入_nginx_单点故障问题网关集群可以这样配置">反例: 创建 nginx 容器实现访问 Eureka 3 台服务器集群的负载均衡（会引入 nginx 单点故障问题），网关集群可以这样配置！！！</h5>
 <div class="listingblock">
 <div class="title">创建 nginx 容器</div>
 <div class="content">
@@ -7488,12 +7504,134 @@ transfer-encoding: chunked
 </div>
 </div>
 <div class="sect2">
-<h3 id="_gateway_过滤器_默认filter">Gateway - 过滤器 - 默认filter</h3>
+<h3 id="_gateway_过滤器_默认filter_default_filters">Gateway - 过滤器 - 默认filter &#8594; default-filters</h3>
+<div class="paragraph">
+<p>测试结果中增加了 X-Response-Default-Red: Default-Blue</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http :8001/api/order/201810300001
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Tue, 14 Oct 2025 09:36:07 GMT
+X-Response-Default-Red: Default-Blue
+X-Response-Red: Blue
+transfer-encoding: chunked
 
+{
+    "createDate": "2025-10-14T09:24:39.056+00:00",
+    "orderDetails": [
+        {
+            "item": {
+                "desc": "商品描述1",
+                "id": 1,
+                "pic": "http://图片1",
+                "price": 1000,
+                "title": "商品1"
+            },
+            "orderId": "201810300001"
+        },
+        {
+            "item": {
+                "desc": "商品描述2",
+                "id": 2,
+                "pic": "http://图片2",
+                "price": 2000,
+                "title": "商品2"
+            },
+            "orderId": "201810300001"
+        }
+    ],
+    "orderId": "201810300001",
+    "updateDate": "2025-10-14T09:24:39.056+00:00",
+    "userId": 1
+}</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainresourcesapplication_route_yml_6">file &#8594; gateway/src/main/resources/application-route.yml</h4>
+<div class="sect4">
+<h5 id="_spring_3">spring</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">cloud</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">gateway</span><span class="tok-p">:</span>
+
+<span class="tok-w">      </span><span class="tok-c1"># --New Added Start--</span>
+<span class="tok-w">      </span><span class="tok-nt">default-filters</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">AddResponseHeader=X-Response-Default-Red, Default-Blue</span>
+<span class="tok-w">      </span><span class="tok-c1"># --New Added End--</span>
+
+<span class="tok-w">      </span><span class="tok-nt">routes</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">order-route</span>
+<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">lb://app-order</span>
+<span class="tok-w">          </span><span class="tok-c1"># -- 长写法 --</span>
+<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path</span>
+<span class="tok-w">              </span><span class="tok-nt">args</span><span class="tok-p">:</span>
+<span class="tok-w">                </span><span class="tok-nt">patterns</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/api/order/**</span>
+<span class="tok-w">          </span><span class="tok-c1"># -- 长写法结束 --</span>
+<span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1</span>
+<span class="tok-w">          </span><span class="tok-nt">filters</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># /api/a/b -&gt; /a/b  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">RewritePath=/api/(?&lt;segment&gt;.*), /$\{segment}</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">AddResponseHeader=X-Response-Red, Blue</span>
+
+<span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">item-route</span>
+<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">lb://app-item</span>
+<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path=/api/item/**</span>
+<span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">2</span>
+<span class="tok-w">          </span><span class="tok-nt">filters</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># 同上</span>
+<span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">RewritePath=/api/(?&lt;segment&gt;.*), /$\{segment}</span>
+<span class="tok-w">        </span><span class="tok-err">@</span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">others</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>order: 控制路由的匹配顺序。默认是从上到下的顺序。</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>filter 中 RewritePath 的作用是将请求路径进行重写。具体来说，它将 /api/ 开头的路径重写为去掉 /api/ 前缀后的路径。
+<div class="ulist">
+<ul>
+<li>
+<p>/api/?：匹配以 /api/ 开头的路径，? 表示 / 是可选的。</p>
+</li>
+<li>
+<p>(?&lt;segment&gt;.*)：这是一个捕获组，捕获 /api/ 之后的所有内容，命名为 segment。</p>
+</li>
+<li>
+<p>, /${segment}：这是替换后的路径，/${segment} 表示将捕获的 segment 替换到新的路径中。</p>
+</li>
+<li>
+<p>假设请求路径为 /api/a/b，RewritePath 会将其重写为 /a/b。</p>
+</li>
+</ul>
+</div></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_gateway_过滤器_globalfilter">Gateway - 过滤器 - GlobalFilter</h3>
-
+<div class="paragraph">
+<p>spring cloud gateway GlobalFilter 与 default-filters 的使用区别。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>认证/鉴权、全局日志、全局限流 这类所有请求都必须经过的逻辑，使用 GlobalFilter。</p>
+</li>
+<li>
+<p>修改特定路由的请求/响应（如添加特定头、重写路径）、为特定路由设置限流 这类与业务路由紧密相关的逻辑，使用 default-filters 在配置文件中声明，使得路由配置更加清晰和易于管理。</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_gateway_过滤器_自定义过滤器工厂">Gateway - 过滤器 - 自定义过滤器工厂</h3>
@@ -7561,7 +7699,7 @@ transfer-encoding: chunked
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-14 16:05:06 +0800
+Last updated 2025-10-15 08:27:53 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
