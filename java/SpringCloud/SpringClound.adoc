@@ -2623,9 +2623,9 @@ public Order queryOrderById(String orderId) throws IOException {
 http :8091/order/201810300001
 ----
 
-5. 重复调用几次（超过 failure-rate-threshold 设置的阈值）
+5. 重复调用几次，因为 service-item 不在线，所以会没用失败，超过 failure-rate-threshold 设置的阈值。
 
-6. 观察日志输出，应该会看到降级方法被调用
+6. 观察日志输出，应该会看到降级方法被调用。
 +
 .输出结果如下
 ....
@@ -2696,6 +2696,8 @@ http :8091/order/201810300001
 === 断路器状态: HALF_OPEN ===  --> 10s 以后又变成了半开状态，如此反复吧......
 === 断路器失败率: -1.0 ===
 === 断路器调用次数: 1 ===
+
+直到 app-item(service-item) 恢复正常，断路器重新将状态 State 更改为 CLOSE。
 ....
 
 这个日志完美展示了：
@@ -2707,15 +2709,15 @@ http :8091/order/201810300001
 
 断路器完全按照设计工作，在系统层面提供了有效的故障保护和自动恢复机制！
 
-== 9. Feign 客户端（声明式 REST 调用）
-虽然使用了 WebClient 或 RestTemplate + @LoadBalanced + Resilience4j 可以实现负载均衡和容错处理，但是这个编码在实现大量业务时会显得太过于冗余（如，多参数的URL拼接）。
+== 9. OpenFeign 客户端（声明式 REST 调用）
+虽然使用了 WebClient 或 RestTemplate + @LoadBalanced + Resilience4j 可以实现负载均衡和容错处理，但是这个编码在实现大量业务时会显得太过于冗余（如，多参数的 URL 拼接）。
 
-思考：有没有更加优雅的实现呢？有，那就是 Feign。
+思考：有没有更加优雅的实现呢？有，那就是 OpenFeign。
 
 === Feign 与其它客户端差异与关系
 1. 基本概念差异
 +
-Feign:
+OpenFeign:
 
 - 是一个声明式的 Web 服务客户端
 - 通过注解驱动，将 HTTP 请求抽象为接口方法
@@ -2793,7 +2795,7 @@ public class ItemService {
             .uri("/{id}", id)
             .retrieve()
             .bodyToMono(Item.class)  // 类似于 js Promise
-            .block();
+            .block();   // 同步调用
     }
 }
 ----
@@ -2834,9 +2836,10 @@ WebClient/RestTemplate 优势:
 - Feign 自动处理了很多微服务特有的问题（负载均衡、熔断等）
 - WebClient/RestTemplate 需要手动配置这些微服务特性
 
-在你的 Spring Cloud 微服务项目中，Feign 提供了更优雅的解决方案，减少了样板代码，让开发者更专注于业务逻辑。
+在 Spring Cloud 微服务项目中，Feign 提供了更优雅的解决方案，减少了样板代码，让开发者更专注于业务逻辑。
 
-总的来说，Feign 与 WebClient/RestTemplate 并不是直接竞争关系，而是解决不同层次问题的工具。Feign 更专注于微服务间的声明式通信，而 WebClient/RestTemplate 是更通用的 HTTP 客户端工具。在微服务架构中，Feign 提供了更高层次的抽象和更好的开发体验。
+总的来说，Feign 与 WebClient|RestTemplate 并不是直接竞争关系，而是解决不同层次问题的工具。
+Feign 更专注于微服务间的声明式通信，而 WebClient|RestTemplate 是更通用的 HTTP 客户端工具。在微服务架构中，Feign 提供了更高层次的抽象和更好的开发体验。
 
 === Feign 客户端配合断路器入门
 
@@ -2845,6 +2848,7 @@ WebClient/RestTemplate 优势:
 正常测试
 
 * http :8091/order/201810300001 
+
 
 item3 id 为 -1，会抛出异常，查看 8091 打印
 
@@ -2892,6 +2896,8 @@ public class ServiceOrderApplication {
 ****
 
 ===== file -> service-order/src/main/java/com/tjise/serviceorder/client/ItemFeignClient.java
+新建 OpenFeign 接口文件
+
 [source,java]
 ----
 package com.tjise.serviceorder.client;
@@ -2931,7 +2937,7 @@ public class OrderService {
 }
 ----
 
-====== 第三个订单 order3 -- item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常
+====== 第三个订单 order3 -- item3.setId(-1L) 设为 -1 ItemController.java 会抛出异常
 [source,java]
 ----
 Order order3 = new Order();
@@ -2973,11 +2979,11 @@ public Item queryItemByIdWithCircuitBreaker(Long id) {
     try {
         // 这是之前使用 WebClient 的方式
         // Item result = circuitBreaker.executeSupplier(
-            // () -> itemService.queryItemByIdWithWebClient(id));
+            // () -> itemService.queryItemByIdWithWebClient(id));  // 注释不用了
 
         // 启用断路器
-        Item result = circuitBreaker.executeSupplier(
-            () -> itemFeignClient.queryItemById(id)  // 使用 feign
+        Item result = circuitBreaker.executeSupplier(  // 断路器会生效
+            () -> itemFeignClient.queryItemById(id)    // --New Added-- 使用 feign
         );
         System.out.println("result:" + result);
         return result;
@@ -2991,70 +2997,10 @@ public Item queryItemByIdWithCircuitBreaker(Long id) {
 }
 ----
 
-====== Item queryItemByIdFallback 断路器降级方法
-[source,java]
-----
-/**
- * 断路器降级方法
- * @param id 商品 ID
- * @param throwable 抛出的异常
- * @return 降级后的默认商品信息
- */
-public Item queryItemByIdFallback(Long id, Throwable throwable) {
-    System.out.println("=======CircuitBreaker 降级处理，原因：" + throwable.getMessage());
-    return new Item(id, "查询商品信息出错", null, null, null);
-}
-----
-
-====== Order queryOrderById
-[source,java]
-----
-// 注入商品服务，用于查询商品详细信息
-@Autowired
-private ItemService itemService;
-/**
- * 根据订单ID查询订单数据
- * 
- * @param orderId 订单ID
- * @return Order 订单信息，包含完整的商品详情
- */
-public Order queryOrderById(String orderId) throws IOException {
-    // 从模拟数据库中查询订单
-    Order order = ORDER_DATA.get(orderId);
-    if (null == order) {
-        return null;
-    }
-    // 获取订单详情列表
-    List<OrderDetail> orderDetails = order.getOrderDetails();
-
-    // 遍历订单详情，通过商品微服务查询商品详细数据
-    for (OrderDetail orderDetail : orderDetails) {
-        // 通过商品微服务查询商品详细数据
-        try {
-            Item item = queryItemByIdWithCircuitBreaker(
-                orderDetail.getItem().getId()
-            );
-            if (null == item) {
-                continue;
-            }
-            // 将查询到的商品详细信息设置到订单详情中
-            orderDetail.setItem(item);
-        } catch (Exception e) {
-            // 如果断路器抛出异常，使用降级商品
-            Item fallbackItem = queryItemByIdFallback(
-                orderDetail.getItem().getId(), e
-            );
-            orderDetail.setItem(fallbackItem);
-        }
-    }
-    return order;
-}
-----
-
 ===== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
 
 
-====== public class ItemController -- New Added 当 ID 为 -1 时抛出异常
+====== public class ItemController --New Added-- 当 ID 为 -1 时抛出异常，为了测试出异常会导致断路器 Open
 [source,java]
 ----
 @RestController
@@ -3080,7 +3026,7 @@ public class ItemController {
         logger.info("Handling request on port: " + serverPort + " for item ID: " + id);
         System.out.println("Processing request on port: " + serverPort + " for item ID: " + id);
         
-        // -- New Added Begin --- 测试用例，当 ID 为 -1 时抛出异常
+        // -- New Added Begin --- 测试用例，当 ID 为 -1 时抛出运行时异常
         if (id == -1) {
             System.out.println("=== 触发异常测试，ID 为 -1 ===");
             throw new RuntimeException("服务内部错误");
@@ -3093,17 +3039,16 @@ public class ItemController {
 
 ==== 2) 使用自带断路器 Resilience4j（SpringCloud 自带，在服务层更细粒度控制）
 正常测试
+http :8091/order/201810300001 
 
-* http :8091/order/201810300001 
 
-item3 id 为 -1，会抛出异常，查看 8091 打印
-
-* http :8091/order/201810300003
+item3 id 为 -1，会抛出异常，查看 8091 打印 +
+http :8091/order/201810300003
 
 ===== file -> service-order/pom.xml
 
 
-====== resilience4j 注释掉不用
+====== resilience4j 注释掉不用了
 [source,scss]
 ....
 <!-- <dependency> -->
@@ -3116,6 +3061,7 @@ item3 id 为 -1，会抛出异常，查看 8091 打印
 ====== spring-cloud-...resilience4j
 [source,java]
 ....
+// spring cloud 集成的 resilience4j
 <dependency>
     <groupId>org.springframework.cloud</groupId>
     <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
@@ -3136,7 +3082,7 @@ item3 id 为 -1，会抛出异常，查看 8091 打印
 public class OrderService {
 
     @Autowired
-    // private CircuitBreakerRegistry circuitBreakerRegistry;
+    // private CircuitBreakerRegistry circuitBreakerRegistry;  // 不能使用了
     private CircuitBreakerFactory circuitBreakerFactory;  // 更改为工厂模式
     
     @Autowired
@@ -3146,38 +3092,13 @@ public class OrderService {
 }
 ----
 
-====== 第三个订单 order3 -- item5.setId(-1L) 设为 -1 ItemController.java 会抛出异常
-[source,java]
-----
-Order order3 = new Order();
-order3.setOrderId("201810300003");
-order3.setCreateDate(new Date());
-order3.setUpdateDate(order.getCreateDate());  // 真会偷懒呀
-order3.setUserId(3L);
-List<OrderDetail> orderDetails3 = new ArrayList<OrderDetail>();
-
-// 创建第一个商品详情（仅保存商品ID，需要调用商品微服务获取详细信息）
-Item item3 = new Item();
-item3.setId(-1L);          // --- 注意这里设置了 -1 哟! ---
-orderDetails3.add(new OrderDetail(order3.getOrderId(), item3));
-
-// 创建第二个商品详情
-item3 = new Item();
-item3.setId(6L);
-orderDetails3.add(new OrderDetail(order3.getOrderId(), item3));
-
-order3.setOrderDetails(orderDetails3);
-
-ORDER_DATA.put(order3.getOrderId(), order3);
-----
-
 ====== Item queryItemByIdWithCircuitBreaker -- 主要更改的代码
 [source,java]
 ----
 public Item queryItemByIdWithCircuitBreaker(Long id) {
     // Using Spring Cloud Circuit Breaker with CircuitBreakerFactory
     // 使用 Factory 创建断路器
-    return circuitBreakerFactory.create("OrderService").run(
+    return circuitBreakerFactory.create("OrderService").run(  // OrderService 是在yaml配置文件中定义的名称
         () -> {
             Item result = itemFeignClient.queryItemById(id);  // 使用 feign
             System.out.println("result:" + result);
@@ -3248,14 +3169,15 @@ public Order queryOrderById(String orderId) throws IOException {
 }
 ----
 
-==== 3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器 Resilience4j，不需要在服务层手动管理断路器）
+==== 3) 使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器 Resilience4j，不需要在服务层手动管理断路器，不成功！）
+WARNING: 断路器没有成功！fallback 是可以的。
+
+
 正常测试
+http :8091/order/201810300001
 
-* http :8091/order/201810300001
-
-item3 id 为 -1，会抛出异常，查看 8091 打印，可以查看断路器工作状态的切换。
-
-* http :8091/order/201810300003
+item3 id 为 -1，会抛出异常，查看 8091 打印，可以查看断路器工作状态的切换。 +
+http :8091/order/201810300003
 
 
 查看负载均衡情况：
@@ -3281,16 +3203,16 @@ feign:
     enabled: true
 ----
 
-====== resilience4j 要改 OrderService -> app-item
+====== resilience4j 要改 OrderService -> app-item (service-item 在 Eureka 中注册的服务名)
 [source,yaml]
 ----
 resilience4j:
   circuitbreaker:
     instances:
       # OrderService:  这里就要改成与 Feign 要使用的 Eureka 服务名一样才行，如下面改成 app-item
-      app-item:
+      app-item:        # --New Added--
         sliding-window-size: 5                  # 需要 5次调用来计算失败率
-        failure-rate-threshold: 50              # 50% 失败率才跳闸
+        failure-rate-threshold: 20              # 50% 失败率才跳闸
         wait-duration-in-open-state: 10s        # 10 秒后进入半开状态
         permitted-number-of-calls-in-half-open-state: 2     # 半开状态允许 2 次调用
         sliding-window-type: COUNT_BASED        # 基于调用次数
@@ -3326,7 +3248,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 // 要访问的在 Eureka 中的服务名，并指定实现该接口的降级类名
-@FeignClient(name = "app-item", fallback = ItemFallback.class)
+@FeignClient(name = "app-item",
+             fallback = ItemFallback.class)  // --New Added--
 public interface ItemFeignClient {
     @GetMapping("/item/{id}")
     Item queryItemById(@PathVariable("id") Long id);
@@ -3405,7 +3328,7 @@ ORDER_DATA.put(order3.getOrderId(), order3);
 ----
 public Item queryItemByIdWithCircuitBreaker(Long id) {
 
-    // 简化为直接调用，断路器由 Feign 自动处理
+    // --New Added-- 简化为直接调用，断路器由 Feign 自动处理
     Item result = itemFeignClient.queryItemById(id);  // 使用 feign
     System.out.println("result:" + result);
     return result;
@@ -3424,51 +3347,6 @@ public Item queryItemByIdWithCircuitBreaker(Long id) {
 public Item queryItemByIdFallback(Long id, Throwable throwable) {
     System.out.println("=======CircuitBreaker 降级处理，原因：" + throwable.getMessage());
     return new Item(id, "查询商品信息出错", null, null, null);
-}
-----
-
-====== Order queryOrderById
-[source,java]
-----
-// 注入商品服务，用于查询商品详细信息
-@Autowired
-private ItemService itemService;
-/**
- * 根据订单ID查询订单数据
- * 
- * @param orderId 订单ID
- * @return Order 订单信息，包含完整的商品详情
- */
-public Order queryOrderById(String orderId) throws IOException {
-    // 从模拟数据库中查询订单
-    Order order = ORDER_DATA.get(orderId);
-    if (null == order) {
-        return null;
-    }
-    // 获取订单详情列表
-    List<OrderDetail> orderDetails = order.getOrderDetails();
-
-    // 遍历订单详情，通过商品微服务查询商品详细数据
-    for (OrderDetail orderDetail : orderDetails) {
-        // 通过商品微服务查询商品详细数据
-        try {
-            Item item = queryItemByIdWithCircuitBreaker(
-                orderDetail.getItem().getId()
-            );
-            if (null == item) {
-                continue;
-            }
-            // 将查询到的商品详细信息设置到订单详情中
-            orderDetail.setItem(item);
-        } catch (Exception e) {
-            // 如果断路器抛出异常，使用降级商品
-            Item fallbackItem = queryItemByIdFallback(
-                orderDetail.getItem().getId(), e
-            );
-            orderDetail.setItem(fallbackItem);
-        }
-    }
-    return order;
 }
 ----
 
@@ -3520,10 +3398,10 @@ Transfer-Encoding: chunked
 </dependency>
 
 <!-- Spring Retry -->
-<dependency>
-    <groupId>org.springframework.retry</groupId>
-    <artifactId>spring-retry</artifactId>
-</dependency>
+<!-- <dependency> -->
+    <!-- <groupId>org.springframework.retry</groupId> -->
+    <!-- <artifactId>spring-retry</artifactId> -->
+<!-- </dependency> -->
 ....
 
 ===== file -> service-order/src/main/resources/application.yml
@@ -3603,7 +3481,7 @@ Declarative rest Client 声明式 rest 客户端（之前叫编程式 rest 客�
 - 指定携带数据: @PathVariable(路径参数) @RequestHeader @RequestParam @RequestBody ...
 - 指定结果返回: 封装成的响应模型，如商品对象 Item
 
-==== 发送请求基本使用步骤（总结未使用断路器 Resilience4j 的步骤）
+==== 发送请求基本使用步骤（总结了未使用断路器 Resilience4j 的步骤）
 . 引入依赖 openfeign
 +
 .service-order/pom.xml
@@ -3614,7 +3492,6 @@ Declarative rest Client 声明式 rest 客户端（之前叫编程式 rest 客�
     <artifactId>spring-cloud-starter-openfeign</artifactId>
 </dependency>
 ....
-
 
 . 启动类开启 openfeign 远程调用功能 -> @EnableFeignClients
 +
@@ -3657,17 +3534,17 @@ public interface ItemFeignClient {
 public Item queryItemByIdWithCircuitBreaker(Long id) {
 
     // 简化为直接调用，断路器由 Feign 自动处理
-    Item result = itemFeignClient.queryItemById(id);  // 使用 feign
+    Item result = itemFeignClient.queryItemById(id);  // --New Added-- 使用 feign
     System.out.println("result:" + result);
     return result;
 }
 ----
 
-==== 调用第三方API
+==== Feign 调用第三方提供的 API
 测试天气 api
 http://t.weather.sojson.com/api/weather/city/101030100
 
-citycode.json 文件下载:
+citycode.json 文件下载（只是单纯的测试，用不到）:
 https://github.com/LS-KR/China-Citycode/blob/main/citycode.json
 
 .通过 url 判断为第三方 API
@@ -3676,9 +3553,11 @@ https://github.com/LS-KR/China-Citycode/blob/main/citycode.json
 // weather-client 是自己随便起的名字，在这儿没具体作用
 // url 是第三方 API 的域名，有 url 则是第三方 API
 @FeignClient(name = "weather-client", url = "http://t.weather.sojson.com")
+// 定义接口的代码
 ----
 
-这里只是最简单的一个 API，您可以自己找个复杂的 API 去练习一下，比如有 @PathVariable(路径参数) @RequestHeader @RequestParam @RequestBody ...
+这里只是最简单的一个 API，您可以自己找个复杂的 API 去练习一下，
+比如有 @PathVariable(路径参数) @RequestHeader @RequestParam @RequestBody ...
 
 ===== file -> service-order/src/main/java/com/tjise/serviceorder/client/WeatherFeignClient.java
 [source,java]
@@ -3768,8 +3647,12 @@ public class FeignConfig {
 ----
 
 ==== 超时控制
+没有断路器也是能返回兜底数据的，只是没有断路器的 Close|Open|HalfOpen 功能。
+
 .超时控制流程图
 image::img/feign_timeout.png[,800]
+
+超时分为：连接超时 和 读取超时。
 
 .超时控制分类
 image::img/feign_timeout_category.png[,800]
@@ -3830,7 +3713,7 @@ public Item queryItemById(Long id) {
 
     // 模拟超时 100s 大于 FeignClient 默认的 60s 超时，可以实现 FeignClient readTimeout 效果。
     try {
-        TimeUnit.SECONDS.sleep(100);
+        TimeUnit.SECONDS.sleep(100);  // 该语句会抛出受检异常，要么 try，要么向上抛出
     } catch (InterruptedException e) {
         throw new RuntimeException(e);
     }
@@ -3853,14 +3736,14 @@ public Item queryItemById(Long id) {
 
 .参考知识
 ****
-在 Resilience4JCircuitBreakerFactory 或 Resilience4JAutoConfiguration 类中，Spring Cloud 会覆盖 Resilience4j 的默认配置：
+在 Resilience4JCircuitBreakerFactory 或 Resilience4JAutoConfiguration 类中，
+Spring Cloud 会覆盖 Resilience4j 的默认配置，源码如下，请参考。
 
 [source,java]
 ----
 @Configuration
 @ConditionalOnClass(CircuitBreaker.class)
 public class Resilience4JAutoConfiguration {
-    
     @Bean
     @ConditionalOnMissingBean
     public CircuitBreakerConfig circuitBreakerConfig() {
@@ -3922,7 +3805,7 @@ feign:
                 readTimeout: 5000
 
             # -- NOTE: feignName 写要调用的微服务名，会覆盖 default 默认设置 --
-            app-item:
+            app-item:  // feignName
                 connectTimeout: 3000
                 readTimeout: 2000
                 # 优先级低于 config/FeignConfig.java 中的 Logger.Level
@@ -4037,7 +3920,7 @@ public Default() {
 **注意事项**
 
 - **总重试次数 = 初始请求 + 4次重试**
-- **不适合所有场景**：对于非幂等操作（POST、PUT）要谨慎使用
+- **不适合所有场景**：对于非幂等操作（POST、PUT）要谨慎使用（容易多次提交数据！）
 - 可以通过自定义 `Retryer` 实现来修改重试策略
 
 这种**指数退避+最大限制**的策略既能给服务恢复时间，又避免了无限等待和雪崩效应。
@@ -4100,7 +3983,7 @@ spring:
 ====== file -> service-order/src/main/java/com/tjise/serviceorder/ServiceOrderApplication.java
 
 
-====== class ServiceOrderApplication -> @EnableFeignClients
+====== class ServiceOrderApplication -> @EnableRetry
 [source,java]
 ----
 /**
@@ -4195,7 +4078,7 @@ public class ElegantRetryController {
 }
 ----
 
-==== 请求和响应拦截器
+==== 请求和响应拦截器(只举了请求拦截器的例子)
 image::img/feign_interceptor.png[,800]
 
 测试发送
@@ -4308,7 +4191,7 @@ image::img/feign_fallback.png[,800]
 前面已经实现过了。参考「使用自带断路器 Feign（Feign 集成 SpringCloud 自带的断路器 Resilience4j，不需要在服务层手动管理断路器）」。
 
 
-下面我们再看如何使用熔断框架 Sentinel 如何实现 Feign 的兜底返回。
+下面我们再看如何使用熔断框架 #Sentinel# 如何实现 Feign 的兜底返回。
 
 .测试结果
 ....
@@ -4369,7 +4252,7 @@ spring:
         # 使用 spring cloud 集成的 resilience4j
         circuitbreaker:
             resilience4j:
-                enabled: false
+                enabled: false  # 要停用
         # sentinel:
             # transport:
                 # dashboard: localhost:8858  # Sentinel 控制台地址
@@ -5394,10 +5277,137 @@ spring:
 浏览器的“跨域限制”（即同源策略 + CORS 校验）只在前端脚本（JavaScript）发起网络请求时才会触发，
 比如通过 XMLHttpRequest、fetch()、axios 等方式发起的请求。
 
-=== Gateway - 总结
+=== Gateway - 面试题
+[qanda]
+微服务之间的调用经过网关吗？::
+
+答：不需要经过网关 Gateway，因为网关是对接前端的，没有必要。
+直接从 Eureka 注册中心发现服务进行调用就可以了。
+
+== 11. 配置中心 Config
 
 
-== 11. 服务保护 Sentinel
+== 12. 分布式事务 Seata -- 使用 Nacos 注册服务例子
+image::img/transactional.png[,800]
+
+=== 创建 MySQL 数据库及相关表
+创建了三个数据库：
+
+* account_db
+* order_db
+* storage_db
+
+每个数据库里的 undo_log 表是 seata 做事务管理要使用的。
+
+
+[source,sql]
+----
+CREATE
+DATABASE IF NOT EXISTS `storage_db`;
+USE
+`storage_db`;
+
+DROP TABLE IF EXISTS `storage_tbl`;
+CREATE TABLE `storage_tbl`
+(
+    `id`             int(11) NOT NULL AUTO_INCREMENT,
+    `commodity_code` varchar(255) DEFAULT NULL,
+    `count`          int(11) DEFAULT 0,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY (`commodity_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `storage_tbl` (`commodity_code`, `count`)
+VALUES ('P0001', 100);
+INSERT INTO `storage_tbl` (`commodity_code`, `count`)
+VALUES ('B1234', 10);
+
+-- 注意此处 0.3.0+ 增加唯一索引 ux_undo_log
+DROP TABLE IF EXISTS `undo_log`;
+CREATE TABLE `undo_log`
+(
+    `id`            bigint(20) NOT NULL AUTO_INCREMENT,
+    `branch_id`     bigint(20) NOT NULL,
+    `xid`           varchar(100) NOT NULL,
+    `context`       varchar(128) NOT NULL,
+    `rollback_info` longblob     NOT NULL,
+    `log_status`    int(11) NOT NULL,
+    `log_created`   datetime     NOT NULL,
+    `log_modified`  datetime     NOT NULL,
+    `ext`           varchar(100) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `ux_undo_log` (`xid`, `branch_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE
+DATABASE IF NOT EXISTS `order_db`;
+USE
+`order_db`;
+
+DROP TABLE IF EXISTS `order_tbl`;
+CREATE TABLE `order_tbl`
+(
+    `id`             int(11) NOT NULL AUTO_INCREMENT,
+    `user_id`        varchar(255) DEFAULT NULL,
+    `commodity_code` varchar(255) DEFAULT NULL,
+    `count`          int(11) DEFAULT 0,
+    `money`          int(11) DEFAULT 0,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 注意此处 0.3.0+ 增加唯一索引 ux_undo_log
+DROP TABLE IF EXISTS `undo_log`;
+CREATE TABLE `undo_log`
+(
+    `id`            bigint(20) NOT NULL AUTO_INCREMENT,
+    `branch_id`     bigint(20) NOT NULL,
+    `xid`           varchar(100) NOT NULL,
+    `context`       varchar(128) NOT NULL,
+    `rollback_info` longblob     NOT NULL,
+    `log_status`    int(11) NOT NULL,
+    `log_created`   datetime     NOT NULL,
+    `log_modified`  datetime     NOT NULL,
+    `ext`           varchar(100) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `ux_undo_log` (`xid`, `branch_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE
+DATABASE IF NOT EXISTS `account_db`;
+USE
+`account_db`;
+
+DROP TABLE IF EXISTS `account_tbl`;
+CREATE TABLE `account_tbl`
+(
+    `id`      int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` varchar(255) DEFAULT NULL,
+    `money`   int(11) DEFAULT 0,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `account_tbl` (`user_id`, `money`)
+VALUES ('1', 10000);
+
+-- 注意此处 0.3.0+ 增加唯一索引 ux_undo_log
+DROP TABLE IF EXISTS `undo_log`;
+CREATE TABLE `undo_log`
+(
+    `id`            bigint(20) NOT NULL AUTO_INCREMENT,
+    `branch_id`     bigint(20) NOT NULL,
+    `xid`           varchar(100) NOT NULL,
+    `context`       varchar(128) NOT NULL,
+    `rollback_info` longblob     NOT NULL,
+    `log_status`    int(11) NOT NULL,
+    `log_created`   datetime     NOT NULL,
+    `log_modified`  datetime     NOT NULL,
+    `ext`           varchar(100) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `ux_undo_log` (`xid`, `branch_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+----
+
+== 13. 服务保护 Sentinel
 
 
 === docker 开启 sentinel-dashboard
@@ -5407,10 +5417,7 @@ image::img/sentinel_dashboard186_run.png[]
 
 image::img/sentinel_dashboard186_admin.png[]
 
-== 12. 分布式事务 Seata
-
-
-== 13. 服务部署
+== 14. 服务部署
 [mermaid, target=img/mermaid-2025-10-12-105950, format=svg]
 ....
 flowchart TD
