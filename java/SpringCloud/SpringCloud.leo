@@ -8844,7 +8844,7 @@ https://cloud.spring.io/spring-cloud-gateway/reference/html/#the-rewritepath-gat
 
 因为前面我们在网关的配置中都加了 /api，
 这样在每个微服务中都需要加 /api，如果微服务多了，就会冗余，且很麻烦，
-下面我们使用过滤器来简化该操作。
+下面我们使用过滤器来简化该操作。更改后，再测试如下：
 
 .测试能正常返回订单数据且有新添加的响应头: AddResponseHeader 的作用
 ....
@@ -8937,7 +8937,7 @@ https://cloud.spring.io/spring-cloud-gateway/reference/html/#global-filters
 
 我们来做一个功能，计算一个请求响应的时间。
 
-测试:
+做好后测试:
 http :8001/api/order/201810300001
 
 .gateway 服务端打印测试结果
@@ -9944,7 +9944,11 @@ order: 控制路由的匹配顺序。默认是从上到下的顺序。
 所有的断言都匹配才能放行。
 
 </t>
-<t tx="swot.20251015114451.1">@language java
+<t tx="swot.20251015114451.1">@doc
+[source,java]
+----
+@c
+@language java
 package com.tjise.gateway.filter;
 
 import lombok.extern.slf4j.Slf4j;
@@ -9971,6 +9975,7 @@ public class ResponseTimeGlobalFilter implements GlobalFilter, Ordered {
         long start= System.currentTimeMillis();
         log.info("请求『{}』开始：时间：{}", uri, start);
 
+        // 放行请求并记录响应所花费的时间
         Mono&lt;Void&gt; filter = chain.filter(exchange)   // 放行请求
                 .doFinally((result)-&gt;{               // 响应式编程的异步链式调用
                     long end = System.currentTimeMillis();
@@ -9984,6 +9989,9 @@ public class ResponseTimeGlobalFilter implements GlobalFilter, Ordered {
         return 0;  // 数字越小，优先级越高
     }
 }
+@doc
+----
+
 </t>
 <t tx="swot.20251015135553.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032352d30392d31387103752e">@language yaml
 @others
