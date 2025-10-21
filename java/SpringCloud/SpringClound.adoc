@@ -3605,6 +3605,10 @@ public class WeatherTest {
 
 image::img/client_and_server_balanced.png[,700]
 
+客户端自己决定负载均衡算法，如我们使用的 service-order 定义了负载均衡算法，则称为客户端负载均衡。
+
+服务端自己决定负载均衡算法，如墨迹天气自动提供了负载均衡算法，则称为服务端负载均衡。
+
 ==== 日志功能
 参考文档:
 https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/#feign-logging
@@ -4002,14 +4006,6 @@ public class ServiceOrderApplication {
 }
 ----
 
-.负载均衡使用拦截器原理：
-****
-1. 拦截请求URL
-2. 识别服务名
-3. 通过服务发现获取实际地址
-4. 替换URL并发起请求
-****
-
 ====== file -> service-order/src/main/java/com/tjise/serviceorder/service/ElegantRetryService.java
 
 
@@ -4298,9 +4294,9 @@ image::img/gateway_overview.png[,800]
 [mermaid, target=img/mermaid-2025-10-12-170255, format=svg]
 ....
 graph TD
-    subgraph reactiveGateway [Spring Cloud Gateway<br>Reactive Server]
-    end
     subgraph mvcGateway [Spring Cloud Gateway<br>Server MVC]
+    end
+    subgraph reactiveGateway [Spring Cloud Gateway<br>Reactive Server]
     end
 
     reactiveGateway -->|group:<br>org.springframework.cloud| reactive[artifactId:<br>spring-cloud-starter-gateway]
@@ -4327,6 +4323,22 @@ image::img/gateway_create.png[,1000]
 
 测试访问网关
 http :8001/
+
+.目前新创建的网关服务器没有路由，所以是 404
+....
+HTTP/1.1 404 Not Found
+Content-Length: 129
+Content-Type: application/json
+
+{
+    "error": "Not Found",
+    "message": null,
+    "path": "/",
+    "requestId": "a1258588-1",
+    "status": 404,
+    "timestamp": "2025-10-20T06:35:17.417+00:00"
+}
+....
 
 ==== file -> gateway/pom.xml
 
@@ -4402,7 +4414,7 @@ http :8001/
 ====== gateway
 如果使用了 Reactive Server，则需要改
 spring-boot-starter-web 为
-spring-boot-starter-webflux
+*spring-boot-starter-webflux*
 
 [source,scss]
 ....
@@ -4495,14 +4507,14 @@ public class GatewayMainApplication {
 ----
 
 === Gateway - 路由 - 规则配置
-实现功能如下，客户端通过 gateway 向不同的服务（service-order 和 service-product）发送请求的流程。
+实现功能如下，客户端通过 gateway 向不同的服务（service-order 和 service-item）发送请求的流程。
 
 [mermaid, target=img/mermaid-2025-10-12-183606, format=svg]
 ....
 graph LR
     A[浏览器] --> B[gateway]
     B -->|/api/order/**  | C[service-order]
-    B -->|/api/product/**| D[service-product]
+    B -->|/api/item/**| D[service-item]
 ....
 
 
@@ -4519,14 +4531,15 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: order-route
-          uri: lb://app-order
+        - id: order-route      # 自已定义的id，全局不能重复
+          uri: lb://app-order  # 注册的服务名; lb 指负载均衡
           predicates:
-            - Path=/api/order/**
-        - id: item-route
-          uri: lb://app-item
+            - Path=/api/order/**  # 将前端路由 redirect 到 app-order 微服务
+
+        - id: item-route      # 自已定义的id，全局不能重复
+          uri: lb://app-item  # 注册的服务名; lb 指负载均衡
           predicates:
-            - Path=/api/item/**
+            - Path=/api/item/**  # 将前端路由 redirect 到 app-item 微服务
 ....
 
 ==== file -> gateway/src/main/resources/application.yml
@@ -4539,14 +4552,6 @@ name 和 instance 两者都有重要作用，缺一不可：
 即使使用 IP 注册，仍然需要服务名称来进行服务发现和调用。
 ****
 
-===== port
-[source,yaml]
-----
-### 服务端口号(本身是一个web项目)
-server:
-    port: 8001
-----
-
 ===== include -- New Added --
 [source,yaml]
 ----
@@ -4557,24 +4562,6 @@ spring:
     # -- New Added --
     profiles:
         include: route
-----
-
-===== eureka
-[source,yaml]
-----
-### 服务注册到 eureka 注册中心的地址
-eureka:
-    client:
-        service-url:
-            # defaultZone: http://root:root@127.0.0.1:8761/eureka/
-            defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
-        register-with-eureka: true # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
-        fetch-registry: true       # 是否需要从 eureka 上检索服务
-
-    instance:
-        prefer-ip-address: true    # 使用IP地址注册而不是主机名
-        ip-address: 127.0.0.1      # 客户端在注册时使用自己的IP，而不是主机名。
-                                   # 这是生产环境的最佳实践，避免主机名解析问题。
 ----
 
 ==== file -> service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
@@ -4607,9 +4594,6 @@ public class OrderController {
     }
 }
 ----
-
-httpie 测试:
-http :8091/order/201810300001
 
 ==== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
 
@@ -4720,6 +4704,8 @@ flowchart TD
     linkStyle 9 stroke:#333,stroke-width:2px,stroke-dasharray:5,fill:none;
 ....
 
+下面举例兜底路由，可展示 Route 路由规则按序匹配。
+
 ==== file -> gateway/src/main/resources/application-route.yml
 
 
@@ -4745,7 +4731,7 @@ spring:
           order: 2
 
         # 兜底路由
-        - id: bing-route
+        - id: bing-route  # 自己定义的id
           uri: https://cn.bing.com/
           predicates:
             - Path=/**
@@ -4764,7 +4750,7 @@ image::img/gateway_predicate_category_0.png[]
 2. 在 IDEA 中查看断言类型:
 Shift Shift -> classs -> routePredicateFactory 打开是个接口
 +
-如下图去掉 RoutePredicateFactory 剩下的就是断言的名字
+如下图去掉 RoutePredicateFactory 剩下的就是断言的名字，比如 Path
 +
 image::img/gateway_predicate_category.png[]
 
@@ -4796,7 +4782,7 @@ spring:
             - name: Path
               args:  # IDEA 中按 Shift Shift -> classes -> PathRoutePredicateFactory 可发现定义了下面两个属性
                 patterns: /api/order/**
-                matchTrailingSlash: true  # 默认 true,是否匹配最后的 /
+                matchTrailingSlash: true  # 默认 true，是否匹配最后的 /
           # -- 长写法结束 --
           order: 1
 
@@ -4817,10 +4803,10 @@ spring:
 order: 控制路由的匹配顺序。默认是从上到下的顺序。
 
 === Gateway - 断言 - Query
-测试可以放行到
+测试可以放行到:
 http :8001/search?q=haha
 
-其它的则不通报 404:
+其它的则不通，会报 404:
 http :8001/search?q=wowo
 
 NOTE: 用浏览器则可以看到网页的渲染内容。
@@ -4832,7 +4818,7 @@ NOTE: 用浏览器则可以看到网页的渲染内容。
 # 兜底路由
 - id: bing-route
   uri: https://cn.bing.com/
-  predicates:
+  predicates:  # <1> 
     - name: Path
       args:
         patterns: /search
@@ -4842,7 +4828,7 @@ NOTE: 用浏览器则可以看到网页的渲染内容。
         regexp: haha
   order: 3
 
-所有的断言都匹配才能放行。
+<1> 所有的断言都匹配才能放行。
 
 === Gateway - 断言 - 自定义断言工厂（高级）
 本课件忽略！可以参考该视频去实现:
@@ -4861,7 +4847,7 @@ https://cloud.spring.io/spring-cloud-gateway/reference/html/#the-rewritepath-gat
 这样在每个微服务中都需要加 /api，如果微服务多了，就会冗余，且很麻烦，
 下面我们使用过滤器来简化该操作。
 
-.测试能正常返回订单数据且有新添加的响应头:
+.测试能正常返回订单数据且有新添加的响应头: AddResponseHeader 的作用
 ....
 http :8001/api/order/201810300001
 HTTP/1.1 200 OK
@@ -4941,6 +4927,7 @@ spring:
                 patterns: /api/order/**
           # -- 长写法结束 --
           order: 1
+
           # --New Added Start--
           filters:  # /api/a/b -> /a/b  <1>
             - RewritePath=/api/(?<segment>.*), /$\{segment}
@@ -4969,7 +4956,7 @@ order: 控制路由的匹配顺序。默认是从上到下的顺序。
 ==== file -> service-order/src/main/java/com/tjise/serviceorder/controller/OrderController.java
 
 
-===== class OrderController -- New Added -- @RequestMapping("/api/order")
+===== class OrderController -- New Added-- 注释 @RequestMapping("/api")
 [source,java]
 ----
 /**
@@ -5000,7 +4987,7 @@ public class OrderController {
 ==== file -> service-item/src/main/java/com/tjise/serviceitem/controller/ItemController.java
 
 
-===== public class ItemController -- New Added -- @RequestMapping("/api/item")
+===== public class ItemController --New Added-- 注释 @RequestMapping("/api")
 [source,java]
 ----
 // @RequestMapping("/api")  // 不要了
@@ -5023,7 +5010,7 @@ public class ItemController {
      */
     @GetMapping(value = "/item/{id}")
     public Item queryItemById(@PathVariable("id") Long id,
-                              HttpServletRequest request  // -- New Added Start --
+                              HttpServletRequest request
     ){
         String header = request.getHeader("X-Token");
         System.out.println("header token = " + header);
@@ -5286,6 +5273,85 @@ spring:
 
 == 11. 配置中心 Config
 
+
+=== 创建配置服务器
+如下图创建模块 config-server
+
+image::img/config-server_create.png[,1000]
+
+测试访问网关
+http :8888/
+
+==== file -> config-server/pom.xml
+
+
+===== project
+[source,scss]
+....
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tjise</groupId>
+    <artifactId>config-server</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+</project>
+....
+
+==== file -> config-server/src/main/resources/application.yml
+[source,yaml]
+----
+server:
+  port: 8888
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/your-org/config-repo
+          search-paths: '{application}'
+----
+
+==== application 解释
+### 为什么是 `{application}`？
+这是 Spring Cloud Config 的**预定义占位符**，不是任意字符串。Spring Cloud 会自动将 `{application}` 替换为微服务的 `spring.application.name`。
+
+### 预定义占位符列表：
+Spring Cloud Config 支持以下占位符：
+- `{application}` - 微服务名称（spring.application.name）
+- `{profile}` - 激活的环境（如：dev, test, prod）
+- `{label}` - Git分支或标签（如：master, v1.0）
+
+### 配置查找过程：
+当微服务 `app-order`（环境：dev）请求配置时：
+1. 配置中心收到请求：`/app-order/dev`
+2. 替换占位符：`{application}` → `app-order`，`{profile}` → `dev`
+3. 在Git仓库中查找：
+   - `app-order-dev.yml`（优先级最高）
+   - `app-order.yml`（共享配置）
+   - `app-order/` 目录下的配置文件
+
+### 完整配置示例：
+```yaml
+search-paths: '{application},{application}/{profile}'
+```
+这样会查找：
+- `app-order.yml`（根目录）
+- `app-order/dev/` 目录下的所有文件
+
+### 为什么不用其他字符串？
+- `{application}` 是 Spring Cloud 的约定
+- 使用其他字符串不会被自动替换
+- 这是框架设计的一部分，确保一致性
 
 == 12. 分布式事务 Seata -- 使用 Nacos 注册服务例子
 image::img/transactional.png[,800]
