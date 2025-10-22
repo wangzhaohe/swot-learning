@@ -758,7 +758,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_兜底路由">兜底路由</a>
 <ul class="sectlevel2">
 <li><a href="#_gateway_断言_自定义断言工厂高级">Gateway - 断言 - 自定义断言工厂（高级）</a></li>
-<li><a href="#_gateway_过滤器_基本使用">Gateway - 过滤器 - 基本使用</a>
+<li><a href="#_gateway_过滤器_基本使用_rewritepath_addresponseheader">Gateway - 过滤器 - 基本使用 RewritePath &amp; AddResponseHeader</a>
 <ul class="sectlevel3">
 <li><a href="#_file_gatewaysrcmainresourcesapplication_yml_3">file &#8594; gateway/src/main/resources/application.yml</a></li>
 <li><a href="#_file_gatewaysrcmainresourcesapplication_route_yml_5">file &#8594; gateway/src/main/resources/application-route.yml</a></li>
@@ -778,7 +778,34 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </li>
 <li><a href="#_gateway_过滤器_自定义过滤器工厂高级">Gateway - 过滤器 - 自定义过滤器工厂（高级）</a></li>
-<li><a href="#_gateway_扩展_全局跨域">Gateway - 扩展 - 全局跨域</a></li>
+<li><a href="#_gateway_扩展_全局跨域">Gateway - 扩展 - 全局跨域</a>
+<ul class="sectlevel3">
+<li><a href="#_file_gatewaysrcmainresourcesapplication_route_yml_7">file &#8594; gateway/src/main/resources/application-route.yml</a></li>
+<li><a href="#_跨域常见问题">跨域常见问题</a></li>
+</ul>
+</li>
+<li><a href="#_gateway_面试题">Gateway - 面试题</a></li>
+<li><a href="#_11_配置中心_config">11. 配置中心 Config</a>
+<ul class="sectlevel2">
+<li><a href="#_创建配置服务器">创建配置服务器</a>
+<ul class="sectlevel3">
+<li><a href="#_file_config_serverpom_xml">@file config-server/pom.xml</a></li>
+<li><a href="#_file_config_serversrcmainresourcesapplication_yml">@file config-server/src/main/resources/application.yml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_12_分布式事务_seata使用_nacos_注册服务例子">12. 分布式事务 Seata&#8201;&#8212;&#8201;使用 Nacos 注册服务例子</a>
+<ul class="sectlevel2">
+<li><a href="#_创建_mysql_数据库及相关表">创建 MySQL 数据库及相关表</a></li>
+</ul>
+</li>
+<li><a href="#_13_服务保护_sentinel">13. 服务保护 Sentinel</a>
+<ul class="sectlevel2">
+<li><a href="#_docker_开启_sentinel_dashboard">docker 开启 sentinel-dashboard</a></li>
+</ul>
+</li>
+<li><a href="#_14_服务部署">14. 服务部署</a></li>
 </ul>
 </li>
 </ul>
@@ -6915,7 +6942,7 @@ http :8001/api/order/201810300001</p>
 <span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path=/api/item/**</span>
 <span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">2</span>
 
-<span class="tok-w">        </span><span class="tok-c1"># 兜底路由</span>
+<span class="tok-w">        </span><span class="tok-c1"># 兜底路由  --New Added--</span>
 <span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">bing-route</span><span class="tok-w">  </span><span class="tok-c1"># 自己定义的id</span>
 <span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">https://cn.bing.com/</span>
 <span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
@@ -6984,13 +7011,13 @@ http :8001/api/order/201810300001</p>
 <span class="tok-w">      </span><span class="tok-nt">routes</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># IDEA中点击可以查看属性定义</span>
 <span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">order-route</span>
 <span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">lb://app-order</span>
-<span class="tok-w">          </span><span class="tok-c1"># -- 长写法 --</span>
-<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span>
+<span class="tok-w">          </span><span class="tok-c1"># -- 断言长写法 --</span>
+<span class="tok-w">          </span><span class="tok-nt">predicates</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># IDEA 中按 Shift Shift -&gt; classes -&gt; PredicateDefinition 可发现 name &amp; args</span>
 <span class="tok-w">            </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Path</span>
 <span class="tok-w">              </span><span class="tok-nt">args</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># IDEA 中按 Shift Shift -&gt; classes -&gt; PathRoutePredicateFactory 可发现定义了下面两个属性</span>
 <span class="tok-w">                </span><span class="tok-nt">patterns</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/api/order/**</span>
 <span class="tok-w">                </span><span class="tok-nt">matchTrailingSlash</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">  </span><span class="tok-c1"># 默认 true，是否匹配最后的 /</span>
-<span class="tok-w">          </span><span class="tok-c1"># -- 长写法结束 --</span>
+<span class="tok-w">          </span><span class="tok-c1"># -- 断言长写法结束 --</span>
 <span class="tok-w">          </span><span class="tok-nt">order</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1</span>
 
 <span class="tok-w">        </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-nt">id</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">item-route</span>
@@ -7083,7 +7110,7 @@ order: 3</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_gateway_过滤器_基本使用">Gateway - 过滤器 - 基本使用</h3>
+<h3 id="_gateway_过滤器_基本使用_rewritepath_addresponseheader">Gateway - 过滤器 - 基本使用 RewritePath &amp; AddResponseHeader</h3>
 <div class="paragraph">
 <p>过滤器工厂名
 <a href="https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories" class="bare">https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories</a></p>
@@ -7100,7 +7127,7 @@ order: 3</p>
 <div class="paragraph">
 <p>因为前面我们在网关的配置中都加了 /api，
 这样在每个微服务中都需要加 /api，如果微服务多了，就会冗余，且很麻烦，
-下面我们使用过滤器来简化该操作。</p>
+下面我们使用过滤器来简化该操作。更改后，再测试如下：</p>
 </div>
 <div class="literalblock">
 <div class="title">测试能正常返回订单数据且有新添加的响应头: AddResponseHeader 的作用</div>
@@ -7357,7 +7384,7 @@ transfer-encoding: chunked
 HTTP/1.1 200 OK
 Content-Type: application/json
 Date: Tue, 14 Oct 2025 09:36:07 GMT
-X-Response-Default-Red: Default-Blue
+X-Response-Default-Red: Default-Blue  --New Added--
 X-Response-Red: Blue
 transfer-encoding: chunked
 
@@ -7483,7 +7510,7 @@ transfer-encoding: chunked
 <p>我们来做一个功能，计算一个请求响应的时间。</p>
 </div>
 <div class="paragraph">
-<p>测试:
+<p>做好后测试:
 http :8001/api/order/201810300001</p>
 </div>
 <div class="literalblock">
@@ -7501,54 +7528,48 @@ Date: &lt;filtered&gt;
 </div>
 <div class="sect3">
 <h4 id="_file_gatewaysrcmainjavacomtjisegatewayfilterresponsetimeglobalfilter_java">file &#8594; gateway/src/main/java/com/tjise/gateway/filter/ResponseTimeGlobalFilter.java</h4>
-<div class="paragraph">
-<p>package com.tjise.gateway.filter;</p>
-</div>
-<div class="paragraph">
-<p>import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.Ordered;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;</p>
-</div>
-<div class="paragraph">
-<p>@Component
-@Slf4j
-public class ResponseTimeGlobalFilter implements GlobalFilter, Ordered {</p>
-</div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>@Override
-public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-    ServerHttpRequest request = exchange.getRequest();
-    ServerHttpResponse response = exchange.getResponse();
-    String uri = request.getURI().toString();
-    long start= System.currentTimeMillis();
-    log.info("请求『{}』开始：时间：{}", uri, start);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    Mono&lt;Void&gt; filter = chain.filter(exchange)   // 放行请求
-            .doFinally((result)-&gt;{      // 响应式编程的异步链式调用
-                long end = System.currentTimeMillis();
-                log.info("请求『{}』结束：时间：{}，耗时：{}ms", uri, end, end-start);
-            });
-    return filter;
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    @Override
-    public int getOrder() {
-        return 0;  // 数字越小，优先级越高
-    }
-}</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.gateway.filter</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">lombok.extern.slf4j.Slf4j</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.gateway.filter.GatewayFilterChain</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.gateway.filter.GlobalFilter</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.core.Ordered</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.http.server.reactive.ServerHttpRequest</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.http.server.reactive.ServerHttpResponse</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.stereotype.Component</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.web.server.ServerWebExchange</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">reactor.core.publisher.Mono</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 全局 filter 只需要放在 IOC Bean 容器中即可，不用再注入。</span>
+<span class="tok-nd">@Component</span>
+<span class="tok-nd">@Slf4j</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ResponseTimeGlobalFilter</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">GlobalFilter</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Ordered</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">Mono</span><span class="tok-o">&lt;</span><span class="tok-n">Void</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nf">filter</span><span class="tok-p">(</span><span class="tok-n">ServerWebExchange</span><span class="tok-w"> </span><span class="tok-n">exchange</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">GatewayFilterChain</span><span class="tok-w"> </span><span class="tok-n">chain</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">ServerHttpRequest</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">exchange</span><span class="tok-p">.</span><span class="tok-na">getRequest</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">ServerHttpResponse</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">exchange</span><span class="tok-p">.</span><span class="tok-na">getResponse</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">uri</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">.</span><span class="tok-na">getURI</span><span class="tok-p">().</span><span class="tok-na">toString</span><span class="tok-p">();</span>
+
+<span class="tok-w">        </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">start</span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;请求『{}』开始：时间：{}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">uri</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">start</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 放行请求并记录响应所花费的时间</span>
+<span class="tok-w">        </span><span class="tok-n">Mono</span><span class="tok-o">&lt;</span><span class="tok-n">Void</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">filter</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">chain</span><span class="tok-p">.</span><span class="tok-na">filter</span><span class="tok-p">(</span><span class="tok-n">exchange</span><span class="tok-p">)</span><span class="tok-w">   </span><span class="tok-c1">// 放行请求</span>
+<span class="tok-w">                </span><span class="tok-p">.</span><span class="tok-na">doFinally</span><span class="tok-p">((</span><span class="tok-n">result</span><span class="tok-p">)</span><span class="tok-o">-&gt;</span><span class="tok-p">{</span><span class="tok-w">               </span><span class="tok-c1">// 响应式编程的异步链式调用</span>
+<span class="tok-w">                    </span><span class="tok-kt">long</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">currentTimeMillis</span><span class="tok-p">();</span>
+<span class="tok-w">                    </span><span class="tok-n">log</span><span class="tok-p">.</span><span class="tok-na">info</span><span class="tok-p">(</span><span class="tok-s">&quot;请求『{}』结束：时间：{}，耗时：{}ms&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">uri</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">end</span><span class="tok-o">-</span><span class="tok-n">start</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-p">});</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">filter</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-nf">getOrder</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 数字越小，优先级越高</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -7566,10 +7587,10 @@ public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain ch
 <p><a href="https://cloud.spring.io/spring-cloud-gateway/reference/html/#cors-configuration" class="bare">https://cloud.spring.io/spring-cloud-gateway/reference/html/#cors-configuration</a></p>
 </div>
 <div class="paragraph">
-<p>支持所有的微服务允许前端浏览器跨域。</p>
+<p>支持所有的微服务允许前端浏览器跨域。这样就不用在每个微服务中设置跨域了。</p>
 </div>
 <div class="literalblock">
-<div class="title">httpie 发送预检的正确返回</div>
+<div class="title">浏览器在跨域时会发送预检请求，httpie 测试发送预检的正确返回</div>
 <div class="content">
 <pre>http OPTIONS http://localhost:8001/api/order/201810300001 \
   Origin:http://localhost:3000 \
@@ -7583,299 +7604,290 @@ Access-Control-Allow-Origin: http://localhost:3000
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-content-length: 0
-....
-
-==== file -&gt; gateway/src/main/resources/application-route.yml
-
-
-===== spring
-[source,yaml]
-....
-spring:
-  cloud:
-    gateway:
-      # 全局跨域
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowed-origin-patterns:
-              - "http://*"           # 所有 HTTP 域名
-              - "https://*"          # 所有 HTTPS 域名
-              - "http://localhost:*" # 本地开发环境
-              - "http://127.0.0.1:*" # 本地 IP
-              - "http://*.example.com" # 子域名匹配
-            allow-credentials: true
-            allowed-methods: "*"
-            allowed-headers: "*"
-      @others
-....
-
-==== 跨域常见问题
-[qanda]
-我知道在浏览器中使用 ajax 访问后端服务的 api 有跨域问题，想问在浏览器的地址栏直接输入后端的 api 会有跨域问题吗？::
-
-答：没有跨域问题。
+content-length: 0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>下面是实现全局跨域需要更改的配置。</p>
+</div>
+<div class="sect3">
+<h4 id="_file_gatewaysrcmainresourcesapplication_route_yml_7">file &#8594; gateway/src/main/resources/application-route.yml</h4>
+<div class="sect4">
+<h5 id="_spring_4">spring</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">cloud</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">gateway</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-c1"># 全局跨域</span>
+<span class="tok-w">      </span><span class="tok-nt">globalcors</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">cors-configurations</span><span class="tok-p">:</span>
+<span class="tok-w">          </span><span class="tok-s">&#39;[/**]&#39;</span><span class="tok-p tok-p-Indicator">:</span>
+<span class="tok-w">            </span><span class="tok-nt">allowed-origin-patterns</span><span class="tok-p">:</span>
+<span class="tok-w">              </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&quot;http://*&quot;</span><span class="tok-w">              </span><span class="tok-c1"># 所有 HTTP 域名</span>
+<span class="tok-w">              </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&quot;https://*&quot;</span><span class="tok-w">             </span><span class="tok-c1"># 所有 HTTPS 域名</span>
+<span class="tok-w">              </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&quot;http://localhost:*&quot;</span><span class="tok-w">    </span><span class="tok-c1"># 本地开发环境</span>
+<span class="tok-w">              </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&quot;http://127.0.0.1:*&quot;</span><span class="tok-w">    </span><span class="tok-c1"># 本地 IP</span>
+<span class="tok-w">              </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-s">&quot;http://*.example.com&quot;</span><span class="tok-w">  </span><span class="tok-c1"># 子域名匹配</span>
+<span class="tok-w">            </span><span class="tok-nt">allow-credentials</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">            </span><span class="tok-nt">allowed-methods</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;*&quot;</span>
+<span class="tok-w">            </span><span class="tok-nt">allowed-headers</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;*&quot;</span>
+<span class="tok-w">      </span><span class="tok-err">@</span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">others</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_跨域常见问题">跨域常见问题</h4>
+<div class="qlist qanda">
+<ol>
+<li>
+<p><em>我知道在浏览器中使用 ajax 访问后端服务的 api 有跨域问题，想问在浏览器的地址栏直接输入后端的 api 会有跨域问题吗？</em></p>
+<p>答：没有跨域问题。
 浏览器的“跨域限制”（即同源策略 + CORS 校验）只在前端脚本（JavaScript）发起网络请求时才会触发，
-比如通过 XMLHttpRequest、fetch()、axios 等方式发起的请求。
+比如通过 XMLHttpRequest、fetch()、axios 等方式发起的请求。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gateway_面试题">Gateway - 面试题</h3>
+<div class="qlist qanda">
+<ol>
+<li>
+<p><em>微服务之间的调用经过网关吗？</em></p>
+<p>答：不需要经过网关 Gateway，因为网关是对接前端的，没有必要。
+直接从 Eureka 注册中心发现服务进行调用就可以了。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_11_配置中心_config">11. 配置中心 Config</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_创建配置服务器">创建配置服务器</h3>
+<div class="paragraph">
+<p>如下图创建模块 config-server</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/config-server_create.png" alt="config server create" width="1000">
+</div>
+</div>
+<div class="paragraph">
+<p>测试访问网关
+http :8888/</p>
+</div>
+<div class="sect3">
+<h4 id="_file_config_serverpom_xml">@file config-server/pom.xml</h4>
+<div class="sect4">
+<h5 id="_config_server">config-server</h5>
+<div class="paragraph">
+<p>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;
+&lt;/dependency&gt;</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_config_serversrcmainresourcesapplication_yml">@file config-server/src/main/resources/application.yml</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8888</span>
 
-=== Gateway - 面试题
-[qanda]
-微服务之间的调用经过网关吗？::
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">cloud</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">config</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">git</span><span class="tok-p">:</span>
+<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">https://github.com/your-org/config-repo</span>
+<span class="tok-w">          </span><span class="tok-nt">search-paths</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&#39;{application}&#39;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_12_分布式事务_seata使用_nacos_注册服务例子">12. 分布式事务 Seata&#8201;&#8212;&#8201;使用 Nacos 注册服务例子</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="img/transactional.png" alt="transactional" width="800">
+</div>
+</div>
+<div class="sect2">
+<h3 id="_创建_mysql_数据库及相关表">创建 MySQL 数据库及相关表</h3>
+<div class="paragraph">
+<p>创建了三个数据库：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>account_db</p>
+</li>
+<li>
+<p>order_db</p>
+</li>
+<li>
+<p>storage_db</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>每个数据库里的 undo_log 表是 seata 做事务管理要使用的。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sql"><span></span><span class="tok-k">CREATE</span>
+<span class="tok-k">DATABASE</span><span class="tok-w"> </span><span class="tok-k">IF</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">EXISTS</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">storage_db</span><span class="tok-o">`</span><span class="tok-p">;</span>
+<span class="tok-n">USE</span>
+<span class="tok-o">`</span><span class="tok-n">storage_db</span><span class="tok-o">`</span><span class="tok-p">;</span>
 
-答：不需要经过网关 Gateway，因为网关是对接前端的，没有必要。
-直接从 Eureka 注册中心发现服务进行调用就可以了。
+<span class="tok-k">DROP</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-k">IF</span><span class="tok-w"> </span><span class="tok-k">EXISTS</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">storage_tbl</span><span class="tok-o">`</span><span class="tok-p">;</span>
+<span class="tok-k">CREATE</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">storage_tbl</span><span class="tok-o">`</span>
+<span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-w">             </span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-mi">11</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-w"> </span><span class="tok-n">AUTO_INCREMENT</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">commodity_code</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">255</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-k">count</span><span class="tok-o">`</span><span class="tok-w">          </span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-mi">11</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-k">PRIMARY</span><span class="tok-w"> </span><span class="tok-k">KEY</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-p">),</span>
+<span class="tok-w">    </span><span class="tok-k">UNIQUE</span><span class="tok-w"> </span><span class="tok-k">KEY</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">commodity_code</span><span class="tok-o">`</span><span class="tok-p">)</span>
+<span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">ENGINE</span><span class="tok-o">=</span><span class="tok-n">InnoDB</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-n">CHARSET</span><span class="tok-o">=</span><span class="tok-n">utf8</span><span class="tok-p">;</span>
 
-== 11. 配置中心 Config
+<span class="tok-k">INSERT</span><span class="tok-w"> </span><span class="tok-k">INTO</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">storage_tbl</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">commodity_code</span><span class="tok-o">`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-k">count</span><span class="tok-o">`</span><span class="tok-p">)</span>
+<span class="tok-k">VALUES</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-s1">&#39;P0001&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">100</span><span class="tok-p">);</span>
+<span class="tok-k">INSERT</span><span class="tok-w"> </span><span class="tok-k">INTO</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">storage_tbl</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">commodity_code</span><span class="tok-o">`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-k">count</span><span class="tok-o">`</span><span class="tok-p">)</span>
+<span class="tok-k">VALUES</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-s1">&#39;B1234&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-p">);</span>
 
+<span class="tok-c1">-- 注意此处 0.3.0+ 增加唯一索引 ux_undo_log</span>
+<span class="tok-k">DROP</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-k">IF</span><span class="tok-w"> </span><span class="tok-k">EXISTS</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">undo_log</span><span class="tok-o">`</span><span class="tok-p">;</span>
+<span class="tok-k">CREATE</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">undo_log</span><span class="tok-o">`</span>
+<span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-w">            </span><span class="tok-nb">bigint</span><span class="tok-p">(</span><span class="tok-mi">20</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-w"> </span><span class="tok-n">AUTO_INCREMENT</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">branch_id</span><span class="tok-o">`</span><span class="tok-w">     </span><span class="tok-nb">bigint</span><span class="tok-p">(</span><span class="tok-mi">20</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">xid</span><span class="tok-o">`</span><span class="tok-w">           </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">context</span><span class="tok-o">`</span><span class="tok-w">       </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">128</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">rollback_info</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-n">longblob</span><span class="tok-w">     </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">log_status</span><span class="tok-o">`</span><span class="tok-w">    </span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-mi">11</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">log_created</span><span class="tok-o">`</span><span class="tok-w">   </span><span class="tok-n">datetime</span><span class="tok-w">     </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">log_modified</span><span class="tok-o">`</span><span class="tok-w">  </span><span class="tok-n">datetime</span><span class="tok-w">     </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">ext</span><span class="tok-o">`</span><span class="tok-w">           </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-k">PRIMARY</span><span class="tok-w"> </span><span class="tok-k">KEY</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-p">),</span>
+<span class="tok-w">    </span><span class="tok-k">UNIQUE</span><span class="tok-w"> </span><span class="tok-k">KEY</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">ux_undo_log</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">xid</span><span class="tok-o">`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">branch_id</span><span class="tok-o">`</span><span class="tok-p">)</span>
+<span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">ENGINE</span><span class="tok-o">=</span><span class="tok-n">InnoDB</span><span class="tok-w"> </span><span class="tok-n">AUTO_INCREMENT</span><span class="tok-o">=</span><span class="tok-mi">1</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-n">CHARSET</span><span class="tok-o">=</span><span class="tok-n">utf8</span><span class="tok-p">;</span>
 
-=== 创建配置服务器
-如下图创建模块 config-server
+<span class="tok-k">CREATE</span>
+<span class="tok-k">DATABASE</span><span class="tok-w"> </span><span class="tok-k">IF</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">EXISTS</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">order_db</span><span class="tok-o">`</span><span class="tok-p">;</span>
+<span class="tok-n">USE</span>
+<span class="tok-o">`</span><span class="tok-n">order_db</span><span class="tok-o">`</span><span class="tok-p">;</span>
 
-image::img/config-server_create.png[,1000]
+<span class="tok-k">DROP</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-k">IF</span><span class="tok-w"> </span><span class="tok-k">EXISTS</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">order_tbl</span><span class="tok-o">`</span><span class="tok-p">;</span>
+<span class="tok-k">CREATE</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">order_tbl</span><span class="tok-o">`</span>
+<span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-w">             </span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-mi">11</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-w"> </span><span class="tok-n">AUTO_INCREMENT</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">user_id</span><span class="tok-o">`</span><span class="tok-w">        </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">255</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">commodity_code</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">255</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-k">count</span><span class="tok-o">`</span><span class="tok-w">          </span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-mi">11</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">money</span><span class="tok-o">`</span><span class="tok-w">          </span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-mi">11</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-k">PRIMARY</span><span class="tok-w"> </span><span class="tok-k">KEY</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-p">)</span>
+<span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">ENGINE</span><span class="tok-o">=</span><span class="tok-n">InnoDB</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-n">CHARSET</span><span class="tok-o">=</span><span class="tok-n">utf8</span><span class="tok-p">;</span>
 
-测试访问网关
-http :8888/
+<span class="tok-c1">-- 注意此处 0.3.0+ 增加唯一索引 ux_undo_log</span>
+<span class="tok-k">DROP</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-k">IF</span><span class="tok-w"> </span><span class="tok-k">EXISTS</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">undo_log</span><span class="tok-o">`</span><span class="tok-p">;</span>
+<span class="tok-k">CREATE</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">undo_log</span><span class="tok-o">`</span>
+<span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-w">            </span><span class="tok-nb">bigint</span><span class="tok-p">(</span><span class="tok-mi">20</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-w"> </span><span class="tok-n">AUTO_INCREMENT</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">branch_id</span><span class="tok-o">`</span><span class="tok-w">     </span><span class="tok-nb">bigint</span><span class="tok-p">(</span><span class="tok-mi">20</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">xid</span><span class="tok-o">`</span><span class="tok-w">           </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">context</span><span class="tok-o">`</span><span class="tok-w">       </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">128</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">rollback_info</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-n">longblob</span><span class="tok-w">     </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">log_status</span><span class="tok-o">`</span><span class="tok-w">    </span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-mi">11</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">log_created</span><span class="tok-o">`</span><span class="tok-w">   </span><span class="tok-n">datetime</span><span class="tok-w">     </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">log_modified</span><span class="tok-o">`</span><span class="tok-w">  </span><span class="tok-n">datetime</span><span class="tok-w">     </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">ext</span><span class="tok-o">`</span><span class="tok-w">           </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-k">PRIMARY</span><span class="tok-w"> </span><span class="tok-k">KEY</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-p">),</span>
+<span class="tok-w">    </span><span class="tok-k">UNIQUE</span><span class="tok-w"> </span><span class="tok-k">KEY</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">ux_undo_log</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">xid</span><span class="tok-o">`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">branch_id</span><span class="tok-o">`</span><span class="tok-p">)</span>
+<span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">ENGINE</span><span class="tok-o">=</span><span class="tok-n">InnoDB</span><span class="tok-w"> </span><span class="tok-n">AUTO_INCREMENT</span><span class="tok-o">=</span><span class="tok-mi">1</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-n">CHARSET</span><span class="tok-o">=</span><span class="tok-n">utf8</span><span class="tok-p">;</span>
 
-==== file -&gt; config-server/pom.xml
+<span class="tok-k">CREATE</span>
+<span class="tok-k">DATABASE</span><span class="tok-w"> </span><span class="tok-k">IF</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">EXISTS</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">account_db</span><span class="tok-o">`</span><span class="tok-p">;</span>
+<span class="tok-n">USE</span>
+<span class="tok-o">`</span><span class="tok-n">account_db</span><span class="tok-o">`</span><span class="tok-p">;</span>
 
+<span class="tok-k">DROP</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-k">IF</span><span class="tok-w"> </span><span class="tok-k">EXISTS</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">account_tbl</span><span class="tok-o">`</span><span class="tok-p">;</span>
+<span class="tok-k">CREATE</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">account_tbl</span><span class="tok-o">`</span>
+<span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-w">      </span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-mi">11</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-w"> </span><span class="tok-n">AUTO_INCREMENT</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">user_id</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">255</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">money</span><span class="tok-o">`</span><span class="tok-w">   </span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-mi">11</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-k">PRIMARY</span><span class="tok-w"> </span><span class="tok-k">KEY</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-p">)</span>
+<span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">ENGINE</span><span class="tok-o">=</span><span class="tok-n">InnoDB</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-n">CHARSET</span><span class="tok-o">=</span><span class="tok-n">utf8</span><span class="tok-p">;</span>
 
-===== project
-[source,scss]
-....
-&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+<span class="tok-k">INSERT</span><span class="tok-w"> </span><span class="tok-k">INTO</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">account_tbl</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">user_id</span><span class="tok-o">`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">money</span><span class="tok-o">`</span><span class="tok-p">)</span>
+<span class="tok-k">VALUES</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-s1">&#39;1&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">10000</span><span class="tok-p">);</span>
 
-    &lt;groupId&gt;com.tjise&lt;/groupId&gt;
-    &lt;artifactId&gt;config-server&lt;/artifactId&gt;
-    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-
-    &lt;properties&gt;
-        &lt;maven.compiler.source&gt;8&lt;/maven.compiler.source&gt;
-        &lt;maven.compiler.target&gt;8&lt;/maven.compiler.target&gt;
-        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-    &lt;/properties&gt;
-
-&lt;/project&gt;
-....
-
-==== file -&gt; config-server/src/main/resources/application.yml
-[source,yaml]
-----
-server:
-  port: 8888
-
-spring:
-  cloud:
-    config:
-      server:
-        git:
-          uri: https://github.com/your-org/config-repo
-          search-paths: '{application}'
-----
-
-==== application 解释
-### 为什么是 `{application}`？
-这是 Spring Cloud Config 的**预定义占位符**，不是任意字符串。Spring Cloud 会自动将 `{application}` 替换为微服务的 `spring.application.name`。
-
-### 预定义占位符列表：
-Spring Cloud Config 支持以下占位符：
-- `{application}` - 微服务名称（spring.application.name）
-- `{profile}` - 激活的环境（如：dev, test, prod）
-- `{label}` - Git分支或标签（如：master, v1.0）
-
-### 配置查找过程：
-当微服务 `app-order`（环境：dev）请求配置时：
-1. 配置中心收到请求：`/app-order/dev`
-2. 替换占位符：`{application}` → `app-order`，`{profile}` → `dev`
-3. 在Git仓库中查找：
-   - `app-order-dev.yml`（优先级最高）
-   - `app-order.yml`（共享配置）
-   - `app-order/` 目录下的配置文件
-
-### 完整配置示例：
-```yaml
-search-paths: '{application},{application}/{profile}'
-```
-这样会查找：
-- `app-order.yml`（根目录）
-- `app-order/dev/` 目录下的所有文件
-
-### 为什么不用其他字符串？
-- `{application}` 是 Spring Cloud 的约定
-- 使用其他字符串不会被自动替换
-- 这是框架设计的一部分，确保一致性
-
-== 12. 分布式事务 Seata -- 使用 Nacos 注册服务例子
-image::img/transactional.png[,800]
-
-=== 创建 MySQL 数据库及相关表
-创建了三个数据库：
-
-* account_db
-* order_db
-* storage_db
-
-每个数据库里的 undo_log 表是 seata 做事务管理要使用的。
-
-
-[source,sql]
-----
-CREATE
-DATABASE IF NOT EXISTS `storage_db`;
-USE
-`storage_db`;
-
-DROP TABLE IF EXISTS `storage_tbl`;
-CREATE TABLE `storage_tbl`
-(
-    `id`             int(11) NOT NULL AUTO_INCREMENT,
-    `commodity_code` varchar(255) DEFAULT NULL,
-    `count`          int(11) DEFAULT 0,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY (`commodity_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO `storage_tbl` (`commodity_code`, `count`)
-VALUES ('P0001', 100);
-INSERT INTO `storage_tbl` (`commodity_code`, `count`)
-VALUES ('B1234', 10);
-
--- 注意此处 0.3.0+ 增加唯一索引 ux_undo_log
-DROP TABLE IF EXISTS `undo_log`;
-CREATE TABLE `undo_log`
-(
-    `id`            bigint(20) NOT NULL AUTO_INCREMENT,
-    `branch_id`     bigint(20) NOT NULL,
-    `xid`           varchar(100) NOT NULL,
-    `context`       varchar(128) NOT NULL,
-    `rollback_info` longblob     NOT NULL,
-    `log_status`    int(11) NOT NULL,
-    `log_created`   datetime     NOT NULL,
-    `log_modified`  datetime     NOT NULL,
-    `ext`           varchar(100) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `ux_undo_log` (`xid`, `branch_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
-CREATE
-DATABASE IF NOT EXISTS `order_db`;
-USE
-`order_db`;
-
-DROP TABLE IF EXISTS `order_tbl`;
-CREATE TABLE `order_tbl`
-(
-    `id`             int(11) NOT NULL AUTO_INCREMENT,
-    `user_id`        varchar(255) DEFAULT NULL,
-    `commodity_code` varchar(255) DEFAULT NULL,
-    `count`          int(11) DEFAULT 0,
-    `money`          int(11) DEFAULT 0,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 注意此处 0.3.0+ 增加唯一索引 ux_undo_log
-DROP TABLE IF EXISTS `undo_log`;
-CREATE TABLE `undo_log`
-(
-    `id`            bigint(20) NOT NULL AUTO_INCREMENT,
-    `branch_id`     bigint(20) NOT NULL,
-    `xid`           varchar(100) NOT NULL,
-    `context`       varchar(128) NOT NULL,
-    `rollback_info` longblob     NOT NULL,
-    `log_status`    int(11) NOT NULL,
-    `log_created`   datetime     NOT NULL,
-    `log_modified`  datetime     NOT NULL,
-    `ext`           varchar(100) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `ux_undo_log` (`xid`, `branch_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
-CREATE
-DATABASE IF NOT EXISTS `account_db`;
-USE
-`account_db`;
-
-DROP TABLE IF EXISTS `account_tbl`;
-CREATE TABLE `account_tbl`
-(
-    `id`      int(11) NOT NULL AUTO_INCREMENT,
-    `user_id` varchar(255) DEFAULT NULL,
-    `money`   int(11) DEFAULT 0,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO `account_tbl` (`user_id`, `money`)
-VALUES ('1', 10000);
-
--- 注意此处 0.3.0+ 增加唯一索引 ux_undo_log
-DROP TABLE IF EXISTS `undo_log`;
-CREATE TABLE `undo_log`
-(
-    `id`            bigint(20) NOT NULL AUTO_INCREMENT,
-    `branch_id`     bigint(20) NOT NULL,
-    `xid`           varchar(100) NOT NULL,
-    `context`       varchar(128) NOT NULL,
-    `rollback_info` longblob     NOT NULL,
-    `log_status`    int(11) NOT NULL,
-    `log_created`   datetime     NOT NULL,
-    `log_modified`  datetime     NOT NULL,
-    `ext`           varchar(100) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `ux_undo_log` (`xid`, `branch_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-----
-
-== 13. 服务保护 Sentinel
-
-
-=== docker 开启 sentinel-dashboard
-image::img/sentinel_dashboard186.png[]
-
-image::img/sentinel_dashboard186_run.png[]
-
-image::img/sentinel_dashboard186_admin.png[]
-
-== 14. 服务部署
-[mermaid, target=img/mermaid-2025-10-12-105950, format=svg]
-....
-flowchart TD
-
-    Client[客户端请求&lt;br/&gt;https://api.company.com]
-
-    subgraph NginxLayer [第一层: Nginx 静态负载均衡]
-        Nginx[Nginx&lt;br/&gt;基于配置文件的负载均衡]
-    end
-
-    subgraph GatewayLayer [第二层: Gateway 动态集群]
-        G1[Gateway 实例1]
-        G2[Gateway 实例2]
-        G3[Gateway 实例3]
-        %% 横向排列
-        G1 --&gt; G2 --&gt; G3
-    end
-
-    subgraph MicroserviceLayer [第三层: 微服务集群]
-        User[用户服务&lt;br&gt;192.168.1.10:8080&lt;br&gt;192.168.1.11:8081]
-        Order[订单服务&lt;br&gt;192.168.1.12:8082&lt;br&gt;192.168.1.13:8083]
-        Product[商品服务&lt;br&gt;192.168.1.14:8084]
-        %% 横向排列
-        User --&gt; Order --&gt; Product
-    end
-
-    Client --&gt; NginxLayer
-    NginxLayer --&gt; GatewayLayer
-    GatewayLayer --&gt; MicroserviceLayer
-....</pre>
+<span class="tok-c1">-- 注意此处 0.3.0+ 增加唯一索引 ux_undo_log</span>
+<span class="tok-k">DROP</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-k">IF</span><span class="tok-w"> </span><span class="tok-k">EXISTS</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">undo_log</span><span class="tok-o">`</span><span class="tok-p">;</span>
+<span class="tok-k">CREATE</span><span class="tok-w"> </span><span class="tok-k">TABLE</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">undo_log</span><span class="tok-o">`</span>
+<span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-w">            </span><span class="tok-nb">bigint</span><span class="tok-p">(</span><span class="tok-mi">20</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-w"> </span><span class="tok-n">AUTO_INCREMENT</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">branch_id</span><span class="tok-o">`</span><span class="tok-w">     </span><span class="tok-nb">bigint</span><span class="tok-p">(</span><span class="tok-mi">20</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">xid</span><span class="tok-o">`</span><span class="tok-w">           </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">context</span><span class="tok-o">`</span><span class="tok-w">       </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">128</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">rollback_info</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-n">longblob</span><span class="tok-w">     </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">log_status</span><span class="tok-o">`</span><span class="tok-w">    </span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-mi">11</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">log_created</span><span class="tok-o">`</span><span class="tok-w">   </span><span class="tok-n">datetime</span><span class="tok-w">     </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">log_modified</span><span class="tok-o">`</span><span class="tok-w">  </span><span class="tok-n">datetime</span><span class="tok-w">     </span><span class="tok-k">NOT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-o">`</span><span class="tok-n">ext</span><span class="tok-o">`</span><span class="tok-w">           </span><span class="tok-nb">varchar</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-k">NULL</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-k">PRIMARY</span><span class="tok-w"> </span><span class="tok-k">KEY</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">id</span><span class="tok-o">`</span><span class="tok-p">),</span>
+<span class="tok-w">    </span><span class="tok-k">UNIQUE</span><span class="tok-w"> </span><span class="tok-k">KEY</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">ux_undo_log</span><span class="tok-o">`</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">`</span><span class="tok-n">xid</span><span class="tok-o">`</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-o">`</span><span class="tok-n">branch_id</span><span class="tok-o">`</span><span class="tok-p">)</span>
+<span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-n">ENGINE</span><span class="tok-o">=</span><span class="tok-n">InnoDB</span><span class="tok-w"> </span><span class="tok-n">AUTO_INCREMENT</span><span class="tok-o">=</span><span class="tok-mi">1</span><span class="tok-w"> </span><span class="tok-k">DEFAULT</span><span class="tok-w"> </span><span class="tok-n">CHARSET</span><span class="tok-o">=</span><span class="tok-n">utf8</span><span class="tok-p">;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_13_服务保护_sentinel">13. 服务保护 Sentinel</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_docker_开启_sentinel_dashboard">docker 开启 sentinel-dashboard</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/sentinel_dashboard186.png" alt="sentinel dashboard186">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/sentinel_dashboard186_run.png" alt="sentinel dashboard186 run">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/sentinel_dashboard186_admin.png" alt="sentinel dashboard186 admin">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_14_服务部署">14. 服务部署</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-2025-10-12-105950.svg" alt="mermaid 2025 10 12 105950" width="818" height="688">
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-21 09:27:15 +0800
+Last updated 2025-10-22 15:03:00 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

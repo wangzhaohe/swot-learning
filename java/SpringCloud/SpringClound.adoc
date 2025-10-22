@@ -4730,7 +4730,7 @@ spring:
             - Path=/api/item/**
           order: 2
 
-        # 兜底路由
+        # 兜底路由  --New Added--
         - id: bing-route  # 自己定义的id
           uri: https://cn.bing.com/
           predicates:
@@ -4777,13 +4777,13 @@ spring:
       routes:  # IDEA中点击可以查看属性定义
         - id: order-route
           uri: lb://app-order
-          # -- 长写法 --
-          predicates:
+          # -- 断言长写法 --
+          predicates:  # IDEA 中按 Shift Shift -> classes -> PredicateDefinition 可发现 name & args
             - name: Path
               args:  # IDEA 中按 Shift Shift -> classes -> PathRoutePredicateFactory 可发现定义了下面两个属性
                 patterns: /api/order/**
                 matchTrailingSlash: true  # 默认 true，是否匹配最后的 /
-          # -- 长写法结束 --
+          # -- 断言长写法结束 --
           order: 1
 
         - id: item-route
@@ -4834,7 +4834,7 @@ NOTE: 用浏览器则可以看到网页的渲染内容。
 本课件忽略！可以参考该视频去实现:
 https://www.bilibili.com/video/BV1UJc2ezEFU?spm_id_from=333.788.player.switch&vd_source=392e2829ea8e40de989be86888026747&p=57
 
-=== Gateway - 过滤器 - 基本使用
+=== Gateway - 过滤器 - 基本使用 RewritePath & AddResponseHeader
 过滤器工厂名
 https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories
 
@@ -4845,7 +4845,7 @@ https://cloud.spring.io/spring-cloud-gateway/reference/html/#the-rewritepath-gat
 
 因为前面我们在网关的配置中都加了 /api，
 这样在每个微服务中都需要加 /api，如果微服务多了，就会冗余，且很麻烦，
-下面我们使用过滤器来简化该操作。
+下面我们使用过滤器来简化该操作。更改后，再测试如下：
 
 .测试能正常返回订单数据且有新添加的响应头: AddResponseHeader 的作用
 ....
@@ -5055,7 +5055,7 @@ http :8001/api/order/201810300001
 HTTP/1.1 200 OK
 Content-Type: application/json
 Date: Tue, 14 Oct 2025 09:36:07 GMT
-X-Response-Default-Red: Default-Blue
+X-Response-Default-Red: Default-Blue  --New Added--
 X-Response-Red: Blue
 transfer-encoding: chunked
 
@@ -5149,7 +5149,7 @@ https://cloud.spring.io/spring-cloud-gateway/reference/html/#global-filters
 
 我们来做一个功能，计算一个请求响应的时间。
 
-测试:
+做好后测试:
 http :8001/api/order/201810300001
 
 .gateway 服务端打印测试结果
@@ -5165,6 +5165,8 @@ Date: <filtered>
 ....
 
 ==== file -> gateway/src/main/java/com/tjise/gateway/filter/ResponseTimeGlobalFilter.java
+[source,java]
+----
 package com.tjise.gateway.filter;
 
 import lombok.extern.slf4j.Slf4j;
@@ -5187,11 +5189,13 @@ public class ResponseTimeGlobalFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
         String uri = request.getURI().toString();
+
         long start= System.currentTimeMillis();
         log.info("请求『{}』开始：时间：{}", uri, start);
 
+        // 放行请求并记录响应所花费的时间
         Mono<Void> filter = chain.filter(exchange)   // 放行请求
-                .doFinally((result)->{      // 响应式编程的异步链式调用
+                .doFinally((result)->{               // 响应式编程的异步链式调用
                     long end = System.currentTimeMillis();
                     log.info("请求『{}』结束：时间：{}，耗时：{}ms", uri, end, end-start);
                 });
@@ -5203,6 +5207,7 @@ public class ResponseTimeGlobalFilter implements GlobalFilter, Ordered {
         return 0;  // 数字越小，优先级越高
     }
 }
+----
 
 === Gateway - 过滤器 - 自定义过滤器工厂（高级）
 本课件忽略！可以参考该视频去实现:
@@ -5211,11 +5216,11 @@ https://www.bilibili.com/video/BV1UJc2ezEFU?spm_id_from=333.788.videopod.episode
 === Gateway - 扩展 - 全局跨域
 https://cloud.spring.io/spring-cloud-gateway/reference/html/#cors-configuration
 
-支持所有的微服务允许前端浏览器跨域。
+支持所有的微服务允许前端浏览器跨域。这样就不用在每个微服务中设置跨域了。
 
 
-.httpie 发送预检的正确返回
-.....
+.浏览器在跨域时会发送预检请求，httpie 测试发送预检的正确返回
+....
 http OPTIONS http://localhost:8001/api/order/201810300001 \
   Origin:http://localhost:3000 \
   Access-Control-Request-Method:GET \
@@ -5231,6 +5236,8 @@ Vary: Access-Control-Request-Headers
 content-length: 0
 ....
 
+下面是实现全局跨域需要更改的配置。
+
 ==== file -> gateway/src/main/resources/application-route.yml
 
 
@@ -5245,11 +5252,11 @@ spring:
         cors-configurations:
           '[/**]':
             allowed-origin-patterns:
-              - "http://*"           # 所有 HTTP 域名
-              - "https://*"          # 所有 HTTPS 域名
-              - "http://localhost:*" # 本地开发环境
-              - "http://127.0.0.1:*" # 本地 IP
-              - "http://*.example.com" # 子域名匹配
+              - "http://*"              # 所有 HTTP 域名
+              - "https://*"             # 所有 HTTPS 域名
+              - "http://localhost:*"    # 本地开发环境
+              - "http://127.0.0.1:*"    # 本地 IP
+              - "http://*.example.com"  # 子域名匹配
             allow-credentials: true
             allowed-methods: "*"
             allowed-headers: "*"
@@ -5282,31 +5289,16 @@ image::img/config-server_create.png[,1000]
 测试访问网关
 http :8888/
 
-==== file -> config-server/pom.xml
+==== @file config-server/pom.xml
 
 
-===== project
-[source,scss]
-....
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+===== config-server
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-config-server</artifactId>
+</dependency>
 
-    <groupId>com.tjise</groupId>
-    <artifactId>config-server</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-</project>
-....
-
-==== file -> config-server/src/main/resources/application.yml
+==== @file config-server/src/main/resources/application.yml
 [source,yaml]
 ----
 server:
@@ -5320,38 +5312,6 @@ spring:
           uri: https://github.com/your-org/config-repo
           search-paths: '{application}'
 ----
-
-==== application 解释
-### 为什么是 `{application}`？
-这是 Spring Cloud Config 的**预定义占位符**，不是任意字符串。Spring Cloud 会自动将 `{application}` 替换为微服务的 `spring.application.name`。
-
-### 预定义占位符列表：
-Spring Cloud Config 支持以下占位符：
-- `{application}` - 微服务名称（spring.application.name）
-- `{profile}` - 激活的环境（如：dev, test, prod）
-- `{label}` - Git分支或标签（如：master, v1.0）
-
-### 配置查找过程：
-当微服务 `app-order`（环境：dev）请求配置时：
-1. 配置中心收到请求：`/app-order/dev`
-2. 替换占位符：`{application}` → `app-order`，`{profile}` → `dev`
-3. 在Git仓库中查找：
-   - `app-order-dev.yml`（优先级最高）
-   - `app-order.yml`（共享配置）
-   - `app-order/` 目录下的配置文件
-
-### 完整配置示例：
-```yaml
-search-paths: '{application},{application}/{profile}'
-```
-这样会查找：
-- `app-order.yml`（根目录）
-- `app-order/dev/` 目录下的所有文件
-
-### 为什么不用其他字符串？
-- `{application}` 是 Spring Cloud 的约定
-- 使用其他字符串不会被自动替换
-- 这是框架设计的一部分，确保一致性
 
 == 12. 分布式事务 Seata -- 使用 Nacos 注册服务例子
 image::img/transactional.png[,800]

@@ -739,11 +739,8 @@
 </v>
 <v t="swot.20251015160024.1"><vh>11. 配置中心 Config</vh>
 <v t="swot.20251019180825.1"><vh>创建配置服务器</vh>
-<v t="swot.20251019185240.1"><vh>file -&gt; config-server/pom.xml</vh>
-<v t="swot.20251019185348.1"><vh>project</vh></v>
-</v>
-<v t="swot.20251019184859.1"><vh>file -&gt; config-server/src/main/resources/application.yml</vh></v>
-<v t="swot.20251019205749.1"><vh>application 解释</vh></v>
+<v t="swot.20251019185240.1"><vh>@file config-server/pom.xml</vh></v>
+<v t="swot.20251019184859.1"><vh>@file config-server/src/main/resources/application.yml</vh></v>
 </v>
 </v>
 <v t="swot.20251010153250.1"><vh>12. 分布式事务 Seata -- 使用 Nacos 注册服务例子</vh>
@@ -8960,11 +8957,11 @@ https://www.bilibili.com/video/BV1UJc2ezEFU?spm_id_from=333.788.videopod.episode
 <t tx="swot.20251012085105.1">@language asciidoc
 https://cloud.spring.io/spring-cloud-gateway/reference/html/#cors-configuration
 
-支持所有的微服务允许前端浏览器跨域。
+支持所有的微服务允许前端浏览器跨域。这样就不用在每个微服务中设置跨域了。
 
 
-.httpie 发送预检的正确返回
-.....
+.浏览器在跨域时会发送预检请求，httpie 测试发送预检的正确返回
+....
 http OPTIONS http://localhost:8001/api/order/201810300001 \
   Origin:http://localhost:3000 \
   Access-Control-Request-Method:GET \
@@ -8979,6 +8976,8 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 content-length: 0
 ....
+
+下面是实现全局跨域需要更改的配置。
 </t>
 <t tx="swot.20251012085116.1">@language asciidoc
 [qanda]
@@ -9996,8 +9995,7 @@ public class ResponseTimeGlobalFilter implements GlobalFilter, Ordered {
 <t tx="swot.20251015135553.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032352d30392d31387103752e">@language yaml
 @others
 </t>
-<t tx="swot.20251015135553.2" annotate="7d71002858080000007072696f7269747971014b01580a000000707269736574646174657102580a000000323032352d31302d31347103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e677104580700000072656c506174687105580d000000636c656f2f707269312e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e">@tabwidth -2
-@doc
+<t tx="swot.20251015135553.2" annotate="7d71002858080000007072696f7269747971014b01580a000000707269736574646174657102580a000000323032352d31302d31347103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e677104580700000072656c506174687105580d000000636c656f2f707269312e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e">@doc
 [source,yaml]
 ....
 @c
@@ -10010,11 +10008,11 @@ spring:
         cors-configurations:
           '[/**]':
             allowed-origin-patterns:
-              - "http://*"           # 所有 HTTP 域名
-              - "https://*"          # 所有 HTTPS 域名
-              - "http://localhost:*" # 本地开发环境
-              - "http://127.0.0.1:*" # 本地 IP
-              - "http://*.example.com" # 子域名匹配
+              - "http://*"              # 所有 HTTP 域名
+              - "https://*"             # 所有 HTTPS 域名
+              - "http://localhost:*"    # 本地开发环境
+              - "http://127.0.0.1:*"    # 本地 IP
+              - "http://*.example.com"  # 子域名匹配
             allow-credentials: true
             allowed-methods: "*"
             allowed-headers: "*"
@@ -10209,85 +10207,6 @@ image::img/config-server_create.png[,1000]
 
 测试访问网关
 http :8888/
-</t>
-<t tx="swot.20251019184859.1">@doc
-[source,yaml]
-----
-@c
-@language yaml
-server:
-  port: 8888
-
-spring:
-  cloud:
-    config:
-      server:
-        git:
-          uri: https://github.com/your-org/config-repo
-          search-paths: '{application}'
-@doc
-----
-</t>
-<t tx="swot.20251019185240.1">@first &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-@language xml
-@others
-</t>
-<t tx="swot.20251019185348.1">@doc
-[source,scss]
-....
-@c
-@language xml
-&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-
-    &lt;groupId&gt;com.tjise&lt;/groupId&gt;
-    &lt;artifactId&gt;config-server&lt;/artifactId&gt;
-    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-
-    &lt;properties&gt;
-        &lt;maven.compiler.source&gt;8&lt;/maven.compiler.source&gt;
-        &lt;maven.compiler.target&gt;8&lt;/maven.compiler.target&gt;
-        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-    &lt;/properties&gt;
-
-&lt;/project&gt;
-@doc
-....
-</t>
-<t tx="swot.20251019205749.1">@language asciidoc
-@doc
-### 为什么是 `{application}`？
-这是 Spring Cloud Config 的**预定义占位符**，不是任意字符串。Spring Cloud 会自动将 `{application}` 替换为微服务的 `spring.application.name`。
-
-### 预定义占位符列表：
-Spring Cloud Config 支持以下占位符：
-- `{application}` - 微服务名称（spring.application.name）
-- `{profile}` - 激活的环境（如：dev, test, prod）
-- `{label}` - Git分支或标签（如：master, v1.0）
-
-### 配置查找过程：
-当微服务 `app-order`（环境：dev）请求配置时：
-1. 配置中心收到请求：`/app-order/dev`
-2. 替换占位符：`{application}` → `app-order`，`{profile}` → `dev`
-3. 在Git仓库中查找：
-   - `app-order-dev.yml`（优先级最高）
-   - `app-order.yml`（共享配置）
-   - `app-order/` 目录下的配置文件
-
-### 完整配置示例：
-```yaml
-search-paths: '{application},{application}/{profile}'
-```
-这样会查找：
-- `app-order.yml`（根目录）
-- `app-order/dev/` 目录下的所有文件
-
-### 为什么不用其他字符串？
-- `{application}` 是 Spring Cloud 的约定
-- 使用其他字符串不会被自动替换
-- 这是框架设计的一部分，确保一致性
 </t>
 </tnodes>
 </leo_file>
