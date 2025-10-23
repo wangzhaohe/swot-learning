@@ -741,7 +741,13 @@
 <v t="swot.20251019180825.1"><vh>创建配置服务器</vh>
 <v t="swot.20251019185240.1"><vh>@file config-server/pom.xml</vh></v>
 <v t="swot.20251019184859.1"><vh>@file config-server/src/main/resources/application.yml</vh></v>
+<v t="swot.20251023075811.1"><vh>@file config-server/src/main/java/com/tjise/serviceconfig/ConfigServerApplication.java</vh></v>
+<v t="swot.20251023080228.1"><vh>@file config-server/src/main/resources/config-repo/application.yml</vh></v>
+<v t="swot.20251023080339.1"><vh>@file config-server/src/main/resources/config-repo/service-order.yml</vh></v>
+<v t="swot.20251023080409.1"><vh>@file config-server/src/main/resources/config-repo/service-order-dev.yml</vh></v>
+<v t="swot.20251023080431.1"><vh>@file config-server/src/main/resources/config-repo/service-order-prod.yml</vh></v>
 </v>
+<v t="swot.20251023080720.1"><vh>在客户端使用配置中心数据</vh></v>
 </v>
 <v t="swot.20251010153250.1"><vh>12. 分布式事务 Seata -- 使用 Nacos 注册服务例子</vh>
 <v t="swot.20251015154829.1"><vh>创建 MySQL 数据库及相关表</vh></v>
@@ -10208,5 +10214,6 @@ image::img/config-server_create.png[,1000]
 测试访问网关
 http :8888/
 </t>
+<t tx="swot.20251023080720.1"></t>
 </tnodes>
 </leo_file>

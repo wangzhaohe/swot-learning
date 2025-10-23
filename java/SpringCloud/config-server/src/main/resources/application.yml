@@ -1,0 +1,31 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: native
+  cloud:
+    config:
+      enabled: false
+      server:
+        # 使用本地文件系统作为配置仓库，适合演示
+        native:
+          search-locations: classpath:/config-repo
+        # 启用健康检查端点
+        health:
+          enabled: true
+    # 禁用配置客户端检查，因为配置中心本身不需要连接到其他配置中心
+    import-check:
+      enabled: false
+
+# 配置 Actuator 端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,configprops
+  endpoint:
+    health:
+      show-details: always

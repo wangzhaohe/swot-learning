@@ -1,0 +1,64 @@
+#@+leo-ver=5-thin
+#@+node:swot.20251023080431.1: * @file config-server/src/main/resources/config-repo/service-order-prod.yml
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
+# service-order 生产环境配置文件
+server:
+  port: 8080
+
+spring:
+  application:
+    name: service-order
+  datasource:
+    url: jdbc:mysql://localhost:3306/order_db
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: prod_user
+    password: ${DB_PASSWORD:secret}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+# 自定义配置示例 - 生产环境
+app:
+  name: 订单服务 (生产环境)
+  version: 1.0.0
+  description: 这是一个订单微服务示例 - 生产环境
+  features:
+    - 订单创建
+    - 订单查询
+    - 订单状态更新
+  limits:
+    max-order-items: 50
+    timeout-seconds: 10
+
+# 演示配置 - 生产环境
+demo:
+  enabled: false
+  message: "生产环境：系统运行中"
+  retry-count: 2
+  cache-enabled: true
+  debug-mode: false
+
+# 生产环境特定配置
+logging:
+  level:
+    com.tjise.serviceorder: INFO
+    org.springframework.web: WARN
+
+# 监控配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
+  endpoint:
+    health:
+      show-details: when_authorized
+#@+doc
+# ----
+#
+#@-leo

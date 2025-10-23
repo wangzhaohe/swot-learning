@@ -1,0 +1,58 @@
+#@+leo-ver=5-thin
+#@+node:swot.20251023080409.1: * @file config-server/src/main/resources/config-repo/service-order-dev.yml
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
+# service-order 开发环境配置文件
+server:
+  port: 8082
+
+spring:
+  application:
+    name: service-order
+  datasource:
+    url: jdbc:h2:mem:devdb
+    driver-class-name: org.h2.Driver
+    username: dev_user
+    password: dev123
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+# 自定义配置示例 - 开发环境
+app:
+  name: 订单服务 (开发环境)
+  version: 1.1.0-dev
+  description: 这是一个订单微服务示例 - 开发环境，包含新功能测试"
+  features:
+    - 订单创建
+    - 订单查询
+    - 订单状态更新
+    - 调试模式
+    - 新功能测试
+  limits:
+    max-order-items: 3
+    timeout-seconds: 120
+
+# 演示配置 - 开发环境
+demo:
+  enabled: true
+  message: "开发环境：正在测试新功能，请谨慎使用！"
+  retry-count: 10
+  cache-enabled: false
+  debug-mode: true
+  branch: dev
+
+# 开发环境特定配置
+logging:
+  level:
+    com.tjise.serviceorder: TRACE
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+#@+doc
+# ----
+#
+#@-leo
