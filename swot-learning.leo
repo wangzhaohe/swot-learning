@@ -494,10 +494,10 @@
 </v>
 <v t="swot.20250510175912.1"><vh>14 UML 图</vh>
 <v t="swot.20250510175912.2"><vh>14.1 类图符号</vh></v>
-<v t="swot.20250511103711.1"><vh>14.2 活动图</vh>
-<v t="swot.20250514132317.1"><vh>14.2.1 复杂的例子</vh></v>
+<v t="swot.20250511230628.1"><vh>14.2 用例图</vh></v>
+<v t="swot.20250511103711.1"><vh>14.3 活动图</vh>
+<v t="swot.20250514132317.1"><vh>复杂的例子</vh></v>
 </v>
-<v t="swot.20250511230628.1"><vh>14.3 用例图</vh></v>
 <v t="swot.20250515105738.1"><vh>14.4 UML面向对象建模</vh></v>
 </v>
 <v t="swot.20250514212913.1"><vh>15 信息安全</vh></v>
@@ -511,6 +511,15 @@
 </v>
 </v>
 <v t="swot.20250521151644.1"><vh>@edit .gitignore</vh></v>
+<v t="swot.20251026093202.1"><vh>@path wubi86</vh>
+<v t="swot.20251026094157.1"><vh>@adoc wubi86.adoc</vh>
+<v t="swot.20251026094246.1"><vh>五笔86学习</vh>
+<v t="swot.20251026094301.1"><vh>五笔86字根表</vh></v>
+<v t="swot.20251026094312.1"><vh>五笔86末笔表</vh></v>
+<v t="swot.20251026094138.1"><vh>五笔86难字表</vh></v>
+</v>
+</v>
+</v>
 </vnodes>
 <tnodes>
 <t tx="swot.20250508105043.2"></t>
@@ -3303,7 +3312,9 @@ D 模式与内模式之间的映像、外模式与模式之间的映像
 
 * 空心三角形箭头	泛化（继承）	猫继承自动物
 
-* 普通箭头/连线	关联	员工参与项目
+* 实线箭头或连线	关联	员工参与项目
+
+* 虚线箭头 依赖 A...&gt;B （A 的某些变化会影响 B）
 
 </t>
 <t tx="swot.20250510180235.1"></t>
@@ -4012,14 +4023,40 @@ flowchart TD
 * UC1 需要 UC2 的事件流才能实例化（即 UC1 依赖 UC2）。
 * UC1 指定了使用 UC2 的精确位置（即 UC1 主动调用 UC2）。
 
-UML 用例图的标准关系只有：
 
-* include（包含）
-* extend（扩展）
-* generalization（泛化/继承）
-* association（关联，通常用于参与者和用例之间）
+UML 用例图中，用例与用例之间有三种标准关系：
 
-没有 call 这个标准关系，所以选项 D 是干扰项。
+* include（包含），用虚线箭头表示，基础用例指向被包含用例，上面写 &lt;&lt;include&gt;&gt;
+  ** 当基础用例执行时，被包含用例一定会执行。
+
+* extend（扩展） ，用虚线箭头表示，扩展用例指向基础用例，上面写 &lt;&lt;extend&gt;&gt;
+  ** 当一个用例执行时，可能会出现特殊情况和可选情况，这个时候就会执行扩展用例。
+
+* generalization（泛化|继承），空心三角形箭头，子类指向父类
+  ** 子继承父的所有属性和行为
+  ** 参与者与参与者之间的关系
+  ** 用例与用例之间的关系
+
+
+association 关联，通常用于参与者和用例之间，不是用例与用例之间的关系。
+
+
+NOTE: 没有 call 这个标准关系，所以选项 D 是干扰项。
+
+
+.画图表示一下更明白
+[mermaid, target=img/mermaid-2025-10-25-195835, format=svg]
+....
+graph TD
+    A[UML用例图关系] --&gt; B[参与者与用例间]
+    A --&gt; C[用例与用例间]
+
+    B --&gt; D[关联&lt;br&gt;Association]
+
+    C --&gt; E[包含 Include]
+    C --&gt; F[扩展 Extend]
+    C --&gt; G[泛化 Generalization]
+....
 
 </t>
 <t tx="swot.20250511231707.1">（C）不属于按寻址方式划分的一类存储器。
@@ -9825,6 +9862,53 @@ https://github.com/redis/redis
 
 For developers, who are building real-time data-driven applications, Redis is the preferred, fastest, and most feature-rich cache, data structure server, and document and vector query engine.
 
+
+</t>
+<t tx="swot.20251026093202.1"></t>
+<t tx="swot.20251026094138.1">@language asciidoc
+https://wubi.xuelai.com/
+
+glf 盏
+</t>
+<t tx="swot.20251026094157.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3</t>
+<t tx="swot.20251026094246.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20251026094301.1">@language asciidoc
+.字根表
+image::img/5bi.jpeg[,800]
+
+</t>
+<t tx="swot.20251026094312.1">@language asciidoc
+.末笔表
+image::img/5bimobi.jpg[,800]
 
 </t>
 </tnodes>
