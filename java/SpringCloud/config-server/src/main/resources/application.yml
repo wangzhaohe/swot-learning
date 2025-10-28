@@ -1,3 +1,10 @@
+#@+leo-ver=5-thin
+#@+node:swot.20251019184859.1: * @file config-server/src/main/resources/application.yml
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
 server:
   port: 8888
 
@@ -5,18 +12,17 @@ spring:
   application:
     name: config-server
   profiles:
-    active: native
+    active: native  # 启用本地模式，使配置服务器使用本地文件系统而不是Git仓库
   cloud:
     config:
-      enabled: false
+      enabled: false  # 该配置中心本身不需要连接到其他配置中心
       server:
-        # 使用本地文件系统作为配置仓库，适合演示
-        native:
+        native:       # 指定本地配置文件的位置
           search-locations: classpath:/config-repo
         # 启用健康检查端点
         health:
           enabled: true
-    # 禁用配置客户端检查，因为配置中心本身不需要连接到其他配置中心
+    # 禁用配置客户端检查（config-server本身是配置服务器，不需要从其他配置中心获取配置）
     import-check:
       enabled: false
 
@@ -25,7 +31,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,configprops
-  endpoint:
+        include: health,info,configprops  # 用于指定要暴露的端点
+  endpoint:  # 用于配置特定端点的行为
     health:
       show-details: always
+#@+doc
+# ----
+#@-leo

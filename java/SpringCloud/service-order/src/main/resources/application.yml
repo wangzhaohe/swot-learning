@@ -1,44 +1,42 @@
 #@+leo-ver=5-thin
-#@+node:swot.20251010105134.1: * @file service-order/src/main/resources/application.yml
+#@+node:swot.20251023083411.1: * @file service-order/src/main/resources/application.yml
 #@@language yaml
 #@+others
-#@+node:swot.20251010105134.2: ** spring -> import application-feign.yml
+#@+node:swot.20251023083411.2: ** spring -> 连接 config-server
 #@+doc
 # [source, yaml]
 # ----
 #@@c
 spring:
     config:
-        import: application-feign.yml
+        # --New Added--
+        import: configserver:http://localhost:8888,application-feign.yml
     application:
+
         # 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
         name: app-order
+
     cloud:
+        # --New Added Start--
+        config:
+            name: app-order    # 配置文件名
+            profile: dev       # 环境配置
+        # --New Added End--
+
+        # 使用 spring cloud 集成的 resilience4j
         circuitbreaker:
             resilience4j:
-                enabled: false
+                enabled: false  # --要停用--
+
+        # 不使用节流等功能，可以不用开启
         # sentinel:
-            # # transport:
-                # # dashboard: localhost:8858  # Sentinel 控制台地址
-            # # eager: true  # 立即初始化 Sentinel
-            # feign:
-                # enabled: true  # 开启 Sentinel 对 Feign 的支持
+            # transport:
+                # dashboard: localhost:8858  # Sentinel 控制台地址
+            # eager: true  # 立即初始化 Sentinel
 #@+doc
 # ----
-#@+node:swot.20251010105134.3: ** feign 开启断路器（测试时需要关闭 feign 断路器功能）
-#@+doc
-# [source,yaml]
-# ----
-#@@c
-#@@language yaml
-feign:
-    circuitbreaker:
-        enabled: true
-#@+doc
-# ----
-#
-#@+node:swot.20251010105134.4: ** @ignore-tree 
-#@+node:swot.20251010105134.5: *3* server
+#@+node:swot.20251023083411.4: ** @ignore-tree 
+#@+node:swot.20251023083411.5: *3* server
 #@+doc
 # [source,yaml]
 # ----
@@ -47,7 +45,7 @@ server:
     port: 8091
 #@+doc
 # ----
-#@+node:swot.20251010105134.6: *3* eureka
+#@+node:swot.20251023083411.6: *3* eureka
 #@+doc
 # [source,yaml]
 # ----
@@ -66,7 +64,7 @@ eureka:
         # 这是生产环境的最佳实践。避免主机名解析问题
 #@+doc
 # ----
-#@+node:swot.20251010105134.7: *3* resilience4j -- 修改成 configs: default
+#@+node:swot.20251023083411.7: *3* resilience4j -- 修改成 configs: default
 #@+doc
 # [source,yaml]
 # ----
@@ -75,7 +73,7 @@ eureka:
 resilience4j:
     circuitbreaker:
         configs:
-            default: # --New 让 SpringCloud 自动管理服务名，否则找不到断路器
+            default:         # --New 让 SpringCloud 自动管理服务名，否则找不到断路器
                 sliding-window-size: 5                  # 需要 5次调用来计算失败率
                 failure-rate-threshold: 50              # 50% 失败率才跳闸
                 wait-duration-in-open-state: 10s        # 10 秒后进入半开状态
@@ -104,7 +102,7 @@ resilience4j:
 # | 恢复时间 | 10 秒   | 60秒
 # | 目的    | 快速验证 | 稳定运行
 # |===
-#@+node:swot.20251010105134.8: *3* management
+#@+node:swot.20251023083411.8: *3* management
 #@+doc
 # [source,yaml]
 # ----
@@ -113,8 +111,8 @@ resilience4j:
 management:
     endpoints:
         web:
-            exposure:
-                include: health,info,circuitbreakerevents  # 暴露断路器事件端点
+            exposure:  # 暴露断路器事件端点
+                include: health,info,circuitbreakerevents,refresh,env
     endpoint:
         health:
             show-details: always
@@ -124,7 +122,22 @@ management:
 #@+doc
 # ----
 #
-#@+node:swot.20251010105134.9: *3* logging
+#@+node:swot.20251023083411.3: *3* feign 开启断路器 -> 测试时需要开启 sentinel 支持 feign 断路器功能
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
+feign:
+    # 直接使用 resilience4j
+    # circuitbreaker:
+        # enabled: true
+    sentinel:
+        enabled: true
+#@+doc
+# ----
+#
+#@+node:swot.20251023083411.9: *3* logging
 #@+doc
 # [source,yaml]
 # ----

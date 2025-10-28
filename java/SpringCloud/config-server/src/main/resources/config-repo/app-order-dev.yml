@@ -1,17 +1,21 @@
 #@+leo-ver=5-thin
-#@+node:swot.20251023080409.1: * @file config-server/src/main/resources/config-repo/service-order-dev.yml
+#@+node:swot.20251024165757.1: * @file config-server/src/main/resources/config-repo/app-order-dev.yml
+#@@language yaml
+#@+others
+#@+node:swot.20251024170506.1: ** @ignore-node config
 #@+doc
+# service-order 开发环境配置文件，当服务以 dev 环境启动时，app-order-dev.yml 会覆盖 app-order.yml 中相同配置项。
+#
 # [source,yaml]
 # ----
 #@@c
 #@@language yaml
-# service-order 开发环境配置文件
 server:
-  port: 8082
+  port: 8092
 
 spring:
   application:
-    name: service-order
+    name: app-order
   datasource:
     url: jdbc:h2:mem:devdb
     driver-class-name: org.h2.Driver
@@ -22,7 +26,7 @@ spring:
       ddl-auto: create-drop
     show-sql: true
 
-# 自定义配置示例 - 开发环境
+# 应用业务配置 - 开发环境
 app:
   name: 订单服务 (开发环境)
   version: 1.1.0-dev
@@ -54,5 +58,20 @@ logging:
     org.hibernate.SQL: DEBUG
 #@+doc
 # ----
-#
+#@+node:swot.20251024170555.1: ** resilience4j
+#@+doc
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
+# 动态配置测试 - 断路器故障率阈值
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        # failure-rate-threshold: 50
+        failure-rate-threshold: 75  # 改数字为了测试
+#@+doc
+# ----
+#@-others
 #@-leo

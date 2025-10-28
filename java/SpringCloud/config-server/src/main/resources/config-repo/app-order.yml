@@ -1,0 +1,61 @@
+#@+leo-ver=5-thin
+#@+node:swot.20251023080339.1: * @file config-server/src/main/resources/config-repo/app-order.yml
+#@+doc
+# 针对名为 "app-order" 特定微服务的配置文件，会覆盖全局配置中的同名属性。
+#
+# @file config-server/src/main/resources/config-repo/application.yml
+#
+# @file config-server/src/main/resources/config-repo/app-order.yml
+#
+# 两者关系：
+#
+# 1. 继承关系：如果 "app-order" 微服务没有在 app-order.yml 中定义的配置项，会从 application.yml 中继承
+# 2. 覆盖关系：app-order.yml 中的配置会覆盖 application.yml 中的相同配置项
+# 3. 优先级：特定应用配置文件的优先级高于全局配置文件
+#
+# 例如，在 app-order.yml 中定义了 server.port: 8092，如果 application.yml 也有端口配置，app-order.yml 中的配置会生效。
+#
+# 这是 Spring Cloud Config 的标准行为，允许您定义全局共享配置和特定应用配置，实现配置的分层管理。
+#
+# [source,yaml]
+# ----
+#@@c
+#@@language yaml
+# app-order 默认配置
+server:
+  port: 8091
+
+spring:
+  application:
+    name: app-order
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+# 应用业务配置
+app:
+  name: 订单服务
+  version: 1.0.0
+  description: 这是一个订单微服务示例
+  features:
+    - 订单创建
+    - 订单查询
+    - 订单状态更新
+  limits:
+    max-order-items: 10
+    timeout-seconds: 30
+
+demo:
+  enabled: true
+  message: "欢迎使用 Spring Cloud Config 配置中心！"
+  retry-count: 3
+  cache-enabled: true
+#@+doc
+# ----
+#@-leo

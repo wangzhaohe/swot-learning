@@ -5279,7 +5279,7 @@ spring:
 直接从 Eureka 注册中心发现服务进行调用就可以了。
 
 == 11. 配置中心 Config
-
+下面文档详细记录了 Spring Cloud Config 配置中心的完整搭建、配置和测试过程，包括 config-server 和 service-order 模块的集成。
 
 === 创建配置服务器
 如下图创建模块 config-server
@@ -5289,29 +5289,446 @@ image::img/config-server_create.png[,1000]
 测试访问网关
 http :8888/
 
-==== @file config-server/pom.xml
+==== file -> config-server/pom.xml
 
 
 ===== config-server
+[source,scss]
+....
 <dependency>
     <groupId>org.springframework.cloud</groupId>
     <artifactId>spring-cloud-config-server</artifactId>
 </dependency>
+....
 
-==== @file config-server/src/main/resources/application.yml
+===== Actuator
+[source,scss]
+....
+<!-- Spring Boot Actuator for monitoring and management -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+....
+
+==== file -> config-server/src/main/java/com/tjise/serviceconfig/ConfigServerApplication.java
+[source,java]
+----
+package com.tjise.serviceconfig;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.config.server.EnableConfigServer;
+
+@SpringBootApplication
+@EnableConfigServer  // --New Added--
+public class ConfigServerApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigServerApplication.class, args);
+    }
+}
+----
+
+==== file -> config-server/src/main/resources/application.yml
 [source,yaml]
 ----
 server:
   port: 8888
 
 spring:
+  application:
+    name: config-server
+  profiles:
+    active: native  # 启用本地模式，使配置服务器使用本地文件系统而不是Git仓库
   cloud:
     config:
+      enabled: false  # 该配置中心本身不需要连接到其他配置中心
       server:
-        git:
-          uri: https://github.com/your-org/config-repo
-          search-paths: '{application}'
+        native:       # 指定本地配置文件的位置
+          search-locations: classpath:/config-repo
+        # 启用健康检查端点
+        health:
+          enabled: true
+    # 禁用配置客户端检查（config-server本身是配置服务器，不需要从其他配置中心获取配置）
+    import-check:
+      enabled: false
+
+# 配置 Actuator 端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,configprops  # 用于指定要暴露的端点
+  endpoint:  # 用于配置特定端点的行为
+    health:
+      show-details: always
 ----
+
+==== file -> config-server/src/main/resources/config-repo/application.yml
+为所有微服务提供全局共享的默认配置。
+任何微服务如果没有特定配置，都会继承这些设置。
+
+[source,yaml]
+----
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        use_sql_comments: true
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+  level:
+    root: INFO
+
+# 应用通用配置
+app:
+  company: TJISE
+  environment: ${spring.profiles.active:default}
+  support-email: support@tjise.com
+
+demo:
+  config-server-url: http://localhost:8888
+  refresh-endpoint: /actuator/refresh
+  config-endpoint: /{application}/{profile}
+----
+
+==== file -> config-server/src/main/resources/config-repo/app-order.yml
+针对名为 "app-order" 特定微服务的配置文件，会覆盖全局配置中的同名属性。
+
+config-server/src/main/resources/config-repo/application.yml
+
+config-server/src/main/resources/config-repo/app-order.yml
+
+两者关系：
+
+1. 继承关系：如果 "app-order" 微服务没有在 app-order.yml 中定义的配置项，会从 application.yml 中继承
+2. 覆盖关系：app-order.yml 中的配置会覆盖 application.yml 中的相同配置项
+3. 优先级：特定应用配置文件的优先级高于全局配置文件
+
+例如，在 app-order.yml 中定义了 server.port: 8092，如果 application.yml 也有端口配置，app-order.yml 中的配置会生效。
+
+这是 Spring Cloud Config 的标准行为，允许您定义全局共享配置和特定应用配置，实现配置的分层管理。
+
+[source,yaml]
+----
+# app-order 默认配置
+server:
+  port: 8091
+
+spring:
+  application:
+    name: app-order
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+# 应用业务配置
+app:
+  name: 订单服务
+  version: 1.0.0
+  description: 这是一个订单微服务示例
+  features:
+    - 订单创建
+    - 订单查询
+    - 订单状态更新
+  limits:
+    max-order-items: 10
+    timeout-seconds: 30
+
+demo:
+  enabled: true
+  message: "欢迎使用 Spring Cloud Config 配置中心！"
+  retry-count: 3
+  cache-enabled: true
+----
+
+==== file -> config-server/src/main/resources/config-repo/app-order-dev.yml
+service-order 开发环境配置文件，当服务以 dev 环境启动时，app-order-dev.yml 会覆盖 app-order.yml 中相同配置项。
+
+[source,yaml]
+----
+server:
+  port: 8092
+
+spring:
+  application:
+    name: app-order
+  datasource:
+    url: jdbc:h2:mem:devdb
+    driver-class-name: org.h2.Driver
+    username: dev_user
+    password: dev123
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+# 应用业务配置 - 开发环境
+app:
+  name: 订单服务 (开发环境)
+  version: 1.1.0-dev
+  description: 这是一个订单微服务示例 - 开发环境，包含新功能测试"
+  features:
+    - 订单创建
+    - 订单查询
+    - 订单状态更新
+    - 调试模式
+    - 新功能测试
+  limits:
+    max-order-items: 3
+    timeout-seconds: 120
+
+# 演示配置 - 开发环境
+demo:
+  enabled: true
+  message: "开发环境：正在测试新功能，请谨慎使用！"
+  retry-count: 10
+  cache-enabled: false
+  debug-mode: true
+  branch: dev
+
+# 开发环境特定配置
+logging:
+  level:
+    com.tjise.serviceorder: TRACE
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+
+# 动态配置测试 - 断路器故障率阈值
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        failure-rate-threshold: 50
+----
+
+==== file -> config-server/src/main/resources/config-repo/app-order-prod.yml
+service-order 生产环境配置文件，该配置只是演示，没有实际配置生效。
+
+[source,yaml]
+----
+server:
+  port: 8093
+
+spring:
+  application:
+    name: service-order
+  datasource:
+    url: jdbc:mysql://localhost:3306/order_db
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: prod_user
+    password: ${DB_PASSWORD:secret}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+# 自定义配置示例 - 生产环境
+app:
+  name: 订单服务 (生产环境)
+  version: 1.0.0
+  description: 这是一个订单微服务示例 - 生产环境
+  features:
+    - 订单创建
+    - 订单查询
+    - 订单状态更新
+  limits:
+    max-order-items: 50
+    timeout-seconds: 10
+
+# 演示配置 - 生产环境
+demo:
+  enabled: false
+  message: "生产环境：系统运行中"
+  retry-count: 2
+  cache-enabled: true
+  debug-mode: false
+
+# 生产环境特定配置
+logging:
+  level:
+    com.tjise.serviceorder: INFO
+    org.springframework.web: WARN
+
+# 监控配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
+  endpoint:
+    health:
+      show-details: when_authorized
+----
+
+=== 在客户端使用配置中心数据
+
+
+==== file -> service-order/pom.xml
+
+
+===== config
+[source,scss]
+....
+<!-- Spring Cloud Config Client -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+....
+
+===== actuator
+[source,scss]
+....
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+....
+
+==== file -> service-order/src/main/resources/application.yml
+
+
+===== spring -> 连接 config-server
+[source, yaml]
+----
+spring:
+    config:
+        # --New Added--
+        import: configserver:http://localhost:8888,application-feign.yml
+    application:
+
+        # 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)
+        name: app-order
+
+    cloud:
+        # --New Added Start--
+        config:
+            name: app-order    # 配置文件名
+            profile: dev       # 环境配置
+        # --New Added End--
+
+        # 使用 spring cloud 集成的 resilience4j
+        circuitbreaker:
+            resilience4j:
+                enabled: false  # --要停用--
+
+        # 不使用节流等功能，可以不用开启
+        # sentinel:
+            # transport:
+                # dashboard: localhost:8858  # Sentinel 控制台地址
+            # eager: true  # 立即初始化 Sentinel
+----
+
+=== 测试配置中心
+
+
+==== 检查 Config-Server 状态
+[source, console]
+----
+http 'http://localhost:8888/actuator/health' | jq .status
+# 输出: "UP"
+
+http http://localhost:8888/app-order/dev | jq '.propertySources[0].source."server.port"'
+# 输出: 8092
+----
+
+==== 检查 Service-Order 状态
+[source, console]
+----
+http http://localhost:8092/actuator/health | jq .status
+# 输出: "UP"
+
+> http http://localhost:8092/actuator/env/resilience4j.circuitbreaker.configs.default.failure-rate-threshold | jq .property.value
+# 输出: 50
+----
+
+==== 测试动态配置的更新 failure-rate-threshold: 50 to 75
+1. 先更改下面 yml 的配置，再进行测试。
+
+2. 触发配置刷新
+.. 由于使用 `native` 模式，需要重启 config-server 来加载新配置。
++
+[source,console]
+----
+http POST http://localhost:8092/actuator/refresh
+# 8092 是配置中心给的端口号
+----
+
+3. 验证配置更新
++
+[source,console]
+----
+http GET http://localhost:8092/actuator/env/resilience4j.circuitbreaker.configs.default.failure-rate-threshold | jq '.property.value'
+----
+
+===== file -> config-server/src/main/resources/config-repo/app-order-dev.yml
+
+
+====== resilience4j
+[source,yaml]
+----
+# 动态配置测试 - 断路器故障率阈值
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        # failure-rate-threshold: 50
+        failure-rate-threshold: 75  # 改数字为了测试
+----
+
+=== 配置优先级说明
+. 配置源优先级
++
+[source]
+----
+高优先级 -> 低优先级
+远程配置 (config-server) > 本地配置 (application.yml) > 默认配置
+----
+
+. 可动态更新的配置类型
+* ✅ **支持动态更新**（无需重启服务）：
+- 业务逻辑配置
+- 日志级别配置
+- 功能开关配置
+- 超时时间配置
+- Resilience4j 断路器配置
+* ❌ **需要重启服务**：
+- 服务器端口 (`server.port`)
+- 数据库连接配置
+- 网络相关配置
+- 任何影响应用启动行为的配置
+
+. 配置模式对比
+
+[cols="1,1,1,2", options="header"]
+|===
+| 模式 | 自动检测 | 需要重启 | 适用场景
+| `native` | ❌ | ✅ | 开发环境、简单演示
+| `git` | ✅ | ❌ | 生产环境、团队协作
+| `vault` | ✅ | ❌ | 安全敏感配置
+| `nacos` | ✅ | ❌ | 云原生环境
+|===
 
 == 12. 分布式事务 Seata -- 使用 Nacos 注册服务例子
 image::img/transactional.png[,800]

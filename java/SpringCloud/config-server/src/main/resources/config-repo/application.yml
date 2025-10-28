@@ -1,13 +1,14 @@
 #@+leo-ver=5-thin
 #@+node:swot.20251023080228.1: * @file config-server/src/main/resources/config-repo/application.yml
 #@+doc
+# 为所有微服务提供全局共享的默认配置。
+# 任何微服务如果没有特定配置，都会继承这些设置。
+#
 # [source,yaml]
 # ----
 #@@c
 #@@language yaml
-# 全局配置文件 - 所有服务共享的配置
 spring:
-  # 全局数据源配置
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -17,7 +18,6 @@ spring:
       idle-timeout: 600000
       max-lifetime: 1800000
 
-  # 全局 JPA 配置
   jpa:
     properties:
       hibernate:
@@ -25,24 +25,22 @@ spring:
         format_sql: true
         use_sql_comments: true
 
-# 全局日志配置
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
   level:
     root: INFO
 
-# 全局应用配置
+# 应用通用配置
 app:
-  company: "TJISE"
+  company: TJISE
   environment: ${spring.profiles.active:default}
-  support-email: "support@tjise.com"
+  support-email: support@tjise.com
 
-# 全局演示配置
 demo:
-  config-server-url: "http://localhost:8888"
-  refresh-endpoint: "/actuator/refresh"
-  config-endpoint: "/{application}/{profile}"
+  config-server-url: http://localhost:8888
+  refresh-endpoint: /actuator/refresh
+  config-endpoint: /{application}/{profile}
 #@+doc
 # ----
 #

@@ -789,10 +789,29 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel2">
 <li><a href="#_创建配置服务器">创建配置服务器</a>
 <ul class="sectlevel3">
-<li><a href="#_file_config_serverpom_xml">@file config-server/pom.xml</a></li>
-<li><a href="#_file_config_serversrcmainresourcesapplication_yml">@file config-server/src/main/resources/application.yml</a></li>
+<li><a href="#_file_config_serverpom_xml">file &#8594; config-server/pom.xml</a></li>
+<li><a href="#_file_config_serversrcmainjavacomtjiseserviceconfigconfigserverapplication_java">file &#8594; config-server/src/main/java/com/tjise/serviceconfig/ConfigServerApplication.java</a></li>
+<li><a href="#_file_config_serversrcmainresourcesapplication_yml">file &#8594; config-server/src/main/resources/application.yml</a></li>
+<li><a href="#_file_config_serversrcmainresourcesconfig_repoapplication_yml">file &#8594; config-server/src/main/resources/config-repo/application.yml</a></li>
+<li><a href="#_file_config_serversrcmainresourcesconfig_repoapp_order_yml">file &#8594; config-server/src/main/resources/config-repo/app-order.yml</a></li>
+<li><a href="#_file_config_serversrcmainresourcesconfig_repoapp_order_dev_yml">file &#8594; config-server/src/main/resources/config-repo/app-order-dev.yml</a></li>
+<li><a href="#_file_config_serversrcmainresourcesconfig_repoapp_order_prod_yml">file &#8594; config-server/src/main/resources/config-repo/app-order-prod.yml</a></li>
 </ul>
 </li>
+<li><a href="#_在客户端使用配置中心数据">在客户端使用配置中心数据</a>
+<ul class="sectlevel3">
+<li><a href="#_file_service_orderpom_xml_11">file &#8594; service-order/pom.xml</a></li>
+<li><a href="#_file_service_ordersrcmainresourcesapplication_yml_14">file &#8594; service-order/src/main/resources/application.yml</a></li>
+</ul>
+</li>
+<li><a href="#_测试配置中心">测试配置中心</a>
+<ul class="sectlevel3">
+<li><a href="#_检查_config_server_状态">检查 Config-Server 状态</a></li>
+<li><a href="#_检查_service_order_状态">检查 Service-Order 状态</a></li>
+<li><a href="#_测试动态配置的更新_failure_rate_threshold_50_to_75">测试动态配置的更新 failure-rate-threshold: 50 to 75</a></li>
+</ul>
+</li>
+<li><a href="#_配置优先级说明">配置优先级说明</a></li>
 </ul>
 </li>
 <li><a href="#_12_分布式事务_seata使用_nacos_注册服务例子">12. 分布式事务 Seata&#8201;&#8212;&#8201;使用 Nacos 注册服务例子</a>
@@ -7666,6 +7685,9 @@ content-length: 0</pre>
 <div class="sect1">
 <h2 id="_11_配置中心_config">11. 配置中心 Config</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>下面文档详细记录了 Spring Cloud Config 配置中心的完整搭建、配置和测试过程，包括 config-server 和 service-order 模块的集成。</p>
+</div>
 <div class="sect2">
 <h3 id="_创建配置服务器">创建配置服务器</h3>
 <div class="paragraph">
@@ -7681,34 +7703,583 @@ content-length: 0</pre>
 http :8888/</p>
 </div>
 <div class="sect3">
-<h4 id="_file_config_serverpom_xml">@file config-server/pom.xml</h4>
+<h4 id="_file_config_serverpom_xml">file &#8594; config-server/pom.xml</h4>
 <div class="sect4">
 <h5 id="_config_server">config-server</h5>
-<div class="paragraph">
-<p>&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;
-&lt;/dependency&gt;</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-config-server</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_actuator_2">Actuator</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">Spring</span><span class="tok-w"> </span><span class="tok-nt">Boot</span><span class="tok-w"> </span><span class="tok-nt">Actuator</span><span class="tok-w"> </span><span class="tok-nt">for</span><span class="tok-w"> </span><span class="tok-nt">monitoring</span><span class="tok-w"> </span><span class="tok-nt">and</span><span class="tok-w"> </span><span class="tok-nt">management</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-actuator</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_file_config_serversrcmainresourcesapplication_yml">@file config-server/src/main/resources/application.yml</h4>
+<h4 id="_file_config_serversrcmainjavacomtjiseserviceconfigconfigserverapplication_java">file &#8594; config-server/src/main/java/com/tjise/serviceconfig/ConfigServerApplication.java</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.tjise.serviceconfig</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.SpringApplication</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">org.springframework.cloud.config.server.EnableConfigServer</span><span class="tok-p">;</span>
+
+<span class="tok-nd">@SpringBootApplication</span>
+<span class="tok-nd">@EnableConfigServer</span><span class="tok-w">  </span><span class="tok-c1">// --New Added--</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ConfigServerApplication</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">SpringApplication</span><span class="tok-p">.</span><span class="tok-na">run</span><span class="tok-p">(</span><span class="tok-n">ConfigServerApplication</span><span class="tok-p">.</span><span class="tok-na">class</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_config_serversrcmainresourcesapplication_yml">file &#8594; config-server/src/main/resources/application.yml</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
 <span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8888</span>
 
 <span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">config-server</span>
+<span class="tok-w">  </span><span class="tok-nt">profiles</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">active</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">native</span><span class="tok-w">  </span><span class="tok-c1"># 启用本地模式，使配置服务器使用本地文件系统而不是Git仓库</span>
 <span class="tok-w">  </span><span class="tok-nt">cloud</span><span class="tok-p">:</span>
 <span class="tok-w">    </span><span class="tok-nt">config</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span><span class="tok-w">  </span><span class="tok-c1"># 该配置中心本身不需要连接到其他配置中心</span>
 <span class="tok-w">      </span><span class="tok-nt">server</span><span class="tok-p">:</span>
-<span class="tok-w">        </span><span class="tok-nt">git</span><span class="tok-p">:</span>
-<span class="tok-w">          </span><span class="tok-nt">uri</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">https://github.com/your-org/config-repo</span>
-<span class="tok-w">          </span><span class="tok-nt">search-paths</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&#39;{application}&#39;</span></code></pre>
+<span class="tok-w">        </span><span class="tok-nt">native</span><span class="tok-p">:</span><span class="tok-w">       </span><span class="tok-c1"># 指定本地配置文件的位置</span>
+<span class="tok-w">          </span><span class="tok-nt">search-locations</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">classpath:/config-repo</span>
+<span class="tok-w">        </span><span class="tok-c1"># 启用健康检查端点</span>
+<span class="tok-w">        </span><span class="tok-nt">health</span><span class="tok-p">:</span>
+<span class="tok-w">          </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">    </span><span class="tok-c1"># 禁用配置客户端检查（config-server本身是配置服务器，不需要从其他配置中心获取配置）</span>
+<span class="tok-w">    </span><span class="tok-nt">import-check</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
+
+<span class="tok-c1"># 配置 Actuator 端点</span>
+<span class="tok-nt">management</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">endpoints</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">web</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">exposure</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">include</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">health,info,configprops</span><span class="tok-w">  </span><span class="tok-c1"># 用于指定要暴露的端点</span>
+<span class="tok-w">  </span><span class="tok-nt">endpoint</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># 用于配置特定端点的行为</span>
+<span class="tok-w">    </span><span class="tok-nt">health</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">show-details</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">always</span></code></pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_file_config_serversrcmainresourcesconfig_repoapplication_yml">file &#8594; config-server/src/main/resources/config-repo/application.yml</h4>
+<div class="paragraph">
+<p>为所有微服务提供全局共享的默认配置。
+任何微服务如果没有特定配置，都会继承这些设置。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">datasource</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">type</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">com.zaxxer.hikari.HikariDataSource</span>
+<span class="tok-w">    </span><span class="tok-nt">hikari</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">maximum-pool-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">20</span>
+<span class="tok-w">      </span><span class="tok-nt">minimum-idle</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">5</span>
+<span class="tok-w">      </span><span class="tok-nt">connection-timeout</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">30000</span>
+<span class="tok-w">      </span><span class="tok-nt">idle-timeout</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">600000</span>
+<span class="tok-w">      </span><span class="tok-nt">max-lifetime</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1800000</span>
+
+<span class="tok-w">  </span><span class="tok-nt">jpa</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">properties</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">hibernate</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">dialect</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">org.hibernate.dialect.H2Dialect</span>
+<span class="tok-w">        </span><span class="tok-nt">format_sql</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">        </span><span class="tok-nt">use_sql_comments</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+
+<span class="tok-nt">logging</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">pattern</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">console</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;%d{yyyy-MM-dd</span><span class="tok-nv"> </span><span class="tok-s">HH:mm:ss}</span><span class="tok-nv"> </span><span class="tok-s">-</span><span class="tok-nv"> </span><span class="tok-s">%logger{36}</span><span class="tok-nv"> </span><span class="tok-s">-</span><span class="tok-nv"> </span><span class="tok-s">%msg%n&quot;</span>
+<span class="tok-w">  </span><span class="tok-nt">level</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">root</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">INFO</span>
+
+<span class="tok-c1"># 应用通用配置</span>
+<span class="tok-nt">app</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">company</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">TJISE</span>
+<span class="tok-w">  </span><span class="tok-nt">environment</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">${spring.profiles.active:default}</span>
+<span class="tok-w">  </span><span class="tok-nt">support-email</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">support@tjise.com</span>
+
+<span class="tok-nt">demo</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">config-server-url</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">http://localhost:8888</span>
+<span class="tok-w">  </span><span class="tok-nt">refresh-endpoint</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/actuator/refresh</span>
+<span class="tok-w">  </span><span class="tok-nt">config-endpoint</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/{application}/{profile}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_config_serversrcmainresourcesconfig_repoapp_order_yml">file &#8594; config-server/src/main/resources/config-repo/app-order.yml</h4>
+<div class="paragraph">
+<p>针对名为 "app-order" 特定微服务的配置文件，会覆盖全局配置中的同名属性。</p>
+</div>
+<div class="paragraph">
+<p>config-server/src/main/resources/config-repo/application.yml</p>
+</div>
+<div class="paragraph">
+<p>config-server/src/main/resources/config-repo/app-order.yml</p>
+</div>
+<div class="paragraph">
+<p>两者关系：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>继承关系：如果 "app-order" 微服务没有在 app-order.yml 中定义的配置项，会从 application.yml 中继承</p>
+</li>
+<li>
+<p>覆盖关系：app-order.yml 中的配置会覆盖 application.yml 中的相同配置项</p>
+</li>
+<li>
+<p>优先级：特定应用配置文件的优先级高于全局配置文件</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>例如，在 app-order.yml 中定义了 server.port: 8092，如果 application.yml 也有端口配置，app-order.yml 中的配置会生效。</p>
+</div>
+<div class="paragraph">
+<p>这是 Spring Cloud Config 的标准行为，允许您定义全局共享配置和特定应用配置，实现配置的分层管理。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># app-order 默认配置</span>
+<span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8091</span>
+
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">app-order</span>
+<span class="tok-w">  </span><span class="tok-nt">datasource</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">url</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">jdbc:h2:mem:testdb</span>
+<span class="tok-w">    </span><span class="tok-nt">driver-class-name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">org.h2.Driver</span>
+<span class="tok-w">    </span><span class="tok-nt">username</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">sa</span>
+<span class="tok-w">    </span><span class="tok-nt">password</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">password</span>
+<span class="tok-w">  </span><span class="tok-nt">jpa</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">hibernate</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">ddl-auto</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">update</span>
+<span class="tok-w">    </span><span class="tok-nt">show-sql</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+
+<span class="tok-c1"># 应用业务配置</span>
+<span class="tok-nt">app</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单服务</span>
+<span class="tok-w">  </span><span class="tok-nt">version</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1.0.0</span>
+<span class="tok-w">  </span><span class="tok-nt">description</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">这是一个订单微服务示例</span>
+<span class="tok-w">  </span><span class="tok-nt">features</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单创建</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单查询</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单状态更新</span>
+<span class="tok-w">  </span><span class="tok-nt">limits</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">max-order-items</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10</span>
+<span class="tok-w">    </span><span class="tok-nt">timeout-seconds</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">30</span>
+
+<span class="tok-nt">demo</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">  </span><span class="tok-nt">message</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;欢迎使用</span><span class="tok-nv"> </span><span class="tok-s">Spring</span><span class="tok-nv"> </span><span class="tok-s">Cloud</span><span class="tok-nv"> </span><span class="tok-s">Config</span><span class="tok-nv"> </span><span class="tok-s">配置中心！&quot;</span>
+<span class="tok-w">  </span><span class="tok-nt">retry-count</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">3</span>
+<span class="tok-w">  </span><span class="tok-nt">cache-enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_config_serversrcmainresourcesconfig_repoapp_order_dev_yml">file &#8594; config-server/src/main/resources/config-repo/app-order-dev.yml</h4>
+<div class="paragraph">
+<p>service-order 开发环境配置文件，当服务以 dev 环境启动时，app-order-dev.yml 会覆盖 app-order.yml 中相同配置项。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8092</span>
+
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">app-order</span>
+<span class="tok-w">  </span><span class="tok-nt">datasource</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">url</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">jdbc:h2:mem:devdb</span>
+<span class="tok-w">    </span><span class="tok-nt">driver-class-name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">org.h2.Driver</span>
+<span class="tok-w">    </span><span class="tok-nt">username</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">dev_user</span>
+<span class="tok-w">    </span><span class="tok-nt">password</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">dev123</span>
+<span class="tok-w">  </span><span class="tok-nt">jpa</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">hibernate</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">ddl-auto</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">create-drop</span>
+<span class="tok-w">    </span><span class="tok-nt">show-sql</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+
+<span class="tok-c1"># 应用业务配置 - 开发环境</span>
+<span class="tok-nt">app</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单服务 (开发环境)</span>
+<span class="tok-w">  </span><span class="tok-nt">version</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1.1.0-dev</span>
+<span class="tok-w">  </span><span class="tok-nt">description</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">这是一个订单微服务示例 - 开发环境，包含新功能测试&quot;</span>
+<span class="tok-w">  </span><span class="tok-nt">features</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单创建</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单查询</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单状态更新</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">调试模式</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">新功能测试</span>
+<span class="tok-w">  </span><span class="tok-nt">limits</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">max-order-items</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">3</span>
+<span class="tok-w">    </span><span class="tok-nt">timeout-seconds</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">120</span>
+
+<span class="tok-c1"># 演示配置 - 开发环境</span>
+<span class="tok-nt">demo</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">  </span><span class="tok-nt">message</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;开发环境：正在测试新功能，请谨慎使用！&quot;</span>
+<span class="tok-w">  </span><span class="tok-nt">retry-count</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10</span>
+<span class="tok-w">  </span><span class="tok-nt">cache-enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
+<span class="tok-w">  </span><span class="tok-nt">debug-mode</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">  </span><span class="tok-nt">branch</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">dev</span>
+
+<span class="tok-c1"># 开发环境特定配置</span>
+<span class="tok-nt">logging</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">level</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">com.tjise.serviceorder</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">TRACE</span>
+<span class="tok-w">    </span><span class="tok-nt">org.springframework.web</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DEBUG</span>
+<span class="tok-w">    </span><span class="tok-nt">org.hibernate.SQL</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DEBUG</span>
+
+<span class="tok-c1"># 动态配置测试 - 断路器故障率阈值</span>
+<span class="tok-nt">resilience4j</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">circuitbreaker</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">configs</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">default</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">failure-rate-threshold</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">50</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_config_serversrcmainresourcesconfig_repoapp_order_prod_yml">file &#8594; config-server/src/main/resources/config-repo/app-order-prod.yml</h4>
+<div class="paragraph">
+<p>service-order 生产环境配置文件，该配置只是演示，没有实际配置生效。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">server</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">port</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">8093</span>
+
+<span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">service-order</span>
+<span class="tok-w">  </span><span class="tok-nt">datasource</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">url</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">jdbc:mysql://localhost:3306/order_db</span>
+<span class="tok-w">    </span><span class="tok-nt">driver-class-name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">com.mysql.cj.jdbc.Driver</span>
+<span class="tok-w">    </span><span class="tok-nt">username</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">prod_user</span>
+<span class="tok-w">    </span><span class="tok-nt">password</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">${DB_PASSWORD:secret}</span>
+<span class="tok-w">  </span><span class="tok-nt">jpa</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">hibernate</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">ddl-auto</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">validate</span>
+<span class="tok-w">    </span><span class="tok-nt">show-sql</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
+
+<span class="tok-c1"># 自定义配置示例 - 生产环境</span>
+<span class="tok-nt">app</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单服务 (生产环境)</span>
+<span class="tok-w">  </span><span class="tok-nt">version</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1.0.0</span>
+<span class="tok-w">  </span><span class="tok-nt">description</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">这是一个订单微服务示例 - 生产环境</span>
+<span class="tok-w">  </span><span class="tok-nt">features</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单创建</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单查询</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">订单状态更新</span>
+<span class="tok-w">  </span><span class="tok-nt">limits</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">max-order-items</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">50</span>
+<span class="tok-w">    </span><span class="tok-nt">timeout-seconds</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">10</span>
+
+<span class="tok-c1"># 演示配置 - 生产环境</span>
+<span class="tok-nt">demo</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
+<span class="tok-w">  </span><span class="tok-nt">message</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;生产环境：系统运行中&quot;</span>
+<span class="tok-w">  </span><span class="tok-nt">retry-count</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">2</span>
+<span class="tok-w">  </span><span class="tok-nt">cache-enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+<span class="tok-w">  </span><span class="tok-nt">debug-mode</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span>
+
+<span class="tok-c1"># 生产环境特定配置</span>
+<span class="tok-nt">logging</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">level</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">com.tjise.serviceorder</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">INFO</span>
+<span class="tok-w">    </span><span class="tok-nt">org.springframework.web</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">WARN</span>
+
+<span class="tok-c1"># 监控配置</span>
+<span class="tok-nt">management</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">endpoints</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">web</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">exposure</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">include</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">health,metrics,info</span>
+<span class="tok-w">  </span><span class="tok-nt">endpoint</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">health</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">show-details</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">when_authorized</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_在客户端使用配置中心数据">在客户端使用配置中心数据</h3>
+<div class="sect3">
+<h4 id="_file_service_orderpom_xml_11">file &#8594; service-order/pom.xml</h4>
+<div class="sect4">
+<h5 id="_config">config</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;!</span><span class="tok-nt">--</span><span class="tok-w"> </span><span class="tok-nt">Spring</span><span class="tok-w"> </span><span class="tok-nt">Cloud</span><span class="tok-w"> </span><span class="tok-nt">Config</span><span class="tok-w"> </span><span class="tok-nt">Client</span><span class="tok-w"> </span><span class="tok-nt">--</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.cloud</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-cloud-starter-config</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_actuator_3">actuator</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-o">&lt;</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span><span class="tok-nt">org</span><span class="tok-nc">.springframework.boot</span><span class="tok-o">&lt;/</span><span class="tok-nt">groupId</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-o">&lt;</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span><span class="tok-nt">spring-boot-starter-actuator</span><span class="tok-o">&lt;/</span><span class="tok-nt">artifactId</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nt">dependency</span><span class="tok-o">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file_service_ordersrcmainresourcesapplication_yml_14">file &#8594; service-order/src/main/resources/application.yml</h4>
+<div class="sect4">
+<h5 id="_spring_连接_config_server">spring &#8594; 连接 config-server</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">spring</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">config</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-c1"># --New Added--</span>
+<span class="tok-w">        </span><span class="tok-nt">import</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">configserver:http://localhost:8888,application-feign.yml</span>
+<span class="tok-w">    </span><span class="tok-nt">application</span><span class="tok-p">:</span>
+
+<span class="tok-w">        </span><span class="tok-c1"># 起个名字作为服务名称(该服务注册到 eureka 注册中心的名称，比如订单服务)</span>
+<span class="tok-w">        </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">app-order</span>
+
+<span class="tok-w">    </span><span class="tok-nt">cloud</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-c1"># --New Added Start--</span>
+<span class="tok-w">        </span><span class="tok-nt">config</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-nt">name</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">app-order</span><span class="tok-w">    </span><span class="tok-c1"># 配置文件名</span>
+<span class="tok-w">            </span><span class="tok-nt">profile</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">dev</span><span class="tok-w">       </span><span class="tok-c1"># 环境配置</span>
+<span class="tok-w">        </span><span class="tok-c1"># --New Added End--</span>
+
+<span class="tok-w">        </span><span class="tok-c1"># 使用 spring cloud 集成的 resilience4j</span>
+<span class="tok-w">        </span><span class="tok-nt">circuitbreaker</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-nt">resilience4j</span><span class="tok-p">:</span>
+<span class="tok-w">                </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">false</span><span class="tok-w">  </span><span class="tok-c1"># --要停用--</span>
+
+<span class="tok-w">        </span><span class="tok-c1"># 不使用节流等功能，可以不用开启</span>
+<span class="tok-w">        </span><span class="tok-c1"># sentinel:</span>
+<span class="tok-w">            </span><span class="tok-c1"># transport:</span>
+<span class="tok-w">                </span><span class="tok-c1"># dashboard: localhost:8858  # Sentinel 控制台地址</span>
+<span class="tok-w">            </span><span class="tok-c1"># eager: true  # 立即初始化 Sentinel</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_测试配置中心">测试配置中心</h3>
+<div class="sect3">
+<h4 id="_检查_config_server_状态">检查 Config-Server 状态</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http &#39;http://localhost:8888/actuator/health&#39; | jq .status</span>
+<span class="tok-gp"># </span>输出:<span class="tok-w"> </span><span class="tok-s2">&quot;UP&quot;</span>
+
+<span class="tok-go">http http://localhost:8888/app-order/dev | jq &#39;.propertySources[0].source.&quot;server.port&quot;&#39;</span>
+<span class="tok-gp"># </span>输出:<span class="tok-w"> </span><span class="tok-m">8092</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_检查_service_order_状态">检查 Service-Order 状态</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http http://localhost:8092/actuator/health | jq .status</span>
+<span class="tok-gp"># </span>输出:<span class="tok-w"> </span><span class="tok-s2">&quot;UP&quot;</span>
+
+<span class="tok-go">&gt; http http://localhost:8092/actuator/env/resilience4j.circuitbreaker.configs.default.failure-rate-threshold | jq .property.value</span>
+<span class="tok-gp"># </span>输出:<span class="tok-w"> </span><span class="tok-m">50</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_测试动态配置的更新_failure_rate_threshold_50_to_75">测试动态配置的更新 failure-rate-threshold: 50 to 75</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>先更改下面 yml 的配置，再进行测试。</p>
+</li>
+<li>
+<p>触发配置刷新</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>由于使用 <code>native</code> 模式，需要重启 config-server 来加载新配置。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http POST http://localhost:8092/actuator/refresh</span>
+<span class="tok-gp"># </span><span class="tok-m">8092</span><span class="tok-w"> </span>是配置中心给的端口号</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>验证配置更新</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http GET http://localhost:8092/actuator/env/resilience4j.circuitbreaker.configs.default.failure-rate-threshold | jq &#39;.property.value&#39;</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="_file_config_serversrcmainresourcesconfig_repoapp_order_dev_yml_2">file &#8594; config-server/src/main/resources/config-repo/app-order-dev.yml</h5>
+<div class="sect5">
+<h6 id="_resilience4j_2">resilience4j</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># 动态配置测试 - 断路器故障率阈值</span>
+<span class="tok-nt">resilience4j</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">circuitbreaker</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">configs</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">default</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-c1"># failure-rate-threshold: 50</span>
+<span class="tok-w">        </span><span class="tok-nt">failure-rate-threshold</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">75</span><span class="tok-w">  </span><span class="tok-c1"># 改数字为了测试</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_配置优先级说明">配置优先级说明</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>配置源优先级</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>高优先级 -&gt; 低优先级
+远程配置 (config-server) &gt; 本地配置 (application.yml) &gt; 默认配置</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>可动态更新的配置类型</p>
+<div class="ulist">
+<ul>
+<li>
+<p>✅ <strong>支持动态更新</strong>（无需重启服务）：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>业务逻辑配置</p>
+</li>
+<li>
+<p>日志级别配置</p>
+</li>
+<li>
+<p>功能开关配置</p>
+</li>
+<li>
+<p>超时时间配置</p>
+</li>
+<li>
+<p>Resilience4j 断路器配置</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>❌ <strong>需要重启服务</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>服务器端口 (<code>server.port</code>)</p>
+</li>
+<li>
+<p>数据库连接配置</p>
+</li>
+<li>
+<p>网络相关配置</p>
+</li>
+<li>
+<p>任何影响应用启动行为的配置</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>配置模式对比</p>
+</li>
+</ol>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">模式</th>
+<th class="tableblock halign-left valign-top">自动检测</th>
+<th class="tableblock halign-left valign-top">需要重启</th>
+<th class="tableblock halign-left valign-top">适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>native</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">❌</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">开发环境、简单演示</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>git</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">❌</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">生产环境、团队协作</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vault</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">❌</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">安全敏感配置</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nacos</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">❌</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">云原生环境</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -7887,7 +8458,7 @@ http :8888/</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-22 15:03:00 +0800
+Last updated 2025-10-28 08:31:13 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
