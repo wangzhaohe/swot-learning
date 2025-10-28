@@ -504,8 +504,17 @@
 <v t="swot.20250511233342.1"><vh>16 专业英语</vh></v>
 </v>
 <v t="swot.20250812113455.1"><vh>软件设计师例题精讲下午</vh>
-<v t="swot.20250812113515.1"><vh>第一题：数据流图</vh>
+<v t="swot.20250812113515.1"><vh>第一题: 数据流图</vh>
 <v t="swot.20250812113624.1"><vh>如何保持数据流图平衡 -- 背下来</vh></v>
+</v>
+<v t="swot.20251028083904.1"><vh>第二题:</vh></v>
+<v t="swot.20251028083912.1"><vh>第三题:</vh>
+<v t="swot.20251028083930.1"><vh>设计模式</vh>
+<v t="swot.20251028083951.1"><vh>观察者模式</vh></v>
+<v t="swot.20251028084707.1"><vh>组合模式</vh></v>
+<v t="swot.20251028083942.1"><vh>策略模式</vh></v>
+<v t="swot.20251028083935.1"><vh>状态模式</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -9918,6 +9927,29 @@ image::img/5bi.jpeg[,800]
 .末笔表
 image::img/5bimobi.jpg[,800]
 
+</t>
+<t tx="swot.20251028083904.1"></t>
+<t tx="swot.20251028083912.1"></t>
+<t tx="swot.20251028083930.1"></t>
+<t tx="swot.20251028083935.1">@language asciidoc
+2013 下半年问题 3 考了状态模式
+
+https://www.bilibili.com/video/BV11Z4y1z7Uc?spm_id_from=333.788.videopod.episodes&amp;vd_source=392e2829ea8e40de989be86888026747&amp;p=53
+</t>
+<t tx="swot.20251028083942.1">@language asciidoc
+2014 上半年问题 3 考了策略模式
+
+https://www.bilibili.com/video/BV11Z4y1z7Uc?spm_id_from=333.788.videopod.episodes&amp;vd_source=392e2829ea8e40de989be86888026747&amp;p=51
+</t>
+<t tx="swot.20251028083951.1">@language asciidoc
+2017 下半年问题 3 考了观察者模式
+
+https://www.bilibili.com/video/BV11Z4y1z7Uc?spm_id_from=333.788.videopod.episodes&amp;vd_source=392e2829ea8e40de989be86888026747&amp;p=33
+</t>
+<t tx="swot.20251028084707.1">@language asciidoc
+2015 上半年问题 3 考了组合模式
+
+https://www.bilibili.com/video/BV11Z4y1z7Uc?spm_id_from=333.788.videopod.episodes&amp;vd_source=392e2829ea8e40de989be86888026747&amp;p=47
 </t>
 </tnodes>
 </leo_file>
