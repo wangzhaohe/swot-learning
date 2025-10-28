@@ -787,7 +787,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_gateway_面试题">Gateway - 面试题</a></li>
 <li><a href="#_11_配置中心_config">11. 配置中心 Config</a>
 <ul class="sectlevel2">
-<li><a href="#_创建配置服务器">创建配置服务器</a>
+<li><a href="#_11_1_创建配置服务器">11.1 创建配置服务器</a>
 <ul class="sectlevel3">
 <li><a href="#_file_config_serverpom_xml">file &#8594; config-server/pom.xml</a></li>
 <li><a href="#_file_config_serversrcmainjavacomtjiseserviceconfigconfigserverapplication_java">file &#8594; config-server/src/main/java/com/tjise/serviceconfig/ConfigServerApplication.java</a></li>
@@ -798,20 +798,20 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_file_config_serversrcmainresourcesconfig_repoapp_order_prod_yml">file &#8594; config-server/src/main/resources/config-repo/app-order-prod.yml</a></li>
 </ul>
 </li>
-<li><a href="#_在客户端使用配置中心数据">在客户端使用配置中心数据</a>
+<li><a href="#_11_2_在客户端使用配置中心数据以_service_order">11.2 在客户端使用配置中心数据（以 service-order）</a>
 <ul class="sectlevel3">
 <li><a href="#_file_service_orderpom_xml_11">file &#8594; service-order/pom.xml</a></li>
 <li><a href="#_file_service_ordersrcmainresourcesapplication_yml_14">file &#8594; service-order/src/main/resources/application.yml</a></li>
 </ul>
 </li>
-<li><a href="#_测试配置中心">测试配置中心</a>
+<li><a href="#_11_3_测试配置中心">11.3 测试配置中心</a>
 <ul class="sectlevel3">
-<li><a href="#_检查_config_server_状态">检查 Config-Server 状态</a></li>
+<li><a href="#_检查_config_server_服务器状态">检查 Config-Server 服务器状态</a></li>
 <li><a href="#_检查_service_order_状态">检查 Service-Order 状态</a></li>
 <li><a href="#_测试动态配置的更新_failure_rate_threshold_50_to_75">测试动态配置的更新 failure-rate-threshold: 50 to 75</a></li>
 </ul>
 </li>
-<li><a href="#_配置优先级说明">配置优先级说明</a></li>
+<li><a href="#_11_4_配置优先级说明">11.4 配置优先级说明</a></li>
 </ul>
 </li>
 <li><a href="#_12_分布式事务_seata使用_nacos_注册服务例子">12. 分布式事务 Seata&#8201;&#8212;&#8201;使用 Nacos 注册服务例子</a>
@@ -7689,7 +7689,7 @@ content-length: 0</pre>
 <p>下面文档详细记录了 Spring Cloud Config 配置中心的完整搭建、配置和测试过程，包括 config-server 和 service-order 模块的集成。</p>
 </div>
 <div class="sect2">
-<h3 id="_创建配置服务器">创建配置服务器</h3>
+<h3 id="_11_1_创建配置服务器">11.1 创建配置服务器</h3>
 <div class="paragraph">
 <p>如下图创建模块 config-server</p>
 </div>
@@ -8030,7 +8030,7 @@ http :8888/</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_在客户端使用配置中心数据">在客户端使用配置中心数据</h3>
+<h3 id="_11_2_在客户端使用配置中心数据以_service_order">11.2 在客户端使用配置中心数据（以 service-order）</h3>
 <div class="sect3">
 <h4 id="_file_service_orderpom_xml_11">file &#8594; service-order/pom.xml</h4>
 <div class="sect4">
@@ -8092,12 +8092,30 @@ http :8888/</p>
 </div>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_management_增加_refreshenv">management &#8594; 增加 refresh,env</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">management</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-nt">endpoints</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">web</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-nt">exposure</span><span class="tok-p">:</span><span class="tok-w">  </span><span class="tok-c1"># 暴露断路器事件端点</span>
+<span class="tok-w">                </span><span class="tok-nt">include</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">health,info,circuitbreakerevents,refresh,env</span>
+<span class="tok-w">    </span><span class="tok-nt">endpoint</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">health</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-nt">show-details</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">always</span>
+<span class="tok-w">    </span><span class="tok-nt">health</span><span class="tok-p">:</span>
+<span class="tok-w">        </span><span class="tok-nt">circuitbreakers</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-nt">enabled</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span><span class="tok-w">  </span><span class="tok-c1"># 启用断路器健康检查</span></code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_测试配置中心">测试配置中心</h3>
+<h3 id="_11_3_测试配置中心">11.3 测试配置中心</h3>
 <div class="sect3">
-<h4 id="_检查_config_server_状态">检查 Config-Server 状态</h4>
+<h4 id="_检查_config_server_服务器状态">检查 Config-Server 服务器状态</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http &#39;http://localhost:8888/actuator/health&#39; | jq .status</span>
@@ -8115,8 +8133,8 @@ http :8888/</p>
 <pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">http http://localhost:8092/actuator/health | jq .status</span>
 <span class="tok-gp"># </span>输出:<span class="tok-w"> </span><span class="tok-s2">&quot;UP&quot;</span>
 
-<span class="tok-go">&gt; http http://localhost:8092/actuator/env/resilience4j.circuitbreaker.configs.default.failure-rate-threshold | jq .property.value</span>
-<span class="tok-gp"># </span>输出:<span class="tok-w"> </span><span class="tok-m">50</span></code></pre>
+<span class="tok-go">http http://localhost:8092/actuator/env/resilience4j.circuitbreaker.configs.default.failure-rate-threshold | jq .property.value</span>
+<span class="tok-gp"># </span>检查是否有配置更新，输出:<span class="tok-w"> </span>null，因为当前没有更新配置。</code></pre>
 </div>
 </div>
 </div>
@@ -8173,7 +8191,7 @@ http :8888/</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_配置优先级说明">配置优先级说明</h3>
+<h3 id="_11_4_配置优先级说明">11.4 配置优先级说明</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -8458,7 +8476,7 @@ http :8888/</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-28 08:31:13 +0800
+Last updated 2025-10-28 11:27:24 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

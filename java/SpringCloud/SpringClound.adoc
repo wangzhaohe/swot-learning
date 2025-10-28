@@ -5281,7 +5281,7 @@ spring:
 == 11. 配置中心 Config
 下面文档详细记录了 Spring Cloud Config 配置中心的完整搭建、配置和测试过程，包括 config-server 和 service-order 模块的集成。
 
-=== 创建配置服务器
+=== 11.1 创建配置服务器
 如下图创建模块 config-server
 
 image::img/config-server_create.png[,1000]
@@ -5581,7 +5581,7 @@ management:
       show-details: when_authorized
 ----
 
-=== 在客户端使用配置中心数据
+=== 11.2 在客户端使用配置中心数据（以 service-order）
 
 
 ==== file -> service-order/pom.xml
@@ -5640,10 +5640,26 @@ spring:
             # eager: true  # 立即初始化 Sentinel
 ----
 
-=== 测试配置中心
+===== management -> 增加 refresh,env
+[source,yaml]
+----
+management:
+    endpoints:
+        web:
+            exposure:  # 暴露断路器事件端点
+                include: health,info,circuitbreakerevents,refresh,env
+    endpoint:
+        health:
+            show-details: always
+    health:
+        circuitbreakers:
+            enabled: true  # 启用断路器健康检查
+----
+
+=== 11.3 测试配置中心
 
 
-==== 检查 Config-Server 状态
+==== 检查 Config-Server 服务器状态
 [source, console]
 ----
 http 'http://localhost:8888/actuator/health' | jq .status
@@ -5659,8 +5675,8 @@ http http://localhost:8888/app-order/dev | jq '.propertySources[0].source."serve
 http http://localhost:8092/actuator/health | jq .status
 # 输出: "UP"
 
-> http http://localhost:8092/actuator/env/resilience4j.circuitbreaker.configs.default.failure-rate-threshold | jq .property.value
-# 输出: 50
+http http://localhost:8092/actuator/env/resilience4j.circuitbreaker.configs.default.failure-rate-threshold | jq .property.value
+# 检查是否有配置更新，输出: null，因为当前没有更新配置。
 ----
 
 ==== 测试动态配置的更新 failure-rate-threshold: 50 to 75
@@ -5697,7 +5713,7 @@ resilience4j:
         failure-rate-threshold: 75  # 改数字为了测试
 ----
 
-=== 配置优先级说明
+=== 11.4 配置优先级说明
 . 配置源优先级
 +
 [source]
