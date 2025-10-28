@@ -506,6 +506,7 @@
 <v t="swot.20250812113455.1"><vh>软件设计师例题精讲下午</vh>
 <v t="swot.20250812113515.1"><vh>第一题: 数据流图</vh>
 <v t="swot.20250812113624.1"><vh>如何保持数据流图平衡 -- 背下来</vh></v>
+<v t="swot.20251028085717.1"><vh>黑洞、白洞、灰洞</vh></v>
 </v>
 <v t="swot.20251028083904.1"><vh>第二题:</vh></v>
 <v t="swot.20251028083912.1"><vh>第三题:</vh>
@@ -9950,6 +9951,14 @@ https://www.bilibili.com/video/BV11Z4y1z7Uc?spm_id_from=333.788.videopod.episode
 2015 上半年问题 3 考了组合模式
 
 https://www.bilibili.com/video/BV11Z4y1z7Uc?spm_id_from=333.788.videopod.episodes&amp;vd_source=392e2829ea8e40de989be86888026747&amp;p=47
+</t>
+<t tx="swot.20251028085717.1">@language asciidoc
+黑洞：吞噬一切经过的飞行器，有进无出。
+
+白洞：定期释放出飞行器，有出无进。
+
+灰洞：会吞噬飞行器，但也会在之后释放出来（即延迟释放）。
+
 </t>
 </tnodes>
 </leo_file>
