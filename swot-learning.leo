@@ -6,6 +6,9 @@
 <preferences/>
 <find_panel_settings/>
 <vnodes>
+<v t="swot.20251030082616.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d31302d333071077573732e"><vh>Doing</vh>
+<v t="swot.20251030082621.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d31302d333071077573732e"><vh>软件设计师</vh></v>
+</v>
 <v t="swot.20250508123413.1"><vh>@adoc README.adoc</vh>
 <v t="swot.20250508123515.1"><vh>learning contents</vh>
 <v t="swot.20250508125533.1"><vh>Read document</vh></v>
@@ -330,8 +333,8 @@
 </v>
 </v>
 </v>
-<v t="swot.20250508162519.1" descendentVnodeUnknownAttributes="7d71005809000000302e302e302e382e3171017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d313071077573732e"><vh>@path software-designer</vh>
-<v t="swot.20250508162628.1" descendentVnodeUnknownAttributes="7d71005807000000302e302e382e3171017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d313071077573732e"><vh>@adoc software-designer.adoc</vh>
+<v t="swot.20250508162519.1" descendentVnodeUnknownAttributes="7d7100285809000000302e302e302e382e3171017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d3130710775735811000000302e302e312e342e302e302e322e302e3471087d7109285808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4b01580a00000070726973657464617465710d580a000000323032352d31302d3331710e75580500000069636f6e73710f5d71107d7111285804000000747970657112580400000066696c657113681358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e677114580700000072656c506174687115580d000000636c656f2f707269312e706e677116580500000077686572657117580e0000006265666f7265486561646c696e6571185807000000796f666673657471194b005807000000786f6666736574711a4b02580400000078706164711b4b0158020000006f6e711c5805000000766e6f6465711d5808000000636c656f49636f6e711e580100000031711f7561755811000000302e302e312e342e302e302e322e302e3571207d712128680a7d712228680c4b02680d580a000000323032352d31302d3331712375680f5d71247d71252868126813681358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e6771266815580d000000636c656f2f707269322e706e6771276817681868194b00681a4b02681b4b01681c681d681e681f756175752e"><vh>@path software-designer</vh>
+<v t="swot.20250508162628.1" descendentVnodeUnknownAttributes="7d7100285807000000302e302e382e3171017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d313071077573580f000000302e312e342e302e302e322e302e3471087d7109285808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4b01580a00000070726973657464617465710d580a000000323032352d31302d3331710e75580500000069636f6e73710f5d71107d7111285804000000747970657112580400000066696c657113681358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e677114580700000072656c506174687115580d000000636c656f2f707269312e706e677116580500000077686572657117580e0000006265666f7265486561646c696e6571185807000000796f666673657471194b005807000000786f6666736574711a4b02580400000078706164711b4b0158020000006f6e711c5805000000766e6f6465711d5808000000636c656f49636f6e711e580100000031711f756175580f000000302e312e342e302e302e322e302e3571207d712128680a7d712228680c4b02680d580a000000323032352d31302d3331712375680f5d71247d71252868126813681358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e6771266815580d000000636c656f2f707269322e706e6771276817681868194b00681a4b02681b4b01681c681d681e681f756175752e"><vh>@adoc software-designer.adoc</vh>
 <v t="swot.20250508162652.1" descendentVnodeUnknownAttributes="7d71005805000000302e382e3171017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30352d313071077573732e"><vh>软件设计师例题精讲上午</vh>
 <v t="swot.20250509183134.1"><vh>1 数据表示</vh>
 <v t="swot.20250522173932.1"><vh>1.1 原码反码补码移码</vh>
@@ -503,7 +506,7 @@
 <v t="swot.20250514212913.1"><vh>15 信息安全</vh></v>
 <v t="swot.20250511233342.1"><vh>16 专业英语</vh></v>
 </v>
-<v t="swot.20250812113455.1"><vh>软件设计师例题精讲下午</vh>
+<v t="swot.20250812113455.1" descendentVnodeUnknownAttributes="7d710028580d000000302e342e302e302e322e302e3471017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d31302d3331710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175580d000000302e342e302e302e322e302e3571197d711a2868037d711b2868054b026806580a000000323032352d31302d3331711c7568085d711d7d711e28680b680c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67711f680e580d000000636c656f2f707269322e706e6771206810681168124b0068134b0268144b016815681668176818756175752e"><vh>软件设计师例题精讲下午</vh>
 <v t="swot.20250812113515.1"><vh>第一题: 数据流图（DFD） - 必考</vh>
 <v t="swot.20250812113624.1"><vh>如何保持数据流图平衡 -- 背下来</vh></v>
 <v t="swot.20251028085717.1"><vh>黑洞、白洞、灰洞</vh></v>
@@ -517,8 +520,65 @@
 <v t="swot.20251028083935.1"><vh>状态模式</vh></v>
 </v>
 </v>
-<v t="swot.20251028101702.1"><vh>第四题: C语言算法实现 - 二选一</vh></v>
-<v t="swot.20251028101711.1"><vh>第五题: 面向对象程序设计（主要是设计模式） - 二选一</vh></v>
+<v t="swot.20251028101702.1"><vh>第四题: C语言算法实现</vh></v>
+<v t="swot.20251028101711.1" descendentVnodeUnknownAttributes="7d710028580b000000302e302e302e322e302e3471017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d31302d3331710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175580b000000302e302e302e322e302e3571197d711a2868037d711b2868054b026806580a000000323032352d31302d3331711c7568085d711d7d711e28680b680c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67711f680e580d000000636c656f2f707269322e706e6771206810681168124b0068134b0268144b016815681668176818756175752e"><vh>第五题: 面向对象程序设计（主要是设计模式） - 二选一</vh>
+<v t="swot.20251029140132.1" descendentVnodeUnknownAttributes="7d7100285809000000302e302e322e302e3471017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d31302d3331710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755809000000302e302e322e302e3571197d711a2868037d711b2868054b026806580a000000323032352d31302d3331711c7568085d711d7d711e28680b680c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67711f680e580d000000636c656f2f707269322e706e6771206810681168124b0068134b0268144b016815681668176818756175752e"><vh>试题6 java设计模式</vh>
+<v t="swot.20251029164942.1" descendentVnodeUnknownAttributes="7d7100285807000000302e322e302e3471017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d31302d3331710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755807000000302e322e302e3571197d711a2868037d711b2868054b026806580a000000323032352d31302d3331711c7568085d711d7d711e28680b680c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67711f680e580d000000636c656f2f707269322e706e6771206810681168124b0068134b0268144b016815681668176818756175752e"><vh>简单工厂模式 -&gt; 不属于 23 种设计模式</vh>
+<v t="swot.20251031155930.1"><vh>类图结构</vh></v>
+<v t="swot.20251031172124.1"><vh>代码实现</vh>
+<v t="swot.20251031133739.1"><vh>file -&gt; code/simpleFactoryPattern/SimpleFactoryPattern.java</vh>
+<v t="swot.20251030080937.1"><vh>abstract class Product</vh></v>
+<v t="swot.20251030081135.1"><vh>class ProductA</vh></v>
+<v t="swot.20251030081339.1"><vh>class ProductB</vh></v>
+<v t="swot.20251030081409.1"><vh>class Factory</vh></v>
+<v t="swot.20251031134700.1"><vh>SimpleFactoryPattern 运行主类</vh></v>
+</v>
+</v>
+<v t="swot.20251031171322.1" descendentVnodeUnknownAttributes="7d7100285805000000302e302e3471017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d31302d3331710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755805000000302e302e3571197d711a2868037d711b2868054b026806580a000000323032352d31302d3331711c7568085d711d7d711e28680b680c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67711f680e580d000000636c656f2f707269322e706e6771206810681168124b0068134b0268144b016815681668176818756175752e"><vh>存在问题 -- 违反开放封闭原则（对扩展开放，对修改关闭）</vh>
+<v t="swot.20251031172116.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3471017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d31302d3331710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755803000000302e3571197d711a2868037d711b2868054b026806580a000000323032352d31302d3331711c7568085d711d7d711e28680b680c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67711f680e580d000000636c656f2f707269322e706e6771206810681168124b0068134b0268144b016815681668176818756175752e"><vh>file -&gt; code/simpleFactoryPattern/SimpleFactoryPattern.java</vh>
+<v t="swot.20251031172116.2"><vh>SimpleFactoryPattern 运行主类</vh></v>
+<v t="swot.20251031172116.3"><vh>abstract class Product</vh></v>
+<v t="swot.20251031172116.4"><vh>ProductA</vh></v>
+<v t="swot.20251031172116.5"><vh>ProductB</vh></v>
+<v t="swot.20251031172254.1" descendentVnodeUnknownAttributes="7d710058010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b01580a000000707269736574646174657106580a000000323032352d31302d3331710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e67710d580700000072656c50617468710e580d000000636c656f2f707269312e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>ProductC -- 新增的类</vh></v>
+<v t="swot.20251031172116.6" descendentVnodeUnknownAttributes="7d710058010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b02580a000000707269736574646174657106580a000000323032352d31302d3331710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e67710d580700000072656c50617468710e580d000000636c656f2f707269322e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>class Factory -- 需要再更改的类</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20251029165119.1"><vh>工厂方法模式 -&gt; 属于 23 种设计模式</vh>
+<v t="swot.20251031235031.1"><vh>类图结构</vh></v>
+<v t="swot.20251101001909.1"><vh>代码实现</vh>
+<v t="swot.20251101001909.2"><vh>file -&gt; code/factoryMethodPattern/FactoryMethodPattern.java</vh>
+<v t="swot.20251101001909.4"><vh>interface Product</vh></v>
+<v t="swot.20251101001909.5"><vh>class ProductA</vh></v>
+<v t="swot.20251101001909.6"><vh>class ProductB</vh></v>
+<v t="swot.20251101001909.7"><vh>interface Factory</vh></v>
+<v t="swot.20251101010811.1"><vh>class FactoryA</vh></v>
+<v t="swot.20251101011100.1"><vh>class FactoryB</vh></v>
+<v t="swot.20251101001909.3"><vh>FactoryMethodPattern 运行主类</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20251029165126.1"><vh>抽象工厂模式 -&gt; 属于 23 种设计模式</vh>
+<v t="swot.20251101114101.1"><vh>类图结构</vh></v>
+<v t="swot.20251101142326.1"><vh>代码实现</vh>
+<v t="swot.20251101142408.1"><vh>file -&gt; code/abstractFactoryPattern/AbstractFactoryPattern.java</vh>
+<v t="swot.20251101142408.2"><vh>interface ProductA</vh></v>
+<v t="swot.20251101142408.3"><vh>class ProductA1</vh></v>
+<v t="swot.20251101145150.1"><vh>class ProductA2</vh></v>
+<v t="swot.20251101145346.1"><vh>interface ProductB</vh></v>
+<v t="swot.20251101142408.4"><vh>class ProductB1</vh></v>
+<v t="swot.20251101145427.1"><vh>class ProductB2</vh></v>
+<v t="swot.20251101142408.5"><vh>interface Factory</vh></v>
+<v t="swot.20251101142408.6"><vh>class Factory1</vh></v>
+<v t="swot.20251101150821.1"><vh>class Factory2</vh></v>
+<v t="swot.20251101142408.8"><vh>AbstractFactoryPattern 运行主类</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20251101192322.1"><vh>生成器模式 Builder</vh></v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -3318,11 +3378,11 @@ D 模式与内模式之间的映像、外模式与模式之间的映像
 <t tx="swot.20250510175912.1"></t>
 <t tx="swot.20250510175912.2">符号	含义	示例：
 
-* 实心菱形	组合（Composition）	房子包含房间
+* 实心菱形	组合（Composition）如房子包含房间，特点是整体消失，部分也会消失。
 
-* 空心菱形	聚合（Aggregation）	班级聚合学生
+* 空心菱形	聚合（Aggregation）	如班级聚合学生，特点是整体消失，部分不会消失。
 
-* 空心三角形箭头	泛化（继承）	猫继承自动物
+* 空心三角形箭头	泛化（继承）	猫继承自动物，即动物是猫的泛化。
 
 * 实线箭头或连线	关联	员工参与项目
 
@@ -4046,10 +4106,10 @@ flowchart TD
 
 UML 用例图中，用例与用例之间有三种标准关系：
 
-* include（包含），用虚线箭头表示，基础用例指向被包含用例，上面写 &lt;&lt;include&gt;&gt;
+* include（包含），用虚线箭头表示，##基础用例指向被包含用例##，上面写 &lt;&lt;include&gt;&gt;
   ** 当基础用例执行时，被包含用例一定会执行。
 
-* extend（扩展） ，用虚线箭头表示，扩展用例指向基础用例，上面写 &lt;&lt;extend&gt;&gt;
+* extend（扩展） ，用虚线箭头表示，##扩展用例指向基础用例##，上面写 &lt;&lt;extend&gt;&gt;
   ** 当一个用例执行时，可能会出现特殊情况和可选情况，这个时候就会执行扩展用例。
 
 * generalization（泛化|继承），空心三角形箭头，子类指向父类
@@ -9963,6 +10023,657 @@ https://www.bilibili.com/video/BV11Z4y1z7Uc?spm_id_from=333.788.videopod.episode
 
 </t>
 <t tx="swot.20251028101702.1"></t>
-<t tx="swot.20251028101711.1"></t>
+<t tx="swot.20251028101711.1">代码填空 15 分，一个空 3 分，一共 5 个空。
+
+代码是某一种设计模式的应用。
+</t>
+<t tx="swot.20251029140132.1"></t>
+<t tx="swot.20251029164942.1">@language asciidoc
+简单工厂模式属于 #创建型# 模式，但 #不属性# 23 种设计模式之一。
+
+定义：定义一个工厂类，它可以根据参数的不同返回不同类的实例，被创建的实例通常都具有共同的父类。
+
+在简单工厂模式中，用于创建实例的方法通常为静态(static)方法，因此简单工厂模式又被称为静态工厂方法(Static Factory Method)。
+
+需要什么产品就传入产品对应的参数，就可以获取所需要的产品对象，而无需知道其实现过程。
+
+例如：有一家饺子店，当客户需要某种饺子时，饺子店生成对应的饺子给客户。这里就可以把饺子店看成工厂(Factory)，饺子看成产品(Product)，饺子的名称看成参数，饺子店根据不同的参数返回不同的饺子。
+
+比如：客户想要韭菜饺子，这里韭菜就是参数，饺子店会根据参数韭菜返回韭菜饺子(当然饺子店有韭菜饺子的前提下)。
+
+三类角色:
+
+* 工厂(核心)：负责实现创建所有产品的内部逻辑，工厂类可以被外界直接调用（因为是静态方法），创建所需对象。
+* 抽象产品：工厂类所创建的所有对象的父类，封装了产品对象的公共抽象方法，所有的具体产品为其子类对象。
+* 具体产品：简单工厂模式的创建目标，所有被创建的对象都是某个具体类的实例。它要实现抽象产品中声明的抽象方法。
+</t>
+<t tx="swot.20251029165119.1">@language asciidoc
+意图：定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法（Factory Method）使一个类的实例化延迟到其子类。
+
+* 为什么需要延迟？→ 为了扩展性
+* 为什么用子类？→ 为了多态
+* 为什么是接口？→ 为了解耦
+</t>
+<t tx="swot.20251029165126.1">@language asciidoc
+意图: 提供一个创建一系列相关或相互依赖对象的接口,而无须指定它们具体的类。
+</t>
+<t tx="swot.20251030080937.1">@doc
+[source,java]
+----
+@c
+@language java
+abstract class Product {
+    public abstract void info();  // 抽象方法没有方法体
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251030081135.1">@doc
+[source,java]
+----
+@c
+@language java
+class ProductA extends Product {
+    @Override
+    public void info() {
+        System.out.println("ProductA");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251030081339.1">@doc
+[source,java]
+----
+@c
+@language java
+class ProductB extends Product {
+    @Override
+    public void info() {
+        System.out.println("ProductB");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251030081409.1">@doc
+[source,java]
+----
+@c
+@language java
+class Factory {
+
+    // 定义静态方法
+    public static Product createProduct(String type) {
+        switch (type) {
+            case "A":
+                return new ProductA();
+            case "B":
+                return new ProductB();
+            default:
+                throw new IllegalArgumentException(
+                          "Unknown product type:" + type);
+        }
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251030082616.1"></t>
+<t tx="swot.20251030082621.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032352d31302d33307103752e"></t>
+<t tx="swot.20251031133739.1">@language java
+@others
+ 
+</t>
+<t tx="swot.20251031134700.1">@doc
+[source,java]
+----
+@c
+@language java
+public class SimpleFactoryPattern{
+    public static void main(String[] args) {
+
+        // 使用静态工厂方法创建不同的产品
+        Product productA = Factory.createProduct("A");
+        productA.info();
+
+        Product productB = Factory.createProduct("B");
+        productB.info();
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251031155930.1">@language asciidoc
+.class diagram
+[plantuml, target=img/2025-10-29-165754, format=svg]
+....
+@startuml
+'!pragma layout smetana
+!option handwritten true
+
+abstract Product {
+    + info(): void
+}
+
+class ProductA {
+    + info(): void
+}
+
+class ProductB {
+    + info(): void
+}
+
+class Factory {
+    + {static} createProduct(): Product
+}
+
+Product &lt;|-- ProductA : 泛化
+Product &lt;|-- ProductB : 泛化
+
+Factory ..&gt; ProductA : 依赖
+Factory ..&gt; ProductB : 依赖
+@enduml
+....
+</t>
+<t tx="swot.20251031171322.1">比如新增一个类 ProductC，还需要修改 Factory 才行。这样不好！
+</t>
+<t tx="swot.20251031172116.1">@language java
+@others
+ 
+</t>
+<t tx="swot.20251031172116.2">@doc
+[source,java]
+----
+@c
+@language java
+public class SimpleFactoryPattern{
+    public static void main(String[] args) {
+
+        // 使用静态工厂方法创建不同的产品
+        Product productA = Factory.createProduct("A");
+        productA.info();
+
+        Product productB = Factory.createProduct("B");
+        productB.info();
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251031172116.3">@doc
+[source,java]
+----
+@c
+@language java
+abstract class Product {
+    public abstract void info();  // 抽象方法没有方法体
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251031172116.4">@doc
+[source,java]
+----
+@c
+@language java
+class ProductA extends Product {
+    @Override
+    public void info() {
+        System.out.println("ProductA");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251031172116.5">@doc
+[source,java]
+----
+@c
+@language java
+class ProductB extends Product {
+    @Override
+    public void info() {
+        System.out.println("ProductB");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251031172116.6" annotate="7d71002858080000007072696f7269747971014b02580a000000707269736574646174657102580a000000323032352d31302d33317103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269322e706e677104580700000072656c506174687105580d000000636c656f2f707269322e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e">@doc
+[source,java]
+----
+@c
+@language java
+class Factory {
+
+    // 定义静态方法
+    public static Product createProduct(String type) {
+        switch (type) {
+            case "A":
+                return new ProductA();
+            case "B":
+                return new ProductB();
+
+            // --New Added Start--
+            case "C":
+                return new ProductC();
+            // --New Added End--
+
+            default:
+                throw new IllegalArgumentException(
+                          "Unknown product type:" + type);
+        }
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251031172124.1"></t>
+<t tx="swot.20251031172254.1" annotate="7d71002858080000007072696f7269747971014b01580a000000707269736574646174657102580a000000323032352d31302d33317103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358320000002f55736572732f73776f742f6170702f6c656f2d656469746f722f6c656f2f49636f6e732f636c656f2f707269312e706e677104580700000072656c506174687105580d000000636c656f2f707269312e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e">@doc
+[source,java]
+----
+@c
+@language java
+class ProductC extends Product {
+    @Override
+    public void info() {
+        System.out.println("ProductC");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251031235031.1">@language asciidoc
+.class diagram
+[plantuml, target=img/2025-10-31-235046, format=svg]
+....
+@startuml
+'!pragma layout smetana
+!option handwritten true
+
+interface Product {
+    + {abstract} info(): void
+}
+
+class ProductA {
+    + info(): void
+}
+
+class ProductB {
+    + info(): void
+}
+
+class FactoryA {
+    + createProduct(): Product
+}
+
+class FactoryB {
+    + createProduct(): Product
+}
+
+interface Factory {
+    + {abstract} createProduct(): Product
+}
+
+Product &lt;|-- ProductA : 泛化
+Product &lt;|-- ProductB : 泛化
+
+FactoryA ..&gt; ProductA : 依赖
+FactoryB ..&gt; ProductB : 依赖
+
+Factory &lt;|-- FactoryA
+Factory &lt;|-- FactoryB
+@enduml
+....
+</t>
+<t tx="swot.20251101001909.1"></t>
+<t tx="swot.20251101001909.2">@language java
+@others
+
+</t>
+<t tx="swot.20251101001909.3">@doc
+[source,java]
+----
+@c
+@language java
+public class FactoryMethodPattern{
+    public static void main(String[] args) {
+        Factory factoryA = new FactoryA();
+        Product productA = factoryA.createProduct();
+        productA.info();
+
+        Factory factoryB = new FactoryB();
+        Product productB = factoryB.createProduct();
+        productB.info();
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101001909.4">@doc
+[source,java]
+----
+@c
+@language java
+interface Product {
+    public void info();  // 抽象方法没有方法体
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101001909.5">@doc
+[source,java]
+----
+@c
+@language java
+class ProductA implements Product {
+    @Override
+    public void info() {
+        System.out.println("ProductA");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101001909.6">@doc
+[source,java]
+----
+@c
+@language java
+class ProductB implements Product {
+    @Override
+    public void info() {
+        System.out.println("ProductB");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101001909.7">@doc
+[source,java]
+----
+@c
+@language java
+interface Factory {
+    public Product createProduct();
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101010811.1">@doc
+[source,java]
+----
+@c
+@language java
+class FactoryA implements Factory {
+    @Override
+    public Product createProduct() {
+        return new ProductA();
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101011100.1">@doc
+[source,java]
+----
+@c
+@language java
+class FactoryB implements Factory {
+    @Override
+    public Product createProduct() {
+        return new ProductB();
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101114101.1">@language asciidoc
+[plantuml, target=img/diagram-2025-11-01-114155, format=svg]
+....
+@startuml
+!pragma use ver batim false
+'!pragma layout smetana
+' !theme plain
+hide empty members
+
+class Client
+
+interface Factory {
+  + {abstract} CreateProductA()
+  + {abstract} CreateProductB()
+}
+
+class Factory1 {
+  + CreateProductA()
+  + CreateProductB()
+}
+
+class Factory2 {
+  + CreateProductA()
+  + CreateProductB()
+}
+
+interface ProductA
+class ProductA1
+class ProductA2
+
+interface ProductB
+class ProductB1
+class ProductB2
+
+' 继承关系
+Factory &lt;|-- Factory1
+Factory &lt;|-- Factory2
+
+ProductA &lt;|-- ProductA1
+ProductA &lt;|-- ProductA2
+
+ProductB &lt;|-- ProductB1
+ProductB &lt;|-- ProductB2
+
+' 依赖关系：Client 使用 Factory
+Client ..&gt; Factory
+
+' 工厂创建产品
+Factory1 ..&gt; ProductA1
+Factory1 ..&gt; ProductB1
+
+Factory2 ..&gt; ProductA2
+Factory2 ..&gt; ProductB2
+
+@enduml
+....
+</t>
+<t tx="swot.20251101142326.1"></t>
+<t tx="swot.20251101142408.1">@language java
+@others
+ 
+</t>
+<t tx="swot.20251101142408.2">@doc
+[source,java]
+----
+@c
+@language java
+interface ProductA {
+    public void info();  // 抽象方法没有方法体
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101142408.3">@doc
+[source,java]
+----
+@c
+@language java
+class ProductA1 implements ProductA {
+    @Override
+    public void info() {
+        System.out.println("ProductA1");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101142408.4">@doc
+[source,java]
+----
+@c
+@language java
+class ProductB1 implements ProductB {
+    @Override
+    public void info() {
+        System.out.println("ProductB1");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101142408.5">@doc
+[source,java]
+----
+@c
+@language java
+interface Factory {
+    public ProductA createProductA();
+    public ProductB createProductB();
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101142408.6">@doc
+[source,java]
+----
+@c
+@language java
+class Factory1 implements Factory {
+
+    @Override
+    public ProductA createProductA() {
+        return new ProductA1();
+    }
+
+    @Override
+    public ProductB createProductB(){
+        return new ProductB1();
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101142408.8">@doc
+[source,java]
+----
+@c
+@language java
+public class AbstractFactoryPattern{
+    public static void main(String[] args) {
+
+        Factory factory1 = new Factory1();
+        ProductA productA = factory1.createProductA();
+        productA.info();
+
+        Factory factory2 = new Factory2();
+        ProductB productB = factory2.createProductB();
+        productB.info();
+    }
+}
+@doc
+----
+
+.run result
+....
+ProductA1
+ProductB2
+....
+</t>
+<t tx="swot.20251101145150.1">@doc
+[source,java]
+----
+@c
+@language java
+class ProductA2 implements ProductA {
+    @Override
+    public void info() {
+        System.out.println("ProductA2");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101145346.1">@doc
+[source,java]
+----
+@c
+@language java
+interface ProductB {
+    public void info();  // 抽象方法没有方法体
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101145427.1">@doc
+[source,java]
+----
+@c
+@language java
+class ProductB2 implements ProductB {
+    @Override
+    public void info() {
+        System.out.println("ProductB2");
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101150821.1">@doc
+[source,java]
+----
+@c
+@language java
+class Factory2 implements Factory {
+
+    @Override
+    public ProductA createProductA() {
+        return new ProductA2();
+    }
+
+    @Override
+    public ProductB createProductB(){
+        return new ProductB2();
+    }
+}
+@doc
+----
+
+</t>
+<t tx="swot.20251101192322.1"></t>
 </tnodes>
 </leo_file>
