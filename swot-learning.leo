@@ -576,7 +576,21 @@
 </v>
 </v>
 </v>
-<v t="swot.20251101192322.1"><vh>生成器模式 Builder</vh></v>
+<v t="swot.20251101192322.1"><vh>生成器模式 Builder</vh>
+<v t="swot.20251101212156.1"><vh>类图结构</vh></v>
+<v t="swot.20251101214628.1"><vh>Computer Builder Example</vh></v>
+</v>
+<v t="swot.20251101202458.1"><vh>原型模式 Propotype</vh></v>
+<v t="swot.20251102074301.1"><vh>适配器模式 Adapter</vh>
+<v t="swot.20251102085343.1"><vh>Example 实际场景：不同格式的图片阅读器</vh>
+<v t="swot.20251102091854.1"><vh>类图结构</vh></v>
+<v t="swot.20251102085959.1"><vh>代码实现</vh>
+<v t="swot.20251102090025.1"><vh>file -&gt; code/adapter/ImageViewer.java</vh></v>
+</v>
+<v t="swot.20251102092131.1"><vh>运行结果</vh></v>
+<v t="swot.20251102092435.1"><vh>关键点对应</vh></v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -10674,6 +10688,348 @@ class Factory2 implements Factory {
 ----
 
 </t>
-<t tx="swot.20251101192322.1"></t>
+<t tx="swot.20251101192322.1">@language asciidoc
+意图：将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
+
+https://www.bilibili.com/video/BV1XT4y1v7ih?spm_id_from=333.788.player.switch&amp;vd_source=392e2829ea8e40de989be86888026747&amp;p=8
+</t>
+<t tx="swot.20251101202458.1">@language asciidoc
+</t>
+<t tx="swot.20251101212156.1">@language asciidoc
+[plantuml, target=img/diagram-2025-11-01-212235, format=svg]
+....
+@startuml Builder Pattern
+' 语法宽松
+!pragma use ver batim false
+'!pragma layout smetana
+' 修改图背景
+' skinparam backgroundColor #EEEBDC
+' skinparam classAttributeIconSize 0
+
+class Client {
+}
+
+class Director {
+  + construct(builder: ConcreteBuilder): Pruduct
+}
+
+interface Builder {
+  + buildPartA(): void
+  + buildPartB(): void
+  + buildPartC(): void
+  + getResult(): Product
+}
+
+class ConcreteBuilder {
+  - product: Product
+  + buildPartA(): void
+  + buildPartB(): void
+  + buildPartC(): void
+  + getResult(): Product
+}
+
+class Product {
+  - parts: List&lt;String&gt;
+  + addPart(part: String): void
+  + show(): void
+}
+
+Client --&gt; Director
+Client --&gt; Builder
+Director --&gt; Builder
+ConcreteBuilder --|&gt; Builder
+ConcreteBuilder --&gt; Product
+
+note right of Director
+  Director 知道构建顺序
+  但不知道具体构建细节
+end note
+
+note right of Builder
+  定义构建产品的
+  各个部分的接口
+end note
+
+note right of ConcreteBuilder
+  实现 Builder 接口
+  具体实现各部分构建
+  提供获取产品的方法
+end note
+
+@enduml
+....
+</t>
+<t tx="swot.20251101214628.1">[plantuml, target=img/diagram-2025-11-01-214649, format=svg]
+....
+@startuml Computer Builder Example
+
+class Client {
+}
+
+class ComputerDirector {
+  + construct(builder: ComputerBuilder): Computer
+}
+
+interface ComputerBuilder {
+  + buildCPU(): void
+  + buildMemory(): void
+  + buildStorage(): void
+  + buildGraphicsCard(): void
+  + getComputer(): Computer
+}
+
+class GamingComputerBuilder {
+  - computer: Computer
+  + buildCPU(): void
+  + buildMemory(): void
+  + buildStorage(): void
+  + buildGraphicsCard(): void
+  + getComputer(): Computer
+}
+
+class OfficeComputerBuilder {
+  - computer: Computer
+  + buildCPU(): void
+  + buildMemory(): void
+  + buildStorage(): void
+  + buildGraphicsCard(): void
+  + getComputer(): Computer
+}
+
+class Computer {
+  - cpu: String
+  - memory: String
+  - storage: String
+  - graphicsCard: String
+  + setCPU(cpu: String): void
+  + setMemory(memory: String): void
+  + setStorage(storage: String): void
+  + setGraphicsCard(graphicsCard: String): void
+  + showSpecs(): void
+}
+
+Client --&gt; ComputerDirector
+Client --&gt; ComputerBuilder
+ComputerDirector --&gt; ComputerBuilder
+GamingComputerBuilder ..|&gt; ComputerBuilder
+OfficeComputerBuilder ..|&gt; ComputerBuilder
+GamingComputerBuilder --&gt; Computer
+OfficeComputerBuilder --&gt; Computer
+
+@enduml
+....
+</t>
+<t tx="swot.20251102074301.1">@language asciidoc
+[plantuml, target=img/diagram-2025-11-02-074806, format=svg]
+....
+@startuml 对象适配器模式 - 简洁彩色版
+
+skinparam roundCorner 15
+skinparam class {
+    BackgroundColor&lt;&lt;Target&gt;&gt; LightGreen
+    BackgroundColor&lt;&lt;Adapter&gt;&gt; LightBlue
+    BackgroundColor&lt;&lt;Adaptee&gt;&gt; LightYellow
+    BackgroundColor&lt;&lt;Client&gt;&gt; Moccasin
+    ArrowColor Black
+    BorderColor Black
+}
+
+' 使用隐藏的构造型 - 有颜色但不显示文字
+interface Target &lt;&lt;Target&gt;&gt; {
+  + {abstract} request(): void
+}
+
+class Adapter &lt;&lt;Adapter&gt;&gt; {
+  - adaptee: Adaptee
+  + request(): void
+}
+
+class Adaptee &lt;&lt;Adaptee&gt;&gt; {
+  + specificRequest(): void
+}
+
+class Client &lt;&lt;Client&gt;&gt; {
+}
+
+' 隐藏构造型显示
+hide stereotype
+
+' 关系定义
+Client ..&gt; Target : 依赖--临时引用
+Adapter ..|&gt; Target : 实现接口
+Adapter *--&gt; Adaptee : adaptee
+
+note on link
+在 Adapter::request() 中：
+调用 adaptee.specificRequest()
+end note
+
+@enduml
+....
+</t>
+<t tx="swot.20251102085343.1"></t>
+<t tx="swot.20251102085959.1"></t>
+<t tx="swot.20251102090025.1">@language java
+// Target 接口 - 客户端期望的图片阅读接口
+interface ImageReader {
+    void displayImage(String fileName);
+}
+
+// Adaptee - 已存在的JPEG图片阅读器（不兼容的接口）
+class JpegReader {
+    public void readJpegFile(String file) {
+        System.out.println("正在显示JPEG图片: " + file);
+        // 实际的JPEG显示逻辑
+    }
+}
+
+// Adaptee - 已存在的PNG图片阅读器（不兼容的接口）  
+class PngReader {
+    public void renderPngImage(String filename) {
+        System.out.println("正在渲染PNG图像: " + filename);
+        // 实际的PNG渲染逻辑
+    }
+}
+
+// Adapter - JPEG适配器
+class JpegAdapter implements ImageReader {
+    private JpegReader jpegReader;  // 组合关系：持有Adaptee实例
+    
+    public JpegAdapter() {
+        this.jpegReader = new JpegReader();
+    }
+    
+    @Override
+    public void displayImage(String fileName) {
+        // 适配：将 displayImage 调用转发给 readJpegFile
+        jpegReader.readJpegFile(fileName);
+    }
+}
+
+// Adapter - PNG适配器
+class PngAdapter implements ImageReader {
+    private PngReader pngReader;  // 组合关系：持有Adaptee实例
+    
+    public PngAdapter() {
+        this.pngReader = new PngReader();
+    }
+    
+    @Override
+    public void displayImage(String fileName) {
+        // 适配：将 displayImage 调用转发给 renderPngImage
+        pngReader.renderPngImage(fileName);
+    }
+}
+
+// Client - 客户端代码
+public class ImageViewer {
+    public void viewImage(ImageReader reader, String file) {
+        System.out.println("图片查看器启动...");
+        reader.displayImage(file);  // 只依赖Target接口
+        System.out.println("图片显示完成");
+        System.out.println();  // Add a blank line to show better
+    }
+    
+    public static void main(String[] args) {
+        ImageViewer viewer = new ImageViewer();
+        
+        // 使用适配器来兼容不同的图片格式
+        ImageReader jpegReader = new JpegAdapter();
+        ImageReader pngReader = new PngAdapter();
+        
+        viewer.viewImage(jpegReader, "photo.jpg");
+        viewer.viewImage(pngReader, "diagram.png");
+    }
+}
+</t>
+<t tx="swot.20251102091854.1">@language asciidoc
+[plantuml, target=img/diagram-2025-11-02-091932, format=svg]
+....
+@startuml
+
+interface ImageReader {
+  + {abstract} displayImage(fileName: String)
+}
+
+class JpegAdapter {
+  - jpegReader: JpegReader
+  + displayImage(fileName: String)
+}
+
+class PngAdapter {
+  - pngReader: PngReader
+  + displayImage(fileName: String)
+}
+
+class JpegReader {
+  + readJpegFile(file: String)
+}
+
+class PngReader {
+  + renderPngImage(filename: String)
+}
+
+class ImageViewer {
+  + viewImage(reader: ImageReader, file: String)
+  + main(args: String[])
+}
+
+' 关系定义
+ImageViewer ..&gt; ImageReader : depends on
+
+JpegAdapter ..|&gt; ImageReader : implements
+PngAdapter ..|&gt; ImageReader : implements
+
+JpegAdapter *--&gt; JpegReader : jpegReader
+PngAdapter *--&gt; PngReader : pngReader
+
+' 注释说明适配行为
+note on link
+在 JpegAdapter::displayImage() 中：
+调用 jpegReader.readJpegFile(fileName)
+end note
+
+note on link
+在 PngAdapter::displayImage() 中：
+调用 pngReader.renderPngImage(fileName)
+end note
+
+@enduml
+....
+</t>
+<t tx="swot.20251102092131.1">@language asciidoc
+....
+图片查看器启动...
+正在显示JPEG图片: photo.jpg
+图片显示完成
+
+图片查看器启动...
+正在渲染PNG图像: diagram.png
+图片显示完成
+....
+</t>
+<t tx="swot.20251102092435.1">@language asciidoc
+[width="100%",cols="30%,30%,40%",options="header"]
+|===
+| 代码实现 | UML表示 | 设计模式含义
+
+| private JpegReader jpegReader
+| JpegAdapter *--&gt; JpegReader
+| 对象适配器通过组合持有被适配对象
+
+| implements ImageReader
+| JpegAdapter ..|&gt; ImageReader
+| 适配器实现客户端期望的目标接口
+
+| jpegReader.readJpegFile(fileName)
+| note on link 注释
+| 适配器将客户端调用转发给被适配对象
+
+| viewer.viewImage(jpegReader, "file")
+| ImageViewer ..&gt; ImageReader
+| 客户端只依赖目标接口，不关心具体实现
+|===
+
+</t>
 </tnodes>
 </leo_file>
