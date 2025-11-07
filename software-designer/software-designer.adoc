@@ -260,9 +260,9 @@ k8(*8*),"0"(*9*),"1"(*10*),"1"(*11*),"0"(*12*),"0"(*13*);
 | 信息码对应值 |1 | 0 | 1 | 0  | 1  | 0  ^.^| 1
 | k2 对应位   |3 | 6 | 7 | 10 | 11 |       | 异或结果为 k2
 | 信息码对应值 |1 | 1 | 1 | 1  | 1  |    ^.^| 1
-| k4 对应位   |5 | 6 | 7 | 12 | 13 |       | 异或结果为 k3
+| k4 对应位   |5 | 6 | 7 | 12 | 13 |       | 异或结果为 k4
 | 信息码对应值 |0 | 1 | 1 | 0  | 0  |    ^.^| 0
-| k8 对应位   |9 | 10| 11| 12 | 13 |       | 异或结果为 k4
+| k8 对应位   |9 | 10| 11| 12 | 13 |       | 异或结果为 k8
 | 信息码对应值 |0 | 1 | 1 | 0  | 0  |    ^.^| 0
 |===
 
@@ -3517,6 +3517,10 @@ stem:[
 在操作系统的进程调度中，前趋图可以帮助操作系统确定进程的执行顺序，确保系统资源的有效利用和进程的正确执行。
 
 ==== 8.1.2 PV 操作
+先看这个例子中有技巧。
+https://www.bilibili.com/video/BV1WW4y197Am?spm_id_from=333.788.player.switch&vd_source=392e2829ea8e40de989be86888026747&p=24
+
+
 PV 操作是操作系统中用于进程同步与互斥的一种机制，由两部分组成：
 P 操作（Proberen，荷兰语中的“测试”）和 V 操作（Verhogen，荷兰语中的“增加”）。这种机制通常与信号量（Semaphore）一起使用，信号量是一个整数变量，用于控制对共享资源的访问。
 
@@ -5166,11 +5170,11 @@ _→ **不是一个好的测试用例**_
 === 14.1 类图符号
 符号	含义	示例：
 
-* 实心菱形	组合（Composition）	房子包含房间
+* 实心菱形	组合（Composition）如房子包含房间，特点是整体消失，部分也会消失。
 
-* 空心菱形	聚合（Aggregation）	班级聚合学生
+* 空心菱形	聚合（Aggregation）	如班级聚合学生，特点是整体消失，部分不会消失。
 
-* 空心三角形箭头	泛化（继承）	猫继承自动物
+* 空心三角形箭头	泛化（继承）	猫继承自动物，即动物是猫的泛化。
 
 * 实线箭头或连线	关联	员工参与项目
 
@@ -5204,10 +5208,10 @@ _→ **不是一个好的测试用例**_
 
 UML 用例图中，用例与用例之间有三种标准关系：
 
-* include（包含），用虚线箭头表示，基础用例指向被包含用例，上面写 <<include>>
+* include（包含），用虚线箭头表示，##基础用例指向被包含用例##，上面写 <<include>>
   ** 当基础用例执行时，被包含用例一定会执行。
 
-* extend（扩展） ，用虚线箭头表示，扩展用例指向基础用例，上面写 <<extend>>
+* extend（扩展） ，用虚线箭头表示，##扩展用例指向基础用例##，上面写 <<extend>>
   ** 当一个用例执行时，可能会出现特殊情况和可选情况，这个时候就会执行扩展用例。
 
 * generalization（泛化|继承），空心三角形箭头，子类指向父类
@@ -5415,7 +5419,7 @@ NOTE: 把 i 乘以 7，然后对 26 取余，结果还是一个 0 到 25 之间�
 = 软件设计师例题精讲下午
 
 
-== 第一题: 数据流图
+== 第一题: 数据流图（DFD） - 必考
 
 
 === 如何保持数据流图平衡 -- 背下来
@@ -5434,10 +5438,10 @@ NOTE: 把 i 乘以 7，然后对 26 取余，结果还是一个 0 到 25 之间�
 
 灰洞：会吞噬飞行器，但也会在之后释放出来（即延迟释放）。
 
-== 第二题:
+== 第二题: 数据库设计（E-R图与关系模式） - 必考
 
 
-== 第三题:
+== 第三题: UML建模（类图、用例图、状态图等） - 必考
 
 
 === 设计模式
@@ -5462,4 +5466,1448 @@ https://www.bilibili.com/video/BV11Z4y1z7Uc?spm_id_from=333.788.videopod.episode
 2013 下半年问题 3 考了状态模式
 
 https://www.bilibili.com/video/BV11Z4y1z7Uc?spm_id_from=333.788.videopod.episodes&vd_source=392e2829ea8e40de989be86888026747&p=53
+
+== 第四题: C语言算法实现
+
+
+== 第五题: 面向对象程序设计（主要是设计模式） - 二选一
+代码填空 15 分，一个空 3 分，一共 5 个空。
+
+代码是某一种设计模式的应用。
+
+=== 试题6 java设计模式
+[plantuml, target=img/diagram-2025-11-03-101149, format=svg]
+....
+@startuml
+@startuml
+title 设计模式分类概览
+
+package "创建型模式" {
+  abstract class CreationalPatterns {
+    + 工厂方法模式(Factory Method)
+    + 抽象工厂模式(Abstract Factory)
+    + 建造者模式(Builder)
+    + 原型模式(Prototype)
+    + 单例模式(Singleton)
+  }
+}
+
+package "结构型模式" {
+  abstract class StructuralPatterns {
+    + 适配器模式(Adapter)
+    + 桥接模式(Bridge)
+    + 组合模式(Composite)
+    + 装饰器模式(Decorator)
+    + 外观模式(Facade)
+    + 享元模式(Flyweight)
+    + 代理模式(Proxy)
+  }
+}
+
+package "行为型模式" {
+  abstract class BehavioralPatterns {
+    + 责任链模式(Chain of Responsibility)
+    + 命令模式(Command)
+    + 解释器模式(Interpreter)
+    + 迭代器模式(Iterator)
+    + 中介者模式(Mediator)
+    + 备忘录模式(Memento)
+    + 观察者模式(Observer)
+    + 状态模式(State)
+    + 策略模式(Strategy)
+    + 模板方法模式(Template Method)
+    + 访问者模式(Visitor)
+  }
+}
+
+CreationalPatterns --> StructuralPatterns : 分类
+StructuralPatterns --> BehavioralPatterns : 分类
+
+note right of StructuralPatterns
+   结构型模式关注如何将
+   类或对象按某种布局
+   组成更大的结构
+end note
+@enduml
+....
+
+==== 简单工厂模式 -> 不属于 23 种设计模式
+简单工厂模式属于 #创建型# 模式，但 #不属性# 23 种设计模式之一。
+
+定义：定义一个工厂类，它可以根据参数的不同返回不同类的实例，被创建的实例通常都具有共同的父类。
+
+在简单工厂模式中，用于创建实例的方法通常为静态(static)方法，因此简单工厂模式又被称为静态工厂方法(Static Factory Method)。
+
+需要什么产品就传入产品对应的参数，就可以获取所需要的产品对象，而无需知道其实现过程。
+
+例如：有一家饺子店，当客户需要某种饺子时，饺子店生成对应的饺子给客户。这里就可以把饺子店看成工厂(Factory)，饺子看成产品(Product)，饺子的名称看成参数，饺子店根据不同的参数返回不同的饺子。
+
+比如：客户想要韭菜饺子，这里韭菜就是参数，饺子店会根据参数韭菜返回韭菜饺子(当然饺子店有韭菜饺子的前提下)。
+
+三类角色:
+
+* 工厂(核心)：负责实现创建所有产品的内部逻辑，工厂类可以被外界直接调用（因为是静态方法），创建所需对象。
+* 抽象产品：工厂类所创建的所有对象的父类，封装了产品对象的公共抽象方法，所有的具体产品为其子类对象。
+* 具体产品：简单工厂模式的创建目标，所有被创建的对象都是某个具体类的实例。它要实现抽象产品中声明的抽象方法。
+
+===== 类图结构
+.class diagram
+[plantuml, target=img/2025-10-29-165754, format=svg]
+....
+@startuml
+'!pragma layout smetana
+!option handwritten true
+
+abstract Product {
+    + info(): void
+}
+
+class ProductA {
+    + info(): void
+}
+
+class ProductB {
+    + info(): void
+}
+
+class Factory {
+    + {static} createProduct(): Product
+}
+
+Product <|-- ProductA : 泛化
+Product <|-- ProductB : 泛化
+
+Factory ..> ProductA : 依赖
+Factory ..> ProductB : 依赖
+@enduml
+....
+
+===== 代码实现
+
+
+====== file -> code/simpleFactoryPattern/SimpleFactoryPattern.java
+
+
+====== abstract class Product
+[source,java]
+----
+abstract class Product {
+    public abstract void info();  // 抽象方法没有方法体
+}
+----
+
+====== class ProductA
+[source,java]
+----
+class ProductA extends Product {
+    @Override
+    public void info() {
+        System.out.println("ProductA");
+    }
+}
+----
+
+====== class ProductB
+[source,java]
+----
+class ProductB extends Product {
+    @Override
+    public void info() {
+        System.out.println("ProductB");
+    }
+}
+----
+
+====== class Factory
+[source,java]
+----
+class Factory {
+
+    // 定义静态方法
+    public static Product createProduct(String type) {
+        switch (type) {
+            case "A":
+                return new ProductA();
+            case "B":
+                return new ProductB();
+            default:
+                throw new IllegalArgumentException(
+                          "Unknown product type:" + type);
+        }
+    }
+}
+----
+
+====== SimpleFactoryPattern 运行主类
+[source,java]
+----
+public class SimpleFactoryPattern{
+    public static void main(String[] args) {
+
+        // 使用静态工厂方法创建不同的产品
+        Product productA = Factory.createProduct("A");
+        productA.info();
+
+        Product productB = Factory.createProduct("B");
+        productB.info();
+    }
+}
+----
+
+===== 存在问题 -- 违反开放封闭原则（对扩展开放，对修改关闭）
+比如新增一个类 ProductC，还需要修改 Factory 才行。这样不好！
+
+====== file -> code/simpleFactoryPattern/SimpleFactoryPattern.java
+
+
+====== SimpleFactoryPattern 运行主类
+[source,java]
+----
+public class SimpleFactoryPattern{
+    public static void main(String[] args) {
+
+        // 使用静态工厂方法创建不同的产品
+        Product productA = Factory.createProduct("A");
+        productA.info();
+
+        Product productB = Factory.createProduct("B");
+        productB.info();
+    }
+}
+----
+
+====== abstract class Product
+[source,java]
+----
+abstract class Product {
+    public abstract void info();  // 抽象方法没有方法体
+}
+----
+
+====== ProductA
+[source,java]
+----
+class ProductA extends Product {
+    @Override
+    public void info() {
+        System.out.println("ProductA");
+    }
+}
+----
+
+====== ProductB
+[source,java]
+----
+class ProductB extends Product {
+    @Override
+    public void info() {
+        System.out.println("ProductB");
+    }
+}
+----
+
+====== ProductC -- 新增的类
+[source,java]
+----
+class ProductC extends Product {
+    @Override
+    public void info() {
+        System.out.println("ProductC");
+    }
+}
+----
+
+====== class Factory -- 需要再更改的类
+[source,java]
+----
+class Factory {
+
+    // 定义静态方法
+    public static Product createProduct(String type) {
+        switch (type) {
+            case "A":
+                return new ProductA();
+            case "B":
+                return new ProductB();
+
+            // --New Added Start--
+            case "C":
+                return new ProductC();
+            // --New Added End--
+
+            default:
+                throw new IllegalArgumentException(
+                          "Unknown product type:" + type);
+        }
+    }
+}
+----
+
+==== 工厂方法模式 -> 属于 23 种设计模式
+
+
+===== 意图
+定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法（Factory Method）使一个类的实例化延迟到其子类。
+
+* 为什么需要延迟？→ 为了扩展性
+* 为什么用子类？→ 为了多态
+* 为什么是接口？→ 为了解耦
+
+===== 类图结构
+.class diagram
+[plantuml, target=img/2025-10-31-235046, format=svg]
+....
+@startuml
+'!pragma layout smetana
+!option handwritten true
+
+interface Product {
+    + {abstract} info(): void
+}
+
+class ProductA {
+    + info(): void
+}
+
+class ProductB {
+    + info(): void
+}
+
+class FactoryA {
+    + createProduct(): Product
+}
+
+class FactoryB {
+    + createProduct(): Product
+}
+
+interface Factory {
+    + {abstract} createProduct(): Product
+}
+
+Product <|-- ProductA : 泛化
+Product <|-- ProductB : 泛化
+
+FactoryA ..> ProductA : 依赖
+FactoryB ..> ProductB : 依赖
+
+Factory <|-- FactoryA
+Factory <|-- FactoryB
+@enduml
+....
+
+===== 代码实现
+
+
+====== file -> code/factoryMethodPattern/FactoryMethodPattern.java
+
+
+====== interface Product
+[source,java]
+----
+interface Product {
+    public void info();  // 抽象方法没有方法体
+}
+----
+
+====== class ProductA
+[source,java]
+----
+class ProductA implements Product {
+    @Override
+    public void info() {
+        System.out.println("ProductA");
+    }
+}
+----
+
+====== class ProductB
+[source,java]
+----
+class ProductB implements Product {
+    @Override
+    public void info() {
+        System.out.println("ProductB");
+    }
+}
+----
+
+====== interface Factory
+[source,java]
+----
+interface Factory {
+    public Product createProduct();
+}
+----
+
+====== class FactoryA
+[source,java]
+----
+class FactoryA implements Factory {
+    @Override
+    public Product createProduct() {
+        return new ProductA();
+    }
+}
+----
+
+====== class FactoryB
+[source,java]
+----
+class FactoryB implements Factory {
+    @Override
+    public Product createProduct() {
+        return new ProductB();
+    }
+}
+----
+
+====== FactoryMethodPattern 运行主类
+[source,java]
+----
+public class FactoryMethodPattern{
+    public static void main(String[] args) {
+        Factory factoryA = new FactoryA();
+        Product productA = factoryA.createProduct();
+        productA.info();
+
+        Factory factoryB = new FactoryB();
+        Product productB = factoryB.createProduct();
+        productB.info();
+    }
+}
+----
+
+==== 抽象工厂模式 -> 属于 23 种设计模式
+
+
+===== 意图
+提供一个创建一系列相关或相互依赖对象的接口,而无须指定它们具体的类。
+
+===== 类图结构
+[plantuml, target=img/diagram-2025-11-01-114155, format=svg]
+....
+@startuml
+!pragma use ver batim false
+'!pragma layout smetana
+' !theme plain
+hide empty members
+
+class Client
+
+interface Factory {
+  + {abstract} CreateProductA()
+  + {abstract} CreateProductB()
+}
+
+class Factory1 {
+  + CreateProductA()
+  + CreateProductB()
+}
+
+class Factory2 {
+  + CreateProductA()
+  + CreateProductB()
+}
+
+interface ProductA
+class ProductA1
+class ProductA2
+
+interface ProductB
+class ProductB1
+class ProductB2
+
+' 继承关系
+Factory <|-- Factory1
+Factory <|-- Factory2
+
+ProductA <|-- ProductA1
+ProductA <|-- ProductA2
+
+ProductB <|-- ProductB1
+ProductB <|-- ProductB2
+
+' 依赖关系：Client 使用 Factory
+Client ..> Factory
+
+' 工厂创建产品
+Factory1 ..> ProductA1
+Factory1 ..> ProductB1
+
+Factory2 ..> ProductA2
+Factory2 ..> ProductB2
+
+@enduml
+....
+
+===== 代码实现
+
+
+====== file -> code/abstractFactoryPattern/AbstractFactoryPattern.java
+
+
+====== interface ProductA
+[source,java]
+----
+interface ProductA {
+    public void info();  // 抽象方法没有方法体
+}
+----
+
+====== class ProductA1
+[source,java]
+----
+class ProductA1 implements ProductA {
+    @Override
+    public void info() {
+        System.out.println("ProductA1");
+    }
+}
+----
+
+====== class ProductA2
+[source,java]
+----
+class ProductA2 implements ProductA {
+    @Override
+    public void info() {
+        System.out.println("ProductA2");
+    }
+}
+----
+
+====== interface ProductB
+[source,java]
+----
+interface ProductB {
+    public void info();  // 抽象方法没有方法体
+}
+----
+
+====== class ProductB1
+[source,java]
+----
+class ProductB1 implements ProductB {
+    @Override
+    public void info() {
+        System.out.println("ProductB1");
+    }
+}
+----
+
+====== class ProductB2
+[source,java]
+----
+class ProductB2 implements ProductB {
+    @Override
+    public void info() {
+        System.out.println("ProductB2");
+    }
+}
+----
+
+====== interface Factory
+[source,java]
+----
+interface Factory {
+    public ProductA createProductA();
+    public ProductB createProductB();
+}
+----
+
+====== class Factory1
+[source,java]
+----
+class Factory1 implements Factory {
+
+    @Override
+    public ProductA createProductA() {
+        return new ProductA1();
+    }
+
+    @Override
+    public ProductB createProductB(){
+        return new ProductB1();
+    }
+}
+----
+
+====== class Factory2
+[source,java]
+----
+class Factory2 implements Factory {
+
+    @Override
+    public ProductA createProductA() {
+        return new ProductA2();
+    }
+
+    @Override
+    public ProductB createProductB(){
+        return new ProductB2();
+    }
+}
+----
+
+====== AbstractFactoryPattern 运行主类
+[source,java]
+----
+public class AbstractFactoryPattern{
+    public static void main(String[] args) {
+
+        Factory factory1 = new Factory1();
+        ProductA productA = factory1.createProductA();
+        productA.info();
+
+        Factory factory2 = new Factory2();
+        ProductB productB = factory2.createProductB();
+        productB.info();
+    }
+}
+----
+
+.run result
+....
+ProductA1
+ProductB2
+....
+
+==== 生成器模式 Builder
+
+
+===== 意图
+将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
+
+https://www.bilibili.com/video/BV1XT4y1v7ih?spm_id_from=333.788.player.switch&vd_source=392e2829ea8e40de989be86888026747&p=8
+
+===== 类图结构
+[plantuml, target=img/diagram-2025-11-01-212235, format=svg]
+....
+@startuml Builder Pattern
+' 语法宽松
+!pragma use ver batim false
+'!pragma layout smetana
+' 修改图背景
+' skinparam backgroundColor #EEEBDC
+' skinparam classAttributeIconSize 0
+
+class Client {
+}
+
+class Director {
+  + construct(builder: ConcreteBuilder): Pruduct
+}
+
+interface Builder {
+  + buildPartA(): void
+  + buildPartB(): void
+  + buildPartC(): void
+  + getResult(): Product
+}
+
+class ConcreteBuilder {
+  - product: Product
+  + buildPartA(): void
+  + buildPartB(): void
+  + buildPartC(): void
+  + getResult(): Product
+}
+
+class Product {
+  - parts: List<String>
+  + addPart(part: String): void
+  + show(): void
+}
+
+Client --> Director
+Client --> Builder
+Director --> Builder
+ConcreteBuilder --|> Builder
+ConcreteBuilder --> Product
+
+note right of Director
+  Director 知道构建顺序
+  但不知道具体构建细节
+end note
+
+note right of Builder
+  定义构建产品的
+  各个部分的接口
+end note
+
+note right of ConcreteBuilder
+  实现 Builder 接口
+  具体实现各部分构建
+  提供获取产品的方法
+end note
+
+@enduml
+....
+
+===== Computer Builder Example
+[plantuml, target=img/diagram-2025-11-01-214649, format=svg]
+....
+@startuml Computer Builder Example
+
+class Client {
+}
+
+class ComputerDirector {
+  + construct(builder: ComputerBuilder): Computer
+}
+
+interface ComputerBuilder {
+  + buildCPU(): void
+  + buildMemory(): void
+  + buildStorage(): void
+  + buildGraphicsCard(): void
+  + getComputer(): Computer
+}
+
+class GamingComputerBuilder {
+  - computer: Computer
+  + buildCPU(): void
+  + buildMemory(): void
+  + buildStorage(): void
+  + buildGraphicsCard(): void
+  + getComputer(): Computer
+}
+
+class OfficeComputerBuilder {
+  - computer: Computer
+  + buildCPU(): void
+  + buildMemory(): void
+  + buildStorage(): void
+  + buildGraphicsCard(): void
+  + getComputer(): Computer
+}
+
+class Computer {
+  - cpu: String
+  - memory: String
+  - storage: String
+  - graphicsCard: String
+  + setCPU(cpu: String): void
+  + setMemory(memory: String): void
+  + setStorage(storage: String): void
+  + setGraphicsCard(graphicsCard: String): void
+  + showSpecs(): void
+}
+
+Client --> ComputerDirector
+Client --> ComputerBuilder
+ComputerDirector --> ComputerBuilder
+GamingComputerBuilder ..|> ComputerBuilder
+OfficeComputerBuilder ..|> ComputerBuilder
+GamingComputerBuilder --> Computer
+OfficeComputerBuilder --> Computer
+
+@enduml
+....
+
+==== 原型模式 Propotype
+
+
+===== 意图
+用原型实例指定创建对象的种类，并且通过复制这些原型创建新的对象。
+
+===== 类图结构
+[plantuml, target=img/diagram-2025-11-02-175035, format=svg]
+....
+@startuml Prototype Pattern
+
+' !theme plain
+
+interface Prototype {
+  + {abstract} clone(): Prototype
+}
+
+class ConcretePrototype1 {
+  - field1: String
+  + ConcretePrototype1(prototype: ConcretePrototype1)
+  + clone(): Prototype
+  + getField1(): String
+  + setField1(field1: String): void
+}
+
+class ConcretePrototype2 {
+  - field2: int
+  + ConcretePrototype2(prototype: ConcretePrototype2)
+  + clone(): Prototype
+  + getField2(): int
+  + setField2(field2: int): void
+}
+
+class Client {
+  - prototypeRegistry: Map<String, Prototype>
+  + getPrototype(key: String): Prototype
+  + addPrototype(key: String, prototype: Prototype): void
+}
+
+Prototype <|.. ConcretePrototype1
+Prototype <|.. ConcretePrototype2
+Client --> Prototype : uses
+
+note top of ConcretePrototype1
+  // clone(): 实现深拷贝或浅拷贝
+  return new ConcretePrototype1(this);
+end note
+
+@enduml
+....
+
+===== Animal Prototype Example
+
+
+====== file -> code/prototypePattern/PrototypePattern.java
+// 超简单原型模式
+interface Animal {
+    Animal clone();
+    void speak();
+}
+
+class Dog implements Animal {
+    private String name;
+
+    public Dog(String name) { this.name = name; }
+
+    public Animal clone() {
+        return new Dog(this.name);
+    }
+
+    public void speak() {
+        System.out.println(name + ": 汪汪!");
+    }
+}
+
+// 使用
+public class PrototypePattern {
+    public static void main(String[] args) {
+        Animal original = new Dog("小黑");
+        Animal cloned = original.clone();
+
+        original.speak();  // 小黑: 汪汪!
+        cloned.speak();    // 小黑: 汪汪!
+    }
+}
+
+==== 适配器模式 Adapter
+
+
+===== 意图
+将一个类的接口转换成客户希望的另外一个接口。Adapter 模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
+
+===== 类图结构（对象适配器）
+IMPORTANT: 因为 java 不支持多继承,所以我们不学类适配器。
+学习对象适配器就可以了。对象适配器依赖于对象组合。
+
+[plantuml, target=img/diagram-2025-11-02-074806, format=svg]
+....
+@startuml 对象适配器模式 - 简洁彩色版
+
+skinparam roundCorner 15
+skinparam class {
+    BackgroundColor<<Target>> LightGreen
+    BackgroundColor<<Adapter>> LightBlue
+    BackgroundColor<<Adaptee>> LightYellow
+    BackgroundColor<<Client>> Moccasin
+    ArrowColor Black
+    BorderColor Black
+}
+
+' 使用隐藏的构造型 - 有颜色但不显示文字
+interface Target <<Target>> {
+  + {abstract} request(): void
+}
+
+class Adapter <<Adapter>> {
+  - adaptee: Adaptee
+  + request(): void
+}
+
+class Adaptee <<Adaptee>> {
+  + specificRequest(): void
+}
+
+class Client <<Client>> {
+}
+
+' 隐藏构造型显示
+hide stereotype
+
+' 关系定义
+Client --> Target
+Adapter ..|> Target : 实现
+Adapter --> Adaptee : adaptee
+
+note on link
+在 Adapter::request() 中：
+     调用 adaptee.specificRequest()
+end note
+
+@enduml
+....
+
+===== Example 实际场景：不同格式的图片阅读器
+
+
+====== 类图结构
+[plantuml, target=img/diagram-2025-11-02-091932, format=svg]
+....
+@startuml
+
+interface ImageReader {
+  + {abstract} displayImage(fileName: String)
+}
+
+class JpegAdapter {
+  - jpegReader: JpegReader
+  + displayImage(fileName: String)
+}
+
+class PngAdapter {
+  - pngReader: PngReader
+  + displayImage(fileName: String)
+}
+
+class JpegReader {
+  + readJpegFile(file: String)
+}
+
+class PngReader {
+  + renderPngImage(filename: String)
+}
+
+class ImageViewer {
+  + viewImage(reader: ImageReader, file: String)
+  + main(args: String[])
+}
+
+' 关系定义
+ImageViewer --> ImageReader
+
+JpegAdapter ..|> ImageReader : implements
+PngAdapter  ..|> ImageReader : implements
+
+JpegAdapter --> JpegReader : jpegReader
+
+note on link
+在 JpegAdapter::displayImage() 中：
+调用 jpegReader.readJpegFile(fileName)
+end note
+
+PngAdapter  --> PngReader : pngReader
+
+note on link
+在 PngAdapter::displayImage() 中：
+调用 pngReader.renderPngImage(fileName)
+end note
+
+@enduml
+....
+
+====== 代码实现
+
+
+====== file -> code/adapter/ImageViewer.java
+
+
+====== Target ImageReader - 客户端期望的图片阅读接口
+interface ImageReader {
+    void displayImage(String fileName);
+}
+
+====== Adaptee JpegReader - 已存在的JPEG图片阅读器（不兼容的接口）
+class JpegReader {
+    public void readJpegFile(String file) {
+        System.out.println("正在显示JPEG图片: " + file);
+        // 实际的JPEG显示逻辑
+    }
+}
+
+====== Adaptee PngReader - 已存在的PNG图片阅读器（不兼容的接口）  
+class PngReader {
+    public void renderPngImage(String filename) {
+        System.out.println("正在渲染PNG图像: " + filename);
+        // 实际的PNG渲染逻辑
+    }
+}
+
+====== Adapter JpegAdapter - JPEG适配器
+class JpegAdapter implements ImageReader {
+
+    private JpegReader jpegReader;  // 组合关系：持有Adaptee实例
+    
+    public JpegAdapter() {
+        this.jpegReader = new JpegReader();
+    }
+    
+    @Override
+    public void displayImage(String fileName) {
+        // 适配：将 displayImage 调用转发给 readJpegFile
+        jpegReader.readJpegFile(fileName);
+    }
+}
+
+====== Adapter PngAdapter - PNG适配器
+class PngAdapter implements ImageReader {
+
+    private PngReader pngReader;  // 组合关系：持有Adaptee实例
+    
+    public PngAdapter() {
+        this.pngReader = new PngReader();
+    }
+    
+    @Override
+    public void displayImage(String fileName) {
+        // 适配：将 displayImage 调用转发给 renderPngImage
+        pngReader.renderPngImage(fileName);
+    }
+}
+
+====== Client - 客户端代码 ImageViewer
+public class ImageViewer {
+
+    public void viewImage(ImageReader reader, String file) {
+        System.out.println("图片查看器启动...");
+        reader.displayImage(file);  // 只依赖Target接口
+        System.out.println("图片显示完成");
+        System.out.println();  // Add a blank line to show better
+    }
+
+    public static void main(String[] args) {
+        ImageViewer viewer = new ImageViewer();
+
+        // 使用适配器来兼容不同的图片格式
+        ImageReader jpegReader = new JpegAdapter();
+        ImageReader pngReader = new PngAdapter();
+
+        viewer.viewImage(jpegReader, "photo.jpg");
+        viewer.viewImage(pngReader, "diagram.png");
+    }
+}
+
+====== 运行结果
+....
+图片查看器启动...
+正在显示JPEG图片: photo.jpg
+图片显示完成
+
+图片查看器启动...
+正在渲染PNG图像: diagram.png
+图片显示完成
+....
+
+====== 关键点对应
+[width="100%",cols="30%,30%,40%",options="header"]
+|===
+| 代码实现 | UML表示 | 设计模式含义
+
+| private JpegReader jpegReader
+| JpegAdapter *--> JpegReader
+| 对象适配器通过组合持有被适配对象
+
+| implements ImageReader
+| JpegAdapter ..|> ImageReader
+| 适配器实现客户端期望的目标接口
+
+| jpegReader.readJpegFile(fileName)
+| note on link 注释
+| 适配器将客户端调用转发给被适配对象
+
+| viewer.viewImage(jpegReader, "file")
+| ImageViewer ..> ImageReader
+| 客户端只依赖目标接口，不关心具体实现
+|===
+
+==== 桥接模式 Bridge
+
+
+===== 意图
+将抽象部分与实现部分分离，使它们都可以独立地变化。
+
+===== 类图结构
+[plantuml, target=img/diagram-2025-11-03-100923, format=svg]
+....
+@startuml
+title 桥接模式 (Bridge Pattern)
+
+abstract class Abstraction {
+  - implementor: Implementor
+  + operation(): void
+}
+
+class RefinedAbstraction {
+  + operation(): void
+}
+
+interface Implementor {
+  + operationImpl(): void
+}
+
+class ConcreteImplementorA {
+  + operationImpl(): void
+}
+
+class ConcreteImplementorB {
+  + operationImpl(): void
+}
+
+Abstraction o--> Implementor
+Abstraction <|-- RefinedAbstraction
+Implementor <|.. ConcreteImplementorA
+Implementor <|.. ConcreteImplementorB
+
+note right of Implementor
+ 实现化角色
+ 定义实现接口
+end note
+
+note left of Abstraction
+ 抽象化角色
+ 定义抽象接口
+end note
+@enduml
+....
+
+===== Example 暂无
+
+
+==== 组合模式 Composite
+
+
+===== 意图
+将对象组合成树形结构以表示“部分-整体”的层次结构。Composite 使得用户对单个对象和组合对象的使用具有一致性。
+
+===== 类图结构（透明方式原理）
+[plantuml, target=img/diagram-2025-11-03-101934, format=svg]
+....
+@startuml
+
+' skinparam classAttributeIconSize 0
+skinparam roundcorner 15
+skinparam shadowing false
+
+title 组合模式 (Composite Pattern)
+
+class Client
+
+interface Component {
+  {abstract} + operation()
+  {abstract} + add(child: Component)
+  {abstract} + remove(child: Component)
+  {abstract} + getChild(index: int): Component
+}
+
+class Leaf {
+  + operation()
+  + add(child: Component)
+  + remove(child: Component)
+  + getChild(index: int): Component
+}
+
+class Composite {
+  - children: List<Component>
+  + operation()
+  + add(child: Component)
+  + remove(child: Component)
+  + getChild(index: int): Component
+}
+
+Client --> Component
+Component <|.. Leaf
+Component <|.. Composite
+Composite o--> "children *" Component
+
+note right of Composite::operation
+  // 递归调用子组件
+  for (child in children) {
+    child.operation();
+  }
+end note
+
+note right of Leaf::add
+  // 叶子节点不支持这些操作
+  throw new UnsupportedOperationException();
+end note
+
+@enduml
+....
+
+List<Component> 不是全局的：每个 Composite 实例都有自己的 children 列表。
+
+===== 类图结构（实际开发中）解决叶子节点没有其它方法的实现问题
+[plantuml, target=img/diagram-2025-11-03-104434, format=svg]
+....
+@startuml
+skinparam classAttributeIconSize 0
+skinparam roundcorner 15
+
+title 组合模式 - 安全方式
+
+class Client
+
+interface Component {
+  {abstract} + operation()
+}
+
+interface CompositeComponent {
+  {abstract} + add(child: Component)
+  {abstract} + remove(child: Component)
+  {abstract} + getChild(index: int): Component
+}
+
+class Leaf {
+  + operation()
+}
+
+class Composite {
+  - children: List<Component>
+  + operation()
+  + add(child: Component)
+  + remove(child: Component)
+  + getChild(index: int): Component
+}
+
+Client --> Component
+Component <|.. Leaf
+Component <|.. Composite
+CompositeComponent <|.. Composite
+Composite o--> "children *" Component
+
+note right of Composite::operation
+  for (child in children) {
+    child.operation();
+  }
+end note
+@enduml
+....
+
+==== 装饰器模式 Decorator
+
+
+===== 意图
+动态地给一个对象添加一些额外的职责。就增加功能而言，Decorator 模式比生成子类更加灵活。
+
+===== 类图结构
+[plantuml, target=img/diagram-2025-11-03-140248, format=svg]
+....
+@startuml Decorator Pattern
+
+title Decorator Pattern Class Diagram
+
+abstract class Component {
+  {abstract} + operation(): void
+}
+
+class ConcreteComponent {
+  + operation(): void
+}
+
+abstract class Decorator {
+  # component: Component
+  + Decorator(component: Component)
+  + operation(): void
+}
+
+class ConcreteDecoratorA {
+  - addedState: string
+  + ConcreteDecoratorA(component: Component)
+  + operation(): void
+  + addedBehavior(): void
+}
+
+class ConcreteDecoratorB {
+  + ConcreteDecoratorB(component: Component)
+  + operation(): void
+}
+
+Component <|-- ConcreteComponent
+Component <|-- Decorator
+Decorator *-- Component : #component
+Decorator <|-- ConcreteDecoratorA
+Decorator <|-- ConcreteDecoratorB
+
+note left of Component
+  **Component**
+  Defines the interface for
+  objects that can have
+  responsibilities added to
+  them dynamically.
+end note
+
+note right of Decorator
+  **Decorator**
+  Maintains a reference to a
+  Component object and defines
+  an interface that conforms
+  to Component's interface.
+end note
+
+note bottom of ConcreteDecoratorA
+  **ConcreteDecoratorA**
+  Adds responsibilities to
+  the component.
+  - addedState: extra field
+  - addedBehavior(): extra method
+  - operation(): extends behavior
+end note
+
+@enduml
+....
+
+==== 享元模式 Flyweight
+
+
+===== 意图
+运用共享技术有效地支持大量细粒度的对象。
+
+===== 类图结构
+[plantuml, target=img/diagram-2025-11-03-172123, format=svg]
+....
+@startuml 享元模式 (Flyweight Pattern)
+
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+title 享元模式类图
+
+interface 享元 {
+    + 操作(外部状态: String): void
+}
+
+class 具体享元 {
+    - 内部状态: String
+    + 具体享元(内部状态: String)
+    + 操作(外部状态: String): void
+}
+
+class 非共享具体享元 {
+    - 全部状态: String
+    + 操作(外部状态: String): void
+}
+
+class 享元工厂 {
+    - 享元池: Map<String, 享元>
+    + 获取享元(键: String): 享元
+    + 获取享元数量(): int
+}
+
+class 客户端 {
+    - 享元: 享元
+    - 外部状态: String
+}
+
+享元 <|.. 具体享元
+享元 <|.. 非共享具体享元
+享元工厂 o--> 享元 : 创建和管理
+客户端 --> 享元 : 使用
+客户端 --> 享元工厂 : 请求享元
+
+note right of 享元工厂
+    if (享元池.containsKey(键)) {
+        return 享元池.get(键);
+    } else {
+        享元 新享元 = 
+            new 具体享元(键);
+        享元池.put(键, 新享元);
+        return 新享元;
+    }
+end note
+
+note top of 具体享元
+    内部状态是共享的
+    且不可变的
+end note
+
+note top of 非共享具体享元
+    可以包含全部状态
+    (不共享)
+end note
+
+@enduml
+....
+
+===== Example
+[plantuml, target=img/diagram-2025-11-03-172312, format=svg]
+....
+@startuml
+title 享元模式 - 正确的游戏例子
+
+interface 子弹 {
+    + 发射(位置: String, 速度: int)
+}
+
+class 红色子弹 {
+    - 颜色: String = "红色"
+    - 形状: String = "圆形"
+    + 发射(位置: String, 速度: int)
+}
+
+class 蓝色子弹 {
+    - 颜色: String = "蓝色" 
+    - 形状: String = "三角形"
+    + 发射(位置: String, 速度: int)
+}
+
+class 子弹工厂 {
+    - 子弹池: Map<String, 子弹>
+    + 获取子弹(类型: String): 子弹
+}
+
+class 玩家 {
+    - 位置: String
+    - 速度: int
+}
+
+子弹 <|.. 红色子弹
+子弹 <|.. 蓝色子弹
+
+子弹工厂 --> 子弹 : 创建和管理
+玩家 --> 子弹 : 使用子弹
+玩家 --> 子弹工厂 : 请求子弹
+
+note right of 子弹工厂
+    if (子弹池有"红色子弹") {
+        返回现有的红色子弹
+    } else {
+        创建新的红色子弹
+        放入子弹池
+        返回这个子弹
+    }
+end note
+
+note right of 红色子弹
+    颜色和形状是共享的\n
+    （内部状态）
+end note
+....
+
+
+一句话理解享元模式：把不变的东西共享，把变化的东西单独存放。
+
+想象你在玩飞机大战游戏：
+
+* 共享的（内部状态）：
+** 子弹颜色（红色）
+** 子弹形状（圆形）
+** 这些大家都一样，可以共享
+
+* 不共享的（外部状态）：
+** 子弹位置（你在左边，我在右边）
+** 子弹速度
+** 这些每个人都不一样，要单独记录
+
+核心思想：
+
+与其创建1000个一模一样的红色圆形子弹，不如：
+
+1. 只创建 1 个红色圆形子弹模板
+2. 记录 1000 个不同的位置信息
+
+这样就大大节省了内存！
 
