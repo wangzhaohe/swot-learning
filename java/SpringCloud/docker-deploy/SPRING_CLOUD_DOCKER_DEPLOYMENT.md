@@ -23,10 +23,13 @@
 **文件结构：**
 ```
 SpringCloud/
-├── docker-compose.yml          # 统一编排文件
-├── deploy.sh                   # 统一部署管理脚本
-├── docker-config.sh            # 共享配置文件
-├── Dockerfile.template         # Dockerfile 模板
+├── deploy.sh                   # 主部署脚本（入口）
+├── docker-deploy/              # 专门的部署文件目录
+│   ├── deploy.sh              # 实际部署逻辑
+│   ├── docker-config.sh       # 共享配置和函数
+│   ├── Dockerfile.template    # Dockerfile 模板
+│   ├── docker-compose.yml     # 服务编排配置
+│   └── SPRING_CLOUD_DOCKER_DEPLOYMENT.md  # 部署文档
 ├── config-server/
 │   ├── Dockerfile
 │   ├── build-docker.sh
@@ -36,6 +39,35 @@ SpringCloud/
 │   ├── build-docker.sh
 │   └── deploy.sh
 └── ... (其他服务类似)
+```
+
+**模块化设计优势：**
+- **清晰的目录结构**：所有 Docker 部署相关文件集中在 `docker-deploy` 目录
+- **配置与逻辑分离**：共享配置在 `docker-config.sh`，部署逻辑在 `deploy.sh`
+- **可复用的工具函数**：颜色定义、服务端口映射、容器命名等统一管理
+- **标准化的脚本模板**：构建脚本、部署脚本、Dockerfile 模板化
+- **易于维护和扩展**：新增服务只需在配置函数中添加，无需修改主逻辑
+- **系统兼容性**：使用函数方式替代关联数组，确保在 macOS 等系统上正常运行
+
+**核心配置函数：**
+```bash
+# 获取服务列表
+get_services() {
+    echo "config-server eureka gateway service-item service-order"
+}
+
+# 获取服务端口
+get_service_port() {
+    local service=$1
+    case $service in
+        "config-server") echo "8888" ;;
+        "eureka") echo "8761" ;;
+        "gateway") echo "8080" ;;
+        "service-item") echo "8081" ;;
+        "service-order") echo "8082" ;;
+        *) echo "8080" ;;
+    esac
+}
 ```
 
 

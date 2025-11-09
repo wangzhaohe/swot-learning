@@ -3,7 +3,7 @@
 # Docker 部署共享配置
 # 这个文件包含所有 Docker 部署脚本的共享配置和函数
 
-# 颜色定义
+# ANSI 颜色定义
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -12,9 +12,6 @@ NC='\033[0m' # No Color
 
 # 服务列表和端口映射
 # 使用函数替代关联数组（兼容 macOS bash）
-
-# 服务列表数组
-SERVICES=("config-server" "eureka" "gateway" "service-item" "service-order")
 
 # 获取服务端口
 get_service_port() {
@@ -27,6 +24,11 @@ get_service_port() {
         "service-order") echo "8082" ;;
         *) echo "8080" ;;
     esac
+}
+
+# 获取服务列表
+get_services() {
+    echo "config-server eureka gateway service-item service-order"
 }
 
 # 获取服务容器名称

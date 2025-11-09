@@ -11,7 +11,7 @@ case "$1" in
         
         # 1. 为每个服务创建 Dockerfile
         echo -e "${YELLOW}步骤 1: 为每个服务创建 Dockerfile${NC}"
-        for service in "${SERVICES[@]}"; do
+        for service in $(get_services); do
             if [ -f "$service/Dockerfile" ]; then
                 echo -e "  $service/Dockerfile 已存在，跳过"
             else
@@ -32,7 +32,7 @@ case "$1" in
 
         # 2. 为每个服务创建构建脚本
         echo -e "${YELLOW}步骤 2: 为每个服务创建构建脚本${NC}"
-        for service in "${SERVICES[@]}"; do
+        for service in $(get_services); do
             if [ -f "$service/build-docker.sh" ]; then
                 echo -e "  $service/build-docker.sh 已存在，跳过"
             else
@@ -43,7 +43,7 @@ case "$1" in
 
         # 3. 为每个服务创建部署脚本
         echo -e "${YELLOW}步骤 3: 为每个服务创建部署脚本${NC}"
-        for service in "${SERVICES[@]}"; do
+        for service in $(get_services); do
             if [ -f "$service/deploy.sh" ]; then
                 echo -e "  $service/deploy.sh 已存在，跳过"
             else
@@ -54,7 +54,7 @@ case "$1" in
 
         # 4. 为每个服务创建独立的 docker-compose.yml
         echo -e "${YELLOW}步骤 4: 为每个服务创建独立的 docker-compose.yml${NC}"
-        for service in "${SERVICES[@]}"; do
+        for service in $(get_services); do
             if [ -f "$service/docker-compose.yml" ]; then
                 echo -e "  $service/docker-compose.yml 已存在，跳过"
             else
@@ -66,7 +66,7 @@ case "$1" in
         # 5. 设置脚本执行权限
         echo -e "${YELLOW}步骤 5: 设置脚本执行权限${NC}"
         chmod +x deploy.sh
-        for service in "${SERVICES[@]}"; do
+        for service in $(get_services); do
             if [ -f "$service/build-docker.sh" ]; then
                 chmod +x "$service/build-docker.sh"
             fi
@@ -85,7 +85,7 @@ case "$1" in
     
     "build-all")
         echo -e "${BLUE}开始构建所有微服务...${NC}"
-        for service in "${SERVICES[@]}"; do
+        for service in $(get_services); do
             echo -e "${YELLOW}构建服务: $service${NC}"
             cd "$service" || exit 1
             if [ -f "build-docker.sh" ]; then
@@ -144,7 +144,7 @@ case "$1" in
     
     "status")
         echo -e "${BLUE}检查微服务集群状态...${NC}"
-        for service in "${SERVICES[@]}"; do
+        for service in $(get_services); do
             check_service_health "$service"
         done
         ;;
@@ -152,7 +152,7 @@ case "$1" in
     "scale")
         if [ -z "$2" ] || [ -z "$3" ]; then
             echo -e "${RED}使用方法: $0 scale <服务名> <实例数量>${NC}"
-            echo "可用服务: ${SERVICES[*]}"
+            echo "可用服务: $(get_services)"
             exit 1
         fi
         echo -e "${BLUE}扩展服务 $2 到 $3 个实例...${NC}"
@@ -187,7 +187,7 @@ case "$1" in
         echo "  $0 scale service-item 2  # 扩展商品服务到2个实例"
         echo ""
         echo -e "${BLUE}服务端口映射:${NC}"
-        for service in "${SERVICES[@]}"; do
+        for service in $(get_services); do
             port=$(get_service_port "$service")
             container_name=$(get_container_name "$service")
             echo "  $container_name: http://localhost:$port"
