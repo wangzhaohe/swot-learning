@@ -141,6 +141,116 @@ eureka-server
 api-gateway, service-item, service-order (并行启动)
 ```
 
+## 单独服务构建指南
+
+### 为什么需要单独构建
+
+在开发过程中，经常需要单独构建某个服务，特别是：
+- **修改配置后**：config-server 的配置文件更新
+- **代码修改后**：某个服务的业务逻辑变更
+- **快速测试**：只重新构建特定服务进行测试
+
+### config-server 配置修改场景
+
+当修改 config-server 的配置文件时，需要重新构建 Docker 镜像：
+
+**配置文件位置**：
+```
+config-server/src/main/resources/config-repo/
+├── app-order.yml
+├── app-order-dev.yml
+├── app-order-docker.yml
+├── app-order-prod.yml
+└── application.yml
+```
+
+**修改配置后的构建流程**：
+1. 修改配置文件
+2. 重新构建 config-server
+3. 重启 config-server 容器
+4. 业务服务通过 refresh 端点获取新配置
+
+### 单独构建方法
+
+#### 1. 使用 build-docker.sh（推荐）
+
+**在服务目录下执行**：
+```bash
+# 完整构建（包含 Maven 打包）
+cd config-server
+./build-docker.sh
+
+# 快速构建（跳过 Maven，只构建 Docker 镜像）
+./build-docker.sh --skip-maven
+```
+
+#### 2. 使用部署脚本的单独构建
+
+**在 docker-deploy 目录下**：
+```bash
+# 构建单个服务
+cd docker-deploy
+./build-docker-only.sh config-server
+
+# 或者使用 deploy.sh 的批量构建（会构建所有服务）
+./deploy.sh build-all
+```
+
+#### 3. 手动构建步骤
+
+**如果 build-docker.sh 不存在**：
+```bash
+cd config-server
+
+# 清理并构建项目
+mvn clean package -DskipTests
+
+# 构建 Docker 镜像
+docker build -t spring-cloud-config-server:1.0 .
+```
+
+#### 4. 快速构建（跳过 Maven）
+
+**如果只需要重新构建 Docker 镜像**：
+```bash
+cd config-server
+
+# 直接构建 Docker 镜像（假设 JAR 文件已存在）
+docker build -t spring-cloud-config-server:1.0 .
+```
+
+### config-server 配置更新完整流程
+
+```bash
+# 1. 修改配置文件
+vi src/main/resources/config-repo/app-order-docker.yml
+
+# 2. 重新构建 config-server（跳过 Maven 构建）
+./build-docker.sh --skip-maven
+
+# 3. 重启 config-server 容器
+cd ../docker-deploy
+docker compose up -d config-server
+
+# 4. 等待配置服务器启动
+sleep 10
+
+# 5. 刷新业务服务配置（不重启业务服务）
+curl -X POST http://localhost:8091/actuator/refresh
+
+# 6. 验证配置更新
+curl http://localhost:8091/actuator/env/resilience4j.circuitbreaker.configs.default.failure-rate-threshold
+```
+
+### 构建脚本功能对比
+
+| 构建方式 | 命令 | 适用场景 | 优点 |
+|---------|------|----------|------|
+| 完整构建 | `./build-docker.sh` | 代码或配置修改 | 确保代码和配置同步 |
+| 快速构建 | `./build-docker.sh --skip-maven` | 仅配置修改 | 速度快，节省时间 |
+| 批量构建 | `./deploy.sh build-all` | 首次部署或全量更新 | 统一管理，确保一致性 |
+| 单独构建 | `./build-docker-only.sh <service>` | 特定服务更新 | 灵活，针对性强 |
+
 ## 集群管理命令
 
 ### 使用统一管理脚本
