@@ -42,7 +42,7 @@ fi
 # 构建 Docker 镜像
 echo "构建 Docker 镜像..."
 IMAGE_NAME="spring-cloud-${PWD##*/}:1.0"
-/Applications/Docker.app/Contents/Resources/bin/docker build -t "$IMAGE_NAME" .
+docker build -t "$IMAGE_NAME" .
 
 if [ $? -eq 0 ]; then
     echo "Docker 镜像构建成功！"
