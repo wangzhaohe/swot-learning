@@ -1,0 +1,63 @@
+# app-order Docker环境配置文件
+# 当服务以 docker 环境启动时，app-order-docker.yml 会覆盖 app-order.yml 中相同配置项
+
+server:
+  port: 8091
+
+spring:
+  application:
+    name: app-order
+  datasource:
+    url: jdbc:h2:mem:dockerdb
+    driver-class-name: org.h2.Driver
+    username: docker_user
+    password: docker123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+# 应用业务配置 - Docker环境
+app:
+  name: 订单服务 (Docker环境)
+  version: 1.0.0-docker
+  description: "这是一个订单微服务示例 - Docker环境部署"
+  features:
+    - 订单创建
+    - 订单查询
+    - 订单状态更新
+    - Docker部署
+  limits:
+    max-order-items: 20
+    timeout-seconds: 60
+
+# 演示配置 - Docker环境
+demo:
+  enabled: true
+  message: "Docker环境：容器化部署运行中"
+  retry-count: 5
+  cache-enabled: true
+  debug-mode: false
+  environment: docker
+
+# Docker环境Eureka配置
+eureka:
+  instance:
+    prefer-ip-address: false
+    # Docker环境中使用主机名而不是IP地址
+    hostname: service-order
+
+# Docker环境特定配置
+logging:
+  level:
+    com.tjise.serviceorder: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: INFO
+
+# 动态配置测试 - 断路器故障率阈值
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        # failure-rate-threshold: 50
+        failure-rate-threshold: 65  # 改数字为了测试

@@ -8,7 +8,7 @@
 - **eureka** (8761) - 服务注册中心
 - **gateway** (8080) - API 网关
 - **service-item** (8081) - 商品服务
-- **service-order** (8082) - 订单服务
+- **service-order** (8091) - 订单服务
 
 ## 部署架构
 
@@ -38,7 +38,18 @@ SpringCloud/
 │   ├── Dockerfile
 │   ├── build-docker.sh
 │   └── deploy.sh
-└── ... (其他服务类似)
+├── gateway/
+│   ├── Dockerfile
+│   ├── build-docker.sh
+│   └── deploy.sh
+├── service-item/
+│   ├── Dockerfile
+│   ├── build-docker.sh
+│   └── deploy.sh
+└── service-order/
+    ├── Dockerfile
+    ├── build-docker.sh
+    └── deploy.sh
 ```
 
 **模块化设计优势：**
@@ -64,11 +75,16 @@ get_service_port() {
         "eureka") echo "8761" ;;
         "gateway") echo "8080" ;;
         "service-item") echo "8081" ;;
-        "service-order") echo "8082" ;;
+        "service-order") echo "8091" ;;
         *) echo "8080" ;;
     esac
 }
 ```
+
+**构建脚本功能：**
+- **完整构建**: 执行 Maven 清理、打包和 Docker 构建
+- **只构建 Docker**: 使用 `--skip-maven` 参数跳过 Maven 构建，只构建 Docker 镜像
+- **灵活部署**: 支持根据需求选择构建方式
 
 
 ## 快速开始
@@ -107,7 +123,7 @@ get_service_port() {
 - Eureka Server: `http://localhost:8761`
 - API Gateway: `http://localhost:8080`
 - Service Item: `http://localhost:8081`
-- Service Order: `http://localhost:8082`
+- Service Order: `http://localhost:8091`
 
 ### 环境变量配置
 每个服务都配置了以下环境变量：
@@ -131,6 +147,11 @@ api-gateway, service-item, service-order (并行启动)
 ```bash
 # 构建所有服务
 ./deploy.sh build-all
+
+# 只构建 Docker 镜像（跳过 Maven 构建）
+for service in config-server eureka gateway service-item service-order; do
+    cd "$service" && ./build-docker.sh --skip-maven && cd ..
+done
 
 # 启动集群
 ./deploy.sh start

@@ -21,7 +21,7 @@ get_service_port() {
         "eureka") echo "8761" ;;
         "gateway") echo "8080" ;;
         "service-item") echo "8081" ;;
-        "service-order") echo "8082" ;;
+        "service-order") echo "8091" ;;
         *) echo "8080" ;;
     esac
 }
@@ -44,6 +44,23 @@ get_container_name() {
     esac
 }
 
+# 获取服务镜像名称
+get_image_name() {
+    local service=$1
+    echo "spring-cloud-$service:1.0"
+}
+
+# 检查镜像是否存在
+check_image_exists() {
+    local service=$1
+    local image_name="spring-cloud-$service:1.0"
+    if docker image inspect "$image_name" &>/dev/null; then
+        return 0  # 镜像存在
+    else
+        return 1  # 镜像不存在
+    fi
+}
+
 # 检查服务是否运行
 check_service_health() {
     local service=$1
@@ -57,47 +74,68 @@ check_service_health() {
 # 创建标准构建脚本
 create_build_script() {
     local service=$1
-    cat > "$service/build-docker.sh" << 'EOF'
+    cat > "../$service/build-docker.sh" << EOF
 #!/bin/bash
 
 # Docker 构建脚本
+SKIP_MAVEN=false
+
+# 解析参数
+while [[ \$# -gt 0 ]]; do
+    case \$1 in
+        --skip-maven)
+            SKIP_MAVEN=true
+            shift
+            ;;
+        *)
+            echo "未知参数: \$1"
+            exit 1
+            ;;
+    esac
+done
+
 echo "开始构建 Docker 镜像..."
 
-# 清理之前的构建
-echo "清理之前的构建..."
-mvn clean
+if [ "\$SKIP_MAVEN" = false ]; then
+    # 清理之前的构建
+    echo "清理之前的构建..."
+    mvn clean
 
-# 构建项目
-echo "构建项目..."
-mvn package -DskipTests
+    # 构建项目
+    echo "构建项目..."
+    mvn package -DskipTests
 
-# 检查构建是否成功
-if [ $? -eq 0 ]; then
-    echo "项目构建成功！"
-    
-    # 构建 Docker 镜像
-    echo "构建 Docker 镜像..."
-    docker build -t ${PWD##*/}:1.0 .
-    
-    if [ $? -eq 0 ]; then
-        echo "Docker 镜像构建成功！"
-        echo "镜像名称: ${PWD##*/}:1.0"
+    # 检查构建是否成功
+    if [ \$? -eq 0 ]; then
+        echo "项目构建成功！"
     else
-        echo "Docker 镜像构建失败！"
+        echo "项目构建失败！"
         exit 1
     fi
 else
-    echo "项目构建失败！"
+    echo "跳过 Maven 构建..."
+fi
+
+# 构建 Docker 镜像
+echo "构建 Docker 镜像..."
+IMAGE_NAME="spring-cloud-\${PWD##*/}:1.0"
+docker build -t "\$IMAGE_NAME" .
+
+if [ \$? -eq 0 ]; then
+    echo "Docker 镜像构建成功！"
+    echo "镜像名称: \$IMAGE_NAME"
+else
+    echo "Docker 镜像构建失败！"
     exit 1
 fi
 EOF
-    chmod +x "$service/build-docker.sh"
+    chmod +x "../$service/build-docker.sh"
 }
 
 # 创建标准部署脚本
 create_deploy_script() {
     local service=$1
-    cat > "$service/deploy.sh" << EOF
+    cat > "../$service/deploy.sh" << EOF
 #!/bin/bash
 
 # 服务部署脚本
@@ -106,24 +144,24 @@ SERVICE_NAME=\${PWD##*/}
 case "\$1" in
     "start")
         echo "启动 \$SERVICE_NAME..."
-        docker-compose up -d
+        docker compose up -d
         ;;
     "stop")
         echo "停止 \$SERVICE_NAME..."
-        docker-compose down
+        docker compose down
         ;;
     "restart")
         echo "重启 \$SERVICE_NAME..."
-        docker-compose down
-        docker-compose up -d
+        docker compose down
+        docker compose up -d
         ;;
     "logs")
         echo "查看 \$SERVICE_NAME 日志..."
-        docker-compose logs -f
+        docker compose logs -f
         ;;
     "status")
         echo "检查 \$SERVICE_NAME 状态..."
-        docker-compose ps
+        docker compose ps
         ;;
     *)
         echo "使用方法: \$0 {start|stop|restart|logs|status}"
@@ -131,29 +169,5 @@ case "\$1" in
         ;;
 esac
 EOF
-    chmod +x "$service/deploy.sh"
-}
-
-# 创建独立 docker-compose.yml
-create_standalone_compose() {
-    local service=$1
-    local port=$(get_service_port "$service")
-    local container_name=$(get_container_name "$service")
-    
-    cat > "$service/docker-compose.yml" << EOF
-version: '3.8'
-
-services:
-  $service:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: $container_name
-    ports:
-      - "$port:$port"
-    environment:
-      - JAVA_OPTS=-Xmx512m -Xms256m
-    restart: unless-stopped
-
-EOF
+    chmod +x "../$service/deploy.sh"
 }

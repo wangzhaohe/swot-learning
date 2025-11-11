@@ -16,11 +16,11 @@ WORKDIR /app
 
 # 复制构建好的 JAR 文件到容器中
 # 注意：需要根据实际项目修改 JAR 文件名
-COPY target/*.jar app.jar
+COPY target/eureka-*.jar app.jar
 
 # 暴露应用端口
 # 注意：需要根据实际项目修改端口号
-EXPOSE 8080
+EXPOSE 8761
 
 # 设置 JVM 参数
 ENV JAVA_OPTS="-Xmx512m -Xms256m"

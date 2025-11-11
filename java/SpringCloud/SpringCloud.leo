@@ -2203,6 +2203,14 @@ image::img/create_eureka_module.png[,800]
     &lt;groupId&gt;com.tjise&lt;/groupId&gt;
     &lt;artifactId&gt;eureka&lt;/artifactId&gt;
     &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+
+    &lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;2.7.18&lt;/version&gt;
+        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+    &lt;/parent&gt;
+
     &lt;!-- 加入下面各项内容 --&gt;
     @others
 &lt;/project&gt;
@@ -3155,6 +3163,14 @@ image::img/eureka_admin_with_user_and_pass.png[]
     &lt;groupId&gt;com.tjise&lt;/groupId&gt;
     &lt;artifactId&gt;eureka&lt;/artifactId&gt;
     &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    
+    &lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;2.7.18&lt;/version&gt;
+        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+    &lt;/parent&gt;
+
     &lt;!-- 加入下面各项内容 --&gt;
     @others
 &lt;/project&gt;

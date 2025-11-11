@@ -3,8 +3,6 @@
 # Spring Cloud 微服务统一部署管理脚本
 source "$(dirname "$0")/docker-config.sh"
 
-echo -e "${BLUE}Spring Cloud 微服务统一部署管理脚本${NC}"
-
 case "$1" in
     "init")
         echo -e "${BLUE}开始初始化 Docker 部署环境...${NC}"
@@ -12,20 +10,20 @@ case "$1" in
         # 1. 为每个服务创建 Dockerfile
         echo -e "${YELLOW}步骤 1: 为每个服务创建 Dockerfile${NC}"
         for service in $(get_services); do
-            if [ -f "$service/Dockerfile" ]; then
+            if [ -f "../$service/Dockerfile" ]; then
                 echo -e "  $service/Dockerfile 已存在，跳过"
             else
                 echo -e "  创建 $service/Dockerfile"
-                cp ../docker-deploy/Dockerfile.template "$service/Dockerfile"
+                cp Dockerfile.template "../$service/Dockerfile"
                 
                 # 根据服务特性调整 Dockerfile
                 port=$(get_service_port "$service")
-                sed -i '' "s/COPY target\/\*\.jar app\.jar/COPY target\/$service-*.jar app.jar/" "$service/Dockerfile"
-                sed -i '' "s/EXPOSE 8080/EXPOSE $port/" "$service/Dockerfile"
+                sed -i '' "s/COPY target\/\*\.jar app\.jar/COPY target\/$service-*.jar app.jar/" "../$service/Dockerfile"
+                sed -i '' "s/EXPOSE 8080/EXPOSE $port/" "../$service/Dockerfile"
                 
                 # config-server 特殊处理：需要复制配置文件
                 if [ "$service" = "config-server" ]; then
-                    echo "COPY src/main/resources/config-repo /app/config-repo" >> "$service/Dockerfile"
+                    echo "COPY src/main/resources/config-repo /app/config-repo" >> "../$service/Dockerfile"
                 fi
             fi
         done
@@ -33,7 +31,7 @@ case "$1" in
         # 2. 为每个服务创建构建脚本
         echo -e "${YELLOW}步骤 2: 为每个服务创建构建脚本${NC}"
         for service in $(get_services); do
-            if [ -f "$service/build-docker.sh" ]; then
+            if [ -f "../$service/build-docker.sh" ]; then
                 echo -e "  $service/build-docker.sh 已存在，跳过"
             else
                 echo -e "  创建 $service/build-docker.sh"
@@ -44,7 +42,7 @@ case "$1" in
         # 3. 为每个服务创建部署脚本
         echo -e "${YELLOW}步骤 3: 为每个服务创建部署脚本${NC}"
         for service in $(get_services); do
-            if [ -f "$service/deploy.sh" ]; then
+            if [ -f "../$service/deploy.sh" ]; then
                 echo -e "  $service/deploy.sh 已存在，跳过"
             else
                 echo -e "  创建 $service/deploy.sh"
@@ -52,26 +50,16 @@ case "$1" in
             fi
         done
 
-        # 4. 为每个服务创建独立的 docker-compose.yml
-        echo -e "${YELLOW}步骤 4: 为每个服务创建独立的 docker-compose.yml${NC}"
-        for service in $(get_services); do
-            if [ -f "$service/docker-compose.yml" ]; then
-                echo -e "  $service/docker-compose.yml 已存在，跳过"
-            else
-                echo -e "  创建 $service/docker-compose.yml"
-                create_standalone_compose "$service"
-            fi
-        done
 
         # 5. 设置脚本执行权限
         echo -e "${YELLOW}步骤 5: 设置脚本执行权限${NC}"
         chmod +x deploy.sh
         for service in $(get_services); do
-            if [ -f "$service/build-docker.sh" ]; then
-                chmod +x "$service/build-docker.sh"
+            if [ -f "../$service/build-docker.sh" ]; then
+                chmod +x "../$service/build-docker.sh"
             fi
-            if [ -f "$service/deploy.sh" ]; then
-                chmod +x "$service/deploy.sh"
+            if [ -f "../$service/deploy.sh" ]; then
+                chmod +x "../$service/deploy.sh"
             fi
         done
 
@@ -87,20 +75,37 @@ case "$1" in
         echo -e "${BLUE}开始构建所有微服务...${NC}"
         for service in $(get_services); do
             echo -e "${YELLOW}构建服务: $service${NC}"
-            cd "$service" || exit 1
+            cd "../$service" || exit 1
             if [ -f "build-docker.sh" ]; then
                 ./build-docker.sh
             else
                 echo -e "${RED}服务 $service 缺少构建脚本，请先运行: ./deploy.sh init${NC}"
             fi
-            cd ..
+            cd ../docker-deploy
         done
         echo -e "${GREEN}所有服务构建完成！${NC}"
         ;;
     
     "start")
         echo -e "${BLUE}启动 Spring Cloud 微服务集群...${NC}"
-        docker-compose up -d
+        
+        # 检查是否所有镜像都已构建
+        echo -e "${YELLOW}检查镜像是否存在...${NC}"
+        all_images_exist=true
+        for service in $(get_services); do
+            image_name="spring-cloud-$service:1.0"
+            if ! docker image inspect "$image_name" &>/dev/null; then
+                echo -e "${RED}镜像 $image_name 不存在，请先运行: ./deploy.sh build-all${NC}"
+                all_images_exist=false
+            fi
+        done
+        
+        if [ "$all_images_exist" = false ]; then
+            exit 1
+        fi
+        
+        echo -e "${GREEN}所有镜像检查通过，启动集群...${NC}"
+        docker compose up -d
         echo -e "${YELLOW}服务正在启动，请稍候...${NC}"
         sleep 30
         echo -e "${BLUE}检查服务状态...${NC}"
@@ -109,14 +114,14 @@ case "$1" in
     
     "stop")
         echo -e "${YELLOW}停止 Spring Cloud 微服务集群...${NC}"
-        docker-compose down
+        docker compose down
         echo -e "${GREEN}所有服务已停止${NC}"
         ;;
     
     "restart")
         echo -e "${YELLOW}重启 Spring Cloud 微服务集群...${NC}"
-        docker-compose down
-        docker-compose up -d
+        docker compose down
+        docker compose up -d
         echo -e "${GREEN}所有服务已重启${NC}"
         ;;
     
@@ -132,12 +137,12 @@ case "$1" in
         read -p "请输入选择 (1-6): " choice
         
         case $choice in
-            1) docker-compose logs -f config-server ;;
-            2) docker-compose logs -f eureka-server ;;
-            3) docker-compose logs -f api-gateway ;;
-            4) docker-compose logs -f service-item ;;
-            5) docker-compose logs -f service-order ;;
-            6) docker-compose logs -f ;;
+            1) docker compose logs -f config-server ;;
+            2) docker compose logs -f eureka-server ;;
+            3) docker compose logs -f api-gateway ;;
+            4) docker compose logs -f service-item ;;
+            5) docker compose logs -f service-order ;;
+            6) docker compose logs -f ;;
             *) echo -e "${RED}无效选择${NC}" ;;
         esac
         ;;
@@ -156,7 +161,7 @@ case "$1" in
             exit 1
         fi
         echo -e "${BLUE}扩展服务 $2 到 $3 个实例...${NC}"
-        docker-compose up -d --scale "$2"="$3"
+        docker compose up -d --scale "$2"="$3"
         ;;
     
     *)

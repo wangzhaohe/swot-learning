@@ -5,9 +5,7 @@ services:
   # 配置中心服务 - Spring Cloud Config Server
   # 负责集中管理所有微服务的配置文件，提供配置的动态更新
   config-server:
-    build:
-      context: ./config-server  # 构建上下文路径，指向config-server目录
-      dockerfile: Dockerfile    # 使用的Dockerfile文件
+    image: spring-cloud-config-server:1.0  # 使用预构建的镜像，避免重复构建
     container_name: spring-cloud-config-server  # 容器名称
     ports:
       - "8888:8888"  # 端口映射：主机端口8888映射到容器端口8888
@@ -26,9 +24,7 @@ services:
   # 服务注册中心 - Eureka Server
   # 负责服务发现和注册，所有微服务都会向Eureka注册自己的服务信息
   eureka-server:
-    build:
-      context: ./eureka        # 构建上下文路径，指向eureka目录
-      dockerfile: Dockerfile   # 使用的Dockerfile文件
+    image: spring-cloud-eureka:1.0  # 使用预构建的镜像，避免重复构建
     container_name: eureka-server  # 容器名称
     ports:
       - "8761:8761"  # 端口映射：主机端口8761映射到容器端口8761（Eureka默认端口）
@@ -48,12 +44,10 @@ services:
   # API 网关 - Spring Cloud Gateway
   # 作为系统的统一入口，负责路由转发、负载均衡、安全认证等网关功能
   api-gateway:
-    build:
-      context: ./gateway        # 构建上下文路径，指向gateway目录
-      dockerfile: Dockerfile    # 使用的Dockerfile文件
+    image: spring-cloud-gateway:1.0  # 使用预构建的镜像，避免重复构建
     container_name: api-gateway  # 容器名称
     ports:
-      - "8080:8080"  # 端口映射：主机端口8080映射到容器端口8080（网关对外端口）
+      - "8001:8001"  # 端口映射：主机端口8001映射到容器端口8001（网关对外端口）
     environment:
       - SPRING_PROFILES_ACTIVE=docker  # Spring激活的配置文件，docker环境
       - JAVA_OPTS=-Xmx512m -Xms256m    # JVM参数：最大堆内存512MB，初始堆内存256MB
@@ -64,7 +58,7 @@ services:
       - spring-cloud-network  # 连接到自定义网络
     restart: unless-stopped   # 重启策略：除非手动停止，否则自动重启
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]  # 健康检查命令
+      test: ["CMD", "curl", "-f", "http://localhost:8001/actuator/health"]  # 健康检查命令
       interval: 30s    # 检查间隔：30秒
       timeout: 10s     # 超时时间：10秒
       retries: 3       # 重试次数：3次
@@ -73,9 +67,7 @@ services:
   # 商品服务 - 业务微服务
   # 负责商品相关的业务逻辑，如商品查询、商品管理等功能
   service-item:
-    build:
-      context: ./service-item    # 构建上下文路径，指向service-item目录
-      dockerfile: Dockerfile     # 使用的Dockerfile文件
+    image: spring-cloud-service-item:1.0  # 使用预构建的镜像，避免重复构建
     container_name: service-item  # 容器名称
     ports:
       - "8081:8081"  # 端口映射：主机端口8081映射到容器端口8081（商品服务端口）
@@ -98,16 +90,13 @@ services:
   # 订单服务 - 业务微服务
   # 负责订单相关的业务逻辑，如订单创建、订单查询、订单状态更新等功能
   service-order:
-    build:
-      context: ./service-order    # 构建上下文路径，指向service-order目录
-      dockerfile: Dockerfile      # 使用的Dockerfile文件
+    image: spring-cloud-service-order:1.0  # 使用预构建的镜像，避免重复构建
     container_name: service-order  # 容器名称
     ports:
-      - "8082:8082"  # 端口映射：主机端口8082映射到容器端口8082（订单服务端口）
+      - "8091:8091"  # 端口映射：主机端口8091映射到容器端口8091（订单服务端口）
     environment:
-      - SPRING_PROFILES_ACTIVE=docker  # Spring激活的配置文件，docker环境
+      - SPRING_PROFILES_ACTIVE=docker  # Spring激活的配置文件，docker环境，将使用app-order-docker.yml配置
       - JAVA_OPTS=-Xmx512m -Xms256m    # JVM参数：最大堆内存512MB，初始堆内存256MB
-      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888  # 配置中心地址，从配置服务器获取配置
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/  # Eureka服务注册中心地址
     depends_on:
       - config-server  # 依赖关系：必须先启动配置中心服务
@@ -116,7 +105,7 @@ services:
       - spring-cloud-network  # 连接到自定义网络
     restart: unless-stopped   # 重启策略：除非手动停止，否则自动重启
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]  # 健康检查命令
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]  # 健康检查命令
       interval: 30s    # 检查间隔：30秒
       timeout: 10s     # 超时时间：10秒
       retries: 3       # 重试次数：3次
