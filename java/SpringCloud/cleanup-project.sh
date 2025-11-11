@@ -11,7 +11,7 @@ echo
 # 1. 停止并删除所有Docker容器和网络
 echo "1. 停止并删除所有Docker容器和网络..."
 cd docker-deploy
-docker-compose down
+docker compose down
 cd ..
 
 echo
