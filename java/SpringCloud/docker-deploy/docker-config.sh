@@ -71,6 +71,49 @@ check_service_health() {
     curl -f "http://localhost:$port/actuator/health" && echo "" || echo -e "${RED}❌ 未运行${NC}"
 }
 
+# 智能等待服务启动
+wait_for_service() {
+    local service=$1
+    local port=$2
+    local timeout=180  # 3分钟超时
+    local start_time=$(date +%s)
+    
+    echo -e "${YELLOW}等待 $service 服务启动...${NC}"
+    while ! curl -f "http://localhost:$port/actuator/health" &>/dev/null; do
+        local current_time=$(date +%s)
+        local elapsed=$((current_time - start_time))
+        
+        if [ $elapsed -gt $timeout ]; then
+            echo -e "${RED}$service 启动超时 (超过 ${timeout} 秒)${NC}"
+            return 1
+        fi
+        
+        sleep 5
+        echo "  已等待 ${elapsed} 秒，继续等待 $service 服务..."
+    done
+    echo -e "${GREEN}$service 服务已就绪 (耗时 ${elapsed} 秒)${NC}"
+    return 0
+}
+
+# 等待关键基础设施服务
+wait_for_infrastructure() {
+    echo -e "${BLUE}等待基础设施服务启动...${NC}"
+    
+    # 等待配置服务器
+    if ! wait_for_service "config-server" 8888; then
+        echo -e "${RED}配置服务器启动失败，但继续等待其他服务...${NC}"
+    fi
+    
+    # 等待Eureka服务器
+    if ! wait_for_service "eureka-server" 8761; then
+        echo -e "${RED}Eureka服务器启动失败，但继续等待其他服务...${NC}"
+    fi
+    
+    # 给业务服务额外时间启动
+    echo -e "${YELLOW}等待业务服务启动...${NC}"
+    sleep 30
+}
+
 # 创建标准构建脚本
 create_build_script() {
     local service=$1

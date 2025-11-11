@@ -106,9 +106,11 @@ case "$1" in
         
         echo -e "${GREEN}所有镜像检查通过，启动集群...${NC}"
         docker compose up -d
-        echo -e "${YELLOW}服务正在启动，请稍候...${NC}"
-        sleep 30
-        echo -e "${BLUE}检查服务状态...${NC}"
+        
+        # 使用智能等待基础设施服务
+        wait_for_infrastructure
+        
+        echo -e "${BLUE}检查所有服务状态...${NC}"
         ./deploy.sh status
         ;;
     
