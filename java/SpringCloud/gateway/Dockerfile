@@ -18,6 +18,10 @@ WORKDIR /app
 # 注意：需要根据实际项目修改 JAR 文件名
 COPY target/gateway-*.jar app.jar
 
+# 复制配置文件到容器中
+# 注意：需要根据实际项目修改配置文件路径
+COPY src/main/resources/*.yml /app/config/
+
 # 暴露应用端口
 # 注意：需要根据实际项目修改端口号
 EXPOSE 8080
