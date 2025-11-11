@@ -37,15 +37,23 @@ spring:
 eureka:
     client:
         service-url:
-            # defaultZone: http://root:root@127.0.0.1:8761/eureka/
-            defaultZone: http://root:root@eureka1:8761/eureka/,http://root:root@eureka2:8762/eureka/,http://root:root@eureka3:8763/eureka/
+            # Eureka服务地址：从环境变量 EUREKA_CLIENT_SERVICEURL_DEFAULTZONE 获取，默认为本地地址
+            # - 开发环境：不设置环境变量，使用默认值 http://127.0.0.1:8761/eureka/
+            # - Docker环境：在 docker-compose.yml 中设置 EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+            defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://root:root@127.0.0.1:8761/eureka/}
         register-with-eureka: true # 因为该应用为服务提供者，是 eureka 的一个客户端，需要注册到注册中心
         fetch-registry: true       # 是否需要从 eureka 上检索服务
 
     instance:
-        prefer-ip-address: true    # 使用IP地址注册而不是主机名
-        ip-address: 127.0.0.1      # 客户端在注册时使用自己的IP，而不是主机名。
-                                   # 这是生产环境的最佳实践，避免主机名解析问题。
+        # 注册方式：从环境变量 EUREKA_INSTANCE_PREFER_IP_ADDRESS 获取，默认为 true（使用IP注册）
+        # - 开发环境：使用IP注册（127.0.0.1）
+        # - Docker环境：在 docker-compose.yml 中设置 prefer-ip-address: false
+        prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:true}     # 使用 IP地址 注册而不是主机名
+        
+        # 注册IP地址：从环境变量 EUREKA_INSTANCE_IP_ADDRESS 获取，默认为 127.0.0.1
+        # - 开发环境：使用 127.0.0.1
+        # - Docker环境：在 docker-compose.yml 中设置 hostname: service-item
+        ip-address: ${EUREKA_INSTANCE_IP_ADDRESS:127.0.0.1}       # 客户端在注册时使用自己的 IP，而不是主机名
 #@+doc
 # ----
 #@-others
