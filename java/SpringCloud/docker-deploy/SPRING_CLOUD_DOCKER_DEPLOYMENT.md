@@ -360,6 +360,13 @@ docker-compose logs -f service-name
 
 # 实时查看服务启动日志
 docker-compose up --build
+
+# 查看负载均衡分布（适用于多实例服务）
+# 查看第一个实例
+docker logs service-item | grep "Processing request"
+
+# 查看第二个实例  
+docker logs service-item-8082 | grep "Processing request"
 ```
 
 ## 开发建议
