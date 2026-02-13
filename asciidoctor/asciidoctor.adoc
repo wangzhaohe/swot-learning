@@ -1289,3 +1289,25 @@ https://github.com/asciidoctor/asciidoctor-kroki
 }
 ....
 
+== github 条件判断渲染图片
+// 如果不是在 GitHub 环境（即本地渲染），执行 Mermaid 脚本
+ifndef::env-github[]
+[mermaid, target=img/mermaid-2026-02-13-131950, format=svg]
+....
+graph LR
+    User((用户)) -- 点击保存 --> V[View: Svelte]
+    V -- HTTP Request --> C[Controller: Spring]
+    C -- 指挥调度 --> M_S[Model: Service]
+    M_S -- 持久化 --> M_D[(Database)]
+
+    M_S -- 返回结果 --> C
+    C -- JSON Response --> V
+    V -- 更新 UI --> User
+....
+endif::[]
+
+// 如果是在 GitHub 环境，引用你已经上传的图片
+ifdef::env-github[]
+image::img/mermaid-2026-02-13-131950.svg[]
+endif::[]
+
