@@ -34,7 +34,6 @@
 <v t="swot.20260201184500.1"><vh>2026-02-01 opencode -&gt; 不好用 -&gt; 换 aider 结对编程助手</vh></v>
 <v t="swot.20260203105212.1"><vh>2026-02-03 aider 配置 mcp -&gt; 官方还不支持呢</vh></v>
 <v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
-<v t="swot.20260205181730.1"><vh>2026-02-05 aider -- aliyun ubuntu install</vh></v>
 </v>
 <v t="swot.20260129095856.1"><vh>windows 绿色版本安装 postgresql &amp; node.js &amp; express -&gt; 绿色动力沙盘数据管理系统</vh>
 <v t="swot.20260122110938.1"><vh>2026-01-22 mysql_8 迁移到 postgresql_17</vh></v>
@@ -69,6 +68,13 @@
 <v t="swot.20250927110835.1"><vh>Redis</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 <v t="swot.20260213123722.1"><vh>五笔86 -&gt; 70后的最爱</vh></v>
+</v>
+</v>
+<v t="swot.20260213134825.1"><vh>@path AI</vh>
+<v t="swot.20260213135117.1"><vh>@adoc AI.adoc</vh>
+<v t="swot.20260213135136.1"><vh>AI使用笔记</vh>
+<v t="swot.20260205181730.1"><vh>2026-02-05 aider -- install in aliyun ubuntu</vh></v>
+</v>
 </v>
 </v>
 <v t="swot.20260116203800.1"><vh>@path html</vh>
@@ -12622,7 +12628,8 @@ aider
 ----
 </t>
 <t tx="swot.20260203105212.1"></t>
-<t tx="swot.20260205181730.1">安装 uv:
+<t tx="swot.20260205181730.1">@language asciidoc
+安装 uv:
 
     pip install uv
 
@@ -12910,6 +12917,39 @@ https://github.com/wangzhaohe/swot-learning/blob/main/wubi86/wubi86.adoc
 :toc: right
 :toc-title: 目录
 :toclevels: 3
+</t>
+<t tx="swot.20260213134825.1"></t>
+<t tx="swot.20260213135117.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+</t>
+<t tx="swot.20260213135136.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
 </t>
 </tnodes>
 </leo_file>

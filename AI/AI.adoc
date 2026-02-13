@@ -1,0 +1,112 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+
+= AI使用笔记
+
+++++
+<button id="toggleButton">目录开关</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== 2026-02-05 aider -- install in aliyun ubuntu
+安装 uv:
+
+    pip install uv
+
+先清理一下缓存再安装：
+
+    uv cache clean
+
+安装 aider：
+
+    UV_HTTP_TIMEOUT=300 uv tool install --force --python 3.12 --with pip aider-chat@latest --index-url https://mirrors.aliyun.com/pypi/simple/
+
+这个命令做了三件事：
+
+* UV_HTTP_TIMEOUT=300：把下载等待时间从 30 秒延长到 300 秒（5 分钟），解决网络抖动问题。
+* --index-url ...：强制 uv 去找阿里云的镜像服务器拿包，这通常比去官网快得多。
+* --python 3.12：继续让 uv 帮你搞定 Python 环境。
+
+---
+
+### 1. 激活 `aider` 命令
+
+为了让你能直接输入 `aider` 启动，你需要把这个路径加到系统搜索路径中。运行以下命令：
+
+```bash
+export PATH="/root/.local/bin:$PATH"
+
+```
+
+**如果你想以后每次登录都能直接用，不需要重新输入上面这行，请执行：**
+
+```bash
+echo 'export PATH="/root/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+```
+
+---
+
+### 2. 验证安装
+
+执行以下命令，如果能看到版本号，说明大功告成：
+
+```bash
+aider --version
+
+```
+
+---
+
+### 3. “无痕”启动建议 (针对共享 root)
+
+担心别人看到 API Key，现在安装好了，我建议你用这种方式启动，既能隐藏 Key，又能隐藏你的项目路径：
+
+**第一步：设置 Key（屏幕不会显示你输入的内容）**
+
+```bash
+read -s DEEPSEEK_API_KEY
+# 粘贴你的 Key 然后回车
+
+```
+
+**第二步：带变量启动**
+
+```bash
+export DEEPSEEK_API_KEY=$DEEPSEEK_API_KEY
+aider --model deepseek
+
+```
+
+**第三步：用完即焚**
+当你输入 `/exit` 退出 `aider` 后，顺手清理一下：
+
+```bash
+unset DEEPSEEK_API_KEY
+history -d $(history 1 | awk '{print $1}')
+
+```
+
