@@ -12878,7 +12878,7 @@ endif::[]
 [discrete]
 === 核心记忆口诀
 
-[IMPORTANT]
+[TIP]
 ====
 * **后端 M 是个组合拳**：$M = Service(脑) + Mapper(手)$。
 * **后端 C 是个传话筒**：只负责转发，不负责思考。
@@ -12926,11 +12926,11 @@ https://github.com/wangzhaohe/swot-learning/blob/main/wubi86/wubi86.adoc
 :toc: right
 :toc-title: 目录
 :toclevels: 3
-:tip-caption: ℹ️
+:tip-caption: ⚡
 :note-caption: ❕
 :important-caption: ❗
-:caution-caption: ⚠️
 :warning-caption: ‼️
+:caution-caption: ⚠️
 </t>
 <t tx="swot.20260213134825.1"></t>
 <t tx="swot.20260213135117.1">@language asciidoc
