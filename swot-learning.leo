@@ -12870,7 +12870,7 @@ graph LR
 --
 </t>
 <t tx="swot.20260213123722.1">@language asciidoc
-https://github.com/wubi86/wubi86
+https://github.com/wangzhaohe/swot-learning/blob/main/wubi86/wubi86.adoc
 </t>
 </tnodes>
 </leo_file>
