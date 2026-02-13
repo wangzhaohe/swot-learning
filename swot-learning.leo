@@ -35,7 +35,6 @@
 <v t="swot.20260203105212.1"><vh>2026-02-03 aider 配置 mcp -&gt; 官方还不支持呢</vh></v>
 <v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
 <v t="swot.20260205181730.1"><vh>2026-02-05 aider -- aliyun ubuntu install</vh></v>
-<v t="swot.20260213075755.1"><vh>2026-02-13 全栈架构核心笔记：从宏观到微观的 MVC 映射及前端 MVVM</vh></v>
 </v>
 <v t="swot.20260129095856.1"><vh>windows 绿色版本安装 postgresql &amp; node.js &amp; express -&gt; 绿色动力沙盘数据管理系统</vh>
 <v t="swot.20260122110938.1"><vh>2026-01-22 mysql_8 迁移到 postgresql_17</vh></v>
@@ -394,6 +393,13 @@
 <v t="swot.20250715075745.1"><vh>总结</vh></v>
 </v>
 </v>
+</v>
+</v>
+</v>
+<v t="swot.20260213131026.1"><vh>@path system-designer</vh>
+<v t="swot.20260213131058.1"><vh>@adoc system-designer.adoc</vh>
+<v t="swot.20260213130935.1"><vh>系统架构设计师</vh>
+<v t="swot.20260213075755.1"><vh>2026-02-13 全栈架构模式：从宏观到微观的 MVC 映射及前端 MVVM</vh></v>
 </v>
 </v>
 </v>
@@ -12804,9 +12810,9 @@ pnpm-lock.yaml text eol=lf
 |===
 
 [discrete]
-=====  🌟 宏观数据流向 (The Flow)
+===== 宏观数据流向 (The Flow)
 
-[mermaid]
+[mermaid, target=img/mermaid-2026-02-13-131950, format=png]
 ....
 graph LR
     User((用户)) -- 点击保存 --&gt; V[View: Svelte]
@@ -12854,7 +12860,7 @@ graph LR
 ---
 
 [discrete]
-=== 💡 核心记忆口诀
+=== 核心记忆口诀
 
 [IMPORTANT]
 ====
@@ -12871,6 +12877,39 @@ graph LR
 </t>
 <t tx="swot.20260213123722.1">@language asciidoc
 https://github.com/wangzhaohe/swot-learning/blob/main/wubi86/wubi86.adoc
+</t>
+<t tx="swot.20260213130935.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260213131026.1"></t>
+<t tx="swot.20260213131058.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
 </t>
 </tnodes>
 </leo_file>

@@ -1,0 +1,118 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+
+= 系统架构设计师
+
+++++
+<button id="toggleButton">目录开关</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== 2026-02-13 全栈架构模式：从宏观到微观的 MVC 映射及前端 MVVM
+[discrete]
+=== 全栈架构核心笔记
+
+[abstract]
+将 “Svelte 前端 + Spring Boot 后端” 构成的系统，拆解为宏观 MVC、后端内部 MVC 与前端 MVVM 三层逻辑，实现职责的彻底分离。
+
+[discrete]
+==== 1. 宏观视角：系统级 MVC (System Level)  
+
+从整体看，前端是 UI，后端是逻辑与数据的提供者。
+
+[cols="1,2,3", options="header"]
+|===
+| 维度 | 对应技术栈 | 核心职责
+| M (Model) | Spring Boot (Service + Mapper) | **系统大脑**：业务逻辑、数据持久化、单一事实来源
+| C (Controller) | Spring Boot (API Layer) | **交通枢纽**：路由分发、参数解析、指挥 Service、返回 JSON。
+| V (View) | Svelte (Pages + Stores + api fetch) | **系统面孔**：数据渲染、交互监听、将意图转化为 API 请求。
+|===
+
+[discrete]
+===== 宏观数据流向 (The Flow)
+
+[mermaid, target=img/mermaid-2026-02-13-131950, format=png]
+....
+graph LR
+    User((用户)) -- 点击保存 --> V[View: Svelte]
+    V -- HTTP Request --> C[Controller: Spring]
+    C -- 指挥调度 --> M_S[Model: Service]
+    M_S -- 持久化 --> M_D[(Database)]
+
+    M_S -- 返回结果 --> C
+    C -- JSON Response --> V
+    V -- 更新 UI --> User
+....
+
+---
+
+[discrete]
+==== 2. 后端视角：Spring Boot 内部 MVC
+
+深入后端代码，拆解“主厨”与“前台”的配合。
+
+* **M (Model) = 业务逻辑 + 数据访问**
+** *Service 层 (@Service)*：**主厨**。负责计算、校验、事务控制（如：`userService.register()`）。
+** *Mapper 层 (@Mapper)*：**库管**。负责搬运数据，执行 SQL。
+** *Entity/DTO*：**食材**。在 Service 和 Mapper 之间传递的数据包。
+
+* **C (Controller) = 请求调度**
+** *RestController*：**前台服务员**。不干脏活，解析 URL 后只喊一句：“后厨，来活了！”
+
+* **V (View) = 数据呈现**
+** *JSON 响应*：**摆盘**。后端不画 HTML，生成的 **JSON 字符串** 就是它提供给外界的视图。
+
+---
+
+[discrete]
+==== 3. 前端视角：Svelte 内部 MVVM
+
+前端通过状态驱动（Reactive）来治理复杂的交互逻辑。
+
+[horizontal]
+**V (View)** :: **组件 (+page.svelte)**。像“顾客”，只负责绑定数据和触发事件。它是“愚笨”的，不关心后端细节。
+
+**VM (ViewModel)** :: **状态管理 (store.svelte.ts)**。像“大堂经理”，持有 `$state`，封装前端处理逻辑，并通过 fetch 调用  API
+
+**M (Model)** :: **数据源代理 (operations.ts)**。像“快递员”，定义 TS 接口，负责发起真正的 fetch/axios 请求。
+
+---
+
+[discrete]
+=== 核心记忆口诀
+
+[IMPORTANT]
+====
+* **后端 M 是个组合拳**：$M = Service(脑) + Mapper(手)$。
+* **后端 C 是个传话筒**：只负责转发，不负责思考。
+* **前端 VM 是个管家**：Store 帮 View 屏蔽了所有复杂的异步 API 细节。
+====
+
+[sidebar]
+--
+*思考题*：如果我要更换数据库，应该改哪一层？ +
+*答案*：只改 **Model (Mapper)** 层，Controller 和 View 理论上完全不需要感知。
+--
+
