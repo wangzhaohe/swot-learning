@@ -6,8 +6,58 @@
 <preferences/>
 <find_panel_settings/>
 <vnodes>
-<v t="swot.20251030082616.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d31302d333071077573732e"><vh>Doing</vh>
-<v t="swot.20251030082621.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d31302d333071077573732e"><vh>软件设计师</vh></v>
+<v t="swot.20251221100443.1"><vh>Calender</vh>
+<v t="swot.20260122203347.1"><vh>2025</vh>
+<v t="swot.20260207194011.1"><vh>History document</vh>
+<v t="swot.20251221100451.1"><vh>2025-12-21 qwen-code -&gt; cli -&gt; 目前 aider 是我的主力</vh></v>
+</v>
+<v t="swot.20251221102636.1"><vh>2025-12-21 postgrel/mysql 在 node.js 下是原生驱动吗？</vh></v>
+<v t="swot.20251225214456.1"><vh>2025-12-25 mcp agent 区别</vh></v>
+<v t="swot.20251226073009.1"><vh>2025-12-27 chrome-devtools-mcp 适用于调试和逆向工程的分析</vh></v>
+<v t="swot.20251227105647.1"><vh>2025-12-27 figma mcp -&gt; 需要申请 figma token</vh></v>
+<v t="swot.20251227174503.1"><vh>2025-12-27 RAG -&gt; 基本认知</vh>
+<v t="swot.20251227175941.1"><vh>podman pull postgresql database image</vh></v>
+<v t="swot.20251227175921.1"><vh>如何存储文本和向量到 postgresql 中，这叫索引</vh></v>
+</v>
+<v t="swot.20251229085446.1"><vh>2025-12-29 RAGflow 项目有点大</vh></v>
+</v>
+<v t="swot.20260122203359.1"><vh>2026</vh>
+<v t="swot.20251229143854.1"><vh>2026-01-01 九天玩转Langchain -&gt; 有点老但概念重要</vh></v>
+<v t="swot.20260102121336.1"><vh>2026-01-02 Svelte &amp; SvelteKit -&gt; 初步了解</vh></v>
+<v t="swot.20260103105836.1"><vh>2026-01-03 Svelte UI -&gt; 如何选择？</vh></v>
+<v t="swot.20260104064819.1"><vh>2026-01-04 有限状态自动机（FSM）式的状态转移逻辑</vh></v>
+<v t="swot.20260105133852.1"><vh>2026-01-04 使用 deepseek 生成数据管理项目</vh></v>
+<v t="swot.20260105134143.1"><vh>2026-01-05 终于将网站的架构定下来了</vh></v>
+<v t="swot.20260110112735.1"><vh>2026-01-10 免费的 ssl</vh></v>
+<v t="swot.20260116203059.1"><vh>2026-01-16 cms 研究</vh></v>
+<v t="swot.20260122203422.1"><vh>2026-01-22 禁止 macos 自动下载高清动态屏保 -&gt; 这是失败案例，执行了被 idleassetsd 疯狂下载</vh></v>
+<v t="swot.20260201184500.1"><vh>2026-02-01 opencode -&gt; 不好用 -&gt; 换 aider 结对编程助手</vh></v>
+<v t="swot.20260203105212.1"><vh>2026-02-03 aider 配置 mcp -&gt; 官方还不支持呢</vh></v>
+<v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
+<v t="swot.20260205181730.1"><vh>2026-02-05 aider -- aliyun ubuntu install</vh></v>
+<v t="swot.20260213075755.1"><vh>2026-02-13 全栈架构核心笔记：从宏观到微观的 MVC 映射及前端 MVVM</vh></v>
+</v>
+<v t="swot.20260129095856.1"><vh>windows 绿色版本安装 postgresql &amp; node.js &amp; express -&gt; 绿色动力沙盘数据管理系统</vh>
+<v t="swot.20260122110938.1"><vh>2026-01-22 mysql_8 迁移到 postgresql_17</vh></v>
+<v t="swot.20260125083042.1"><vh>2026-01-25 从 podman postgresql17 迁移数据到 windows 绿色包环境</vh></v>
+<v t="swot.20260129095824.1"><vh>2026-01-29 在 windows 下生成 node_modules 目录</vh></v>
+<v t="swot.20260129112711.1"><vh>2026-01-29 在 windows 下设置 postgresql 密码</vh></v>
+<v t="swot.20260121223227.1"><vh>2026-01-21 windows 绿色部署 node.js + postgresql -&gt; 待执行</vh>
+<v t="swot.20260201131420.1"><vh>1. 目录结构预览</vh></v>
+<v t="swot.20260201131504.1"><vh>2. 核心启动脚本 (`start_server.bat`)</vh></v>
+<v t="swot.20260201131616.1"><vh>3. WinSW 配置文件 (`hongfeng-data-service.xml`)</vh></v>
+<v t="swot.20260201131718.1"><vh>4. 客户一键启动脚本 (`一键启动服务.bat`)</vh></v>
+<v t="swot.20260201131910.1"><vh>5. 部署步骤（你的操作）</vh></v>
+<v t="swot.20260201131941.1"><vh>6. 交付给客户的操作说明</vh></v>
+<v t="swot.20260201132035.1"><vh>7. 如何停止或卸载？</vh></v>
+<v t="swot.20260201174615.1"><vh>8. 一键备份数据库.bat</vh></v>
+<v t="swot.20260201174656.1"><vh>9. 一键停止并卸载服务.bat</vh></v>
+</v>
+<v t="swot.20260201080427.1"><vh>2026-02-01 学习第三方做的「大屏展示」项目的启动脚本</vh>
+<v t="swot.20260201080533.1"><vh>启动.bat</vh></v>
+<v t="swot.20260201080659.1"><vh>脚本解释</vh></v>
+</v>
+</v>
 </v>
 <v t="swot.20250508123413.1"><vh>@adoc README.adoc</vh>
 <v t="swot.20250508123515.1"><vh>learning contents</vh>
@@ -19,6 +69,17 @@
 <v t="swot.20250521144332.1"><vh>Nuxt3</vh></v>
 <v t="swot.20250927110835.1"><vh>Redis</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
+<v t="swot.20260213123722.1"><vh>五笔86 -&gt; 70后的最爱</vh></v>
+</v>
+</v>
+<v t="swot.20260116203800.1"><vh>@path html</vh>
+<v t="swot.20260116203055.1"><vh>2026-01-16 html &amp; css</vh>
+<v t="swot.20260116203530.1"><vh>编辑器 VsCode</vh></v>
+<v t="swot.20260116203604.1"><vh>浏览器 Chrome</vh></v>
+<v t="swot.20260116212512.1"><vh>Quill 项目资料</vh>
+<v t="swot.20260116212521.1"><vh>原始文本素材 -- 用 markdown 展示了标题大小的效果</vh></v>
+</v>
+<v t="swot.20260116203328.1"><vh>HTML HyperText Markup Language</vh></v>
 </v>
 </v>
 <v t="swot.20250906075341.1"><vh>@path docker</vh>
@@ -151,6 +212,9 @@
 <v t="swot.20250831100251.1"><vh>列操作模式 rectangle</vh></v>
 </v>
 </v>
+</v>
+<v t="swot.20251210103828.1"><vh>@path js</vh>
+<v t="swot.20251210103835.1"><vh>pnpm -&gt; https://pnpm.io/</vh></v>
 </v>
 <v t="swot.20250508160844.1"><vh>@path git</vh>
 <v t="swot.20250508161005.1"><vh>@adoc git.adoc</vh>
@@ -645,11 +709,6 @@
 <v t="swot.20251026094138.1"><vh>五笔86难字表</vh></v>
 </v>
 </v>
-</v>
-<v t="swot.20251108090129.1"><vh>@spot</vh>
-<v t="swot.20250518004209.1"></v>
-<v t="swot.20250515113552.1"></v>
-<v t="swot.20250520082915.1"></v>
 </v>
 </vnodes>
 <tnodes>
@@ -3445,7 +3504,7 @@ D 模式与内模式之间的映像、外模式与模式之间的映像
 
 * 空心菱形	聚合（Aggregation）	如班级聚合学生，特点是整体消失，部分不会消失。
 
-* 空心三角形箭头	泛化（继承）	猫继承自动物，即动物是猫的泛化。
+* 空心三角形箭头	泛化（继承）	猫继承自动物，即动物是猫的泛化。（参考下面用例图详解）
 
 * 实线箭头或连线	关联	员工参与项目
 
@@ -4175,7 +4234,7 @@ UML 用例图中，用例与用例之间有三种标准关系：
 * extend（扩展） ，用虚线箭头表示，##扩展用例指向基础用例##，上面写 &lt;&lt;extend&gt;&gt;
   ** 当一个用例执行时，可能会出现特殊情况和可选情况，这个时候就会执行扩展用例。
 
-* generalization（泛化|继承），空心三角形箭头，子类指向父类
+* generalization（泛化|继承），空心三角形箭头，子类指向父类(泛化)。注：父类指向子类为继承。
   ** 子继承父的所有属性和行为
   ** 参与者与参与者之间的关系
   ** 用例与用例之间的关系
@@ -9860,6 +9919,9 @@ For developers, who are building real-time data-driven applications, Redis is th
 https://wubi.xuelai.com/
 
 glf 盏
+
+tak 升
+
 </t>
 <t tx="swot.20251026094157.1">@language asciidoc
 :source-highlighter: pygments
@@ -10083,8 +10145,6 @@ class Factory {
 ----
 
 </t>
-<t tx="swot.20251030082616.1"></t>
-<t tx="swot.20251030082621.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032352d31302d33307103752e"></t>
 <t tx="swot.20251031133739.1">@language java
 @others
  
@@ -11614,6 +11674,1203 @@ NOTE: 我们要看这期间，运算符栈最多被占用了多少个。
 <t tx="swot.20251108073340.1">采用 up 主 zst_2001 的方法最简单：
 https://www.bilibili.com/video/BV1WW4y197Am?t=2.6&amp;p=46
 </t>
-<t tx="swot.20251108090129.1"></t>
+<t tx="swot.20251210103828.1"></t>
+<t tx="swot.20251210103835.1">還在用 npm？使用 pnpm 解決 node_module 塞爆硬碟的問題｜六角學院｜2023 鐵人賽 #2
+https://www.youtube.com/watch?v=DKulVqlQYa8
+
+其实用 pnpm 就行了。
+</t>
+<t tx="swot.20251221100443.1"></t>
+<t tx="swot.20251221100451.1">https://github.com/QwenLM/qwen-code
+
+pnpm install -g @qwen-code/qwen-code@latest
+
+</t>
+<t tx="swot.20251221102636.1">@language md
+IMPORTANT: better-sqlite3 是原生的驱动，需要 C++ 和 Python 来编译。
+
+## 1. mysql2 是原生的吗？
+
+**不是原生的。** mysql2 是一个**纯 JavaScript** 实现的 MySQL 驱动程序。
+
+根据 mysql2 的官方文档："MySQL2 is free from native bindings and can be installed on Linux, Mac OS or Windows without any issues."（MySQL2 没有原生绑定，可以在 Linux、Mac OS 或 Windows 上安装而没有任何问题。）
+
+mysql2 的优势包括：
+- 纯 JavaScript 实现，无需编译
+- 支持预编译语句（prepared statements）
+- 更好的性能（相比老的 mysql 模块）
+- 内置 Promise 支持
+
+## 2. PostgreSQL 驱动是原生的吗？
+
+**PostgreSQL 有两者选择：**
+
+**默认是纯 JavaScript 实现。** node-postgres（pg）模块默认提供纯 JavaScript 的驱动程序，不需要原生编译。
+
+**但也提供可选的原生绑定。** 如果你需要更高性能，可以选择安装原生绑定：
+```bash
+npm install pg pg-native
+```
+
+根据文档：
+- 原生绑定通过 `pg-native` 包提供
+- 使用 libpq（PostgreSQL 的 C 客户端库）
+- 需要编译环境（node-gyp）
+- 性能比纯 JavaScript 版本高 20-30%
+- 某些高级功能（如流处理）与原生绑定不兼容
+
+## 总结对比：
+
+| 驱动 | 是否需要原生编译 | 实现方式 | 性能 |
+|------|------------------|----------|------|
+| **better-sqlite3** | ✅ 需要 | C++ 原生绑定 | 最高 |
+| **mysql2** | ❌ 不需要 | 纯 JavaScript | 较好 |
+| **PostgreSQL (pg)** | ❌ 默认不需要&lt;br&gt;✅ 可选原生绑定 | 默认纯 JS&lt;br&gt;可选 libpq 原生 | 纯 JS：良好&lt;br&gt;原生：更好 |
+
+所以，如果你在做技术选型时考虑部署便利性，mysql2 和默认的 PostgreSQL 驱动都是不错的选择，因为它们都不需要复杂的原生编译环境。</t>
+<t tx="swot.20251225214456.1">问了好多问题，大致明白了
+https://chat.deepseek.com/share/1tvbpo62bzu8qwmev6
+</t>
+<t tx="swot.20251226073009.1">. 可以用来分析网页加载的速度，叫 LCP（Largest Contentful Paint）
+
+. 可以给特定的 figma 网页，生成前端代码。真正开发的话，可以使用 figma mcp，效果应该会更好。
+
+</t>
+<t tx="swot.20251227105647.1">还没整理
+</t>
+<t tx="swot.20251227174503.1"></t>
+<t tx="swot.20251227175921.1">流程概念：
+
+RAG 工作机制详解——一个高质量知识库背后的技术全流程
+https://www.bilibili.com/video/BV1JLN2z4EZQ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=392e2829ea8e40de989be86888026747
+
+使用Python构建RAG系统 —— 用代码还原 RAG系统的每个细节
+https://www.bilibili.com/video/BV1wc3izUEUb?spm_id_from=333.1387.homepage.video_card.click
+
+</t>
+<t tx="swot.20251227175941.1">这个国内源很快
+podman pull docker.m.daocloud.io/library/postgres:15
+</t>
+<t tx="swot.20251229085446.1">https://ragflow.org/
+https://ragflow.io/
+
+https://github.com/infiniflow/ragflow
+
+LangChain Agent + RAGFlow + MCP
+https://chatgpt.com/share/6951d518-f434-8004-8f59-e0e3cb797f65
+
+</t>
+<t tx="swot.20251229143854.1">把这 10 讲的视频看了一遍，收获是理解了一些应用。还需要实战练习。
+https://www.youtube.com/watch?v=Rk6GS953Z3c&amp;list=PLAr9oL1AT4OElxInUijCzCgU3CpgHTjTI
+</t>
+<t tx="swot.20260102121336.1">https://www.youtube.com/watch?v=2A94VS0ZUtg&amp;list=PLTOaik4iw-qWzDxW0ElVqKZ5Lj18MM7ha&amp;index=15&amp;pp=iAQB
+</t>
+<t tx="swot.20260103105836.1">. 综合性，多用于管理端
+https://flowbite-svelte.com/
+
+. 中后台
+https://www.skeleton.dev/docs/svelte/get-started/introduction
+
+. 移动端
+https://stdf.design/
+
+
+. 商业展示（基于 shadcn-svelte 定制）
+https://sv-blocks.vercel.app/
+
+. shadcn-svelte（基于 bits-ui 定制）
+https://www.shadcn-svelte.com/
+
+. 纯无头自定义
+https://www.bits-ui.com/
+
+</t>
+<t tx="swot.20260104064819.1">Expain from ChartGPT:
+https://chatgpt.com/c/69599bb4-a95c-8325-b9ca-5fdf4ae6840e
+
+The source code from SvelteKit:
+https://svelte.dev/tutorial/kit/rest-params
+
+联想到软件设计师中的状态机知识了
+
+IMPORTANT: 现在还没有完全理解，先记着。
+</t>
+<t tx="swot.20260105133852.1">/Users/swot/project/sandbox-sveltekit
+
+还是挺费劲的
+</t>
+<t tx="swot.20260105134143.1"># 多容器架构选型说明（SvelteKit + Drizzle + PostgreSQL 15）
+
+## 一、背景与需求
+
+项目目标：
+
+1. 客户本地部署，尽量减少环境依赖和配置。
+  
+2. 后端采用 **Node.js 单一技术栈** + Drizzle ORM，保持开发与运行环境统一。
+  
+3. 数据存储不仅包含关系型表，还可能包含 JSON / ARRAY / 文档类型数据。
+  
+4. 数据库需要支持多用户并发访问、复杂类型数据存储和未来扩展。
+  
+5. 系统需支持自动迁移、版本升级及数据持久化。
+  
+6. 交付方式轻量，运行时无需管理员权限或专门管理进程。
+  
+
+---
+
+## 二、选型方案
+
+### 多容器方案（推荐）
+
+- **Node 容器**
+  
+  - 包含 SvelteKit + Drizzle ORM + 应用逻辑
+    
+  - **单一技术栈**：所有后端逻辑基于 Node.js
+    
+  - 通过环境变量 `DATABASE_URL` 连接 PostgreSQL 容器
+    
+  - 容器内无需挂载数据库数据卷，仅挂载业务文件或缓存目录
+    
+- **PostgreSQL 15 容器**
+  
+  - 官方 PostgreSQL 15 镜像
+    
+  - 数据卷挂载到宿主机 (`/pgdata`)，保证持久化
+    
+  - **多类型数据能力**：关系型表 + JSON/ARRAY/HSTORE/全文搜索等
+    
+- **Podman 容器管理**
+  
+  - 不需要管理员权限（rootless），安全性高
+    
+  - 不需要专门进程管理，轻量且易交付
+    
+  - Node 容器与 PostgreSQL 容器通过内部网络通信
+    
+- **数据迁移**
+  
+  - 容器启动时执行 Drizzle ORM 迁移，保证数据库 schema 与代码同步：
+
+```ts
+import { migrate } from 'drizzle-orm/postgres/migrator';
+await migrate(db, { migrationsFolder: './drizzle/migrations' });
+```
+
+---
+
+## 三、架构优势
+
+| 优势  | 说明  |
+| --- | --- |
+| ✅ 单一技术栈 | Node.js + Drizzle ORM，开发、测试和运维环境统一，降低维护成本 |
+| ✅ 多类型数据支持 | PostgreSQL 内置关系型 + JSON / ARRAY / HSTORE / 全文搜索等能力，满足复杂业务需求 |
+| ✅ 数据持久化 | PostgreSQL 数据卷挂载，容器重建或升级不影响数据 |
+| ✅ 可扩展性 | Node 与 PostgreSQL 容器独立，可单独升级或扩展其他服务（Redis、ElasticSearch 等） |
+| ✅ 并发性能 | PostgreSQL 支持高并发写入，避免 SQLite 单写限制 |
+| ✅ 自动迁移 | 容器启动时自动执行迁移，保证 schema 与应用版本一致 |
+| ✅ 轻量安全 | Podman 无需管理员权限，无专门守护进程，客户部署简单、安全 |
+
+---
+
+## 四、可避免的劣势与风险
+
+| 潜在问题 | 多容器方案规避方式 |
+| --- | --- |
+| 数据丢失 | 挂载 PostgreSQL 数据卷 `/pgdata`，保证持久化 |
+| 升级冲突 | Node 与 PostgreSQL 独立容器，可单独升级 |
+| 并发写入受限 | PostgreSQL 支持高并发，多用户环境适用 |
+| 数据类型受限 | PostgreSQL 内置丰富数据类型，适应多种业务需求 |
+| 客户端环境复杂 | 所有依赖打包在容器中，客户仅需 Podman 执行容器即可，无需安装 Node 或数据库 |
+
+---
+
+## 五、总结与建议
+
+- **为什么选 PostgreSQL 15 + 多容器**：
+  
+  1. 支持关系型与复杂类型数据存储（JSON / ARRAY / HSTORE / 文档型数据）
+    
+  2. Node.js 单一技术栈，保持开发和运维一致性
+    
+  3. 容器化交付保证运行环境一致，客户无需额外配置
+    
+  4. 数据独立持久化，容器升级和维护风险低
+    
+  5. Podman 轻量、安全、无管理员依赖，易于客户部署
+    
+- **为什么不选单容器或 SQLite**：
+  
+  1. 单容器不利于数据库升级、数据备份和扩展
+    
+  2. SQLite 并发性能受限，类型功能不够丰富
+    
+
+**结论**：
+
+&gt; 多容器架构（Node.js 单技术栈 + PostgreSQL 15 多类型数据 + Drizzle ORM）结合 Podman 轻量化交付，是当前业务需求和长期维护的最优方案。</t>
+<t tx="swot.20260110112735.1">**Let's Encrypt 免费SSL证书**
+
+是的，Let's Encrypt 提供的 SSL 证书是完全免费的，由非营利组织运作。
+
+**优点：**
+- 完全免费
+- 自动续期（证书90天有效，certbot自动续期）
+- 被所有主流浏览器信任
+- 一键安装配置
+
+**安装方式：**
+```bash
+# 自动安装（推荐）
+sudo certbot --nginx -d api.hongfengvision.com
+
+# 或仅获取证书
+sudo certbot certonly --webroot -w /var/www/html -d api.hongfengvision.com
+```
+
+**自动续期：**
+```bash
+# 测试续期
+sudo certbot renew --dry-run
+
+# 添加cron定时任务
+sudo crontab -e
+# 添加：0 0,12 * * * certbot renew --quiet
+```
+
+整个过程5分钟搞定，无需付费。
+</t>
+<t tx="swot.20260116203055.1"></t>
+<t tx="swot.20260116203059.1">Strapi 这个就不用了，不符合我的需求。因为在数据录入方面需很多的自定义 ，复杂化了。
+
+TipTap vs Editor.js：还是使用 nuxtui 集成了 TipTap 的 example 吧
+
+静态渲染文章 SSG：官网上线后，这个是要用的，因为快呀！
+
+Directus：基于 vue3 的无头 cms 项目，强大。这个还没有去尝试过。
+</t>
+<t tx="swot.20260116203328.1">
+</t>
+<t tx="swot.20260116203530.1"></t>
+<t tx="swot.20260116203604.1"></t>
+<t tx="swot.20260116203800.1"></t>
+<t tx="swot.20260116212512.1">https://www.youtube.com/watch?v=zutb5Clb_0Y&amp;list=PLVht7UBOfJb-V8p0uWmhNejmKdnvaHmbm&amp;index=2
+
+</t>
+<t tx="swot.20260116212521.1"># Mindful living for the digital world 📱
+
+The ultimate bullet journal app to document, reflect, and embrace your personal journey 
+
+## Finally, a simple and easy to use journal app
+
+### Write all your journals in a few clicks
+
+Unlock the simplicity of online journaling - say goodbye to the hassle of pen and paper and hello to effortless journaling with just a few clicks. 
+
+### Beautifully displayed and neatly organised
+
+Not just words on a screen - our journals are beautifully displayed and neatly organised. 
+
+### Create and reflect from anywhere in the world
+
+Whether you're at home or exploring the far corners of the world, create and reflect on your experiences, thoughts, and emotions from anywhere on the globe. 
+
+## Get Started Now
+
+Made with ♥︎ in London
+
+</t>
+<t tx="swot.20260121223227.1">@language asciidoc
+这份文档将为你整理出一套完整的 **绿色版 Node.js + PostgreSQL + WinSW** 部署方案。你可以根据这份文档直接配置并打包发给客户。
+
+该方案实现了：**免安装、零配置（对于客户）、开机自启、崩溃自动重启、后台静默运行。**
+</t>
+<t tx="swot.20260122110938.1">. 导出 mysql 中的数据
+mysqldump -h 182.92.131.108 -u root -p data_management &gt; data_dump.sql
+
+. 转换排序编码（mysql5.7 不认 mysql8 的排序）
+sed 's/utf8mb4_0900_ai_ci/utf8mb4_general_ci/g' data_dump.sql &gt; data_dump_fixed.sql
+
+. 启动一个旧版本的 MySQL，它天然支持 pgloader 的所有协议
+```
+podman run --name mysql-bridge \
+  -e MYSQL_ROOT_PASSWORD=mypass \
+  -p 3307:3306 \
+  -d docker.m.daocloud.io/library/mysql:5.7
+```
+
+. 等几秒钟容器启动后
+```
+mysql -h 127.0.0.1 -P 3307 -u root -pmypass -e "CREATE DATABASE data_management;"
+mysql -h 127.0.0.1 -P 3307 -u root -pmypass data_management &lt; data_dump_fixed.sql
+```
+---
+
+. 下载 postgresql 17 image
+podman pull docker.m.daocloud.io/library/postgres:17
+
+
+. 查看 image
+&gt; podman image list
+REPOSITORY                             TAG         IMAGE ID      CREATED      SIZE
+docker.m.daocloud.io/library/postgres  17          1268669160cb  9 days ago   461 MB
+docker.m.daocloud.io/library/node      22-slim     f9834cd4819c  3 weeks ago  232 MB
+
+
+. 运行 postgresql 容器，数据库密码是 naonao
+podman run --name pg17-server \
+  -e POSTGRES_PASSWORD=naonao \
+  -p 5432:5432 \
+  -v pgdata_vol:/var/lib/postgresql/data:Z \
+  -d docker.m.daocloud.io/library/postgres:17
+
+
+. 查看容器已经在运行了
+&gt; podman container list
+CONTAINER ID  IMAGE                                     COMMAND     CREATED        STATUS        PORTS                   NAMES
+eb26e62fd368  docker.m.daocloud.io/library/postgres:17  postgres    7 seconds ago  Up 7 seconds  0.0.0.0:5432-&gt;5432/tcp  pg17-server
+
+
+. 创建数据库 data_management
+podman exec -it pg17-server psql -U postgres -c "CREATE DATABASE data_management;"
+
+
+. 创建文件 migrate.load
+```
+LOAD DATABASE
+     FROM mysql://root:mypass@127.0.0.1:3307/data_management
+     INTO postgresql://postgres:naonao@localhost:5432/data_management
+
+ WITH include drop, create tables, create indexes, reset sequences, foreign keys
+
+  SET maintenance_work_mem to '128MB', 
+      work_mem to '12MB'
+
+ CAST 
+      -- 1. 强制将所有 tinyint(x) 转换为 boolean，并丢弃修饰符
+      type tinyint to boolean drop typemod using tinyint-to-boolean,
+      
+      -- 2. 针对这种已经变成了 boolean(4) 的情况，显式拦截 boolean 类型并丢弃修饰符
+      type boolean to boolean drop typemod,
+      
+      -- 3. 时间类型转换
+      type datetime to timestamptz drop default;
+```
+
+. 运行 pgloader 容器执行迁移
+在终端中切换到 migrate.load 所在的目录，运行以下命令。
+```
+pgloader migrate.load
+```
+
+. 查看 postgresql 中的数据是否正确
+</t>
+<t tx="swot.20260122203347.1"></t>
+<t tx="swot.20260122203359.1"></t>
+<t tx="swot.20260122203422.1">1. 把 4KSDR240FPS 目录改成文件，并禁用该文件
+sudo touch "/Library/Application Support/com.apple.idleassetsd/Customer/4KSDR240FPS"
+sudo chflags schg "/Library/Application Support/com.apple.idleassetsd/Customer/4KSDR240FPS"
+
+2. 杀死进程，该进程会自动重启，然后发现无法写入目录就会休眠。
+sudo killall idleassetsd
+
+3. 验证加锁是否成功，有 schg 说明加锁成功了。
+ls -lOd "/Library/Application Support/com.apple.idleassetsd/Customer/4KSDR240FPS"
+drwxr-xr-x  9 root  admin  schg 288 Jan 22 19:49 /Library/Application Support/com.apple.idleassetsd/Customer/4KSDR240FPS
+
+4. 删除索引数据库
+sudo rm -rf "/Library/Application Support/com.apple.idleassetsd/Customer/index.sqlite"*
+
+最后是通过配置 clash verge 实现的。
+</t>
+<t tx="swot.20260125083042.1">从 podman 中导出 postgresql 数据
+
+1. 在容器内生成文件（直接由 pg_dump 写入磁盘，不经过终端管道）
+podman exec pg17-server pg_dump -U postgres -n data_management -Fc data_management -f /tmp/safe_data.dump
+
+2. 将文件从容器内部拷贝出来
+podman cp pg17-server:/tmp/safe_data.dump ./data_management.dump
+
+# 3. 验证文件完整性（必须显示为 PostgreSQL custom dump archive）
+file ./data_management.dump
+....
+data_management.dump: PostgreSQL custom database dump - v1.16-0
+....
+
+---
+. 解压 postgresql-17.7-2-windows-x64-binaries.zip
+
+. cd E:\deploy\postgresql-17.7-2-windows-x64-binaries\pgsql\bin
+
+. 初始化数据库：.\initdb.exe -D C:\pgsql\data -U postgres -W -E UTF8
+    * C:\pgsql\data 数据库文件保存目录
+
+. 启动数据库服务：.\pg_ctl.exe -D C:\pgsql\data -l logfile start
+
+. 创建数据库： .\psql.exe -U postgres -d postgres -c "CREATE DATABASE data_management;"
+    * 先指定初始化时自动创建的数据库 postgres 来进行连接，要不然创建不了数据库 data_management。
+
+. 导入数据 .\pg_restore.exe -U postgres -d data_management -v --no-owner "../../../data_management.dump"
+
+</t>
+<t tx="swot.20260129095824.1">. 复制项目到 windows 系统中
+
+. 解压: node-v24.13.0-win-x64.zip
+    * 移动文件夹：建议将解压后的 node-v24.13.0-win-x64 文件夹移到一个固定的位置，例如 C:\Program Files\nodejs。
+
+. 设置 Path：
+    * 按下 Win + S 搜索 “编辑系统环境变量” 并打开。
+    * 点击 “环境变量” 按钮。
+    * 在“系统变量”栏找到 Path，点击“编辑”。
+    * 点击“新建”，将你刚才 Node.js 文件夹的全路径粘贴进去（例如 C:\Program Files\nodejs）。
+    * 一路点击“确定”保存
+
+. 复制项目 sandbox
+    * cd sandbox/backend
+    * npm i
+
+</t>
+<t tx="swot.20260129095856.1"></t>
+<t tx="swot.20260129112711.1">在 Windows 环境下，PostgreSQL 的用户信息和密码并不像普通文件那样可以直接“查看”，因为它们是经过哈希加密存储在数据库内部表的。
+
+不过，我们可以通过**登录尝试**来判断是否有密码，并使用 SQL 命令来设置新密码。
+
+---
+
+## 1. 检查是否有密码
+
+由于你使用的是解压版，默认情况下 PostgreSQL 可能配置为 `trust` 模式（即本地登录不需要密码）。
+
+请在终端（`.\bin` 目录下）执行：
+
+```bash
+.\psql.exe -U postgres -d postgres
+
+```
+
+* **如果直接进去了**（出现 `postgres=#` 提示符）：说明**没有密码**，或者当前处于信任模式。
+* **如果提示 `Password for user postgres:**`：说明**有密码**。
+
+---
+
+## 2. 设置密码为 `naonao`
+
+无论之前有没有密码，你都可以通过以下步骤将其修改为 `naonao`：
+
+### 方法 A：在 psql 交互界面修改（最推荐）
+
+如果你已经成功进入了 `psql`（看到 `postgres=#`），直接输入：
+
+```sql
+ALTER USER postgres WITH PASSWORD 'naonao';
+
+```
+
+&gt; **注意**：末尾的**分号 `;**` 必须带上。执行成功后会显示 `ALTER ROLE`。输入 `\q` 退出。
+
+### 方法 B：单条命令修改
+
+如果你不想进入交互界面，可以直接在 CMD/PowerShell 运行：
+
+```bash
+.\psql.exe -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'naonao';"
+
+```
+
+---
+
+## 3. 关键一步：确保密码生效 (pg_hba.conf)
+
+在 Windows 下，解压版默认可能允许免密登录。如果你设置了密码但发现登录时还是不提示输入密码，需要修改配置文件：
+
+1. 打开你的数据目录：`C:\pgsql\data`。
+2. 找到 **`pg_hba.conf`** 文件，用记事本打开。
+3. 拉到最底部，找到类似这样的一行：
+```text
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+host    all             all             127.0.0.1/32            trust
+
+```
+
+
+4. 将最后的 **`trust`** 改为 **`scram-sha-256`** (或者 `md5`)：
+```text
+host    all             all             127.0.0.1/32            scram-sha-256
+
+```
+
+
+5. **重启数据库**使配置生效：
+```bash
+.\pg_ctl.exe restart -D C:\pgsql\data
+
+```
+
+
+
+---
+
+## 4. 验证密码
+
+重启后，再次尝试登录：
+
+```bash
+.\psql.exe -U postgres
+
+```
+
+此时系统应该会强制要求你输入密码，输入 `naonao` 即可进入。
+
+---
+
+**设置好密码后，你的项目配置文件（如 `.env`）里记得也要同步更新数据库密码。需要我帮你检查一下 `pnpm` 项目里常见的数据库连接配置吗？**
+</t>
+<t tx="swot.20260201080427.1"></t>
+<t tx="swot.20260201080533.1">@echo off
+echo Starting Runoff Monitoring System...
+echo Please wait for the browser to open...
+
+:: 启动 Node 服务器 (最小化窗口运行，服务退出则窗口自动关闭)
+:: 去掉了 &amp; pause，避免Node窗口一直停留
+start "Node-Server" /min cmd /c "node server.js"
+
+:: 等待 2 秒确保服务器启动
+:: timeout /t 2 /nobreak &gt;nul
+
+:: 打开浏览器访问页面（如果需要保留这行就取消注释）
+:: start http://localhost:3000
+
+:: 移除 pause，主窗口执行完直接关闭
+echo.
+echo System is running. To stop the server, end node.exe in Task Manager.
+</t>
+<t tx="swot.20260201080659.1">该脚本是一个典型的 Windows 批处理文件（`.bat`），主要用于自动化启动基于 **Node.js** 的 Web 项目。其核心逻辑是：*静默启动后端服务，并在执行完成后自动退出主界面。*
+
+.核心代码功能拆解
+[cols="1,2", options="header"]
+|===
+| 命令 | 作用分析
+| `@echo off` | 关闭命令回显。执行时隐藏代码行，仅显示定义的输出结果，保持界面整洁。
+| `start "Node-Server" /min ...` | *核心指令*。开启新进程运行： +
+1. `"Node-Server"`: 指定新窗口标题。 +
+2. `/min`: 最小化窗口，避免干扰用户视线。 +
+3. `cmd /c`: 执行完 `node server.js` 后自动关闭该子窗口。
+| `:: timeout /t 2...` | *已注释*。原意为服务器预留启动时间，防止浏览器在服务尚未就绪时打开。
+| `echo.` | 输出空行，提升控制台输出的可读性。
+|===
+
+=== ✅ 优点：用户体验友好
+* **非阻塞运行**：利用 `start` 命令，主窗口在派生子进程后立即释放，不会长时间占用屏幕。
+* **后台静默**：通过 `/min` 参数确保服务器在后台运行，降低了用户误操作关闭服务的风险。
+
+=== ❌ 潜在风险与改进点
+. **容错性缺失**：若环境缺少 Node.js 或目标文件 `server.js` 不存在，脚本将闪退且不报错。
+. **端口冲突隐患**：若 `3000` 端口被占用，脚本无法捕获异常，导致服务启动失败。
+. **运维不便**：停止服务需进入任务管理器手动结束 `node.exe`，对普通用户门槛较高。
+
+== 进阶优化建议
+
+为了提升脚本的健壮性，建议引入以下改进：
+
+. **环境检查**：
+[source,batch]
+----
+node -v &gt;nul 2&gt;&amp;1 || (echo Error: Node.js is not installed. &amp;&amp; pause &amp;&amp; exit)
+----
+
+. **自动化闭环**：
+取消对浏览器启动命令的注释，实现一键访问。
+[source,batch]
+----
+start http://localhost:3000
+----
+
+. **引入启动延迟**：
+保留 `timeout /t 3`，确保服务完全加载后再触发浏览器行为。
+
+NOTE: 如果需要将此脚本用于生产环境，建议配合 `pm2` 等进程管理器使用，以获得更好的稳定性。
+</t>
+<t tx="swot.20260201131420.1">在你的开发机上，创建一个名为 `DeployPackage` 的文件夹，结构如下：
+
+```text
+DeployPackage/
+├── pgsql/               # PostgreSQL 15 绿色版解压目录
+├── node/                # Node.js 绿色版解压目录
+├── app/                 # 你的 Express 项目代码
+│   ├── node_modules/    # 预先执行过 npm install 的包
+│   └── backend/index.js         # 入口文件
+├── data/                # (空文件夹) 用于存放数据库数据
+├── logs/                # (空文件夹) 用于存放运行日志
+├── hongfeng-data-service.exe   # 重命名后的 WinSW-x64.exe
+├── hongfeng-data-service.xml   # WinSW 配置文件
+├── temp_pwd.txt         # 默认密码
+├── start_server.bat     # 核心启动脚本
+└── 一键启动服务.bat      # 客户运行的脚本
+```
+</t>
+<t tx="swot.20260201131504.1">这个脚本负责按顺序拉起 postgresql &amp; Node.js。
+
+```batch
+@echo off
+set PROJECT_DIR=%~dp0
+set PG_PATH=%PROJECT_DIR%pgsql\bin
+set DATA_PATH=%PROJECT_DIR%data
+set NODE_PATH=%PROJECT_DIR%node
+
+echo [1/2] 正在启动 PostgreSQL...
+:: 启动数据库进程
+"%PG_PATH%\pg_ctl.exe" -D "%DATA_PATH%" -l "%PROJECT_DIR%logs\pgsql.log" start
+
+:: 等待 5 秒确保数据库完全就绪
+timeout /t 5 /nobreak &gt; nul
+
+echo [2/2] 正在启动 Node.js 服务...
+:: 临时设置环境变量
+set PATH=%NODE_PATH%;%PATH%
+:: 验证一下是否使用了自已的 node（可选）
+node -v &gt;&gt; "%PROJECT_DIR%logs\startup_debug.log"
+
+cd /d "%PROJECT_DIR%app\backend"
+:: 启动你的程序
+node app.js
+```
+</t>
+<t tx="swot.20260201131616.1">注意文件名必须与 `.exe` 文件名严格一致。
+
+```xml
+&lt;service&gt;
+  &lt;id&gt;ExpressAppService&lt;/id&gt;
+  &lt;name&gt;HongFeng data Service&lt;/name&gt;
+  &lt;description&gt;Node.js Express + PostgreSQL 17 绿色版后台服务&lt;/description&gt;
+  
+  &lt;executable&gt;%BASE%\start_server.bat&lt;/executable&gt;
+  &lt;workingdirectory&gt;%BASE%&lt;/workingdirectory&gt;
+  
+  &lt;onfailure action="restart" delay="30 sec"/&gt;
+  
+  &lt;log mode="roll"&gt;
+    &lt;logpath&gt;%BASE%\logs&lt;/logpath&gt;
+  &lt;/log&gt;
+&lt;/service&gt;
+```
+</t>
+<t tx="swot.20260201131718.1">@echo off
+setlocal enabledelayedexpansion
+:: 强制切换到当前脚本所在目录
+cd /d "%~dp0"
+
+:: 设置 CMD 窗口编码为简体中文，防止显示乱码
+chcp 936 &gt;nul
+
+title 红丰数据服务 - 一键部署工具
+
+echo ==========================================
+echo    正在初始化系统组件，请稍候...
+echo ==========================================
+
+:: 0. 检查管理员权限
+net session &gt;nul 2&gt;&amp;1
+if %errorLevel% neq 0 (
+    echo [错误] 请右键点击此脚本，选择“以管理员身份运行”！
+    pause
+    exit
+)
+
+:: 1. 初始化数据库 (仅在首次安装时执行)
+if not exist "data\PG_VERSION" (
+    echo [1/4] 正在首次初始化数据库...
+    if exist "temp_pwd.txt" (
+        :: 使用指定的密码文件初始化
+        "pgsql\bin\initdb.exe" -D "data" -U postgres -A scram-sha-256 --pwfile="temp_pwd.txt"
+        echo 数据库初始化完成。
+        :: 根据你的需求，初始化完后可以删除密码文件以保安全
+        :: del temp_pwd.txt
+    ) else (
+        echo [错误] 根目录下未找到 temp_pwd.txt (内需包含初始密码 naonao)
+        pause
+        exit
+    )
+) else (
+    echo [1/4] 数据库目录已存在，跳过初始化。
+)
+
+:: 2. 配置防火墙规则 (允许 8019 端口入站)
+set PORT=8019
+set RULE_NAME="HongFeng_Service_Port"
+
+echo [2/4] 正在配置防火墙规则...
+:: 先尝试删除可能存在的旧规则，确保规则名唯一且配置最新
+netsh advfirewall firewall delete rule name=%RULE_NAME% &gt;nul 2&gt;&amp;1
+:: 添加新规则：针对 8019 端口放行所有 TCP 流量
+netsh advfirewall firewall add rule name=%RULE_NAME% dir=in action=allow protocol=TCP localport=%PORT% description="Allow HongFeng Data Service" &gt;nul 2&gt;&amp;1
+
+if %errorlevel% equ 0 (
+    echo      防火墙规则已配置，准许局域网通过 %PORT% 端口访问。
+) else (
+    echo      [警告] 防火墙配置失败，请确保没有第三方安全软件拦截。
+)
+
+:: 3. 注册并启动 Windows 服务 (WinSW)
+echo [3/4] 正在注册并启动后台服务...
+set SERVICE_EXE=hongfeng-data-service.exe
+
+if exist "%SERVICE_EXE%" (
+    :: 先停掉并卸载旧服务（如果存在），确保重新覆盖安装
+    %SERVICE_EXE% stop &gt;nul 2&gt;&amp;1
+    %SERVICE_EXE% uninstall &gt;nul 2&gt;&amp;1
+    
+    :: 安装并启动
+    %SERVICE_EXE% install
+    if !errorlevel! equ 0 (
+        %SERVICE_EXE% start
+        echo      后台服务已成功注册并启动。
+    ) else (
+        echo      [错误] 服务安装失败，请检查 XML 配置文件是否正确。
+    )
+) else (
+    echo [错误] 未找到服务程序 %SERVICE_EXE%，请检查文件名是否正确。
+)
+
+:: 4. 自动获取本机局域网 IP 地址
+echo [4/4] 正在生成访问报告...
+set "IP=127.0.0.1"
+:: 查找路由表中默认网关所在的活动 IP
+for /f "tokens=4" %%a in ('route print ^| findstr "\&lt;0.0.0.0\&gt;"') do (
+    set "IP=%%a"
+)
+
+echo ==========================================
+echo    系统部署成功！
+echo    您可以关闭此窗口，系统将在后台持续运行。
+echo.
+echo    本地访问地址: http://localhost:%PORT%
+echo    局域网访问地址: http://%IP%:%PORT%
+echo.
+echo    如需停止服务，请运行: %SERVICE_EXE% stop
+echo ==========================================
+pause</t>
+<t tx="swot.20260201131910.1">
+1. **准备环境**：
+* 下载 [PostgreSQL Binary Zip](https://www.enterprisedb.com/download-postgresql-binaries) 并解压到 `pgsql`。
+* 下载 [Node.js Windows Zip](https://nodejs.org/en/download/prebuilt-binaries) 并解压到 `node`。
+* 下载 [WinSW-x64.exe](https://github.com/winsw/winsw/releases) 并重命名为 hongfeng-data-serveice.exe
+
+2. **配置代码**：
+* 确保你的 Express 代码中，PostgreSQL 的连接字符串指向 `localhost:5432`，用户名为 `postgres`，密码为空（因为 `initdb` 时用了 `-A trust`，如需密码可另行配置）。
+
+IMPORTANT: 已经设置密码为 naonao
+
+3. **打包**：
+* 使用 7-Zip 或 WinRAR 将整个 `DeployPackage` 文件夹压缩。
+</t>
+<t tx="swot.20260201131941.1">**尊敬的客户，请按以下步骤部署系统：**
+
+1. 解压压缩包到任意目录（路径请勿包含中文或空格）。
+2. 进入文件夹，找到 **`一键启动服务.bat`**。
+3. **右键点击**该文件，选择 **“以管理员身份运行”**。
+4. 等待黑色窗口显示“系统部署成功”后，即可关闭窗口。
+5. 打开浏览器，访问 `http://localhost:8019` 即可使用。
+6. 确认开机启动生效方法
+6.1 查看操作系统服务中是否有 「hongfeng data Service」 正在运行，且启动类型为自动，说明开机自启已经注册成功。
+6.2 重启电脑，浏览器能访问 `http://localhost:8019` 说明开机自启生效
+</t>
+<t tx="swot.20260201132035.1">如果后续需要停止服务，在命令行运行：
+
+* `hongfeng-data-service.exe stop` (停止运行)
+* `hongfeng-data-service.exe uninstall` (从系统中彻底删除服务)
+</t>
+<t tx="swot.20260201174615.1">@echo off
+setlocal enabledelayedexpansion
+:: 切换到当前目录
+cd /d "%~dp0"
+
+:: 设置编码为中文
+chcp 936 &gt;nul
+
+title 红枫数据服务 - 数据库备份工具
+
+:: =================配置区==================
+set PG_DUMP_EXE="%~dp0pgsql\bin\pg_dump.exe"
+set BACKUP_DIR="%~dp0backups"
+set DB_USER=postgres
+set DB_NAME=postgres
+:: 设置导出密码的环境变量（防止弹出输入密码提示）
+set PGPASSWORD=naonao
+:: =========================================
+
+echo ==========================================
+echo    正在启动数据库备份，请稍候...
+echo ==========================================
+
+:: 1. 创建备份文件夹
+if not exist %BACKUP_DIR% (
+    mkdir %BACKUP_DIR%
+    echo 已创建备份目录: %BACKUP_DIR%
+)
+
+:: 2. 生成时间戳文件名 (格式: YYYYMMDD_HHMM)
+set TIMESTAMP=%date:~0,4%%date:~5,2%%date:~8,2%_%time:~0,2%%time:~3,2%
+:: 处理小时是个位数时可能出现的空格情况
+set TIMESTAMP=%TIMESTAMP: =0%
+
+set FILE_NAME=db_backup_%TIMESTAMP%.sql
+set FULL_PATH=%BACKUP_DIR%\%FILE_NAME%
+
+:: 3. 执行备份
+echo 正在导出数据到: %FILE_NAME%...
+%PG_DUMP_EXE% -U %DB_USER% -h localhost -p 5432 -F p -f %FULL_PATH% %DB_NAME%
+
+if %errorlevel% equ 0 (
+    echo.
+    echo ==========================================
+    echo    备份成功！
+    echo    文件位置: %FULL_PATH%
+    echo ==========================================
+) else (
+    echo.
+    echo [错误] 备份失败！请检查数据库是否正在运行。
+)
+
+:: 清除密码环境变量
+set PGPASSWORD=
+pause
+</t>
+<t tx="swot.20260201174656.1">@echo off
+setlocal enabledelayedexpansion
+:: 强制切换到当前脚本所在目录
+cd /d "%~dp0"
+
+:: 设置 CMD 窗口编码为简体中文
+chcp 936 &gt;nul
+
+title 红枫数据服务 - 卸载工具
+
+echo ==========================================
+echo    警告：正在准备停止并卸载系统服务
+echo ==========================================
+
+:: 0. 检查管理员权限
+net session &gt;nul 2&gt;&amp;1
+if %errorLevel% neq 0 (
+    echo [错误] 请右键点击此脚本，选择“以管理员身份运行”！
+    pause
+    exit
+)
+
+set SERVICE_EXE=hongfeng-data-service.exe
+set RULE_NAME="HongFeng_Service_Port"
+
+:: 1. 停止并卸载 Windows 服务
+echo [1/3] 正在停止后台进程并注销服务...
+if exist "%SERVICE_EXE%" (
+    %SERVICE_EXE% stop &gt;nul 2&gt;&amp;1
+    %SERVICE_EXE% uninstall
+    if !errorlevel! equ 0 (
+        echo      服务已成功从系统中移除。
+    ) else (
+        echo      [提示] 服务可能未在运行或已被移除。
+    )
+) else (
+    echo [错误] 未找到主程序 %SERVICE_EXE%。
+)
+
+:: 2. 彻底关闭残留的 PostgreSQL 进程 (可选，防残留)
+echo [2/3] 正在清理数据库残留进程...
+taskkill /f /im postgres.exe &gt;nul 2&gt;&amp;1
+
+:: 3. 清理防火墙规则
+echo [3/3] 正在移除防火墙开放端口...
+netsh advfirewall firewall delete rule name=%RULE_NAME% &gt;nul 2&gt;&amp;1
+if %errorlevel% equ 0 (
+    echo      防火墙规则已清理。
+)
+
+echo ==========================================
+echo    卸载完成！
+echo    注意：数据库数据文件 (data 目录) 已保留，未被删除。
+echo ==========================================
+pause
+</t>
+<t tx="swot.20260201184500.1">pnpm install -g opencode-ai
+
+有免费模型可用，要试。
+
+运行 opencode，发现在 macos 下不能运行，得用参数 no-ui 才行。这样界面简单，不用了。
+
+chatgpt 和 gemini 都推荐了 aider，装个试试
+
+[source,shell]
+----
+pip install pipx
+pipx install aider-chat
+pipx upgrade aider-chat  // 升级aider
+
+echo 'export DEEPSEEK_API_KEY=你的key' &gt;&gt; ~/.zshrc
+source ~/.zshrc
+
+aider --model deepseek/deepseek-chat
+
+aider
+----
+</t>
+<t tx="swot.20260203105212.1"></t>
+<t tx="swot.20260205181730.1">安装 uv:
+
+    pip install uv
+
+先清理一下缓存再安装：
+
+    uv cache clean
+
+安装 aider：
+
+    UV_HTTP_TIMEOUT=300 uv tool install --force --python 3.12 --with pip aider-chat@latest --index-url https://mirrors.aliyun.com/pypi/simple/
+
+这个命令做了三件事：
+
+* UV_HTTP_TIMEOUT=300：把下载等待时间从 30 秒延长到 300 秒（5 分钟），解决网络抖动问题。
+* --index-url ...：强制 uv 去找阿里云的镜像服务器拿包，这通常比去官网快得多。
+* --python 3.12：继续让 uv 帮你搞定 Python 环境。
+
+---
+
+### 1. 激活 `aider` 命令
+
+为了让你能直接输入 `aider` 启动，你需要把这个路径加到系统搜索路径中。运行以下命令：
+
+```bash
+export PATH="/root/.local/bin:$PATH"
+
+```
+
+**如果你想以后每次登录都能直接用，不需要重新输入上面这行，请执行：**
+
+```bash
+echo 'export PATH="/root/.local/bin:$PATH"' &gt;&gt; ~/.bashrc
+source ~/.bashrc
+
+```
+
+---
+
+### 2. 验证安装
+
+执行以下命令，如果能看到版本号，说明大功告成：
+
+```bash
+aider --version
+
+```
+
+---
+
+### 3. “无痕”启动建议 (针对共享 root)
+
+担心别人看到 API Key，现在安装好了，我建议你用这种方式启动，既能隐藏 Key，又能隐藏你的项目路径：
+
+**第一步：设置 Key（屏幕不会显示你输入的内容）**
+
+```bash
+read -s DEEPSEEK_API_KEY
+# 粘贴你的 Key 然后回车
+
+```
+
+**第二步：带变量启动**
+
+```bash
+export DEEPSEEK_API_KEY=$DEEPSEEK_API_KEY
+aider --model deepseek
+
+```
+
+**第三步：用完即焚**
+当你输入 `/exit` 退出 `aider` 后，顺手清理一下：
+
+```bash
+unset DEEPSEEK_API_KEY
+history -d $(history 1 | awk '{print $1}')
+
+```
+</t>
+<t tx="swot.20260205232002.1">当开发环境（macOS）与生产环境（Ubuntu/Linux）不一致时，`pnpm-lock.yaml` 经常会出现非预期的变动。本文档旨在通过规范化流程解决平台特定依赖（Platform-specific dependencies）导致的问题。
+
+== 核心原因分析
+
+. *可选依赖（Optional Dependencies）*: 高性能库（如 `esbuild`, `sharp`）根据 OS/CPU 下载不同的二进制包。
+. *环境差异*: macOS (Darwin) 与 Ubuntu (Linux) 的文件系统大小写敏感度及系统库不同。
+. *版本偏离*: 两端使用的 `pnpm` 版本不一致会导致 Lock 文件 Schema 发生变化。
+
+== 解决方案步骤
+
+=== 1. 基础设施：版本对齐（优先执行）
+
+必须首先确保两端环境使用完全一致的包管理器版本。
+
+[IMPORTANT]
+====
+**必须先执行 `corepack enable`**，否则 `package.json` 中的 `packageManager` 字段将不会生效。
+====
+
+. *启用 Corepack*:
++
+[source,console]
+----
+corepack enable
+----
+
+. *锁定版本*: 在 `package.json` 中明确指定版本。
++
+[source,json]
+----
+{
+    "packageManager": "pnpm@10.28.2"
+}
+----
+
+=== 2. 配置层：多平台架构支持
+
+配置 pnpm 在生成 Lock 文件时，同时预留 Linux 环境所需的依赖树。
+
+. *修改 package.json*:
++
+[source,json]
+----
+{
+    "pnpm": {
+      "supportedArchitectures": {
+        "os": ["darwin", "linux"],
+        "cpu": ["x64", "arm64"]
+      }
+    }
+}
+----
+
+. *同步状态*: 在 macOS 执行 `pnpm install`。此时 `pnpm-lock.yaml` 会记录所有指定平台的索引。
+
+=== 3. 生产层：冻结安装策略
+
+在 Ubuntu 部署或 CI/CD 流程中，禁止任何修改 Lock 文件的行为。
+
+[source,console]
+----
+corepack enable
+pnpm install --frozen-lockfile
+----
+
+NOTE: 如果检测到 `package.json` 与 Lock 文件不匹配，安装将直接抛出错误并退出，确保环境 100% 还原。
+
+== 辅助配置（预防性措施）
+
+=== Git 换行符归一化
+为了防止 Windows / Mac / Linux 之间的换行符干扰，建议在项目根目录建立 `.gitattributes`：
+
+[source,yaml]
+----
+pnpm-lock.yaml text eol=lf
+----
+
+== 检查清单 (Checklist)
+
+[cols="1,3", options="header"]
+|===
+| 检查项 | 预期行为
+| Corepack | 开发与生产环境都已执行 `corepack enable`
+| pnpm 版本 | `pnpm -v` 输出与 `packageManager` 一致
+| Lock 文件大小 | 包含 `linux-x64` 等跨平台条目
+| CI 脚本 | 使用了 `--frozen-lockfile` 参数
+|===
+</t>
+<t tx="swot.20260207194011.1"></t>
+<t tx="swot.20260213075755.1">[discrete]
+=== 全栈架构核心笔记
+
+[abstract]
+将 “Svelte 前端 + Spring Boot 后端” 构成的系统，拆解为宏观 MVC、后端内部 MVC 与前端 MVVM 三层逻辑，实现职责的彻底分离。
+
+[discrete]
+==== 1. 宏观视角：系统级 MVC (System Level)  
+
+从整体看，前端是 UI，后端是逻辑与数据的提供者。
+
+[cols="1,2,3", options="header"]
+|===
+| 维度 | 对应技术栈 | 核心职责
+| M (Model) | Spring Boot (Service + Mapper) | **系统大脑**：业务逻辑、数据持久化、单一事实来源
+| C (Controller) | Spring Boot (API Layer) | **交通枢纽**：路由分发、参数解析、指挥 Service、返回 JSON。
+| V (View) | Svelte (Pages + Stores + api fetch) | **系统面孔**：数据渲染、交互监听、将意图转化为 API 请求。
+|===
+
+[discrete]
+=====  🌟 宏观数据流向 (The Flow)
+
+[mermaid]
+....
+graph LR
+    User((用户)) -- 点击保存 --&gt; V[View: Svelte]
+    V -- HTTP Request --&gt; C[Controller: Spring]
+    C -- 指挥调度 --&gt; M_S[Model: Service]
+    M_S -- 持久化 --&gt; M_D[(Database)]
+
+    M_S -- 返回结果 --&gt; C
+    C -- JSON Response --&gt; V
+    V -- 更新 UI --&gt; User
+....
+
+---
+
+[discrete]
+==== 2. 后端视角：Spring Boot 内部 MVC
+
+深入后端代码，拆解“主厨”与“前台”的配合。
+
+* **M (Model) = 业务逻辑 + 数据访问**
+** *Service 层 (@Service)*：**主厨**。负责计算、校验、事务控制（如：`userService.register()`）。
+** *Mapper 层 (@Mapper)*：**库管**。负责搬运数据，执行 SQL。
+** *Entity/DTO*：**食材**。在 Service 和 Mapper 之间传递的数据包。
+
+* **C (Controller) = 请求调度**
+** *RestController*：**前台服务员**。不干脏活，解析 URL 后只喊一句：“后厨，来活了！”
+
+* **V (View) = 数据呈现**
+** *JSON 响应*：**摆盘**。后端不画 HTML，生成的 **JSON 字符串** 就是它提供给外界的视图。
+
+---
+
+[discrete]
+==== 3. 前端视角：Svelte 内部 MVVM
+
+前端通过状态驱动（Reactive）来治理复杂的交互逻辑。
+
+[horizontal]
+**V (View)** :: **组件 (+page.svelte)**。像“顾客”，只负责绑定数据和触发事件。它是“愚笨”的，不关心后端细节。
+
+**VM (ViewModel)** :: **状态管理 (store.svelte.ts)**。像“大堂经理”，持有 `$state`，封装前端处理逻辑，并通过 fetch 调用  API
+
+**M (Model)** :: **数据源代理 (operations.ts)**。像“快递员”，定义 TS 接口，负责发起真正的 fetch/axios 请求。
+
+---
+
+[discrete]
+=== 💡 核心记忆口诀
+
+[IMPORTANT]
+====
+* **后端 M 是个组合拳**：$M = Service(脑) + Mapper(手)$。
+* **后端 C 是个传话筒**：只负责转发，不负责思考。
+* **前端 VM 是个管家**：Store 帮 View 屏蔽了所有复杂的异步 API 细节。
+====
+
+[sidebar]
+--
+*思考题*：如果我要更换数据库，应该改哪一层？ +
+*答案*：只改 **Model (Mapper)** 层，Controller 和 View 理论上完全不需要感知。
+--
+</t>
+<t tx="swot.20260213123722.1">@language asciidoc
+https://github.com/wubi86/wubi86
+</t>
 </tnodes>
 </leo_file>
