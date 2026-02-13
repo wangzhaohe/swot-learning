@@ -12819,6 +12819,8 @@ pnpm-lock.yaml text eol=lf
 [discrete]
 ===== 宏观数据流向 (The Flow)
 
+// 如果不是在 GitHub 环境（即本地渲染），执行 Mermaid 脚本
+ifndef::env-github[]
 [mermaid, target=img/mermaid-2026-02-13-131950, format=svg]
 ....
 graph LR
@@ -12831,6 +12833,12 @@ graph LR
     C -- JSON Response --&gt; V
     V -- 更新 UI --&gt; User
 ....
+endif::[]
+
+// 如果是在 GitHub 环境，引用你已经上传的图片
+ifdef::env-github[]
+image::img/mermaid-2026-02-13-131950.svg[]
+endif::[]
 
 ---
 
