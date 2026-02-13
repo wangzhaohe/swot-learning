@@ -1290,8 +1290,12 @@ https://github.com/asciidoctor/asciidoctor-kroki
 ....
 
 == github 条件判断渲染图片
+在 github 上不会渲染 `mermaid`，所以只能使用加载图片的方式 `image::`，下面是判断的代码
+
+[source,java]
+----
 // 如果不是在 GitHub 环境（即本地渲染），执行 Mermaid 脚本
-ifndef::env-github[]
+\ifndef::env-github[]
 [mermaid, target=img/mermaid-2026-02-13-131950, format=svg]
 ....
 graph LR
@@ -1304,10 +1308,12 @@ graph LR
     C -- JSON Response --> V
     V -- 更新 UI --> User
 ....
-endif::[]
+\endif::[]
 
 // 如果是在 GitHub 环境，引用你已经上传的图片
-ifdef::env-github[]
+\ifdef::env-github[]
 image::img/mermaid-2026-02-13-131950.svg[]
-endif::[]
+\endif::[]
+....
+----
 

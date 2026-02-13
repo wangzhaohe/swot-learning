@@ -201,6 +201,7 @@
 </v>
 </v>
 <v t="swot.20250509171442.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d303271077573732e"><vh>asciidoctor-kroki server drawing</vh></v>
+<v t="swot.20260213153402.1"><vh>github 条件判断渲染图片</vh></v>
 </v>
 </v>
 </v>
@@ -12958,6 +12959,34 @@ https://github.com/wangzhaohe/swot-learning/blob/main/wubi86/wubi86.adoc
     });
 &lt;/script&gt;
 ++++
+</t>
+<t tx="swot.20260213153402.1">@language asciidoc
+在 github 上不会渲染 `mermaid`，所以只能使用加载图片的方式 `image::`，下面是判断的代码
+
+[source,java]
+----
+// 如果不是在 GitHub 环境（即本地渲染），执行 Mermaid 脚本
+\ifndef::env-github[]
+[mermaid, target=img/mermaid-2026-02-13-131950, format=svg]
+....
+graph LR
+    User((用户)) -- 点击保存 --&gt; V[View: Svelte]
+    V -- HTTP Request --&gt; C[Controller: Spring]
+    C -- 指挥调度 --&gt; M_S[Model: Service]
+    M_S -- 持久化 --&gt; M_D[(Database)]
+
+    M_S -- 返回结果 --&gt; C
+    C -- JSON Response --&gt; V
+    V -- 更新 UI --&gt; User
+....
+\endif::[]
+
+// 如果是在 GitHub 环境，引用你已经上传的图片
+\ifdef::env-github[]
+image::img/mermaid-2026-02-13-131950.svg[]
+\endif::[]
+....
+----
 </t>
 </tnodes>
 </leo_file>
