@@ -12812,7 +12812,7 @@ pnpm-lock.yaml text eol=lf
 [discrete]
 ===== 宏观数据流向 (The Flow)
 
-[mermaid, target=img/mermaid-2026-02-13-131950, format=png]
+[mermaid, target=img/mermaid-2026-02-13-131950, format=svg]
 ....
 graph LR
     User((用户)) -- 点击保存 --&gt; V[View: Svelte]
