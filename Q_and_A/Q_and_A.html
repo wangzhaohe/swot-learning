@@ -563,7 +563,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_clash_verge_限制访问_apple_屏保资源">Clash Verge 限制访问 apple 屏保资源</a></li>
 </ul>
 </li>
-<li><a href="#_2026_02_14_macos_无法_ssh_github_问题">2026-02-14 macos 无法 ssh github 问题</a></li>
+<li><a href="#_2026_02_14_macos_无法_ssh_github_问题">2026-02-14 macos 无法 ssh github 问题</a>
+<ul class="sectlevel3">
+<li><a href="#_https_方式推送时报_rpc_failed_http_400">https 方式推送时报 RPC failed HTTP 400</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1212,14 +1216,72 @@ User-Agent: HTTPie/3.0.0
 </div>
 <div class="sect2">
 <h3 id="_2026_02_14_macos_无法_ssh_github_问题">2026-02-14 macos 无法 ssh github 问题</h3>
+<div class="paragraph">
+<p>有时候因为 dns 污染了，或者代理就是不让发 ssh，从而导致无法使用 ssh 来和 github 交互。这时候转换成 https 去使用 github 吧。</p>
+</div>
+<div class="listingblock">
+<div class="title">改成使用 https 的方式</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">git remote set-url origin https://github.com/wangzhaohe/swot-learning.git</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">强制 Git 走本地的 7897 代理端口出去（根据自己的代理情况而定）</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp"># </span>设置<span class="tok-w"> </span>HTTP<span class="tok-w"> </span>代理
+<span class="tok-go">git config --global http.proxy http://127.0.0.1:7897</span>
 
+<span class="tok-gp"># </span>设置<span class="tok-w"> </span>HTTPS<span class="tok-w"> </span>代理
+<span class="tok-go">git config --global https.proxy http://127.0.0.1:7897</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>git push</code> 推送时输入用户名和密码（github 要求密码要是 token 才行，参下面获取说明）。</p>
+</div>
+<div class="paragraph">
+<p>进入 github 的全局设置中，创建 tokens，用它当作密码来确认登录。
+<a href="https://github.com/settings/tokens" class="bare">https://github.com/settings/tokens</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/github_tokens-classic.png" alt="github tokens classic">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_https_方式推送时报_rpc_failed_http_400">https 方式推送时报 RPC failed HTTP 400</h4>
+<div class="literalblock">
+<div class="content">
+<pre>&gt; git push
+Enumerating objects: 17, done.
+Counting objects: 100% (17/17), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (12/12), done.
+error: RPC failed; HTTP 400 curl 22 The requested URL returned error: 400
+send-pack: unexpected disconnect while reading sideband packet
+Writing objects: 100% (12/12), 1.14 MiB | 1.78 MiB/s, done.
+Total 12 (delta 4), reused 0 (delta 0), pack-reused 0 (from 0)
+fatal: the remote end hung up unexpectedly
+Everything up-to-date</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RPC failed; HTTP 400	The server didn&#8217;t understand the request (often because it was too large).<br>
+所以放大 postBuffer 试试，我成功了。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">git config --global http.postBuffer 524288000</span>
+<span class="tok-go">git push //成功</span></code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-14 22:49:07 +0800
+Last updated 2026-02-14 23:25:50 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

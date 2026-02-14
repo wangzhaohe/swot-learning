@@ -160,7 +160,9 @@
 <v t="swot.20260214223319.1"><vh>2026-02-14 macos idleassetsd 疯狂下载屏保视频问题</vh>
 <v t="swot.20260214223319.2"><vh>Clash Verge 限制访问 apple 屏保资源</vh></v>
 </v>
-<v t="swot.20260214224255.1"><vh>2026-02-14 macos 无法 ssh github 问题</vh></v>
+<v t="swot.20260214224255.1"><vh>2026-02-14 macos 无法 ssh github 问题</vh>
+<v t="swot.20260214231356.1"><vh>https 方式推送时报 RPC failed HTTP 400</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -13291,6 +13293,54 @@ prepend-rules:
   - DOMAIN-KEYWORD,googleai,PROXY
 ----
 </t>
-<t tx="swot.20260214224255.1"></t>
+<t tx="swot.20260214224255.1">@language asciidoc
+有时候因为 dns 污染了，或者代理就是不让发 ssh，从而导致无法使用 ssh 来和 github 交互。这时候转换成 https 去使用 github 吧。
+
+.改成使用 https 的方式
+[source,console]
+----
+git remote set-url origin https://github.com/wangzhaohe/swot-learning.git
+----
+
+.强制 Git 走本地的 7897 代理端口出去（根据自己的代理情况而定）
+[source,console]
+----
+# 设置 HTTP 代理
+git config --global http.proxy http://127.0.0.1:7897
+
+# 设置 HTTPS 代理
+git config --global https.proxy http://127.0.0.1:7897
+----
+
+`git push` 推送时输入用户名和密码（github 要求密码要是 token 才行，参下面获取说明）。
+
+进入 github 的全局设置中，创建 tokens，用它当作密码来确认登录。
+https://github.com/settings/tokens
+
+image::img/github_tokens-classic.png[]
+</t>
+<t tx="swot.20260214231356.1">....
+&gt; git push
+Enumerating objects: 17, done.
+Counting objects: 100% (17/17), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (12/12), done.
+error: RPC failed; HTTP 400 curl 22 The requested URL returned error: 400
+send-pack: unexpected disconnect while reading sideband packet
+Writing objects: 100% (12/12), 1.14 MiB | 1.78 MiB/s, done.
+Total 12 (delta 4), reused 0 (delta 0), pack-reused 0 (from 0)
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+....
+
+RPC failed; HTTP 400	The server didn't understand the request (often because it was too large). +
+所以放大 postBuffer 试试，我成功了。
+
+[source,console]
+----
+git config --global http.postBuffer 524288000
+git push //成功
+----
+</t>
 </tnodes>
 </leo_file>
