@@ -171,7 +171,7 @@ body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-b
 body.toc2.toc-right{padding-left:0;padding-right:15em}
 body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
 @media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
-#toc.toc2{width:30em}
+#toc.toc2{width:45em}
 #toc.toc2 #toctitle{font-size:1.375em}
 #toc.toc2>ul{font-size:.95em}
 #toc.toc2 ul ul{padding-left:1.25em}
@@ -554,6 +554,16 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_chrome">Chrome</a>
 <ul class="sectlevel2">
 <li><a href="#_打开开发者控制台模式的快捷键是什么">打开开发者控制台模式的快捷键是什么？</a></li>
+</ul>
+</li>
+<li><a href="#_macos">macos</a>
+<ul class="sectlevel2">
+<li><a href="#_2026_02_14_macos_idleassetsd_疯狂下载屏保视频问题">2026-02-14 macos idleassetsd 疯狂下载屏保视频问题</a>
+<ul class="sectlevel3">
+<li><a href="#_clash_verge_限制访问_apple_屏保资源">Clash Verge 限制访问 apple 屏保资源</a></li>
+</ul>
+</li>
+<li><a href="#_2026_02_14_macos_无法_ssh_github_问题">2026-02-14 macos 无法 ssh github 问题</a></li>
 </ul>
 </li>
 </ul>
@@ -1102,10 +1112,114 @@ User-Agent: HTTPie/3.0.0
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_macos">macos</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_2026_02_14_macos_idleassetsd_疯狂下载屏保视频问题">2026-02-14 macos idleassetsd 疯狂下载屏保视频问题</h3>
+<div class="paragraph">
+<p>使用 macos 的用户遇见了比较让人恼火的事，本来硬盘就不大，apple 还使劲往硬盘里下载屏保视频，在我的电脑上下载了 15 个G，杀都杀不掉，太不像话了！下载的目录：<br>
+'/Library/Application Support/com.apple.idleassetsd/Customer/4KSDR240FPS'</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>方案：问 apple 客服，回复说无法解决，等待下个系统更新，看有没有改善，这……</p>
+</li>
+<li>
+<p>方案： cuplimit 限速</p>
+<div class="listingblock">
+<div class="title">使用 cpulimit 限制下载速率（存在问题，过一会儿 idleassetsd 自己就杀死自己了，再重启换了一个系统id，太……）</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">&gt; sudo cpulimit -e idleassetsd -l 1 -z</span>
+<span class="tok-go">Password:</span>
+<span class="tok-go">Process 19196 found</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>方案：firewall LuLu<br>
+限制进程 idleassetsd 是可行的。但是如果开启了代理，又不行了，因为流量走代理了。总不能把代理也关了吧。</p>
+</li>
+<li>
+<p><strong>方案：使用代理 Clash Verge 限制访问 apple 的屏保资源（目前可行）</strong></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_clash_verge_限制访问_apple_屏保资源">Clash Verge 限制访问 apple 屏保资源</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>开启 TUN 模式：虚拟网上模式</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/ClashVerge-TUN.png" alt="ClashVerge TUN">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/ClashVerge-TUN-system.png" alt="ClashVerge TUN system" width="520">
+</div>
+</div>
+</li>
+<li>
+<p>启用 DNS fake-ip 功能</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/ClashVerge-DNS.png" alt="ClashVerge DNS">
+</div>
+</div>
+</li>
+<li>
+<p>全局扩展覆写配置</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/ClashVerge-global-edit.png" alt="ClashVerge global edit">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/ClashVerge-global-edit-content.png" alt="ClashVerge global edit content">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-c1"># Profile Enhancement Merge Template for Clash Verge</span>
+<span class="tok-nt">profile</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">store-selected</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+
+<span class="tok-nt">prepend-rules</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">PROCESS-NAME,idleassetsd,REJECT</span>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DOMAIN-SUFFIX,sylvan.apple.com,REJECT</span>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DOMAIN-SUFFIX,desktop-assets.apple.com,REJECT</span>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DOMAIN-KEYWORD,assets.itunes.apple,REJECT</span>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DOMAIN,sylvan.apple.com,REJECT</span>
+
+<span class="tok-w">  </span><span class="tok-c1"># GitHub 规则：确保 Git 走代理</span>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DOMAIN-SUFFIX,github.com,PROXY</span>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DOMAIN-KEYWORD,github,PROXY</span>
+
+<span class="tok-w">  </span><span class="tok-c1"># Gemini 规则：确保 Gemini 走支持的节点（如美国、新加坡）</span>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DOMAIN-SUFFIX,gemini.google.com,PROXY</span>
+<span class="tok-w">  </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">DOMAIN-KEYWORD,googleai,PROXY</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2026_02_14_macos_无法_ssh_github_问题">2026-02-14 macos 无法 ssh github 问题</h3>
+
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-06-13 10:34:47 +0800
+Last updated 2026-02-14 22:49:07 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
