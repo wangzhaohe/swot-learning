@@ -13031,8 +13031,8 @@ image::img/mermaid-2026-02-13-131950.svg[]
 
 ---
 
-1. 代码写 js 文件，不写复杂的类型标。
-2. 配置 jsconfig or tsconfig （tsconfig.json 应该会被优先读取）
+1. 代码写 js 文件，不写复杂的类型标注。
+2. 配置 tsconfig or jsconfig （tsconfig.json 应该会被优先读取）
 3. 写 global.d.ts 全局类型
 
 ---
