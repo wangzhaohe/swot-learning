@@ -164,6 +164,9 @@
 <v t="swot.20260214231356.1"><vh>https 方式推送时报 RPC failed HTTP 400</vh></v>
 </v>
 </v>
+<v t="swot.20260214235745.1"><vh>neovim</vh>
+<v t="swot.20260214235718.1"><vh>2026-02-14 How to install LazyVim?</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -13342,5 +13345,38 @@ git config --global http.postBuffer 524288000
 git push //成功
 ----
 </t>
+<t tx="swot.20260214235718.1">@language asciidoc
+https://github.com/LazyVim/LazyVim
+
+LazyVim 是目前最成熟的配置框架，它的作者已经处理好了所有版本兼容性问题。
+
+1. 清空现有配置（备份后删除）：
++
+[source, console]
+----
+rm -rf ~/.config/nvim ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim
+----
+
+2. 一键克隆官方模版：
++
+[source,java]
+----
+git clone https://github.com/LazyVim/starter ~/.config/nvim
+----
+
+3. 启用 Svelte 支持
+
+* 打开 nvim，按 &lt;leader&gt;x（通常是空格+x）或者输入 :LazyExtras
+* 找到 lang.svelte 和 lang.typescript，按 x 选中即可。
+* 按下 I (大写) 进行安装。
++
+它会自动帮你配好 0.10 或 0.11 下最稳定的解析器。
+
+.官网参考
+****
+https://www.lazyvim.org/
+****
+</t>
+<t tx="swot.20260214235745.1"></t>
 </tnodes>
 </leo_file>
