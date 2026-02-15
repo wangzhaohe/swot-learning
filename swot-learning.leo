@@ -71,8 +71,8 @@
 </v>
 </v>
 <v t="swot.20260215082206.1"><vh>@path postgresql</vh>
-<v t="swot.20260215160552.1"><vh>@adoc windows_制作绿色版_nodejs24_postgresql17_绿色动力沙盘数据管理系统.adoc</vh>
-<v t="swot.20260215162708.1"><vh>windows_制作绿色版_nodejs24_postgresql17_绿色动力沙盘数据管理系统</vh>
+<v t="swot.20260215160552.1"><vh>@adoc Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统.adoc</vh>
+<v t="swot.20260215162708.1"><vh>Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统</vh>
 <v t="swot.20260215082625.1"><vh>2026-01-22 mysql:8 迁移到 postgresql:17</vh>
 <v t="swot.20260215094854.1"><vh>step1: export data from mysql:8 to mysql:5.7</vh></v>
 <v t="swot.20260215095103.1"><vh>step2: prepare database postgresql:17</vh></v>
