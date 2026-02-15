@@ -39,7 +39,6 @@
 <v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
 </v>
 <v t="swot.20260129095856.1"><vh>windows 绿色版本安装 postgresql &amp; node.js &amp; express -&gt; 绿色动力沙盘数据管理系统</vh>
-<v t="swot.20260129112711.1"><vh>2026-01-29 在 windows 下设置 postgresql 密码</vh></v>
 <v t="swot.20260121223227.1"><vh>2026-01-21 windows 绿色部署 node.js + postgresql -&gt; 待执行</vh>
 <v t="swot.20260201131420.1"><vh>1. 目录结构预览</vh></v>
 <v t="swot.20260201131504.1"><vh>2. 核心启动脚本 (`start_server.bat`)</vh></v>
@@ -82,7 +81,8 @@
 <v t="swot.20260215160522.1"><vh>step1: 从 Macos 导出数据</vh></v>
 <v t="swot.20260215160511.1"><vh>step2: 从 windows 导入数据</vh></v>
 </v>
-<v t="swot.20260215162134.1"><vh>2026-01-29 在 windows 下生成项目 node_modules 目录</vh></v>
+<v t="swot.20260215162134.1"><vh>2026-01-28 在 windows 下生成项目 node_modules 目录</vh></v>
+<v t="swot.20260215164835.1"><vh>2026-01-29 在 windows 下设置 postgresql 密码</vh></v>
 </v>
 </v>
 </v>
@@ -12066,100 +12066,6 @@ sudo rm -rf "/Library/Application Support/com.apple.idleassetsd/Customer/index.s
 最后是通过配置 clash verge 实现的。
 </t>
 <t tx="swot.20260129095856.1"></t>
-<t tx="swot.20260129112711.1">在 Windows 环境下，PostgreSQL 的用户信息和密码并不像普通文件那样可以直接“查看”，因为它们是经过哈希加密存储在数据库内部表的。
-
-不过，我们可以通过**登录尝试**来判断是否有密码，并使用 SQL 命令来设置新密码。
-
----
-
-## 1. 检查是否有密码
-
-由于你使用的是解压版，默认情况下 PostgreSQL 可能配置为 `trust` 模式（即本地登录不需要密码）。
-
-请在终端（`.\bin` 目录下）执行：
-
-```bash
-.\psql.exe -U postgres -d postgres
-
-```
-
-* **如果直接进去了**（出现 `postgres=#` 提示符）：说明**没有密码**，或者当前处于信任模式。
-* **如果提示 `Password for user postgres:**`：说明**有密码**。
-
----
-
-## 2. 设置密码为 `naonao`
-
-无论之前有没有密码，你都可以通过以下步骤将其修改为 `naonao`：
-
-### 方法 A：在 psql 交互界面修改（最推荐）
-
-如果你已经成功进入了 `psql`（看到 `postgres=#`），直接输入：
-
-```sql
-ALTER USER postgres WITH PASSWORD 'naonao';
-
-```
-
-&gt; **注意**：末尾的**分号 `;**` 必须带上。执行成功后会显示 `ALTER ROLE`。输入 `\q` 退出。
-
-### 方法 B：单条命令修改
-
-如果你不想进入交互界面，可以直接在 CMD/PowerShell 运行：
-
-```bash
-.\psql.exe -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'naonao';"
-
-```
-
----
-
-## 3. 关键一步：确保密码生效 (pg_hba.conf)
-
-在 Windows 下，解压版默认可能允许免密登录。如果你设置了密码但发现登录时还是不提示输入密码，需要修改配置文件：
-
-1. 打开你的数据目录：`C:\pgsql\data`。
-2. 找到 **`pg_hba.conf`** 文件，用记事本打开。
-3. 拉到最底部，找到类似这样的一行：
-```text
-# TYPE  DATABASE        USER            ADDRESS                 METHOD
-host    all             all             127.0.0.1/32            trust
-
-```
-
-
-4. 将最后的 **`trust`** 改为 **`scram-sha-256`** (或者 `md5`)：
-```text
-host    all             all             127.0.0.1/32            scram-sha-256
-
-```
-
-
-5. **重启数据库**使配置生效：
-```bash
-.\pg_ctl.exe restart -D C:\pgsql\data
-
-```
-
-
-
----
-
-## 4. 验证密码
-
-重启后，再次尝试登录：
-
-```bash
-.\psql.exe -U postgres
-
-```
-
-此时系统应该会强制要求你输入密码，输入 `naonao` 即可进入。
-
----
-
-**设置好密码后，你的项目配置文件（如 `.env`）里记得也要同步更新数据库密码。需要我帮你检查一下 `pnpm` 项目里常见的数据库连接配置吗？**
-</t>
 <t tx="swot.20260201080427.1"></t>
 <t tx="swot.20260201080533.1">@echo off
 echo Starting Runoff Monitoring System...
@@ -13517,6 +13423,83 @@ npm install
     });
 &lt;/script&gt;
 ++++
+</t>
+<t tx="swot.20260215164835.1">在 Windows 环境下，PostgreSQL 的用户信息和密码并不像普通文件那样可以直接“查看”，因为它们是经过哈希加密存储在数据库内部表的。
+不过，我们可以通过**登录尝试**来判断是否有密码，并使用 SQL 命令来设置新密码。
+
+---
+1. 检查是否有密码
++
+* 由于使用的是解压版，默认情况下 PostgreSQL 可能配置为 `trust` 模式（即本地登录不需要密码）。请在终端（`.\bin` 目录下）执行：
++
+[source,console]
+----
+.\psql.exe -U postgres -d postgres
+----
+
+* 如果直接进去了（出现 `postgres=#` 提示符）：说明**没有密码**，或者当前处于信任模式。
+* 如果提示 `Password for user postgres:**`：说明**有密码**。
+
+2. 设置密码为 `naonao`，无论之前有没有密码，你都可以通过以下步骤将其修改为 `naonao`：
+* 方法 A：在 psql 交互界面修改（最推荐）
++
+如果你已经成功进入了 `psql`（看到 `postgres=#`），直接输入：
++
+[source,sql]
+----
+ALTER USER postgres WITH PASSWORD 'naonao';
+----
++
+NOTE: **注意**：末尾的**分号 `;**` 必须带上。执行成功后会显示 `ALTER ROLE`。输入 `\q` 退出。
+
+* 方法 B：单条命令修改
++
+如果你不想进入交互界面，可以直接在 CMD/PowerShell 运行：
++
+[source,console]
+----
+.\psql.exe -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'naonao';"
+----
+
+3. 关键一步：确保密码生效 (pg_hba.conf)
++
+在 Windows 下，解压版默认可能允许免密登录。如果你设置了密码但发现登录时还是不提示输入密码，需要修改配置文件：
++
+.. 打开你的数据目录：`C:\pgsql\data`。
+.. 找到 **`pg_hba.conf`** 文件，用记事本打开。
+.. 拉到最底部，找到类似这样的一行：
++
+[source,text]
+----
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+host    all             all             127.0.0.1/32            trust
+----
+
+4. 将最后的 **`trust`** 改为 **`scram-sha-256`** (或者 `md5`)：
++
+[source,text]
+----
+host    all             all             127.0.0.1/32            scram-sha-256
+----
+
+5. **重启数据库**使配置生效：
++
+[source,console]
+----
+.\pg_ctl.exe restart -D C:\pgsql\data
+----
+
+6. 验证密码
++
+.重启后，再次尝试登录：
+[source,console]
+----
+.\psql.exe -U postgres
+----
++
+此时系统应该会强制要求你输入密码，输入 `naonao` 即可进入。
+
+IMPORTANT: 设置好密码后，你的项目配置文件（如 `.env`）里记得也要同步更新数据库密码。
 </t>
 </tnodes>
 </leo_file>

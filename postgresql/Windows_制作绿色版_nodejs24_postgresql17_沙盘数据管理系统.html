@@ -548,7 +548,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_step2_从_windows_导入数据">step2: 从 windows 导入数据</a></li>
 </ul>
 </li>
-<li><a href="#_2026_01_29_在_windows_下生成项目_node_modules_目录">2026-01-29 在 windows 下生成项目 node_modules 目录</a></li>
+<li><a href="#_2026_01_28_在_windows_下生成项目_node_modules_目录">2026-01-28 在 windows 下生成项目 node_modules 目录</a></li>
+<li><a href="#_2026_01_29_在_windows_下设置_postgresql_密码">2026-01-29 在 windows 下设置 postgresql 密码</a></li>
 </ul>
 </div>
 </div>
@@ -862,7 +863,7 @@ data_management.dump: PostgreSQL custom database dump - v1.16-0</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_2026_01_29_在_windows_下生成项目_node_modules_目录">2026-01-29 在 windows 下生成项目 node_modules 目录</h2>
+<h2 id="_2026_01_28_在_windows_下生成项目_node_modules_目录">2026-01-28 在 windows 下生成项目 node_modules 目录</h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
@@ -914,10 +915,151 @@ data_management.dump: PostgreSQL custom database dump - v1.16-0</pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_2026_01_29_在_windows_下设置_postgresql_密码">2026-01-29 在 windows 下设置 postgresql 密码</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>在 Windows 环境下，PostgreSQL 的用户信息和密码并不像普通文件那样可以直接“查看”，因为它们是经过哈希加密存储在数据库内部表的。
+不过，我们可以通过<strong>登录尝试</strong>来判断是否有密码，并使用 SQL 命令来设置新密码。</p>
+</div>
+<hr>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>检查是否有密码</p>
+<div class="ulist">
+<ul>
+<li>
+<p>由于使用的是解压版，默认情况下 PostgreSQL 可能配置为 <code>trust</code> 模式（即本地登录不需要密码）。请在终端（<code>.\bin</code> 目录下）执行：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">.\psql.exe -U postgres -d postgres</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>如果直接进去了（出现 <code>postgres=#</code> 提示符）：说明<strong>没有密码</strong>，或者当前处于信任模式。</p>
+</li>
+<li>
+<p>如果提示 <code>Password for user postgres:<strong></code>：说明</strong>有密码**。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>设置密码为 <code>naonao</code>，无论之前有没有密码，你都可以通过以下步骤将其修改为 <code>naonao</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>方法 A：在 psql 交互界面修改（最推荐）</p>
+<div class="paragraph">
+<p>如果你已经成功进入了 <code>psql</code>（看到 <code>postgres=#</code>），直接输入：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sql"><span></span><span class="tok-k">ALTER</span><span class="tok-w"> </span><span class="tok-k">USER</span><span class="tok-w"> </span><span class="tok-n">postgres</span><span class="tok-w"> </span><span class="tok-k">WITH</span><span class="tok-w"> </span><span class="tok-n">PASSWORD</span><span class="tok-w"> </span><span class="tok-s1">&#39;naonao&#39;</span><span class="tok-p">;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+<strong>注意</strong>：末尾的<strong>分号 <code>;</strong></code> 必须带上。执行成功后会显示 <code>ALTER ROLE</code>。输入 <code>\q</code> 退出。
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>方法 B：单条命令修改</p>
+<div class="paragraph">
+<p>如果你不想进入交互界面，可以直接在 CMD/PowerShell 运行：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">.\psql.exe -U postgres -d postgres -c &quot;ALTER USER postgres WITH PASSWORD &#39;naonao&#39;;&quot;</span></code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>关键一步：确保密码生效 (pg_hba.conf)</p>
+<div class="paragraph">
+<p>在 Windows 下，解压版默认可能允许免密登录。如果你设置了密码但发现登录时还是不提示输入密码，需要修改配置文件：</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>打开你的数据目录：<code>C:\pgsql\data</code>。</p>
+</li>
+<li>
+<p>找到 <strong><code>pg_hba.conf</code></strong> 文件，用记事本打开。</p>
+</li>
+<li>
+<p>拉到最底部，找到类似这样的一行：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span># TYPE  DATABASE        USER            ADDRESS                 METHOD
+host    all             all             127.0.0.1/32            trust</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>将最后的 <strong><code>trust</code></strong> 改为 <strong><code>scram-sha-256</code></strong> (或者 <code>md5</code>)：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>host    all             all             127.0.0.1/32            scram-sha-256</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>重启数据库</strong>使配置生效：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">.\pg_ctl.exe restart -D C:\pgsql\data</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>验证密码</p>
+<div class="listingblock">
+<div class="title">重启后，再次尝试登录：</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">.\psql.exe -U postgres</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>此时系统应该会强制要求你输入密码，输入 <code>naonao</code> 即可进入。</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+设置好密码后，你的项目配置文件（如 <code>.env</code>）里记得也要同步更新数据库密码。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-15 16:40:08 +0800
+Last updated 2026-02-15 17:03:38 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
