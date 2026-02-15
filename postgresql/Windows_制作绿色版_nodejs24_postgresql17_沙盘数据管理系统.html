@@ -550,6 +550,19 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_2026_01_28_在_windows_下生成项目_node_modules_目录">2026-01-28 在 windows 下生成项目 node_modules 目录</a></li>
 <li><a href="#_2026_01_29_在_windows_下设置_postgresql_密码">2026-01-29 在 windows 下设置 postgresql 密码</a></li>
+<li><a href="#_2026_01_30_在_windows_下绿色部署_node_js_postgresql">2026-01-30 在 windows 下绿色部署 node.js + postgresql</a>
+<ul class="sectlevel2">
+<li><a href="#_1_目录结构预览">1. 目录结构预览</a></li>
+<li><a href="#_2_核心启动脚本_start_server_bat">2. 核心启动脚本 (<code>start_server.bat</code>)</a></li>
+<li><a href="#_3_winsw_配置文件_hongfeng_data_service_xml">3. WinSW 配置文件 (<code>hongfeng-data-service.xml</code>)</a></li>
+<li><a href="#_4_客户一键启动脚本_一键启动服务_bat">4. 客户一键启动脚本 (<code>一键启动服务.bat</code>)</a></li>
+<li><a href="#_5_部署步骤你的操作">5. 部署步骤（你的操作）</a></li>
+<li><a href="#_6_交付给客户的操作说明">6. 交付给客户的操作说明</a></li>
+<li><a href="#_7_如何停止服务或卸载服务">7. 如何停止服务或卸载服务？</a></li>
+<li><a href="#_8_一键备份数据库_bat">8. 一键备份数据库.bat</a></li>
+<li><a href="#_9_一键停止并卸载服务_bat">9. 一键停止并卸载服务.bat</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1056,10 +1069,458 @@ host    all             all             127.0.0.1/32            trust</code></pr
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_2026_01_30_在_windows_下绿色部署_node_js_postgresql">2026-01-30 在 windows 下绿色部署 node.js + postgresql</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>这份文档将为你整理出一套完整的 <strong>绿色版 Node.js + PostgreSQL + WinSW</strong> 部署方案。你可以根据这份文档直接配置并打包发给客户。</p>
+</div>
+<div class="paragraph">
+<p>该方案实现了：<strong>免安装、零配置（对于客户）、开机自启、崩溃自动重启、后台静默运行。</strong></p>
+</div>
+<div class="sect2">
+<h3 id="_1_目录结构预览">1. 目录结构预览</h3>
+<div class="paragraph">
+<p>在 windows 开发机上，创建一个名为 <code>DeployPackage</code> 的文件夹，结构如下：</p>
+</div>
+<div class="paragraph">
+<p>+</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">DeployPackage/</span>
+<span class="tok-go">├── pgsql/                      # PostgreSQL 15 绿色版解压目录</span>
+<span class="tok-go">├── node/                       # Node.js 绿色版解压目录</span>
+<span class="tok-go">├── app/                        # 你的 Express 项目代码</span>
+<span class="tok-go">│   ├── node_modules/           # 预先执行过 npm install 的包</span>
+<span class="tok-go">│   └── backend/index.js        # 入口文件</span>
+<span class="tok-go">├── data/                       # (空文件夹) 用于存放数据库数据</span>
+<span class="tok-go">├── logs/                       # (空文件夹) 用于存放运行日志</span>
+<span class="tok-go">├── hongfeng-data-service.exe   # 重命名后的 WinSW-x64.exe</span>
+<span class="tok-go">├── hongfeng-data-service.xml   # WinSW 配置文件</span>
+<span class="tok-go">├── temp_pwd.txt                # 默认密码</span>
+<span class="tok-go">├── start_server.bat            # 核心启动脚本</span>
+<span class="tok-go">└── 一键启动服务.bat              # 客户运行的脚本</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_核心启动脚本_start_server_bat">2. 核心启动脚本 (<code>start_server.bat</code>)</h3>
+<div class="paragraph">
+<p>这个脚本负责按顺序拉起 postgresql &amp; Node.js。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>@echo<span class="tok-w"> </span>off
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">PROJECT_DIR</span><span class="tok-o">=</span>%~dp0
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">PG_PATH</span><span class="tok-o">=</span>%PROJECT_DIR%pgsql<span class="tok-se">\b</span>in
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">DATA_PATH</span><span class="tok-o">=</span>%PROJECT_DIR%data
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">NODE_PATH</span><span class="tok-o">=</span>%PROJECT_DIR%node
+
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span><span class="tok-m">1</span>/2<span class="tok-o">]</span><span class="tok-w"> </span>正在启动<span class="tok-w"> </span>PostgreSQL...
+::<span class="tok-w"> </span>启动数据库进程
+<span class="tok-s2">&quot;%PG_PATH%\pg_ctl.exe&quot;</span><span class="tok-w"> </span>-D<span class="tok-w"> </span><span class="tok-s2">&quot;%DATA_PATH%&quot;</span><span class="tok-w"> </span>-l<span class="tok-w"> </span><span class="tok-s2">&quot;%PROJECT_DIR%logs\pgsql.log&quot;</span><span class="tok-w"> </span>start
+
+::<span class="tok-w"> </span>等待<span class="tok-w"> </span><span class="tok-m">5</span><span class="tok-w"> </span>秒确保数据库完全就绪
+timeout<span class="tok-w"> </span>/t<span class="tok-w"> </span><span class="tok-m">5</span><span class="tok-w"> </span>/nobreak<span class="tok-w"> </span>&gt;<span class="tok-w"> </span>nul
+
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span><span class="tok-m">2</span>/2<span class="tok-o">]</span><span class="tok-w"> </span>正在启动<span class="tok-w"> </span>Node.js<span class="tok-w"> </span>服务...
+::<span class="tok-w"> </span>临时设置环境变量
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">PATH</span><span class="tok-o">=</span>%NODE_PATH%<span class="tok-p">;</span>%PATH%
+::<span class="tok-w"> </span>验证一下是否使用了自已的<span class="tok-w"> </span>node（可选）
+node<span class="tok-w"> </span>-v<span class="tok-w"> </span>&gt;&gt;<span class="tok-w"> </span><span class="tok-s2">&quot;%PROJECT_DIR%logs\startup_debug.log&quot;</span>
+
+<span class="tok-nb">cd</span><span class="tok-w"> </span>/d<span class="tok-w"> </span><span class="tok-s2">&quot;%PROJECT_DIR%app\backend&quot;</span>
+::<span class="tok-w"> </span>启动你的程序
+node<span class="tok-w"> </span>app.js</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_3_winsw_配置文件_hongfeng_data_service_xml">3. WinSW 配置文件 (<code>hongfeng-data-service.xml</code>)</h3>
+<div class="paragraph">
+<p>注意文件名必须与 <code>.exe</code> 文件名严格一致。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;service&gt;</span>
+<span class="tok-w">  </span><span class="tok-nt">&lt;id&gt;</span>ExpressAppService<span class="tok-nt">&lt;/id&gt;</span>
+<span class="tok-w">  </span><span class="tok-nt">&lt;name&gt;</span>HongFeng<span class="tok-w"> </span>data<span class="tok-w"> </span>Service<span class="tok-nt">&lt;/name&gt;</span>
+<span class="tok-w">  </span><span class="tok-nt">&lt;description&gt;</span>Node.js<span class="tok-w"> </span>Express<span class="tok-w"> </span>+<span class="tok-w"> </span>PostgreSQL<span class="tok-w"> </span>17<span class="tok-w"> </span>绿色版后台服务<span class="tok-nt">&lt;/description&gt;</span>
+
+<span class="tok-w">  </span><span class="tok-nt">&lt;executable&gt;</span>%BASE%\start_server.bat<span class="tok-nt">&lt;/executable&gt;</span>
+<span class="tok-w">  </span><span class="tok-nt">&lt;workingdirectory&gt;</span>%BASE%<span class="tok-nt">&lt;/workingdirectory&gt;</span>
+
+<span class="tok-w">  </span><span class="tok-nt">&lt;onfailure</span><span class="tok-w"> </span><span class="tok-na">action=</span><span class="tok-s">&quot;restart&quot;</span><span class="tok-w"> </span><span class="tok-na">delay=</span><span class="tok-s">&quot;30 sec&quot;</span><span class="tok-nt">/&gt;</span>
+
+<span class="tok-w">  </span><span class="tok-nt">&lt;log</span><span class="tok-w"> </span><span class="tok-na">mode=</span><span class="tok-s">&quot;roll&quot;</span><span class="tok-nt">&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;logpath&gt;</span>%BASE%\logs<span class="tok-nt">&lt;/logpath&gt;</span>
+<span class="tok-w">  </span><span class="tok-nt">&lt;/log&gt;</span>
+<span class="tok-nt">&lt;/service&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_4_客户一键启动脚本_一键启动服务_bat">4. 客户一键启动脚本 (<code>一键启动服务.bat</code>)</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>@echo<span class="tok-w"> </span>off
+setlocal<span class="tok-w"> </span>enabledelayedexpansion
+::<span class="tok-w"> </span>强制切换到当前脚本所在目录
+<span class="tok-nb">cd</span><span class="tok-w"> </span>/d<span class="tok-w"> </span><span class="tok-s2">&quot;%~dp0&quot;</span>
+
+::<span class="tok-w"> </span>设置<span class="tok-w"> </span>CMD<span class="tok-w"> </span>窗口编码为简体中文，防止显示乱码
+chcp<span class="tok-w"> </span><span class="tok-m">936</span><span class="tok-w"> </span>&gt;nul
+
+title<span class="tok-w"> </span>红丰数据服务<span class="tok-w"> </span>-<span class="tok-w"> </span>一键部署工具
+
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">==========================================</span>
+<span class="tok-nb">echo</span><span class="tok-w">    </span>正在初始化系统组件，请稍候...
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">==========================================</span>
+
+::<span class="tok-w"> </span><span class="tok-m">0</span>.<span class="tok-w"> </span>检查管理员权限
+net<span class="tok-w"> </span>session<span class="tok-w"> </span>&gt;nul<span class="tok-w"> </span><span class="tok-m">2</span>&gt;<span class="tok-p">&amp;</span><span class="tok-m">1</span>
+<span class="tok-k">if</span><span class="tok-w"> </span>%errorLevel%<span class="tok-w"> </span>neq<span class="tok-w"> </span><span class="tok-m">0</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span>错误<span class="tok-o">]</span><span class="tok-w"> </span>请右键点击此脚本，选择“以管理员身份运行”！
+<span class="tok-w">    </span>pause
+<span class="tok-w">    </span><span class="tok-nb">exit</span>
+<span class="tok-o">)</span>
+
+::<span class="tok-w"> </span><span class="tok-m">1</span>.<span class="tok-w"> </span>初始化数据库<span class="tok-w"> </span><span class="tok-o">(</span>仅在首次安装时执行<span class="tok-o">)</span>
+<span class="tok-k">if</span><span class="tok-w"> </span>not<span class="tok-w"> </span>exist<span class="tok-w"> </span><span class="tok-s2">&quot;data\PG_VERSION&quot;</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span><span class="tok-m">1</span>/4<span class="tok-o">]</span><span class="tok-w"> </span>正在首次初始化数据库...
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span>exist<span class="tok-w"> </span><span class="tok-s2">&quot;temp_pwd.txt&quot;</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">        </span>::<span class="tok-w"> </span>使用指定的密码文件初始化
+<span class="tok-w">        </span><span class="tok-s2">&quot;pgsql\bin\initdb.exe&quot;</span><span class="tok-w"> </span>-D<span class="tok-w"> </span><span class="tok-s2">&quot;data&quot;</span><span class="tok-w"> </span>-U<span class="tok-w"> </span>postgres<span class="tok-w"> </span>-A<span class="tok-w"> </span>scram-sha-256<span class="tok-w"> </span>--pwfile<span class="tok-o">=</span><span class="tok-s2">&quot;temp_pwd.txt&quot;</span>
+<span class="tok-w">        </span><span class="tok-nb">echo</span><span class="tok-w"> </span>数据库初始化完成。
+<span class="tok-w">        </span>::<span class="tok-w"> </span>根据你的需求，初始化完后可以删除密码文件以保安全
+<span class="tok-w">        </span>::<span class="tok-w"> </span>del<span class="tok-w"> </span>temp_pwd.txt
+<span class="tok-w">    </span><span class="tok-o">)</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">        </span><span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span>错误<span class="tok-o">]</span><span class="tok-w"> </span>根目录下未找到<span class="tok-w"> </span>temp_pwd.txt<span class="tok-w"> </span><span class="tok-o">(</span>内需包含初始密码<span class="tok-w"> </span>naonao<span class="tok-o">)</span>
+<span class="tok-w">        </span>pause
+<span class="tok-w">        </span><span class="tok-nb">exit</span>
+<span class="tok-w">    </span><span class="tok-o">)</span>
+<span class="tok-o">)</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span><span class="tok-m">1</span>/4<span class="tok-o">]</span><span class="tok-w"> </span>数据库目录已存在，跳过初始化。
+<span class="tok-o">)</span>
+
+::<span class="tok-w"> </span><span class="tok-m">2</span>.<span class="tok-w"> </span>配置防火墙规则<span class="tok-w"> </span><span class="tok-o">(</span>允许<span class="tok-w"> </span><span class="tok-m">8019</span><span class="tok-w"> </span>端口入站<span class="tok-o">)</span>
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">PORT</span><span class="tok-o">=</span><span class="tok-m">8019</span>
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">RULE_NAME</span><span class="tok-o">=</span><span class="tok-s2">&quot;HongFeng_Service_Port&quot;</span>
+
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span><span class="tok-m">2</span>/4<span class="tok-o">]</span><span class="tok-w"> </span>正在配置防火墙规则...
+::<span class="tok-w"> </span>先尝试删除可能存在的旧规则，确保规则名唯一且配置最新
+netsh<span class="tok-w"> </span>advfirewall<span class="tok-w"> </span>firewall<span class="tok-w"> </span>delete<span class="tok-w"> </span>rule<span class="tok-w"> </span><span class="tok-nv">name</span><span class="tok-o">=</span>%RULE_NAME%<span class="tok-w"> </span>&gt;nul<span class="tok-w"> </span><span class="tok-m">2</span>&gt;<span class="tok-p">&amp;</span><span class="tok-m">1</span>
+::<span class="tok-w"> </span>添加新规则：针对<span class="tok-w"> </span><span class="tok-m">8019</span><span class="tok-w"> </span>端口放行所有<span class="tok-w"> </span>TCP<span class="tok-w"> </span>流量
+netsh<span class="tok-w"> </span>advfirewall<span class="tok-w"> </span>firewall<span class="tok-w"> </span>add<span class="tok-w"> </span>rule<span class="tok-w"> </span><span class="tok-nv">name</span><span class="tok-o">=</span>%RULE_NAME%<span class="tok-w"> </span><span class="tok-nv">dir</span><span class="tok-o">=</span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-nv">action</span><span class="tok-o">=</span>allow<span class="tok-w"> </span><span class="tok-nv">protocol</span><span class="tok-o">=</span>TCP<span class="tok-w"> </span><span class="tok-nv">localport</span><span class="tok-o">=</span>%PORT%<span class="tok-w"> </span><span class="tok-nv">description</span><span class="tok-o">=</span><span class="tok-s2">&quot;Allow HongFeng Data Service&quot;</span><span class="tok-w"> </span>&gt;nul<span class="tok-w"> </span><span class="tok-m">2</span>&gt;<span class="tok-p">&amp;</span><span class="tok-m">1</span>
+
+<span class="tok-k">if</span><span class="tok-w"> </span>%errorlevel%<span class="tok-w"> </span>equ<span class="tok-w"> </span><span class="tok-m">0</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w">      </span>防火墙规则已配置，准许局域网通过<span class="tok-w"> </span>%PORT%<span class="tok-w"> </span>端口访问。
+<span class="tok-o">)</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w">      </span><span class="tok-o">[</span>警告<span class="tok-o">]</span><span class="tok-w"> </span>防火墙配置失败，请确保没有第三方安全软件拦截。
+<span class="tok-o">)</span>
+
+::<span class="tok-w"> </span><span class="tok-m">3</span>.<span class="tok-w"> </span>注册并启动<span class="tok-w"> </span>Windows<span class="tok-w"> </span>服务<span class="tok-w"> </span><span class="tok-o">(</span>WinSW<span class="tok-o">)</span>
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span><span class="tok-m">3</span>/4<span class="tok-o">]</span><span class="tok-w"> </span>正在注册并启动后台服务...
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">SERVICE_EXE</span><span class="tok-o">=</span>hongfeng-data-service.exe
+
+<span class="tok-k">if</span><span class="tok-w"> </span>exist<span class="tok-w"> </span><span class="tok-s2">&quot;%SERVICE_EXE%&quot;</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span>::<span class="tok-w"> </span>先停掉并卸载旧服务（如果存在），确保重新覆盖安装
+<span class="tok-w">    </span>%SERVICE_EXE%<span class="tok-w"> </span>stop<span class="tok-w"> </span>&gt;nul<span class="tok-w"> </span><span class="tok-m">2</span>&gt;<span class="tok-p">&amp;</span><span class="tok-m">1</span>
+<span class="tok-w">    </span>%SERVICE_EXE%<span class="tok-w"> </span>uninstall<span class="tok-w"> </span>&gt;nul<span class="tok-w"> </span><span class="tok-m">2</span>&gt;<span class="tok-p">&amp;</span><span class="tok-m">1</span>
+
+<span class="tok-w">    </span>::<span class="tok-w"> </span>安装并启动
+<span class="tok-w">    </span>%SERVICE_EXE%<span class="tok-w"> </span>install
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span>!errorlevel!<span class="tok-w"> </span>equ<span class="tok-w"> </span><span class="tok-m">0</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">        </span>%SERVICE_EXE%<span class="tok-w"> </span>start
+<span class="tok-w">        </span><span class="tok-nb">echo</span><span class="tok-w">      </span>后台服务已成功注册并启动。
+<span class="tok-w">    </span><span class="tok-o">)</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">        </span><span class="tok-nb">echo</span><span class="tok-w">      </span><span class="tok-o">[</span>错误<span class="tok-o">]</span><span class="tok-w"> </span>服务安装失败，请检查<span class="tok-w"> </span>XML<span class="tok-w"> </span>配置文件是否正确。
+<span class="tok-w">    </span><span class="tok-o">)</span>
+<span class="tok-o">)</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span>错误<span class="tok-o">]</span><span class="tok-w"> </span>未找到服务程序<span class="tok-w"> </span>%SERVICE_EXE%，请检查文件名是否正确。
+<span class="tok-o">)</span>
+
+::<span class="tok-w"> </span><span class="tok-m">4</span>.<span class="tok-w"> </span>自动获取本机局域网<span class="tok-w"> </span>IP<span class="tok-w"> </span>地址
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span><span class="tok-m">4</span>/4<span class="tok-o">]</span><span class="tok-w"> </span>正在生成访问报告...
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-s2">&quot;IP=127.0.0.1&quot;</span>
+::<span class="tok-w"> </span>查找路由表中默认网关所在的活动<span class="tok-w"> </span>IP
+<span class="tok-k">for</span><span class="tok-w"> </span>/f<span class="tok-w"> </span><span class="tok-s2">&quot;tokens=4&quot;</span><span class="tok-w"> </span>%%a<span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-o">(</span><span class="tok-s1">&#39;route print ^| findstr &quot;\&lt;0.0.0.0\&gt;&quot;&#39;</span><span class="tok-o">)</span><span class="tok-w"> </span><span class="tok-k">do</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span><span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-s2">&quot;IP=%%a&quot;</span>
+<span class="tok-o">)</span>
+
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">==========================================</span>
+<span class="tok-nb">echo</span><span class="tok-w">    </span>系统部署成功！
+<span class="tok-nb">echo</span><span class="tok-w">    </span>您可以关闭此窗口，系统将在后台持续运行。
+echo.
+<span class="tok-nb">echo</span><span class="tok-w">    </span>本地访问地址:<span class="tok-w"> </span>http://localhost:%PORT%
+<span class="tok-nb">echo</span><span class="tok-w">    </span>局域网访问地址:<span class="tok-w"> </span>http://%IP%:%PORT%
+echo.
+<span class="tok-nb">echo</span><span class="tok-w">    </span>如需停止服务，请运行:<span class="tok-w"> </span>%SERVICE_EXE%<span class="tok-w"> </span>stop
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">==========================================</span>
+pause</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_5_部署步骤你的操作">5. 部署步骤（你的操作）</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>准备环境</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>下载 [PostgreSQL Binary Zip](<a href="https://www.enterprisedb.com/download-postgresql-binaries" class="bare">https://www.enterprisedb.com/download-postgresql-binaries</a>) 并解压到 <code>pgsql</code>。</p>
+</li>
+<li>
+<p>下载 [Node.js Windows Zip](<a href="https://nodejs.org/en/download/prebuilt-binaries" class="bare">https://nodejs.org/en/download/prebuilt-binaries</a>) 并解压到 <code>node</code>。</p>
+</li>
+<li>
+<p>下载 [WinSW-x64.exe](<a href="https://github.com/winsw/winsw/releases" class="bare">https://github.com/winsw/winsw/releases</a>) 并重命名为 hongfeng-data-serveice.exe</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>配置代码</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>确保你的 Express(基于node.js的项目) 代码中</p>
+<div class="ulist">
+<ul>
+<li>
+<p>PostgreSQL 的连接字符串指向 <code>localhost:5432</code></p>
+</li>
+<li>
+<p>用户名为 <code>postgres</code></p>
+</li>
+<li>
+<p>密码为空（因为 <code>initdb</code> 时用了 <code>-A trust</code>，如需密码可另行配置）</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+前面已经设置密码为 <code>naonao</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>打包</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>使用 7-Zip 或 WinRAR 将整个 <code>DeployPackage</code> 文件夹压缩。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>发送给客户做单机部署</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_6_交付给客户的操作说明">6. 交付给客户的操作说明</h3>
+<div class="paragraph">
+<p><strong>尊敬的客户，请按以下步骤部署系统：</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>解压压缩包到任意目录（路径请勿包含中文或空格）。</p>
+</li>
+<li>
+<p>进入文件夹，找到 <strong><code>一键启动服务.bat</code></strong>。</p>
+</li>
+<li>
+<p><strong>右键点击</strong>该文件，选择 <strong>“以管理员身份运行”</strong>。</p>
+</li>
+<li>
+<p>等待黑色窗口显示“系统部署成功”后，即可关闭窗口。</p>
+</li>
+<li>
+<p>打开浏览器，访问 <code><a href="http://localhost:8019" class="bare">http://localhost:8019</a></code> 即可使用。</p>
+</li>
+<li>
+<p>确认开机启动生效方法</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>查看操作系统服务中是否有 「hongfeng data Service」 正在运行，且启动类型为自动，说明开机自启已经注册成功。</p>
+</li>
+<li>
+<p>重启电脑，浏览器能访问 <code><a href="http://localhost:8019" class="bare">http://localhost:8019</a></code> 说明开机自启生效</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_如何停止服务或卸载服务">7. 如何停止服务或卸载服务？</h3>
+<div class="paragraph">
+<p>如果后续需要停止服务，在命令行运行：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>hongfeng-data-service.exe stop</code> (停止运行)</p>
+</li>
+<li>
+<p><code>hongfeng-data-service.exe uninstall</code> (从系统中彻底删除服务)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_一键备份数据库_bat">8. 一键备份数据库.bat</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>@echo<span class="tok-w"> </span>off
+setlocal<span class="tok-w"> </span>enabledelayedexpansion
+::<span class="tok-w"> </span>切换到当前目录
+<span class="tok-nb">cd</span><span class="tok-w"> </span>/d<span class="tok-w"> </span><span class="tok-s2">&quot;%~dp0&quot;</span>
+
+::<span class="tok-w"> </span>设置编码为中文
+chcp<span class="tok-w"> </span><span class="tok-m">936</span><span class="tok-w"> </span>&gt;nul
+
+title<span class="tok-w"> </span>红枫数据服务<span class="tok-w"> </span>-<span class="tok-w"> </span>数据库备份工具
+
+::<span class="tok-w"> </span><span class="tok-o">=================</span><span class="tok-nv">配置区</span><span class="tok-o">==================</span>
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">PG_DUMP_EXE</span><span class="tok-o">=</span><span class="tok-s2">&quot;%~dp0pgsql\bin\pg_dump.exe&quot;</span>
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">BACKUP_DIR</span><span class="tok-o">=</span><span class="tok-s2">&quot;%~dp0backups&quot;</span>
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">DB_USER</span><span class="tok-o">=</span>postgres
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">DB_NAME</span><span class="tok-o">=</span>postgres
+::<span class="tok-w"> </span>设置导出密码的环境变量（防止弹出输入密码提示）
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">PGPASSWORD</span><span class="tok-o">=</span>naonao
+::<span class="tok-w"> </span><span class="tok-o">=========================================</span>
+
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">==========================================</span>
+<span class="tok-nb">echo</span><span class="tok-w">    </span>正在启动数据库备份，请稍候...
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">==========================================</span>
+
+::<span class="tok-w"> </span><span class="tok-m">1</span>.<span class="tok-w"> </span>创建备份文件夹
+<span class="tok-k">if</span><span class="tok-w"> </span>not<span class="tok-w"> </span>exist<span class="tok-w"> </span>%BACKUP_DIR%<span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span>mkdir<span class="tok-w"> </span>%BACKUP_DIR%
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w"> </span>已创建备份目录:<span class="tok-w"> </span>%BACKUP_DIR%
+<span class="tok-o">)</span>
+
+::<span class="tok-w"> </span><span class="tok-m">2</span>.<span class="tok-w"> </span>生成时间戳文件名<span class="tok-w"> </span><span class="tok-o">(</span>格式:<span class="tok-w"> </span>YYYYMMDD_HHMM<span class="tok-o">)</span>
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">TIMESTAMP</span><span class="tok-o">=</span>%date:~0,4%%date:~5,2%%date:~8,2%_%time:~0,2%%time:~3,2%
+::<span class="tok-w"> </span>处理小时是个位数时可能出现的空格情况
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">TIMESTAMP</span><span class="tok-o">=</span>%TIMESTAMP:<span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-m">0</span>%
+
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">FILE_NAME</span><span class="tok-o">=</span>db_backup_%TIMESTAMP%.sql
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">FULL_PATH</span><span class="tok-o">=</span>%BACKUP_DIR%<span class="tok-se">\%</span>FILE_NAME%
+
+::<span class="tok-w"> </span><span class="tok-m">3</span>.<span class="tok-w"> </span>执行备份
+<span class="tok-nb">echo</span><span class="tok-w"> </span>正在导出数据到:<span class="tok-w"> </span>%FILE_NAME%...
+%PG_DUMP_EXE%<span class="tok-w"> </span>-U<span class="tok-w"> </span>%DB_USER%<span class="tok-w"> </span>-h<span class="tok-w"> </span>localhost<span class="tok-w"> </span>-p<span class="tok-w"> </span><span class="tok-m">5432</span><span class="tok-w"> </span>-F<span class="tok-w"> </span>p<span class="tok-w"> </span>-f<span class="tok-w"> </span>%FULL_PATH%<span class="tok-w"> </span>%DB_NAME%
+
+<span class="tok-k">if</span><span class="tok-w"> </span>%errorlevel%<span class="tok-w"> </span>equ<span class="tok-w"> </span><span class="tok-m">0</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span>echo.
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">==========================================</span>
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w">    </span>备份成功！
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w">    </span>文件位置:<span class="tok-w"> </span>%FULL_PATH%
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">==========================================</span>
+<span class="tok-o">)</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-o">(</span>
+<span class="tok-w">    </span>echo.
+<span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span>错误<span class="tok-o">]</span><span class="tok-w"> </span>备份失败！请检查数据库是否正在运行。
+<span class="tok-o">)</span>
+
+::<span class="tok-w"> </span>清除密码环境变量
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">PGPASSWORD</span><span class="tok-o">=</span>
+pause</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_一键停止并卸载服务_bat">9. 一键停止并卸载服务.bat</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">@echo off</span>
+<span class="tok-go">setlocal enabledelayedexpansion</span>
+<span class="tok-go">:: 强制切换到当前脚本所在目录</span>
+<span class="tok-go">cd /d &quot;%~dp0&quot;</span>
+
+<span class="tok-go">:: 设置 CMD 窗口编码为简体中文</span>
+<span class="tok-go">chcp 936 &gt;nul</span>
+
+<span class="tok-go">title 红枫数据服务 - 卸载工具</span>
+
+<span class="tok-go">echo ==========================================</span>
+<span class="tok-go">echo    警告：正在准备停止并卸载系统服务</span>
+<span class="tok-go">echo ==========================================</span>
+
+<span class="tok-go">:: 0. 检查管理员权限</span>
+<span class="tok-go">net session &gt;nul 2&gt;&amp;1</span>
+<span class="tok-go">if %errorLevel% neq 0 (</span>
+<span class="tok-go">    echo [错误] 请右键点击此脚本，选择“以管理员身份运行”！</span>
+<span class="tok-go">    pause</span>
+<span class="tok-go">    exit</span>
+<span class="tok-go">)</span>
+
+<span class="tok-go">set SERVICE_EXE=hongfeng-data-service.exe</span>
+<span class="tok-go">set RULE_NAME=&quot;HongFeng_Service_Port&quot;</span>
+
+<span class="tok-go">:: 1. 停止并卸载 Windows 服务</span>
+<span class="tok-go">echo [1/3] 正在停止后台进程并注销服务...</span>
+<span class="tok-go">if exist &quot;%SERVICE_EXE%&quot; (</span>
+<span class="tok-gp">    %</span>SERVICE_EXE%<span class="tok-w"> </span>stop<span class="tok-w"> </span>&gt;nul<span class="tok-w"> </span><span class="tok-m">2</span>&gt;<span class="tok-p">&amp;</span><span class="tok-m">1</span>
+<span class="tok-gp">    %</span>SERVICE_EXE%<span class="tok-w"> </span>uninstall
+<span class="tok-go">    if !errorlevel! equ 0 (</span>
+<span class="tok-go">        echo      服务已成功从系统中移除。</span>
+<span class="tok-go">    ) else (</span>
+<span class="tok-go">        echo      [提示] 服务可能未在运行或已被移除。</span>
+<span class="tok-go">    )</span>
+<span class="tok-go">) else (</span>
+<span class="tok-go">    echo [错误] 未找到主程序 %SERVICE_EXE%。</span>
+<span class="tok-go">)</span>
+
+<span class="tok-go">:: 2. 彻底关闭残留的 PostgreSQL 进程 (可选，防残留)</span>
+<span class="tok-go">echo [2/3] 正在清理数据库残留进程...</span>
+<span class="tok-go">taskkill /f /im postgres.exe &gt;nul 2&gt;&amp;1</span>
+
+<span class="tok-go">:: 3. 清理防火墙规则</span>
+<span class="tok-go">echo [3/3] 正在移除防火墙开放端口...</span>
+<span class="tok-go">netsh advfirewall firewall delete rule name=%RULE_NAME% &gt;nul 2&gt;&amp;1</span>
+<span class="tok-go">if %errorlevel% equ 0 (</span>
+<span class="tok-go">    echo      防火墙规则已清理。</span>
+<span class="tok-go">)</span>
+
+<span class="tok-go">echo ==========================================</span>
+<span class="tok-go">echo    卸载完成！</span>
+<span class="tok-go">echo    注意：数据库数据文件 (data 目录) 已保留，未被删除。</span>
+<span class="tok-go">echo ==========================================</span>
+<span class="tok-go">pause</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-15 17:03:38 +0800
+Last updated 2026-02-15 17:32:36 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

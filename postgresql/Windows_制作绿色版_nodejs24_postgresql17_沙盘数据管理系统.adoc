@@ -332,3 +332,335 @@ host    all             all             127.0.0.1/32            scram-sha-256
 
 IMPORTANT: 设置好密码后，你的项目配置文件（如 `.env`）里记得也要同步更新数据库密码。
 
+== 2026-01-30 在 windows 下绿色部署 node.js + postgresql
+这份文档将为你整理出一套完整的 **绿色版 Node.js + PostgreSQL + WinSW** 部署方案。你可以根据这份文档直接配置并打包发给客户。
+
+该方案实现了：**免安装、零配置（对于客户）、开机自启、崩溃自动重启、后台静默运行。**
+
+=== 1. 目录结构预览
+在 windows 开发机上，创建一个名为 `DeployPackage` 的文件夹，结构如下：
++
+[source,console]
+----
+DeployPackage/
+├── pgsql/                      # PostgreSQL 15 绿色版解压目录
+├── node/                       # Node.js 绿色版解压目录
+├── app/                        # 你的 Express 项目代码
+│   ├── node_modules/           # 预先执行过 npm install 的包
+│   └── backend/index.js        # 入口文件
+├── data/                       # (空文件夹) 用于存放数据库数据
+├── logs/                       # (空文件夹) 用于存放运行日志
+├── hongfeng-data-service.exe   # 重命名后的 WinSW-x64.exe
+├── hongfeng-data-service.xml   # WinSW 配置文件
+├── temp_pwd.txt                # 默认密码
+├── start_server.bat            # 核心启动脚本
+└── 一键启动服务.bat              # 客户运行的脚本
+----
+
+=== 2. 核心启动脚本 (`start_server.bat`)
+这个脚本负责按顺序拉起 postgresql & Node.js。
+
+[source,shell]
+----
+@echo off
+set PROJECT_DIR=%~dp0
+set PG_PATH=%PROJECT_DIR%pgsql\bin
+set DATA_PATH=%PROJECT_DIR%data
+set NODE_PATH=%PROJECT_DIR%node
+
+echo [1/2] 正在启动 PostgreSQL...
+:: 启动数据库进程
+"%PG_PATH%\pg_ctl.exe" -D "%DATA_PATH%" -l "%PROJECT_DIR%logs\pgsql.log" start
+
+:: 等待 5 秒确保数据库完全就绪
+timeout /t 5 /nobreak > nul
+
+echo [2/2] 正在启动 Node.js 服务...
+:: 临时设置环境变量
+set PATH=%NODE_PATH%;%PATH%
+:: 验证一下是否使用了自已的 node（可选）
+node -v >> "%PROJECT_DIR%logs\startup_debug.log"
+
+cd /d "%PROJECT_DIR%app\backend"
+:: 启动你的程序
+node app.js
+----
+
+=== 3. WinSW 配置文件 (`hongfeng-data-service.xml`)
+注意文件名必须与 `.exe` 文件名严格一致。
+
+[source,xml]
+----
+<service>
+  <id>ExpressAppService</id>
+  <name>HongFeng data Service</name>
+  <description>Node.js Express + PostgreSQL 17 绿色版后台服务</description>
+  
+  <executable>%BASE%\start_server.bat</executable>
+  <workingdirectory>%BASE%</workingdirectory>
+  
+  <onfailure action="restart" delay="30 sec"/>
+  
+  <log mode="roll">
+    <logpath>%BASE%\logs</logpath>
+  </log>
+</service>
+----
+
+=== 4. 客户一键启动脚本 (`一键启动服务.bat`)
+[source,shell]
+----
+@echo off
+setlocal enabledelayedexpansion
+:: 强制切换到当前脚本所在目录
+cd /d "%~dp0"
+
+:: 设置 CMD 窗口编码为简体中文，防止显示乱码
+chcp 936 >nul
+
+title 红丰数据服务 - 一键部署工具
+
+echo ==========================================
+echo    正在初始化系统组件，请稍候...
+echo ==========================================
+
+:: 0. 检查管理员权限
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [错误] 请右键点击此脚本，选择“以管理员身份运行”！
+    pause
+    exit
+)
+
+:: 1. 初始化数据库 (仅在首次安装时执行)
+if not exist "data\PG_VERSION" (
+    echo [1/4] 正在首次初始化数据库...
+    if exist "temp_pwd.txt" (
+        :: 使用指定的密码文件初始化
+        "pgsql\bin\initdb.exe" -D "data" -U postgres -A scram-sha-256 --pwfile="temp_pwd.txt"
+        echo 数据库初始化完成。
+        :: 根据你的需求，初始化完后可以删除密码文件以保安全
+        :: del temp_pwd.txt
+    ) else (
+        echo [错误] 根目录下未找到 temp_pwd.txt (内需包含初始密码 naonao)
+        pause
+        exit
+    )
+) else (
+    echo [1/4] 数据库目录已存在，跳过初始化。
+)
+
+:: 2. 配置防火墙规则 (允许 8019 端口入站)
+set PORT=8019
+set RULE_NAME="HongFeng_Service_Port"
+
+echo [2/4] 正在配置防火墙规则...
+:: 先尝试删除可能存在的旧规则，确保规则名唯一且配置最新
+netsh advfirewall firewall delete rule name=%RULE_NAME% >nul 2>&1
+:: 添加新规则：针对 8019 端口放行所有 TCP 流量
+netsh advfirewall firewall add rule name=%RULE_NAME% dir=in action=allow protocol=TCP localport=%PORT% description="Allow HongFeng Data Service" >nul 2>&1
+
+if %errorlevel% equ 0 (
+    echo      防火墙规则已配置，准许局域网通过 %PORT% 端口访问。
+) else (
+    echo      [警告] 防火墙配置失败，请确保没有第三方安全软件拦截。
+)
+
+:: 3. 注册并启动 Windows 服务 (WinSW)
+echo [3/4] 正在注册并启动后台服务...
+set SERVICE_EXE=hongfeng-data-service.exe
+
+if exist "%SERVICE_EXE%" (
+    :: 先停掉并卸载旧服务（如果存在），确保重新覆盖安装
+    %SERVICE_EXE% stop >nul 2>&1
+    %SERVICE_EXE% uninstall >nul 2>&1
+    
+    :: 安装并启动
+    %SERVICE_EXE% install
+    if !errorlevel! equ 0 (
+        %SERVICE_EXE% start
+        echo      后台服务已成功注册并启动。
+    ) else (
+        echo      [错误] 服务安装失败，请检查 XML 配置文件是否正确。
+    )
+) else (
+    echo [错误] 未找到服务程序 %SERVICE_EXE%，请检查文件名是否正确。
+)
+
+:: 4. 自动获取本机局域网 IP 地址
+echo [4/4] 正在生成访问报告...
+set "IP=127.0.0.1"
+:: 查找路由表中默认网关所在的活动 IP
+for /f "tokens=4" %%a in ('route print ^| findstr "\<0.0.0.0\>"') do (
+    set "IP=%%a"
+)
+
+echo ==========================================
+echo    系统部署成功！
+echo    您可以关闭此窗口，系统将在后台持续运行。
+echo.
+echo    本地访问地址: http://localhost:%PORT%
+echo    局域网访问地址: http://%IP%:%PORT%
+echo.
+echo    如需停止服务，请运行: %SERVICE_EXE% stop
+echo ==========================================
+pause
+----
+
+=== 5. 部署步骤（你的操作）
+1. **准备环境**：
+* 下载 [PostgreSQL Binary Zip](https://www.enterprisedb.com/download-postgresql-binaries) 并解压到 `pgsql`。
+* 下载 [Node.js Windows Zip](https://nodejs.org/en/download/prebuilt-binaries) 并解压到 `node`。
+* 下载 [WinSW-x64.exe](https://github.com/winsw/winsw/releases) 并重命名为 hongfeng-data-serveice.exe
+
+2. **配置代码**：
+* 确保你的 Express(基于node.js的项目) 代码中
+** PostgreSQL 的连接字符串指向 `localhost:5432`
+** 用户名为 `postgres`
+** 密码为空（因为 `initdb` 时用了 `-A trust`，如需密码可另行配置）
+
+IMPORTANT: 前面已经设置密码为 `naonao`
+
+3. **打包**：
+* 使用 7-Zip 或 WinRAR 将整个 `DeployPackage` 文件夹压缩。
+
+4. 发送给客户做单机部署
+
+=== 6. 交付给客户的操作说明
+**尊敬的客户，请按以下步骤部署系统：**
+
+1. 解压压缩包到任意目录（路径请勿包含中文或空格）。
+2. 进入文件夹，找到 **`一键启动服务.bat`**。
+3. **右键点击**该文件，选择 **“以管理员身份运行”**。
+4. 等待黑色窗口显示“系统部署成功”后，即可关闭窗口。
+5. 打开浏览器，访问 `http://localhost:8019` 即可使用。
+6. 确认开机启动生效方法
+.. 查看操作系统服务中是否有 「hongfeng data Service」 正在运行，且启动类型为自动，说明开机自启已经注册成功。
+.. 重启电脑，浏览器能访问 `http://localhost:8019` 说明开机自启生效
+
+=== 7. 如何停止服务或卸载服务？
+如果后续需要停止服务，在命令行运行：
+
+* `hongfeng-data-service.exe stop` (停止运行)
+* `hongfeng-data-service.exe uninstall` (从系统中彻底删除服务)
+
+=== 8. 一键备份数据库.bat
+[source,shell]
+----
+@echo off
+setlocal enabledelayedexpansion
+:: 切换到当前目录
+cd /d "%~dp0"
+
+:: 设置编码为中文
+chcp 936 >nul
+
+title 红枫数据服务 - 数据库备份工具
+
+:: =================配置区==================
+set PG_DUMP_EXE="%~dp0pgsql\bin\pg_dump.exe"
+set BACKUP_DIR="%~dp0backups"
+set DB_USER=postgres
+set DB_NAME=postgres
+:: 设置导出密码的环境变量（防止弹出输入密码提示）
+set PGPASSWORD=naonao
+:: =========================================
+
+echo ==========================================
+echo    正在启动数据库备份，请稍候...
+echo ==========================================
+
+:: 1. 创建备份文件夹
+if not exist %BACKUP_DIR% (
+    mkdir %BACKUP_DIR%
+    echo 已创建备份目录: %BACKUP_DIR%
+)
+
+:: 2. 生成时间戳文件名 (格式: YYYYMMDD_HHMM)
+set TIMESTAMP=%date:~0,4%%date:~5,2%%date:~8,2%_%time:~0,2%%time:~3,2%
+:: 处理小时是个位数时可能出现的空格情况
+set TIMESTAMP=%TIMESTAMP: =0%
+
+set FILE_NAME=db_backup_%TIMESTAMP%.sql
+set FULL_PATH=%BACKUP_DIR%\%FILE_NAME%
+
+:: 3. 执行备份
+echo 正在导出数据到: %FILE_NAME%...
+%PG_DUMP_EXE% -U %DB_USER% -h localhost -p 5432 -F p -f %FULL_PATH% %DB_NAME%
+
+if %errorlevel% equ 0 (
+    echo.
+    echo ==========================================
+    echo    备份成功！
+    echo    文件位置: %FULL_PATH%
+    echo ==========================================
+) else (
+    echo.
+    echo [错误] 备份失败！请检查数据库是否正在运行。
+)
+
+:: 清除密码环境变量
+set PGPASSWORD=
+pause
+----
+
+=== 9. 一键停止并卸载服务.bat
+[source,console]
+----
+@echo off
+setlocal enabledelayedexpansion
+:: 强制切换到当前脚本所在目录
+cd /d "%~dp0"
+
+:: 设置 CMD 窗口编码为简体中文
+chcp 936 >nul
+
+title 红枫数据服务 - 卸载工具
+
+echo ==========================================
+echo    警告：正在准备停止并卸载系统服务
+echo ==========================================
+
+:: 0. 检查管理员权限
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [错误] 请右键点击此脚本，选择“以管理员身份运行”！
+    pause
+    exit
+)
+
+set SERVICE_EXE=hongfeng-data-service.exe
+set RULE_NAME="HongFeng_Service_Port"
+
+:: 1. 停止并卸载 Windows 服务
+echo [1/3] 正在停止后台进程并注销服务...
+if exist "%SERVICE_EXE%" (
+    %SERVICE_EXE% stop >nul 2>&1
+    %SERVICE_EXE% uninstall
+    if !errorlevel! equ 0 (
+        echo      服务已成功从系统中移除。
+    ) else (
+        echo      [提示] 服务可能未在运行或已被移除。
+    )
+) else (
+    echo [错误] 未找到主程序 %SERVICE_EXE%。
+)
+
+:: 2. 彻底关闭残留的 PostgreSQL 进程 (可选，防残留)
+echo [2/3] 正在清理数据库残留进程...
+taskkill /f /im postgres.exe >nul 2>&1
+
+:: 3. 清理防火墙规则
+echo [3/3] 正在移除防火墙开放端口...
+netsh advfirewall firewall delete rule name=%RULE_NAME% >nul 2>&1
+if %errorlevel% equ 0 (
+    echo      防火墙规则已清理。
+)
+
+echo ==========================================
+echo    卸载完成！
+echo    注意：数据库数据文件 (data 目录) 已保留，未被删除。
+echo ==========================================
+pause
+----
+
