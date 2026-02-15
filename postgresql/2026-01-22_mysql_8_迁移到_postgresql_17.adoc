@@ -1,0 +1,164 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+
+= 2026-01-22 mysql_8 迁移到 postgresql_17
+
+++++
+<button id="toggleButton">目录开关</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== step1: export data from mysql:8 to mysql:5.7
+. 导出 mysql8 中的数据
+* mysqldump -h your_mysql_server_ip -u root -p database_name > export_file_name.sql
+
+
+. 转换排序编码（mysql5.7 不认 mysql8 的排序）
+* sed 's/utf8mb4_0900_ai_ci/utf8mb4_general_ci/g' export_file_name.sql > export_file_name_fixed.sql
+* 要使用 mysql5.7 是因为 mysql8 不支持 pgloader
+
+
+. 启动一个旧版本的 MySQL，它天然支持 #pgloader# 的所有协议（会自动去 pull 镜像）
++
+[source,console]
+----
+podman run --name mysql-bridge \
+  -e MYSQL_ROOT_PASSWORD=mypass \
+  -p 3307:3306 \
+  -d docker.m.daocloud.io/library/mysql:5.7
+----
+
+
+. 等几秒钟容器启动后，创建 database 并导入数据
++
+[source,console]
+----
+mysql -h 127.0.0.1 -P 3307 -u root -pmypass -e "CREATE DATABASE database_name;"
+mysql -h 127.0.0.1 -P 3307 -u root -pmypass data_management < export_file_name_fixed.sql
+----
+
+== step2: prepare database postgresql:17
+. 下载 postgresql 17 image
++
+[source,console]
+----
+podman pull docker.m.daocloud.io/library/postgres:17
+----
+
+
+. 查看 image
++
+[source,console]
+----
+> podman image list
+REPOSITORY                             TAG         IMAGE ID      CREATED      SIZE
+docker.m.daocloud.io/library/postgres  17          1268669160cb  9 days ago   461 MB
+docker.m.daocloud.io/library/node      22-slim     f9834cd4819c  3 weeks ago  232 MB
+----
+
+
+. 运行 postgresql 容器（数据库密码是 naonao）
++
+[source,console]
+----
+podman run --name pg17-server \
+  -e POSTGRES_PASSWORD=naonao \
+  -p 5432:5432 \
+  -v pgdata_vol:/var/lib/postgresql/data:Z \
+  -d docker.m.daocloud.io/library/postgres:17
+----
++
+[TIP]
+====
+[loweralpha]
+1. 如果想确认这个 pgdata_vol 到底在宿主机的哪个物理位置，可以运行： +
+podman volume inspect pgdata_vol
+
+2. pgdata_vol 是自己起的卷名，查看目前电脑上已经有哪些命名卷了，可以运行： +
+podman volume ls
+
+3. :Z	SELinux 选项	授权证明，允许读写（在 windows10/11 或者 macos 上可以不加 Z 选项）
+====
+
+
+. 查看容器已经在运行了
++
+[source,console]
+----
+> podman container list
+CONTAINER ID  IMAGE                                     COMMAND     CREATED        STATUS        PORTS                   NAMES
+eb26e62fd368  docker.m.daocloud.io/library/postgres:17  postgres    7 seconds ago  Up 7 seconds  0.0.0.0:5432->5432/tcp  pg17-server
+----
+
+. 创建数据库 data_management
++
+[source,console]
+----
+podman exec -it pg17-server psql -U postgres -c "CREATE DATABASE data_management;"
+----
+
+== step3: import data from mysql:5.7 to postgresql:17
+. 创建文件 migrate.load
++
+[source,console]
+----
+LOAD DATABASE
+     FROM mysql://root:mypass@127.0.0.1:3307/data_management
+     INTO postgresql://postgres:naonao@localhost:5432/data_management
+
+ WITH include drop, create tables, create indexes, reset sequences, foreign keys
+
+  SET maintenance_work_mem to '128MB', 
+      work_mem to '12MB'
+
+ CAST 
+      -- 1. 强制将所有 tinyint(x) 转换为 boolean，并丢弃修饰符
+      type tinyint to boolean drop typemod using tinyint-to-boolean,
+      
+      -- 2. 针对这种已经变成了 boolean(4) 的情况，显式拦截 boolean 类型并丢弃修饰符
+      type boolean to boolean drop typemod,
+      
+      -- 3. 时间类型转换
+      type datetime to timestamptz drop default;
+----
+
+
+. 运行 pgloader 容器执行迁移
++
+.在终端中切换到 migrate.load 所在的目录，运行以下命令
+[source,console]
+----
+pgloader migrate.load
+----
++
+TIP: 在 macos 中安装 pgloader：`brew install pgloader`
+
+. 查看 postgresql 中的数据是否正确
+

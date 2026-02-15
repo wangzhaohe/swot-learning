@@ -7,6 +7,9 @@
 <find_panel_settings/>
 <vnodes>
 <v t="swot.20251221100443.1"><vh>Calender</vh>
+<v t="swot.20260215081941.1"><vh>小日志</vh>
+<v t="swot.20260214163843.1"><vh>2026-02-14 gitlab.cn 极狐 -&gt; 试了 asciidoc 渲染，一般</vh></v>
+</v>
 <v t="swot.20260122203347.1"><vh>2025</vh>
 <v t="swot.20260207194011.1"><vh>History document</vh>
 <v t="swot.20251221100451.1"><vh>2025-12-21 qwen-code -&gt; cli -&gt; 目前 aider 是我的主力</vh></v>
@@ -34,10 +37,8 @@
 <v t="swot.20260201184500.1"><vh>2026-02-01 opencode -&gt; 不好用 -&gt; 换 aider 结对编程助手</vh></v>
 <v t="swot.20260203105212.1"><vh>2026-02-03 aider 配置 mcp -&gt; 官方还不支持呢</vh></v>
 <v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
-<v t="swot.20260214163843.1"><vh>2026-02-14 gitlab.cn 极狐 -&gt; 试了 asciidoc 渲染，一般</vh></v>
 </v>
 <v t="swot.20260129095856.1"><vh>windows 绿色版本安装 postgresql &amp; node.js &amp; express -&gt; 绿色动力沙盘数据管理系统</vh>
-<v t="swot.20260122110938.1"><vh>2026-01-22 mysql_8 迁移到 postgresql_17</vh></v>
 <v t="swot.20260125083042.1"><vh>2026-01-25 从 podman postgresql17 迁移数据到 windows 绿色包环境</vh></v>
 <v t="swot.20260129095824.1"><vh>2026-01-29 在 windows 下生成 node_modules 目录</vh></v>
 <v t="swot.20260129112711.1"><vh>2026-01-29 在 windows 下设置 postgresql 密码</vh></v>
@@ -69,6 +70,15 @@
 <v t="swot.20250927110835.1"><vh>Redis</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 <v t="swot.20260213123722.1"><vh>五笔86 -&gt; 70后的最爱</vh></v>
+</v>
+</v>
+<v t="swot.20260215082206.1"><vh>@path postgresql</vh>
+<v t="swot.20260215101225.1"><vh>@adoc 2026-01-22_mysql_8_迁移到_postgresql_17.adoc</vh>
+<v t="swot.20260215082625.1"><vh>2026-01-22 mysql:8 迁移到 postgresql:17</vh>
+<v t="swot.20260215094854.1"><vh>step1: export data from mysql:8 to mysql:5.7</vh></v>
+<v t="swot.20260215095103.1"><vh>step2: prepare database postgresql:17</vh></v>
+<v t="swot.20260215095256.1"><vh>step3: import data from mysql:5.7 to postgresql:17</vh></v>
+</v>
 </v>
 </v>
 <v t="swot.20260213134825.1"><vh>@path AI</vh>
@@ -12032,86 +12042,6 @@ Made with ♥︎ in London
 
 该方案实现了：**免安装、零配置（对于客户）、开机自启、崩溃自动重启、后台静默运行。**
 </t>
-<t tx="swot.20260122110938.1">. 导出 mysql 中的数据
-mysqldump -h 182.92.131.108 -u root -p data_management &gt; data_dump.sql
-
-. 转换排序编码（mysql5.7 不认 mysql8 的排序）
-sed 's/utf8mb4_0900_ai_ci/utf8mb4_general_ci/g' data_dump.sql &gt; data_dump_fixed.sql
-
-. 启动一个旧版本的 MySQL，它天然支持 pgloader 的所有协议
-```
-podman run --name mysql-bridge \
-  -e MYSQL_ROOT_PASSWORD=mypass \
-  -p 3307:3306 \
-  -d docker.m.daocloud.io/library/mysql:5.7
-```
-
-. 等几秒钟容器启动后
-```
-mysql -h 127.0.0.1 -P 3307 -u root -pmypass -e "CREATE DATABASE data_management;"
-mysql -h 127.0.0.1 -P 3307 -u root -pmypass data_management &lt; data_dump_fixed.sql
-```
----
-
-. 下载 postgresql 17 image
-podman pull docker.m.daocloud.io/library/postgres:17
-
-
-. 查看 image
-&gt; podman image list
-REPOSITORY                             TAG         IMAGE ID      CREATED      SIZE
-docker.m.daocloud.io/library/postgres  17          1268669160cb  9 days ago   461 MB
-docker.m.daocloud.io/library/node      22-slim     f9834cd4819c  3 weeks ago  232 MB
-
-
-. 运行 postgresql 容器，数据库密码是 naonao
-podman run --name pg17-server \
-  -e POSTGRES_PASSWORD=naonao \
-  -p 5432:5432 \
-  -v pgdata_vol:/var/lib/postgresql/data:Z \
-  -d docker.m.daocloud.io/library/postgres:17
-
-
-. 查看容器已经在运行了
-&gt; podman container list
-CONTAINER ID  IMAGE                                     COMMAND     CREATED        STATUS        PORTS                   NAMES
-eb26e62fd368  docker.m.daocloud.io/library/postgres:17  postgres    7 seconds ago  Up 7 seconds  0.0.0.0:5432-&gt;5432/tcp  pg17-server
-
-
-. 创建数据库 data_management
-podman exec -it pg17-server psql -U postgres -c "CREATE DATABASE data_management;"
-
-
-. 创建文件 migrate.load
-```
-LOAD DATABASE
-     FROM mysql://root:mypass@127.0.0.1:3307/data_management
-     INTO postgresql://postgres:naonao@localhost:5432/data_management
-
- WITH include drop, create tables, create indexes, reset sequences, foreign keys
-
-  SET maintenance_work_mem to '128MB', 
-      work_mem to '12MB'
-
- CAST 
-      -- 1. 强制将所有 tinyint(x) 转换为 boolean，并丢弃修饰符
-      type tinyint to boolean drop typemod using tinyint-to-boolean,
-      
-      -- 2. 针对这种已经变成了 boolean(4) 的情况，显式拦截 boolean 类型并丢弃修饰符
-      type boolean to boolean drop typemod,
-      
-      -- 3. 时间类型转换
-      type datetime to timestamptz drop default;
-```
-
-. 运行 pgloader 容器执行迁移
-在终端中切换到 migrate.load 所在的目录，运行以下命令。
-```
-pgloader migrate.load
-```
-
-. 查看 postgresql 中的数据是否正确
-</t>
 <t tx="swot.20260122203347.1"></t>
 <t tx="swot.20260122203359.1"></t>
 <t tx="swot.20260122203422.1">1. 把 4KSDR240FPS 目录改成文件，并禁用该文件
@@ -13232,8 +13162,8 @@ const currentUser = { id: 1, name: "Gemini", role: "admin" };
 ----
 
 </t>
-<t tx="swot.20260214163843.1">https://jihulab.com/wangzhaohe/swot-learning
-
+<t tx="swot.20260214163843.1">我用 github 注册了一个帐号，试用了一下，目前无他。
+https://jihulab.com/wangzhaohe/swot-learning
 </t>
 <t tx="swot.20260214222007.1"></t>
 <t tx="swot.20260214223319.1">@language asciidoc
@@ -13378,5 +13308,171 @@ https://www.lazyvim.org/
 ****
 </t>
 <t tx="swot.20260214235745.1"></t>
+<t tx="swot.20260215081941.1"></t>
+<t tx="swot.20260215082206.1"></t>
+<t tx="swot.20260215082625.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260215094854.1">@language asciidoc
+. 导出 mysql8 中的数据
+* mysqldump -h your_mysql_server_ip -u root -p database_name &gt; export_file_name.sql
+
+
+. 转换排序编码（mysql5.7 不认 mysql8 的排序）
+* sed 's/utf8mb4_0900_ai_ci/utf8mb4_general_ci/g' export_file_name.sql &gt; export_file_name_fixed.sql
+* 要使用 mysql5.7 是因为 mysql8 不支持 pgloader
+
+
+. 启动一个旧版本的 MySQL，它天然支持 #pgloader# 的所有协议（会自动去 pull 镜像）
++
+[source,console]
+----
+podman run --name mysql-bridge \
+  -e MYSQL_ROOT_PASSWORD=mypass \
+  -p 3307:3306 \
+  -d docker.m.daocloud.io/library/mysql:5.7
+----
+
+
+. 等几秒钟容器启动后，创建 database 并导入数据
++
+[source,console]
+----
+mysql -h 127.0.0.1 -P 3307 -u root -pmypass -e "CREATE DATABASE database_name;"
+mysql -h 127.0.0.1 -P 3307 -u root -pmypass data_management &lt; export_file_name_fixed.sql
+----
+</t>
+<t tx="swot.20260215095103.1">@language asciidoc
+. 下载 postgresql 17 image
++
+[source,console]
+----
+podman pull docker.m.daocloud.io/library/postgres:17
+----
+
+
+. 查看 image
++
+[source,console]
+----
+&gt; podman image list
+REPOSITORY                             TAG         IMAGE ID      CREATED      SIZE
+docker.m.daocloud.io/library/postgres  17          1268669160cb  9 days ago   461 MB
+docker.m.daocloud.io/library/node      22-slim     f9834cd4819c  3 weeks ago  232 MB
+----
+
+
+. 运行 postgresql 容器（数据库密码是 naonao）
++
+[source,console]
+----
+podman run --name pg17-server \
+  -e POSTGRES_PASSWORD=naonao \
+  -p 5432:5432 \
+  -v pgdata_vol:/var/lib/postgresql/data:Z \
+  -d docker.m.daocloud.io/library/postgres:17
+----
++
+[TIP]
+====
+[loweralpha]
+1. 如果想确认这个 pgdata_vol 到底在宿主机的哪个物理位置，可以运行： +
+podman volume inspect pgdata_vol
+
+2. pgdata_vol 是自己起的卷名，查看目前电脑上已经有哪些命名卷了，可以运行： +
+podman volume ls
+
+3. :Z	SELinux 选项	授权证明，允许读写（在 windows10/11 或者 macos 上可以不加 Z 选项）
+====
+
+
+. 查看容器已经在运行了
++
+[source,console]
+----
+&gt; podman container list
+CONTAINER ID  IMAGE                                     COMMAND     CREATED        STATUS        PORTS                   NAMES
+eb26e62fd368  docker.m.daocloud.io/library/postgres:17  postgres    7 seconds ago  Up 7 seconds  0.0.0.0:5432-&gt;5432/tcp  pg17-server
+----
+
+. 创建数据库 data_management
++
+[source,console]
+----
+podman exec -it pg17-server psql -U postgres -c "CREATE DATABASE data_management;"
+----
+</t>
+<t tx="swot.20260215095256.1">@language asciidoc
+. 创建文件 migrate.load
++
+[source,console]
+----
+LOAD DATABASE
+     FROM mysql://root:mypass@127.0.0.1:3307/data_management
+     INTO postgresql://postgres:naonao@localhost:5432/data_management
+
+ WITH include drop, create tables, create indexes, reset sequences, foreign keys
+
+  SET maintenance_work_mem to '128MB', 
+      work_mem to '12MB'
+
+ CAST 
+      -- 1. 强制将所有 tinyint(x) 转换为 boolean，并丢弃修饰符
+      type tinyint to boolean drop typemod using tinyint-to-boolean,
+      
+      -- 2. 针对这种已经变成了 boolean(4) 的情况，显式拦截 boolean 类型并丢弃修饰符
+      type boolean to boolean drop typemod,
+      
+      -- 3. 时间类型转换
+      type datetime to timestamptz drop default;
+----
+
+
+. 运行 pgloader 容器执行迁移
++
+.在终端中切换到 migrate.load 所在的目录，运行以下命令
+[source,console]
+----
+pgloader migrate.load
+----
++
+TIP: 在 macos 中安装 pgloader：`brew install pgloader`
+
+. 查看 postgresql 中的数据是否正确
+</t>
+<t tx="swot.20260215101225.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
 </tnodes>
 </leo_file>
