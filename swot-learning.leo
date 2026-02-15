@@ -13576,23 +13576,23 @@ pause
 </t>
 <t tx="swot.20260215194832.1">针对“人像转卡通”这一具体需求，以下是经过验证的、直达API功能文档页面的准确入口。
 
-**1. 百度智能云 - 人像动漫化接口**
-*   **直达入口**：https://cloud.baidu.com/doc/IMAGEPROCESS/s/Mk4i6olx5
-*   **说明**：这是百度人脸识别技术文档的具体接口页面，搜索“人像动漫化”即可看到API调用方法。该接口专门用于将人脸照片转换为动漫风格，支持API直接调用。
+1. 百度智能云 - 人像动漫化接口
+*  **直达入口**： https://cloud.baidu.com/doc/IMAGEPROCESS/s/Mk4i6olx5
+*  **说明**：这是百度人脸识别技术文档的具体接口页面，搜索“人像动漫化”即可看到API调用方法。该接口专门用于将人脸照片转换为动漫风格，支持API直接调用。
 
 
-**2. 阿里云 - 人脸动漫化接口**
-*   **直达入口**：https://help.aliyun.com/zh/viapi/developer-reference/api-animation-of-characters?spm=a2c4g.11186623.help-menu-142958.d_4_3_2_3_3.2aa784c7XikaAD&amp;scm=20140722.H_188840._.OR_help-T_cn~zh-V_1
+2. 阿里云 - 人脸动漫化接口
+*   **直达入口**： https://help.aliyun.com/zh/viapi/developer-reference/api-animation-of-characters?spm=a2c4g.11186623.help-menu-142958.d_4_3_2_3_3.2aa784c7XikaAD&amp;scm=20140722.H_188840._.OR_help-T_cn~zh-V_1
 *   **说明**：这是阿里云视觉智能开放平台（ViAPI）的具体接口文档页。文档详细描述了请求参数（ImageURL）和返回结果，可直接用于开发。
 
 
-**3. 腾讯云 - 人像动漫化接口**
-*   **直达入口**：https://cloud.tencent.com/document/product/1202/47891
+3. 腾讯云 - 人像动漫化接口
+*   **直达入口**： https://cloud.tencent.com/document/product/1202/47891
 *   **说明**：这是腾讯云人脸特效产品的API文档直链，提供了“人像动漫化”动作的接口说明，支持生成多种风格的卡通图片。
 
 
-**4. 火山引擎 - 智能创作服务**
-*   **直达入口**：https://www.volcengine.com/docs/86081/1660198?lang=zh
+4. 火山引擎 - 智能创作服务
+*   **直达入口**： https://www.volcengine.com/docs/86081/1660198?lang=zh
 *   **说明**：火山引擎将此类功能归类在“智能创作”或“视频特效”中，该文档页面包含了人像风格化的处理能力。
 
 这些链接直接指向具体的API说明文档，您可以直接查阅接口地址和调用示例。
