@@ -54,6 +54,7 @@
 <v t="swot.20260215181304.1"><vh>postgresql</vh></v>
 <v t="swot.20250927110835.1"><vh>Redis</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
+<v t="swot.20260215181527.1"><vh>system-designer</vh></v>
 <v t="swot.20260213123722.1"><vh>五笔86 -&gt; 70后的最爱</vh></v>
 </v>
 </v>
@@ -13528,6 +13529,8 @@ pause
 ----
 </t>
 <t tx="swot.20260215181304.1">https://www.postgresql.org/
+</t>
+<t tx="swot.20260215181527.1">关于架构的知识。
 </t>
 </tnodes>
 </leo_file>
