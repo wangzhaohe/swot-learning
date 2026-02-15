@@ -8,6 +8,10 @@
 <vnodes>
 <v t="swot.20251221100443.1"><vh>Calender</vh>
 <v t="swot.20260215081941.1"><vh>小日志</vh>
+<v t="swot.20260201080427.1"><vh>2026-02-01 学习第三方做的「大屏展示」项目的启动脚本</vh>
+<v t="swot.20260201080533.1"><vh>启动.bat</vh></v>
+<v t="swot.20260201080659.1"><vh>脚本解释</vh></v>
+</v>
 <v t="swot.20260214163843.1"><vh>2026-02-14 gitlab.cn 极狐 -&gt; 试了 asciidoc 渲染，一般</vh></v>
 </v>
 <v t="swot.20260122203347.1"><vh>2025</vh>
@@ -37,12 +41,6 @@
 <v t="swot.20260201184500.1"><vh>2026-02-01 opencode -&gt; 不好用 -&gt; 换 aider 结对编程助手</vh></v>
 <v t="swot.20260203105212.1"><vh>2026-02-03 aider 配置 mcp -&gt; 官方还不支持呢</vh></v>
 <v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
-</v>
-<v t="swot.20260129095856.1"><vh>windows 绿色版本安装 postgresql &amp; node.js &amp; express -&gt; 绿色动力沙盘数据管理系统</vh>
-<v t="swot.20260201080427.1"><vh>2026-02-01 学习第三方做的「大屏展示」项目的启动脚本</vh>
-<v t="swot.20260201080533.1"><vh>启动.bat</vh></v>
-<v t="swot.20260201080659.1"><vh>脚本解释</vh></v>
-</v>
 </v>
 </v>
 <v t="swot.20250508123413.1"><vh>@adoc README.adoc</vh>
@@ -12060,7 +12058,6 @@ sudo rm -rf "/Library/Application Support/com.apple.idleassetsd/Customer/index.s
 
 最后是通过配置 clash verge 实现的。
 </t>
-<t tx="swot.20260129095856.1"></t>
 <t tx="swot.20260201080427.1"></t>
 <t tx="swot.20260201080533.1">[source,shell]
 ----
