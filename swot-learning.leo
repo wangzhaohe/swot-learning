@@ -13120,6 +13120,8 @@ npm install
     });
 &lt;/script&gt;
 ++++
+
+文档整理于 2026-02-15 17:46:24 by Swot [https://github.com/wangzhaohe/swot-learning]
 </t>
 <t tx="swot.20260215164835.1">在 Windows 环境下，PostgreSQL 的用户信息和密码并不像普通文件那样可以直接“查看”，因为它们是经过哈希加密存储在数据库内部表的。
 不过，我们可以通过**登录尝试**来判断是否有密码，并使用 SQL 命令来设置新密码。
