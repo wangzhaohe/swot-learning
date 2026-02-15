@@ -39,7 +39,6 @@
 <v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
 </v>
 <v t="swot.20260129095856.1"><vh>windows 绿色版本安装 postgresql &amp; node.js &amp; express -&gt; 绿色动力沙盘数据管理系统</vh>
-<v t="swot.20260125083042.1"><vh>2026-01-25 从 podman postgresql17 迁移数据到 windows 绿色包环境</vh></v>
 <v t="swot.20260129095824.1"><vh>2026-01-29 在 windows 下生成 node_modules 目录</vh></v>
 <v t="swot.20260129112711.1"><vh>2026-01-29 在 windows 下设置 postgresql 密码</vh></v>
 <v t="swot.20260121223227.1"><vh>2026-01-21 windows 绿色部署 node.js + postgresql -&gt; 待执行</vh>
@@ -78,6 +77,12 @@
 <v t="swot.20260215094854.1"><vh>step1: export data from mysql:8 to mysql:5.7</vh></v>
 <v t="swot.20260215095103.1"><vh>step2: prepare database postgresql:17</vh></v>
 <v t="swot.20260215095256.1"><vh>step3: import data from mysql:5.7 to postgresql:17</vh></v>
+</v>
+</v>
+<v t="swot.20260215160552.1"><vh>@adoc 2026-01-25_从_podman_postgresql17_迁移数据到_windows_绿色包环境.adoc</vh>
+<v t="swot.20260215154921.1"><vh>2026-01-25 从 podman postgresql17 迁移数据到 windows 绿色包环境</vh>
+<v t="swot.20260215160522.1"><vh>从 Macos 导出数据</vh></v>
+<v t="swot.20260215160511.1"><vh>从 windows 导入数据</vh></v>
 </v>
 </v>
 </v>
@@ -12060,36 +12065,6 @@ sudo rm -rf "/Library/Application Support/com.apple.idleassetsd/Customer/index.s
 
 最后是通过配置 clash verge 实现的。
 </t>
-<t tx="swot.20260125083042.1">从 podman 中导出 postgresql 数据
-
-1. 在容器内生成文件（直接由 pg_dump 写入磁盘，不经过终端管道）
-podman exec pg17-server pg_dump -U postgres -n data_management -Fc data_management -f /tmp/safe_data.dump
-
-2. 将文件从容器内部拷贝出来
-podman cp pg17-server:/tmp/safe_data.dump ./data_management.dump
-
-# 3. 验证文件完整性（必须显示为 PostgreSQL custom dump archive）
-file ./data_management.dump
-....
-data_management.dump: PostgreSQL custom database dump - v1.16-0
-....
-
----
-. 解压 postgresql-17.7-2-windows-x64-binaries.zip
-
-. cd E:\deploy\postgresql-17.7-2-windows-x64-binaries\pgsql\bin
-
-. 初始化数据库：.\initdb.exe -D C:\pgsql\data -U postgres -W -E UTF8
-    * C:\pgsql\data 数据库文件保存目录
-
-. 启动数据库服务：.\pg_ctl.exe -D C:\pgsql\data -l logfile start
-
-. 创建数据库： .\psql.exe -U postgres -d postgres -c "CREATE DATABASE data_management;"
-    * 先指定初始化时自动创建的数据库 postgres 来进行连接，要不然创建不了数据库 data_management。
-
-. 导入数据 .\pg_restore.exe -U postgres -d data_management -v --no-owner "../../../data_management.dump"
-
-</t>
 <t tx="swot.20260129095824.1">. 复制项目到 windows 系统中
 
 . 解压: node-v24.13.0-win-x64.zip
@@ -13460,6 +13435,107 @@ TIP: 在 macos 中安装 pgloader：`brew install pgloader`
 . 查看 postgresql 中的数据是否正确
 </t>
 <t tx="swot.20260215101225.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
+<t tx="swot.20260215154921.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260215160511.1">. 解压 postgresql-17.7-2-windows-x64-binaries.zip
+
+. 进入 bin 目录
++
+[source,console]
+----
+cd E:\deploy\postgresql-17.7-2-windows-x64-binaries\pgsql\bin
+---- 
+
+. 初始化数据库：
++
+.C:\pgsql\data 是数据库文件保存目录
+[source,console]
+----
+.\initdb.exe -D C:\pgsql\data -U postgres -W -E UTF8
+----
+
+. 启动数据库服务：
++
+[source,console]
+----
+.\pg_ctl.exe -D C:\pgsql\data -l logfile start
+----
+
+. 创建数据库：
++
+.先指定初始化时自动创建的数据库 postgres 来进行连接，要不然创建不了数据库 data_management。
+[source,console]
+----
+.\psql.exe -U postgres -d postgres -c "CREATE DATABASE data_management;"
+----
+
+. 将导出的数据复制到 windows
++
+.导入数据
+[source,console]
+----
+.\pg_restore.exe -U postgres -d data_management -v --no-owner "../../../data_management.dump"
+----
+</t>
+<t tx="swot.20260215160522.1">@language asciidoc
+从 podman 中导出 postgresql 数据
+
+1. 在容器内生成文件（直接由 pg_dump 写入磁盘，不经过终端管道）
++
+[source,console]
+----
+podman exec pg17-server pg_dump -U postgres -n data_management -Fc data_management -f /tmp/safe_data.dump
+----
+
+2. 将文件从容器内部拷贝出来
++
+[source,console]
+----
+podman cp pg17-server:/tmp/safe_data.dump ./data_management.dump
+----
+
+3. 验证文件完整性（必须显示为: PostgreSQL custom dump archive）
+[source,console]
+----
+&gt; file ./data_management.dump
+data_management.dump: PostgreSQL custom database dump - v1.16-0
+----
+</t>
+<t tx="swot.20260215160552.1">@language asciidoc
 :source-highlighter: pygments
 :icons: font
 :scripts: cjk
