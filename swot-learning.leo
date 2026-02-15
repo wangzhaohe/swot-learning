@@ -51,6 +51,7 @@
 <v t="swot.20250508161823.1"><vh>Git</vh></v>
 <v t="swot.20250508123546.1"><vh>LEO-Editor</vh></v>
 <v t="swot.20250521144332.1"><vh>Nuxt3</vh></v>
+<v t="swot.20260215181304.1"><vh>postgresql</vh></v>
 <v t="swot.20250927110835.1"><vh>Redis</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 <v t="swot.20260213123722.1"><vh>五笔86 -&gt; 70后的最爱</vh></v>
@@ -816,20 +817,25 @@ Create a hard link:
 :source-highlighter: pygments
 :icons: font
 :scripts: cjk
+:stem: latexmath
 :toc:
 :toc: right
-:toc-title: Table of Contents
+:toc-title: 目录
 :toclevels: 3
-
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
 </t>
 <t tx="swot.20250508123515.1">
 ++++
-&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
 &lt;script&gt;
     // 获取按钮和 div 元素
     const toggleButton = document.getElementById('toggleButton');
     const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
 
     // 添加点击事件监听器
     toggleButton.addEventListener('click', () =&gt; {
@@ -13520,6 +13526,8 @@ if %errorlevel% equ 0 (
 set PGPASSWORD=
 pause
 ----
+</t>
+<t tx="swot.20260215181304.1">https://www.postgresql.org/
 </t>
 </tnodes>
 </leo_file>
