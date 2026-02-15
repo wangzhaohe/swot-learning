@@ -39,7 +39,6 @@
 <v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
 </v>
 <v t="swot.20260129095856.1"><vh>windows 绿色版本安装 postgresql &amp; node.js &amp; express -&gt; 绿色动力沙盘数据管理系统</vh>
-<v t="swot.20260129095824.1"><vh>2026-01-29 在 windows 下生成 node_modules 目录</vh></v>
 <v t="swot.20260129112711.1"><vh>2026-01-29 在 windows 下设置 postgresql 密码</vh></v>
 <v t="swot.20260121223227.1"><vh>2026-01-21 windows 绿色部署 node.js + postgresql -&gt; 待执行</vh>
 <v t="swot.20260201131420.1"><vh>1. 目录结构预览</vh></v>
@@ -72,17 +71,18 @@
 </v>
 </v>
 <v t="swot.20260215082206.1"><vh>@path postgresql</vh>
-<v t="swot.20260215101225.1"><vh>@adoc 2026-01-22_mysql_8_迁移到_postgresql_17.adoc</vh>
+<v t="swot.20260215160552.1"><vh>@adoc windows_制作绿色版_nodejs24_postgresql17_绿色动力沙盘数据管理系统.adoc</vh>
+<v t="swot.20260215162708.1"><vh>windows_制作绿色版_nodejs24_postgresql17_绿色动力沙盘数据管理系统</vh>
 <v t="swot.20260215082625.1"><vh>2026-01-22 mysql:8 迁移到 postgresql:17</vh>
 <v t="swot.20260215094854.1"><vh>step1: export data from mysql:8 to mysql:5.7</vh></v>
 <v t="swot.20260215095103.1"><vh>step2: prepare database postgresql:17</vh></v>
 <v t="swot.20260215095256.1"><vh>step3: import data from mysql:5.7 to postgresql:17</vh></v>
 </v>
-</v>
-<v t="swot.20260215160552.1"><vh>@adoc 2026-01-25_从_podman_postgresql17_迁移数据到_windows_绿色包环境.adoc</vh>
 <v t="swot.20260215154921.1"><vh>2026-01-25 从 podman postgresql17 迁移数据到 windows 绿色包环境</vh>
-<v t="swot.20260215160522.1"><vh>从 Macos 导出数据</vh></v>
-<v t="swot.20260215160511.1"><vh>从 windows 导入数据</vh></v>
+<v t="swot.20260215160522.1"><vh>step1: 从 Macos 导出数据</vh></v>
+<v t="swot.20260215160511.1"><vh>step2: 从 windows 导入数据</vh></v>
+</v>
+<v t="swot.20260215162134.1"><vh>2026-01-29 在 windows 下生成项目 node_modules 目录</vh></v>
 </v>
 </v>
 </v>
@@ -12065,23 +12065,6 @@ sudo rm -rf "/Library/Application Support/com.apple.idleassetsd/Customer/index.s
 
 最后是通过配置 clash verge 实现的。
 </t>
-<t tx="swot.20260129095824.1">. 复制项目到 windows 系统中
-
-. 解压: node-v24.13.0-win-x64.zip
-    * 移动文件夹：建议将解压后的 node-v24.13.0-win-x64 文件夹移到一个固定的位置，例如 C:\Program Files\nodejs。
-
-. 设置 Path：
-    * 按下 Win + S 搜索 “编辑系统环境变量” 并打开。
-    * 点击 “环境变量” 按钮。
-    * 在“系统变量”栏找到 Path，点击“编辑”。
-    * 点击“新建”，将你刚才 Node.js 文件夹的全路径粘贴进去（例如 C:\Program Files\nodejs）。
-    * 一路点击“确定”保存
-
-. 复制项目 sandbox
-    * cd sandbox/backend
-    * npm i
-
-</t>
 <t tx="swot.20260129095856.1"></t>
 <t tx="swot.20260129112711.1">在 Windows 环境下，PostgreSQL 的用户信息和密码并不像普通文件那样可以直接“查看”，因为它们是经过哈希加密存储在数据库内部表的。
 
@@ -13285,28 +13268,7 @@ https://www.lazyvim.org/
 <t tx="swot.20260214235745.1"></t>
 <t tx="swot.20260215081941.1"></t>
 <t tx="swot.20260215082206.1"></t>
-<t tx="swot.20260215082625.1">
-++++
-&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
-&lt;script&gt;
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
-
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () =&gt; {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
-&lt;/script&gt;
-++++
-</t>
+<t tx="swot.20260215082625.1"></t>
 <t tx="swot.20260215094854.1">@language asciidoc
 . 导出 mysql8 中的数据
 * mysqldump -h your_mysql_server_ip -u root -p database_name &gt; export_file_name.sql
@@ -13434,43 +13396,7 @@ TIP: 在 macos 中安装 pgloader：`brew install pgloader`
 
 . 查看 postgresql 中的数据是否正确
 </t>
-<t tx="swot.20260215101225.1">@language asciidoc
-:source-highlighter: pygments
-:icons: font
-:scripts: cjk
-:stem: latexmath
-:toc:
-:toc: right
-:toc-title: 目录
-:toclevels: 3
-:tip-caption: ⚡
-:note-caption: ❕
-:important-caption: ❗
-:warning-caption: ‼️
-:caution-caption: ⚠️
-</t>
-<t tx="swot.20260215154921.1">
-++++
-&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
-&lt;script&gt;
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
-
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () =&gt; {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
-&lt;/script&gt;
-++++
-</t>
+<t tx="swot.20260215154921.1"></t>
 <t tx="swot.20260215160511.1">. 解压 postgresql-17.7-2-windows-x64-binaries.zip
 
 . 进入 bin 目录
@@ -13549,6 +13475,48 @@ data_management.dump: PostgreSQL custom database dump - v1.16-0
 :important-caption: ❗
 :warning-caption: ‼️
 :caution-caption: ⚠️
+</t>
+<t tx="swot.20260215162134.1">. 解压: node-v24.13.0-win-x64.zip
+
+. 移动文件夹：
+    * 建议将解压后的 node-v24.13.0-win-x64 文件夹移到一个固定的位置，例如 C:\Program Files\nodejs。
+
+. 设置系统 Path：
+    .. 按下 Win + S 搜索 “编辑系统环境变量” 并打开。
+    .. 点击 “环境变量” 按钮。
+    .. 在“系统变量”栏找到 Path，点击“编辑”。
+    .. 点击“新建”，将你刚才 Node.js 文件夹的全路径粘贴进去（例如 C:\Program Files\nodejs）。
+    .. 一路点击“确定”保存
+
+. 复制项目 sandbox 到 windows 系统中，然后安装依赖
++
+[source,console]
+----
+cd sandbox/backend
+npm install
+----
+</t>
+<t tx="swot.20260215162708.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
 </t>
 </tnodes>
 </leo_file>
