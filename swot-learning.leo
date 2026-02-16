@@ -6,43 +6,6 @@
 <preferences/>
 <find_panel_settings/>
 <vnodes>
-<v t="swot.20251221100443.1"><vh>Calender</vh>
-<v t="swot.20260215081941.1"><vh>小日志</vh>
-<v t="swot.20260201080427.1"><vh>2026-02-01 学习第三方做的「大屏展示」项目的启动脚本</vh>
-<v t="swot.20260201080533.1"><vh>启动.bat</vh></v>
-<v t="swot.20260201080659.1"><vh>脚本解释</vh></v>
-</v>
-<v t="swot.20260214163843.1"><vh>2026-02-14 gitlab.cn 极狐 -&gt; 试了 asciidoc 渲染，一般</vh></v>
-</v>
-<v t="swot.20260122203347.1"><vh>2025</vh>
-<v t="swot.20260207194011.1"><vh>History document</vh>
-<v t="swot.20251221100451.1"><vh>2025-12-21 qwen-code -&gt; cli -&gt; 目前 aider 是我的主力</vh></v>
-</v>
-<v t="swot.20251221102636.1"><vh>2025-12-21 postgrel/mysql 在 node.js 下是原生驱动吗？</vh></v>
-<v t="swot.20251225214456.1"><vh>2025-12-25 mcp agent 区别</vh></v>
-<v t="swot.20251226073009.1"><vh>2025-12-27 chrome-devtools-mcp 适用于调试和逆向工程的分析</vh></v>
-<v t="swot.20251227105647.1"><vh>2025-12-27 figma mcp -&gt; 需要申请 figma token</vh></v>
-<v t="swot.20251227174503.1"><vh>2025-12-27 RAG -&gt; 基本认知</vh>
-<v t="swot.20251227175941.1"><vh>podman pull postgresql database image</vh></v>
-<v t="swot.20251227175921.1"><vh>如何存储文本和向量到 postgresql 中，这叫索引</vh></v>
-</v>
-<v t="swot.20251229085446.1"><vh>2025-12-29 RAGflow 项目有点大</vh></v>
-</v>
-<v t="swot.20260122203359.1"><vh>2026</vh>
-<v t="swot.20251229143854.1"><vh>2026-01-01 九天玩转Langchain -&gt; 有点老但概念重要</vh></v>
-<v t="swot.20260102121336.1"><vh>2026-01-02 Svelte &amp; SvelteKit -&gt; 初步了解</vh></v>
-<v t="swot.20260103105836.1"><vh>2026-01-03 Svelte UI -&gt; 如何选择？</vh></v>
-<v t="swot.20260104064819.1"><vh>2026-01-04 有限状态自动机（FSM）式的状态转移逻辑</vh></v>
-<v t="swot.20260105133852.1"><vh>2026-01-04 使用 deepseek 生成数据管理项目</vh></v>
-<v t="swot.20260105134143.1"><vh>2026-01-05 终于将网站的架构定下来了</vh></v>
-<v t="swot.20260110112735.1"><vh>2026-01-10 免费的 ssl</vh></v>
-<v t="swot.20260116203059.1"><vh>2026-01-16 cms 研究</vh></v>
-<v t="swot.20260122203422.1"><vh>2026-01-22 禁止 macos 自动下载高清动态屏保 -&gt; 这是失败案例，执行了被 idleassetsd 疯狂下载</vh></v>
-<v t="swot.20260201184500.1"><vh>2026-02-01 opencode -&gt; 不好用 -&gt; 换 aider 结对编程助手</vh></v>
-<v t="swot.20260203105212.1"><vh>2026-02-03 aider 配置 mcp -&gt; 官方还不支持呢</vh></v>
-<v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
-</v>
-</v>
 <v t="swot.20250508123413.1"><vh>@adoc README.adoc</vh>
 <v t="swot.20250508123515.1"><vh>learning contents</vh>
 <v t="swot.20250508125533.1"><vh>Read document</vh></v>
@@ -58,34 +21,7 @@
 <v t="swot.20260213123722.1"><vh>五笔86 -&gt; 70后的最爱</vh></v>
 </v>
 </v>
-<v t="swot.20260215082206.1"><vh>@path postgresql</vh>
-<v t="swot.20260215160552.1"><vh>@adoc Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统.adoc</vh>
-<v t="swot.20260215162708.1"><vh>Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统</vh>
-<v t="swot.20260215082625.1"><vh>2026-01-22 mysql:8 迁移到 postgresql:17</vh>
-<v t="swot.20260215094854.1"><vh>step1: export data from mysql:8 to mysql:5.7</vh></v>
-<v t="swot.20260215095103.1"><vh>step2: prepare database postgresql:17</vh></v>
-<v t="swot.20260215095256.1"><vh>step3: import data from mysql:5.7 to postgresql:17</vh></v>
-</v>
-<v t="swot.20260215154921.1"><vh>2026-01-25 从 podman postgresql17 迁移数据到 windows 绿色包环境</vh>
-<v t="swot.20260215160522.1"><vh>step1: 从 Macos 导出数据</vh></v>
-<v t="swot.20260215160511.1"><vh>step2: 从 windows 导入数据</vh></v>
-</v>
-<v t="swot.20260215162134.1"><vh>2026-01-28 在 windows 下生成项目 node_modules 目录</vh></v>
-<v t="swot.20260215164835.1"><vh>2026-01-29 在 windows 下设置 postgresql 密码</vh></v>
-<v t="swot.20260215170749.1"><vh>2026-01-30 在 windows 下绿色部署 node.js + postgresql</vh>
-<v t="swot.20260215170749.2"><vh>1. 目录结构预览</vh></v>
-<v t="swot.20260215170749.3"><vh>2. 核心启动脚本 (`start_server.bat`)</vh></v>
-<v t="swot.20260215170749.4"><vh>3. WinSW 配置文件 (`hongfeng-data-service.xml`)</vh></v>
-<v t="swot.20260215170749.5"><vh>4. 客户一键启动脚本 (`一键启动服务.bat`)</vh></v>
-<v t="swot.20260215170749.6"><vh>5. 部署步骤（你的操作）</vh></v>
-<v t="swot.20260215170749.7"><vh>6. 交付给客户的操作说明</vh></v>
-<v t="swot.20260215170749.8"><vh>7. 如何停止服务或卸载服务？</vh></v>
-<v t="swot.20260215170749.9"><vh>8. 一键备份数据库.bat</vh></v>
-<v t="swot.20260215170749.10"><vh>9. 一键停止并卸载服务.bat</vh></v>
-</v>
-</v>
-</v>
-</v>
+<v t="swot.20250521151644.1"><vh>@edit .gitignore</vh></v>
 <v t="swot.20260213134825.1"><vh>@path AI</vh>
 <v t="swot.20260213135117.1"><vh>@adoc AI.adoc</vh>
 <v t="swot.20260213135136.1"><vh>AI使用笔记</vh>
@@ -95,98 +31,6 @@
 <v t="swot.20260215190317.1"><vh>@adoc 2026-02-15_调用_api_把人像照片生成卡通像方案研究.adoc</vh>
 <v t="swot.20260215190821.1"><vh>2026-02-15_调用_api_把人像照片生成卡通像方案研究</vh>
 <v t="swot.20260215194832.1"><vh>大厂API收集</vh></v>
-</v>
-</v>
-</v>
-<v t="swot.20260116203800.1"><vh>@path html</vh>
-<v t="swot.20260116203055.1"><vh>2026-01-16 html &amp; css</vh>
-<v t="swot.20260116203530.1"><vh>编辑器 VsCode</vh></v>
-<v t="swot.20260116203604.1"><vh>浏览器 Chrome</vh></v>
-<v t="swot.20260116212512.1"><vh>Quill 项目资料</vh>
-<v t="swot.20260116212521.1"><vh>原始文本素材 -- 用 markdown 展示了标题大小的效果</vh></v>
-</v>
-<v t="swot.20260116203328.1"><vh>HTML HyperText Markup Language</vh></v>
-</v>
-</v>
-<v t="swot.20250906075341.1"><vh>@path docker</vh>
-<v t="swot.20250906075354.1"><vh>@adoc docker.adoc</vh>
-<v t="swot.20250906075409.1"><vh>Learning Docker</vh>
-<v t="swot.20250906082625.1"><vh>Introduction Docker</vh></v>
-<v t="swot.20250906075427.1"><vh>Install Docker</vh></v>
-<v t="swot.20250906084634.1"><vh>Pull &amp; Run Redis</vh></v>
-<v t="swot.20250906093952.1"><vh>Commit &amp; Save &amp; Load &amp; Run 把 redis 容器做成离线镜像包发给学生</vh></v>
-<v t="swot.20250916164207.1"><vh>Pull &amp; Run MySQL</vh></v>
-<v t="swot.20250921231329.1"><vh>Pull &amp; Run Nginx</vh></v>
-</v>
-</v>
-</v>
-<v t="swot.20250906101555.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d333171077573732e"><vh>@path redis</vh>
-<v t="swot.20250906102110.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d333171077573732e"><vh>@adoc Redis.adoc</vh>
-<v t="swot.20250906102110.2"><vh>Redis 速览</vh>
-<v t="swot.20250906102110.3"><vh>1 简介</vh></v>
-<v t="swot.20250906102110.4"><vh>2 五大核心特性</vh></v>
-<v t="swot.20250906102110.5"><vh>3 安装方式</vh></v>
-<v t="swot.20250906102110.6"><vh>4 连接 Redis 的几种方式</vh></v>
-<v t="swot.20250906102110.7"><vh>5 最常用的 20 条命令</vh></v>
-<v t="swot.20250906102110.8"><vh>6 一分钟体验</vh></v>
-<v t="swot.20250906102110.9"><vh>7 Redis 新手厨房：30 道命令边做边学</vh>
-<v t="swot.20250906102110.10"><vh>7.1 String 类型 4 例（最简单的“键-值”）</vh></v>
-<v t="swot.20250906102110.11"><vh>7.2 Hash 类型 5 例（“对象”缓存）</vh></v>
-<v t="swot.20250906102110.12"><vh>7.3 List 类型 7 例（队列 / 栈）</vh></v>
-<v t="swot.20250906102110.13"><vh>7.4 Set 类型 4 例（去重 / 抽奖）</vh></v>
-<v t="swot.20250906102110.14"><vh>7.5 Sorted Set 类型 6 例（排行榜）</vh></v>
-<v t="swot.20250906102110.15"><vh>7.6 Key 生命周期 3 例</vh></v>
-<v t="swot.20250906102110.16"><vh>7.7 服务器 / 调试 6 例</vh></v>
-<v t="swot.20250906102110.17"><vh>7.8 结语</vh></v>
-</v>
-</v>
-</v>
-</v>
-<v t="swot.20250811154633.1"><vh>@path threejs</vh>
-<v t="swot.20250812085446.1"><vh>@adoc Three.js.adoc</vh>
-<v t="swot.20250812085536.1"><vh>Three.js</vh>
-<v t="swot.20250812084836.1"><vh>MeshXxxMaterial 对比</vh></v>
-<v t="swot.20250811160652.1"><vh>pbr 物理的渲染材质网站</vh>
-<v t="swot.20250812210640.1"><vh>use download pbr</vh>
-<v t="swot.20250812210658.1"><vh>@file pbr_example/light-sofa.html</vh></v>
-<v t="swot.20250812215237.1"><vh>@file pbr_example/light-sofa_低功耗.html</vh></v>
-</v>
-</v>
-</v>
-</v>
-</v>
-<v t="swot.20250524213031.1"><vh>@path Q_and_A</vh>
-<v t="swot.20250524210117.1"><vh>@adoc Q_and_A.adoc</vh>
-<v t="swot.20250524214956.1"><vh>Q_and_A</vh>
-<v t="swot.20250524210138.1"><vh>Nuxt3</vh>
-<v t="swot.20250524210146.1"><vh>utils vs composables?</vh></v>
-<v t="swot.20250524210230.1"><vh>app.config.ts vs nuxt.config.ts?</vh></v>
-</v>
-<v t="swot.20250528071453.1"><vh>Web</vh>
-<v t="swot.20250528071457.1"><vh>http   body 3 种上传数据方式有什么不同？</vh></v>
-<v t="swot.20250528073829.1"><vh>httpie body 3 种上传数据方式如何使用？</vh></v>
-<v t="swot.20250528074031.1"><vh>httpie 如何显示请求和响应部分的数据</vh></v>
-<v t="swot.20250602081407.1"><vh>Web 配色网站哪个好用？</vh></v>
-<v t="swot.20250604113830.1"><vh>css</vh></v>
-<v t="swot.20250604115240.1"><vh>Web 新框架</vh></v>
-</v>
-<v t="swot.20250613103138.1"><vh>Chrome</vh>
-<v t="swot.20250613103144.1"><vh>打开开发者控制台模式的快捷键是什么？</vh></v>
-</v>
-<v t="swot.20250524210625.1"><vh>@ignore-tree Vue3</vh>
-<v t="swot.20250524210629.1"><vh>ref vs reactive？</vh></v>
-</v>
-<v t="swot.20260214222007.1"><vh>macos</vh>
-<v t="swot.20260214223319.1"><vh>2026-02-14 macos idleassetsd 疯狂下载屏保视频问题</vh>
-<v t="swot.20260214223319.2"><vh>Clash Verge 限制访问 apple 屏保资源</vh></v>
-</v>
-<v t="swot.20260214224255.1"><vh>2026-02-14 macos 无法 ssh github 问题</vh>
-<v t="swot.20260214231356.1"><vh>https 方式推送时报 RPC failed HTTP 400</vh></v>
-</v>
-</v>
-<v t="swot.20260214235745.1"><vh>neovim</vh>
-<v t="swot.20260214235718.1"><vh>2026-02-14 How to install LazyVim?</vh></v>
-</v>
 </v>
 </v>
 </v>
@@ -237,6 +81,126 @@
 </v>
 </v>
 </v>
+<v t="swot.20250906075341.1"><vh>@path docker</vh>
+<v t="swot.20250906075354.1"><vh>@adoc docker.adoc</vh>
+<v t="swot.20250906075409.1"><vh>Learning Docker</vh>
+<v t="swot.20250906082625.1"><vh>Introduction Docker</vh></v>
+<v t="swot.20250906075427.1"><vh>Install Docker</vh></v>
+<v t="swot.20250906084634.1"><vh>Pull &amp; Run Redis</vh></v>
+<v t="swot.20250906093952.1"><vh>Commit &amp; Save &amp; Load &amp; Run 把 redis 容器做成离线镜像包发给学生</vh></v>
+<v t="swot.20250916164207.1"><vh>Pull &amp; Run MySQL</vh></v>
+<v t="swot.20250921231329.1"><vh>Pull &amp; Run Nginx</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20250508160844.1"><vh>@path git</vh>
+<v t="swot.20250508161005.1"><vh>@adoc git.adoc</vh>
+<v t="swot.20250508161024.1"><vh>Git</vh>
+<v t="swot.20250520181051.1"><vh>git worktree</vh></v>
+<v t="swot.20250520181057.1"><vh>git subtree</vh></v>
+<v t="swot.20250508161032.1"><vh>git-filter-repo -&gt; delete file from all git commit</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20260116203800.1"><vh>@path html</vh>
+<v t="swot.20260116203055.1"><vh>2026-01-16 html &amp; css</vh>
+<v t="swot.20260116203530.1"><vh>编辑器 VsCode</vh></v>
+<v t="swot.20260116203604.1"><vh>浏览器 Chrome</vh></v>
+<v t="swot.20260116212512.1"><vh>Quill 项目资料</vh>
+<v t="swot.20260116212521.1"><vh>原始文本素材 -- 用 markdown 展示了标题大小的效果</vh></v>
+</v>
+<v t="swot.20260116203328.1"><vh>HTML HyperText Markup Language</vh></v>
+</v>
+</v>
+<v t="swot.20260215211454.1"><vh>@path java</vh>
+<v t="swot.20260216182522.1"><vh>@path javaBase</vh>
+<v t="swot.20260215212755.1"><vh>@adoc Java高级程序设计进阶.adoc</vh>
+<v t="swot.20260215211506.1"><vh>高级程序设计进阶（Java）</vh>
+<v t="swot.20260215213152.1"><vh>1. 课程基本信息</vh></v>
+<v t="swot.20260215212100.1"><vh>2. 理论教学内容（共 36 学时）</vh>
+<v t="swot.20260215212238.1"><vh>2.1 面向对象基础 (4学时)</vh>
+<v t="swot.20260215222431.1"><vh>2.1.1 类与对象 —— “图纸”与“实物”</vh></v>
+<v t="swot.20260215222514.1"><vh>2.1.2 封装 —— “电视机外壳”</vh></v>
+<v t="swot.20260215222546.1"><vh>2.1.3 继承与多态 —— “父子关系”与“七十二变”</vh></v>
+<v t="swot.20260215222615.1"><vh>2.1.4 接口设计 —— “万能插座标准”</vh></v>
+<v t="swot.20260216074225.1"><vh>2.1.5 小结</vh></v>
+</v>
+<v t="swot.20260215212244.1"><vh>2.2 常用工具类 (4学时)</vh>
+<v t="swot.20260216081800.1"><vh>2.2.1 String：文字的“修剪与检查”</vh>
+<v t="swot.20260216081956.1"><vh>class StringDemo</vh></v>
+</v>
+<v t="swot.20260216081744.1"><vh>2.2.2 Date：记录刷卡的“那一瞬间”</vh>
+<v t="swot.20260216083251.1"><vh>class DateDemo</vh></v>
+</v>
+<v t="swot.20260216080055.1"><vh>2.2.3 小结</vh></v>
+</v>
+<v t="swot.20260215212333.1"><vh>2.3 异常处理机制 (4学时)</vh>
+<v t="swot.20260216085926.1"><vh>2.3.1 什么是异常？ —— “生活的备选方案”</vh></v>
+<v t="swot.20260216085934.1"><vh>2.3.2 try-catch-finally —— “安全气囊”</vh>
+<v t="swot.20260216090424.1"><vh>class ExceptionDemo</vh></v>
+</v>
+<v t="swot.20260216085957.1"><vh>2.3.3 throw 与 throws —— “甩锅与上报”</vh>
+<v t="swot.20260216090658.1"><vh>class DoorService</vh></v>
+</v>
+<v t="swot.20260216090012.1"><vh>2.3.4 自定义异常 —— “定制报警器”</vh>
+<v t="swot.20260216100242.1"><vh>class DoorSystemException 门禁系统异常类代码实现</vh></v>
+<v t="swot.20260216101953.1"><vh>门禁系统异常类使用场景</vh></v>
+</v>
+<v t="swot.20260216085347.1"><vh>小结</vh></v>
+</v>
+<v t="swot.20260215212328.1"><vh>2.4 集合框架 (4学时)</vh>
+<v t="swot.20260216105105.1"><vh>2.4.1 ArrayList —— “自动伸缩的排队队伍”</vh>
+<v t="swot.20260216105325.1"><vh>class ListDemo 代码举例（存储一堆用户）</vh></v>
+</v>
+<v t="swot.20260216105116.1"><vh>2.4.2 HashMap —— “宿舍号对应学生”</vh>
+<v t="swot.20260216105844.1"><vh>MapDemo 代码举例（快速查找用户）</vh></v>
+</v>
+<v t="swot.20260216103228.1"><vh>2.4.3 小结</vh></v>
+</v>
+<v t="swot.20260215212323.1"><vh>2.5 IO 流技术 (6学时)</vh>
+<v t="swot.20260216115239.1"><vh>2.5.1 为什么要学 IO？ —— “大脑”与“笔记本”</vh></v>
+<v t="swot.20260216115250.1"><vh>2.5.2 File 类 —— “文件管理员”</vh>
+<v t="swot.20260216123452.1"><vh>class FileDemo 代码举例</vh></v>
+</v>
+<v t="swot.20260216115302.1"><vh>2.5.3 字符缓冲流 —— “高效搬运工”</vh>
+<v t="swot.20260216123721.1"><vh>class SaveUserDemo 代码举例（保存用户信息到 txt）</vh></v>
+<v t="swot.20260216133002.1"><vh>补充知识: Java I/O 核心组件解析：File, FileWriter 与 BufferedWriter</vh></v>
+</v>
+<v t="swot.20260216115311.1"><vh>2.5.4 序列化 —— “数据冷冻技术”</vh></v>
+<v t="swot.20260216115314.1"><vh>2.5.5 实战演示：读取文件并抛出自定义异常</vh></v>
+<v t="swot.20260216115335.1"><vh>2.5.6 小结</vh></v>
+</v>
+<v t="swot.20260215212313.1"><vh>2.6 Java 数据库编程 (6学时)</vh>
+<v t="swot.20260216191659.1"><vh>2.6.1 为什么要用数据库？ —— “记事本”升级为“大仓库”</vh></v>
+<v t="swot.20260216191709.1"><vh>2.6.2 JDBC 操作的“四大步骤” —— “打电话订货”</vh></v>
+<v t="swot.20260216191718.1"><vh>2.6.3 代码实现：查询用户信息</vh></v>
+<v t="swot.20260216191728.1"><vh>2.6.4 防止 SQL 注入 —— “拒绝陌生人的小纸条”</vh></v>
+<v t="swot.20260216191751.1"><vh>2.6.5 实验预告：实验三 数据库驱动开发</vh></v>
+<v t="swot.20260216194309.1"><vh>2.6.6 小结</vh></v>
+</v>
+<v t="swot.20260215212309.1"><vh>2.7 多线程与反射 (4学时)</vh></v>
+<v t="swot.20260215212257.1"><vh>2.8 网络编程 (4学时)</vh></v>
+</v>
+<v t="swot.20260215212047.1"><vh>3. 实验内容：JavaSE 门禁系统实训（共 36 学时）</vh>
+<v t="swot.20260215212525.1"><vh>实验一：环境与项目初始化 (4学时)</vh></v>
+<v t="swot.20260215212523.1"><vh>实验二：数据模型与实体类开发 (4学时)</vh>
+<v t="swot.20260216075118.1"><vh>class User 用户实体类</vh></v>
+<v t="swot.20260216075612.1"><vh>关于 User 类小结</vh></v>
+<v t="swot.20260216100242.1"></v>
+</v>
+<v t="swot.20260215212522.1"><vh>实验三：系统逻辑接口设计 (6学时)</vh></v>
+<v t="swot.20260215212520.1"><vh>实验四：单元测试与验证 (4学时)</vh></v>
+<v t="swot.20260215212518.1"><vh>实验五：认证算法实现 (6学时)</vh></v>
+<v t="swot.20260215212516.1"><vh>实验六：持久化层升级 (6学时)</vh></v>
+<v t="swot.20260215212514.1"><vh>实验七：系统集成与发布 (6学时)</vh></v>
+</v>
+</v>
+</v>
+</v>
+</v>
+<v t="swot.20251210103828.1"><vh>@path js</vh>
+<v t="swot.20251210103835.1"><vh>pnpm -&gt; https://pnpm.io/</vh></v>
+</v>
 <v t="swot.20250508105043.2"><vh>@path leo-editor</vh>
 <v t="swot.20250508134307.1"><vh>@adoc leo-editor.adoc</vh>
 <v t="swot.20250508134351.1"><vh>Learning Leo</vh>
@@ -248,18 +212,6 @@
 </v>
 <v t="swot.20250831095539.1"><vh>基于 x86 的库如何在 macos arm 架构下运行</vh></v>
 <v t="swot.20250831100251.1"><vh>列操作模式 rectangle</vh></v>
-</v>
-</v>
-</v>
-<v t="swot.20251210103828.1"><vh>@path js</vh>
-<v t="swot.20251210103835.1"><vh>pnpm -&gt; https://pnpm.io/</vh></v>
-</v>
-<v t="swot.20250508160844.1"><vh>@path git</vh>
-<v t="swot.20250508161005.1"><vh>@adoc git.adoc</vh>
-<v t="swot.20250508161024.1"><vh>Git</vh>
-<v t="swot.20250520181051.1"><vh>git worktree</vh></v>
-<v t="swot.20250520181057.1"><vh>git subtree</vh></v>
-<v t="swot.20250508161032.1"><vh>git-filter-repo -&gt; delete file from all git commit</vh></v>
 </v>
 </v>
 </v>
@@ -435,29 +387,88 @@
 </v>
 </v>
 </v>
-<v t="swot.20260213131026.1"><vh>@path system-designer</vh>
-<v t="swot.20260213131058.1"><vh>@adoc system-designer.adoc</vh>
-<v t="swot.20260213130935.1"><vh>系统架构设计师</vh>
-<v t="swot.20260213075755.1"><vh>2026-02-13 全栈架构模式：从宏观到微观的 MVC 映射及前端 MVVM</vh></v>
-<v t="swot.20260214094024.1"><vh>2026-02-14 开发语言解惑汇总</vh>
-<v t="swot.20260214100040.1"><vh>1. 编程语言执行机制与性能哲学</vh>
-<v t="swot.20260214104811.1"><vh>1.1 Lua：极致的嵌入式胶水</vh></v>
-<v t="swot.20260214104720.1"><vh>1.2 编译、解释与 JIT 的三角关系</vh></v>
-<v t="swot.20260214104711.1"><vh>1.3 为什么 AI 偏爱 Python 而非 Java？</vh></v>
+<v t="swot.20260215225306.1"><vh>@path neovim</vh></v>
+<v t="swot.20260215082206.1"><vh>@path postgresql</vh>
+<v t="swot.20260215160552.1"><vh>@adoc Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统.adoc</vh>
+<v t="swot.20260215162708.1"><vh>Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统</vh>
+<v t="swot.20260215082625.1"><vh>2026-01-22 mysql:8 迁移到 postgresql:17</vh>
+<v t="swot.20260215094854.1"><vh>step1: export data from mysql:8 to mysql:5.7</vh></v>
+<v t="swot.20260215095103.1"><vh>step2: prepare database postgresql:17</vh></v>
+<v t="swot.20260215095256.1"><vh>step3: import data from mysql:5.7 to postgresql:17</vh></v>
 </v>
-<v t="swot.20260214100053.1"><vh>2. Web 图形与计算架构演进</vh>
-<v t="swot.20260214104443.1"><vh>2.1 WebAssembly (WASM)</vh></v>
-<v t="swot.20260214104450.1"><vh>2.2 从 WebGL 到 WebGPU 的跨越</vh></v>
+<v t="swot.20260215154921.1"><vh>2026-01-25 从 podman postgresql17 迁移数据到 windows 绿色包环境</vh>
+<v t="swot.20260215160522.1"><vh>step1: 从 Macos 导出数据</vh></v>
+<v t="swot.20260215160511.1"><vh>step2: 从 windows 导入数据</vh></v>
 </v>
-<v t="swot.20260214100102.1"><vh>3. 类型系统的深度工程化</vh>
-<v t="swot.20260214105028.1"><vh>3.1 类型的本质与负担</vh></v>
-<v t="swot.20260214100115.1"><vh>3.2 零编译的类型方案：JSDoc + .d.ts</vh>
-<v t="swot.20260214113041.1"><vh>&lt;&lt; jsconfig.json &gt;&gt;</vh></v>
-<v t="swot.20260214113129.1"><vh>&lt;&lt; global.d.ts &gt;&gt;</vh></v>
-<v t="swot.20260214113154.1"><vh>&lt;&lt; main.js &gt;&gt;</vh></v>
+<v t="swot.20260215162134.1"><vh>2026-01-28 在 windows 下生成项目 node_modules 目录</vh></v>
+<v t="swot.20260215164835.1"><vh>2026-01-29 在 windows 下设置 postgresql 密码</vh></v>
+<v t="swot.20260215170749.1"><vh>2026-01-30 在 windows 下绿色部署 node.js + postgresql</vh>
+<v t="swot.20260215170749.2"><vh>1. 目录结构预览</vh></v>
+<v t="swot.20260215170749.3"><vh>2. 核心启动脚本 (`start_server.bat`)</vh></v>
+<v t="swot.20260215170749.4"><vh>3. WinSW 配置文件 (`hongfeng-data-service.xml`)</vh></v>
+<v t="swot.20260215170749.5"><vh>4. 客户一键启动脚本 (`一键启动服务.bat`)</vh></v>
+<v t="swot.20260215170749.6"><vh>5. 部署步骤（你的操作）</vh></v>
+<v t="swot.20260215170749.7"><vh>6. 交付给客户的操作说明</vh></v>
+<v t="swot.20260215170749.8"><vh>7. 如何停止服务或卸载服务？</vh></v>
+<v t="swot.20260215170749.9"><vh>8. 一键备份数据库.bat</vh></v>
+<v t="swot.20260215170749.10"><vh>9. 一键停止并卸载服务.bat</vh></v>
 </v>
 </v>
-<v t="swot.20260214100122.1"><vh>4. 商业版权与开源治理</vh></v>
+</v>
+</v>
+<v t="swot.20250524213031.1"><vh>@path Q_and_A</vh>
+<v t="swot.20250524210117.1"><vh>@adoc Q_and_A.adoc</vh>
+<v t="swot.20250524214956.1"><vh>Q_and_A</vh>
+<v t="swot.20250524210138.1"><vh>Nuxt3</vh>
+<v t="swot.20250524210146.1"><vh>utils vs composables?</vh></v>
+<v t="swot.20250524210230.1"><vh>app.config.ts vs nuxt.config.ts?</vh></v>
+</v>
+<v t="swot.20250528071453.1"><vh>Web</vh>
+<v t="swot.20250528071457.1"><vh>http   body 3 种上传数据方式有什么不同？</vh></v>
+<v t="swot.20250528073829.1"><vh>httpie body 3 种上传数据方式如何使用？</vh></v>
+<v t="swot.20250528074031.1"><vh>httpie 如何显示请求和响应部分的数据</vh></v>
+<v t="swot.20250602081407.1"><vh>Web 配色网站哪个好用？</vh></v>
+<v t="swot.20250604113830.1"><vh>css</vh></v>
+<v t="swot.20250604115240.1"><vh>Web 新框架</vh></v>
+</v>
+<v t="swot.20250613103138.1"><vh>Chrome</vh>
+<v t="swot.20250613103144.1"><vh>打开开发者控制台模式的快捷键是什么？</vh></v>
+</v>
+<v t="swot.20250524210625.1"><vh>@ignore-tree Vue3</vh>
+<v t="swot.20250524210629.1"><vh>ref vs reactive？</vh></v>
+</v>
+<v t="swot.20260214222007.1"><vh>macos</vh>
+<v t="swot.20260214223319.1"><vh>2026-02-14 macos idleassetsd 疯狂下载屏保视频问题</vh>
+<v t="swot.20260214223319.2"><vh>Clash Verge 限制访问 apple 屏保资源</vh></v>
+</v>
+<v t="swot.20260214224255.1"><vh>2026-02-14 macos 无法 ssh github 问题</vh>
+<v t="swot.20260214231356.1"><vh>https 方式推送时报 RPC failed HTTP 400</vh></v>
+</v>
+</v>
+<v t="swot.20260214235745.1"><vh>neovim</vh>
+<v t="swot.20260214235718.1"><vh>2026-02-14 How to install LazyVim?</vh></v>
+</v>
+</v>
+</v>
+</v>
+<v t="swot.20250906101555.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d333171077573732e"><vh>@path redis</vh>
+<v t="swot.20250906102110.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30382d333171077573732e"><vh>@adoc Redis.adoc</vh>
+<v t="swot.20250906102110.2"><vh>Redis 速览</vh>
+<v t="swot.20250906102110.3"><vh>1 简介</vh></v>
+<v t="swot.20250906102110.4"><vh>2 五大核心特性</vh></v>
+<v t="swot.20250906102110.5"><vh>3 安装方式</vh></v>
+<v t="swot.20250906102110.6"><vh>4 连接 Redis 的几种方式</vh></v>
+<v t="swot.20250906102110.7"><vh>5 最常用的 20 条命令</vh></v>
+<v t="swot.20250906102110.8"><vh>6 一分钟体验</vh></v>
+<v t="swot.20250906102110.9"><vh>7 Redis 新手厨房：30 道命令边做边学</vh>
+<v t="swot.20250906102110.10"><vh>7.1 String 类型 4 例（最简单的“键-值”）</vh></v>
+<v t="swot.20250906102110.11"><vh>7.2 Hash 类型 5 例（“对象”缓存）</vh></v>
+<v t="swot.20250906102110.12"><vh>7.3 List 类型 7 例（队列 / 栈）</vh></v>
+<v t="swot.20250906102110.13"><vh>7.4 Set 类型 4 例（去重 / 抽奖）</vh></v>
+<v t="swot.20250906102110.14"><vh>7.5 Sorted Set 类型 6 例（排行榜）</vh></v>
+<v t="swot.20250906102110.15"><vh>7.6 Key 生命周期 3 例</vh></v>
+<v t="swot.20250906102110.16"><vh>7.7 服务器 / 调试 6 例</vh></v>
+<v t="swot.20250906102110.17"><vh>7.8 结语</vh></v>
 </v>
 </v>
 </v>
@@ -765,7 +776,46 @@
 </v>
 </v>
 </v>
-<v t="swot.20250521151644.1"><vh>@edit .gitignore</vh></v>
+<v t="swot.20260213131026.1"><vh>@path system-designer</vh>
+<v t="swot.20260213131058.1"><vh>@adoc system-designer.adoc</vh>
+<v t="swot.20260213130935.1"><vh>系统架构设计师</vh>
+<v t="swot.20260213075755.1"><vh>2026-02-13 全栈架构模式：从宏观到微观的 MVC 映射及前端 MVVM</vh></v>
+<v t="swot.20260214094024.1"><vh>2026-02-14 开发语言解惑汇总</vh>
+<v t="swot.20260214100040.1"><vh>1. 编程语言执行机制与性能哲学</vh>
+<v t="swot.20260214104811.1"><vh>1.1 Lua：极致的嵌入式胶水</vh></v>
+<v t="swot.20260214104720.1"><vh>1.2 编译、解释与 JIT 的三角关系</vh></v>
+<v t="swot.20260214104711.1"><vh>1.3 为什么 AI 偏爱 Python 而非 Java？</vh></v>
+</v>
+<v t="swot.20260214100053.1"><vh>2. Web 图形与计算架构演进</vh>
+<v t="swot.20260214104443.1"><vh>2.1 WebAssembly (WASM)</vh></v>
+<v t="swot.20260214104450.1"><vh>2.2 从 WebGL 到 WebGPU 的跨越</vh></v>
+</v>
+<v t="swot.20260214100102.1"><vh>3. 类型系统的深度工程化</vh>
+<v t="swot.20260214105028.1"><vh>3.1 类型的本质与负担</vh></v>
+<v t="swot.20260214100115.1"><vh>3.2 零编译的类型方案：JSDoc + .d.ts</vh>
+<v t="swot.20260214113041.1"><vh>&lt;&lt; jsconfig.json &gt;&gt;</vh></v>
+<v t="swot.20260214113129.1"><vh>&lt;&lt; global.d.ts &gt;&gt;</vh></v>
+<v t="swot.20260214113154.1"><vh>&lt;&lt; main.js &gt;&gt;</vh></v>
+</v>
+</v>
+<v t="swot.20260214100122.1"><vh>4. 商业版权与开源治理</vh></v>
+</v>
+</v>
+</v>
+</v>
+<v t="swot.20250811154633.1"><vh>@path threejs</vh>
+<v t="swot.20250812085446.1"><vh>@adoc Three.js.adoc</vh>
+<v t="swot.20250812085536.1"><vh>Three.js</vh>
+<v t="swot.20250812084836.1"><vh>MeshXxxMaterial 对比</vh></v>
+<v t="swot.20250811160652.1"><vh>pbr 物理的渲染材质网站</vh>
+<v t="swot.20250812210640.1"><vh>use download pbr</vh>
+<v t="swot.20250812210658.1"><vh>@file pbr_example/light-sofa.html</vh></v>
+<v t="swot.20250812215237.1"><vh>@file pbr_example/light-sofa_低功耗.html</vh></v>
+</v>
+</v>
+</v>
+</v>
+</v>
 <v t="swot.20251026093202.1"><vh>@path wubi86</vh>
 <v t="swot.20251026094157.1"><vh>@adoc wubi86.adoc</vh>
 <v t="swot.20251026094246.1"><vh>五笔86学习</vh>
@@ -773,6 +823,43 @@
 <v t="swot.20251026094312.1"><vh>五笔86末笔表</vh></v>
 <v t="swot.20251026094138.1"><vh>五笔86难字表</vh></v>
 </v>
+</v>
+</v>
+<v t="swot.20251221100443.1"><vh>Calender</vh>
+<v t="swot.20260215081941.1"><vh>小日志</vh>
+<v t="swot.20260201080427.1"><vh>2026-02-01 学习第三方做的「大屏展示」项目的启动脚本</vh>
+<v t="swot.20260201080533.1"><vh>启动.bat</vh></v>
+<v t="swot.20260201080659.1"><vh>脚本解释</vh></v>
+</v>
+<v t="swot.20260214163843.1"><vh>2026-02-14 gitlab.cn 极狐 -&gt; 试了 asciidoc 渲染，一般</vh></v>
+</v>
+<v t="swot.20260122203347.1"><vh>2025</vh>
+<v t="swot.20260207194011.1"><vh>History document</vh>
+<v t="swot.20251221100451.1"><vh>2025-12-21 qwen-code -&gt; cli -&gt; 目前 aider 是我的主力</vh></v>
+</v>
+<v t="swot.20251221102636.1"><vh>2025-12-21 postgrel/mysql 在 node.js 下是原生驱动吗？</vh></v>
+<v t="swot.20251225214456.1"><vh>2025-12-25 mcp agent 区别</vh></v>
+<v t="swot.20251226073009.1"><vh>2025-12-27 chrome-devtools-mcp 适用于调试和逆向工程的分析</vh></v>
+<v t="swot.20251227105647.1"><vh>2025-12-27 figma mcp -&gt; 需要申请 figma token</vh></v>
+<v t="swot.20251227174503.1"><vh>2025-12-27 RAG -&gt; 基本认知</vh>
+<v t="swot.20251227175941.1"><vh>podman pull postgresql database image</vh></v>
+<v t="swot.20251227175921.1"><vh>如何存储文本和向量到 postgresql 中，这叫索引</vh></v>
+</v>
+<v t="swot.20251229085446.1"><vh>2025-12-29 RAGflow 项目有点大</vh></v>
+</v>
+<v t="swot.20260122203359.1"><vh>2026</vh>
+<v t="swot.20251229143854.1"><vh>2026-01-01 九天玩转Langchain -&gt; 有点老但概念重要</vh></v>
+<v t="swot.20260102121336.1"><vh>2026-01-02 Svelte &amp; SvelteKit -&gt; 初步了解</vh></v>
+<v t="swot.20260103105836.1"><vh>2026-01-03 Svelte UI -&gt; 如何选择？</vh></v>
+<v t="swot.20260104064819.1"><vh>2026-01-04 有限状态自动机（FSM）式的状态转移逻辑</vh></v>
+<v t="swot.20260105133852.1"><vh>2026-01-04 使用 deepseek 生成数据管理项目</vh></v>
+<v t="swot.20260105134143.1"><vh>2026-01-05 终于将网站的架构定下来了</vh></v>
+<v t="swot.20260110112735.1"><vh>2026-01-10 免费的 ssl</vh></v>
+<v t="swot.20260116203059.1"><vh>2026-01-16 cms 研究</vh></v>
+<v t="swot.20260122203422.1"><vh>2026-01-22 禁止 macos 自动下载高清动态屏保 -&gt; 这是失败案例，执行了被 idleassetsd 疯狂下载</vh></v>
+<v t="swot.20260201184500.1"><vh>2026-02-01 opencode -&gt; 不好用 -&gt; 换 aider 结对编程助手</vh></v>
+<v t="swot.20260203105212.1"><vh>2026-02-03 aider 配置 mcp -&gt; 官方还不支持呢</vh></v>
+<v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
 </v>
 </v>
 </vnodes>
@@ -13596,6 +13683,894 @@ pause
 *   **说明**：火山引擎将此类功能归类在“智能创作”或“视频特效”中，该文档页面包含了人像风格化的处理能力。
 
 这些链接直接指向具体的API说明文档，您可以直接查阅接口地址和调用示例。
+</t>
+<t tx="swot.20260215211454.1"></t>
+<t tx="swot.20260215211506.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260215212047.1">@language asciidoc
+实验部分以“门禁系统”为核心案例，采用综合性实验形式。
+</t>
+<t tx="swot.20260215212100.1"></t>
+<t tx="swot.20260215212238.1">* *核心知识点*：类与对象、抽象与封装、属性与方法、继承与多态、接口设计。
+
+* *教学要求*：深入理解面向对象设计思想，熟练掌握接口与抽象类的应用场景。
+
+* *教学目标*：让学生从“执行者”转变为“设计者”，理解 Java 程序的组织逻辑。
+</t>
+<t tx="swot.20260215212244.1">* *核心知识点*：String/StringBuilder、Math类、包装类、日期时间类（Date/Calendar/SimpleDateFormat）。
+* *总教学要求*：掌握 Java 核心 API 的使用方法及性能差异。
+* *本节要求*：掌握最常用的 String 字符串处理和 Date 时间记录方法。
+</t>
+<t tx="swot.20260215212257.1">* *核心知识点*：TCP/UDP 协议、Socket 编程、URL 处理。
+* *教学要求*：能够实现简单的 C/S 架构通信。
+</t>
+<t tx="swot.20260215212309.1">* *核心知识点*：线程创建与生命周期、同步机制（synchronized）、反射 API、动态代理。
+* *教学要求*：理解并发编程基础及 Java 语言的动态特性。
+</t>
+<t tx="swot.20260215212313.1">* *核心知识点*：JDBC 架构、Connection/Statement/ResultSet、预编译 SQL、事务处理。
+* *教学要求*：学会使用 Java 连接数据库，让门禁系统具备“海量数据”的管理能力。
+</t>
+<t tx="swot.20260215212323.1">* *核心知识点*：File 类、字节流与字符流、缓冲流、转换流、序列化（对象流）、随机存取文件。
+
+* *教学要求*：掌握文件读写操作及流的关闭规范。
+    ** 让程序拥有“持久记忆”。
+    ** 学习如何将门禁系统的用户信息存入硬盘，实现关机后数据不丢失。
+
+</t>
+<t tx="swot.20260215212328.1">* *核心知识点*：Collection 与 Map 接口、List (ArrayList/LinkedList)、Set (HashSet/TreeSet)、Map (HashMap/TreeMap)。
+* *教学要求*：理解不同数据结构的特性，并能根据需求选择合适的集合。
+* *本节要求*：学会用 `ArrayList` 和 `HashMap` 来管理成千上万个用户信息。
+</t>
+<t tx="swot.20260215212333.1">* *核心知识点*：异常体系结构、try-catch-finally、throw/throws、自定义异常。
+* *教学要求*：能够编写健壮的代码，防止程序因为一点小意外就“直接罢工” 。
+
+在开发门禁系统时，最怕程序因为一点小错就彻底崩溃（比如读卡器坏了，整个系统不应该直接蓝屏）。
+这就是异常处理机制 要解决的问题。
+</t>
+<t tx="swot.20260215212514.1">* *目标*：完成模块整合，开发主程序交互逻辑，提交最终成果。
+</t>
+<t tx="swot.20260215212516.1">* *目标*：将原有的文件存储或内存存储升级为 JDBC 数据库存储。
+
+</t>
+<t tx="swot.20260215212518.1">* *目标*：实现门禁系统的核心认证算法及权限校验。
+
+</t>
+<t tx="swot.20260215212520.1">* *目标*：编写测试类，对功能模块进行逻辑覆盖测试。
+
+</t>
+<t tx="swot.20260215212522.1">* *目标*：利用接口和抽象类定义门禁系统的核心业务逻辑。
+
+</t>
+<t tx="swot.20260215212523.1">* *目标*：根据需求设计实体类及自定义异常类。
+
+*实验目标*：学会定义一个标准的“实体类”（Entity），用于存储门禁系统中的用户信息。
+
+[discrete]
+=== 1. 什么是实体类？
+在门禁系统中，我们需要一个东西来代表“人”。实体类就像一张**电子入职登记表**，把一个人的信息打包在一起。
+
+[discrete]
+=== 2. 标准的 User 类要求
+为了保证数据的安全，我们要遵循上一节学的“封装”原则：
+1. 属性全部私有 (`private`)。
+2. 提供公共的 `Getter/Setter` 方法。
+3. 提供一个无参构造方法和一个全参构造方法。
+
+[discrete]
+=== 3. 代码实现
+</t>
+<t tx="swot.20260215212525.1">* *目标*：搭建 JDK 与 IntelliJ IDEA 环境，完成项目骨架搭建。
+
+</t>
+<t tx="swot.20260215212755.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
+<t tx="swot.20260215213152.1">@language asciidoc
+.课程基本信息
+[cols="1,3"]
+|===
+| 课程名称 | 高级程序设计进阶（Java）
+| 总学时 | 72 学时（理论：36 / 实验：36）
+| 学分 | 3 学分
+| 考核方式 | 大作业 (70%) + 平时成绩 (30%)
+|===
+</t>
+<t tx="swot.20260215222431.1">**1. 知识点说明**
+
+* **类 (Class)**：相当于一张**手机设计图纸**。它规定了手机应该有的样子（颜色、价格）和功能（打电话）。
+* **对象 (Object)**：是根据图纸生产出来的**具体手机**。
+
+[TIP]
+====
+**记住一句话**：你不能给“图纸”打电话，你只能给“手机实体”打电话。 +
+在 Java 中，我们要先写类，再 `new` 出对象。
+====
+
+**2. 代码举例**
+
+[source,java]
+----
+// 1. 定义类（设计图纸）
+class Phone {
+    String brand;  // 属性：品牌
+    int price;     // 属性：价格
+
+    // 行为：打电话的功能
+    void call(String name) {
+        System.out.println("正在给 " + name + " 打电话...");
+    }
+}
+
+// 2. 使用类（造手机并使用）
+public class TestPhone {
+    public static void main(String[] args) {
+        // 使用 new 关键字，根据图纸造出一台真实的手机
+        Phone myPhone = new Phone(); 
+        
+        myPhone.brand = "华为"; // 给这台手机贴上品牌
+        myPhone.call("张三");   // 让这台手机执行功能
+    }
+}
+----
+
+[qanda]
+放在哪个文件里？ ::
+答：
+
+如何执行？ ::
+答：
+
+</t>
+<t tx="swot.20260215222514.1">**1. 知识点说明**
+
+* **私有化 (private)**：把数据藏在里面，不让外人乱碰。
+* **Getter|Setter (遥控器)**：你想改数据？必须通过我提供的“按钮”。
+
+**2. 生活举例**
+电视机内部电路很复杂，你不需要（也不应该）拆开机壳去拨弄电线，你只需要按遥控器上的“音量+”即可。
+
+**3. 代码举例**
+
+[source,java]
+----
+class BankAccount {
+    private double balance = 100.0; // 私有的余额，别人不能直接用 .balance 修改
+
+    // 提供一个存钱的“按钮”（方法）
+    public void deposit(double money) {
+        if (money &gt; 0) {
+            balance += money;
+            System.out.println("存钱成功！当前余额：" + balance);
+        } else {
+            System.out.println("警告：存钱金额不能为负数！");
+        }
+    }
+
+    // 提供一个看余额的“只读窗口”
+    public double getBalance() {
+        return balance;
+    }
+}
+----
+
+[qanda]
+如何测试运行这个例子？ ::
+答：
+
+</t>
+<t tx="swot.20260215222546.1">**1. 知识点说明**
+
+* **继承 (extends)**：子承父业。儿子自动学会父亲的本事，不用重写。
+* **多态**：同一个动作（命令），不同的对象表现出不同的结果。
+
+**2. 生活举例**
+老板喊一声“开工！”，程序员开始敲代码，厨师开始炒菜。同样的命令，不同职业反应不同。
+
+**3. 代码举例**
+
+[source,java]
+----
+// 父类：动物
+class Animal {
+    void shout() {
+        System.out.println("动物发出叫声");
+    }
+}
+
+// 子类：狗，继承动物
+class Dog extends Animal {
+    @Override // “重写”父亲的方法，改为狗的叫声
+    void shout() {
+        System.out.println("汪汪叫！");
+    }
+}
+
+// 子类：猫，继承动物
+class Cat extends Animal {
+    @Override
+    void shout() {
+        System.out.println("喵喵叫！");
+    }
+}
+----
+
+[qanda]
+如何执行这个例子？ ::
+答：
+</t>
+<t tx="swot.20260215222615.1">@language asciidoc
+**1. 知识点说明**
+
+* **接口 (interface)**：它不干活，它只负责**定规矩**。
+* 它规定了“如果你想当某种东西，你必须能干什么”。
+
+**2. 生活举例**
+**USB 标准**。不管你是鼠标、键盘还是 U 盘，只要你符合 USB 的形状和规范，电脑就能识别你。
+
+**3. 代码举例**
+
+[source,java]
+----
+// 定义一个“充电”标准
+interface Chargeable {
+    void charge(); // 谁实现这个接口，谁就必须能充电
+}
+
+class ElectricCar implements Chargeable {
+    public void charge() {
+        System.out.println("连接充电桩，新能源车充电中...");
+    }
+}
+
+class SmartPhone implements Chargeable {
+    public void charge() {
+        System.out.println("连接数据线，手机快速充电中...");
+    }
+}
+----
+</t>
+<t tx="swot.20260215225306.1"></t>
+<t tx="swot.20260216074225.1">针对基础弱学生的教学小贴士
+
+- 互动环节：讲“类与对象”时，可以让学生描述一下他邻座的那位学生（属性：性别、发型；行为：记笔记、打哈欠），这就是在“抽象成类”。
+
+- 拒绝深挖：在第一周，千万不要跟他们抠 static 在内存里的分配逻辑，那样会吓跑一半的学生。
+
+- 实验挂钩：这部分的理论可以直接对应你大纲里的 实验二：数据模型开发 ，让他们亲手写出 User 类。
+</t>
+<t tx="swot.20260216075118.1">@language java
+[source,java]
+----
+/**
+ * 用户实体类：代表一个拥有门禁卡的人
+ */
+public class User {
+    private String id;        // 工号
+    private String name;      // 姓名
+    private String cardId;    // 门禁卡号
+    private boolean isActive; // 账户是否激活
+
+    // 无参数构造方法（Java 习惯，方便以后框架使用）
+    public User() {
+    }
+
+    // 全参数构造方法（方便一句话创建用户）
+    public User(String id, String name, String cardId, boolean isActive) {
+        this.id = id;
+        this.name = name;
+        this.cardId = cardId;
+        this.isActive = isActive;
+    }
+
+    // Getter 和 Setter（就像开关，外界通过它们读写数据）
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
+    
+    // ... id 和 isActive 的 Getter/Setter 省略，实际开发中需补全
+}
+----
+</t>
+<t tx="swot.20260216075612.1">@language asciidoc
+private + Getter|Setter 是 Java 的“潜规则”，虽然写起来累，但可以保护数据不被乱改（例如可以在 setCardId 里加逻辑，长度不对就不给存）。
+
+在 IDEA 中演示 Alt + Insert 快捷键自动生成这些代码，学生会觉得很神奇，从而降低抗拒感。
+
+</t>
+<t tx="swot.20260216080055.1">@language asciidoc
+关于 String 比较：
+
+* 重点强调：一定要反复强调 String 比较用 .equals()，而不是 ==。
+* 这是初学者最容易踩的坑，可以用“一个是比长相，一个是比灵魂”来打比方。
+
+关于 Date：
+
+* 虽然 Java 8 之后有了 LocalDateTime，但对基础弱的学生来说，Date + SimpleDateFormat 的代码量更少，概念更直观。
+* 建议第一阶段先教这个，等他们实验五、六需要更精确的操作时，再提新 API。
+
+</t>
+<t tx="swot.20260216081744.1">@language asciidoc
+[upperalpha]
+. 知识点说明 +
+门禁系统必须记录：谁在**什么时候**刷了卡？
+* `new Date()`：获取此时此刻的系统时间。
+* `SimpleDateFormat`：把时间从“一串数字”变成“人能看懂的文字”。
+
+. 生活举例 +
+就像相机的“时间水印”，`Date` 抓拍瞬间，`SimpleDateFormat` 决定水印印成 "2023/10/01" 还是 "10月1日"。
+
+. 代码举例：
+</t>
+<t tx="swot.20260216081800.1">[upperalpha]
+. 为什么要学？
+* 门禁系统拿到的卡号可能有空格，或者我们需要检查卡号长度是否正确。
+* String 类就是我们的“文字加工厂”。
+
+. 核心招式：
+* `length()`：数数有几个字（检查卡号位数）。
+* `trim()`：掐头去尾掉空格（防止用户不小心多打了空格）。
+* `equals()`：比较两个词长得是否**一模一样**（比对密码/卡号）。
+* `substring()`：切下一块肉（提取身份证里的生日）。
+
+. 代码举例：
+ </t>
+<t tx="swot.20260216081956.1">@language java
+[source,java]
+----
+public class StringDemo {
+    public static void main(String[] args) {
+        String inputCard = "  A1234567  ";
+        
+        // 1. 去掉多余空格
+        String cleanCard = inputCard.trim();
+        
+        // 2. 检查长度是否是 8 位
+        if(cleanCard.length() == 8) {
+            System.out.println("卡号格式正确");
+        }
+        
+        // 3. 比较卡号（注意：字符串比较千万不能用 ==，要用 .equals()）
+        if(cleanCard.equals("A1234567")) {
+            System.out.println("欢迎回家，管理员！");
+        }
+    }
+}
+----
+</t>
+<t tx="swot.20260216083251.1">@language java
+[source,java]
+----
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+public class DateDemo {
+    public static void main(String[] args) {
+        // 1. 获取当前时间（刷卡瞬间）
+        Date now = new Date();
+        System.out.println("原始时间对象：" + now); // 很难看：Mon Oct ...
+
+        // 2. 设定我们喜欢的格式：年-月-日 时:分:秒
+        // yyyy-MM-dd HH:mm:ss 是固定写法，别写错大小写哦
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        // 3. 转换
+        String timeStr = sdf.format(now);
+        System.out.println("刷卡时间记录：" + timeStr); 
+        // 输出：2023-10-27 10:30:05
+    }
+}
+----
+</t>
+<t tx="swot.20260216085347.1">@language asciidoc
+关于 Exception 体系结构：
+
+* 不需要背诵 Throwable 下面有多少个类。
+* 只需要告诉知道：Exception 是所有意外的总称，遇到搞不定的异常，直接 catch (Exception e) 就能兜底。
+
+
+关于 finally 的必要性：
+
+* 用“借书”打比方：你向图书馆借了书（打开流/数据库连接），不管你最后看没看完（执行成功或失败），你都得还书（finally 里关闭资源），否则别人就借不到了。
+
+
+随堂小练习建议：
+
+* 让学生写一个除法运算器，输入 10 / 0。观察程序崩溃的样子，然后教他们用 try-catch 捕获 ArithmeticException 并输出“分母不能为 0”。这种立竿见影的效果最能激发学习兴趣。
+</t>
+<t tx="swot.20260216085926.1">[upperalpha]
+. 知识点说明
+* 程序运行就像开车，即使你技术再好，也可能遇到“爆胎”或“封路”。
+* **异常 (Exception)**：不是程序写错了（那是 Bug），而是程序运行中遇到了**意外情况**（比如网络断了、文件找不到了）。
+
+. 生活举例
+* 你出门上班，计划是坐地铁。但如果地铁停运了（异常），你应该去坐公交（处理异常），而不是直接原地消失。
+</t>
+<t tx="swot.20260216085934.1">@language asciidoc
+[upperalpha]
+. 核心招式
+* **try**：试着运行这段代码（可能有危险）。
+* **catch**：如果真的出事了，该怎么办？（抓捕异常并处理）。
+* **finally**：不管出不出事，最后都要执行的操作（比如关灯、锁门）。
+
+. 代码举例（模拟刷卡读取数据）
+</t>
+<t tx="swot.20260216085957.1">@language asciidoc
+[upperalpha]
+. 知识点说明
+* **throw**：手动抛出一个异常。比如：我发现你余额不足，我手动报个错。
+* **throws**：写在方法头上，告诉调用者：“我这可能会出事，你自己看着办”。
+
+. 代码举例（模拟门禁权限检查）
+</t>
+<t tx="swot.20260216090012.1">@language asciidoc
+为什么要学？
+
+* Java 自带的异常（如 `NullPointerException`）太泛泛了。
+* 在门禁系统中，我们需要门禁系统的报警，比如统一使用 `DoorSystemException`。
+* 它更具通用性，以后不管是卡号不对、权限不足还是数据库连不上，都可以归并在这一类报警下。
+* **易读性**：看到这个报错，程序员立刻就知道是“门禁系统逻辑”出问题了，而不是简单的“空指针”。
+</t>
+<t tx="swot.20260216090424.1">@language java
+[source,java]
+----
+public class ExceptionDemo {
+    public static void main(String[] args) {
+        String cardData = null; // 假设由于硬件故障，没读到数据
+
+        try {
+            // 尝试读取卡片长度
+            System.out.println("正在读取卡片...");
+            System.out.println("卡号长度为：" + cardData.length()); 
+        } catch (NullPointerException e) {
+            // 如果 cardData 是空的，程序会跳到这里，而不是直接崩溃
+            System.out.println("【警告】读卡器未检测到卡片，请重新刷卡！");
+        } finally {
+            // 不管读没读到，都要重置读卡器状态
+            System.out.println("&gt;&gt; 读卡器指示灯重置完毕。");
+        }
+        
+        System.out.println("系统继续运行中...");
+    }
+}
+----
+
+</t>
+<t tx="swot.20260216090658.1">@language java
+[source,java]
+----
+public class DoorService {
+    // throws 声明：这方法可能会抛出异常，调用它的人得准备好 try-catch
+    public void checkIdentity(String name) throws Exception {
+        if (name == null || name.equals("黑名单")) {
+            // throw：手动触发一个报警
+            throw new Exception("非法闯入者！");
+        }
+        System.out.println("欢迎光临，" + name);
+    }
+}
+----
+
+</t>
+<t tx="swot.20260216100242.1">[source,java]
+----
+/**
+ * 自定义异常：专门处理门禁系统的异常情况
+ */
+public class DoorSystemException extends Exception {
+    public DoorSystemException(String message) {
+        super(message); // 把错误信息传给父类去处理
+    }
+}
+----
+</t>
+<t tx="swot.20260216101953.1">[source,java]
+----
+public void swipeCard(String cardId) throws DoorSystemException {
+    if (!cardId.startsWith("A")) {
+        throw new DoorSystemException("卡号 " + cardId + " 格式不正确，不是本校卡！");
+    }
+}
+----
+</t>
+<t tx="swot.20260216103228.1">@language asciidoc
+[upperalpha]
+. **关于泛型 `&lt; &gt;`**：
+  * 这就像“贴标签”。
+  * `ArrayList&lt;User&gt;` 就是告诉 Java，这个盒子里只能装 `User` 类型的货，装个苹果或者字符串，编译器会直接报错拦住。
+
+. **ArrayList vs HashMap 的选择**：
+  * 如果只是想**按顺序存**，用 `ArrayList`；
+  * 如果想根据某个东西（比如卡号、工号）快速找人，必须用 `HashMap`。
+
+. **避开复杂原理**：
+  * 这个阶段，先**不要**讲 HashMap 的哈希碰撞、红黑树、负载因子。只需要知道 `put`（存）和 `get`（取）就行。  
+</t>
+<t tx="swot.20260216105105.1">@language asciidoc
+知识点说明
+
+* 传统的数组（Array）容量是死的，开辟了 10 个位子就只能坐 10 个人。
+
+* **ArrayList**：像一个会变魔术的排队队伍。人多它就变长，人少它就缩短。
+</t>
+<t tx="swot.20260216105116.1">@language asciidoc
+[upperalpha]
+. 知识点说明
+    * 如果要在 1 万个人里找“张三”，`ArrayList` 要从头翻到尾（很累）。
+    * **HashMap**：就像宿舍管理员的登记表。左边是**房号(Key)**，右边是**学生(Value)**。你只要报出房号，立刻就能找到人。
+
+. 生活举例
+    * 门禁系统：**卡号** -&gt; **用户信息**。
+    * 只要刷一下卡，系统瞬间从万千数据中定位到你。
+</t>
+<t tx="swot.20260216105325.1">@language java
+[source,java]
+----
+import java.util.ArrayList;
+
+public class ListDemo {
+    public static void main(String[] args) {
+        // 1. 创建一个专门装 User 的集合
+        ArrayList&lt;User&gt; userList = new ArrayList&lt;&gt;();
+
+        // 2. 添加用户
+        userList.add(new User("001", "张三", "A123", true));
+        userList.add(new User("002", "李四", "B456", true));
+
+        // 3. 看看现在有多少人
+        System.out.println("当前用户总数：" + userList.size());
+
+        // 4. 拿走第一个人的信息
+        User firstUser = userList.get(0);
+        System.out.println("第一位用户是：" + firstUser.getName());
+    }
+}
+----
+</t>
+<t tx="swot.20260216105844.1">@language java
+[source,java]
+----
+import java.util.HashMap;
+
+public class MapDemo {
+    public static void main(String[] args) {
+        // K=卡号(String), V=用户信息(User)
+        HashMap&lt;String, User&gt; userMap = new HashMap&lt;&gt;();
+
+        // 1. 存入数据
+        User u1 = new User("001", "张三", "CARD_888", true);
+        userMap.put(u1.getCardId(), u1);
+
+        // 2. 模拟刷卡：输入卡号，瞬间找人
+        String inputId = "CARD_888";
+        if (userMap.containsKey(inputId)) {
+            User found = userMap.get(inputId);
+            System.out.println("刷卡成功！欢迎 " + found.getName());
+        } else {
+            System.out.println("查无此卡！");
+        }
+    }
+}
+----
+</t>
+<t tx="swot.20260216115239.1">@language asciidoc
+知识点说明
+
+* **内存 (RAM)**：像人的大脑，程序运行极快，但一断电（关机）数据就全丢了。我们之前创建的 `ArrayList` 就在这里。
+* **硬盘 (Disk)**：像笔记本，速度虽慢，但写上去了就能永久保存。
+* **IO (Input|Output)**：就是把数据在大脑和笔记本之间搬运的过程。
+
+[NOTE]
+====
+**Output (输出)**：把脑子里的名单**写**到纸上（保存文件）。 +
+**Input (输入)**：把纸上的名单**读**进脑子里（读取文件）。
+====
+
+</t>
+<t tx="swot.20260216115250.1">@language asciidoc
+知识点说明
+
+* 在操作文件内容之前，先要找到文件。
+* `File` 类不负责读写，它只负责查看文件是否存在、文件名叫什么、有多大。
+
+</t>
+<t tx="swot.20260216115302.1">@language asciidoc
+知识点说明
+
+* **FileWriter | FileReader**：像用小勺子挖水，一次只能搬一点，无缓冲区。
+* **BufferedWriter | BufferedReader**：像配了一个大水桶（缓冲区）。先把水倒满一桶，再一口气搬走，效率极高。
+</t>
+<t tx="swot.20260216115311.1">@language asciidoc
+**1. 知识点说明**
+
+如果想直接把一整个 `User` 对象（包含姓名、卡号、状态等）原封不动“冻结”并存进硬盘，就需要**序列化**。
+
+**2. 核心步骤**
+
+1.  **盖章认证**：在 `User` 类后面加上 `implements Serializable`。这相当于告诉 Java：“这个类是安全的，可以转成二进制”。
+2.  **对象流**：使用 `ObjectOutputStream` 将对象写入文件。
+
+[source,java]
+----
+/**
+ * 实验二补充：让 User 支持序列化
+ */
+import java.io.Serializable;
+
+public class User implements Serializable {
+    // 即使这里不写任何代码，只要加了 implements Serializable 就能“冷冻保存”了
+    private String name;
+    private String cardId;
+    // ... 其他代码同实验二
+}
+----
+</t>
+<t tx="swot.20260216115314.1">我们将之前学的 **DoorSystemException** 融入进来。如果读取文件失败，直接上报门禁系统异常。
+
+@language java
+[source,java]
+----
+public void loadUsers() throws DoorSystemException {
+    try (BufferedReader reader = new BufferedReader(new FileReader("users.txt"))) {
+        String line = reader.readLine();
+        if (line == null) {
+            // 如果文件是空的，手动抛出我们定义的门禁异常
+            throw new DoorSystemException("读取失败：名单文件为空！");
+        }
+        System.out.println("成功读取到数据：" + line);
+    }
+    catch (IOException e) {
+        // 将 IO 异常包装成我们的门禁异常向上汇报
+        throw new DoorSystemException("读取异常：磁盘损坏或文件丢失");
+    }
+}
+----
+</t>
+<t tx="swot.20260216115335.1">@language asciidoc
+- **“小水桶”实验**： 
+    ** 用碗喝汤和用勺子喝汤的区别，可以立刻明白为什么 `BufferedWriter` 比 `FileWriter` 快。
+
+- **重点避坑：文件的位置**： 
+  **  `users.txt` 在哪。默认就在你 IntelliJ IDEA 项目的根文件夹里。
+
+- **IO 异常的必然性**：
+  ** 即使代码写得再完美，硬盘也可能坏，U 盘也可能被拔掉。所以 IO 操作**强制要求**写 `try-catch`，这是为了让程序更坚强。
+
+****
+虽然文件存取很方便，但如果我们要处理几万个用户，在一个 txt 文件里找人会非常慢且麻烦。
+这就是为什么我们后面需要学习 **2.6 JDBC 数据库编程** 的原因——引入专业的“数据仓库”。
+****
+</t>
+<t tx="swot.20260216123452.1">@language java
+[source,java]
+----
+import java.io.File;
+
+public class FileDemo {
+    public static void main(String[] args) {
+        // 创建一个文件对象（注意：这只是建立了联系，不代表文件一定存在）
+        File file = new File("users.txt");
+        
+        if (file.exists()) {
+            System.out.println("找到名单文件了！大小是：" + file.length() + " 字节");
+        } else {
+            System.out.println("找不到文件，系统稍后将自动新建。");
+        }
+    }
+}
+----
+</t>
+<t tx="swot.20260216123721.1">@language java
+[source,java]
+----
+import java.io.*;
+
+public class SaveUserDemo {
+    public static void main(String[] args) {
+        // try-with-resources 语法：括号里的资源会自动关闭，省心省力
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
+            // 模拟存入一个用户信息
+            writer.write("001,张三,CARD_888");
+            writer.newLine(); // 换行，准备写下一条记录
+            System.out.println("保存成功！用户信息已写入硬盘。");
+        }
+        catch (IOException e) {
+            System.err.println("发生意外！文件写不进去了：" + e.getMessage());
+        }
+    }
+}
+----
+</t>
+<t tx="swot.20260216133002.1">@language asciidoc
+****
+[upperalpha]
+1. 角色分工与类关系 (Decorator Pattern)
++
+.这三个类之间不是 **继承** 关系，而是 **组合（包装）** 关系。
+[cols="1,1,2"]
+|===
+| 类名 | 角色 | 核心职责
+
+| `File`
+| **地址标签**
+| 仅代表磁盘上的路径或属性，不具备读写数据的能力。
+
+| `FileWriter`
+| **基础搬运工**
+| 字符流写入器。负责建立连接并将字符一个个“敲”入硬盘。
+
+| `BufferedWriter`
+| **集装箱/缓冲区**
+| 包装类。在内存开辟 8KB 空间，攒满后再调用一次 `FileWriter` 批量写入。
+|===
+
+2. “小水桶”实验：为什么需要缓冲区？
+* **直接写入 (`FileWriter`)**：
+  如同用 **勺子** 舀水，每舀一勺都要跑一趟院子（触发一次磁盘 I/O），效率极低。
+* **缓冲写入 (`BufferedWriter`)**：
+  如同给勺子配了一个 **水桶**。先将数据存在内存里，等桶装满了再跑一趟院子，极大地减少了往返次数。
+
+3. try-with-resources 完整写法
+这是目前 Java 开发中最推荐的写法。注意所有的“流对象”都在 `try` 的括号内创建：
++
+[source,java]
+----
+// 所有的流创建都放在 try (...) 内部
+// 执行完毕后，Java 会自动调用 close()，即使中间出了异常也会关
+try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
+    
+    writer.write("新用户：张三");
+    writer.newLine(); // BufferedWriter 特有的换行方法，非常好用
+    writer.write("新用户：李四");
+    
+} catch (IOException e) {
+    // 捕获可能的文件读写异常
+    e.printStackTrace();
+}
+----
+
+4. 核心要点
+.. **自动关闭**：只要写在 `try(...)` 里的资源，不需要手动写 `writer.close()`。
+.. **便捷路径**：`new FileWriter("users.txt")` 这种写法会在底层自动为你创建一个 `new File("users.txt")`。
+.. **追加数据**：第二个参数 `true` 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。
+****
+</t>
+<t tx="swot.20260216182522.1"></t>
+<t tx="swot.20260216191659.1">@language asciidoc
+. 知识点说明
+* **IO 文件 (2.5节)**：像是个人的小账本。数据多了不好找（比如在 10 万行里找一个卡号），且容易写乱。
+* **数据库 (Database)**：专业的数字化仓库。自带索引，找人“瞬间即达”，且支持多个人同时读写。
+
+. 核心工具：JDBC
+* **JDBC** 全称 Java Database Connectivity。
+* **大白话**：它就是一套**“标准翻译协议”**。
+    ** 不管后台是 MySQL、Oracle 还是 SQL Server，Java 程序员只需要学一套 JDBC 的写法，就能跟所有数据库沟通。
+</t>
+<t tx="swot.20260216191709.1">要把 Java 里的数据存进数据库，就像打电话给仓库订货：
+
+1.  **准备电话线 (加载驱动)**：告诉 Java 你要连接哪种类型的仓库（MySQL 还是其他）。
+2.  **拨通电话 (建立连接)**：输入仓库地址、账号、密码。
+3.  **下订单 (执行 SQL)**：用 SQL 语言告诉仓库你要干什么（增删改查）。
+4.  **挂断电话 (关闭资源)**：干完活必须挂电话，否则仓库线路会被占满。
+
+</t>
+<t tx="swot.20260216191718.1">@language asciidoc
+我们将之前定义的 `User` 对象和 `DoorSystemException` 结合进来。
+
+@language java
+[source,java]
+----
+import java.sql.*;
+
+public class JDBCDemo {
+    // 数据库连接信息（假设是 MySQL）
+    private static final String URL = "jdbc:mysql://localhost:3306/door_db";
+    private static final String USER = "root";
+    private static final String PASS = "123456";
+
+    public void findUserByCard(String cardId) throws DoorSystemException {
+        // SQL 语句：去 users 表里找卡号对应的姓名
+        String sql = "SELECT name FROM users WHERE card_id = ?";
+
+        // 使用 try-with-resources，自动关闭连接，防止“占线”
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // 设置参数
+            pstmt.setString(1, cardId);
+
+            // 执行查询
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String name = rs.getString("name");
+                System.out.println("数据库查询成功！该卡所属用户为：" + name);
+            } else {
+                // 找不到时，抛出我们统一定义的异常
+                throw new DoorSystemException("数据库中未找到卡号为 " + cardId + " 的用户");
+            }
+        } catch (SQLException e) {
+            // 将底层的 SQL 错误包装成我们的门禁系统错误
+            throw new DoorSystemException("数据库连接失败：" + e.getMessage());
+        }
+    }
+}
+----
+</t>
+<t tx="swot.20260216191728.1">@language asciidoc
+. 知识点说明
++
+初学者喜欢用字符串拼接 SQL，比如 `sql = "SELECT * FROM users WHERE name = '" + input + "'"`。
+* **危险**：坏人如果输入 `' OR '1'='1`，就能绕过密码。
+* **解决方案**：必须使用 **PreparedStatement**（预编译对象）。
+
+. 形象比喻
+* **拼接字符串**：就像把客户的话直接印在合同里，别人改了话术，合同就变了。
+* **PreparedStatement**：就像一份填空题模版。你只能在空位填内容，不能修改题目的逻辑。**这是安全底线！**
+
+</t>
+<t tx="swot.20260216191751.1">在接下来的实验中，我们将：
+
+.  在 MySQL 中创建 `user_table`。
+.  编写一个 `DBUtils` 工具类，专门负责开/关数据库。
+.  实现门禁系统的“刷卡记录”保存功能（把每次刷卡的时间、卡号存入数据库）。
+</t>
+<t tx="swot.20260216194309.1">@language asciidoc
+.  **不要死记硬背**：
+    * JDBC 的代码很长，初学者容易记不住。**“Ctrl+C/Ctrl+V 是程序员的常态”**。
+    * 重点是理解那四个步骤，具体的代码可以查手册或复制模版。
+
+.  **环境避坑**：
+    * 基础弱的学生最容易卡在“找不到驱动包 (Jar包)”或者“数据库连接不上”。
+    * 用命令行链接
+        ** 编译：javac -cp ".;lib/mysql-connector-java.jar" MyTest.java
+        ** 运行：java -cp ".;lib/mysql-connector-java.jar" MyTest
+
+.  **可视化辅助**：
+    * 在写代码前，先用图形化工具（如 Navicat 或 IDEA 自带的 Database 窗口）手动往表里填数据。看到表里的数据，再写 Java 去查，成就感会很强。
 </t>
 </tnodes>
 </leo_file>
