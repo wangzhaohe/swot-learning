@@ -178,8 +178,19 @@
 <v t="swot.20260216191751.1"><vh>2.6.5 实验预告：实验三 数据库驱动开发</vh></v>
 <v t="swot.20260216194309.1"><vh>2.6.6 小结</vh></v>
 </v>
-<v t="swot.20260215212309.1"><vh>2.7 多线程与反射 (4学时)</vh></v>
-<v t="swot.20260215212257.1"><vh>2.8 网络编程 (4学时)</vh></v>
+<v t="swot.20260215212309.1"><vh>2.7 多线程与反射 (4学时)</vh>
+<v t="swot.20260216213100.1"><vh>2.7.1 多线程 —— “程序的分身术”</vh></v>
+<v t="swot.20260216213110.1"><vh>2.7.2 反射机制 —— “程序的 X 光机”</vh></v>
+<v t="swot.20260217014753.1"><vh>2.7.3 小结</vh></v>
+</v>
+<v t="swot.20260215212257.1"><vh>2.8 网络编程 (4学时)</vh>
+<v t="swot.20260216212750.1"><vh>2.8.1 网络基础 —— “寄快递”</vh></v>
+<v t="swot.20260216213241.1"><vh>2.8.2 Socket 编程 —— “打通电话”</vh>
+<v t="swot.20260217014602.1"><vh>代码举例：门禁终端（客户端）发送刷卡请求</vh></v>
+<v t="swot.20260217014610.1"><vh>代码举例：中央服务器（服务端）接收请求</vh></v>
+</v>
+<v t="swot.20260216221239.1"><vh>2.8.3 小结</vh></v>
+</v>
 </v>
 <v t="swot.20260215212047.1"><vh>3. 实验内容：JavaSE 门禁系统实训（共 36 学时）</vh>
 <v t="swot.20260215212525.1"><vh>实验一：环境与项目初始化 (4学时)</vh></v>
@@ -13723,9 +13734,12 @@ pause
 </t>
 <t tx="swot.20260215212257.1">* *核心知识点*：TCP/UDP 协议、Socket 编程、URL 处理。
 * *教学要求*：能够实现简单的 C/S 架构通信。
+* *本节要求*：理解 TCP 通信流程，实现门禁终端与服务器的“跨空间对话”。
 </t>
-<t tx="swot.20260215212309.1">* *核心知识点*：线程创建与生命周期、同步机制（synchronized）、反射 API、动态代理。
+<t tx="swot.20260215212309.1">@language asciidoc
+* *核心知识点*：线程创建与生命周期、同步机制（synchronized）、反射 API、动态代理。
 * *教学要求*：理解并发编程基础及 Java 语言的动态特性。
+* *本节要求*：理解“分身术”的原理，让程序能同时干多件事；了解反射这一“透视眼”技术。
 </t>
 <t tx="swot.20260215212313.1">* *核心知识点*：JDBC 架构、Connection/Statement/ResultSet、预编译 SQL、事务处理。
 * *教学要求*：学会使用 Java 连接数据库，让门禁系统具备“海量数据”的管理能力。
@@ -13796,6 +13810,7 @@ pause
 :important-caption: ❗
 :warning-caption: ‼️
 :caution-caption: ⚠️
+
 </t>
 <t tx="swot.20260215213152.1">@language asciidoc
 .课程基本信息
@@ -13806,6 +13821,7 @@ pause
 | 学分 | 3 学分
 | 考核方式 | 大作业 (70%) + 平时成绩 (30%)
 |===
+
 </t>
 <t tx="swot.20260215222431.1">**1. 知识点说明**
 
@@ -14571,6 +14587,132 @@ public class JDBCDemo {
 
 .  **可视化辅助**：
     * 在写代码前，先用图形化工具（如 Navicat 或 IDEA 自带的 Database 窗口）手动往表里填数据。看到表里的数据，再写 Java 去查，成就感会很强。
+</t>
+<t tx="swot.20260216212750.1">@language asciidoc
+知识点说明
+
+* **IP 地址**：收件人的地址（哪台电脑）。
+* **端口号 (Port)**：收件人的姓名/房间号（电脑里的哪个程序）。
+* **TCP 协议**：像发快递，必须收件人签收了，寄件人才放心（可靠连接）。
+</t>
+<t tx="swot.20260216213100.1">@language asciidoc
+[upperalpha]
+. 知识点说明
+* **进程**：像是一个工厂（比如整个门禁系统）。
+* **线程**：像是工厂里的工人。一个工厂可以有很多工人同时干活。
+* **为什么要学？**：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。
+
+
+. 生活举例
++
+你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。
+
+
+. 代码实现：模拟门禁自检与刷卡同时进行
++
+[source,java]
+----
+@language java
+// 1. 定义一个自检任务
+class HealthCheckThread extends Thread {
+    public void run() {
+        while (true) {
+            System.out.println("系统自检中：硬件状态正常...");
+            try { Thread.sleep(5000); } catch (InterruptedException e) {}
+        }
+    }
+}
+
+public class MultiThreadDemo {
+    public static void main(String[] args) {
+        // 2. 启动自检“分身”
+        HealthCheckThread check = new HealthCheckThread();
+        check.start(); 
+
+        // 3. 主线程继续处理刷卡
+        System.out.println("主系统：准备就绪，请刷卡...");
+    }
+}
+----
+</t>
+<t tx="swot.20260216213110.1">@language asciidoc
+知识点说明
+
+* **反射 (Reflection)**：平时我们用类，是先看到图纸再造房子。反射则是房子已经在那了，我们拿个“X光机”去扫，看看它里面有什么属性和方法。
+* **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
+
+
+.代码举例（看看 User 类里有什么）
+[source,java]
+----
+@language java
+public class ReflectionDemo {
+    public static void main(String[] args) throws Exception {
+        // 通过类名，直接“抓取”这个类的结构
+        Class clazz = Class.forName("User");
+
+        System.out.println("类的名字是：" + clazz.getName());
+
+        // 获取所有定义的属性名字
+        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+        for (var f : fields) {
+            System.out.println("发现属性：" + f.getName());
+        }
+    }
+}
+----
+</t>
+<t tx="swot.20260216213241.1"></t>
+<t tx="swot.20260216221239.1">**网络编程的演示**：
+
+   * 演示这一课时，最好**开两个命令行窗口**。一个跑服务器，一个跑客户端，可以看到一台电脑里的两个程序在“聊天”，这种直观感非常重要。
+
+</t>
+<t tx="swot.20260217014602.1">@language java
+[source,java]
+----
+import java.io.*;
+import java.net.*;
+
+public class DoorClient {
+    public static void main(String[] args) {
+        try (Socket socket = new Socket("127.0.0.1", 8888);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+
+            // 模拟发送刷卡数据给服务器
+            out.println("CARD_ID:A1234567;ACTION:OPEN");
+            System.out.println("已将刷卡数据传回中央服务器。");
+
+        } catch (IOException e) {
+            System.out.println("网络连接失败，门禁进入离线模式。");
+        }
+    }
+}
+----
+</t>
+<t tx="swot.20260217014610.1">@language java
+[source,java]
+----
+public class CentralServer {
+    public static void main(String[] args) throws Exception {
+        ServerSocket server = new ServerSocket(8888);
+        System.out.println("服务器已启动，等待门禁终端连接...");
+
+        while (true) {
+            Socket client = server.accept(); // 等待连接
+            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            System.out.println("收到终端上报：" + in.readLine());
+        }
+    }
+}
+----
+</t>
+<t tx="swot.20260217014753.1">[upperalpha]
+. **多线程的坑**：
+   * 多线程虽然好用，但不要乱用。两个工人都去抢一个笔记本（共享资源）会打架（死锁/线程安全）。
+
+. **反射的定位**：
+   * 基础阶段，不需要能写出复杂的反射逻辑，只要知道“原来 Java 可以在运行的时候去拆解一个类”就可以了。
 </t>
 </tnodes>
 </leo_file>

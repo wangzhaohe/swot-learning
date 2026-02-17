@@ -590,8 +590,20 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_2_6_6_小结">2.6.6 小结</a></li>
 </ul>
 </li>
-<li><a href="#_2_7_多线程与反射_4学时">2.7 多线程与反射 (4学时)</a></li>
-<li><a href="#_2_8_网络编程_4学时">2.8 网络编程 (4学时)</a></li>
+<li><a href="#_2_7_多线程与反射_4学时">2.7 多线程与反射 (4学时)</a>
+<ul class="sectlevel3">
+<li><a href="#_2_7_1_多线程_程序的分身术">2.7.1 多线程 —— “程序的分身术”</a></li>
+<li><a href="#_2_7_2_反射机制_程序的_x_光机">2.7.2 反射机制 —— “程序的 X 光机”</a></li>
+<li><a href="#_2_7_3_小结">2.7.3 小结</a></li>
+</ul>
+</li>
+<li><a href="#_2_8_网络编程_4学时">2.8 网络编程 (4学时)</a>
+<ul class="sectlevel3">
+<li><a href="#_2_8_1_网络基础_寄快递">2.8.1 网络基础 —— “寄快递”</a></li>
+<li><a href="#_2_8_2_socket_编程_打通电话">2.8.2 Socket 编程 —— “打通电话”</a></li>
+<li><a href="#_2_8_3_小结">2.8.3 小结</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_3_实验内容javase_门禁系统实训共_36_学时">3. 实验内容：JavaSE 门禁系统实训（共 36 学时）</a>
@@ -2047,7 +2059,128 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li>
 <p><strong>教学要求</strong>：理解并发编程基础及 Java 语言的动态特性。</p>
 </li>
+<li>
+<p><strong>本节要求</strong>：理解“分身术”的原理，让程序能同时干多件事；了解反射这一“透视眼”技术。</p>
+</li>
 </ul>
+</div>
+<div class="sect3">
+<h4 id="_2_7_1_多线程_程序的分身术">2.7.1 多线程 —— “程序的分身术”</h4>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>知识点说明</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>进程</strong>：像是一个工厂（比如整个门禁系统）。</p>
+</li>
+<li>
+<p><strong>线程</strong>：像是工厂里的工人。一个工厂可以有很多工人同时干活。</p>
+</li>
+<li>
+<p><strong>为什么要学？</strong>：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>生活举例</p>
+<div class="paragraph">
+<p>你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。</p>
+</div>
+</li>
+<li>
+<p>代码实现：模拟门禁自检与刷卡同时进行</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 1. 定义一个自检任务</span>
+<span class="tok-kd">class</span> <span class="tok-nc">HealthCheckThread</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">Thread</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">run</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;系统自检中：硬件状态正常...&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">Thread</span><span class="tok-p">.</span><span class="tok-na">sleep</span><span class="tok-p">(</span><span class="tok-mi">5000</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">InterruptedException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{}</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">MultiThreadDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 2. 启动自检“分身”</span>
+<span class="tok-w">        </span><span class="tok-n">HealthCheckThread</span><span class="tok-w"> </span><span class="tok-n">check</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">HealthCheckThread</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">check</span><span class="tok-p">.</span><span class="tok-na">start</span><span class="tok-p">();</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 3. 主线程继续处理刷卡</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;主系统：准备就绪，请刷卡...&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_7_2_反射机制_程序的_x_光机">2.7.2 反射机制 —— “程序的 X 光机”</h4>
+<div class="paragraph">
+<p>知识点说明</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>反射 (Reflection)</strong>：平时我们用类，是先看到图纸再造房子。反射则是房子已经在那了，我们拿个“X光机”去扫，看看它里面有什么属性和方法。</p>
+</li>
+<li>
+<p><strong>核心价值</strong>：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">代码举例（看看 User 类里有什么）</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ReflectionDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 通过类名，直接“抓取”这个类的结构</span>
+<span class="tok-w">        </span><span class="tok-n">Class</span><span class="tok-w"> </span><span class="tok-n">clazz</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Class</span><span class="tok-p">.</span><span class="tok-na">forName</span><span class="tok-p">(</span><span class="tok-s">&quot;User&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;类的名字是：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">clazz</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">());</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 获取所有定义的属性名字</span>
+<span class="tok-w">        </span><span class="tok-n">java</span><span class="tok-p">.</span><span class="tok-na">lang</span><span class="tok-p">.</span><span class="tok-na">reflect</span><span class="tok-p">.</span><span class="tok-na">Field</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">fields</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">clazz</span><span class="tok-p">.</span><span class="tok-na">getDeclaredFields</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">fields</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;发现属性：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_7_3_小结">2.7.3 小结</h4>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p><strong>多线程的坑</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>多线程虽然好用，但不要乱用。两个工人都去抢一个笔记本（共享资源）会打架（死锁/线程安全）。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>反射的定位</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>基础阶段，不需要能写出复杂的反射逻辑，只要知道“原来 Java 可以在运行的时候去拆解一个类”就可以了。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -2060,7 +2193,88 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li>
 <p><strong>教学要求</strong>：能够实现简单的 C/S 架构通信。</p>
 </li>
+<li>
+<p><strong>本节要求</strong>：理解 TCP 通信流程，实现门禁终端与服务器的“跨空间对话”。</p>
+</li>
 </ul>
+</div>
+<div class="sect3">
+<h4 id="_2_8_1_网络基础_寄快递">2.8.1 网络基础 —— “寄快递”</h4>
+<div class="paragraph">
+<p>知识点说明</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>IP 地址</strong>：收件人的地址（哪台电脑）。</p>
+</li>
+<li>
+<p><strong>端口号 (Port)</strong>：收件人的姓名/房间号（电脑里的哪个程序）。</p>
+</li>
+<li>
+<p><strong>TCP 协议</strong>：像发快递，必须收件人签收了，寄件人才放心（可靠连接）。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_8_2_socket_编程_打通电话">2.8.2 Socket 编程 —— “打通电话”</h4>
+<div class="sect4">
+<h5 id="_代码举例门禁终端客户端发送刷卡请求">代码举例：门禁终端（客户端）发送刷卡请求</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.*</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.net.*</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DoorClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Socket</span><span class="tok-w"> </span><span class="tok-n">socket</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Socket</span><span class="tok-p">(</span><span class="tok-s">&quot;127.0.0.1&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">8888</span><span class="tok-p">);</span>
+<span class="tok-w">             </span><span class="tok-n">PrintWriter</span><span class="tok-w"> </span><span class="tok-n">out</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">PrintWriter</span><span class="tok-p">(</span><span class="tok-n">socket</span><span class="tok-p">.</span><span class="tok-na">getOutputStream</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 模拟发送刷卡数据给服务器</span>
+<span class="tok-w">            </span><span class="tok-n">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;CARD_ID:A1234567;ACTION:OPEN&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;已将刷卡数据传回中央服务器。&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;网络连接失败，门禁进入离线模式。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_代码举例中央服务器服务端接收请求">代码举例：中央服务器（服务端）接收请求</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">CentralServer</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">ServerSocket</span><span class="tok-w"> </span><span class="tok-n">server</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ServerSocket</span><span class="tok-p">(</span><span class="tok-mi">8888</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;服务器已启动，等待门禁终端连接...&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">Socket</span><span class="tok-w"> </span><span class="tok-n">client</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">server</span><span class="tok-p">.</span><span class="tok-na">accept</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 等待连接</span>
+<span class="tok-w">            </span><span class="tok-n">BufferedReader</span><span class="tok-w"> </span><span class="tok-n">in</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">BufferedReader</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">InputStreamReader</span><span class="tok-p">(</span><span class="tok-n">client</span><span class="tok-p">.</span><span class="tok-na">getInputStream</span><span class="tok-p">()));</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;收到终端上报：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">in</span><span class="tok-p">.</span><span class="tok-na">readLine</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_8_3_小结">2.8.3 小结</h4>
+<div class="paragraph">
+<p><strong>网络编程的演示</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>演示这一课时，最好<strong>开两个命令行窗口</strong>。一个跑服务器，一个跑客户端，可以看到一台电脑里的两个程序在“聊天”，这种直观感非常重要。</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -2232,7 +2446,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-16 20:18:24 +0800
+Last updated 2026-02-17 08:51:45 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
