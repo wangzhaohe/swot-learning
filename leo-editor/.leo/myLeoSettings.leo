@@ -235,20 +235,8 @@
 <v t="swot.20181202012654.208"><vh>@shortcuts</vh></v>
 </v>
 <v t="swot.20201214164630.1"><vh>themes</vh>
-<v t="swot.20230403131600.1"><vh>@@color name = solarized-red</vh></v>
 <v t="swot.20250709112119.1"><vh>@string theme-name = SwotMoknokai</vh></v>
 <v t="swot.20201214164630.2"><vh>@@string theme-name = swotLightDev</vh></v>
-<v t="swot.20210618192740.1"><vh>@@string theme-name = EKRLight</vh></v>
-<v t="swot.20201214164630.3"><vh>@@string theme-name = EKRDark</vh></v>
-<v t="swot.20201214164630.4"><vh>@@string theme-name = BreezeDarkTheme</vh></v>
-<v t="swot.20201214164630.5"><vh>@@string theme-name = BreezeDark2Theme.leo</vh></v>
-<v t="swot.20201214164630.6"><vh>@@string theme-name = ZephyrDarkTheme</vh></v>
-<v t="swot.20201214164630.7"><vh>@@string theme-name = PaperLightTheme</vh></v>
-<v t="swot.20201214164630.10"><vh>@@string theme-name = DefaultTheme.leo</vh></v>
-<v t="swot.20201214164630.11"><vh>@@string theme-name = NullTheme.leo</vh></v>
-<v t="swot.20201214164630.9"><vh>@@string theme-name = EKRDark_use_2</vh></v>
-<v t="swot.20201214164630.12"><vh>@@string theme-name = EKRLight_use</vh></v>
-<v t="swot.20201214164630.8"><vh>@@string theme-name = BreezeDarkTheme_use</vh></v>
 </v>
 <v t="swot.20211014175000.1"><vh>@bool show-tips = False</vh></v>
 <v t="swot.20240224200242.1"><vh>@@buttons</vh>
@@ -980,17 +968,7 @@ arg:    "/Applications/Typora.app/Contents/MacOS/Typora"</t>
 <t tx="swot.20201004091246.1"></t>
 <t tx="swot.20201213233145.1"></t>
 <t tx="swot.20201214164630.1"></t>
-<t tx="swot.20201214164630.10"></t>
-<t tx="swot.20201214164630.11"></t>
-<t tx="swot.20201214164630.12"></t>
 <t tx="swot.20201214164630.2"></t>
-<t tx="swot.20201214164630.3"></t>
-<t tx="swot.20201214164630.4"></t>
-<t tx="swot.20201214164630.5"></t>
-<t tx="swot.20201214164630.6"></t>
-<t tx="swot.20201214164630.7"></t>
-<t tx="swot.20201214164630.8"></t>
-<t tx="swot.20201214164630.9"></t>
 <t tx="swot.20201221092830.1"># 'subprocess.Popen','C:/Program Files/Microsoft Office/Office/WINWORD.exe',None
 
 ext:
@@ -1055,7 +1033,6 @@ Thu, 30 Jan 2003 16:57:12
 #\:   &lt;|data|&gt;
 </t>
 <t tx="swot.20210210150302.1"></t>
-<t tx="swot.20210618192740.1"></t>
 <t tx="swot.20210906170429.1">r;;=return &lt;||&gt;;
 
 p;;=print(&lt;||&gt;);
@@ -2001,11 +1978,6 @@ r;;=return
 
 </t>
 <t tx="swot.20230331173553.1"></t>
-<t tx="swot.20230403131600.1">https://github.com/leo-editor/leo-editor/issues/3234
-
-for temporary bugfix
-
-You can delete this after https://github.com/leo-editor/leo-editor/pull/3239 is approved.</t>
 <t tx="swot.20230412134154.1">m;;=mongoose.
 
 redirect;;=router.get("&lt;||&gt;", async function (req, res) {
