@@ -216,6 +216,10 @@
 <v t="swot.20250508134307.1"><vh>@adoc leo-editor.adoc</vh>
 <v t="swot.20250508134351.1"><vh>Learning Leo</vh>
 <v t="swot.20250508134253.1"><vh>Install leo-editor from source</vh></v>
+<v t="swot.20260218100311.1"><vh>Config leo-editor</vh>
+<v t="swot.20260218100553.1"><vh>复制 leo 自定义配置文件</vh></v>
+<v t="swot.20260218100631.1"><vh>复制 leo 主题文件</vh></v>
+</v>
 <v t="swot.20250609210130.1"><vh>Nav Search</vh></v>
 <v t="swot.20250508154257.1"><vh>Teaching by leo-editor</vh>
 <v t="swot.20250508154257.3"><vh>write code</vh></v>
@@ -14722,5 +14726,18 @@ public class CentralServer {
 <t tx="swot.20260217193310.1"></t>
 <t tx="swot.20260217195134.1"></t>
 <t tx="swot.20260217215620.1"></t>
+<t tx="swot.20260218100311.1"></t>
+<t tx="swot.20260218100553.1">[source,console]
+----
+cp .leo/myLeoSettings.leo ~/.leo/
+----
+
+
+</t>
+<t tx="swot.20260218100631.1">[source,console]
+----
+cp .leo/themes/SwotMoknokai.leo ~/.leo/themes/
+----
+</t>
 </tnodes>
 </leo_file>
