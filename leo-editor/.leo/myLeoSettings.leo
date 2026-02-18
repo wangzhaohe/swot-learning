@@ -238,7 +238,6 @@
 <v t="swot.20230403131600.1"><vh>@@color name = solarized-red</vh></v>
 <v t="swot.20250709112119.1"><vh>@string theme-name = SwotMoknokai</vh></v>
 <v t="swot.20201214164630.2"><vh>@@string theme-name = swotLightDev</vh></v>
-<v t="swot.20220920163626.1"><vh>@@string theme-name = swotLightDev4k</vh></v>
 <v t="swot.20210618192740.1"><vh>@@string theme-name = EKRLight</vh></v>
 <v t="swot.20201214164630.3"><vh>@@string theme-name = EKRDark</vh></v>
 <v t="swot.20201214164630.4"><vh>@@string theme-name = BreezeDarkTheme</vh></v>
@@ -1443,7 +1442,6 @@ Negative tab widths (recommended) cause Leo to convert tabs to blanks when typin
 \:}
 \:
 </t>
-<t tx="swot.20220920163626.1"></t>
 <t tx="swot.20221015133608.1">@override
 void dispose() {
   super.dispose();
