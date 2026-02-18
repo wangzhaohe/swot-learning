@@ -10,9 +10,9 @@
 #@+node:swot.20200205164205.2: ** var
 from pynput import keyboard, mouse
 
-key_count = 50000
-mouse_count = 5600
-total_count = 55600
+key_count = 128866
+mouse_count = 12344
+total_count = 141210
 #@+node:swot.20200205164205.3: ** mouse
 
 
