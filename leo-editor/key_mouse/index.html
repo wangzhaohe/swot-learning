@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>击键仪表盘 | Keystroke Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        :root {
+            --bg-color: #1a1b26; /* TokyoNight Theme */
+            --card-bg: #24283b;
+            --text-main: #c0caf5;
+            --text-muted: #565f89;
+            --accent: #7aa2f7;
+            --success: #9ece6a;
+            --purple: #bb9af7;
+            --warning: #e0af68;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-color); color: var(--text-main);
+            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 3rem; }
+        .header h1 { font-size: 2.5rem; letter-spacing: 2px; color: var(--accent); }
+        .header p { color: var(--text-muted); margin-top: 0.5rem; }
+        
+        /* 顶部数据卡片 */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card {
+            background: var(--card-bg); padding: 2rem; border-radius: 12px;
+            text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-title { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { font-size: 3rem; font-weight: bold; color: var(--text-main); }
+        .stat-value.keyboard { color: var(--success); }
+        .stat-value.mouse { color: var(--purple); }
+
+        /* 图表网格布局: 统一为 2 列 */
+        .charts-row-split { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-bottom: 2rem; }
+        .chart-container {
+            background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .chart { width: 100%; height: 350px; }
+
+        .loading { text-align: center; padding: 5rem; font-size: 1.5rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <div v-if="loading" class="loading">加载数据中... (请确保已通过 HTTP Server 运行)</div>
+        
+        <div v-else>
+            <div class="header">
+                <h1>HP GT87 Ultra 战况大屏</h1>
+                <p>实时读取本地统计数据，每 60 秒自动刷新</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">历史总产出 (Click)</div>
+                    <div class="stat-value">{{ formatNumber(globalStats.total) }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">键盘敲击 (Key)</div>
+                    <div class="stat-value keyboard">{{ formatNumber(globalStats.keyboard) }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">鼠标点击 (Mouse)</div>
+                    <div class="stat-value mouse">{{ formatNumber(globalStats.mouse) }}</div>
+                </div>
+            </div>
+
+            <div class="charts-row-split">
+                <div class="chart-container">
+                    <div id="hourlyChart" class="chart"></div>
+                </div>
+                <div class="chart-container">
+                    <div id="topKeysChart" class="chart"></div>
+                </div>
+            </div>
+
+            <div class="charts-row-split">
+                <div class="chart-container">
+                    <div id="trendChart" class="chart"></div>
+                </div>
+                <div class="chart-container">
+                    <div id="allTimeTopKeysChart" class="chart"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted, nextTick } = Vue;
+
+        createApp({
+            setup() {
+                const loading = ref(true);
+                const globalStats = ref({ total: 0, keyboard: 0, mouse: 0, key_details: {} });
+                const todayHourlyData = ref([]);
+                const last7DaysData = ref({ dates: [], values: [] });
+                const top10KeysData = ref({ keys: [], values: [] });
+                const allTimeTopKeysData = ref({ keys: [], values: [] });
+
+                // 保存 ECharts 实例
+                let trendChartInstance = null;
+                let hourlyChartInstance = null;
+                let topKeysChartInstance = null;
+                let allTimeTopKeysChartInstance = null;
+
+                // --- 跨平台按键名称美化逻辑 ---
+                const keyMap = {
+                    'Key.space': '␣ Space',
+                    'Key.enter': '↵ Enter',
+                    'Key.backspace': '⌫ Backspace',
+                    'Key.cmd': '⌘ Cmd/Win',
+                    'Key.cmd_r': '⌘ Cmd/Win',
+                    'Key.cmd_l': '⌘ Cmd/Win',
+                    'Key.alt': '⌥ Opt/Alt',
+                    'Key.alt_l': '⌥ Opt/Alt',
+                    'Key.alt_r': '⌥ Opt/Alt',
+                    'Key.ctrl': '⌃ Ctrl',
+                    'Key.ctrl_l': '⌃ Ctrl',
+                    'Key.ctrl_r': '⌃ Ctrl',
+                    'Key.shift': '⇧ Shift',
+                    'Key.shift_r': '⇧ Shift',
+                    'Key.tab': '⇥ Tab',
+                    'Key.esc': '⎋ Esc',
+                    'Key.up': '↑ Up',
+                    'Key.down': '↓ Down',
+                    'Key.left': '← Left',
+                    'Key.right': '→ Right',
+                    'Key.caps_lock': '⇪ Caps',
+                    'Key.delete': '⌦ Delete',
+                    'Key.page_down': '⇟ PgDn',
+                    'Key.page_up': '⇞ PgUp',
+                    'Key.home': '↖ Home',
+                    'Key.end': '↘ End'
+                };
+
+                const formatKeyName = (rawName) => {
+                    if (keyMap[rawName]) return keyMap[rawName];
+                    if (rawName.startsWith('Key.')) {
+                        const name = rawName.replace('Key.', '');
+                        return name.charAt(0).toUpperCase() + name.slice(1);
+                    }
+                    return rawName.toUpperCase();
+                };
+                // -----------------------------
+
+                const formatNumber = (num) => new Intl.NumberFormat('en-US').format(num || 0);
+
+                const getLast7Days = () => {
+                    const dates = [];
+                    for (let i = 6; i >= 0; i--) {
+                        const d = new Date();
+                        d.setDate(d.getDate() - i);
+                        const offset = d.getTimezoneOffset() * 60000;
+                        dates.push((new Date(d - offset)).toISOString().split('T')[0]);
+                    }
+                    return dates;
+                };
+
+                const fetchData = async () => {
+                    try {
+                        const timestamp = new Date().getTime();
+                        // 1. 获取全局数据 (含历史所有按键分布)
+                        const globalRes = await fetch(`key_stats/global_stats.json?t=${timestamp}`);
+                        if (globalRes.ok) {
+                            globalStats.value = await globalRes.json();
+                            
+                            // 排序提取历史 Top 10 (套用美化函数)
+                            if (globalStats.value.key_details) {
+                                const sortedAllTime = Object.entries(globalStats.value.key_details)
+                                    .sort((a, b) => b[1] - a[1]).slice(0, 10);
+                                allTimeTopKeysData.value.keys = sortedAllTime.map(item => formatKeyName(item[0])).reverse();
+                                allTimeTopKeysData.value.values = sortedAllTime.map(item => item[1]).reverse();
+                            }
+                        }
+
+                        // 2. 获取每日数据
+                        const dates = getLast7Days();
+                        const dailyValues = [];
+                        
+                        for (const date of dates) {
+                            try {
+                                const res = await fetch(`key_stats/${date}.json?t=${timestamp}`);
+                                if (res.ok) {
+                                    const data = await res.json();
+                                    dailyValues.push(data.total || 0);
+                                    
+                                    if (date === dates[dates.length - 1]) {
+                                        const hours = Array.from({length: 24}, (_, i) => i.toString().padStart(2, '0'));
+                                        todayHourlyData.value = hours.map(h => data.hourly?.[h] || 0);
+                                        
+                                        // 排序提取今日 Top 10 (套用美化函数)
+                                        if (data.keyboard) {
+                                            const sortedKeys = Object.entries(data.keyboard)
+                                                .sort((a, b) => b[1] - a[1]).slice(0, 10);
+                                            top10KeysData.value.keys = sortedKeys.map(item => formatKeyName(item[0])).reverse();
+                                            top10KeysData.value.values = sortedKeys.map(item => item[1]).reverse();
+                                        }
+                                    }
+                                } else {
+                                    dailyValues.push(0);
+                                }
+                            } catch (e) {
+                                dailyValues.push(0);
+                            }
+                        }
+                        
+                        last7DaysData.value = { dates, values: dailyValues };
+                        
+                        if (loading.value) {
+                            loading.value = false;
+                            nextTick(() => {
+                                renderHourlyChart();
+                                renderTopKeysChart();
+                                renderTrendChart();
+                                renderAllTimeTopKeysChart();
+                            });
+                        } else {
+                            updateCharts();
+                        }
+                    } catch (error) {
+                        console.error("数据拉取异常:", error);
+                    }
+                };
+
+                const renderHourlyChart = () => {
+                    hourlyChartInstance = echarts.init(document.getElementById('hourlyChart'), 'dark');
+                    hourlyChartInstance.setOption({
+                        backgroundColor: 'transparent',
+                        title: { text: '摸鱼检测器 (今日时段分布)', left: 'center' },
+                        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                        xAxis: { type: 'category', data: Array.from({length: 24}, (_, i) => `${i}:00`), axisLine: { lineStyle: { color: '#565f89' } } },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { color: '#1f2335' } } },
+                        series: [{
+                            data: todayHourlyData.value, type: 'bar',
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: '#bb9af7' }, { offset: 1, color: '#7aa2f7' }
+                                ]),
+                                borderRadius: [4, 4, 0, 0]
+                            }
+                        }]
+                    });
+                };
+
+                const renderTopKeysChart = () => {
+                    topKeysChartInstance = echarts.init(document.getElementById('topKeysChart'), 'dark');
+                    topKeysChartInstance.setOption({
+                        backgroundColor: 'transparent',
+                        title: { text: '键皇争霸赛 (今日 Top 10)', left: 'center' },
+                        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                        grid: { left: '3%', right: '10%', bottom: '3%', containLabel: true },
+                        xAxis: { type: 'value', splitLine: { lineStyle: { color: '#1f2335' } } },
+                        yAxis: { type: 'category', data: top10KeysData.value.keys, axisLine: { lineStyle: { color: '#565f89' } } },
+                        series: [{
+                            data: top10KeysData.value.values, type: 'bar',
+                            label: { show: true, position: 'right', color: '#c0caf5', formatter: '{c} 次' },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                                    { offset: 0, color: '#9ece6a' }, { offset: 1, color: '#73daca' }
+                                ]),
+                                borderRadius: [0, 4, 4, 0]
+                            }
+                        }]
+                    });
+                };
+
+                const renderTrendChart = () => {
+                    trendChartInstance = echarts.init(document.getElementById('trendChart'), 'dark');
+                    trendChartInstance.setOption({
+                        backgroundColor: 'transparent',
+                        title: { text: '产出趋势 (近 7 天)', left: 'center' },
+                        tooltip: { trigger: 'axis' },
+                        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                        xAxis: { type: 'category', data: last7DaysData.value.dates.map(d => d.slice(5)), axisLine: { lineStyle: { color: '#565f89' } } },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { color: '#1f2335' } } },
+                        series: [{
+                            data: last7DaysData.value.values, type: 'line', smooth: true, symbolSize: 8,
+                            itemStyle: { color: '#7aa2f7' },
+                            areaStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: 'rgba(122, 162, 247, 0.5)' },
+                                    { offset: 1, color: 'rgba(122, 162, 247, 0)' }
+                                ])
+                            }
+                        }]
+                    });
+                };
+
+                const renderAllTimeTopKeysChart = () => {
+                    allTimeTopKeysChartInstance = echarts.init(document.getElementById('allTimeTopKeysChart'), 'dark');
+                    allTimeTopKeysChartInstance.setOption({
+                        backgroundColor: 'transparent',
+                        title: { text: '全明星战绩 (历史 Top 10)', left: 'center' },
+                        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                        grid: { left: '3%', right: '10%', bottom: '3%', containLabel: true },
+                        xAxis: { type: 'value', splitLine: { lineStyle: { color: '#1f2335' } } },
+                        yAxis: { type: 'category', data: allTimeTopKeysData.value.keys, axisLine: { lineStyle: { color: '#565f89' } } },
+                        series: [{
+                            data: allTimeTopKeysData.value.values, type: 'bar',
+                            label: { show: true, position: 'right', color: '#c0caf5', formatter: '{c} 次' },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                                    { offset: 0, color: '#e0af68' }, { offset: 1, color: '#ff9e64' }
+                                ]),
+                                borderRadius: [0, 4, 4, 0]
+                            }
+                        }]
+                    });
+                };
+
+                const updateCharts = () => {
+                    hourlyChartInstance?.setOption({ series: [{ data: todayHourlyData.value }] });
+                    topKeysChartInstance?.setOption({
+                        yAxis: { data: top10KeysData.value.keys },
+                        series: [{ data: top10KeysData.value.values }]
+                    });
+                    trendChartInstance?.setOption({
+                        xAxis: { data: last7DaysData.value.dates.map(d => d.slice(5)) },
+                        series: [{ data: last7DaysData.value.values }]
+                    });
+                    allTimeTopKeysChartInstance?.setOption({
+                        yAxis: { data: allTimeTopKeysData.value.keys },
+                        series: [{ data: allTimeTopKeysData.value.values }]
+                    });
+                };
+
+                onMounted(() => {
+                    fetchData();
+                    setInterval(fetchData, 60000);
+
+                    window.addEventListener('resize', () => {
+                        hourlyChartInstance?.resize();
+                        topKeysChartInstance?.resize();
+                        trendChartInstance?.resize();
+                        allTimeTopKeysChartInstance?.resize();
+                    });
+                });
+
+                return { loading, globalStats, formatNumber };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
