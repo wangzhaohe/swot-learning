@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
         :root {
-            --bg-color: #1a1b26; /* TokyoNight Theme */
+            --bg-color: #1a1b26; 
             --card-bg: #24283b;
             --text-main: #c0caf5;
             --text-muted: #565f89;
@@ -16,6 +16,7 @@
             --success: #9ece6a;
             --purple: #bb9af7;
             --warning: #e0af68;
+            --focus: #f7768e;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -28,20 +29,20 @@
         .header h1 { font-size: 2.5rem; letter-spacing: 2px; color: var(--accent); }
         .header p { color: var(--text-muted); margin-top: 0.5rem; }
         
-        /* 顶部数据卡片 */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+        /* 顶部数据卡片 (由 3 列变更为 4 列) */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
         .stat-card {
-            background: var(--card-bg); padding: 2rem; border-radius: 12px;
+            background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
             text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             transition: transform 0.2s;
         }
         .stat-card:hover { transform: translateY(-5px); }
-        .stat-title { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-value { font-size: 3rem; font-weight: bold; color: var(--text-main); }
+        .stat-title { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { font-size: 2.5rem; font-weight: bold; color: var(--text-main); }
         .stat-value.keyboard { color: var(--success); }
         .stat-value.mouse { color: var(--purple); }
+        .stat-value.focus { color: var(--focus); }
 
-        /* 图表网格布局: 统一为 2 列 */
         .charts-row-split { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-bottom: 2rem; }
         .chart-container {
             background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
@@ -64,15 +65,19 @@
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-title">历史总产出 (Click)</div>
+                    <div class="stat-title">今日专注时长</div>
+                    <div class="stat-value focus">{{ formatDuration(todayFocusSeconds) }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">历史总点击 (Total)</div>
                     <div class="stat-value">{{ formatNumber(globalStats.total) }}</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-title">键盘敲击 (Key)</div>
+                    <div class="stat-title">总键盘敲击 (Key)</div>
                     <div class="stat-value keyboard">{{ formatNumber(globalStats.keyboard) }}</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-title">鼠标点击 (Mouse)</div>
+                    <div class="stat-title">总鼠标点击 (Mouse)</div>
                     <div class="stat-value mouse">{{ formatNumber(globalStats.mouse) }}</div>
                 </div>
             </div>
@@ -109,41 +114,25 @@
                 const last7DaysData = ref({ dates: [], values: [] });
                 const top10KeysData = ref({ keys: [], values: [] });
                 const allTimeTopKeysData = ref({ keys: [], values: [] });
+                
+                // 新增：记录今天的专注秒数
+                const todayFocusSeconds = ref(0);
 
-                // 保存 ECharts 实例
                 let trendChartInstance = null;
                 let hourlyChartInstance = null;
                 let topKeysChartInstance = null;
                 let allTimeTopKeysChartInstance = null;
 
-                // --- 跨平台按键名称美化逻辑 ---
                 const keyMap = {
-                    'Key.space': '␣ Space',
-                    'Key.enter': '↵ Enter',
-                    'Key.backspace': '⌫ Backspace',
-                    'Key.cmd': '⌘ Cmd/Win',
-                    'Key.cmd_r': '⌘ Cmd/Win',
-                    'Key.cmd_l': '⌘ Cmd/Win',
-                    'Key.alt': '⌥ Opt/Alt',
-                    'Key.alt_l': '⌥ Opt/Alt',
-                    'Key.alt_r': '⌥ Opt/Alt',
-                    'Key.ctrl': '⌃ Ctrl',
-                    'Key.ctrl_l': '⌃ Ctrl',
-                    'Key.ctrl_r': '⌃ Ctrl',
-                    'Key.shift': '⇧ Shift',
-                    'Key.shift_r': '⇧ Shift',
-                    'Key.tab': '⇥ Tab',
-                    'Key.esc': '⎋ Esc',
-                    'Key.up': '↑ Up',
-                    'Key.down': '↓ Down',
-                    'Key.left': '← Left',
-                    'Key.right': '→ Right',
-                    'Key.caps_lock': '⇪ Caps',
-                    'Key.delete': '⌦ Delete',
-                    'Key.page_down': '⇟ PgDn',
-                    'Key.page_up': '⇞ PgUp',
-                    'Key.home': '↖ Home',
-                    'Key.end': '↘ End'
+                    'Key.space': '␣ Space', 'Key.enter': '↵ Enter', 'Key.backspace': '⌫ Backspace',
+                    'Key.cmd': '⌘ Cmd/Win', 'Key.cmd_r': '⌘ Cmd/Win', 'Key.cmd_l': '⌘ Cmd/Win',
+                    'Key.alt': '⌥ Opt/Alt', 'Key.alt_l': '⌥ Opt/Alt', 'Key.alt_r': '⌥ Opt/Alt',
+                    'Key.ctrl': '⌃ Ctrl', 'Key.ctrl_l': '⌃ Ctrl', 'Key.ctrl_r': '⌃ Ctrl',
+                    'Key.shift': '⇧ Shift', 'Key.shift_r': '⇧ Shift', 'Key.tab': '⇥ Tab',
+                    'Key.esc': '⎋ Esc', 'Key.up': '↑ Up', 'Key.down': '↓ Down',
+                    'Key.left': '← Left', 'Key.right': '→ Right', 'Key.caps_lock': '⇪ Caps',
+                    'Key.delete': '⌦ Delete', 'Key.page_down': '⇟ PgDn', 'Key.page_up': '⇞ PgUp',
+                    'Key.home': '↖ Home', 'Key.end': '↘ End'
                 };
 
                 const formatKeyName = (rawName) => {
@@ -154,9 +143,17 @@
                     }
                     return rawName.toUpperCase();
                 };
-                // -----------------------------
 
                 const formatNumber = (num) => new Intl.NumberFormat('en-US').format(num || 0);
+
+                // 新增：将秒数转换为友好格式 (如 3h 45m)
+                const formatDuration = (seconds) => {
+                    if (!seconds) return '0h 0m';
+                    const h = Math.floor(seconds / 3600);
+                    const m = Math.floor((seconds % 3600) / 60);
+                    if (h > 0) return `${h}h ${m}m`;
+                    return `${m}m`;
+                };
 
                 const getLast7Days = () => {
                     const dates = [];
@@ -172,12 +169,9 @@
                 const fetchData = async () => {
                     try {
                         const timestamp = new Date().getTime();
-                        // 1. 获取全局数据 (含历史所有按键分布)
                         const globalRes = await fetch(`key_stats/global_stats.json?t=${timestamp}`);
                         if (globalRes.ok) {
                             globalStats.value = await globalRes.json();
-                            
-                            // 排序提取历史 Top 10 (套用美化函数)
                             if (globalStats.value.key_details) {
                                 const sortedAllTime = Object.entries(globalStats.value.key_details)
                                     .sort((a, b) => b[1] - a[1]).slice(0, 10);
@@ -186,7 +180,6 @@
                             }
                         }
 
-                        // 2. 获取每日数据
                         const dates = getLast7Days();
                         const dailyValues = [];
                         
@@ -198,10 +191,12 @@
                                     dailyValues.push(data.total || 0);
                                     
                                     if (date === dates[dates.length - 1]) {
+                                        // 提取今日专注秒数
+                                        todayFocusSeconds.value = data.focus_seconds || 0;
+
                                         const hours = Array.from({length: 24}, (_, i) => i.toString().padStart(2, '0'));
                                         todayHourlyData.value = hours.map(h => data.hourly?.[h] || 0);
                                         
-                                        // 排序提取今日 Top 10 (套用美化函数)
                                         if (data.keyboard) {
                                             const sortedKeys = Object.entries(data.keyboard)
                                                 .sort((a, b) => b[1] - a[1]).slice(0, 10);
@@ -350,9 +345,10 @@
                     });
                 });
 
-                return { loading, globalStats, formatNumber };
+                return { loading, globalStats, formatNumber, formatDuration, todayFocusSeconds };
             }
         }).mount('#app');
     </script>
 </body>
 </html>
+
