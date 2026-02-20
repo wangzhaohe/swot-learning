@@ -635,16 +635,29 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p>心跳检测 (Active Time Heartbeat)，系统引入了 <code>HEARTBEAT_THRESHOLD</code>（300秒）概念。</p>
 </div>
 <div class="listingblock">
+<div class="title">@file key_mouse.py-&#8594;class TrackerEngine-&#8594;def log_event</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-c1"># 代码片段来自节点：*3* def log_event</span>
-<span class="tok-n">delta</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span> <span class="tok-o">-</span> <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">delta</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span> <span class="tok-o">-</span> <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span>
 <span class="tok-k">if</span> <span class="tok-n">delta</span> <span class="tok-o">&lt;</span> <span class="tok-n">HEARTBEAT_THRESHOLD</span><span class="tok-p">:</span>
     <span class="tok-c1"># 只有距离上次操作小于 5 分钟，才认为是连贯工作</span>
-    <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-p">[</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-o">.</span><span class="tok-n">get</span><span class="tok-p">(</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-n">delta</span></code></pre>
+    <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-p">[</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-p">(</span>
+        <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-o">.</span><span class="tok-n">get</span><span class="tok-p">(</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-n">delta</span>
+    <span class="tok-p">)</span>
+<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>该算法的核心思想是：<strong>专注总时长 = 所有（间隔 &lt; 5分钟）的时间段之和</strong>。若两次操作间隔超过5分钟，系统将判定用户处于闲置状态，不计入时长。</p>
+<p>该算法的核心思想是：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>专注总时长 = 所有（间隔 &lt; 5分钟）的时间段之和</strong>。</p>
+</li>
+<li>
+<p>若两次操作间隔超过5分钟，系统将判定用户处于闲置状态，不计入时长。</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -856,7 +869,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-20 22:40:27 +0800
+Last updated 2026-02-20 23:01:40 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

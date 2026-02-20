@@ -841,7 +841,9 @@
 <v t="swot.20260220170138.1"><vh>1 项目概述</vh></v>
 <v t="swot.20260220170207.1"><vh>2 开发环境与工具</vh></v>
 <v t="swot.20260220170311.1"><vh>3 核心架构设计：Python 监听引擎</vh>
-<v t="swot.20260220170638.1"><vh>3.1 专注时长算法</vh></v>
+<v t="swot.20260220170638.1"><vh>3.1 专注时长算法</vh>
+<v t="swot.20260220225738.1"><vh>&lt;&lt; 专注时长计算 (5分钟心跳法) &gt;&gt;</vh></v>
+</v>
 <v t="swot.20260220170623.1"><vh>3.2 数据原子化持久化</vh></v>
 </v>
 <v t="swot.20260220170400.1"><vh>4 前端大屏设计：Vue + ECharts</vh>
@@ -15028,16 +15030,16 @@ def _atomic_save(self, data, target_path):
 </t>
 <t tx="swot.20260220170638.1">心跳检测 (Active Time Heartbeat)，系统引入了 `HEARTBEAT_THRESHOLD`（300秒）概念。
 
+.@file key_mouse.py--&gt;class TrackerEngine--&gt;def log_event
 [source,python]
 ----
-# 代码片段来自节点：*3* def log_event
-delta = now_ts - self.last_event_time
-if delta &lt; HEARTBEAT_THRESHOLD:
-    # 只有距离上次操作小于 5 分钟，才认为是连贯工作
-    self.daily_data["focus_seconds"] = self.daily_data.get("focus_seconds", 0) + delta
+&lt;&lt; 专注时长计算 (5分钟心跳法) &gt;&gt;
 ----
 
-该算法的核心思想是：**专注总时长 = 所有（间隔 &lt; 5分钟）的时间段之和**。若两次操作间隔超过5分钟，系统将判定用户处于闲置状态，不计入时长。
+该算法的核心思想是：
+
+- **专注总时长 = 所有（间隔 &lt; 5分钟）的时间段之和**。
+- 若两次操作间隔超过5分钟，系统将判定用户处于闲置状态，不计入时长。
 
 </t>
 <t tx="swot.20260220170918.1">系统提供四个维度的图表分析：
@@ -15151,6 +15153,16 @@ if delta &lt; HEARTBEAT_THRESHOLD:
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 .chart { width: 100%; height: 350px; }
+</t>
+<t tx="swot.20260220225738.1">@language python
+delta = now_ts - self.last_event_time
+if delta &lt; HEARTBEAT_THRESHOLD:
+    # 只有距离上次操作小于 5 分钟，才认为是连贯工作
+    self.daily_data["focus_seconds"] = (
+        self.daily_data.get("focus_seconds", 0) + delta
+    )
+self.last_event_time = now_ts
+
 </t>
 </tnodes>
 </leo_file>

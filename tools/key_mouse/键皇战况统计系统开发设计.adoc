@@ -61,16 +61,23 @@
 === 3.1 专注时长算法
 心跳检测 (Active Time Heartbeat)，系统引入了 `HEARTBEAT_THRESHOLD`（300秒）概念。
 
+.@file key_mouse.py-->class TrackerEngine-->def log_event
 [source,python]
 ----
-# 代码片段来自节点：*3* def log_event
 delta = now_ts - self.last_event_time
 if delta < HEARTBEAT_THRESHOLD:
     # 只有距离上次操作小于 5 分钟，才认为是连贯工作
-    self.daily_data["focus_seconds"] = self.daily_data.get("focus_seconds", 0) + delta
+    self.daily_data["focus_seconds"] = (
+        self.daily_data.get("focus_seconds", 0) + delta
+    )
+self.last_event_time = now_ts
+
 ----
 
-该算法的核心思想是：**专注总时长 = 所有（间隔 < 5分钟）的时间段之和**。若两次操作间隔超过5分钟，系统将判定用户处于闲置状态，不计入时长。
+该算法的核心思想是：
+
+- **专注总时长 = 所有（间隔 < 5分钟）的时间段之和**。
+- 若两次操作间隔超过5分钟，系统将判定用户处于闲置状态，不计入时长。
 
 === 3.2 数据原子化持久化
 为了防止意外停机导致 JSON 损坏，系统在 `_atomic_save` 节点中实现了原子化写入：
