@@ -85,11 +85,11 @@
 <v t="swot.20200908084141.65"><vh>@string status-font-style = @font-style</vh></v>
 </v>
 </v>
-<v t="swot.20181202012654.205" descendentVnodeUnknownAttributes="7d7100580a000000302e32332e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@settings</vh>
+<v t="swot.20181202012654.205" descendentVnodeUnknownAttributes="7d7100580a000000302e32352e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@settings</vh>
 <v t="swot.20200916152454.1"><vh>@enabled-plugins</vh></v>
 <v t="swot.20210129110804.1"><vh>@string headline-time-format-string = %Y-%m-%d</vh></v>
 <v t="swot.20210129110742.1"><vh>@string body-time-format-string = %Y-%m-%d %H:%M:%S</vh></v>
-<v t="swot.20250529213001.1"><vh>@string target-language = java</vh></v>
+<v t="swot.20250529213001.1"><vh>@string target-language = python</vh></v>
 <v t="swot.20201004091246.1"><vh>vr3 settings</vh>
 <v t="swot.20201004073914.1"><vh>@int qweb-view-font-size = 18</vh></v>
 <v t="swot.20201004082022.1"><vh>@bool vr3-md-math-output = True </vh></v>
@@ -107,6 +107,7 @@
 <v t="swot.20221230160721.1"><vh>@bool vr3-asciidoctor-diagram=True</vh></v>
 </v>
 <v t="swot.20181207204040.1"><vh>@commands</vh>
+<v t="swot.20260219100306.1"><vh>@command reload-body-style</vh></v>
 <v t="swot.20260218013134.1"><vh>@command adoc-live</vh></v>
 <v t="swot.20230201133436.1"><vh>@command insert-subheads-sn</vh></v>
 <v t="swot.20230201133444.1"><vh>@command insert-all-subheads-sn</vh></v>
@@ -133,16 +134,18 @@
 <v t="swot.20200226234611.1"><vh>@string vim-mode-unfocused-border = border: 2px white</vh></v>
 </v>
 <v t="swot.20181207204231.1"><vh>@bool vim-crosses-lines = True</vh></v>
-<v t="swot.20181207204218.1"><vh>@bool vim-mode = False</vh></v>
 <v t="swot.20181207203812.1"><vh>@bool autocomplete-brackets = True</vh></v>
+<v t="swot.20181207204130.1"><vh>@bool scripting-abbreviations = True</vh></v>
+<v t="swot.20190503184609.1"><vh>@bool run-pyflakes-on-write = True</vh></v>
+<v t="swot.20220114092932.1"><vh>@bool color_trailing_whitespace = True</vh></v>
+<v t="swot.20190503184623.1"><vh>@bool syntax-error-popup = True</vh></v>
+<v t="swot.20260218222902.1"><vh>@bool put-node-timestamps = False</vh></v>
+<v t="swot.20181207204218.1"><vh>@bool vim-mode = False</vh></v>
 <v t="swot.20181207204102.1"><vh>@bool log_show_save_time = False</vh></v>
 <v t="swot.20181207203834.1"><vh>@bool report_unchanged_files = False</vh></v>
 <v t="swot.20181207204117.1"><vh>@bool show_iconbar = False</vh></v>
-<v t="swot.20181207204130.1"><vh>@bool scripting-abbreviations = True</vh></v>
 <v t="swot.20181219183905.1"><vh>@bool outline_tabs_show_close = False</vh></v>
-<v t="swot.20190503184609.1"><vh>@bool run-pyflakes-on-write = True</vh></v>
-<v t="swot.20190503184623.1"><vh>@bool syntax-error-popup = True</vh></v>
-<v t="swot.20220114092932.1"><vh>@bool color_trailing_whitespace = True</vh></v>
+<v t="swot.20211014175000.1"><vh>@bool show-tips = False</vh></v>
 <v t="swot.20200806093010.1"><vh>@string todo_time_name = hours</vh></v>
 <v t="swot.20230824225611.1"><vh>@string unl-status-kind = legacy</vh></v>
 <v t="swot.20220917160028.1"><vh>@int tab-width = -4</vh></v>
@@ -238,7 +241,6 @@
 <v t="swot.20250709112119.1"><vh>@string theme-name = SwotMoknokai</vh></v>
 <v t="swot.20201214164630.2"><vh>@@string theme-name = swotLightDev</vh></v>
 </v>
-<v t="swot.20211014175000.1"><vh>@bool show-tips = False</vh></v>
 <v t="swot.20240224200242.1"><vh>@@buttons</vh>
 <v t="swot.20240224200843.1"><vh>Version 2a.3 rewrite with tbp's suggestions [wangzhaohe]</vh>
 <v t="swot.20240224200843.2"><vh>@@button delete-subtree-numbering</vh></v>
@@ -2443,6 +2445,39 @@ else:
         # Scenario B: Update only.
         g.es(f"Updated: {html_filename}", color="green")
         g.es("Browser should auto-reload.", color="grey")
+</t>
+<t tx="swot.20260218222902.1"></t>
+<t tx="swot.20260219100306.1">import sys
+from leo.core import leoGlobals as g
+
+# 1. 动态获取插件目录路径
+# 根据你的 Log，插件位于此路径
+plugin_dir = "/Users/swot/app/leo-editor/leo/plugins"
+
+# 2. 确保该路径在 Python 搜索路径中
+if plugin_dir not in sys.path:
+    sys.path.append(plugin_dir)
+
+# 3. 强制清理旧缓存（防止重载无效）
+module_name = 'body_style_hook'
+if module_name in sys.modules:
+    del sys.modules[module_name]
+
+try:
+    # 4. 重新导入模块
+    # 注意：确保你的文件名确实是 body_style_hook.py
+    import body_style_hook as plugin
+    
+    # 5. 执行初始化与绑定
+    # 这会重新应用你修改后的 STYLE_CONFIG
+    plugin.init()
+    c._body_styler = plugin.BodyStyleController(c)
+    c._body_styler.apply_style()
+    
+    g.es(f"Successfully reloaded: {module_name}", color="blue")
+except Exception as e:
+    g.es(f"Reload failed: {e}", color="red")
+    g.es_exception()
 </t>
 </tnodes>
 </leo_file>
