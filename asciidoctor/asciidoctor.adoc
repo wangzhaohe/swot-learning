@@ -37,8 +37,8 @@ Find it position:
 
 Create a hard link:
 
-    ln ~/.rvm/gems/ruby-2.7.2/gems/asciidoctor-2.0.23/data/stylesheets/asciidoctor-default.css leo-editor/
-    Now I can edit asciidoctor-default.css in leo-editor.
+    ln ~/.rvm/gems/ruby-2.7.2/gems/asciidoctor-2.0.23/data/stylesheets/asciidoctor-default.css asciidoctor/
+    Now I can edit asciidoctor-default.css in directory asciidoctor.
 
 == options.rb -> asciidoctor config file
 Purpose: It is unnecessary to change the Leo Editor source code to customize the Asciidoctor command used for generating HTML.
@@ -48,8 +48,7 @@ Asciidoctor runs in a Ruby environment, and we occasionally need to pass extra p
 .Find Ruby LOAD_PATH
 [source,console]
 ----
-ruby -e 'puts $LOAD_PATH'
-
+>ruby -e 'puts $LOAD_PATH'
 /Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/site_ruby/2.7.0
 /Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/site_ruby/2.7.0/x86_64-darwin21
 /Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/site_ruby
@@ -89,6 +88,9 @@ cp options.rb /Users/swot/.rvm/rubies/ruby-2.7.2/lib/ruby/site_ruby/2.7.0
 .Then leo-editor source code only use `-r options` will be ok
 [source,python]
 ----
+# 这是直接指定要使用画图
+# command = f"{prog} {i_path} -o {o_path} -b html5 -r asciidoctor-diagram"
+# 这是使用 options.rb 配置文件
 command = f"{prog} {i_path} -o {o_path} -b html5 -r options"
 ----
 

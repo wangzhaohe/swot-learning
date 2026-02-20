@@ -970,8 +970,8 @@
 
 Create a hard link:
 
-    ln ~/.rvm/gems/ruby-2.7.2/gems/asciidoctor-2.0.23/data/stylesheets/asciidoctor-default.css leo-editor/
-    Now I can edit asciidoctor-default.css in leo-editor.
+    ln ~/.rvm/gems/ruby-2.7.2/gems/asciidoctor-2.0.23/data/stylesheets/asciidoctor-default.css asciidoctor/
+    Now I can edit asciidoctor-default.css in directory asciidoctor.
 
 </t>
 <t tx="swot.20250508105244.1">@language asciidoc
@@ -14966,7 +14966,7 @@ const formatNumber = (num) =&gt;
     // 获取按钮和 div 元素
     const toggleButton = document.getElementById('toggleButton');
     const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+    contentDiv.style.display = 'none';
 
     // 添加点击事件监听器
     toggleButton.addEventListener('click', () =&gt; {
