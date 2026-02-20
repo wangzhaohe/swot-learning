@@ -229,20 +229,6 @@
 <v t="swot.20250831100251.1"><vh>列操作模式 rectangle</vh></v>
 </v>
 </v>
-<v t="swot.20200205164205.1"><vh>@clean key_mouse.py</vh>
-<v t="swot.20200205164205.2"><vh>var</vh></v>
-<v t="swot.20200205164205.3"><vh>mouse</vh></v>
-<v t="swot.20200205164205.4"><vh>keyboard</vh></v>
-<v t="swot.20200205164205.5"><vh>listener</vh></v>
-<v t="swot.20200205164205.6"><vh>if False</vh></v>
-</v>
-<v t="swot.20260220083112.1"><vh>@@file key_mouse.py</vh>
-<v t="swot.20260220083112.2"><vh>var</vh></v>
-<v t="swot.20260220083112.3"><vh>mouse</vh></v>
-<v t="swot.20260220083112.4"><vh>keyboard</vh></v>
-<v t="swot.20260220083112.5"><vh>listener</vh></v>
-<v t="swot.20260220083112.6"><vh>if False</vh></v>
-</v>
 </v>
 <v t="swot.20260218173224.1"><vh>@path lazyvim</vh>
 <v t="swot.20260218173307.1"><vh>item2 启动 lazyvim 后切换标签会导致编辑器当前行下面变灰，按键会跳到别的行的问题</vh></v>
@@ -848,6 +834,42 @@
 </v>
 </v>
 </v>
+<v t="swot.20260220145006.1"><vh>@path tools</vh>
+<v t="swot.20260220171008.1"><vh>@path key_mouse</vh>
+<v t="swot.20260220165251.1"><vh>@adoc 键皇战况统计系统开发设计.adoc</vh>
+<v t="swot.20260220170018.1"><vh>键皇战况统计系统开发设计</vh>
+<v t="swot.20260220170138.1"><vh>1 项目概述</vh></v>
+<v t="swot.20260220170207.1"><vh>2 开发环境与工具</vh></v>
+<v t="swot.20260220170311.1"><vh>3 核心架构设计：Python 监听引擎</vh>
+<v t="swot.20260220170638.1"><vh>3.1 专注时长算法</vh></v>
+<v t="swot.20260220170623.1"><vh>3.2 数据原子化持久化</vh></v>
+</v>
+<v t="swot.20260220170400.1"><vh>4 前端大屏设计：Vue + ECharts</vh>
+<v t="swot.20260220182415.1"><vh>4.1 头部标题</vh>
+<v t="swot.20260220154251.1"><vh>&lt;&lt; header div &gt;&gt;</vh></v>
+<v t="swot.20260220183334.1"><vh>&lt;&lt; header style &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260220170925.1"><vh>4.1 响应式数据卡片</vh>
+<v t="swot.20260220154318.1"><vh>&lt;&lt; 4 cards div &gt;&gt;</vh></v>
+<v t="swot.20260220193929.1"><vh>&lt;&lt; 4 cards style &gt;&gt;</vh></v>
+<v t="swot.20260220160534.1"><vh>&lt;&lt; formatNumber() &gt;&gt;</vh></v>
+<v t="swot.20260220155506.1"><vh>&lt;&lt; formatDuration(seconds) &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260220170918.1"><vh>4.2 可视化分析维度</vh>
+<v t="swot.20260220154401.1"><vh>today analyse</vh></v>
+<v t="swot.20260220154415.1"><vh>total analyse</vh></v>
+<v t="swot.20260220194042.1"><vh>&lt;&lt; charts style &gt;&gt;</vh></v>
+</v>
+</v>
+<v t="swot.20260220170418.1"><vh>5 总结</vh></v>
+</v>
+</v>
+<v t="swot.20260220180617.1"><vh>project structure</vh>
+<v t="swot.20260220144432.1"><vh>@file key_mouse.py</vh></v>
+<v t="swot.20260220153302.1"><vh>@file index.html</vh></v>
+</v>
+</v>
+</v>
 <v t="swot.20251026093202.1"><vh>@path wubi86</vh>
 <v t="swot.20251026094157.1"><vh>@adoc wubi86.adoc</vh>
 <v t="swot.20251026094246.1"><vh>五笔86学习</vh>
@@ -895,7 +917,6 @@
 <v t="swot.20260217193310.1"><vh>2026-02-17 leo-editor 文字间距改善，准备 pull request to leo-editor</vh>
 <v t="swot.20250715091430.1"><vh>@file /Users/swot/app/leo-editor/leo/plugins/body_style_hook.py</vh></v>
 </v>
-<v t="swot.20260217195134.1"><vh>2026-02-17 </vh></v>
 </v>
 </v>
 <v t="swot.20260218173421.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3371017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b64580a000000707269736574646174657106580a000000323032362d30322d3139710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58260000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f63686b626c6b2e706e67710d580700000072656c50617468710e580f000000636c656f2f63686b626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755805000000302e332e3071197d711a285808000000616e6e6f74617465711b7d711c2858080000007072696f72697479711d4b64580a00000070726973657464617465711e580a000000323032362d30322d3139711f75580500000069636f6e7371205d71217d712228680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e6771236810681168124b0068134b0268144b0168156816681768187561755803000000302e3471247d7125285808000000616e6e6f7461746571267d71272858080000007072696f7269747971284b64580a000000707269736574646174657129580a000000323032362d30322d3139712a75580500000069636f6e73712b5d712c7d712d28680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e67712e6810681168124b0068134b0268144b0168156816681768187561755805000000302e342e30712f7d71305808000000616e6e6f7461746571317d71322858080000007072696f7269747971334d0f27580a000000707269736574646174657134580a000000323032362d30322d3139713575735803000000302e3571367d7137285808000000616e6e6f7461746571387d71392858080000007072696f72697479713a4b64580a00000070726973657464617465713b580a000000323032362d30322d3139713c75580500000069636f6e73713d5d713e7d713f28680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e6771406810681168124b0068134b0268144b0168156816681768187561755805000000302e352e3071417d71425808000000616e6e6f7461746571437d71442858080000007072696f7269747971454d0f27580a000000707269736574646174657146580a000000323032362d30322d313971477573752e"><vh>@spot</vh>
@@ -941,112 +962,6 @@
 </v>
 </vnodes>
 <tnodes>
-<t tx="swot.20200205164205.1" _mod_time="4741da65eae28c9a442e">@language python
-@tabwidth -4
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
-@others
-</t>
-<t tx="swot.20200205164205.2">from pynput import keyboard, mouse
-
-key_count = 135896
-mouse_count = 12858
-total_count = 148754
-</t>
-<t tx="swot.20200205164205.3">def on_move(x, y):
-    pass
-    '''
-    print('Pointer moved to {0}'.format(
-        (x, y)))
-    '''
-
-def on_click(x, y, button, pressed):
-
-    global mouse_count, total_count
-    if not pressed:
-        mouse_count += 1
-        total_count += 1
-        print('total: {1} mouse: {0}'.format(mouse_count, total_count))
-    '''
-    print('{0} at {1}'.format(
-        'Pressed' if pressed else 'Released',
-        (x, y)))
-    '''
-    '''
-    if not pressed:
-        # Stop listener
-        return False
-    '''
-
-def on_scroll(x, y, dx, dy):
-    pass
-    '''
-    print('Scrolled {0} at {1}'.format(
-        'down' if dy &lt; 0 else 'up',
-        (x, y)))
-    '''
-</t>
-<t tx="swot.20200205164205.4"># def on_press(key):
-def on_release(key):
-
-    # print(key)
-    global key_count, total_count
-    key_count += 1
-    total_count += 1
-
-    try:
-        print('total: {2} key: {0} alphanumeric key {1} pressed'.format(
-            key_count, key.char, total_count))
-    except AttributeError:
-        print('total: {2} key: {0} special key {1} pressed'.format(
-            key_count, key, total_count))
-
-</t>
-<t tx="swot.20200205164205.5">"""
-# Collect events until released
-with mouse.Listener(
-        on_move=on_move,
-        on_click=on_click,
-        on_scroll=on_scroll) as mouse_listener:
-    mouse_listener.join()
-
-
-# ...or, in a non-blocking fashion:
-listener = mouse.Listener(
-    on_move=on_move,
-    on_click=on_click,
-    on_scroll=on_scroll)
-listener.start()
-
-
-# Collect events until released
-with keyboard.Listener(
-        on_press=on_press,
-        on_release=on_release) as listener:
-    listener.join()
-
-
-# ...or, in a non-blocking fashion:
-listener = keyboard.Listener(
-    on_press=on_press,
-    on_release=on_release)
-listener.start()
-"""
-
-# with keyboard.Listener(on_press=on_press) as mouse_listener:
-#     with mouse.Listener(on_click=on_click) as keyboard_listener:
-#         keyboard_listener.join()
-#         mouse_listener.join()
-# with keyboard.Listener(on_press=on_press) as keyboard_listener:
-with keyboard.Listener(on_release=on_release) as keyboard_listener:
-    with mouse.Listener(on_click=on_click) as mouse_listener:
-        keyboard_listener.join()
-        mouse_listener.join()
-</t>
-<t tx="swot.20200205164205.6">if False:
-    pass
-    @others
-</t>
 <t tx="swot.20250508105043.2"></t>
 <t tx="swot.20250508105234.1">Find it position:
 
@@ -14888,7 +14803,6 @@ public class CentralServer {
    * 基础阶段，不需要能写出复杂的反射逻辑，只要知道“原来 Java 可以在运行的时候去拆解一个类”就可以了。
 </t>
 <t tx="swot.20260217193310.1"></t>
-<t tx="swot.20260217195134.1"></t>
 <t tx="swot.20260218100311.1"></t>
 <t tx="swot.20260218100553.1">[source,console]
 ----
@@ -14968,111 +14882,275 @@ console.log('End create token')
 <t tx="swot.20260219194805.6">console.log('Running validate token')
 </t>
 <t tx="swot.20260220074315.1"></t>
-<t tx="swot.20260220083112.1">@first #! /usr/bin/env python
-@first # -*- coding: utf-8 -*-
-@language python
-@tabwidth -4
-@others
+<t tx="swot.20260220145006.1"></t>
+<t tx="swot.20260220154251.1">@language html
+&lt;div class="header"&gt;
+    &lt;h1&gt;HP GT87 Ultra 战况大屏&lt;/h1&gt;
+    &lt;p&gt;实时读取本地统计数据，每 60 秒自动刷新&lt;/p&gt;
+&lt;/div&gt;
 </t>
-<t tx="swot.20260220083112.2">from pynput import keyboard, mouse
-
-key_count = 135896
-mouse_count = 12858
-total_count = 148754
+<t tx="swot.20260220154318.1">@language html
+&lt;div class="stats-grid"&gt;
+    &lt;div class="stat-card"&gt;
+        &lt;div class="stat-title"&gt;今日专注时长&lt;/div&gt;
+        &lt;div class="stat-value focus"&gt;{{ formatDuration(todayFocusSeconds) }}&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="stat-card"&gt;
+        &lt;div class="stat-title"&gt;历史总点击 (Total)&lt;/div&gt;
+        &lt;div class="stat-value"&gt;{{ formatNumber(globalStats.total) }}&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="stat-card"&gt;
+        &lt;div class="stat-title"&gt;总键盘敲击 (Key)&lt;/div&gt;
+        &lt;div class="stat-value keyboard"&gt;{{ formatNumber(globalStats.keyboard) }}&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="stat-card"&gt;
+        &lt;div class="stat-title"&gt;总鼠标点击 (Mouse)&lt;/div&gt;
+        &lt;div class="stat-value mouse"&gt;{{ formatNumber(globalStats.mouse) }}&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
 </t>
-<t tx="swot.20260220083112.3">def on_move(x, y):
-    pass
-    '''
-    print('Pointer moved to {0}'.format(
-        (x, y)))
-    '''
-
-def on_click(x, y, button, pressed):
-
-    global mouse_count, total_count
-    if not pressed:
-        mouse_count += 1
-        total_count += 1
-        print('total: {1} mouse: {0}'.format(mouse_count, total_count))
-    '''
-    print('{0} at {1}'.format(
-        'Pressed' if pressed else 'Released',
-        (x, y)))
-    '''
-    '''
-    if not pressed:
-        # Stop listener
-        return False
-    '''
-
-def on_scroll(x, y, dx, dy):
-    pass
-    '''
-    print('Scrolled {0} at {1}'.format(
-        'down' if dy &lt; 0 else 'up',
-        (x, y)))
-    '''
+<t tx="swot.20260220154401.1">@language html
+&lt;!-- 今日展示 --&gt;
+&lt;div class="charts-row-split"&gt;
+    &lt;div class="chart-container"&gt;
+        &lt;div id="hourlyChart" class="chart"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="chart-container"&gt;
+        &lt;div id="topKeysChart" class="chart"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
 </t>
-<t tx="swot.20260220083112.4"># def on_press(key):
-def on_release(key):
+<t tx="swot.20260220154415.1">@language html
+&lt;!-- 总体展示 --&gt;
+&lt;div&gt;
+    &lt;div class="chart-container"&gt;
+        &lt;div id="trendChart" class="chart"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="chart-container"&gt;
+        &lt;div id="allTimeTopKeysChart" class="chart"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</t>
+<t tx="swot.20260220155506.1">@language java
+// 将秒数转换为友好格式 (如 3h 45m)
+const formatDuration = (seconds) =&gt; {
+    if (!seconds) return '0h 0m';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    if (h &gt; 0) return `${h}h ${m}m`;
+    return `${m}m`;
+};
+</t>
+<t tx="swot.20260220160534.1">@language java
+const formatNumber = (num) =&gt; 
+    new Intl.NumberFormat('en-US').format(num || 0);
+</t>
+<t tx="swot.20260220165251.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
 
-    # print(key)
-    global key_count, total_count
-    key_count += 1
-    total_count += 1
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
 
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260220170018.1"></t>
+<t tx="swot.20260220170138.1">本项目名为“键皇战况统计系统”（Keystroke Dashboard），旨在通过后台静默监听键盘与鼠标动作，实时分析用户的生产力状态。系统不仅统计点击总数，还通过“心跳算法”估算用户的**今日专注时长**，并以可视化大屏的方式进行展示。
+
+项目采用 **Leo Editor** 进行文学化编程（Literate Programming），代码组织结构清晰，逻辑与文档高度统一。
+
+</t>
+<t tx="swot.20260220170207.1">* **编辑器**:
+  ** Leo Editor 文学化编程核心工具管理大纲
+  ** LazyVim 代码开发
+
+* **后端语言**: Python 3.x (监听引擎)
+
+* **前端框架**: Vue 3 (渐进式视图层)
+
+* **图表库**: Apache ECharts (数据可视化)
+
+* **核心库**: `pynput` (输入设备监听)
+
+</t>
+<t tx="swot.20260220170311.1">监听引擎位于 `@file key_mouse.py` 节点下。
+它负责数据的采集、过滤、持久化以及专注时长的计算。
+</t>
+<t tx="swot.20260220170400.1">大屏展示位于 `@file index.html` 节点。
+
+</t>
+<t tx="swot.20260220170418.1">通过 Leo Editor 的文学化编程，我们将复杂的监听逻辑与直观的 Web UI 完美结合。
+系统的“心跳算法”为用户提供了真实的生产力反馈，而原子化保存则确保了数据的绝对安全。
+
+</t>
+<t tx="swot.20260220170623.1">为了防止意外停机导致 JSON 损坏，系统在 `_atomic_save` 节点中实现了原子化写入：
+
+[source,python]
+----
+# 代码片段来自节点：*3* def _atomic_save
+def _atomic_save(self, data, target_path):
+    tmp_path = target_path.with_suffix('.tmp')
     try:
-        print('total: {2} key: {0} alphanumeric key {1} pressed'.format(
-            key_count, key.char, total_count))
-    except AttributeError:
-        print('total: {2} key: {0} special key {1} pressed'.format(
-            key_count, key, total_count))
+        with open(tmp_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+        os.replace(tmp_path, target_path) # 原子替换
+    except Exception as e:
+        print(f"保存失败: {e}")
+----
 
 </t>
-<t tx="swot.20260220083112.5">"""
-# Collect events until released
-with mouse.Listener(
-        on_move=on_move,
-        on_click=on_click,
-        on_scroll=on_scroll) as mouse_listener:
-    mouse_listener.join()
+<t tx="swot.20260220170638.1">心跳检测 (Active Time Heartbeat)，系统引入了 `HEARTBEAT_THRESHOLD`（300秒）概念。
 
+[source,python]
+----
+# 代码片段来自节点：*3* def log_event
+delta = now_ts - self.last_event_time
+if delta &lt; HEARTBEAT_THRESHOLD:
+    # 只有距离上次操作小于 5 分钟，才认为是连贯工作
+    self.daily_data["focus_seconds"] = self.daily_data.get("focus_seconds", 0) + delta
+----
 
-# ...or, in a non-blocking fashion:
-listener = mouse.Listener(
-    on_move=on_move,
-    on_click=on_click,
-    on_scroll=on_scroll)
-listener.start()
+该算法的核心思想是：**专注总时长 = 所有（间隔 &lt; 5分钟）的时间段之和**。若两次操作间隔超过5分钟，系统将判定用户处于闲置状态，不计入时长。
 
-
-# Collect events until released
-with keyboard.Listener(
-        on_press=on_press,
-        on_release=on_release) as listener:
-    listener.join()
-
-
-# ...or, in a non-blocking fashion:
-listener = keyboard.Listener(
-    on_press=on_press,
-    on_release=on_release)
-listener.start()
-"""
-
-# with keyboard.Listener(on_press=on_press) as mouse_listener:
-#     with mouse.Listener(on_click=on_click) as keyboard_listener:
-#         keyboard_listener.join()
-#         mouse_listener.join()
-# with keyboard.Listener(on_press=on_press) as keyboard_listener:
-with keyboard.Listener(on_release=on_release) as keyboard_listener:
-    with mouse.Listener(on_click=on_click) as mouse_listener:
-        keyboard_listener.join()
-        mouse_listener.join()
 </t>
-<t tx="swot.20260220083112.6">if False:
-    pass
-    @others
+<t tx="swot.20260220170918.1">系统提供四个维度的图表分析：
+
+1. **摸鱼检测器 (今日时段分布)**：24小时热度分析。
+2. **键皇争霸赛 (今日 Top 10)**：统计最高频使用的键位。
+3. **产出趋势 (近 7 天)**：折线图展示近期活跃度。
+4. **全明星战绩 (历史 Top 10)**：展示自系统启动以来的最强键位。
+
+.今日和总体分析展示
+[source,html]
+----
+@others
+----
+
+.今日和总体分析展示样式
+[source,css]
+----
+&lt;&lt; charts style &gt;&gt;
+----
+
+</t>
+<t tx="swot.20260220170925.1">前端采用 4 列网格布局，直观展示:
+
+.卡片结构
+[source,html]
+----
+&lt;&lt; 4 cards div &gt;&gt;
+----
+
+.调用函数
+[source,javascript]
+----
+&lt;&lt; formatNumber() &gt;&gt;
+&lt;&lt; formatDuration(seconds) &gt;&gt;
+----
+
+.卡片样式
+[source,css]
+----
+&lt;&lt; 4 cards style &gt;&gt;
+----
+</t>
+<t tx="swot.20260220171008.1"></t>
+<t tx="swot.20260220180617.1"></t>
+<t tx="swot.20260220182415.1">对头部标题进行描述
+
+.头部结构
+[source,html]
+----
+&lt;&lt; header div &gt;&gt;
+----
+
+.头部样式
+[source,scss]
+----
+&lt;&lt; header style &gt;&gt;
+----
+</t>
+<t tx="swot.20260220183334.1">@language css
+.header { text-align: center; margin-bottom: 3rem; }
+.header h1 { font-size: 2.5rem; letter-spacing: 2px; color: var(--accent); }
+.header p { color: var(--text-muted); margin-top: 0.5rem; }
+</t>
+<t tx="swot.20260220193929.1">@language css
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+.stat-card {
+    background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
+    text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+.stat-title {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--text-main);
+}
+.stat-value.keyboard {
+    color: var(--success);
+}
+.stat-value.mouse {
+    color: var(--purple);
+}
+.stat-value.focus {
+    color: var(--focus);
+}
+</t>
+<t tx="swot.20260220194042.1">@language css
+.charts-row-split {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+.chart-container {
+    background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+.chart { width: 100%; height: 350px; }
 </t>
 </tnodes>
 </leo_file>

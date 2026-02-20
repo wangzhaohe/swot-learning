@@ -1,0 +1,245 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+
+++++
+<button id="toggleButton">目录开关</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+= 键皇战况统计系统开发设计
+
+
+== 1 项目概述
+本项目名为“键皇战况统计系统”（Keystroke Dashboard），旨在通过后台静默监听键盘与鼠标动作，实时分析用户的生产力状态。系统不仅统计点击总数，还通过“心跳算法”估算用户的**今日专注时长**，并以可视化大屏的方式进行展示。
+
+项目采用 **Leo Editor** 进行文学化编程（Literate Programming），代码组织结构清晰，逻辑与文档高度统一。
+
+== 2 开发环境与工具
+* **编辑器**:
+  ** Leo Editor 文学化编程核心工具管理大纲
+  ** LazyVim 代码开发
+
+* **后端语言**: Python 3.x (监听引擎)
+
+* **前端框架**: Vue 3 (渐进式视图层)
+
+* **图表库**: Apache ECharts (数据可视化)
+
+* **核心库**: `pynput` (输入设备监听)
+
+== 3 核心架构设计：Python 监听引擎
+监听引擎位于 `@file key_mouse.py` 节点下。
+它负责数据的采集、过滤、持久化以及专注时长的计算。
+
+=== 3.1 专注时长算法
+心跳检测 (Active Time Heartbeat)，系统引入了 `HEARTBEAT_THRESHOLD`（300秒）概念。
+
+[source,python]
+----
+# 代码片段来自节点：*3* def log_event
+delta = now_ts - self.last_event_time
+if delta < HEARTBEAT_THRESHOLD:
+    # 只有距离上次操作小于 5 分钟，才认为是连贯工作
+    self.daily_data["focus_seconds"] = self.daily_data.get("focus_seconds", 0) + delta
+----
+
+该算法的核心思想是：**专注总时长 = 所有（间隔 < 5分钟）的时间段之和**。若两次操作间隔超过5分钟，系统将判定用户处于闲置状态，不计入时长。
+
+=== 3.2 数据原子化持久化
+为了防止意外停机导致 JSON 损坏，系统在 `_atomic_save` 节点中实现了原子化写入：
+
+[source,python]
+----
+# 代码片段来自节点：*3* def _atomic_save
+def _atomic_save(self, data, target_path):
+    tmp_path = target_path.with_suffix('.tmp')
+    try:
+        with open(tmp_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+        os.replace(tmp_path, target_path) # 原子替换
+    except Exception as e:
+        print(f"保存失败: {e}")
+----
+
+== 4 前端大屏设计：Vue + ECharts
+大屏展示位于 `@file index.html` 节点。
+
+=== 4.1 头部标题
+对头部标题进行描述
+
+.头部结构
+[source,html]
+----
+<div class="header">
+    <h1>HP GT87 Ultra 战况大屏</h1>
+    <p>实时读取本地统计数据，每 60 秒自动刷新</p>
+</div>
+----
+
+.头部样式
+[source,scss]
+----
+.header { text-align: center; margin-bottom: 3rem; }
+.header h1 { font-size: 2.5rem; letter-spacing: 2px; color: var(--accent); }
+.header p { color: var(--text-muted); margin-top: 0.5rem; }
+----
+
+=== 4.1 响应式数据卡片
+前端采用 4 列网格布局，直观展示:
+
+.卡片结构
+[source,html]
+----
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-title">今日专注时长</div>
+        <div class="stat-value focus">{{ formatDuration(todayFocusSeconds) }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-title">历史总点击 (Total)</div>
+        <div class="stat-value">{{ formatNumber(globalStats.total) }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-title">总键盘敲击 (Key)</div>
+        <div class="stat-value keyboard">{{ formatNumber(globalStats.keyboard) }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-title">总鼠标点击 (Mouse)</div>
+        <div class="stat-value mouse">{{ formatNumber(globalStats.mouse) }}</div>
+    </div>
+</div>
+----
+
+.调用函数
+[source,javascript]
+----
+const formatNumber = (num) => 
+    new Intl.NumberFormat('en-US').format(num || 0);
+// 将秒数转换为友好格式 (如 3h 45m)
+const formatDuration = (seconds) => {
+    if (!seconds) return '0h 0m';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    if (h > 0) return `${h}h ${m}m`;
+    return `${m}m`;
+};
+----
+
+.卡片样式
+[source,css]
+----
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+.stat-card {
+    background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
+    text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+.stat-title {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--text-main);
+}
+.stat-value.keyboard {
+    color: var(--success);
+}
+.stat-value.mouse {
+    color: var(--purple);
+}
+.stat-value.focus {
+    color: var(--focus);
+}
+----
+
+=== 4.2 可视化分析维度
+系统提供四个维度的图表分析：
+
+1. **摸鱼检测器 (今日时段分布)**：24小时热度分析。
+2. **键皇争霸赛 (今日 Top 10)**：统计最高频使用的键位。
+3. **产出趋势 (近 7 天)**：折线图展示近期活跃度。
+4. **全明星战绩 (历史 Top 10)**：展示自系统启动以来的最强键位。
+
+.今日和总体分析展示
+[source,html]
+----
+<!-- 今日展示 -->
+<div class="charts-row-split">
+    <div class="chart-container">
+        <div id="hourlyChart" class="chart"></div>
+    </div>
+    <div class="chart-container">
+        <div id="topKeysChart" class="chart"></div>
+    </div>
+</div>
+<!-- 总体展示 -->
+<div>
+    <div class="chart-container">
+        <div id="trendChart" class="chart"></div>
+    </div>
+    <div class="chart-container">
+        <div id="allTimeTopKeysChart" class="chart"></div>
+    </div>
+</div>
+----
+
+.今日和总体分析展示样式
+[source,css]
+----
+.charts-row-split {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+.chart-container {
+    background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+.chart { width: 100%; height: 350px; }
+----
+
+== 5 总结
+通过 Leo Editor 的文学化编程，我们将复杂的监听逻辑与直观的 Web UI 完美结合。
+系统的“心跳算法”为用户提供了真实的生产力反馈，而原子化保存则确保了数据的绝对安全。
+

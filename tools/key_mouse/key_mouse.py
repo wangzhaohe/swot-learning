@@ -1,3 +1,8 @@
+#@+leo-ver=5-thin
+#@+node:swot.20260220144432.1: * @file key_mouse.py
+#@@language python
+#@+others
+#@+node:swot.20260220151135.1: ** import
 import json
 import time
 import os
@@ -6,13 +11,17 @@ from datetime import datetime
 from pathlib import Path
 from pynput import keyboard, mouse
 
+#@+node:swot.20260220151847.1: ** var
 # --- 核心配置 ---
 SCRIPT_DIR = Path(__file__).parent.absolute()
 SAVE_DIR = SCRIPT_DIR / "key_stats"
 SAVE_INTERVAL = 60  # 1分钟自动存盘
 HEARTBEAT_THRESHOLD = 300  # 5分钟心跳阈值（300秒），用于计算专注时长
 
+#@+node:swot.20260220152237.1: ** class TrackerEngine
 class TrackerEngine:
+    #@+others
+    #@+node:swot.20260220152820.1: *3* def __init__
     def __init__(self):
         SAVE_DIR.mkdir(parents=True, exist_ok=True)
         self.lock = threading.Lock()
@@ -36,6 +45,7 @@ class TrackerEngine:
             "keyboard": {}, "mouse": 0, "total": 0, "hourly": {}, "focus_seconds": 0 # 新增：专注秒数
         })
 
+    #@+node:swot.20260220152829.1: *3* def _load_json
     def _load_json(self, path, default_data):
         if path.exists():
             try:
@@ -45,6 +55,7 @@ class TrackerEngine:
                 print(f"读取 {path} 失败，使用默认值。错误: {e}")
         return default_data
 
+    #@+node:swot.20260220152843.1: *3* def _atomic_save
     def _atomic_save(self, data, target_path):
         tmp_path = target_path.with_suffix('.tmp')
         try:
@@ -54,6 +65,7 @@ class TrackerEngine:
         except Exception as e:
             print(f"保存失败: {e}")
 
+    #@+node:swot.20260220152853.1: *3* def force_save
     def force_save(self):
         with self.lock:
             if self.has_unsaved_changes:
@@ -63,6 +75,7 @@ class TrackerEngine:
                 self.last_save_time = time.time()
                 print(f"[{datetime.now().strftime('%H:%M:%S')}] 数据已安全存盘。")
 
+    #@+node:swot.20260220152916.1: *3* def log_event
     def log_event(self, is_keyboard, key_name=None):
         now_dt = datetime.now()
         today = now_dt.strftime("%Y-%m-%d")
@@ -123,9 +136,8 @@ class TrackerEngine:
                 focus_mins = int(self.daily_data.get('focus_seconds', 0) // 60)
                 print(f"[{now_dt.strftime('%H:%M:%S')}] ⏳ 存盘成功。今日已专注: {focus_mins} 分钟。")
 
-# --- 监听器初始化 ---
-engine = TrackerEngine()
-
+    #@-others
+#@+node:swot.20260220152543.1: ** def on_release
 def on_release(key):
     try:
         name = key.char if getattr(key, 'char', None) is not None else str(key)
@@ -133,12 +145,18 @@ def on_release(key):
         name = str(key)
     engine.log_event(is_keyboard=True, key_name=name)
 
+#@+node:swot.20260220152520.1: ** def on_click
 def on_click(x, y, button, pressed):
     if not pressed:
         engine.log_event(is_keyboard=False)
 
+#@-others
+
+# --- 监听器初始化 ---
+engine = TrackerEngine()
+
 if __name__ == "__main__":
-    print(f"🚀 专家级统计引擎已启动！(支持专注时长计算)")
+    print("🚀 专家级统计引擎已启动！(支持专注时长计算)")
     print(f"📁 数据存放目录: {SAVE_DIR}")
     print("--------------------------------------------------")
     try:
@@ -150,3 +168,4 @@ if __name__ == "__main__":
         engine.force_save()
         print("\n👋 程序正常退出，最后的数据已原子化存盘。")
 
+#@-leo

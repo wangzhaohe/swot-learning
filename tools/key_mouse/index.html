@@ -1,3 +1,6 @@
+<!--@+leo-ver=5-thin-->
+<!--@+node:swot.20260220153302.1: * @file index.html-->
+<!--@@language html-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6,7 +9,74 @@
     <title>击键仪表盘 | Keystroke Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!--@+<< style >>-->
+    <!--@+node:swot.20260220153543.1: ** << style >>-->
+    <!--@delims /* */ -->
     <style>
+        /*@+<< header style >>*/
+        /*@+node:swot.20260220183334.1: *3* << header style >>*/
+        /*@@language css*/
+        .header { text-align: center; margin-bottom: 3rem; }
+        .header h1 { font-size: 2.5rem; letter-spacing: 2px; color: var(--accent); }
+        .header p { color: var(--text-muted); margin-top: 0.5rem; }
+        /*@-<< header style >>*/
+        /*@+<< 4 cards style >>*/
+        /*@+node:swot.20260220193929.1: *3* << 4 cards style >>*/
+        /*@@language css*/
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
+            text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-title {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .stat-value {
+          font-size: 2.5rem;
+          font-weight: bold;
+          color: var(--text-main);
+        }
+        .stat-value.keyboard {
+            color: var(--success);
+        }
+        .stat-value.mouse {
+            color: var(--purple);
+        }
+        .stat-value.focus {
+            color: var(--focus);
+        }
+        /*@-<< 4 cards style >>*/
+        /*@+<< charts style >>*/
+        /*@+node:swot.20260220194042.1: *3* << charts style >>*/
+        /*@@language css*/
+        .charts-row-split {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .chart-container {
+            background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .chart { width: 100%; height: 350px; }
+        /*@-<< charts style >>*/
+        /*@+others*/
+        /*@+node:swot.20260220183022.1: *3* color var*/
+        /*@@language css*/
         :root {
             --bg-color: #1a1b26; 
             --card-bg: #24283b;
@@ -18,51 +88,54 @@
             --warning: #e0af68;
             --focus: #f7768e;
         }
+        /*@+node:swot.20260220183155.1: *3* browser reset*/
+        /*@@language css*/
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        /*@+node:swot.20260220183201.1: *3* body & container style*/
+        /*@@language css*/
         body {
-            background-color: var(--bg-color); color: var(--text-main);
+            background-color: var(--bg-color);
+            color: var(--text-main);
             font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
             padding: 2rem;
         }
+
         .container { max-width: 1200px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 3rem; }
-        .header h1 { font-size: 2.5rem; letter-spacing: 2px; color: var(--accent); }
-        .header p { color: var(--text-muted); margin-top: 0.5rem; }
-        
-        /* 顶部数据卡片 (由 3 列变更为 4 列) */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card {
-            background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
-            text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
-        }
-        .stat-card:hover { transform: translateY(-5px); }
-        .stat-title { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-value { font-size: 2.5rem; font-weight: bold; color: var(--text-main); }
-        .stat-value.keyboard { color: var(--success); }
-        .stat-value.mouse { color: var(--purple); }
-        .stat-value.focus { color: var(--focus); }
 
-        .charts-row-split { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-bottom: 2rem; }
-        .chart-container {
-            background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        /*@+node:swot.20260220194258.1: *3* loading*/
+        /*@@language css*/
+        .loading {
+            text-align: center;
+            padding: 5rem;
+            font-size: 1.5rem;
+            color: var(--text-muted);
         }
-        .chart { width: 100%; height: 350px; }
-
-        .loading { text-align: center; padding: 5rem; font-size: 1.5rem; color: var(--text-muted); }
+        /*@-others*/
+    /*@delims <!-- --> */
     </style>
+    <!--@-<< style >>-->
 </head>
 <body>
+    <!--@+<< div app >>-->
+    <!--@+node:swot.20260220153934.1: ** << div app >>-->
+    <!--@@language html-->
     <div id="app" class="container">
-        <div v-if="loading" class="loading">加载数据中... (请确保已通过 HTTP Server 运行)</div>
-        
+        <div v-if="loading" class="loading">
+            加载数据中... (请确保已通过 HTTP Server 运行)
+        </div>
+
         <div v-else>
+            <!--@+<< header div >>-->
+            <!--@+node:swot.20260220154251.1: *3* << header div >>-->
+            <!--@@language html-->
             <div class="header">
                 <h1>HP GT87 Ultra 战况大屏</h1>
                 <p>实时读取本地统计数据，每 60 秒自动刷新</p>
             </div>
-
+            <!--@-<< header div >>-->
+            <!--@+<< 4 cards div >>-->
+            <!--@+node:swot.20260220154318.1: *3* << 4 cards div >>-->
+            <!--@@language html-->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-title">今日专注时长</div>
@@ -81,7 +154,11 @@
                     <div class="stat-value mouse">{{ formatNumber(globalStats.mouse) }}</div>
                 </div>
             </div>
-
+            <!--@-<< 4 cards div >>-->
+            <!--@+others-->
+            <!--@+node:swot.20260220154401.1: *3* today analyse-->
+            <!--@@language html-->
+            <!-- 今日展示 -->
             <div class="charts-row-split">
                 <div class="chart-container">
                     <div id="hourlyChart" class="chart"></div>
@@ -90,8 +167,10 @@
                     <div id="topKeysChart" class="chart"></div>
                 </div>
             </div>
-
-            <div class="charts-row-split">
+            <!--@+node:swot.20260220154415.1: *3* total analyse-->
+            <!--@@language html-->
+            <!-- 总体展示 -->
+            <div>
                 <div class="chart-container">
                     <div id="trendChart" class="chart"></div>
                 </div>
@@ -99,30 +178,46 @@
                     <div id="allTimeTopKeysChart" class="chart"></div>
                 </div>
             </div>
-
+            <!--@-others-->
         </div>
     </div>
-
+    <!--@-<< div app >>-->
+    <!--@+<< script >>-->
+    <!--@+node:swot.20260220154005.1: ** << script >>-->
+    <!--@@language javascript-->
+    <!--@delims // -->
     <script>
         const { createApp, ref, onMounted, nextTick } = Vue;
-
         createApp({
             setup() {
+                //@+<< formatNumber() >>
+                //@+node:swot.20260220160534.1: *3* << formatNumber() >>
+                //@@language java
+                const formatNumber = (num) => 
+                    new Intl.NumberFormat('en-US').format(num || 0);
+                //@-<< formatNumber() >>
+                //@+<< formatDuration(seconds) >>
+                //@+node:swot.20260220155506.1: *3* << formatDuration(seconds) >>
+                //@@language java
+                // 将秒数转换为友好格式 (如 3h 45m)
+                const formatDuration = (seconds) => {
+                    if (!seconds) return '0h 0m';
+                    const h = Math.floor(seconds / 3600);
+                    const m = Math.floor((seconds % 3600) / 60);
+                    if (h > 0) return `${h}h ${m}m`;
+                    return `${m}m`;
+                };
+                //@-<< formatDuration(seconds) >>
+                //@+others
+                //@+node:swot.20260220160736.1: *3* const var
+                //@@language java
                 const loading = ref(true);
                 const globalStats = ref({ total: 0, keyboard: 0, mouse: 0, key_details: {} });
                 const todayHourlyData = ref([]);
                 const last7DaysData = ref({ dates: [], values: [] });
                 const top10KeysData = ref({ keys: [], values: [] });
                 const allTimeTopKeysData = ref({ keys: [], values: [] });
-                
-                // 新增：记录今天的专注秒数
-                const todayFocusSeconds = ref(0);
-
-                let trendChartInstance = null;
-                let hourlyChartInstance = null;
-                let topKeysChartInstance = null;
-                let allTimeTopKeysChartInstance = null;
-
+                const todayFocusSeconds = ref(0);  // 记录今天的专注秒数
                 const keyMap = {
                     'Key.space': '␣ Space', 'Key.enter': '↵ Enter', 'Key.backspace': '⌫ Backspace',
                     'Key.cmd': '⌘ Cmd/Win', 'Key.cmd_r': '⌘ Cmd/Win', 'Key.cmd_l': '⌘ Cmd/Win',
@@ -135,37 +230,28 @@
                     'Key.home': '↖ Home', 'Key.end': '↘ End'
                 };
 
-                const formatKeyName = (rawName) => {
-                    if (keyMap[rawName]) return keyMap[rawName];
-                    if (rawName.startsWith('Key.')) {
-                        const name = rawName.replace('Key.', '');
-                        return name.charAt(0).toUpperCase() + name.slice(1);
-                    }
-                    return rawName.toUpperCase();
-                };
+                //@+node:swot.20260220160655.1: *3* let var
+                //@@language java
+                let trendChartInstance = null;
+                let hourlyChartInstance = null;
+                let topKeysChartInstance = null;
+                let allTimeTopKeysChartInstance = null;
 
-                const formatNumber = (num) => new Intl.NumberFormat('en-US').format(num || 0);
+                //@+node:swot.20260220155002.1: *3* onMounted()
+                //@@language javascript
+                onMounted(() => {
+                    fetchData();
+                    setInterval(fetchData, 60000);  // 每隔 60s 刷新一次
 
-                // 新增：将秒数转换为友好格式 (如 3h 45m)
-                const formatDuration = (seconds) => {
-                    if (!seconds) return '0h 0m';
-                    const h = Math.floor(seconds / 3600);
-                    const m = Math.floor((seconds % 3600) / 60);
-                    if (h > 0) return `${h}h ${m}m`;
-                    return `${m}m`;
-                };
-
-                const getLast7Days = () => {
-                    const dates = [];
-                    for (let i = 6; i >= 0; i--) {
-                        const d = new Date();
-                        d.setDate(d.getDate() - i);
-                        const offset = d.getTimezoneOffset() * 60000;
-                        dates.push((new Date(d - offset)).toISOString().split('T')[0]);
-                    }
-                    return dates;
-                };
-
+                    window.addEventListener('resize', () => {
+                        hourlyChartInstance?.resize();
+                        topKeysChartInstance?.resize();
+                        trendChartInstance?.resize();
+                        allTimeTopKeysChartInstance?.resize();
+                    });
+                });
+                //@+node:swot.20260220155408.1: *4* fetchData()
+                //@@language javascript
                 const fetchData = async () => {
                     try {
                         const timestamp = new Date().getTime();
@@ -179,24 +265,26 @@
                                 allTimeTopKeysData.value.values = sortedAllTime.map(item => item[1]).reverse();
                             }
                         }
-
                         const dates = getLast7Days();
                         const dailyValues = [];
-                        
+
+                        //@+<< forloop dates >>
+                        //@+node:swot.20260220214634.1: *5* << forloop dates >>
+                        //@@language javascript
                         for (const date of dates) {
                             try {
                                 const res = await fetch(`key_stats/${date}.json?t=${timestamp}`);
                                 if (res.ok) {
                                     const data = await res.json();
                                     dailyValues.push(data.total || 0);
-                                    
+
                                     if (date === dates[dates.length - 1]) {
                                         // 提取今日专注秒数
                                         todayFocusSeconds.value = data.focus_seconds || 0;
 
                                         const hours = Array.from({length: 24}, (_, i) => i.toString().padStart(2, '0'));
                                         todayHourlyData.value = hours.map(h => data.hourly?.[h] || 0);
-                                        
+
                                         if (data.keyboard) {
                                             const sortedKeys = Object.entries(data.keyboard)
                                                 .sort((a, b) => b[1] - a[1]).slice(0, 10);
@@ -211,9 +299,12 @@
                                 dailyValues.push(0);
                             }
                         }
-                        
+                        //@-<< forloop dates >>
+
                         last7DaysData.value = { dates, values: dailyValues };
-                        
+
+                        //@+<< loading or updateCharts >>
+                        //@+node:swot.20260220215428.1: *5* << loading or updateCharts >>
                         if (loading.value) {
                             loading.value = false;
                             nextTick(() => {
@@ -225,11 +316,57 @@
                         } else {
                             updateCharts();
                         }
+                        //@-<< loading or updateCharts >>
+
                     } catch (error) {
                         console.error("数据拉取异常:", error);
                     }
                 };
+                //@+node:swot.20260220155528.1: *5* formatKeyName(rawName)
+                //@@language javascript
+                const formatKeyName = (rawName) => {
+                    if (keyMap[rawName])
+                        return keyMap[rawName];
+                    if (rawName.startsWith('Key.')) {
+                        const name = rawName.replace('Key.', '');
+                        return name.charAt(0).toUpperCase() + name.slice(1);
+                    }
+                    return rawName.toUpperCase();
+                };
 
+                //@+node:swot.20260220155441.1: *5* getLast7Days()
+                //@@language javascript
+                const getLast7Days = () => {
+                    const dates = [];
+                    for (let i = 6; i >= 0; i--) {
+                        const d = new Date();
+                        d.setDate(d.getDate() - i);
+                        const offset = d.getTimezoneOffset() * 60000;
+                        dates.push((new Date(d - offset)).toISOString().split('T')[0]);
+                    }
+                    return dates;
+                };
+
+                //@+node:swot.20260220155053.1: *5* updateCharts()
+                //@@language javascript
+                const updateCharts = () => {
+                    hourlyChartInstance?.setOption({ series: [{ data: todayHourlyData.value }] });
+                    topKeysChartInstance?.setOption({
+                        yAxis: { data: top10KeysData.value.keys },
+                        series: [{ data: top10KeysData.value.values }]
+                    });
+                    trendChartInstance?.setOption({
+                        xAxis: { data: last7DaysData.value.dates.map(d => d.slice(5)) },
+                        series: [{ data: last7DaysData.value.values }]
+                    });
+                    allTimeTopKeysChartInstance?.setOption({
+                        yAxis: { data: allTimeTopKeysData.value.keys },
+                        series: [{ data: allTimeTopKeysData.value.values }]
+                    });
+                };
+
+                //@+node:swot.20260220155329.1: *5* renderHourlyChart()
+                //@@language javascript
                 const renderHourlyChart = () => {
                     hourlyChartInstance = echarts.init(document.getElementById('hourlyChart'), 'dark');
                     hourlyChartInstance.setOption({
@@ -251,6 +388,8 @@
                     });
                 };
 
+                //@+node:swot.20260220155303.1: *5* renderTopKeysChart()
+                //@@language javascript
                 const renderTopKeysChart = () => {
                     topKeysChartInstance = echarts.init(document.getElementById('topKeysChart'), 'dark');
                     topKeysChartInstance.setOption({
@@ -273,6 +412,8 @@
                     });
                 };
 
+                //@+node:swot.20260220155224.1: *5* renderTrendChart()
+                //@@language javascript
                 const renderTrendChart = () => {
                     trendChartInstance = echarts.init(document.getElementById('trendChart'), 'dark');
                     trendChartInstance.setOption({
@@ -295,6 +436,8 @@
                     });
                 };
 
+                //@+node:swot.20260220155122.1: *5* renderAllTimeTopKeysChart()
+                //@@language javascript
                 const renderAllTimeTopKeysChart = () => {
                     allTimeTopKeysChartInstance = echarts.init(document.getElementById('allTimeTopKeysChart'), 'dark');
                     allTimeTopKeysChartInstance.setOption({
@@ -317,38 +460,13 @@
                     });
                 };
 
-                const updateCharts = () => {
-                    hourlyChartInstance?.setOption({ series: [{ data: todayHourlyData.value }] });
-                    topKeysChartInstance?.setOption({
-                        yAxis: { data: top10KeysData.value.keys },
-                        series: [{ data: top10KeysData.value.values }]
-                    });
-                    trendChartInstance?.setOption({
-                        xAxis: { data: last7DaysData.value.dates.map(d => d.slice(5)) },
-                        series: [{ data: last7DaysData.value.values }]
-                    });
-                    allTimeTopKeysChartInstance?.setOption({
-                        yAxis: { data: allTimeTopKeysData.value.keys },
-                        series: [{ data: allTimeTopKeysData.value.values }]
-                    });
-                };
-
-                onMounted(() => {
-                    fetchData();
-                    setInterval(fetchData, 60000);
-
-                    window.addEventListener('resize', () => {
-                        hourlyChartInstance?.resize();
-                        topKeysChartInstance?.resize();
-                        trendChartInstance?.resize();
-                        allTimeTopKeysChartInstance?.resize();
-                    });
-                });
-
+                //@-others
                 return { loading, globalStats, formatNumber, formatDuration, todayFocusSeconds };
             }
         }).mount('#app');
+    //@delims <!-- --> 
     </script>
+    <!--@-<< script >>-->
 </body>
 </html>
-
+<!--@-leo-->
