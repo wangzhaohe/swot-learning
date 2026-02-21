@@ -30,9 +30,12 @@
             margin-bottom: 2rem;
         }
         .stat-card {
-            background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
-            text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: all 0.5s ease; /* 唤醒时恢复速度稍快，更灵敏 */
         }
         .stat-card:hover {
             transform: translateY(-5px);
@@ -104,6 +107,14 @@
         body.dormant-mode {
             background-color: #0d0e15; /* 更深的暗色背景 */
             filter: brightness(0.8); /* 整体变暗，降低刺眼感 */
+        }
+
+        /* 新增：休眠模式下的卡片联动效果 */
+        body.dormant-mode .stat-card {
+            opacity: 0.4;             /* 降低卡片透明度，营造“退居幕后”感 */
+            transform: scale(0.96);   /* 微微缩小，模拟视觉上的“远离” */
+            filter: grayscale(0.6);   /* 增加一点灰度，让色彩不再跳跃 */
+            transition: all 2s ease;  /* 确保进入休眠时是缓慢“入睡”的 */
         }
 
         .container { max-width: 1200px; margin: 0 auto; }
@@ -317,6 +328,7 @@
                 onMounted(() => {
                     fetchData();
                     setInterval(fetchData, 60000);  // 每隔 60s 刷新一次
+                    // setInterval(fetchData, 10000);  // 测试每隔 10s 刷新一次
 
                     setInterval(() => {
                         now.value = Date.now() / 1000;
@@ -460,6 +472,9 @@
                     hourlyChartInstance = echarts.init(document.getElementById('hourlyChart'), 'dark');
                     hourlyChartInstance.setOption({
                         backgroundColor: 'transparent',
+                        animationDuration: 1000,
+                        animationDurationUpdate: 800,       // 增加平滑更新
+                        animationEasingUpdate: 'cubicOut',  // 增加缓动效果
                         title: { text: '摸鱼检测器 (今日时段分布)', left: 'center' },
                         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
                         grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
@@ -507,6 +522,9 @@
                     trendChartInstance = echarts.init(document.getElementById('trendChart'), 'dark');
                     trendChartInstance.setOption({
                         backgroundColor: 'transparent',
+                        animationDuration: 1000,
+                        animationDurationUpdate: 800,
+                        animationEasingUpdate: 'cubicOut',
                         title: { text: '产出趋势 (近 7 天)', left: 'center' },
                         tooltip: { trigger: 'axis' },
                         grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
@@ -556,7 +574,8 @@
                     formatNumber,
                     formatDuration,
                     liveFocusSeconds,
-                    isDormant
+                    isDormant,
+                    lastEventTimestamp
                 };
             }
         }).mount('#app');

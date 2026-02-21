@@ -15198,9 +15198,12 @@ FocusTime = \sum_{n=1}^{N} \min(\Delta t_n, Threshold)
     margin-bottom: 2rem;
 }
 .stat-card {
-    background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
-    text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    transition: transform 0.2s;
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: all 0.5s ease; /* 唤醒时恢复速度稍快，更灵敏 */
 }
 .stat-card:hover {
     transform: translateY(-5px);
