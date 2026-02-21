@@ -23,13 +23,17 @@ HEARTBEAT_THRESHOLD = 300  # 5分钟心跳阈值（300秒），用于计算专�
 class TrackerEngine:
     #@+others
     #@+node:swot.20260220152820.1: *3* def __init__
+    #@@language python
     def __init__(self):
         SAVE_DIR.mkdir(parents=True, exist_ok=True)
-        self.lock = threading.Lock()
+        self.lock = threading.RLock()
 
         self.last_save_time = time.time()
-        self.last_event_time = time.time()  # 新增：记录上一次敲击的绝对时间
+        self.last_event_time = time.time()  # 记录上一次敲击时间
         self.has_unsaved_changes = False
+
+        # 防抖定时器
+        self.debounce_timer = None
 
         # 加载全局统计
         self.global_file = SAVE_DIR / "global_stats.json"
@@ -81,8 +85,10 @@ class TrackerEngine:
                 self._atomic_save(self.global_data, self.global_file)
                 self.has_unsaved_changes = False
                 self.last_save_time = time.time()
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] 数据已安全存盘。")
 
+                # 终端反馈（如果觉得吵可以注释掉）
+                focus_mins = int(self.daily_data.get("focus_seconds", 0) // 60)
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] 数据已安全存盘，今日已专注: {focus_mins} 分钟。")
     #@+node:swot.20260220152916.1: *3* def log_event
     #@@language python
     def log_event(self, is_keyboard, key_name=None):
@@ -92,7 +98,9 @@ class TrackerEngine:
         now_ts = time.time()
 
         with self.lock:
-            # 1. 跨天检测
+            #@+<< 1. 跨天检测 >>
+            #@+node:swot.20260221204633.1: *4* << 1. 跨天检测 >>
+            #@@language python
             if today != self.current_date:
                 if self.has_unsaved_changes:
                     self._atomic_save(
@@ -112,10 +120,11 @@ class TrackerEngine:
                     },
                 )
                 self.last_event_time = now_ts  # 跨天重置事件时间
+            #@-<< 1. 跨天检测 >>
 
-            '''
-            #@+<< 专注时长计算 (5分钟心跳法) A 公式 >>
-            #@+node:swot.20260220225738.1: *4* << 专注时长计算 (5分钟心跳法) A 公式 >>
+            """
+            #@+<< 2. 专注时长计算 (5分钟心跳法) A 公式 >>
+            #@+node:swot.20260220225738.1: *4* << 2. 专注时长计算 (5分钟心跳法) A 公式 >>
             #@@language python
             delta = now_ts - self.last_event_time
 
@@ -127,23 +136,30 @@ class TrackerEngine:
 
             self.last_event_time = now_ts  # 重置上次事件时间
 
-            #@-<< 专注时长计算 (5分钟心跳法) A 公式 >>
-            '''
-            #@+<< 专注时长计算 (5分钟心跳法) B 公式 >>
-            #@+node:swot.20260221164831.1: *4* << 专注时长计算 (5分钟心跳法) B 公式 >>
+            # 向前端暴露最后操作的确切时间戳
+            self.daily_data["last_event_timestamp"] = now_ts
+
+            #@-<< 2. 专注时长计算 (5分钟心跳法) A 公式 >>
+            """
+            #@+<< 2. 专注时长计算 (5分钟心跳法) B 公式 >>
+            #@+node:swot.20260221164831.1: *4* << 2. 专注时长计算 (5分钟心跳法) B 公式 >>
             #@@language python
             delta = now_ts - self.last_event_time
 
             # 无论间隔多久，最多累加 HEARTBEAT_THRESHOLD（例如5分钟）
-            self.daily_data["focus_seconds"] = (
-                self.daily_data.get("focus_seconds", 0) + min(delta, HEARTBEAT_THRESHOLD)
-            )
+            self.daily_data["focus_seconds"] = self.daily_data.get(
+                "focus_seconds", 0
+            ) + min(delta, HEARTBEAT_THRESHOLD)
 
             self.last_event_time = now_ts  # 重置上次事件时间
 
-            #@-<< 专注时长计算 (5分钟心跳法) B 公式 >>
+            # 向前端暴露最后操作的确切时间戳
+            self.daily_data["last_event_timestamp"] = now_ts
 
-            # 2. 数据累加
+            #@-<< 2. 专注时长计算 (5分钟心跳法) B 公式 >>
+
+            #@+<< 3. 数据累加 >>
+            #@+node:swot.20260221210912.1: *4* << 3. 数据累加 >>
             if is_keyboard:
                 self.daily_data["keyboard"][key_name] = (
                     self.daily_data["keyboard"].get(key_name, 0) + 1
@@ -170,21 +186,21 @@ class TrackerEngine:
             )
 
             self.has_unsaved_changes = True
+            #@-<< 3. 数据累加 >>
 
-            # 4. 间隔保存检测
+            #@+<< 4. 双轨制存盘策略 >>
+            #@+node:swot.20260221211911.1: *4* << 4. 双轨制存盘策略 >> self.force_save() 替代了好多代码
+            #@@language python
+            # 策略 A: 10秒防抖存盘（灵敏度）
+            if self.debounce_timer:
+                self.debounce_timer.cancel()
+            self.debounce_timer = threading.Timer(10.0, self.force_save)
+            self.debounce_timer.start()
+
+            # 策略 B: 60秒保底存盘（安全性）
             if now_ts - self.last_save_time > SAVE_INTERVAL:
-                self._atomic_save(
-                    self.daily_data, SAVE_DIR / f"{self.current_date}.json"
-                )
-                self._atomic_save(self.global_data, self.global_file)
-                self.has_unsaved_changes = False
-                self.last_save_time = now_ts
-
-                # 终端反馈（如果觉得吵可以注释掉）
-                focus_mins = int(self.daily_data.get("focus_seconds", 0) // 60)
-                print(
-                    f"[{now_dt.strftime('%H:%M:%S')}] ⏳ 存盘成功。今日已专注: {focus_mins} 分钟。"
-                )
+                self.force_save()
+            #@-<< 4. 双轨制存盘策略 >>
     #@-others
 
 

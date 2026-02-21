@@ -98,6 +98,12 @@
             color: var(--text-main);
             font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
             padding: 2rem;
+            transition: background-color 2s ease, filter 2s ease;
+        }
+
+        body.dormant-mode {
+            background-color: #0d0e15; /* 更深的暗色背景 */
+            filter: brightness(0.8); /* 整体变暗，降低刺眼感 */
         }
 
         .container { max-width: 1200px; margin: 0 auto; }
@@ -109,6 +115,35 @@
             padding: 5rem;
             font-size: 1.5rem;
             color: var(--text-muted);
+        }
+        /*@+node:swot.20260221213206.1: *3* status 看懂*/
+        /*@@language css*/
+        /* 状态指示徽章 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.5s ease;
+        }
+        .status-active { 
+            background: rgba(158, 206, 106, 0.2); 
+            color: var(--success); 
+            border: 1px solid var(--success); 
+        }
+        .status-dormant { 
+            background: rgba(247, 118, 142, 0.2); 
+            color: var(--focus); 
+            border: 1px solid var(--focus); 
+        }
+        .pulse { animation: pulse-animation 2s infinite; }
+
+        @keyframes pulse-animation {
+            0% { opacity: 1; box-shadow: 0 0 0 0 rgba(158, 206, 106, 0.4); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(158, 206, 106, 0); }
+            100% { opacity: 1; box-shadow: 0 0 0 0 rgba(158, 206, 106, 0); }
         }
         /*@-others*/
     /*@delims <!-- --> */
@@ -141,6 +176,15 @@
                     <div class="stat-title">今日专注时长</div>
                     <div class="stat-value focus">{{ formatDuration(todayFocusSeconds) }}</div>
                 </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">今日专注时长</div>
+                    <div class="stat-value focus">{{ formatDuration(liveFocusSeconds) }}</div>
+                    <div :class="['status-badge', isDormant ? 'status-dormant' : 'status-active pulse']">
+                        {{ isDormant ? '💤 系统休眠中' : '🔥 专注打码中' }}
+                    </div>
+                </div>
+
                 <div class="stat-card">
                     <div class="stat-title">历史总点击 (Total)</div>
                     <div class="stat-value">{{ formatNumber(globalStats.total) }}</div>
@@ -187,29 +231,11 @@
     <!--@@language javascript-->
     <!--@delims // -->
     <script>
-        const { createApp, ref, onMounted, nextTick } = Vue;
+        const { createApp, ref, computed, watch, onMounted, nextTick } = Vue;
         createApp({
             setup() {
-                //@+<< formatNumber() >>
-                //@+node:swot.20260220160534.1: *3* << formatNumber() >>
-                //@@language java
-                const formatNumber = (num) => 
-                    new Intl.NumberFormat('en-US').format(num || 0);
-                //@-<< formatNumber() >>
-                //@+<< formatDuration(seconds) >>
-                //@+node:swot.20260220155506.1: *3* << formatDuration(seconds) >>
-                //@@language java
-                // 将秒数转换为友好格式 (如 3h 45m)
-                const formatDuration = (seconds) => {
-                    if (!seconds) return '0h 0m';
-                    const h = Math.floor(seconds / 3600);
-                    const m = Math.floor((seconds % 3600) / 60);
-                    if (h > 0) return `${h}h ${m}m`;
-                    return `${m}m`;
-                };
-                //@-<< formatDuration(seconds) >>
-                //@+others
-                //@+node:swot.20260220160736.1: *3* const var
+                //@+<< const var >>
+                //@+node:swot.20260220160736.1: *3* << const var >>
                 //@@language java
                 const loading = ref(true);
                 const globalStats = ref({ total: 0, keyboard: 0, mouse: 0, key_details: {} });
@@ -230,18 +256,71 @@
                     'Key.home': '↖ Home', 'Key.end': '↘ End'
                 };
 
-                //@+node:swot.20260220160655.1: *3* let var
+                //@-<< const var >>
+                //@+<< let var >>
+                //@+node:swot.20260220160655.1: *3* << let var >>
                 //@@language java
                 let trendChartInstance = null;
                 let hourlyChartInstance = null;
                 let topKeysChartInstance = null;
                 let allTimeTopKeysChartInstance = null;
 
+                //@-<< let var >>
+                //@+<< formatNumber() >>
+                //@+node:swot.20260220160534.1: *3* << formatNumber() >>
+                //@@language java
+                const formatNumber = (num) => 
+                    new Intl.NumberFormat('en-US').format(num || 0);
+                //@-<< formatNumber() >>
+                //@+<< formatDuration(seconds) >>
+                //@+node:swot.20260220155506.1: *3* << formatDuration(seconds) >>
+                //@@language java
+                // 将秒数转换为友好格式 (如 3h 45m)
+                const formatDuration = (seconds) => {
+                    if (!seconds) return '0h 0m';
+                    const h = Math.floor(seconds / 3600);
+                    const m = Math.floor((seconds % 3600) / 60);
+                    if (h > 0) return `${h}h ${m}m`;
+                    return `${m}m`;
+                };
+                //@-<< formatDuration(seconds) >>
+
+                // 新增：实时计算所需的变量
+                const jsonFocusSeconds = ref(0); 
+                const lastEventTimestamp = ref(Date.now() / 1000);
+                const now = ref(Date.now() / 1000);
+                const HEARTBEAT_THRESHOLD = 300; // 5分钟
+
+                // 公式：实时展示时长 = JSON已存时长 + min(当前时间差, 阈值)
+                const liveFocusSeconds = computed(() => {
+                    const delta = now.value - lastEventTimestamp.value;
+                    const contribution = Math.min(Math.max(0, delta), HEARTBEAT_THRESHOLD);
+                    return jsonFocusSeconds.value + contribution;
+                });
+
+                // 状态判断：是否已超过心跳阈值
+                const isDormant = computed(() => {
+                    return (now.value - lastEventTimestamp.value) >= HEARTBEAT_THRESHOLD;
+                });
+
+                // 监听状态改变，切换全局背景色
+                watch(isDormant, (newVal) => {
+                    if (newVal) {
+                        document.body.classList.add('dormant-mode');
+                    } else {
+                        document.body.classList.remove('dormant-mode');
+                    }
+                });
+                //@+others
                 //@+node:swot.20260220155002.1: *3* onMounted()
                 //@@language javascript
                 onMounted(() => {
                     fetchData();
                     setInterval(fetchData, 60000);  // 每隔 60s 刷新一次
+
+                    setInterval(() => {
+                        now.value = Date.now() / 1000;
+                    }, 1000)
 
                     window.addEventListener('resize', () => {
                         hourlyChartInstance?.resize();
@@ -254,8 +333,12 @@
                 //@@language javascript
                 const fetchData = async () => {
                     try {
+                        //@+<< get global_stats.json >>
+                        //@+node:swot.20260221214753.1: *5* << get global_stats.json >>
+                        //@@language python
                         const timestamp = new Date().getTime();
                         const globalRes = await fetch(`key_stats/global_stats.json?t=${timestamp}`);
+
                         if (globalRes.ok) {
                             globalStats.value = await globalRes.json();
                             if (globalStats.value.key_details) {
@@ -265,12 +348,13 @@
                                 allTimeTopKeysData.value.values = sortedAllTime.map(item => item[1]).reverse();
                             }
                         }
+                        //@-<< get global_stats.json >>
+                        //@+<< get last 7 dates >>
+                        //@+node:swot.20260220214634.1: *5* << get last 7 dates >>
+                        //@@language javascript
                         const dates = getLast7Days();
                         const dailyValues = [];
 
-                        //@+<< forloop dates >>
-                        //@+node:swot.20260220214634.1: *5* << forloop dates >>
-                        //@@language javascript
                         for (const date of dates) {
                             try {
                                 const res = await fetch(`key_stats/${date}.json?t=${timestamp}`);
@@ -279,12 +363,20 @@
                                     dailyValues.push(data.total || 0);
 
                                     if (date === dates[dates.length - 1]) {
+                                        // --- 核心变动区：更新实时专注时长的基准值 ---
+                                        jsonFocusSeconds.value = data.focus_seconds || 0;
+                                        // 提取后端防抖存盘发来的精确时间戳，如果没有则用当前时间防错
+                                        lastEventTimestamp.value = data.last_event_timestamp || (Date.now() / 1000);
+                                        // ---------------------------------------------
+                                        
                                         // 提取今日专注秒数
                                         todayFocusSeconds.value = data.focus_seconds || 0;
-
+                                        
+                                        // 提取 24 小时热度分布
                                         const hours = Array.from({length: 24}, (_, i) => i.toString().padStart(2, '0'));
                                         todayHourlyData.value = hours.map(h => data.hourly?.[h] || 0);
-
+                                        
+                                        // 提取今日 Top 10 按键
                                         if (data.keyboard) {
                                             const sortedKeys = Object.entries(data.keyboard)
                                                 .sort((a, b) => b[1] - a[1]).slice(0, 10);
@@ -299,12 +391,12 @@
                                 dailyValues.push(0);
                             }
                         }
-                        //@-<< forloop dates >>
 
                         last7DaysData.value = { dates, values: dailyValues };
-
+                        //@-<< get last 7 dates >>
                         //@+<< loading or updateCharts >>
                         //@+node:swot.20260220215428.1: *5* << loading or updateCharts >>
+                        //@@language python
                         if (loading.value) {
                             loading.value = false;
                             nextTick(() => {
@@ -461,7 +553,15 @@
                 };
 
                 //@-others
-                return { loading, globalStats, formatNumber, formatDuration, todayFocusSeconds };
+                return {
+                    loading,
+                    globalStats,
+                    formatNumber,
+                    formatDuration,
+                    todayFocusSeconds,
+                    liveFocusSeconds,
+                    isDormant
+                };
             }
         }).mount('#app');
     //@delims <!-- --> 
