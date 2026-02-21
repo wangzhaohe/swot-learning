@@ -174,11 +174,6 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-title">今日专注时长</div>
-                    <div class="stat-value focus">{{ formatDuration(todayFocusSeconds) }}</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-title">今日专注时长</div>
                     <div class="stat-value focus">{{ formatDuration(liveFocusSeconds) }}</div>
                     <div :class="['status-badge', isDormant ? 'status-dormant' : 'status-active pulse']">
                         {{ isDormant ? '💤 系统休眠中' : '🔥 专注打码中' }}
@@ -243,7 +238,7 @@
                 const last7DaysData = ref({ dates: [], values: [] });
                 const top10KeysData = ref({ keys: [], values: [] });
                 const allTimeTopKeysData = ref({ keys: [], values: [] });
-                const todayFocusSeconds = ref(0);  // 记录今天的专注秒数
+
                 const keyMap = {
                     'Key.space': '␣ Space', 'Key.enter': '↵ Enter', 'Key.backspace': '⌫ Backspace',
                     'Key.cmd': '⌘ Cmd/Win', 'Key.cmd_r': '⌘ Cmd/Win', 'Key.cmd_l': '⌘ Cmd/Win',
@@ -275,13 +270,18 @@
                 //@+<< formatDuration(seconds) >>
                 //@+node:swot.20260220155506.1: *3* << formatDuration(seconds) >>
                 //@@language java
-                // 将秒数转换为友好格式 (如 3h 45m)
+                // 将秒数转换为友好格式 (如 3h 45m 19s)
                 const formatDuration = (seconds) => {
-                    if (!seconds) return '0h 0m';
+                    if (!seconds) return '0h 0m 0s';
                     const h = Math.floor(seconds / 3600);
                     const m = Math.floor((seconds % 3600) / 60);
-                    if (h > 0) return `${h}h ${m}m`;
-                    return `${m}m`;
+                    const s = Math.floor(seconds % 60);  // 算出余下的秒数
+
+                    // 补齐两位数，让跳动更整齐美观（例如 05s）
+                    const formattedS = s.toString().padStart(2, '0');
+
+                    if (h > 0) return `${h}h ${m}m ${formattedS}s`;
+                    return `${m}m ${formattedS}s`;
                 };
                 //@-<< formatDuration(seconds) >>
 
@@ -368,9 +368,6 @@
                                         // 提取后端防抖存盘发来的精确时间戳，如果没有则用当前时间防错
                                         lastEventTimestamp.value = data.last_event_timestamp || (Date.now() / 1000);
                                         // ---------------------------------------------
-                                        
-                                        // 提取今日专注秒数
-                                        todayFocusSeconds.value = data.focus_seconds || 0;
                                         
                                         // 提取 24 小时热度分布
                                         const hours = Array.from({length: 24}, (_, i) => i.toString().padStart(2, '0'));
@@ -558,7 +555,6 @@
                     globalStats,
                     formatNumber,
                     formatDuration,
-                    todayFocusSeconds,
                     liveFocusSeconds,
                     isDormant
                 };

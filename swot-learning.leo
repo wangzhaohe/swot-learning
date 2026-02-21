@@ -968,6 +968,7 @@
 </v>
 <v t="swot.20260221211911.1"><vh>&lt;&lt; 4. 双轨制存盘策略 &gt;&gt; self.force_save() 替代了好多代码</vh></v>
 <v t="swot.20260221213206.1"><vh>status 看懂</vh></v>
+<v t="swot.20260221230656.1"><vh>newHeadline</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -14899,11 +14900,6 @@ console.log('End create token')
 &lt;div class="stats-grid"&gt;
     &lt;div class="stat-card"&gt;
         &lt;div class="stat-title"&gt;今日专注时长&lt;/div&gt;
-        &lt;div class="stat-value focus"&gt;{{ formatDuration(todayFocusSeconds) }}&lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class="stat-card"&gt;
-        &lt;div class="stat-title"&gt;今日专注时长&lt;/div&gt;
         &lt;div class="stat-value focus"&gt;{{ formatDuration(liveFocusSeconds) }}&lt;/div&gt;
         &lt;div :class="['status-badge', isDormant ? 'status-dormant' : 'status-active pulse']"&gt;
             {{ isDormant ? '💤 系统休眠中' : '🔥 专注打码中' }}
@@ -14947,13 +14943,18 @@ console.log('End create token')
 &lt;/div&gt;
 </t>
 <t tx="swot.20260220155506.1">@language java
-// 将秒数转换为友好格式 (如 3h 45m)
+// 将秒数转换为友好格式 (如 3h 45m 19s)
 const formatDuration = (seconds) =&gt; {
-    if (!seconds) return '0h 0m';
+    if (!seconds) return '0h 0m 0s';
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
-    if (h &gt; 0) return `${h}h ${m}m`;
-    return `${m}m`;
+    const s = Math.floor(seconds % 60);  // 算出余下的秒数
+
+    // 补齐两位数，让跳动更整齐美观（例如 05s）
+    const formattedS = s.toString().padStart(2, '0');
+
+    if (h &gt; 0) return `${h}h ${m}m ${formattedS}s`;
+    return `${m}m ${formattedS}s`;
 };
 </t>
 <t tx="swot.20260220160534.1">@language java
@@ -15312,5 +15313,6 @@ if now_ts - self.last_save_time &gt; SAVE_INTERVAL:
 }
 </t>
 <t tx="swot.20260221214644.1"></t>
+<t tx="swot.20260221230656.1"></t>
 </tnodes>
 </leo_file>
