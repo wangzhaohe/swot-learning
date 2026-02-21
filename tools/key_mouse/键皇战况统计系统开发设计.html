@@ -531,10 +531,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
+<h1>键皇战况统计系统开发设计</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
-<ul class="sectlevel0">
-<li><a href="#_键皇战况统计系统开发设计">键皇战况统计系统开发设计</a>
 <ul class="sectlevel1">
 <li><a href="#_1_项目概述">1 项目概述</a></li>
 <li><a href="#_2_开发环境与工具">2 开发环境与工具</a></li>
@@ -553,11 +552,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_5_总结">5 总结</a></li>
 </ul>
-</li>
-</ul>
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
 <button id="toggleButton">目录开关</button>
 <script>
     // 获取按钮和 div 元素
@@ -576,7 +575,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
         }
     });
 </script>
-<h1 id="_键皇战况统计系统开发设计" class="sect0">键皇战况统计系统开发设计</h1>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_1_项目概述">1 项目概述</h2>
 <div class="sectionbody">
@@ -632,22 +632,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="sect2">
 <h3 id="_3_1_专注时长算法">3.1 专注时长算法</h3>
 <div class="paragraph">
-<p>心跳检测 (Active Time Heartbeat)，系统引入了 <code>HEARTBEAT_THRESHOLD</code>（300秒）概念。</p>
-</div>
-<div class="listingblock">
-<div class="title">@file key_mouse.py-&#8594;class TrackerEngine-&#8594;def log_event</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">delta</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span> <span class="tok-o">-</span> <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span>
-<span class="tok-k">if</span> <span class="tok-n">delta</span> <span class="tok-o">&lt;</span> <span class="tok-n">HEARTBEAT_THRESHOLD</span><span class="tok-p">:</span>
-    <span class="tok-c1"># 只有距离上次操作小于 5 分钟，才认为是连贯工作</span>
-    <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-p">[</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-p">(</span>
-        <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-o">.</span><span class="tok-n">get</span><span class="tok-p">(</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-n">delta</span>
-    <span class="tok-p">)</span>
-<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>该算法的核心思想是：</p>
+<p>心跳检测 (Active Time Heartbeat)，系统引入了 <code>HEARTBEAT_THRESHOLD</code>（300秒）概念。
+该算法的核心思想是：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -658,6 +644,144 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p>若两次操作间隔超过5分钟，系统将判定用户处于闲置状态，不计入时长。</p>
 </li>
 </ul>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">专注时长核心算法：心跳估算法 (Active Time Heartbeat) 原理学习</div>
+<div class="paragraph">
+<p>本系统采用一种启发式的“心跳”逻辑来估算专注时长，而非简单的计时器。</p>
+</div>
+<h4 id="_1_算法逻辑说明" class="discrete">1. 算法逻辑说明</h4>
+<div class="paragraph">
+<p>系统将每一次键盘敲击或鼠标点击视为一次<strong>心跳 (Heartbeat)</strong>。系统根据连续两次心跳之间的时间差 \(\Delta t\) 来决定这段时间是否为“专注贡献值”。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>打点 (Heartbeat)</strong>: 证明用户当前处于活跃状态。</p>
+</li>
+<li>
+<p><strong>阈值 (Threshold)</strong>: 系统设定 <code>HEARTBEAT_THRESHOLD = 300</code>（5分钟）。若两次操作间隔超过此值，系统认为用户进入了“非工作状态”。</p>
+</li>
+</ul>
+</div>
+<h4 id="_2_数学模型对比代码实现_vs_理想公式" class="discrete">2. 数学模型对比：代码实现 vs. 理想公式</h4>
+<div class="paragraph">
+<p>在开发过程中，我们需要区分<strong>硬截断</strong>与<strong>饱和截断</strong>两种不同的统计逻辑：</p>
+</div>
+<h5 id="_a_最开始本系统采用的硬截断_hard_cutoff" class="discrete">A. 最开始本系统采用的：硬截断 (Hard Cutoff)</h5>
+<div class="paragraph">
+<p>这是 <code>key_mouse.py</code> 中实际运行的逻辑。只要间隔超过阈值，整段间隔时间归零。</p>
+</div>
+<div class="listingblock">
+<div class="title">@file key_mouse.py-&#8594;class TrackerEngine-&#8594;def log_event</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">delta</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span> <span class="tok-o">-</span> <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span>
+
+<span class="tok-k">if</span> <span class="tok-n">delta</span> <span class="tok-o">&lt;</span> <span class="tok-n">HEARTBEAT_THRESHOLD</span><span class="tok-p">:</span>
+    <span class="tok-c1"># 只有距离上次操作小于 5 分钟，才认为是连贯工作</span>
+    <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-p">[</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-p">(</span>
+        <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-o">.</span><span class="tok-n">get</span><span class="tok-p">(</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-n">delta</span>
+    <span class="tok-p">)</span>
+
+<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span>  <span class="tok-c1"># 重置上次事件时间</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>其数学对应关系为带<strong>指示函数</strong>的求和：</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[FocusTime = \sum_{n=1}^{N} (\Delta t_n \cdot \mathbb{1}_{\{\Delta t_n &lt; Threshold\}})\]
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>计算行为：它就像一个逻辑开关。如果两次操作间隔 \(\Delta t_n\) 小于设定的阈值，该函数输出为 1（时长被全额计入）。一旦间隔大于或等于阈值，函数输出瞬间突变为 0。此时 \(\Delta t_n\) 乘以 0 等于 0，这段间隔时间被彻底归零。</p>
+</li>
+<li>
+<p><strong>特点</strong>: 极其严格。如果你离开电脑 5 分 1 秒，系统会判定你这 5 分钟完全没在工作。</p>
+</li>
+</ul>
+</div>
+<h5 id="_b_现在本系统使用了通用的理想模型饱和截断_saturation" class="discrete">B. 现在本系统使用了<strong>通用的理想模型</strong>：饱和截断 (Saturation)</h5>
+<div class="paragraph">
+<p>商业统计软件（如 Toggl）常采用 \(\min\) 函数逻辑：</p>
+</div>
+<div class="listingblock">
+<div class="title">@file key_mouse.py-&#8594;class TrackerEngine-&#8594;def log_event</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">delta</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span> <span class="tok-o">-</span> <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span>
+
+<span class="tok-c1"># 无论间隔多久，最多累加 HEARTBEAT_THRESHOLD（例如5分钟）</span>
+<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-p">[</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-p">(</span>
+    <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-o">.</span><span class="tok-n">get</span><span class="tok-p">(</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-nb">min</span><span class="tok-p">(</span><span class="tok-n">delta</span><span class="tok-p">,</span> <span class="tok-n">HEARTBEAT_THRESHOLD</span><span class="tok-p">)</span>
+<span class="tok-p">)</span>
+
+<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span>  <span class="tok-c1"># 重置上次事件时间</span></code></pre>
+</div>
+</div>
+<div class="stemblock">
+<div class="content">
+\[FocusTime = \sum_{n=1}^{N} \min(\Delta t_n, Threshold)\]
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>计算行为：它是一种平滑的截断机制。系统会比较实际间隔时间 $\Delta t_n$ 和设定的阈值，取两者中较小的一个累加进去。这意味着即便用户的间隔时间极其漫长，系统依然会截取相当于“阈值”的时长，算作有效专注时间。</p>
+</li>
+<li>
+<p><strong>特点</strong>: 相对慷慨。即使你离开电脑 30 分钟，系统依然会“保底”为你计入前 5 分钟的专注时长，认为那是你离开前的思考时间。</p>
+</li>
+</ul>
+</div>
+<h4 id="_3_算法优缺点分析" class="discrete">3. 算法优缺点分析</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">维度</th>
+<th class="tableblock halign-left valign-top">特性描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>隐私性</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">极佳。无需截屏或访问摄像头，仅记录操作间隔。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>性能</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">极低。仅在输入事件触发时进行一次减法运算，不占用系统资源。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>准确性</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">存在估算误差。阅读长文档或观看视频而不操作时，会被误判为离线。</p></td>
+</tr>
+</tbody>
+</table>
+<h4 id="_关键实现节点参考_leo_editor_nodes" class="discrete">关键实现节点参考 (Leo Editor Nodes)</h4>
+<div class="paragraph">
+<p>在 Leo Editor 中，上述算法主要在以下节点中实现：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong><code>def log_event</code></strong>: 核心逻辑入口，计算 \(\Delta t\) 并进行跨天检测。</p>
+</li>
+<li>
+<p><strong><code>formatDuration(seconds)</code></strong>: 前端 Vue 节点，负责将秒数转化为 <code>1h 20m</code> 的可读格式。</p>
+</li>
+<li>
+<p><strong><code>fetchData()</code></strong>: 前端异步节点，每 60 秒从后端生成的 JSON 文件中拉取最新的专注秒数。</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -869,7 +993,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-20 23:01:40 +0800
+Last updated 2026-02-21 20:10:44 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

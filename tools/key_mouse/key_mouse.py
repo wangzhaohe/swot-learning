@@ -113,17 +113,35 @@ class TrackerEngine:
                 )
                 self.last_event_time = now_ts  # 跨天重置事件时间
 
-            #@+<< 专注时长计算 (5分钟心跳法) >>
-            #@+node:swot.20260220225738.1: *4* << 专注时长计算 (5分钟心跳法) >>
+            '''
+            #@+<< 专注时长计算 (5分钟心跳法) A 公式 >>
+            #@+node:swot.20260220225738.1: *4* << 专注时长计算 (5分钟心跳法) A 公式 >>
+            #@@language python
             delta = now_ts - self.last_event_time
+
             if delta < HEARTBEAT_THRESHOLD:
                 # 只有距离上次操作小于 5 分钟，才认为是连贯工作
                 self.daily_data["focus_seconds"] = (
                     self.daily_data.get("focus_seconds", 0) + delta
                 )
-            self.last_event_time = now_ts
 
-            #@-<< 专注时长计算 (5分钟心跳法) >>
+            self.last_event_time = now_ts  # 重置上次事件时间
+
+            #@-<< 专注时长计算 (5分钟心跳法) A 公式 >>
+            '''
+            #@+<< 专注时长计算 (5分钟心跳法) B 公式 >>
+            #@+node:swot.20260221164831.1: *4* << 专注时长计算 (5分钟心跳法) B 公式 >>
+            #@@language python
+            delta = now_ts - self.last_event_time
+
+            # 无论间隔多久，最多累加 HEARTBEAT_THRESHOLD（例如5分钟）
+            self.daily_data["focus_seconds"] = (
+                self.daily_data.get("focus_seconds", 0) + min(delta, HEARTBEAT_THRESHOLD)
+            )
+
+            self.last_event_time = now_ts  # 重置上次事件时间
+
+            #@-<< 专注时长计算 (5分钟心跳法) B 公式 >>
 
             # 2. 数据累加
             if is_keyboard:

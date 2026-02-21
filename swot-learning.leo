@@ -842,7 +842,8 @@
 <v t="swot.20260220170207.1"><vh>2 开发环境与工具</vh></v>
 <v t="swot.20260220170311.1"><vh>3 核心架构设计：Python 监听引擎</vh>
 <v t="swot.20260220170638.1"><vh>3.1 专注时长算法</vh>
-<v t="swot.20260220225738.1"><vh>&lt;&lt; 专注时长计算 (5分钟心跳法) &gt;&gt;</vh></v>
+<v t="swot.20260220225738.1"><vh>&lt;&lt; 专注时长计算 (5分钟心跳法) A 公式 &gt;&gt;</vh></v>
+<v t="swot.20260221164831.1"><vh>&lt;&lt; 专注时长计算 (5分钟心跳法) B 公式 &gt;&gt;</vh></v>
 </v>
 <v t="swot.20260220170623.1"><vh>3.2 数据原子化持久化</vh></v>
 </v>
@@ -14961,7 +14962,8 @@ const formatNumber = (num) =&gt;
 :important-caption: ❗
 :warning-caption: ‼️
 :caution-caption: ⚠️
-
+</t>
+<t tx="swot.20260220170018.1">
 ++++
 &lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
 &lt;script&gt;
@@ -14983,7 +14985,6 @@ const formatNumber = (num) =&gt;
 &lt;/script&gt;
 ++++
 </t>
-<t tx="swot.20260220170018.1"></t>
 <t tx="swot.20260220170138.1">本项目名为“键皇战况统计系统”（Keystroke Dashboard），旨在通过后台静默监听键盘与鼠标动作，实时分析用户的生产力状态。系统不仅统计点击总数，还通过“心跳算法”估算用户的**今日专注时长**，并以可视化大屏的方式进行展示。
 
 项目采用 **Leo Editor** 进行文学化编程（Literate Programming），代码组织结构清晰，逻辑与文档高度统一。
@@ -15028,19 +15029,91 @@ def _atomic_save(self, data, target_path):
 ----
 
 </t>
-<t tx="swot.20260220170638.1">心跳检测 (Active Time Heartbeat)，系统引入了 `HEARTBEAT_THRESHOLD`（300秒）概念。
-
-.@file key_mouse.py--&gt;class TrackerEngine--&gt;def log_event
-[source,python]
-----
-&lt;&lt; 专注时长计算 (5分钟心跳法) &gt;&gt;
-----
-
+<t tx="swot.20260220170638.1">@language asciidoc
+心跳检测 (Active Time Heartbeat)，系统引入了 `HEARTBEAT_THRESHOLD`（300秒）概念。
 该算法的核心思想是：
 
 - **专注总时长 = 所有（间隔 &lt; 5分钟）的时间段之和**。
 - 若两次操作间隔超过5分钟，系统将判定用户处于闲置状态，不计入时长。
 
+
+.专注时长核心算法：心跳估算法 (Active Time Heartbeat) 原理学习
+[sidebar]
+--
+本系统采用一种启发式的“心跳”逻辑来估算专注时长，而非简单的计时器。
+
+[discrete]
+==== 1. 算法逻辑说明
+系统将每一次键盘敲击或鼠标点击视为一次**心跳 (Heartbeat)**。系统根据连续两次心跳之间的时间差 stem:[\Delta t] 来决定这段时间是否为“专注贡献值”。
+
+* **打点 (Heartbeat)**: 证明用户当前处于活跃状态。
+* **阈值 (Threshold)**: 系统设定 `HEARTBEAT_THRESHOLD = 300`（5分钟）。若两次操作间隔超过此值，系统认为用户进入了“非工作状态”。
+
+[discrete]
+==== 2. 数学模型对比：代码实现 vs. 理想公式
+
+在开发过程中，我们需要区分**硬截断**与**饱和截断**两种不同的统计逻辑：
+
+[discrete]
+===== A. 最开始本系统采用的：硬截断 (Hard Cutoff)
+这是 `key_mouse.py` 中实际运行的逻辑。只要间隔超过阈值，整段间隔时间归零。
+
+.@file key_mouse.py--&gt;class TrackerEngine--&gt;def log_event
+[source,python]
+----
+&lt;&lt; 专注时长计算 (5分钟心跳法) A 公式 &gt;&gt;
+----
+
+其数学对应关系为带**指示函数**的求和：
+
+[stem]
+++++
+FocusTime = \sum_{n=1}^{N} (\Delta t_n \cdot \mathbb{1}_{\{\Delta t_n &lt; Threshold\}})
+++++
+
+* 计算行为：它就像一个逻辑开关。如果两次操作间隔 stem:[\Delta t_n] 小于设定的阈值，该函数输出为 1（时长被全额计入）。一旦间隔大于或等于阈值，函数输出瞬间突变为 0。此时 stem:[\Delta t_n] 乘以 0 等于 0，这段间隔时间被彻底归零。
+* **特点**: 极其严格。如果你离开电脑 5 分 1 秒，系统会判定你这 5 分钟完全没在工作。
+
+
+[discrete]
+===== B. 现在本系统使用了**通用的理想模型**：饱和截断 (Saturation)
+商业统计软件（如 Toggl）常采用 stem:[\min] 函数逻辑：
+
+.@file key_mouse.py--&gt;class TrackerEngine--&gt;def log_event
+[source,python]
+----
+&lt;&lt; 专注时长计算 (5分钟心跳法) B 公式 &gt;&gt;
+----
+
+[stem]
+++++
+FocusTime = \sum_{n=1}^{N} \min(\Delta t_n, Threshold)
+++++
+
+* 计算行为：它是一种平滑的截断机制。系统会比较实际间隔时间 $\Delta t_n$ 和设定的阈值，取两者中较小的一个累加进去。这意味着即便用户的间隔时间极其漫长，系统依然会截取相当于“阈值”的时长，算作有效专注时间。
+* **特点**: 相对慷慨。即使你离开电脑 30 分钟，系统依然会“保底”为你计入前 5 分钟的专注时长，认为那是你离开前的思考时间。
+
+
+[discrete]
+==== 3. 算法优缺点分析
+
+[cols="1,3", options="header"]
+|===
+|维度 | 特性描述
+|**隐私性** | 极佳。无需截屏或访问摄像头，仅记录操作间隔。
+|**性能** | 极低。仅在输入事件触发时进行一次减法运算，不占用系统资源。
+|**准确性** | 存在估算误差。阅读长文档或观看视频而不操作时，会被误判为离线。
+|===
+
+[discrete]
+==== 关键实现节点参考 (Leo Editor Nodes)
+
+在 Leo Editor 中，上述算法主要在以下节点中实现：
+
+. **`def log_event`**: 核心逻辑入口，计算 stem:[\Delta t] 并进行跨天检测。
+. **`formatDuration(seconds)`**: 前端 Vue 节点，负责将秒数转化为 `1h 20m` 的可读格式。
+. **`fetchData()`**: 前端异步节点，每 60 秒从后端生成的 JSON 文件中拉取最新的专注秒数。
+--
 </t>
 <t tx="swot.20260220170918.1">系统提供四个维度的图表分析：
 
@@ -15156,12 +15229,25 @@ def _atomic_save(self, data, target_path):
 </t>
 <t tx="swot.20260220225738.1">@language python
 delta = now_ts - self.last_event_time
+
 if delta &lt; HEARTBEAT_THRESHOLD:
     # 只有距离上次操作小于 5 分钟，才认为是连贯工作
     self.daily_data["focus_seconds"] = (
         self.daily_data.get("focus_seconds", 0) + delta
     )
-self.last_event_time = now_ts
+
+self.last_event_time = now_ts  # 重置上次事件时间
+
+</t>
+<t tx="swot.20260221164831.1">@language python
+delta = now_ts - self.last_event_time
+
+# 无论间隔多久，最多累加 HEARTBEAT_THRESHOLD（例如5分钟）
+self.daily_data["focus_seconds"] = (
+    self.daily_data.get("focus_seconds", 0) + min(delta, HEARTBEAT_THRESHOLD)
+)
+
+self.last_event_time = now_ts  # 重置上次事件时间
 
 </t>
 </tnodes>
