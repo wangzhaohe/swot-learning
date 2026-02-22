@@ -229,6 +229,7 @@
 <v t="swot.20250831100251.1"><vh>列操作模式 rectangle</vh></v>
 </v>
 </v>
+<v t="swot.20260222103905.1"><vh>找出右键菜单 open with neovim 与命令 open-with-neovim 不一样的原因</vh></v>
 </v>
 <v t="swot.20260218173224.1"><vh>@path lazyvim</vh>
 <v t="swot.20260218173307.1"><vh>item2 启动 lazyvim 后切换标签会导致编辑器当前行下面变灰，按键会跳到别的行的问题</vh></v>
@@ -405,7 +406,17 @@
 </v>
 </v>
 </v>
-<v t="swot.20260215225306.1"><vh>@path neovim</vh></v>
+<v t="swot.20260215225306.1"><vh>@path neovim</vh>
+<v t="swot.20260222101217.1"><vh>@adoc Neovim与Leo-editor格式化冲突解决方案总结.adoc</vh>
+<v t="swot.20260222101313.1"><vh>lazyvim 自动格式化分开 leo-editor @# 为 @ # 解决方案</vh>
+<v t="swot.20260222102911.1"><vh>Need to DO</vh></v>
+<v t="swot.20260222100358.1"><vh>问题背景 (Background)</vh></v>
+<v t="swot.20260222101450.1"><vh>核心原理 (Principles)</vh></v>
+<v t="swot.20260222101458.1"><vh>技术实现 (Implementation)</vh></v>
+<v t="swot.20260222101511.1"><vh>方案评估 (Evaluation)</vh></v>
+</v>
+</v>
+</v>
 <v t="swot.20260215082206.1"><vh>@path postgresql</vh>
 <v t="swot.20260215160552.1"><vh>@adoc Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统.adoc</vh>
 <v t="swot.20260215162708.1"><vh>Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统</vh>
@@ -918,7 +929,24 @@
 <v t="swot.20260203105212.1"><vh>2026-02-03 aider 配置 mcp -&gt; 官方还不支持呢</vh></v>
 <v t="swot.20260205232002.1"><vh>2026-02-05 pnpm-lock.yaml 的不一致问题 -&gt; 终极解决方法是用 podman/docker</vh></v>
 <v t="swot.20260217193310.1"><vh>2026-02-17 leo-editor 文字间距改善，准备 pull request to leo-editor</vh>
-<v t="swot.20250715091430.1"><vh>@file /Users/swot/app/leo-editor/leo/plugins/body_style_hook.py</vh></v>
+<v t="swot.20250715091430.1"><vh>@@file /Users/swot/app/leo-editor/leo/plugins/body_style_hook.py</vh>
+<v t="swot.20260219114240.1"><vh>import</vh></v>
+<v t="swot.20260219114210.1"><vh>var</vh></v>
+<v t="swot.20260219114140.1"><vh>def init</vh></v>
+<v t="swot.20260219114126.1"><vh>def on_window_init</vh></v>
+<v t="swot.20260219114059.1"><vh>class BodyStyleController</vh>
+<v t="swot.20260219115900.1"><vh>def __init__</vh></v>
+<v t="swot.20260222181121.1"><vh>def get_config</vh></v>
+<v t="swot.20260219115854.1"><vh>def on_select</vh></v>
+<v t="swot.20260222110100.1"><vh>def on_command</vh></v>
+<v t="swot.20260222110233.1"><vh>def setup_qt_signals</vh></v>
+<v t="swot.20260222164552.1"><vh>def on_contents_change</vh></v>
+<v t="swot.20260219115843.1"><vh>def get_editor</vh></v>
+<v t="swot.20260219114043.1"><vh>def apply_style</vh></v>
+<v t="swot.20260219114021.1"><vh>def _apply_formats</vh></v>
+</v>
+</v>
+<v t="swot.20260222193522.1"><vh>@file /Users/swot/app/leo-editor/leo/plugins/body_style.py</vh></v>
 </v>
 </v>
 </v>
@@ -962,12 +990,16 @@
 <v t="swot.20260219205754.1"><vh>@edit test_at_others_include.adoc</vh></v>
 </v>
 <v t="swot.20260221211950.1"><vh>body_style_hook.py</vh>
+<v t="swot.20260222172132.1"><vh>done</vh>
 <v t="swot.20260221212003.1"><vh>在按下 Shift+Tab 后 body 设定的样式没了</vh></v>
 <v t="swot.20260221212028.1"><vh>在按下 cmd + Shift + ) 后 body 设定的样式不了</vh></v>
 <v t="swot.20260221214644.1"><vh>在按下 s;; 后 body 设定的样式没了</vh></v>
 </v>
+</v>
 <v t="swot.20260221211911.1"><vh>&lt;&lt; 4. 双轨制存盘策略 &gt;&gt; self.force_save() 替代了好多代码</vh></v>
 <v t="swot.20260221213206.1"><vh>status 看懂</vh></v>
+<v t="swot.20260222102911.1"></v>
+<v t="swot.20260222103905.1"></v>
 </v>
 </vnodes>
 <tnodes>
@@ -9355,6 +9387,9 @@ NOTE: 但这种方式只能防止“主动点击”，不能防止用户手动�
 
 - 没权限时自动跳转到 403 或首页，用户体验更好。
 </t>
+<t tx="swot.20250715091430.1">@language python
+@others
+</t>
 <t tx="swot.20250721131040.1"></t>
 <t tx="swot.20250721131113.1">输入 if 选择 vIf 可以生成条件语句
 
@@ -14838,6 +14873,161 @@ cp .leo/themes/SwotMoknokai.leo ~/.leo/themes/
 <t tx="swot.20260218225702.1">D body</t>
 <t tx="swot.20260218225850.1">D1 body</t>
 <t tx="swot.20260219084120.1" annotate="7d71002858080000007072696f7269747971014b64580a000000707269736574646174657102580a000000323032362d30322d31397103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358260000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f63686b626c6b2e706e677104580700000072656c506174687105580f000000636c656f2f63686b626c6b2e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e"></t>
+<t tx="swot.20260219114021.1">def _apply_formats(self, editor, doc, config):
+    """Apply paragraph (line height) and character (letter spacing) formats simultaneously"""
+    v_scrollbar = editor.verticalScrollBar()
+    current_scroll_value = v_scrollbar.value() if v_scrollbar else 0
+
+    cursor = QTextCursor(doc)
+    cursor.select(QTextCursor.SelectionType.Document)
+
+    editor.blockSignals(True)
+    doc.blockSignals(True)
+
+    try:
+        # A. Set paragraph format using dynamic config
+        block_fmt = QTextBlockFormat()
+        block_fmt.setLineHeight(config["line_height"], config["line_height_type"])
+        cursor.mergeBlockFormat(block_fmt)
+
+        # B. Set character format using dynamic config
+        char_fmt = QTextCharFormat()
+        
+        char_fmt.setFontFamily(config["family"])
+        char_fmt.setFontPointSize(config["size"])
+        
+        char_fmt.setFontLetterSpacingType(QFont.SpacingType.PercentageSpacing)
+        char_fmt.setFontLetterSpacing(config["letter_spacing"])
+        cursor.mergeCharFormat(char_fmt)
+    finally:
+        doc.blockSignals(False)
+        editor.blockSignals(False)
+
+        cursor.clearSelection()
+
+        if v_scrollbar:
+            v_scrollbar.setValue(current_scroll_value)
+
+</t>
+<t tx="swot.20260219114043.1">def apply_style(self):
+    """Entry point: Prepare font object and apply formats"""
+    editor = self.get_editor()
+    if not editor:
+        return
+
+    doc = editor.document()
+    if not doc:
+        return
+
+    config = self.get_config()
+
+    current_font = editor.font()
+    if (
+        current_font.family() != config["family"]
+        or current_font.pointSize() != config["size"]
+    ):
+        font = QFont(config["family"])
+        font.setPointSize(config["size"])
+        font.setLetterSpacing(
+            QFont.SpacingType.PercentageSpacing, config["letter_spacing"]
+        )
+
+        editor.setFont(font)
+        doc.setDefaultFont(font)
+
+    self._apply_formats(editor, doc, config)
+
+</t>
+<t tx="swot.20260219114059.1">class BodyStyleController:
+    """
+    Independent style controller for each Commander.
+    """
+
+    @others
+
+
+</t>
+<t tx="swot.20260219114126.1">def on_window_init(tag, keywords):
+    """Universal window initialization function, handles startup, new windows, and reloads"""
+    c = keywords.get("c")
+    if not c:
+        return
+
+    # Prevent duplicate mounting (Singleton pattern)
+    if hasattr(c, "_body_styler"):
+        c._body_styler.apply_style()
+        return
+
+    # First time mount
+    c._body_styler = BodyStyleController(c)
+
+
+</t>
+<t tx="swot.20260219114140.1">def init():
+    """Plugin entry point"""
+    # 1. For newly opened windows (Ctrl+O, Ctrl+N)
+    g.registerHandler("open2", on_window_init)
+
+    # 2. For the first window when Leo starts
+    g.registerHandler("start2", on_window_init)
+
+    # 3. [Key Fix] For existing windows during plugin reload
+    if g.app.commanders():
+        for existing_c in g.app.commanders():
+            on_window_init("reload", {"c": existing_c})
+
+    g.es("Body Style Plugin loaded (Config Enabled).")
+    return True
+
+
+</t>
+<t tx="swot.20260219114210.1"># Eliminate Pyflakes false positives during save
+try:
+    c
+except NameError:
+    c = None
+
+
+</t>
+<t tx="swot.20260219114240.1">from leo.core import leoGlobals as g
+from PyQt6.QtGui import QTextBlockFormat, QTextCursor, QFont, QTextCharFormat
+from PyQt6.QtCore import QTimer
+
+</t>
+<t tx="swot.20260219115843.1">def get_editor(self):
+    """Safely get Qt editor widget"""
+    try:
+        return self.c.frame.body.wrapper.widget
+    except AttributeError:
+        return None
+
+</t>
+<t tx="swot.20260219115854.1">def on_select(self, tag, keywords):
+    """Apply style when switching nodes"""
+    if keywords.get("c") != self.c:
+        return
+    QTimer.singleShot(0, self.apply_style)
+
+</t>
+<t tx="swot.20260219115900.1">def __init__(self, c):
+    self.c = c
+
+    # 1. init Debouncer
+    self._debounce_timer = QTimer()
+    self._debounce_timer.setSingleShot(True)
+    self._debounce_timer.setInterval(50)  # delay 50ms
+    self._debounce_timer.timeout.connect(self.apply_style)
+
+    # 2. Listen for node switching
+    g.registerHandler("select1", self.on_select)
+
+    # 3. Listen Leo command
+    g.registerHandler("command2", self.on_command)
+
+    # Delayed application on startup
+    QTimer.singleShot(100, self.setup_qt_signals)
+
+</t>
 <t tx="swot.20260219172054.1" annotate="7d71002858080000007072696f7269747971014b64580a000000707269736574646174657102580a000000323032362d30322d31397103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358260000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f63686b626c6b2e706e677104580700000072656c506174687105580f000000636c656f2f63686b626c6b2e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e"></t>
 <t tx="swot.20260219172118.1" annotate="7d71002858080000007072696f7269747971014b64580a000000707269736574646174657102580a000000323032362d30322d31397103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358260000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f63686b626c6b2e706e677104580700000072656c506174687105580f000000636c656f2f63686b626c6b2e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e"></t>
 <t tx="swot.20260219172222.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032362d30322d31397103752e"></t>
@@ -15208,14 +15398,14 @@ FocusTime = \sum_{n=1}^{N} \min(\Delta t_n, Threshold)
     transform: translateY(-5px);
 }
 .stat-title {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--text-muted);
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 .stat-value {
-  font-size: 2.5rem;
+  font-size: 2.4rem;
   font-weight: bold;
   color: var(--text-main);
 }
@@ -15315,5 +15505,186 @@ if now_ts - self.last_save_time &gt; SAVE_INTERVAL:
 }
 </t>
 <t tx="swot.20260221214644.1"></t>
+<t tx="swot.20260222100358.1">在 *LazyVim* (Neovim) 环境下开发 Python 时，默认格式化工具（如 `black` 或 `ruff`）会强制执行 **PEP 8** 规范。
+
+[CAUTION]
+====
+格式化工具会自动将 Leo-editor 的 Sentinel 标记由 `#@+node` 修改为 `# @+node`（增加了一个空格）。
+这将导致 Leo 无法识别大纲结构，破坏双向同步，甚至造成数据丢失。
+====
+
+</t>
+<t tx="swot.20260222101217.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
+<t tx="swot.20260222101313.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260222101450.1">本方案采用 **"先破坏，后瞬间修复"** 的逻辑，利用 Neovim 原生的 `autocmd` 机制。
+
+. *事件触发*：绑定在 `BufWritePost`（文件写入并完成格式化之后）。
+. *指纹检查*：检测文件前 10 行是否包含 `#@+leo` 标识，确保非 Leo 文件不受干扰。
+. *精准修复*：使用 Lua 正则表达式，仅针对 Leo 专用符号集 `[+ - &lt; &gt; = @]` 移除冲突空格。
+. *静默写回*：执行 `noautocmd write`，避免触发递归循环。
+
+</t>
+<t tx="swot.20260222101458.1">将以下配置添加至 `~/.config/nvim/lua/config/autocmds.lua`：
+
+[source,lua]
+----
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = vim.api.nvim_create_augroup("FixLeoSentinels", { clear = true }),
+  pattern = "*.py",
+  callback = function()
+    local first_10_lines = vim.api.nvim_buf_get_lines(0, 0, 10, false)
+    local is_leo_file = false
+    for _, line in ipairs(first_10_lines) do
+      if line:match("%@%+leo") then
+        is_leo_file = true
+        break
+      end
+    end
+    if not is_leo_file then
+      return
+    end
+
+    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local modified = false
+
+    for i, line in ipairs(lines) do
+      -- 【核心修改】：在正则的方括号里加上了 @ 符号
+      -- 现在它可以匹配 "# @+", "# @-", 以及 "# @@" 等结构
+      if line:match("^%s*# %@[%+%-%&lt;%&gt;%=@]") then
+        lines[i] = line:gsub("^(%s*)# %@([%+%-%&lt;%&gt;%=@])", "%1#@%2")
+        modified = true
+      end
+    end
+
+    if modified then
+      vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+      vim.cmd("silent! noautocmd write")
+    end
+  end,
+})
+----
+
+</t>
+<t tx="swot.20260222101511.1">[cols="1,2", options="header"]
+|===
+| 维度 | 评价
+| **稳定性** | 极高。基于 `@file` 机制，不依赖尚不稳定的 `@clean`。
+| **侵入性** | 极低。不修改 LSP 或格式化插件的核心配置。
+| **掌控感** | 满分。代码逻辑完全透明，符合原生 (Native) 使用习惯。
+| **兼容性** | 良好。完美适配 `#@+node`、`#@@language` 等所有 Leo 指令。
+|===
+
+[TIP]
+====
+如果在 `git diff` 中仍看到其他不可思议的改动，通常是格式化工具清理了行尾不可见空格（Trailing Whitespace），这属于正常的代码优化。
+====
+</t>
+<t tx="swot.20260222102911.1">需要去看下 leo-editor 源码，是否已经能够自动加载 @file 中的 @# 和 @ # 了。
+
+如是，就不用折腾下面的方案了。
+</t>
+<t tx="swot.20260222103905.1"></t>
+<t tx="swot.20260222110100.1">def on_command(self, tag, keywords):
+    """catch not trigger textChanged command"""
+    if keywords.get("c") == self.c:
+        QTimer.singleShot(0, self.apply_style)
+
+</t>
+<t tx="swot.20260222110233.1">def setup_qt_signals(self):
+    """Bind Qt document contentsChange signal"""
+    editor = self.get_editor()
+    if not editor:
+        return
+
+    doc = editor.document()
+    if not doc:
+        return
+
+    try:
+        doc.contentsChange.disconnect(self.on_contents_change)
+    except Exception:
+        pass
+
+    doc.contentsChange.connect(self.on_contents_change)
+    self.apply_style()
+
+</t>
+<t tx="swot.20260222164552.1">def on_contents_change(self, position, charsRemoved, charsAdded):
+    """Differentiate normal typing from abbrev expansion/paste"""
+    if charsRemoved &gt; 1 or charsAdded &gt; 1:
+        QTimer.singleShot(0, self.apply_style)
+    else:
+        self._debounce_timer.start()
+
+</t>
+<t tx="swot.20260222172132.1"></t>
+<t tx="swot.20260222181121.1">def get_config(self):
+    """Load settings from Leo's @data body-style-settings node"""
+    # Default configuration fallback
+    conf = {
+        "family": "JetBrains Mono",
+        "size": 16,
+        "line_height": 125,
+        "line_height_type": 1,
+        "letter_spacing": 105,
+    }
+
+    # Fetch data from myLeoSettings.leo
+    data = self.c.config.getData("body-style-settings")
+    if data:
+        for line in data:
+            line = line.strip()
+            # Skip empty lines or comments
+            if not line or line.startswith("#"):
+                continue
+
+            if "=" in line:
+                key, val = [x.strip() for x in line.split("=", 1)]
+                if key in conf:
+                    if key == "family":
+                        conf[key] = val
+                    else:
+                        try:
+                            conf[key] = int(val)
+                        except ValueError:
+                            g.es(f"BodyStyle Warning: Invalid number for {key}")
+    return conf
+
+</t>
 </tnodes>
 </leo_file>
