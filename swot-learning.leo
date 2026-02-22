@@ -968,7 +968,6 @@
 </v>
 <v t="swot.20260221211911.1"><vh>&lt;&lt; 4. 双轨制存盘策略 &gt;&gt; self.force_save() 替代了好多代码</vh></v>
 <v t="swot.20260221213206.1"><vh>status 看懂</vh></v>
-<v t="swot.20260221230656.1"><vh>newHeadline</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -15316,6 +15315,5 @@ if now_ts - self.last_save_time &gt; SAVE_INTERVAL:
 }
 </t>
 <t tx="swot.20260221214644.1"></t>
-<t tx="swot.20260221230656.1"></t>
 </tnodes>
 </leo_file>
