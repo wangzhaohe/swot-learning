@@ -1,0 +1,110 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+
+= lazyvim 自动格式化分开 leo-editor @# 为 @ # 解决方案
+
+++++
+<button id="toggleButton">目录开关</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== 问题背景 (Background)
+在 *LazyVim* (Neovim) 环境下开发 Python 时，默认格式化工具（如 `black` 或 `ruff`）会强制执行 **PEP 8** 规范。
+
+[CAUTION]
+====
+格式化工具会自动将 Leo-editor 的 Sentinel 标记由 `#@+node` 修改为 `# @+node`（增加了一个空格）。
+这将导致 Leo 无法识别大纲结构，破坏双向同步，甚至造成数据丢失。
+====
+
+== 核心原理 (Principles)
+本方案采用 **"先破坏，后瞬间修复"** 的逻辑，利用 Neovim 原生的 `autocmd` 机制。
+
+. *事件触发*：绑定在 `BufWritePost`（文件写入并完成格式化之后）。
+. *指纹检查*：检测文件前 10 行是否包含 `#@+leo` 标识，确保非 Leo 文件不受干扰。
+. *精准修复*：使用 Lua 正则表达式，仅针对 Leo 专用符号集 `[+ - < > = @]` 移除冲突空格。
+. *静默写回*：执行 `noautocmd write`，避免触发递归循环。
+
+== 技术实现 (Implementation)
+将以下配置添加至 `~/.config/nvim/lua/config/autocmds.lua`：
+
+[source,lua]
+----
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = vim.api.nvim_create_augroup("FixLeoSentinels", { clear = true }),
+  pattern = "*.py",
+  callback = function()
+    local first_10_lines = vim.api.nvim_buf_get_lines(0, 0, 10, false)
+    local is_leo_file = false
+    for _, line in ipairs(first_10_lines) do
+      if line:match("%@%+leo") then
+        is_leo_file = true
+        break
+      end
+    end
+    if not is_leo_file then
+      return
+    end
+
+    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local modified = false
+
+    for i, line in ipairs(lines) do
+      -- 【核心修改】：在正则的方括号里加上了 @ 符号
+      -- 现在它可以匹配 "# @+", "# @-", 以及 "# @@" 等结构
+      if line:match("^%s*# %@[%+%-%<%>%=@]") then
+        lines[i] = line:gsub("^(%s*)# %@([%+%-%<%>%=@])", "%1#@%2")
+        modified = true
+      end
+    end
+
+    if modified then
+      vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+      vim.cmd("silent! noautocmd write")
+    end
+  end,
+})
+----
+
+== 方案评估 (Evaluation)
+[cols="1,2", options="header"]
+|===
+| 维度 | 评价
+| **稳定性** | 极高。基于 `@file` 机制，不依赖尚不稳定的 `@clean`。
+| **侵入性** | 极低。不修改 LSP 或格式化插件的核心配置。
+| **掌控感** | 满分。代码逻辑完全透明，符合原生 (Native) 使用习惯。
+| **兼容性** | 良好。完美适配 `#@+node`、`#@@language` 等所有 Leo 指令。
+|===
+
+[TIP]
+====
+如果在 `git diff` 中仍看到其他不可思议的改动，通常是格式化工具清理了行尾不可见空格（Trailing Whitespace），这属于正常的代码优化。
+====
+
