@@ -15405,7 +15405,7 @@ FocusTime = \sum_{n=1}^{N} \min(\Delta t_n, Threshold)
     letter-spacing: 1px;
 }
 .stat-value {
-  font-size: 2.4rem;
+  font-size: 2.3rem;
   font-weight: bold;
   color: var(--text-main);
 }
@@ -15617,6 +15617,8 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 <t tx="swot.20260222102911.1">需要去看下 leo-editor 源码，是否已经能够自动加载 @file 中的 @# 和 @ # 了。
 
 如是，就不用折腾下面的方案了。
+
+要看……
 </t>
 <t tx="swot.20260222103905.1"></t>
 <t tx="swot.20260222110100.1">def on_command(self, tag, keywords):
