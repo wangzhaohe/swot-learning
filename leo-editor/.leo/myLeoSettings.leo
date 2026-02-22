@@ -85,7 +85,7 @@
 <v t="swot.20200908084141.65"><vh>@string status-font-style = @font-style</vh></v>
 </v>
 </v>
-<v t="swot.20181202012654.205" descendentVnodeUnknownAttributes="7d7100580a000000302e32352e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@settings</vh>
+<v t="swot.20181202012654.205" descendentVnodeUnknownAttributes="7d7100580a000000302e32362e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@settings</vh>
 <v t="swot.20200916152454.1"><vh>@enabled-plugins</vh></v>
 <v t="swot.20210129110804.1"><vh>@string headline-time-format-string = %Y-%m-%d</vh></v>
 <v t="swot.20210129110742.1"><vh>@string body-time-format-string = %Y-%m-%d %H:%M:%S</vh></v>
@@ -186,6 +186,7 @@
 <v t="swot.20230412134154.1"><vh>node.js</vh></v>
 <v t="swot.20230715163332.1"><vh>uni</vh></v>
 </v>
+<v t="swot.20260222181758.1"><vh>@data body-style-settings</vh></v>
 <v t="swot.20190506212541.1" descendentVnodeUnknownAttributes="7d71005807000000302e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@outline-data tree-abbreviations</vh>
 <v t="swot.20221127234708.1"><vh>vue</vh>
 <v t="swot.20230426072719.1"><vh>vc2;;</vh>
@@ -824,7 +825,7 @@ freewin.py
 
 # writen by swot
 #mark_file_nodes_dirty.py
-body_style_hook.py
+body_style.py
 #highlightCurrentLine.py
 
 
@@ -2478,6 +2479,12 @@ try:
 except Exception as e:
     g.es(f"Reload failed: {e}", color="red")
     g.es_exception()
+</t>
+<t tx="swot.20260222181758.1"># Your body style settings here
+family = JetBrains Mono
+size = 16
+line_height = 120
+letter_spacing = 102
 </t>
 </tnodes>
 </leo_file>
