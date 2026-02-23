@@ -409,7 +409,6 @@
 <v t="swot.20260215225306.1"><vh>@path neovim</vh>
 <v t="swot.20260222101217.1"><vh>@adoc Neovim与Leo-editor格式化冲突解决方案总结.adoc</vh>
 <v t="swot.20260222101313.1"><vh>lazyvim 自动格式化分开 leo-editor @# 为 @ # 解决方案</vh>
-<v t="swot.20260222102911.1"><vh>Need to DO</vh></v>
 <v t="swot.20260222100358.1"><vh>问题背景 (Background)</vh></v>
 <v t="swot.20260222101450.1"><vh>核心原理 (Principles)</vh></v>
 <v t="swot.20260222101458.1"><vh>技术实现 (Implementation)</vh></v>
@@ -870,8 +869,8 @@
 <v t="swot.20260220155506.1"><vh>&lt;&lt; formatDuration(seconds) &gt;&gt;</vh></v>
 </v>
 <v t="swot.20260220170918.1"><vh>4.2 可视化分析维度</vh>
-<v t="swot.20260220154401.1"><vh>today analyse</vh></v>
-<v t="swot.20260220154415.1"><vh>total analyse</vh></v>
+<v t="swot.20260220154401.1"><vh>&lt;&lt; today analyse &gt;&gt;</vh></v>
+<v t="swot.20260220154415.1"><vh>&lt;&lt; total analyse &gt;&gt;</vh></v>
 <v t="swot.20260220194042.1"><vh>&lt;&lt; charts style &gt;&gt;</vh></v>
 </v>
 </v>
@@ -998,8 +997,8 @@
 </v>
 <v t="swot.20260221211911.1"><vh>&lt;&lt; 4. 双轨制存盘策略 &gt;&gt; self.force_save() 替代了好多代码</vh></v>
 <v t="swot.20260221213206.1"><vh>status 看懂</vh></v>
-<v t="swot.20260222102911.1"></v>
 <v t="swot.20260222103905.1"></v>
+<v t="swot.20260223091817.1"><vh>newHeadline</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -15327,7 +15326,8 @@ FocusTime = \sum_{n=1}^{N} \min(\Delta t_n, Threshold)
 .今日和总体分析展示
 [source,html]
 ----
-@others
+&lt;&lt; today analyse &gt;&gt;
+&lt;&lt; total analyse &gt;&gt;
 ----
 
 .今日和总体分析展示样式
@@ -15614,12 +15614,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 如果在 `git diff` 中仍看到其他不可思议的改动，通常是格式化工具清理了行尾不可见空格（Trailing Whitespace），这属于正常的代码优化。
 ====
 </t>
-<t tx="swot.20260222102911.1">需要去看下 leo-editor 源码，是否已经能够自动加载 @file 中的 @# 和 @ # 了。
-
-如是，就不用折腾下面的方案了。
-
-要看……
-</t>
 <t tx="swot.20260222103905.1"></t>
 <t tx="swot.20260222110100.1">def on_command(self, tag, keywords):
     """catch not trigger textChanged command"""
@@ -15687,6 +15681,16 @@ vim.api.nvim_create_autocmd("BufWritePost", {
                             g.es(f"BodyStyle Warning: Invalid number for {key}")
     return conf
 
+</t>
+<t tx="swot.20260223091817.1">print("Hello World!")
+print("Hello World!")
+
+    print("Hello World!")
+    print("Hello World!")
+
+print("Hello World!")
+print("Hello World!")
+print("Hello World!")
 </t>
 </tnodes>
 </leo_file>

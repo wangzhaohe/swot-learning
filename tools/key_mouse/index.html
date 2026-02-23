@@ -169,66 +169,71 @@
         <div v-if="loading" class="loading">
             加载数据中... (请确保已通过 HTTP Server 运行)
         </div>
-
         <div v-else>
-            <!--@+<< header div >>-->
-            <!--@+node:swot.20260220154251.1: *3* << header div >>-->
-            <!--@@language html-->
-            <div class="header">
-                <h1>HP GT87 Ultra 战况大屏</h1>
-                <p>实时读取本地统计数据，每 60 秒自动刷新</p>
-            </div>
-            <!--@-<< header div >>-->
-            <!--@+<< 4 cards div >>-->
-            <!--@+node:swot.20260220154318.1: *3* << 4 cards div >>-->
-            <!--@@language html-->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-title">今日专注时长</div>
-                    <div class="stat-value focus">{{ formatDuration(liveFocusSeconds) }}</div>
-                    <div :class="['status-badge', isDormant ? 'status-dormant' : 'status-active pulse']">
-                        {{ isDormant ? '💤 系统休眠中' : '🔥 专注打码中' }}
+            <div class="first-screen">
+                <!--@+<< header div >>-->
+                <!--@+node:swot.20260220154251.1: *3* << header div >>-->
+                <!--@@language html-->
+                <div class="header">
+                    <h1>HP GT87 Ultra 战况大屏</h1>
+                    <p>实时读取本地统计数据，每 60 秒自动刷新</p>
+                </div>
+                <!--@-<< header div >>-->
+                <!--@+<< 4 cards div >>-->
+                <!--@+node:swot.20260220154318.1: *3* << 4 cards div >>-->
+                <!--@@language html-->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-title">今日专注时长</div>
+                        <div class="stat-value focus">{{ formatDuration(liveFocusSeconds) }}</div>
+                        <div :class="['status-badge', isDormant ? 'status-dormant' : 'status-active pulse']">
+                            {{ isDormant ? '💤 系统休眠中' : '🔥 专注打码中' }}
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-title">历史总点击 (Total)</div>
+                        <div class="stat-value">{{ formatNumber(globalStats.total) }}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">总键盘敲击 (Key)</div>
+                        <div class="stat-value keyboard">{{ formatNumber(globalStats.keyboard) }}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">总鼠标点击 (Mouse)</div>
+                        <div class="stat-value mouse">{{ formatNumber(globalStats.mouse) }}</div>
                     </div>
                 </div>
-
-                <div class="stat-card">
-                    <div class="stat-title">历史总点击 (Total)</div>
-                    <div class="stat-value">{{ formatNumber(globalStats.total) }}</div>
+                <!--@-<< 4 cards div >>-->
+                <!--@+<< today analyse >>-->
+                <!--@+node:swot.20260220154401.1: *3* << today analyse >>-->
+                <!--@@language html-->
+                <!-- 今日展示 -->
+                <div class="charts-row-split">
+                    <div class="chart-container">
+                        <div id="hourlyChart" class="chart"></div>
+                    </div>
+                    <div class="chart-container">
+                        <div id="topKeysChart" class="chart"></div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-title">总键盘敲击 (Key)</div>
-                    <div class="stat-value keyboard">{{ formatNumber(globalStats.keyboard) }}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-title">总鼠标点击 (Mouse)</div>
-                    <div class="stat-value mouse">{{ formatNumber(globalStats.mouse) }}</div>
-                </div>
+                <!--@-<< today analyse >>-->
             </div>
-            <!--@-<< 4 cards div >>-->
-            <!--@+others-->
-            <!--@+node:swot.20260220154401.1: *3* today analyse-->
-            <!--@@language html-->
-            <!-- 今日展示 -->
-            <div class="charts-row-split">
-                <div class="chart-container">
-                    <div id="hourlyChart" class="chart"></div>
+            <div class="first-screen">
+                <!--@+<< total analyse >>-->
+                <!--@+node:swot.20260220154415.1: *3* << total analyse >>-->
+                <!--@@language html-->
+                <!-- 总体展示 -->
+                <div>
+                    <div class="chart-container">
+                        <div id="trendChart" class="chart"></div>
+                    </div>
+                    <div class="chart-container">
+                        <div id="allTimeTopKeysChart" class="chart"></div>
+                    </div>
                 </div>
-                <div class="chart-container">
-                    <div id="topKeysChart" class="chart"></div>
-                </div>
+                <!--@-<< total analyse >>-->
             </div>
-            <!--@+node:swot.20260220154415.1: *3* total analyse-->
-            <!--@@language html-->
-            <!-- 总体展示 -->
-            <div>
-                <div class="chart-container">
-                    <div id="trendChart" class="chart"></div>
-                </div>
-                <div class="chart-container">
-                    <div id="allTimeTopKeysChart" class="chart"></div>
-                </div>
-            </div>
-            <!--@-others-->
         </div>
     </div>
     <!--@-<< div app >>-->
