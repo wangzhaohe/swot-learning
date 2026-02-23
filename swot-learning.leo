@@ -15121,7 +15121,7 @@ console.log('End create token')
 </t>
 <t tx="swot.20260220154415.1">@language html
 &lt;!-- 总体展示 --&gt;
-&lt;div&gt;
+&lt;div class="charts-row-split"&gt;
     &lt;div class="chart-container"&gt;
         &lt;div id="trendChart" class="chart"&gt;&lt;/div&gt;
     &lt;/div&gt;
@@ -15424,13 +15424,23 @@ FocusTime = \sum_{n=1}^{N} \min(\Delta t_n, Threshold)
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
-    margin-bottom: 2rem;
+    flex: 1; /* 关键：自动占据 first-screen 剩下的所有高度 */
+    margin-bottom: 0; /* 移除原来的底部边距 */
 }
 .chart-container {
-    background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    display: flex;  /* 图表容器使用 flex，方便内部的图表 100% 撑开 */
+    flex-direction: column;
 }
-.chart { width: 100%; height: 350px; }
+.chart {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+}
+
 </t>
 <t tx="swot.20260220225738.1">@language python
 delta = now_ts - self.last_event_time

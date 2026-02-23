@@ -13,6 +13,19 @@
     <!--@+node:swot.20260220153543.1: ** << style >>-->
     <!--@delims /* */ -->
     <style>
+        /*@+<< first-screen >>*/
+        /*@+node:swot.20260223095049.1: *3* << first-screen >>*/
+        /*@@language css*/
+        /* 首屏容器样式 */
+        .first-screen {
+            display: flex;
+            flex-direction: column;
+            /* 100vh 减去 body 的上下 2rem padding (共 4rem) */
+            min-height: calc(100vh - 4rem); 
+            margin-bottom: 2rem; 
+        }
+
+        /*@-<< first-screen >>*/
         /*@+<< header style >>*/
         /*@+node:swot.20260220183334.1: *3* << header style >>*/
         /*@@language css*/
@@ -69,14 +82,34 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 2rem;
-            margin-bottom: 2rem;
+            flex: 1; /* 关键：自动占据 first-screen 剩下的所有高度 */
+            margin-bottom: 0; /* 移除原来的底部边距 */
         }
         .chart-container {
-            background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            display: flex;  /* 图表容器使用 flex，方便内部的图表 100% 撑开 */
+            flex-direction: column;
         }
-        .chart { width: 100%; height: 350px; }
+        .chart {
+            width: 100%;
+            height: 100%;
+            flex: 1;
+        }
+
         /*@-<< charts style >>*/
+        /*@+<< second-screen >>*/
+        /*@+node:swot.20260223095831.1: *3* << second-screen >>*/
+        /*@@language css*/
+        /* 为“总体展示”的图表容器单独设置一个固定高度，防止高度塌陷 */
+        .second-screen .chart-container {
+            height: 400px; /* 或者你喜欢的任何高度 */
+            margin-bottom: 2rem;
+        }
+
+        /*@-<< second-screen >>*/
         /*@+others*/
         /*@+node:swot.20260220183022.1: *3* color var*/
         /*@@language css*/
@@ -219,12 +252,12 @@
                 </div>
                 <!--@-<< today analyse >>-->
             </div>
-            <div class="first-screen">
+            <div class="second-screen">
                 <!--@+<< total analyse >>-->
                 <!--@+node:swot.20260220154415.1: *3* << total analyse >>-->
                 <!--@@language html-->
                 <!-- 总体展示 -->
-                <div>
+                <div class="charts-row-split">
                     <div class="chart-container">
                         <div id="trendChart" class="chart"></div>
                     </div>
