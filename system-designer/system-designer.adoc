@@ -42,8 +42,7 @@
 [abstract]
 将 “Svelte 前端 + Spring Boot 后端” 构成的系统，拆解为宏观 MVC、后端内部 MVC 与前端 MVVM 三层逻辑，实现职责的彻底分离。
 
-[discrete]
-==== 1. 宏观视角：系统级 MVC (System Level)  
+=== 1. 宏观视角：系统级 MVC (System Level)
 
 从整体看，前端是 UI，后端是逻辑与数据的提供者。
 
@@ -56,7 +55,7 @@
 |===
 
 [discrete]
-===== 宏观数据流向 (The Flow)
+==== 宏观数据流向 (The Flow)
 
 // 如果不是在 GitHub 环境（即本地渲染），执行 Mermaid 脚本
 ifndef::env-github[]
@@ -65,7 +64,7 @@ ifndef::env-github[]
 graph LR
     User((用户)) -- 点击保存 --> V[View: Svelte]
     V -- HTTP Request --> C[Controller: Spring]
-    C -- 指挥调度 --> M_S[Model: Service]
+    C -- 指挥调度 --> M_S[Model: Service + Mapper]
     M_S -- 持久化 --> M_D[(Database)]
 
     M_S -- 返回结果 --> C
@@ -79,11 +78,7 @@ ifdef::env-github[]
 image::img/mermaid-2026-02-13-131950.svg[]
 endif::[]
 
----
-
-[discrete]
-==== 2. 后端视角：Spring Boot 内部 MVC
-
+=== 2. 后端视角：Spring Boot 内部 MVC
 深入后端代码，拆解“主厨”与“前台”的配合。
 
 * **M (Model) = 业务逻辑 + 数据访问**
@@ -97,11 +92,7 @@ endif::[]
 * **V (View) = 数据呈现**
 ** *JSON 响应*：**摆盘**。后端不画 HTML，生成的 **JSON 字符串** 就是它提供给外界的视图。
 
----
-
-[discrete]
-==== 3. 前端视角：Svelte 内部 MVVM
-
+=== 3. 前端视角：Svelte 内部 MVVM
 前端通过状态驱动（Reactive）来治理复杂的交互逻辑。
 
 [horizontal]
@@ -111,14 +102,11 @@ endif::[]
 
 **M (Model)** :: **数据源代理 (operations.ts)**。像“快递员”，定义 TS 接口，负责发起真正的 fetch/axios 请求。
 
----
-
-[discrete]
-=== 核心记忆口诀
-
+=== 4. 架构总结及思考
+.核心记忆口诀
 [TIP]
 ====
-* **后端 M 是个组合拳**：$M = Service(脑) + Mapper(手)$。
+* **后端 M 是个组合拳**：M = Service(脑) + Mapper(手)。
 * **后端 C 是个传话筒**：只负责转发，不负责思考。
 * **前端 VM 是个管家**：Store 帮 View 屏蔽了所有复杂的异步 API 细节。
 ====
@@ -150,7 +138,7 @@ endif::[]
     ** 跨平台逻辑复用： 比如你的游戏底层逻辑是用 Lua 写的，那么无论前端是用浏览器（JS）还是桌面端工具，都可以共用这一套 Lua 代码。
 
 ==== 1.2 编译、解释与 JIT 的三角关系
-* **JavaScript (JS)：** 为了跨平台和网络分发而采用源码传输。现代引擎（V8）使用 **JIT (Just-In-Time)** 在运行时将热点代码转为机器码。
+* **JavaScript (JS)：** 为了跨平台和网络分发而采用源码传输。比如 Chrome 浏览器的现代引擎（V8）使用 **JIT (Just-In-Time)** 在运行时将热点代码转为机器码。
     ** 跨平台与碎片化（最大的障碍）： 浏览器环境极其复杂。Chrome、Safari、Firefox 都有不同的内核，且运行在 Windows、Android、iOS 等各种硬件架构上。如果 JS 是编译后的二进制文件，开发者就得像发布安卓 App 或 Windows 软件一样，为每个平台编译一个版本。目前的 JS 代码（文本）由浏览器实时解析，确保了**“一份代码，到处运行”**。
     ** 网络传输效率： 编译后的二进制文件往往比压缩后的文本（Gzip/Brotli）大得多。在 Web 早期，带宽极其珍贵，传输文本更高效。
     ** 安全性： 浏览器是一个高度受限的“沙箱”。如果执行预编译的代码，浏览器很难实时监控代码是否在非法操作内存，安全性会大打折扣。
@@ -217,9 +205,9 @@ NOTE: 虽然 Java 在 AI 训练 领域不行，但在 大数据处理（Hadoop, 
 
 
 ==== 3.1 类型的本质与负担
-* **名义类型 (Java)：** 类型是程序的物理骨架，不可剥离。
+* **Java(名义类型)：** 类型是程序的物理骨架，不可剥离。
 
-* **Python)：** 运行过程中根本不看类型。
+* **Python：** 运行过程中根本不看类型。
     ** 现状： 现在的 Python 开发者（尤其是后端和 AI 工程师）大量使用 Type Hints。虽然 Python 解释器运行时依然忽略这些类型，但开发者会配合 mypy 或 PyCharm 这种工具进行静态检查。
     ** 为什么用？ 就像你说的，Python 太灵活了。如果没有类型标注，过三个月你自己都不知道这个函数返回的是列表还是字典。
     ** 库的标配： 像 FastAPI 或 Pydantic 这种现代库，完全是基于类型标注构建的。如果你不写类型，这些库甚至无法工作。
@@ -244,31 +232,10 @@ NOTE: 虽然 Java 在 AI 训练 领域不行，但在 大数据处理（Hadoop, 
 
 ---
 
-[discrete]
-=== jsconfig.json 与 global.d.ts 的协同
+jsconfig.json 与 global.d.ts 的协同
 
 * **jsconfig.json：** 控制编辑器的“扫描范围”。关键参数包括 `"checkJs": true` 和路径别名 `paths`。
 +
-<< jsconfig.json >>
-
-* **global.d.ts 类型定义的可见性：**
-    ** 类型定义写在该文件中，比用 jsdoc 写要清爽。
-    ** 一般在项目根目录放一个 global.d.ts 文件，用 TS 语法定义复杂的对象接口。做成全局自动导入，LSP 会读取它。
-    ** **declare：** 建议都写上这个关键字。
-    ** **规则：** 若该文件中不含 `import/export`，则为**全局脚本**，里面的类型全项目可见，无需手动导入。
-    ** **强制全局：** 若必须在该文件中声明 `import`，则需将内容包裹在 `declare global { ... }` 中。
-+
-<< global.d.ts >>
-+
-<< main.js >>
-
-.SvelteKit 举例
-====
-**SvelteKit：** SvelteKit 自动生成的 `.svelte-kit/types` 目录是类型补全的核心，Neovim 需配置 `jsconfig.json` 来索引这些目录。
-实际上引用 `"extends": "./.svelte-kit/tsconfig.json"` 就可以了。
-====
-
-===== << jsconfig.json >>
 [source,json]
 ----
 {
@@ -293,7 +260,13 @@ NOTE: 虽然 Java 在 AI 训练 领域不行，但在 大数据处理（Hadoop, 
 }
 ----
 
-===== << global.d.ts >>
+* **global.d.ts 类型定义的可见性：**
+    ** 类型定义写在该文件中，比用 jsdoc 写要清爽。
+    ** 一般在项目根目录放一个 global.d.ts 文件，用 TS 语法定义复杂的对象接口。做成全局自动导入，LSP 会读取它。
+    ** **declare：** 建议都写上这个关键字。
+    ** **规则：** 若该文件中不含 `import/export`，则为**全局脚本**，里面的类型全项目可见，无需手动导入。
+    ** **强制全局：** 若必须在该文件中声明 `import`，则需将内容包裹在 `declare global { ... }` 中。
++
 [source,javascript]
 ----
 // global.d.ts
@@ -307,10 +280,9 @@ interface User {
 // 声明全局变量
 declare var __VERSION__: string;
 ----
-
-
++
 如果使用了 import or export，则必须使用 declare global 才能成为全局类型，例子如下：
-
++
 [source,javascript]
 ----
 // global.d.ts
@@ -323,23 +295,28 @@ declare global {
   }
 }
 ----
-
-===== << main.js >>
-.在 main.js 中使用类型
++
+.Example: 在 main.js 中使用类型
 [source,javascript]
 ----
 /** @type {User} */
 const currentUser = { id: 1, name: "Gemini", role: "admin" };
 ----
 
-=== 4. 商业版权与开源治理
-[discrete]
-=== 5.1 甲骨文 (Oracle) 与 Java 诉讼
++
+.SvelteKit 举例
+====
+**SvelteKit：** SvelteKit 自动生成的 `.svelte-kit/types` 目录是类型补全的核心，Neovim 需配置 `jsconfig.json` 来索引这些目录。
 
+实际上引用 `"extends": "./.svelte-kit/tsconfig.json"` 就可以了。
+====
+
+=== 4. 商业版权与开源治理
+
+
+==== 甲骨文 (Oracle) 与 Java 诉讼
 * **核心矛盾：** 尽管 Java 开源，但 Oracle 拥有商标权及特定商业组件所有权。其官司重心在于**“API 的组织结构和命名”**是否受版权保护（如 Oracle vs. Google）。
 
-[discrete]
-=== 5.2 Python (PSF) 的自由之路
-
+==== Python (PSF) 的自由之路
 * **管理模式：** 归属于非营利基金会（PSF）。其许可证极其开放（PSF License），鼓励连接一切而不设商业关卡。
 

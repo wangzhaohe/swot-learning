@@ -807,7 +807,12 @@
 <v t="swot.20260213131026.1"><vh>@path system-designer</vh>
 <v t="swot.20260213131058.1"><vh>@adoc system-designer.adoc</vh>
 <v t="swot.20260213130935.1"><vh>系统架构设计师</vh>
-<v t="swot.20260213075755.1"><vh>2026-02-13 全栈架构模式：从宏观到微观的 MVC 映射及前端 MVVM</vh></v>
+<v t="swot.20260213075755.1"><vh>2026-02-13 全栈架构模式：从宏观到微观的 MVC 映射及前端 MVVM</vh>
+<v t="swot.20260224073312.1"><vh>1. 宏观视角：系统级 MVC (System Level)</vh></v>
+<v t="swot.20260224073211.1"><vh>2. 后端视角：Spring Boot 内部 MVC</vh></v>
+<v t="swot.20260224073142.1"><vh>3. 前端视角：Svelte 内部 MVVM</vh></v>
+<v t="swot.20260224073020.1"><vh>4. 架构总结及思考</vh></v>
+</v>
 <v t="swot.20260214094024.1"><vh>2026-02-14 开发语言解惑汇总</vh>
 <v t="swot.20260214100040.1"><vh>1. 编程语言执行机制与性能哲学</vh>
 <v t="swot.20260214104811.1"><vh>1.1 Lua：极致的嵌入式胶水</vh></v>
@@ -826,7 +831,10 @@
 <v t="swot.20260214113154.1"><vh>&lt;&lt; main.js &gt;&gt;</vh></v>
 </v>
 </v>
-<v t="swot.20260214100122.1"><vh>4. 商业版权与开源治理</vh></v>
+<v t="swot.20260214100122.1"><vh>4. 商业版权与开源治理</vh>
+<v t="swot.20260224095544.1"><vh>甲骨文 (Oracle) 与 Java 诉讼</vh></v>
+<v t="swot.20260224095534.1"><vh>Python (PSF) 的自由之路</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -12566,92 +12574,6 @@ pnpm-lock.yaml text eol=lf
 [abstract]
 将 “Svelte 前端 + Spring Boot 后端” 构成的系统，拆解为宏观 MVC、后端内部 MVC 与前端 MVVM 三层逻辑，实现职责的彻底分离。
 
-[discrete]
-==== 1. 宏观视角：系统级 MVC (System Level)  
-
-从整体看，前端是 UI，后端是逻辑与数据的提供者。
-
-[cols="1,2,3", options="header"]
-|===
-| 维度 | 对应技术栈 | 核心职责
-| M (Model) | Spring Boot (Service + Mapper) | **系统大脑**：业务逻辑、数据持久化、单一事实来源
-| C (Controller) | Spring Boot (API Layer) | **交通枢纽**：路由分发、参数解析、指挥 Service、返回 JSON。
-| V (View) | Svelte (Pages + Stores + api fetch) | **系统面孔**：数据渲染、交互监听、将意图转化为 API 请求。
-|===
-
-[discrete]
-===== 宏观数据流向 (The Flow)
-
-// 如果不是在 GitHub 环境（即本地渲染），执行 Mermaid 脚本
-ifndef::env-github[]
-[mermaid, target=img/mermaid-2026-02-13-131950, format=svg]
-....
-graph LR
-    User((用户)) -- 点击保存 --&gt; V[View: Svelte]
-    V -- HTTP Request --&gt; C[Controller: Spring]
-    C -- 指挥调度 --&gt; M_S[Model: Service]
-    M_S -- 持久化 --&gt; M_D[(Database)]
-
-    M_S -- 返回结果 --&gt; C
-    C -- JSON Response --&gt; V
-    V -- 更新 UI --&gt; User
-....
-endif::[]
-
-// 如果是在 GitHub 环境，引用你已经上传的图片
-ifdef::env-github[]
-image::img/mermaid-2026-02-13-131950.svg[]
-endif::[]
-
----
-
-[discrete]
-==== 2. 后端视角：Spring Boot 内部 MVC
-
-深入后端代码，拆解“主厨”与“前台”的配合。
-
-* **M (Model) = 业务逻辑 + 数据访问**
-** *Service 层 (@Service)*：**主厨**。负责计算、校验、事务控制（如：`userService.register()`）。
-** *Mapper 层 (@Mapper)*：**库管**。负责搬运数据，执行 SQL。
-** *Entity/DTO*：**食材**。在 Service 和 Mapper 之间传递的数据包。
-
-* **C (Controller) = 请求调度**
-** *RestController*：**前台服务员**。不干脏活，解析 URL 后只喊一句：“后厨，来活了！”
-
-* **V (View) = 数据呈现**
-** *JSON 响应*：**摆盘**。后端不画 HTML，生成的 **JSON 字符串** 就是它提供给外界的视图。
-
----
-
-[discrete]
-==== 3. 前端视角：Svelte 内部 MVVM
-
-前端通过状态驱动（Reactive）来治理复杂的交互逻辑。
-
-[horizontal]
-**V (View)** :: **组件 (+page.svelte)**。像“顾客”，只负责绑定数据和触发事件。它是“愚笨”的，不关心后端细节。
-
-**VM (ViewModel)** :: **状态管理 (store.svelte.ts)**。像“大堂经理”，持有 `$state`，封装前端处理逻辑，并通过 fetch 调用  API
-
-**M (Model)** :: **数据源代理 (operations.ts)**。像“快递员”，定义 TS 接口，负责发起真正的 fetch/axios 请求。
-
----
-
-[discrete]
-=== 核心记忆口诀
-
-[TIP]
-====
-* **后端 M 是个组合拳**：$M = Service(脑) + Mapper(手)$。
-* **后端 C 是个传话筒**：只负责转发，不负责思考。
-* **前端 VM 是个管家**：Store 帮 View 屏蔽了所有复杂的异步 API 细节。
-====
-
-[sidebar]
---
-*思考题*：如果我要更换数据库，应该改哪一层？ +
-*答案*：只改 **Model (Mapper)** 层，Controller 和 View 理论上完全不需要感知。
---
 </t>
 <t tx="swot.20260213123722.1">@language asciidoc
 https://github.com/wangzhaohe/swot-learning/blob/main/wubi86/wubi86.adoc
@@ -12778,8 +12700,7 @@ image::img/mermaid-2026-02-13-131950.svg[]
 
 ---
 
-[discrete]
-=== jsconfig.json 与 global.d.ts 的协同
+jsconfig.json 与 global.d.ts 的协同
 
 * **jsconfig.json：** 控制编辑器的“扫描范围”。关键参数包括 `"checkJs": true` 和路径别名 `paths`。
 +
@@ -12795,23 +12716,16 @@ image::img/mermaid-2026-02-13-131950.svg[]
 &lt;&lt; global.d.ts &gt;&gt;
 +
 &lt;&lt; main.js &gt;&gt;
-
++
 .SvelteKit 举例
 ====
 **SvelteKit：** SvelteKit 自动生成的 `.svelte-kit/types` 目录是类型补全的核心，Neovim 需配置 `jsconfig.json` 来索引这些目录。
+
 实际上引用 `"extends": "./.svelte-kit/tsconfig.json"` 就可以了。
 ====
+
 </t>
-<t tx="swot.20260214100122.1">@language asciidoc
-[discrete]
-=== 5.1 甲骨文 (Oracle) 与 Java 诉讼
-
-* **核心矛盾：** 尽管 Java 开源，但 Oracle 拥有商标权及特定商业组件所有权。其官司重心在于**“API 的组织结构和命名”**是否受版权保护（如 Oracle vs. Google）。
-
-[discrete]
-=== 5.2 Python (PSF) 的自由之路
-
-* **管理模式：** 归属于非营利基金会（PSF）。其许可证极其开放（PSF License），鼓励连接一切而不设商业关卡。
+<t tx="swot.20260214100122.1">
 </t>
 <t tx="swot.20260214104443.1">@language asciidoc
 * **本质：** 一种低级、类汇编的二进制指令格式，作为 C++/Rust 等语言在浏览器的运行目标。
@@ -12853,7 +12767,7 @@ image::img/mermaid-2026-02-13-131950.svg[]
 NOTE: 虽然 Java 在 AI 训练 领域不行，但在 大数据处理（Hadoop, Spark）和 企业级推理（将模型部署到后端）领域，Java 依然是主力。
 </t>
 <t tx="swot.20260214104720.1">@language asciidoc
-* **JavaScript (JS)：** 为了跨平台和网络分发而采用源码传输。现代引擎（V8）使用 **JIT (Just-In-Time)** 在运行时将热点代码转为机器码。
+* **JavaScript (JS)：** 为了跨平台和网络分发而采用源码传输。比如 Chrome 浏览器的现代引擎（V8）使用 **JIT (Just-In-Time)** 在运行时将热点代码转为机器码。
     ** 跨平台与碎片化（最大的障碍）： 浏览器环境极其复杂。Chrome、Safari、Firefox 都有不同的内核，且运行在 Windows、Android、iOS 等各种硬件架构上。如果 JS 是编译后的二进制文件，开发者就得像发布安卓 App 或 Windows 软件一样，为每个平台编译一个版本。目前的 JS 代码（文本）由浏览器实时解析，确保了**“一份代码，到处运行”**。
     ** 网络传输效率： 编译后的二进制文件往往比压缩后的文本（Gzip/Brotli）大得多。在 Web 早期，带宽极其珍贵，传输文本更高效。
     ** 安全性： 浏览器是一个高度受限的“沙箱”。如果执行预编译的代码，浏览器很难实时监控代码是否在非法操作内存，安全性会大打折扣。
@@ -12890,9 +12804,9 @@ NOTE: 虽然 Java 在 AI 训练 领域不行，但在 大数据处理（Hadoop, 
     ** 跨平台逻辑复用： 比如你的游戏底层逻辑是用 Lua 写的，那么无论前端是用浏览器（JS）还是桌面端工具，都可以共用这一套 Lua 代码。
 </t>
 <t tx="swot.20260214105028.1">@language asciidoc
-* **名义类型 (Java)：** 类型是程序的物理骨架，不可剥离。
+* **Java(名义类型)：** 类型是程序的物理骨架，不可剥离。
 
-* **Python)：** 运行过程中根本不看类型。
+* **Python：** 运行过程中根本不看类型。
     ** 现状： 现在的 Python 开发者（尤其是后端和 AI 工程师）大量使用 Type Hints。虽然 Python 解释器运行时依然忽略这些类型，但开发者会配合 mypy 或 PyCharm 这种工具进行静态检查。
     ** 为什么用？ 就像你说的，Python 太灵活了。如果没有类型标注，过三个月你自己都不知道这个函数返回的是列表还是字典。
     ** 库的标配： 像 FastAPI 或 Pydantic 这种现代库，完全是基于类型标注构建的。如果你不写类型，这些库甚至无法工作。
@@ -12937,10 +12851,9 @@ interface User {
 // 声明全局变量
 declare var __VERSION__: string;
 ----
-
-
++
 如果使用了 import or export，则必须使用 declare global 才能成为全局类型，例子如下：
-
++
 [source,javascript]
 ----
 // global.d.ts
@@ -12954,7 +12867,7 @@ declare global {
 }
 ----
 </t>
-<t tx="swot.20260214113154.1">.在 main.js 中使用类型
+<t tx="swot.20260214113154.1">.Example: 在 main.js 中使用类型
 [source,javascript]
 ----
 /** @type {User} */
@@ -15701,6 +15614,82 @@ print("Hello World!")
 print("Hello World!")
 print("Hello World!")
 print("Hello World!")
+</t>
+<t tx="swot.20260224073020.1">.核心记忆口诀
+[TIP]
+====
+* **后端 M 是个组合拳**：M = Service(脑) + Mapper(手)。
+* **后端 C 是个传话筒**：只负责转发，不负责思考。
+* **前端 VM 是个管家**：Store 帮 View 屏蔽了所有复杂的异步 API 细节。
+====
+
+[sidebar]
+--
+*思考题*：如果我要更换数据库，应该改哪一层？ +
+*答案*：只改 **Model (Mapper)** 层，Controller 和 View 理论上完全不需要感知。
+--
+</t>
+<t tx="swot.20260224073142.1">前端通过状态驱动（Reactive）来治理复杂的交互逻辑。
+
+[horizontal]
+**V (View)** :: **组件 (+page.svelte)**。像“顾客”，只负责绑定数据和触发事件。它是“愚笨”的，不关心后端细节。
+
+**VM (ViewModel)** :: **状态管理 (store.svelte.ts)**。像“大堂经理”，持有 `$state`，封装前端处理逻辑，并通过 fetch 调用  API
+
+**M (Model)** :: **数据源代理 (operations.ts)**。像“快递员”，定义 TS 接口，负责发起真正的 fetch/axios 请求。
+
+</t>
+<t tx="swot.20260224073211.1">深入后端代码，拆解“主厨”与“前台”的配合。
+
+* **M (Model) = 业务逻辑 + 数据访问**
+** *Service 层 (@Service)*：**主厨**。负责计算、校验、事务控制（如：`userService.register()`）。
+** *Mapper 层 (@Mapper)*：**库管**。负责搬运数据，执行 SQL。
+** *Entity/DTO*：**食材**。在 Service 和 Mapper 之间传递的数据包。
+
+* **C (Controller) = 请求调度**
+** *RestController*：**前台服务员**。不干脏活，解析 URL 后只喊一句：“后厨，来活了！”
+
+* **V (View) = 数据呈现**
+** *JSON 响应*：**摆盘**。后端不画 HTML，生成的 **JSON 字符串** 就是它提供给外界的视图。
+</t>
+<t tx="swot.20260224073312.1">
+从整体看，前端是 UI，后端是逻辑与数据的提供者。
+
+[cols="1,2,3", options="header"]
+|===
+| 维度 | 对应技术栈 | 核心职责
+| M (Model) | Spring Boot (Service + Mapper) | **系统大脑**：业务逻辑、数据持久化、单一事实来源
+| C (Controller) | Spring Boot (API Layer) | **交通枢纽**：路由分发、参数解析、指挥 Service、返回 JSON。
+| V (View) | Svelte (Pages + Stores + api fetch) | **系统面孔**：数据渲染、交互监听、将意图转化为 API 请求。
+|===
+
+[discrete]
+==== 宏观数据流向 (The Flow)
+
+// 如果不是在 GitHub 环境（即本地渲染），执行 Mermaid 脚本
+ifndef::env-github[]
+[mermaid, target=img/mermaid-2026-02-13-131950, format=svg]
+....
+graph LR
+    User((用户)) -- 点击保存 --&gt; V[View: Svelte]
+    V -- HTTP Request --&gt; C[Controller: Spring]
+    C -- 指挥调度 --&gt; M_S[Model: Service + Mapper]
+    M_S -- 持久化 --&gt; M_D[(Database)]
+
+    M_S -- 返回结果 --&gt; C
+    C -- JSON Response --&gt; V
+    V -- 更新 UI --&gt; User
+....
+endif::[]
+
+// 如果是在 GitHub 环境，引用你已经上传的图片
+ifdef::env-github[]
+image::img/mermaid-2026-02-13-131950.svg[]
+endif::[]
+</t>
+<t tx="swot.20260224095534.1">* **管理模式：** 归属于非营利基金会（PSF）。其许可证极其开放（PSF License），鼓励连接一切而不设商业关卡。
+</t>
+<t tx="swot.20260224095544.1">* **核心矛盾：** 尽管 Java 开源，但 Oracle 拥有商标权及特定商业组件所有权。其官司重心在于**“API 的组织结构和命名”**是否受版权保护（如 Oracle vs. Google）。
 </t>
 </tnodes>
 </leo_file>
