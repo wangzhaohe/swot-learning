@@ -894,6 +894,7 @@
 <v t="swot.20260220170418.1"><vh>5 总结</vh></v>
 </v>
 </v>
+<v t="swot.20260224111805.1"><vh>功能增加: 键盘每日和所有热力图</vh></v>
 <v t="swot.20260220180617.1"><vh>project structure</vh>
 <v t="swot.20260220144432.1"><vh>@file key_mouse.py</vh></v>
 <v t="swot.20260220153302.1"><vh>@file index.html</vh></v>
@@ -15491,10 +15492,13 @@ if now_ts - self.last_save_time &gt; SAVE_INTERVAL:
 . *静默写回*：执行 `noautocmd write`，避免触发递归循环。
 
 </t>
-<t tx="swot.20260222101458.1">将以下配置添加至 `~/.config/nvim/lua/config/autocmds.lua`：
+<t tx="swot.20260222101458.1">@language asciidoc
+将以下配置添加至 `~/.config/nvim/lua/config/autocmds.lua`：
 
+@language lua
 [source,lua]
 ----
+-- 仅针对 Python 文件，且只在保存后触发
 vim.api.nvim_create_autocmd("BufWritePost", {
   group = vim.api.nvim_create_augroup("FixLeoSentinels", { clear = true }),
   pattern = "*.py",
@@ -15530,7 +15534,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   end,
 })
 ----
-
 </t>
 <t tx="swot.20260222101511.1">[cols="1,2", options="header"]
 |===
@@ -15780,5 +15783,6 @@ endif::[]
 * **劣势**：它仅是渲染库，物理引擎、碰撞检测等核心功能需依赖第三方插件拼凑。
 
 </t>
+<t tx="swot.20260224111805.1"></t>
 </tnodes>
 </leo_file>
