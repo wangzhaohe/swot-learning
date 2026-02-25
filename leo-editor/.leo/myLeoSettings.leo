@@ -251,6 +251,7 @@
 </v>
 </v>
 </v>
+<v t="swot.20260225124755.1"><vh>@bool write-black-sentinels = True</vh></v>
 </v>
 <v t="swot.20220825192124.1"><vh>flutter tree abbrevitations</vh>
 <v t="swot.20220825171004.1"><vh>app;;</vh>
@@ -2485,6 +2486,14 @@ family = JetBrains Mono
 size = 16
 line_height = 120
 letter_spacing = 102
+</t>
+<t tx="swot.20260225124755.1"># New in Leo 6.8.8. This setting replaces the --black-sentinels command-line argument.
+# This setting is **strongly recommended** so that you can use ruff format to beautify your code.
+
+add a space with comment:
+#@ -&gt; # @
+#@+node:swot.20260222193522.1: * @file ...
+# @+node:swot.20260222193522.1: * @file ...
 </t>
 </tnodes>
 </leo_file>
