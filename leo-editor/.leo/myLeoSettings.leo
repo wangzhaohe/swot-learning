@@ -2461,14 +2461,14 @@ if plugin_dir not in sys.path:
     sys.path.append(plugin_dir)
 
 # 3. 强制清理旧缓存（防止重载无效）
-module_name = 'body_style_hook'
+module_name = 'body_style'
 if module_name in sys.modules:
     del sys.modules[module_name]
 
 try:
     # 4. 重新导入模块
-    # 注意：确保你的文件名确实是 body_style_hook.py
-    import body_style_hook as plugin
+    # 注意：确保你的文件名确实是 body_style.py
+    import body_style as plugin
     
     # 5. 执行初始化与绑定
     # 这会重新应用你修改后的 STYLE_CONFIG
