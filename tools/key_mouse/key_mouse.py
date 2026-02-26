@@ -1,8 +1,8 @@
-#@+leo-ver=5-thin
-#@+node:swot.20260220144432.1: * @file key_mouse.py
-#@@language python
-#@+others
-#@+node:swot.20260220151135.1: ** import
+# @+leo-ver=5-thin
+# @+node:swot.20260220144432.1: * @file key_mouse.py
+# @@language python
+# @+others
+# @+node:swot.20260220151135.1: ** import
 import json
 import time
 import os
@@ -11,7 +11,7 @@ from datetime import datetime
 from pathlib import Path
 from pynput import keyboard, mouse
 
-#@+node:swot.20260220151847.1: ** var
+# @+node:swot.20260220151847.1: ** var
 # --- 核心配置 ---
 SCRIPT_DIR = Path(__file__).parent.absolute()
 SAVE_DIR = SCRIPT_DIR / "key_stats"
@@ -19,11 +19,11 @@ SAVE_INTERVAL = 60  # 1分钟自动存盘
 HEARTBEAT_THRESHOLD = 300  # 5分钟心跳阈值（300秒），用于计算专注时长
 
 
-#@+node:swot.20260220152237.1: ** class TrackerEngine
+# @+node:swot.20260220152237.1: ** class TrackerEngine
 class TrackerEngine:
-    #@+others
-    #@+node:swot.20260220152820.1: *3* def __init__
-    #@@language python
+    # @+others
+    # @+node:swot.20260220152820.1: *3* def __init__
+    # @@language python
     def __init__(self):
         SAVE_DIR.mkdir(parents=True, exist_ok=True)
         self.lock = threading.RLock()
@@ -55,7 +55,7 @@ class TrackerEngine:
             },
         )
 
-    #@+node:swot.20260220152829.1: *3* def _load_json
+    # @+node:swot.20260220152829.1: *3* def _load_json
     def _load_json(self, path, default_data):
         if path.exists():
             try:
@@ -65,42 +65,19 @@ class TrackerEngine:
                 print(f"读取 {path} 失败，使用默认值。错误: {e}")
         return default_data
 
-    #@+node:swot.20260220152843.1: *3* def _atomic_save
-    def _atomic_save(self, data, target_path):
-        tmp_path = target_path.with_suffix(".tmp")
-        try:
-            with open(tmp_path, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=4, ensure_ascii=False)
-            os.replace(tmp_path, target_path)
-        except Exception as e:
-            print(f"保存失败: {e}")
-
-    #@+node:swot.20260220152853.1: *3* def force_save
-    def force_save(self):
-        with self.lock:
-            if self.has_unsaved_changes:
-                self._atomic_save(
-                    self.daily_data, SAVE_DIR / f"{self.current_date}.json"
-                )
-                self._atomic_save(self.global_data, self.global_file)
-                self.has_unsaved_changes = False
-                self.last_save_time = time.time()
-
-                # 终端反馈（如果觉得吵可以注释掉）
-                focus_mins = int(self.daily_data.get("focus_seconds", 0) // 60)
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] 数据已安全存盘，今日已专注: {focus_mins} 分钟。")
-    #@+node:swot.20260220152916.1: *3* def log_event
-    #@@language python
+    # @+node:swot.20260220152916.1: *3* def log_event
+    # @@language python
     def log_event(self, is_keyboard, key_name=None):
+
         now_dt = datetime.now()
         today = now_dt.strftime("%Y-%m-%d")
         current_hour = now_dt.strftime("%H")
         now_ts = time.time()
 
         with self.lock:
-            #@+<< 1. 跨天检测 >>
-            #@+node:swot.20260221204633.1: *4* << 1. 跨天检测 >>
-            #@@language python
+            # @+<< 1. 跨天检测 >>
+            # @+node:swot.20260221204633.1: *4* << 1. 跨天检测 >>
+            # @@language python
             if today != self.current_date:
                 if self.has_unsaved_changes:
                     self._atomic_save(
@@ -120,12 +97,11 @@ class TrackerEngine:
                     },
                 )
                 self.last_event_time = now_ts  # 跨天重置事件时间
-            #@-<< 1. 跨天检测 >>
-
+            # @-<< 1. 跨天检测 >>
             """
-            #@+<< 2. 专注时长计算 (5分钟心跳法) A 公式 >>
-            #@+node:swot.20260220225738.1: *4* << 2. 专注时长计算 (5分钟心跳法) A 公式 >>
-            #@@language python
+            # @+<< 2. 专注时长计算 (5分钟心跳法) A 公式 >>
+            # @+node:swot.20260220225738.1: *4* << 2. 专注时长计算 (5分钟心跳法) A 公式 >>
+            # @@language python
             delta = now_ts - self.last_event_time
 
             if delta < HEARTBEAT_THRESHOLD:
@@ -139,11 +115,11 @@ class TrackerEngine:
             # 向前端暴露最后操作的确切时间戳
             self.daily_data["last_event_timestamp"] = now_ts
 
-            #@-<< 2. 专注时长计算 (5分钟心跳法) A 公式 >>
+            # @-<< 2. 专注时长计算 (5分钟心跳法) A 公式 >>
             """
-            #@+<< 2. 专注时长计算 (5分钟心跳法) B 公式 >>
-            #@+node:swot.20260221164831.1: *4* << 2. 专注时长计算 (5分钟心跳法) B 公式 >>
-            #@@language python
+            # @+<< 2. 专注时长计算 (5分钟心跳法) B 公式 >>
+            # @+node:swot.20260221164831.1: *4* << 2. 专注时长计算 (5分钟心跳法) B 公式 >>
+            # @@language python
             delta = now_ts - self.last_event_time
 
             # 无论间隔多久，最多累加 HEARTBEAT_THRESHOLD（例如5分钟）
@@ -156,10 +132,9 @@ class TrackerEngine:
             # 向前端暴露最后操作的确切时间戳
             self.daily_data["last_event_timestamp"] = now_ts
 
-            #@-<< 2. 专注时长计算 (5分钟心跳法) B 公式 >>
-
-            #@+<< 3. 数据累加 >>
-            #@+node:swot.20260221210912.1: *4* << 3. 数据累加 >>
+            # @-<< 2. 专注时长计算 (5分钟心跳法) B 公式 >>
+            # @+<< 3. 数据累加 >>
+            # @+node:swot.20260221210912.1: *4* << 3. 数据累加 >>
             if is_keyboard:
                 self.daily_data["keyboard"][key_name] = (
                     self.daily_data["keyboard"].get(key_name, 0) + 1
@@ -186,11 +161,10 @@ class TrackerEngine:
             )
 
             self.has_unsaved_changes = True
-            #@-<< 3. 数据累加 >>
-
-            #@+<< 4. 双轨制存盘策略 >>
-            #@+node:swot.20260221211911.1: *4* << 4. 双轨制存盘策略 >> self.force_save() 替代了好多代码
-            #@@language python
+            # @-<< 3. 数据累加 >>
+            # @+<< 4. 双轨制存盘策略 >>
+            # @+node:swot.20260221211911.1: *4* << 4. 双轨制存盘策略 >> self.force_save() 替代了好多代码
+            # @@language python
             # 策略 A: 10秒防抖存盘（灵敏度）
             if self.debounce_timer:
                 self.debounce_timer.cancel()
@@ -200,11 +174,35 @@ class TrackerEngine:
             # 策略 B: 60秒保底存盘（安全性）
             if now_ts - self.last_save_time > SAVE_INTERVAL:
                 self.force_save()
-            #@-<< 4. 双轨制存盘策略 >>
-    #@-others
+            # @-<< 4. 双轨制存盘策略 >>
+    # @+node:swot.20260220152853.1: *4* def force_save
+    def force_save(self):
+        with self.lock:
+            if self.has_unsaved_changes:
+                self._atomic_save(
+                    self.daily_data, SAVE_DIR / f"{self.current_date}.json"
+                )
+                self._atomic_save(self.global_data, self.global_file)
+                self.has_unsaved_changes = False
+                self.last_save_time = time.time()
+
+                # 终端反馈（如果觉得吵可以注释掉）
+                focus_mins = int(self.daily_data.get("focus_seconds", 0) // 60)
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] 数据已安全存盘，今日已专注: {focus_mins} 分钟。")
+    # @+node:swot.20260220152843.1: *4* def _atomic_save
+    def _atomic_save(self, data, target_path):
+        tmp_path = target_path.with_suffix(".tmp")
+        try:
+            with open(tmp_path, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=4, ensure_ascii=False)
+            os.replace(tmp_path, target_path)
+        except Exception as e:
+            print(f"保存失败: {e}")
+
+    # @-others
 
 
-#@+node:swot.20260220152543.1: ** def on_release
+# @+node:swot.20260220152543.1: ** def on_release
 def on_release(key):
     try:
         name = key.char if getattr(key, "char", None) is not None else str(key)
@@ -213,13 +211,13 @@ def on_release(key):
     engine.log_event(is_keyboard=True, key_name=name)
 
 
-#@+node:swot.20260220152520.1: ** def on_click
+# @+node:swot.20260220152520.1: ** def on_click
 def on_click(x, y, button, pressed):
     if not pressed:
         engine.log_event(is_keyboard=False)
 
 
-#@-others
+# @-others
 
 # --- 监听器初始化 ---
 engine = TrackerEngine()
@@ -237,4 +235,4 @@ if __name__ == "__main__":
         engine.force_save()
         print("\n👋 程序正常退出，最后的数据已原子化存盘。")
 
-#@-leo
+# @-leo
