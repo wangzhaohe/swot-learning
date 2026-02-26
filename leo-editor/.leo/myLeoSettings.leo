@@ -1759,6 +1759,7 @@ bclick;;=$("button").click(function(){
 \::icons: font
 \::scripts: cjk
 \::stem: latexmath
+\::experimental:
 \::toc:
 \::toc: right
 \::toc-title: 目录
