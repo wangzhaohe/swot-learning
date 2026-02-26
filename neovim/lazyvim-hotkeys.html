@@ -459,9 +459,10 @@ body.toc2.toc-right {
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>LazyVim 快捷键</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
+<ul class="sectlevel0">
+<li><a href="#_lazyvim_快捷键">LazyVim 快捷键</a>
 <ul class="sectlevel1">
 <li><a href="#_lazyvim_函数跳转">LazyVim 函数跳转</a>
 <ul class="sectlevel2">
@@ -472,7 +473,7 @@ body.toc2.toc-right {
 <li><a href="#_5_总结表">5. 总结表</a></li>
 </ul>
 </li>
-<li><a href="#_lazyvim_诊断与报错跳转指南">LazyVim 诊断与报错跳转指南</a>
+<li><a href="#_lazyvim_诊断与报错diagnostics">LazyVim 诊断与报错（Diagnostics）</a>
 <ul class="sectlevel2">
 <li><a href="#_1_基础跳转_basic_navigation">1. 基础跳转 (Basic Navigation)</a></li>
 <li><a href="#_2_查看详细诊断信息_inspection">2. 查看详细诊断信息 (Inspection)</a></li>
@@ -480,12 +481,24 @@ body.toc2.toc-right {
 <li><a href="#_4_快速修复_quick_fix">4. 快速修复 (Quick Fix)</a></li>
 </ul>
 </li>
+<li><a href="#_lazyvim_代码重构_refactoring">LazyVim 代码重构 (Refactoring)</a>
+<ul class="sectlevel2">
+<li><a href="#_1_核心重构操作_core_refactoring">1. 核心重构操作 (Core Refactoring)</a></li>
+<li><a href="#_2_导航与搜索_navigation">2. 导航与搜索 (Navigation)</a></li>
+<li><a href="#_3_高级重构_refactoring_nvim">3. 高级重构 (Refactoring.nvim)</a></li>
+<li><a href="#_4_格式化_formatting">4. 格式化 (Formatting)</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
+<div class="paragraph">
+<p>caution-caption: ⚠️</p>
+</div>
+<h1 id="_lazyvim_快捷键" class="sect0">LazyVim 快捷键</h1>
 <button id="toggleButton">目录开关</button>
 <script>
     // 获取按钮和 div 元素
@@ -504,8 +517,6 @@ body.toc2.toc-right {
         }
     });
 </script>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_lazyvim_函数跳转">LazyVim 函数跳转</h2>
 <div class="sectionbody">
@@ -637,7 +648,7 @@ body.toc2.toc-right {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_lazyvim_诊断与报错跳转指南">LazyVim 诊断与报错跳转指南</h2>
+<h2 id="_lazyvim_诊断与报错diagnostics">LazyVim 诊断与报错（Diagnostics）</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>在 LazyVim 中，代码报错和警告被称为 <strong>Diagnostics</strong>（诊断）。
@@ -773,10 +784,149 @@ body.toc2.toc-right {
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_lazyvim_代码重构_refactoring">LazyVim 代码重构 (Refactoring)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>在 LazyVim 中，代码重构主要依赖于 LSP (Language Server Protocol)。
+通过这些快捷键，可以高效地重命名变量、提取函数或执行自动修复。</p>
+</div>
+<div class="sect2">
+<h3 id="_1_核心重构操作_core_refactoring">1. 核心重构操作 (Core Refactoring)</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 50.0002%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">功能</th>
+<th class="tableblock halign-left valign-top">快捷键</th>
+<th class="tableblock halign-left valign-top">英文对照 (Keybinding)</th>
+<th class="tableblock halign-left valign-top">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>重命名符号</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>&lt;leader&gt;cr</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rename</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">最常用的重构功能，它会同步修改项目中所有引用了该变量的地方。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>代码操作/快速修复</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>&lt;leader&gt;ca</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Code Action</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">重构的“万金油”，LSP 提供的绝大多数重构建议（如提取、移动）都藏在这里面。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>源操作 (如优化导入)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>&lt;leader&gt;cA</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Source Action</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_2_导航与搜索_navigation">2. 导航与搜索 (Navigation)</h3>
+<div class="paragraph">
+<p>重构前确认引用范围非常重要。</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">功能</th>
+<th class="tableblock halign-left valign-top">快捷键</th>
+<th class="tableblock halign-left valign-top">英文对照 (Keybinding)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>跳转到定义</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>gd</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Go to Definition</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>查看所有引用</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>gr</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Go to References</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>查看类型定义</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>gy</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Go to Type Definition</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>查看实现</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>gI</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Go to Implementation</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_3_高级重构_refactoring_nvim">3. 高级重构 (Refactoring.nvim)</h3>
+<div class="paragraph">
+<p>如果你启用了 LazyVim 的 <code>coding.refactoring</code> 额外选项，可以使用以下高级功能（通常在可视化模式下选择代码后使用）：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>提取函数</strong>：在选中模式下按 <kbd>&lt;leader&gt;re</kbd> (Extract Function)</p>
+</li>
+<li>
+<p><strong>提取变量</strong>：在选中模式下按 <kbd>&lt;leader&gt;rv</kbd> (Extract Variable)</p>
+</li>
+<li>
+<p><strong>内联变量</strong>：按 <kbd>&lt;leader&gt;ri</kbd> (Inline Variable)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>即使没有安装特定的重构插件，针对许多语言（如 TypeScript, Python），直接在代码上按 <kbd>&lt;leader&gt;ca</kbd> 也会弹出诸如 "Move to new file" 或 "Extract method" 的建议。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_4_格式化_formatting">4. 格式化 (Formatting)</h3>
+<div class="paragraph">
+<p>重构完成后通常需要统一代码风格。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>格式化当前文件/选区</strong>：<kbd>&lt;leader&gt;cf</kbd> (Format)</p>
+</li>
+<li>
+<p><strong>开关自动保存格式化</strong>：<kbd>&lt;leader&gt;uf</kbd> (Toggle format on save)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-26 11:29:18 +0800
+Last updated 2026-02-26 12:59:35 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
