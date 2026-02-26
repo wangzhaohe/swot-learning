@@ -405,13 +405,19 @@
 </v>
 <v t="swot.20260215225306.1"><vh>@path neovim</vh>
 <v t="swot.20260226111454.1"><vh>@adoc lazyvim-hotkeys.adoc</vh>
-<v t="swot.20260226110618.1"><vh>lazyvim 快捷键</vh>
-<v t="swot.20260226110833.1"><vh>函数跳转</vh>
+<v t="swot.20260226110618.1"><vh>LazyVim 快捷键</vh>
+<v t="swot.20260226110833.1"><vh>LazyVim 函数跳转</vh>
 <v t="swot.20260226110918.1"><vh>1. 使用 Treesitter 快捷键 (推荐)</vh></v>
 <v t="swot.20260226110950.1"><vh>2. 使用符号搜索 (Symbol Search)</vh></v>
 <v t="swot.20260226111027.1"><vh>3. 使用符号大纲 (Symbols Outline)</vh></v>
 <v t="swot.20260226111107.1"><vh>4. 基础 Vim 跳转 (兜底方案)</vh></v>
 <v t="swot.20260226111124.1"><vh>5. 总结表</vh></v>
+</v>
+<v t="swot.20260226112148.1"><vh>LazyVim 诊断与报错跳转指南</vh>
+<v t="swot.20260226112252.1"><vh>1. 基础跳转 (Basic Navigation)</vh></v>
+<v t="swot.20260226112258.1"><vh>2. 查看详细诊断信息 (Inspection)</vh></v>
+<v t="swot.20260226112304.1"><vh>3. 批量处理 (Trouble 插件)</vh></v>
+<v t="swot.20260226112309.1"><vh>4. 快速修复 (Quick Fix)</vh></v>
 </v>
 </v>
 </v>
@@ -15801,8 +15807,9 @@ endif::[]
 这样能在 leo-editor 退出时自动关闭，不会留下僵尸进程。
 
 </t>
-<t tx="swot.20260226091640.1">import httpserver
+<t tx="swot.20260226091640.1">import http.server
 import socketserver
+
 </t>
 <t tx="swot.20260226095631.1">前期 key_mouse.py 项目的启动和网页监控 index.html 是没有关系的。启动步骤为：
 
@@ -15855,8 +15862,9 @@ python -m http.server 8098
 <t tx="swot.20260226100523.1">@language python
 def start_server(port=8099):
     # 切换到脚本所在目录
-    print("Hello World!")
-    
+    os.chdir(SCRIPT_DIR)
+    Handler = http.server
+
 
 </t>
 <t tx="swot.20260226110618.1">
@@ -15934,6 +15942,7 @@ def start_server(port=8099):
 :icons: font
 :scripts: cjk
 :stem: latexmath
+:experimental:
 :toc:
 :toc: right
 :toc-title: 目录
@@ -15942,7 +15951,53 @@ def start_server(port=8099):
 :note-caption: ❕
 :important-caption: ❗
 :warning-caption: ‼️
-:caution-caption: ⚠️
+caution-caption: ⚠️
+</t>
+<t tx="swot.20260226112148.1">在 LazyVim 中，代码报错和警告被称为 *Diagnostics*（诊断）。
+可以通过以下快捷键在文件内快速跳转或查看详细错误。
+
+</t>
+<t tx="swot.20260226112252.1">这些快捷键用于在文件内的报错点之间快速切换。
+
+[cols="1,2,2", options="header"]
+|===
+| 功能 | 快捷键 | 英文对照 (Keybinding)
+| 下一个诊断 | kbd:[\]d] | Next Diagnostic
+| 上一个诊断 | kbd:[[d] | Prev Diagnostic
+| 下一个错误 | kbd:[\]e] | Next Error
+| 上一个错误 | kbd:[[e] | Prev Error
+| 下一个警告 | kbd:[\]w] | Next Warning
+| 上一个警告 | kbd:[[w] | Prev Warning
+|===
+
+</t>
+<t tx="swot.20260226112258.1">当你停留在报错行时，可以使用以下命令查看具体错误描述。
+
+* **显示行诊断浮窗**：使用 kbd:[&lt;leader&gt; + c + d]
++
+[TIP]
+====
+`c` 代表 **Code**，`d` 代表 **Diagnostics**。这会弹出一个浮窗显示完整的错误堆栈或提示信息。
+====
+
+</t>
+<t tx="swot.20260226112304.1">LazyVim 默认集成了 `Trouble.nvim`，类似于 VS Code 的底部 "Problems" 面板。
+
+* **打开当前文件诊断列表**：kbd:[&lt;leader&gt; + x + x]
+* **打开全项目诊断列表**：kbd:[&lt;leader&gt; + x + X]
+* **关闭列表面板**：kbd:[q] 或再次按 kbd:[&lt;leader&gt; + x + x]
+
+[IMPORTANT]
+====
+在 Trouble 面板中，你可以使用 kbd:[j] / kbd:[k] 移动，按 kbd:[Enter] 直接跳转到对应的代码行。
+====
+
+</t>
+<t tx="swot.20260226112309.1">如果你跳转到了报错位置，可以尝试让 LSP 自动修复：
+
+* **代码操作 (Code Action)**：kbd:[&lt;leader&gt; + c + a]
++
+这会列出所有可能的修复方案（如自动导入、删除未使用变量等）。
 </t>
 </tnodes>
 </leo_file>

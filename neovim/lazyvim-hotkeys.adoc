@@ -11,8 +11,9 @@
 :important-caption: ❗
 :warning-caption: ‼️
 :caution-caption: ⚠️
+:experimental:
 
-= lazyvim 快捷键
+= LazyVim 快捷键
 
 ++++
 <button id="toggleButton">目录开关</button>
@@ -35,7 +36,7 @@
 </script>
 ++++
 
-== 函数跳转
+== LazyVim 函数跳转
 在 LazyVim（以及大多数现代 Neovim 配置）中，跳转到下一个或上一个函数主要依赖于 **LSP (Language Server Protocol)** 或 **Treesitter**。
 
 这里有几种最常用的方式，你可以根据习惯选择：
@@ -81,4 +82,51 @@ LazyVim 默认集成了 `nvim-treesitter-textobjects`，这是最精准的跳转
 | **下一个类**    | `]]`     | 适用于 Python/Java 等
 | **模糊搜索函数** | `<leader>ss` | 适合知道名字的跳转
 |===
+
+== LazyVim 诊断与报错跳转指南
+在 LazyVim 中，代码报错和警告被称为 *Diagnostics*（诊断）。
+可以通过以下快捷键在文件内快速跳转或查看详细错误。
+
+=== 1. 基础跳转 (Basic Navigation)
+这些快捷键用于在文件内的报错点之间快速切换。
+
+[cols="1,2,2", options="header"]
+|===
+| 功能 | 快捷键 | 英文对照 (Keybinding)
+| 下一个诊断 | kbd:[\]d] | Next Diagnostic
+| 上一个诊断 | kbd:[[d] | Prev Diagnostic
+| 下一个错误 | kbd:[\]e] | Next Error
+| 上一个错误 | kbd:[[e] | Prev Error
+| 下一个警告 | kbd:[\]w] | Next Warning
+| 上一个警告 | kbd:[[w] | Prev Warning
+|===
+
+=== 2. 查看详细诊断信息 (Inspection)
+当你停留在报错行时，可以使用以下命令查看具体错误描述。
+
+* **显示行诊断浮窗**：使用 kbd:[<leader> + c + d]
++
+[TIP]
+====
+`c` 代表 **Code**，`d` 代表 **Diagnostics**。这会弹出一个浮窗显示完整的错误堆栈或提示信息。
+====
+
+=== 3. 批量处理 (Trouble 插件)
+LazyVim 默认集成了 `Trouble.nvim`，类似于 VS Code 的底部 "Problems" 面板。
+
+* **打开当前文件诊断列表**：kbd:[<leader> + x + x]
+* **打开全项目诊断列表**：kbd:[<leader> + x + X]
+* **关闭列表面板**：kbd:[q] 或再次按 kbd:[<leader> + x + x]
+
+[IMPORTANT]
+====
+在 Trouble 面板中，你可以使用 kbd:[j] / kbd:[k] 移动，按 kbd:[Enter] 直接跳转到对应的代码行。
+====
+
+=== 4. 快速修复 (Quick Fix)
+如果你跳转到了报错位置，可以尝试让 LSP 自动修复：
+
+* **代码操作 (Code Action)**：kbd:[<leader> + c + a]
++
+这会列出所有可能的修复方案（如自动导入、删除未使用变量等）。
 
