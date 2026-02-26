@@ -413,11 +413,17 @@
 <v t="swot.20260226111107.1"><vh>4. 基础 Vim 跳转 (兜底方案)</vh></v>
 <v t="swot.20260226111124.1"><vh>5. 总结表</vh></v>
 </v>
-<v t="swot.20260226112148.1"><vh>LazyVim 诊断与报错跳转指南</vh>
+<v t="swot.20260226112148.1"><vh>LazyVim 诊断与报错（Diagnostics）</vh>
 <v t="swot.20260226112252.1"><vh>1. 基础跳转 (Basic Navigation)</vh></v>
 <v t="swot.20260226112258.1"><vh>2. 查看详细诊断信息 (Inspection)</vh></v>
 <v t="swot.20260226112304.1"><vh>3. 批量处理 (Trouble 插件)</vh></v>
 <v t="swot.20260226112309.1"><vh>4. 快速修复 (Quick Fix)</vh></v>
+</v>
+<v t="swot.20260226123304.1"><vh>LazyVim 代码重构 (Refactoring) </vh>
+<v t="swot.20260226123524.1"><vh>1. 核心重构操作 (Core Refactoring)</vh></v>
+<v t="swot.20260226123530.1"><vh>2. 导航与搜索 (Navigation)</vh></v>
+<v t="swot.20260226123535.1"><vh>3. 高级重构 (Refactoring.nvim)</vh></v>
+<v t="swot.20260226123539.1"><vh>4. 格式化 (Formatting)</vh></v>
 </v>
 </v>
 </v>
@@ -911,6 +917,7 @@
 <v t="swot.20260226095658.1"><vh>5.2 监听引擎集成 http server</vh>
 <v t="swot.20260226091640.1"><vh>&lt;&lt; import server &gt;&gt;</vh></v>
 <v t="swot.20260226100523.1"><vh>&lt;&lt; def start_server &gt;&gt;</vh></v>
+<v t="swot.20260226133524.1"><vh>&lt;&lt; HTTP 服务器作为一个守护线程启动 &gt;&gt;</vh></v>
 </v>
 </v>
 <v t="swot.20260220170418.1"><vh>6. 总结</vh></v>
@@ -15807,8 +15814,10 @@ endif::[]
 这样能在 leo-editor 退出时自动关闭，不会留下僵尸进程。
 
 </t>
-<t tx="swot.20260226091640.1">import http.server
+<t tx="swot.20260226091640.1">@language python
+import http.server
 import socketserver
+import webbrowser
 
 </t>
 <t tx="swot.20260226095631.1">前期 key_mouse.py 项目的启动和网页监控 index.html 是没有关系的。启动步骤为：
@@ -15840,7 +15849,9 @@ python -m http.server 8098
 存在问题：
 
 * A 步骤执行的进程退出后，B 步骤执行的进程依然存在，需要手工去停止。
-* 普通用户不会启动 B 步骤。
+* 非开发者用户不会启动 B 步骤。
+* 用户在启动 B 步骤时，可以工作路径不是在项目目录下，导致无法打开网页报 404。
+
 </t>
 <t tx="swot.20260226095658.1">为了让监听引擎在后台记录键鼠操作的同时，还能通过 HTTP 服务器对外提供数据接口（供前端页面读取 JSON 数据），我们不能让 `http.server` 阻塞主线程。
 
@@ -15858,12 +15869,31 @@ python -m http.server 8098
 &lt;&lt; def start_server &gt;&gt;
 ----
 
+NOTE: **自动化路径锁定**: 代码中使用了 `os.chdir(SCRIPT_DIR)`，确保了无论用户在哪个目录下执行脚本，服务器都能准确地找到 `key_stats` 文件夹。
+
+.在主程序入口处 (if __name__ == "__main__":) 添加了启动该服务的守护线程代码。
+[source,python]
+----
+&lt;&lt; HTTP 服务器作为一个守护线程启动 &gt;&gt;
+----
+
+NOTE: **一键启停：**: 当你关闭 Python 脚本时，由于我们设置了 daemon=True，HTTP 服务器会随之自动关闭，不会像命令行版那样可能被遗忘在后台占用端口。
+
 </t>
 <t tx="swot.20260226100523.1">@language python
 def start_server(port=8099):
     # 切换到脚本所在目录
     os.chdir(SCRIPT_DIR)
-    Handler = http.server
+    Handler = http.server.SimpleHTTPRequestHandler
+
+    try:
+        # 允许端口利用，防止频繁重启脚本时出现 "Address already in use" 错误
+        socketserver.TCPServer.allow_reuse_address = True
+        with socketserver.TCPServer(("", port), Handler) as httpd:
+            print(f"本地服务器已启动: http://localhost:{port}/")
+            httpd.serve_forever()
+    except Exception as e:
+        print(f"HTTP 服务器启动失败: {e}")
 
 
 </t>
@@ -15998,6 +16028,62 @@ caution-caption: ⚠️
 * **代码操作 (Code Action)**：kbd:[&lt;leader&gt; + c + a]
 +
 这会列出所有可能的修复方案（如自动导入、删除未使用变量等）。
+</t>
+<t tx="swot.20260226123304.1">@language asciidoc
+在 LazyVim 中，代码重构主要依赖于 LSP (Language Server Protocol)。
+通过这些快捷键，可以高效地重命名变量、提取函数或执行自动修复。
+
+</t>
+<t tx="swot.20260226123524.1">[cols="1,1,1,3", options="header"]
+|===
+| 功能 | 快捷键 | 英文对照 (Keybinding) | 说明
+| **重命名符号**           | kbd:[&lt;leader&gt;cr] | Rename | 最常用的重构功能，它会同步修改项目中所有引用了该变量的地方。
+| **代码操作/快速修复**     | kbd:[&lt;leader&gt;ca] | Code Action | 局部当前行相关。重构的“万金油”，LSP 提供的绝大多数重构建议（如提取、移动）都藏在这里面。
+| **源操作 (如优化导入)**   | kbd:[&lt;leader&gt;cA] | Source Action | 文件级别。通常是预定义的“批处理”任务。
+|===
+
+</t>
+<t tx="swot.20260226123530.1">重构前确认引用范围非常重要。
+
+[cols="1,2,2", options="header"]
+|===
+| 功能 | 快捷键 | 英文对照 (Keybinding)
+| **跳转到定义**     | kbd:[gd] | Go to Definition
+| **查看所有引用**   | kbd:[gr] | Go to References
+| **查看类型定义**   | kbd:[gy] | Go to Type Definition
+| **查看实现**      | kbd:[gI] | Go to Implementation
+|===
+
+</t>
+<t tx="swot.20260226123535.1">如果你启用了 LazyVim 的 `coding.refactoring` 额外选项，可以使用以下高级功能（通常在可视化模式下选择代码后使用）：
+
+* **提取函数**：在选中模式下按 kbd:[&lt;leader&gt;re] (Extract Function)
+* **提取变量**：在选中模式下按 kbd:[&lt;leader&gt;rv] (Extract Variable)
+* **内联变量**：按 kbd:[&lt;leader&gt;ri] (Inline Variable)
+
+[TIP]
+====
+即使没有安装特定的重构插件，针对许多语言（如 TypeScript, Python），直接在代码上按 kbd:[&lt;leader&gt;ca] 也会弹出诸如 "Move to new file" 或 "Extract method" 的建议。
+====
+
+</t>
+<t tx="swot.20260226123539.1">重构完成后通常需要统一代码风格。
+
+* **格式化当前文件/选区**：kbd:[&lt;leader&gt;cf] (Format)
+* **开关自动保存格式化**：kbd:[&lt;leader&gt;uf] (Toggle format on save)
+
+</t>
+<t tx="swot.20260226133524.1">@language python
+server_thread = threading.Thread(target=start_server, args=(8099,), daemon=True)
+server_thread.start()
+
+# 稍微延迟 0.5 秒再开浏览器，确保服务器已经 Listen 成功
+def open_browser():
+    time.sleep(0.5)
+    webbrowser.open("http://localhost:8099")
+
+threading.Thread(target=open_browser, daemon=True).start()
+
 </t>
 </tnodes>
 </leo_file>
