@@ -1016,7 +1016,8 @@
 <v t="swot.20260221211911.1"><vh>&lt;&lt; 4. 双轨制存盘策略 &gt;&gt; self.force_save() 替代了好多代码</vh></v>
 <v t="swot.20260221213206.1"><vh>status 看懂</vh></v>
 <v t="swot.20260222103905.1"></v>
-<v t="swot.20260223091817.1"><vh>newHeadline</vh></v>
+<v t="swot.20260226073510.1"><vh>waiting for leo-editor adoc 命令增加 @data 配置</vh></v>
+<v t="swot.20260226075849.1"><vh>waiting for writing myLeoSettings.leo usage .adoc</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -15617,16 +15618,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     return conf
 
 </t>
-<t tx="swot.20260223091817.1">print("Hello World!")
-print("Hello World!")
-
-    print("Hello World!")
-    print("Hello World!")
-
-print("Hello World!")
-print("Hello World!")
-print("Hello World!")
-</t>
 <t tx="swot.20260224073020.1">.核心记忆口诀
 [TIP]
 ====
@@ -15784,5 +15775,7 @@ endif::[]
 
 </t>
 <t tx="swot.20260224111805.1"></t>
+<t tx="swot.20260226073510.1"></t>
+<t tx="swot.20260226075849.1"></t>
 </tnodes>
 </leo_file>
