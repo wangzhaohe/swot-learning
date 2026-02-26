@@ -231,9 +231,6 @@
 </v>
 <v t="swot.20260222103905.1"><vh>找出右键菜单 open with neovim 与命令 open-with-neovim 不一样的原因</vh></v>
 </v>
-<v t="swot.20260218173224.1"><vh>@path lazyvim</vh>
-<v t="swot.20260218173307.1"><vh>item2 启动 lazyvim 后切换标签会导致编辑器当前行下面变灰，按键会跳到别的行的问题</vh></v>
-</v>
 <v t="swot.20250511104537.1" descendentVnodeUnknownAttributes="7d7100285809000000302e312e302e392e3671017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d3237710775735809000000302e312e302e392e3871087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30342d3237710e7573580a000000302e312e302e31302e33710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30342d323771157573580a000000302e312e302e31302e3671167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30352d3031711c7573580a000000302e312e302e31302e39711d7d711e5808000000616e6e6f74617465711f7d71202858080000007072696f7269747971214d0f27580a000000707269736574646174657122580a000000323032352d30342d323771237573580c000000302e312e302e31332e352e3071247d71255808000000616e6e6f7461746571267d71272858080000007072696f7269747971284d0f27580a000000707269736574646174657129580a000000323032352d30352d3330712a7573580c000000302e312e302e31332e362e32712b7d712c5808000000616e6e6f74617465712d7d712e2858080000007072696f72697479712f4d0f27580a000000707269736574646174657130580a000000323032352d30352d333071317573580c000000302e312e302e31332e372e3071327d71335808000000616e6e6f7461746571347d71352858080000007072696f7269747971364d0f27580a000000707269736574646174657137580a000000323032352d30352d333071387573580c000000302e312e302e31332e382e3171397d713a5808000000616e6e6f74617465713b7d713c2858080000007072696f72697479713d4d0f27580a00000070726973657464617465713e580a000000323032352d30352d3330713f7573752e"><vh>@path nuxt/nuxt3</vh>
 <v t="swot.20250511104555.1"><vh>Plan</vh>
 <v t="swot.20250511104602.1"><vh>How to test nuxt?</vh></v>
@@ -407,6 +404,17 @@
 </v>
 </v>
 <v t="swot.20260215225306.1"><vh>@path neovim</vh>
+<v t="swot.20260226111454.1"><vh>@adoc lazyvim-hotkeys.adoc</vh>
+<v t="swot.20260226110618.1"><vh>lazyvim 快捷键</vh>
+<v t="swot.20260226110833.1"><vh>函数跳转</vh>
+<v t="swot.20260226110918.1"><vh>1. 使用 Treesitter 快捷键 (推荐)</vh></v>
+<v t="swot.20260226110950.1"><vh>2. 使用符号搜索 (Symbol Search)</vh></v>
+<v t="swot.20260226111027.1"><vh>3. 使用符号大纲 (Symbols Outline)</vh></v>
+<v t="swot.20260226111107.1"><vh>4. 基础 Vim 跳转 (兜底方案)</vh></v>
+<v t="swot.20260226111124.1"><vh>5. 总结表</vh></v>
+</v>
+</v>
+</v>
 <v t="swot.20260222101217.1"><vh>@adoc Neovim与Leo-editor格式化冲突解决方案总结.adoc</vh>
 <v t="swot.20260222101313.1"><vh>lazyvim 自动格式化分开 leo-editor @# 为 @ # 解决方案</vh>
 <v t="swot.20260222100358.1"><vh>问题背景 (Background)</vh></v>
@@ -415,6 +423,7 @@
 <v t="swot.20260222101511.1"><vh>方案评估 (Evaluation)</vh></v>
 </v>
 </v>
+<v t="swot.20260218173307.1"><vh>item2 启动 lazyvim 后切换标签会导致编辑器当前行下面变灰，按键会跳到别的行的问题</vh></v>
 </v>
 <v t="swot.20260215082206.1"><vh>@path postgresql</vh>
 <v t="swot.20260215160552.1"><vh>@adoc Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统.adoc</vh>
@@ -865,33 +874,40 @@
 <v t="swot.20260220171008.1"><vh>@path key_mouse</vh>
 <v t="swot.20260220165251.1"><vh>@adoc 键皇战况统计系统开发设计.adoc</vh>
 <v t="swot.20260220170018.1"><vh>键皇战况统计系统开发设计</vh>
-<v t="swot.20260220170138.1"><vh>1 项目概述</vh></v>
-<v t="swot.20260220170207.1"><vh>2 开发环境与工具</vh></v>
-<v t="swot.20260220170311.1"><vh>3 核心架构设计：Python 监听引擎</vh>
+<v t="swot.20260220170138.1"><vh>1. 项目概述</vh></v>
+<v t="swot.20260220170207.1"><vh>2. 开发环境与工具</vh></v>
+<v t="swot.20260220170311.1"><vh>3. 核心架构设计：Python 监听引擎</vh>
 <v t="swot.20260220170638.1"><vh>3.1 专注时长算法</vh>
 <v t="swot.20260220225738.1"><vh>&lt;&lt; 2. 专注时长计算 (5分钟心跳法) A 公式 &gt;&gt;</vh></v>
 <v t="swot.20260221164831.1"><vh>&lt;&lt; 2. 专注时长计算 (5分钟心跳法) B 公式 &gt;&gt;</vh></v>
 </v>
 <v t="swot.20260220170623.1"><vh>3.2 数据原子化持久化</vh></v>
 </v>
-<v t="swot.20260220170400.1"><vh>4 前端大屏设计：Vue + ECharts</vh>
+<v t="swot.20260220170400.1"><vh>4. 前端大屏设计：Vue + ECharts</vh>
 <v t="swot.20260220182415.1"><vh>4.1 头部标题</vh>
 <v t="swot.20260220154251.1"><vh>&lt;&lt; header div &gt;&gt;</vh></v>
 <v t="swot.20260220183334.1"><vh>&lt;&lt; header style &gt;&gt;</vh></v>
 </v>
-<v t="swot.20260220170925.1"><vh>4.1 响应式数据卡片</vh>
+<v t="swot.20260220170925.1"><vh>4.2 响应式数据卡片</vh>
 <v t="swot.20260220154318.1"><vh>&lt;&lt; 4 cards div &gt;&gt;</vh></v>
 <v t="swot.20260220193929.1"><vh>&lt;&lt; 4 cards style &gt;&gt;</vh></v>
 <v t="swot.20260220160534.1"><vh>&lt;&lt; formatNumber() &gt;&gt;</vh></v>
 <v t="swot.20260220155506.1"><vh>&lt;&lt; formatDuration(seconds) &gt;&gt;</vh></v>
 </v>
-<v t="swot.20260220170918.1"><vh>4.2 可视化分析维度</vh>
+<v t="swot.20260220170918.1"><vh>4.3 可视化分析维度</vh>
 <v t="swot.20260220154401.1"><vh>&lt;&lt; today analyse &gt;&gt;</vh></v>
 <v t="swot.20260220154415.1"><vh>&lt;&lt; total analyse &gt;&gt;</vh></v>
 <v t="swot.20260220194042.1"><vh>&lt;&lt; charts style &gt;&gt;</vh></v>
 </v>
 </v>
-<v t="swot.20260220170418.1"><vh>5 总结</vh></v>
+<v t="swot.20260226085122.1"><vh>5. 项目启动设计</vh>
+<v t="swot.20260226095631.1"><vh>5.1 服务与监控网页分离设计问题</vh></v>
+<v t="swot.20260226095658.1"><vh>5.2 监听引擎集成 http server</vh>
+<v t="swot.20260226091640.1"><vh>&lt;&lt; import server &gt;&gt;</vh></v>
+<v t="swot.20260226100523.1"><vh>&lt;&lt; def start_server &gt;&gt;</vh></v>
+</v>
+</v>
+<v t="swot.20260220170418.1"><vh>6. 总结</vh></v>
 </v>
 </v>
 <v t="swot.20260224111805.1"><vh>功能增加: 键盘每日和所有热力图</vh></v>
@@ -1018,6 +1034,8 @@
 <v t="swot.20260222103905.1"></v>
 <v t="swot.20260226073510.1"><vh>waiting for leo-editor adoc 命令增加 @data 配置</vh></v>
 <v t="swot.20260226075849.1"><vh>waiting for writing myLeoSettings.leo usage .adoc</vh></v>
+<v t="swot.20260226085349.1"><vh>leo-editor support paste markdown content</vh></v>
+<v t="swot.20260226085753.1"><vh>adoc-live 命令应该开启一个守护</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -14783,7 +14801,6 @@ cp .leo/myLeoSettings.leo ~/.leo/
 cp .leo/themes/SwotMoknokai.leo ~/.leo/themes/
 ----
 </t>
-<t tx="swot.20260218173224.1"></t>
 <t tx="swot.20260218173307.1">将 item2 update 到最新版本后解决问题了
 </t>
 <t tx="swot.20260218173421.1"></t>
@@ -15777,5 +15794,155 @@ endif::[]
 <t tx="swot.20260224111805.1"></t>
 <t tx="swot.20260226073510.1"></t>
 <t tx="swot.20260226075849.1"></t>
+<t tx="swot.20260226085122.1"></t>
+<t tx="swot.20260226085349.1">比如从网页上复制了 markdown 内容，应该能像在 markText 里 paste 一样，带有 md 格式
+</t>
+<t tx="swot.20260226085753.1">最好的做法是**开辟一个守护线程（Daemon Thread）来运行 `npx live-server` HTTP 服务器**。
+这样能在 leo-editor 退出时自动关闭，不会留下僵尸进程。
+
+</t>
+<t tx="swot.20260226091640.1">import httpserver
+import socketserver
+</t>
+<t tx="swot.20260226095631.1">前期 key_mouse.py 项目的启动和网页监控 index.html 是没有关系的。启动步骤为：
+
+[upperalpha]
+. 启动 keymouse.py 收集键盘和鼠标点击数据
++
+[source,console]
+----
+source ~/venv/leoqt6/bin/activate
+cd key_mouse
+python key_mouse.py
+----
+
+. 启动静态 http 服务器
++
+[source,console]
+----
+python -m http.server 8098
+----
++
+[NOTE]
+====
+[loweralpha]
+. 让浏览器可以访问 index.html
+. 让 index.html 可以访问 key_mouse.py 生成的 json 数据文件
+====
+
+存在问题：
+
+* A 步骤执行的进程退出后，B 步骤执行的进程依然存在，需要手工去停止。
+* 普通用户不会启动 B 步骤。
+</t>
+<t tx="swot.20260226095658.1">为了让监听引擎在后台记录键鼠操作的同时，还能通过 HTTP 服务器对外提供数据接口（供前端页面读取 JSON 数据），我们不能让 `http.server` 阻塞主线程。
+
+最好的做法是**开辟一个守护线程（Daemon Thread）来运行 HTTP 服务器**。这样它能和监听器同时工作，并且在你按下 `Ctrl+C` 退出脚本时自动关闭，不会留下僵尸进程。
+
+.导入服务模块: key_mouse.py
+[source,python]
+----
+&lt;&lt; import server &gt;&gt;
+----
+
+.定义开启服务函数 key_mouse.py
+[source,python]
+----
+&lt;&lt; def start_server &gt;&gt;
+----
+
+</t>
+<t tx="swot.20260226100523.1">@language python
+def start_server(port=8099):
+    # 切换到脚本所在目录
+    print("Hello World!")
+    
+
+</t>
+<t tx="swot.20260226110618.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260226110833.1">@language asciidoc
+在 LazyVim（以及大多数现代 Neovim 配置）中，跳转到下一个或上一个函数主要依赖于 **LSP (Language Server Protocol)** 或 **Treesitter**。
+
+这里有几种最常用的方式，你可以根据习惯选择：
+
+</t>
+<t tx="swot.20260226110918.1">LazyVim 默认集成了 `nvim-treesitter-textobjects`，这是最精准的跳转方式，因为它能理解代码的语法结构。
+
+* **跳转到下一个函数：** `]m`
+* **跳转到上一个函数：** `[m`
+* **跳转到下一个类的开始：** `]]`
+* **跳转到上一个类的开始：** `[[`
+
+&gt; **提示：** 这里的 `m` 可以理解为 "Method"（方法/函数）。如果你想跳转到函数的**结尾**，可以使用 `]M`。
+
+</t>
+<t tx="swot.20260226110950.1">如果你想跳转到特定的函数，而不是仅仅“下一个”，可以使用符号导航：
+
+* **当前文件符号：** 输入 `&lt;leader&gt;ss` (Search Symbol)。
+* 这会打开一个列表，输入函数名即可快速定位。
+
+
+* **全局项目符号：** 输入 `&lt;leader&gt;sS`。
+
+</t>
+<t tx="swot.20260226111027.1">如果你喜欢在侧边栏看到整个文件的函数结构：
+
+* **打开/关闭大纲：** `&lt;leader&gt;cs` (Symbols Outline)。
+* 在大纲中使用 `j/k` 选择，回车即可跳转。
+
+</t>
+<t tx="swot.20260226111107.1">如果当前文件没有配置 LSP 或 Treesitter，你可以使用 Vim 自带的正则跳转，虽然不够智能，但胜在通用：
+
+* **跳转到下一个 `}` 开头的行（通常是函数开头）：** `]]`
+* **跳转到上一个 `{` 开头的行：** `[[`
+
+</t>
+<t tx="swot.20260226111124.1">[caption=]
+[cols="1,1,1",options="header"]
+|===
+| 操作 | 快捷键 | 备注
+| **下一个函数**   | `]m`    | 基于 Treesitter，最常用
+| **上一个函数**   | `[m`    | 基于 Treesitter
+| **下一个类**    | `]]`     | 适用于 Python/Java 等
+| **模糊搜索函数** | `&lt;leader&gt;ss` | 适合知道名字的跳转
+|===
+
+</t>
+<t tx="swot.20260226111454.1">@language asciidoc
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
 </tnodes>
 </leo_file>

@@ -1,0 +1,84 @@
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+
+= lazyvim 快捷键
+
+++++
+<button id="toggleButton">目录开关</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== 函数跳转
+在 LazyVim（以及大多数现代 Neovim 配置）中，跳转到下一个或上一个函数主要依赖于 **LSP (Language Server Protocol)** 或 **Treesitter**。
+
+这里有几种最常用的方式，你可以根据习惯选择：
+
+=== 1. 使用 Treesitter 快捷键 (推荐)
+LazyVim 默认集成了 `nvim-treesitter-textobjects`，这是最精准的跳转方式，因为它能理解代码的语法结构。
+
+* **跳转到下一个函数：** `]m`
+* **跳转到上一个函数：** `[m`
+* **跳转到下一个类的开始：** `]]`
+* **跳转到上一个类的开始：** `[[`
+
+> **提示：** 这里的 `m` 可以理解为 "Method"（方法/函数）。如果你想跳转到函数的**结尾**，可以使用 `]M`。
+
+=== 2. 使用符号搜索 (Symbol Search)
+如果你想跳转到特定的函数，而不是仅仅“下一个”，可以使用符号导航：
+
+* **当前文件符号：** 输入 `<leader>ss` (Search Symbol)。
+* 这会打开一个列表，输入函数名即可快速定位。
+
+
+* **全局项目符号：** 输入 `<leader>sS`。
+
+=== 3. 使用符号大纲 (Symbols Outline)
+如果你喜欢在侧边栏看到整个文件的函数结构：
+
+* **打开/关闭大纲：** `<leader>cs` (Symbols Outline)。
+* 在大纲中使用 `j/k` 选择，回车即可跳转。
+
+=== 4. 基础 Vim 跳转 (兜底方案)
+如果当前文件没有配置 LSP 或 Treesitter，你可以使用 Vim 自带的正则跳转，虽然不够智能，但胜在通用：
+
+* **跳转到下一个 `}` 开头的行（通常是函数开头）：** `]]`
+* **跳转到上一个 `{` 开头的行：** `[[`
+
+=== 5. 总结表
+[caption=]
+[cols="1,1,1",options="header"]
+|===
+| 操作 | 快捷键 | 备注
+| **下一个函数**   | `]m`    | 基于 Treesitter，最常用
+| **上一个函数**   | `[m`    | 基于 Treesitter
+| **下一个类**    | `]]`     | 适用于 Python/Java 等
+| **模糊搜索函数** | `<leader>ss` | 适合知道名字的跳转
+|===
+
