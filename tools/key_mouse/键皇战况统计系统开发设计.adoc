@@ -35,12 +35,12 @@
 </script>
 ++++
 
-== 1 项目概述
+== 1. 项目概述
 本项目名为“键皇战况统计系统”（Keystroke Dashboard），旨在通过后台静默监听键盘与鼠标动作，实时分析用户的生产力状态。系统不仅统计点击总数，还通过“心跳算法”估算用户的**今日专注时长**，并以可视化大屏的方式进行展示。
 
 项目采用 **Leo Editor** 进行文学化编程（Literate Programming），代码组织结构清晰，逻辑与文档高度统一。
 
-== 2 开发环境与工具
+== 2. 开发环境与工具
 * **编辑器**:
   ** Leo Editor 文学化编程核心工具管理大纲
   ** LazyVim 代码开发
@@ -53,7 +53,7 @@
 
 * **核心库**: `pynput` (输入设备监听)
 
-== 3 核心架构设计：Python 监听引擎
+== 3. 核心架构设计：Python 监听引擎
 监听引擎位于 `@file key_mouse.py` 节点下。
 它负责数据的采集、过滤、持久化以及专注时长的计算。
 
@@ -99,6 +99,9 @@ if delta < HEARTBEAT_THRESHOLD:
 
 self.last_event_time = now_ts  # 重置上次事件时间
 
+# 向前端暴露最后操作的确切时间戳
+self.daily_data["last_event_timestamp"] = now_ts
+
 ----
 
 其数学对应关系为带**指示函数**的求和：
@@ -122,11 +125,14 @@ FocusTime = \sum_{n=1}^{N} (\Delta t_n \cdot \mathbb{1}_{\{\Delta t_n < Threshol
 delta = now_ts - self.last_event_time
 
 # 无论间隔多久，最多累加 HEARTBEAT_THRESHOLD（例如5分钟）
-self.daily_data["focus_seconds"] = (
-    self.daily_data.get("focus_seconds", 0) + min(delta, HEARTBEAT_THRESHOLD)
-)
+self.daily_data["focus_seconds"] = self.daily_data.get(
+    "focus_seconds", 0
+) + min(delta, HEARTBEAT_THRESHOLD)
 
 self.last_event_time = now_ts  # 重置上次事件时间
+
+# 向前端暴露最后操作的确切时间戳
+self.daily_data["last_event_timestamp"] = now_ts
 
 ----
 
@@ -176,7 +182,7 @@ def _atomic_save(self, data, target_path):
         print(f"保存失败: {e}")
 ----
 
-== 4 前端大屏设计：Vue + ECharts
+== 4. 前端大屏设计：Vue + ECharts
 大屏展示位于 `@file index.html` 节点。
 
 === 4.1 头部标题
@@ -199,7 +205,7 @@ def _atomic_save(self, data, target_path):
 .header p { color: var(--text-muted); margin-top: 0.5rem; }
 ----
 
-=== 4.1 响应式数据卡片
+=== 4.2 响应式数据卡片
 前端采用 4 列网格布局，直观展示:
 
 .卡片结构
@@ -208,8 +214,12 @@ def _atomic_save(self, data, target_path):
 <div class="stats-grid">
     <div class="stat-card">
         <div class="stat-title">今日专注时长</div>
-        <div class="stat-value focus">{{ formatDuration(todayFocusSeconds) }}</div>
+        <div class="stat-value focus">{{ formatDuration(liveFocusSeconds) }}</div>
+        <div :class="['status-badge', isDormant ? 'status-dormant' : 'status-active pulse']">
+            {{ isDormant ? '💤 系统休眠中' : '🔥 专注打码中' }}
+        </div>
     </div>
+
     <div class="stat-card">
         <div class="stat-title">历史总点击 (Total)</div>
         <div class="stat-value">{{ formatNumber(globalStats.total) }}</div>
@@ -230,13 +240,18 @@ def _atomic_save(self, data, target_path):
 ----
 const formatNumber = (num) => 
     new Intl.NumberFormat('en-US').format(num || 0);
-// 将秒数转换为友好格式 (如 3h 45m)
+// 将秒数转换为友好格式 (如 3h 45m 19s)
 const formatDuration = (seconds) => {
-    if (!seconds) return '0h 0m';
+    if (!seconds) return '0h 0m 0s';
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
-    if (h > 0) return `${h}h ${m}m`;
-    return `${m}m`;
+    const s = Math.floor(seconds % 60);  // 算出余下的秒数
+
+    // 补齐两位数，让跳动更整齐美观（例如 05s）
+    const formattedS = s.toString().padStart(2, '0');
+
+    if (h > 0) return `${h}h ${m}m ${formattedS}s`;
+    return `${m}m ${formattedS}s`;
 };
 ----
 
@@ -250,22 +265,25 @@ const formatDuration = (seconds) => {
     margin-bottom: 2rem;
 }
 .stat-card {
-    background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
-    text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    transition: transform 0.2s;
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: all 0.5s ease; /* 唤醒时恢复速度稍快，更灵敏 */
 }
 .stat-card:hover {
     transform: translateY(-5px);
 }
 .stat-title {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--text-muted);
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 .stat-value {
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   font-weight: bold;
   color: var(--text-main);
 }
@@ -280,7 +298,7 @@ const formatDuration = (seconds) => {
 }
 ----
 
-=== 4.2 可视化分析维度
+=== 4.3 可视化分析维度
 系统提供四个维度的图表分析：
 
 1. **摸鱼检测器 (今日时段分布)**：24小时热度分析。
@@ -301,7 +319,7 @@ const formatDuration = (seconds) => {
     </div>
 </div>
 <!-- 总体展示 -->
-<div>
+<div class="charts-row-split">
     <div class="chart-container">
         <div id="trendChart" class="chart"></div>
     </div>
@@ -318,16 +336,108 @@ const formatDuration = (seconds) => {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
-    margin-bottom: 2rem;
+    flex: 1; /* 关键：自动占据 first-screen 剩下的所有高度 */
+    margin-bottom: 0; /* 移除原来的底部边距 */
 }
 .chart-container {
-    background: var(--card-bg); padding: 1.5rem; border-radius: 12px;
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    display: flex;  /* 图表容器使用 flex，方便内部的图表 100% 撑开 */
+    flex-direction: column;
 }
-.chart { width: 100%; height: 350px; }
+.chart {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+}
+
 ----
 
-== 5 总结
+== 5. 项目启动设计
+
+
+=== 5.1 服务与监控网页分离设计问题
+前期 key_mouse.py 项目的启动和网页监控 index.html 是没有关系的。启动步骤为：
+
+[upperalpha]
+. 启动 keymouse.py 收集键盘和鼠标点击数据
++
+[source,console]
+----
+source ~/venv/leoqt6/bin/activate
+cd key_mouse
+python key_mouse.py
+----
+
+. 启动静态 http 服务器
++
+[source,console]
+----
+python -m http.server 8098
+----
++
+[NOTE]
+====
+[loweralpha]
+. 让浏览器可以访问 index.html
+. 让 index.html 可以访问 key_mouse.py 生成的 json 数据文件
+====
+
+存在问题：
+
+* A 步骤执行的进程退出后，B 步骤执行的进程依然存在，需要手工去停止。
+* 非开发者用户不会启动 B 步骤。
+* 用户在启动 B 步骤时，可以工作路径不是在项目目录下，导致无法打开网页报 404。
+
+=== 5.2 监听引擎集成 http server
+为了让监听引擎在后台记录键鼠操作的同时，还能通过 HTTP 服务器对外提供数据接口（供前端页面读取 JSON 数据），我们不能让 `http.server` 阻塞主线程。
+
+最好的做法是**开辟一个守护线程（Daemon Thread）来运行 HTTP 服务器**。这样它能和监听器同时工作，并且在你按下 `Ctrl+C` 退出脚本时自动关闭，不会留下僵尸进程。
+
+.导入服务模块: key_mouse.py
+[source,python]
+----
+import http.server
+import socketserver
+import webbrowser
+
+----
+
+.定义开启服务函数 key_mouse.py
+[source,python]
+----
+def start_server(port=8099):
+    # 切换到脚本所在目录
+    os.chdir(SCRIPT_DIR)
+    Handler = http.server.SimpleHTTPRequestHandler
+
+    try:
+        # 允许端口利用，防止频繁重启脚本时出现 "Address already in use" 错误
+        socketserver.TCPServer.allow_reuse_address = True
+        with socketserver.TCPServer(("", port), Handler) as httpd:
+            print(f"本地服务器已启动: http://localhost:{port}/")
+            httpd.serve_forever()
+    except Exception as e:
+        print(f"HTTP 服务器启动失败: {e}")
+
+
+----
+
+NOTE: **自动化路径锁定**: 代码中使用了 `os.chdir(SCRIPT_DIR)`，确保了无论用户在哪个目录下执行脚本，服务器都能准确地找到 `key_stats` 文件夹。
+
+.在主程序入口处 (if __name__ == "__main__":) 添加了启动该服务的守护线程代码。
+[source,python]
+----
+server_thread = threading.Thread(target=start_server, args=(8099,), daemon=True)
+server_thread.start()
+webbrowser.open("http://localhost:8099")
+----
+
+NOTE: **一键启停：**: 当你关闭 Python 脚本时，由于我们设置了 daemon=True，HTTP 服务器会随之自动关闭，不会像命令行版那样可能被遗忘在后台占用端口。
+
+== 6. 总结
 通过 Leo Editor 的文学化编程，我们将复杂的监听逻辑与直观的 Web UI 完美结合。
 系统的“心跳算法”为用户提供了真实的生产力反馈，而原子化保存则确保了数据的绝对安全。
 

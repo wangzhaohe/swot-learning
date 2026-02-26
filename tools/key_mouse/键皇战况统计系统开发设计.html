@@ -535,22 +535,28 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
 <ul class="sectlevel1">
-<li><a href="#_1_项目概述">1 项目概述</a></li>
-<li><a href="#_2_开发环境与工具">2 开发环境与工具</a></li>
-<li><a href="#_3_核心架构设计python_监听引擎">3 核心架构设计：Python 监听引擎</a>
+<li><a href="#_1_项目概述">1. 项目概述</a></li>
+<li><a href="#_2_开发环境与工具">2. 开发环境与工具</a></li>
+<li><a href="#_3_核心架构设计python_监听引擎">3. 核心架构设计：Python 监听引擎</a>
 <ul class="sectlevel2">
 <li><a href="#_3_1_专注时长算法">3.1 专注时长算法</a></li>
 <li><a href="#_3_2_数据原子化持久化">3.2 数据原子化持久化</a></li>
 </ul>
 </li>
-<li><a href="#_4_前端大屏设计vue_echarts">4 前端大屏设计：Vue + ECharts</a>
+<li><a href="#_4_前端大屏设计vue_echarts">4. 前端大屏设计：Vue + ECharts</a>
 <ul class="sectlevel2">
 <li><a href="#_4_1_头部标题">4.1 头部标题</a></li>
-<li><a href="#_4_1_响应式数据卡片">4.1 响应式数据卡片</a></li>
-<li><a href="#_4_2_可视化分析维度">4.2 可视化分析维度</a></li>
+<li><a href="#_4_2_响应式数据卡片">4.2 响应式数据卡片</a></li>
+<li><a href="#_4_3_可视化分析维度">4.3 可视化分析维度</a></li>
 </ul>
 </li>
-<li><a href="#_5_总结">5 总结</a></li>
+<li><a href="#_5_项目启动设计">5. 项目启动设计</a>
+<ul class="sectlevel2">
+<li><a href="#_5_1_服务与监控网页分离设计问题">5.1 服务与监控网页分离设计问题</a></li>
+<li><a href="#_5_2_监听引擎集成_http_server">5.2 监听引擎集成 http server</a></li>
+</ul>
+</li>
+<li><a href="#_6_总结">6. 总结</a></li>
 </ul>
 </div>
 </div>
@@ -578,7 +584,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_1_项目概述">1 项目概述</h2>
+<h2 id="_1_项目概述">1. 项目概述</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>本项目名为“键皇战况统计系统”（Keystroke Dashboard），旨在通过后台静默监听键盘与鼠标动作，实时分析用户的生产力状态。系统不仅统计点击总数，还通过“心跳算法”估算用户的<strong>今日专注时长</strong>，并以可视化大屏的方式进行展示。</p>
@@ -589,7 +595,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_2_开发环境与工具">2 开发环境与工具</h2>
+<h2 id="_2_开发环境与工具">2. 开发环境与工具</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -623,7 +629,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_3_核心架构设计python_监听引擎">3 核心架构设计：Python 监听引擎</h2>
+<h2 id="_3_核心架构设计python_监听引擎">3. 核心架构设计：Python 监听引擎</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>监听引擎位于 <code>@file key_mouse.py</code> 节点下。
@@ -684,7 +690,10 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
         <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-o">.</span><span class="tok-n">get</span><span class="tok-p">(</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-n">delta</span>
     <span class="tok-p">)</span>
 
-<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span>  <span class="tok-c1"># 重置上次事件时间</span></code></pre>
+<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span>  <span class="tok-c1"># 重置上次事件时间</span>
+
+<span class="tok-c1"># 向前端暴露最后操作的确切时间戳</span>
+<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-p">[</span><span class="tok-s2">&quot;last_event_timestamp&quot;</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -715,11 +724,14 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">delta</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span> <span class="tok-o">-</span> <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span>
 
 <span class="tok-c1"># 无论间隔多久，最多累加 HEARTBEAT_THRESHOLD（例如5分钟）</span>
-<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-p">[</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-p">(</span>
-    <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-o">.</span><span class="tok-n">get</span><span class="tok-p">(</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-nb">min</span><span class="tok-p">(</span><span class="tok-n">delta</span><span class="tok-p">,</span> <span class="tok-n">HEARTBEAT_THRESHOLD</span><span class="tok-p">)</span>
-<span class="tok-p">)</span>
+<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-p">[</span><span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-o">.</span><span class="tok-n">get</span><span class="tok-p">(</span>
+    <span class="tok-s2">&quot;focus_seconds&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span>
+<span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-nb">min</span><span class="tok-p">(</span><span class="tok-n">delta</span><span class="tok-p">,</span> <span class="tok-n">HEARTBEAT_THRESHOLD</span><span class="tok-p">)</span>
 
-<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span>  <span class="tok-c1"># 重置上次事件时间</span></code></pre>
+<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">last_event_time</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span>  <span class="tok-c1"># 重置上次事件时间</span>
+
+<span class="tok-c1"># 向前端暴露最后操作的确切时间戳</span>
+<span class="tok-bp">self</span><span class="tok-o">.</span><span class="tok-n">daily_data</span><span class="tok-p">[</span><span class="tok-s2">&quot;last_event_timestamp&quot;</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">now_ts</span></code></pre>
 </div>
 </div>
 <div class="stemblock">
@@ -806,7 +818,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
-<h2 id="_4_前端大屏设计vue_echarts">4 前端大屏设计：Vue + ECharts</h2>
+<h2 id="_4_前端大屏设计vue_echarts">4. 前端大屏设计：Vue + ECharts</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>大屏展示位于 <code>@file index.html</code> 节点。</p>
@@ -835,7 +847,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_4_1_响应式数据卡片">4.1 响应式数据卡片</h3>
+<h3 id="_4_2_响应式数据卡片">4.2 响应式数据卡片</h3>
 <div class="paragraph">
 <p>前端采用 4 列网格布局，直观展示:</p>
 </div>
@@ -845,8 +857,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;stats-grid&quot;</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;stat-card&quot;</span><span class="tok-p">&gt;</span>
         <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;stat-title&quot;</span><span class="tok-p">&gt;</span>今日专注时长<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
-        <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;stat-value focus&quot;</span><span class="tok-p">&gt;</span>{{ formatDuration(todayFocusSeconds) }}<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;stat-value focus&quot;</span><span class="tok-p">&gt;</span>{{ formatDuration(liveFocusSeconds) }}<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">:class</span><span class="tok-o">=</span><span class="tok-s">&quot;[&#39;status-badge&#39;, isDormant ? &#39;status-dormant&#39; : &#39;status-active pulse&#39;]&quot;</span><span class="tok-p">&gt;</span>
+            {{ isDormant ? &#39;💤 系统休眠中&#39; : &#39;🔥 专注打码中&#39; }}
+        <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
     <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;stat-card&quot;</span><span class="tok-p">&gt;</span>
         <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;stat-title&quot;</span><span class="tok-p">&gt;</span>历史总点击 (Total)<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
         <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;stat-value&quot;</span><span class="tok-p">&gt;</span>{{ formatNumber(globalStats.total) }}<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
@@ -867,13 +883,18 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">formatNumber</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">num</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span>
 <span class="tok-w">    </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nb">Intl</span><span class="tok-p">.</span><span class="tok-nx">NumberFormat</span><span class="tok-p">(</span><span class="tok-s1">&#39;en-US&#39;</span><span class="tok-p">).</span><span class="tok-nx">format</span><span class="tok-p">(</span><span class="tok-nx">num</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span>
-<span class="tok-c1">// 将秒数转换为友好格式 (如 3h 45m)</span>
+<span class="tok-c1">// 将秒数转换为友好格式 (如 3h 45m 19s)</span>
 <span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">formatDuration</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">seconds</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">seconds</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s1">&#39;0h 0m&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">seconds</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s1">&#39;0h 0m 0s&#39;</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">h</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">floor</span><span class="tok-p">(</span><span class="tok-nx">seconds</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-mf">3600</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">m</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">floor</span><span class="tok-p">((</span><span class="tok-nx">seconds</span><span class="tok-w"> </span><span class="tok-o">%</span><span class="tok-w"> </span><span class="tok-mf">3600</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-mf">60</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">h</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">h</span><span class="tok-si">}</span><span class="tok-sb">h </span><span class="tok-si">${</span><span class="tok-nx">m</span><span class="tok-si">}</span><span class="tok-sb">m`</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">m</span><span class="tok-si">}</span><span class="tok-sb">m`</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">s</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">floor</span><span class="tok-p">(</span><span class="tok-nx">seconds</span><span class="tok-w"> </span><span class="tok-o">%</span><span class="tok-w"> </span><span class="tok-mf">60</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 算出余下的秒数</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 补齐两位数，让跳动更整齐美观（例如 05s）</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">formattedS</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">s</span><span class="tok-p">.</span><span class="tok-nx">toString</span><span class="tok-p">().</span><span class="tok-nx">padStart</span><span class="tok-p">(</span><span class="tok-mf">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;0&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">h</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">h</span><span class="tok-si">}</span><span class="tok-sb">h </span><span class="tok-si">${</span><span class="tok-nx">m</span><span class="tok-si">}</span><span class="tok-sb">m </span><span class="tok-si">${</span><span class="tok-nx">formattedS</span><span class="tok-si">}</span><span class="tok-sb">s`</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">m</span><span class="tok-si">}</span><span class="tok-sb">m </span><span class="tok-si">${</span><span class="tok-nx">formattedS</span><span class="tok-si">}</span><span class="tok-sb">s`</span><span class="tok-p">;</span>
 <span class="tok-p">};</span></code></pre>
 </div>
 </div>
@@ -887,22 +908,25 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-w">    </span><span class="tok-k">margin-bottom</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-kt">rem</span><span class="tok-p">;</span>
 <span class="tok-p">}</span>
 <span class="tok-p">.</span><span class="tok-nc">stat-card</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nf">var</span><span class="tok-p">(</span><span class="tok-nv">--card-bg</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mf">1.5</span><span class="tok-kt">rem</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">12</span><span class="tok-kt">px</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-k">text-align</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">center</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">box-shadow</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">6</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-nb">rgba</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mf">0.3</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-k">transition</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-k">transform</span><span class="tok-w"> </span><span class="tok-mf">0.2</span><span class="tok-kt">s</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nf">var</span><span class="tok-p">(</span><span class="tok-nv">--card-bg</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mf">1.5</span><span class="tok-kt">rem</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">12</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">text-align</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">center</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">box-shadow</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">6</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-nb">rgba</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mf">0.3</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">transition</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">all</span><span class="tok-w"> </span><span class="tok-mf">0.5</span><span class="tok-kt">s</span><span class="tok-w"> </span><span class="tok-kc">ease</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c">/* 唤醒时恢复速度稍快，更灵敏 */</span>
 <span class="tok-p">}</span>
 <span class="tok-p">.</span><span class="tok-nc">stat-card</span><span class="tok-p">:</span><span class="tok-nd">hover</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-k">transform</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nb">translateY</span><span class="tok-p">(</span><span class="tok-mi">-5</span><span class="tok-kt">px</span><span class="tok-p">);</span>
 <span class="tok-p">}</span>
 <span class="tok-p">.</span><span class="tok-nc">stat-title</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-k">font-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mf">0.95</span><span class="tok-kt">rem</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">font-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">rem</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-k">color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nf">var</span><span class="tok-p">(</span><span class="tok-nv">--text-muted</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-k">margin-bottom</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mf">0.5</span><span class="tok-kt">rem</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-k">text-transform</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">uppercase</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-k">letter-spacing</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-p">;</span>
 <span class="tok-p">}</span>
 <span class="tok-p">.</span><span class="tok-nc">stat-value</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">  </span><span class="tok-k">font-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mf">2.5</span><span class="tok-kt">rem</span><span class="tok-p">;</span>
+<span class="tok-w">  </span><span class="tok-k">font-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mf">2.3</span><span class="tok-kt">rem</span><span class="tok-p">;</span>
 <span class="tok-w">  </span><span class="tok-k">font-weight</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">bold</span><span class="tok-p">;</span>
 <span class="tok-w">  </span><span class="tok-k">color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nf">var</span><span class="tok-p">(</span><span class="tok-nv">--text-main</span><span class="tok-p">);</span>
 <span class="tok-p">}</span>
@@ -919,7 +943,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_4_2_可视化分析维度">4.2 可视化分析维度</h3>
+<h3 id="_4_3_可视化分析维度">4.3 可视化分析维度</h3>
 <div class="paragraph">
 <p>系统提供四个维度的图表分析：</p>
 </div>
@@ -952,7 +976,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
     <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
 <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
 <span class="tok-cm">&lt;!-- 总体展示 --&gt;</span>
-<span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;charts-row-split&quot;</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;chart-container&quot;</span><span class="tok-p">&gt;</span>
         <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;trendChart&quot;</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;chart&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
@@ -969,20 +993,166 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-w">    </span><span class="tok-k">display</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-k">grid</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-k">grid-template-columns</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nf">repeat</span><span class="tok-p">(</span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-n">fr</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-k">gap</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-kt">rem</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-k">margin-bottom</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-kt">rem</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">flex</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c">/* 关键：自动占据 first-screen 剩下的所有高度 */</span>
+<span class="tok-w">    </span><span class="tok-k">margin-bottom</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c">/* 移除原来的底部边距 */</span>
 <span class="tok-p">}</span>
 <span class="tok-p">.</span><span class="tok-nc">chart-container</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nf">var</span><span class="tok-p">(</span><span class="tok-nv">--card-bg</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mf">1.5</span><span class="tok-kt">rem</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">12</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nf">var</span><span class="tok-p">(</span><span class="tok-nv">--card-bg</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mf">1.5</span><span class="tok-kt">rem</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">12</span><span class="tok-kt">px</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-k">box-shadow</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">6</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-nb">rgba</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mf">0.3</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">display</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">flex</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c">/* 图表容器使用 flex，方便内部的图表 100% 撑开 */</span>
+<span class="tok-w">    </span><span class="tok-k">flex-direction</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">column</span><span class="tok-p">;</span>
 <span class="tok-p">}</span>
-<span class="tok-p">.</span><span class="tok-nc">chart</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">width</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">100</span><span class="tok-kt">%</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">height</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">350</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span></code></pre>
+<span class="tok-p">.</span><span class="tok-nc">chart</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">width</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">100</span><span class="tok-kt">%</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">height</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">100</span><span class="tok-kt">%</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">flex</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_5_总结">5 总结</h2>
+<h2 id="_5_项目启动设计">5. 项目启动设计</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_5_1_服务与监控网页分离设计问题">5.1 服务与监控网页分离设计问题</h3>
+<div class="paragraph">
+<p>前期 key_mouse.py 项目的启动和网页监控 index.html 是没有关系的。启动步骤为：</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>启动 keymouse.py 收集键盘和鼠标点击数据</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">source ~/venv/leoqt6/bin/activate</span>
+<span class="tok-go">cd key_mouse</span>
+<span class="tok-go">python key_mouse.py</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>启动静态 http 服务器</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">python -m http.server 8098</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>让浏览器可以访问 index.html</p>
+</li>
+<li>
+<p>让 index.html 可以访问 key_mouse.py 生成的 json 数据文件</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>存在问题：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A 步骤执行的进程退出后，B 步骤执行的进程依然存在，需要手工去停止。</p>
+</li>
+<li>
+<p>非开发者用户不会启动 B 步骤。</p>
+</li>
+<li>
+<p>用户在启动 B 步骤时，可以工作路径不是在项目目录下，导致无法打开网页报 404。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_5_2_监听引擎集成_http_server">5.2 监听引擎集成 http server</h3>
+<div class="paragraph">
+<p>为了让监听引擎在后台记录键鼠操作的同时，还能通过 HTTP 服务器对外提供数据接口（供前端页面读取 JSON 数据），我们不能让 <code>http.server</code> 阻塞主线程。</p>
+</div>
+<div class="paragraph">
+<p>最好的做法是<strong>开辟一个守护线程（Daemon Thread）来运行 HTTP 服务器</strong>。这样它能和监听器同时工作，并且在你按下 <code>Ctrl+C</code> 退出脚本时自动关闭，不会留下僵尸进程。</p>
+</div>
+<div class="listingblock">
+<div class="title">导入服务模块: key_mouse.py</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-kn">import</span> <span class="tok-nn">http.server</span>
+<span class="tok-kn">import</span> <span class="tok-nn">socketserver</span>
+<span class="tok-kn">import</span> <span class="tok-nn">webbrowser</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">定义开启服务函数 key_mouse.py</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-k">def</span> <span class="tok-nf">start_server</span><span class="tok-p">(</span><span class="tok-n">port</span><span class="tok-o">=</span><span class="tok-mi">8099</span><span class="tok-p">):</span>
+    <span class="tok-c1"># 切换到脚本所在目录</span>
+    <span class="tok-n">os</span><span class="tok-o">.</span><span class="tok-n">chdir</span><span class="tok-p">(</span><span class="tok-n">SCRIPT_DIR</span><span class="tok-p">)</span>
+    <span class="tok-n">Handler</span> <span class="tok-o">=</span> <span class="tok-n">http</span><span class="tok-o">.</span><span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-n">SimpleHTTPRequestHandler</span>
+
+    <span class="tok-k">try</span><span class="tok-p">:</span>
+        <span class="tok-c1"># 允许端口利用，防止频繁重启脚本时出现 &quot;Address already in use&quot; 错误</span>
+        <span class="tok-n">socketserver</span><span class="tok-o">.</span><span class="tok-n">TCPServer</span><span class="tok-o">.</span><span class="tok-n">allow_reuse_address</span> <span class="tok-o">=</span> <span class="tok-kc">True</span>
+        <span class="tok-k">with</span> <span class="tok-n">socketserver</span><span class="tok-o">.</span><span class="tok-n">TCPServer</span><span class="tok-p">((</span><span class="tok-s2">&quot;&quot;</span><span class="tok-p">,</span> <span class="tok-n">port</span><span class="tok-p">),</span> <span class="tok-n">Handler</span><span class="tok-p">)</span> <span class="tok-k">as</span> <span class="tok-n">httpd</span><span class="tok-p">:</span>
+            <span class="tok-nb">print</span><span class="tok-p">(</span><span class="tok-sa">f</span><span class="tok-s2">&quot;本地服务器已启动: http://localhost:</span><span class="tok-si">{</span><span class="tok-n">port</span><span class="tok-si">}</span><span class="tok-s2">/&quot;</span><span class="tok-p">)</span>
+            <span class="tok-n">httpd</span><span class="tok-o">.</span><span class="tok-n">serve_forever</span><span class="tok-p">()</span>
+    <span class="tok-k">except</span> <span class="tok-ne">Exception</span> <span class="tok-k">as</span> <span class="tok-n">e</span><span class="tok-p">:</span>
+        <span class="tok-nb">print</span><span class="tok-p">(</span><span class="tok-sa">f</span><span class="tok-s2">&quot;HTTP 服务器启动失败: </span><span class="tok-si">{</span><span class="tok-n">e</span><span class="tok-si">}</span><span class="tok-s2">&quot;</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+<strong>自动化路径锁定</strong>: 代码中使用了 <code>os.chdir(SCRIPT_DIR)</code>，确保了无论用户在哪个目录下执行脚本，服务器都能准确地找到 <code>key_stats</code> 文件夹。
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">在主程序入口处 (if <em>name</em> == "<em>main</em>":) 添加了启动该服务的守护线程代码。</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">server_thread</span> <span class="tok-o">=</span> <span class="tok-n">threading</span><span class="tok-o">.</span><span class="tok-n">Thread</span><span class="tok-p">(</span><span class="tok-n">target</span><span class="tok-o">=</span><span class="tok-n">start_server</span><span class="tok-p">,</span> <span class="tok-n">args</span><span class="tok-o">=</span><span class="tok-p">(</span><span class="tok-mi">8099</span><span class="tok-p">,),</span> <span class="tok-n">daemon</span><span class="tok-o">=</span><span class="tok-kc">True</span><span class="tok-p">)</span>
+<span class="tok-n">server_thread</span><span class="tok-o">.</span><span class="tok-n">start</span><span class="tok-p">()</span>
+<span class="tok-n">webbrowser</span><span class="tok-o">.</span><span class="tok-n">open</span><span class="tok-p">(</span><span class="tok-s2">&quot;http://localhost:8099&quot;</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+<strong>一键启停：</strong>: 当你关闭 Python 脚本时，由于我们设置了 daemon=True，HTTP 服务器会随之自动关闭，不会像命令行版那样可能被遗忘在后台占用端口。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_总结">6. 总结</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>通过 Leo Editor 的文学化编程，我们将复杂的监听逻辑与直观的 Web UI 完美结合。
@@ -993,7 +1163,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-21 20:10:44 +0800
+Last updated 2026-02-26 13:54:48 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -7,6 +7,15 @@ import json
 import time
 import os
 import threading
+
+# @+<< import server >>
+# @+node:swot.20260226091640.1: *3* << import server >>
+# @@language python
+import http.server
+import socketserver
+import webbrowser
+
+# @-<< import server >>
 from datetime import datetime
 from pathlib import Path
 from pynput import keyboard, mouse
@@ -175,6 +184,7 @@ class TrackerEngine:
             if now_ts - self.last_save_time > SAVE_INTERVAL:
                 self.force_save()
             # @-<< 4. 双轨制存盘策略 >>
+
     # @+node:swot.20260220152853.1: *4* def force_save
     def force_save(self):
         with self.lock:
@@ -188,7 +198,10 @@ class TrackerEngine:
 
                 # 终端反馈（如果觉得吵可以注释掉）
                 focus_mins = int(self.daily_data.get("focus_seconds", 0) // 60)
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] 数据已安全存盘，今日已专注: {focus_mins} 分钟。")
+                print(
+                    f"[{datetime.now().strftime('%H:%M:%S')}] 数据已安全存盘，今日已专注: {focus_mins} 分钟。"
+                )
+
     # @+node:swot.20260220152843.1: *4* def _atomic_save
     def _atomic_save(self, data, target_path):
         tmp_path = target_path.with_suffix(".tmp")
@@ -218,13 +231,46 @@ def on_click(x, y, button, pressed):
 
 
 # @-others
+# @+<< def start_server >>
+# @+node:swot.20260226100523.1: ** << def start_server >>
+# @@language python
+def start_server(port=8099):
+    # 切换到脚本所在目录
+    os.chdir(SCRIPT_DIR)
+    Handler = http.server.SimpleHTTPRequestHandler
+
+    try:
+        # 允许端口利用，防止频繁重启脚本时出现 "Address already in use" 错误
+        socketserver.TCPServer.allow_reuse_address = True
+        with socketserver.TCPServer(("", port), Handler) as httpd:
+            print(f"本地服务器已启动: http://localhost:{port}/")
+            httpd.serve_forever()
+    except Exception as e:
+        print(f"HTTP 服务器启动失败: {e}")
+
+
+# @-<< def start_server >>
 
 # --- 监听器初始化 ---
 engine = TrackerEngine()
 
 if __name__ == "__main__":
-    print("🚀 专家级统计引擎已启动！(支持专注时长计算)")
-    print(f"📁 数据存放目录: {SAVE_DIR}")
+    print("专家级统计引擎已启动！(支持专注时长计算)")
+    print(f"数据存放目录: {SAVE_DIR}")
+    # @+<< HTTP 服务器作为一个守护线程启动 >>
+    # @+node:swot.20260226133524.1: ** << HTTP 服务器作为一个守护线程启动 >>
+    # @@language python
+    server_thread = threading.Thread(target=start_server, args=(8099,), daemon=True)
+    server_thread.start()
+
+    # 稍微延迟 0.5 秒再开浏览器，确保服务器已经 Listen 成功
+    def open_browser():
+        time.sleep(0.5)
+        webbrowser.open("http://localhost:8099")
+
+    threading.Thread(target=open_browser, daemon=True).start()
+
+    # @-<< HTTP 服务器作为一个守护线程启动 >>
     print("--------------------------------------------------")
     try:
         with keyboard.Listener(on_release=on_release) as k_listener:
