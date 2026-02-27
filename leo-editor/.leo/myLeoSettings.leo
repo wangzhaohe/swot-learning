@@ -116,6 +116,7 @@
 <v t="swot.20250712224747.1"><vh>@command count-all-nodes</vh></v>
 <v t="swot.20220809083113.1"><vh>@command create-nodes-from-body</vh></v>
 <v t="swot.20181207204040.2"><vh>@command fquick-selected @key=Shift-Ctrl-F</vh></v>
+<v t="swot.20260227090439.1"><vh>@command focus-to-nav @key=Shift-Ctrl-N</vh></v>
 <v t="swot.20211114155413.1"><vh>@command tfs</vh></v>
 <v t="swot.20250918220343.1"><vh>@command tf</vh></v>
 </v>
@@ -432,7 +433,7 @@ contract-all-subheads = Ctrl-Shift-N
 select-to-matching-bracket = Ctrl-Shift-M
 toggle-angle-brackets = Ctrl-Shift-T
 show-file-line = Ctrl-Shift-L
-vr3-update = Ctrl-R
+# vr3-update = Ctrl-R
 adoc-live = Ctrl-/
 
 z-open-freewin = Ctrl-\
@@ -2496,5 +2497,6 @@ add a space with comment:
 #@+node:swot.20260222193522.1: * @file ...
 # @+node:swot.20260222193522.1: * @file ...
 </t>
+<t tx="swot.20260227090439.1">c.k.simulateCommand('find-quick-selected')</t>
 </tnodes>
 </leo_file>
