@@ -16408,7 +16408,8 @@ your url is: https://abc123.loca.lt
 </t>
 <t tx="swot.20260228002347.1">实际上 github push 也有这样的问题
 </t>
-<t tx="swot.20260228005708.1"># 确保 filename 即使为 None 也能安全处理
+<t tx="swot.20260228005708.1">@language python
+# 确保 filename 即使为 None 也能安全处理
 original_filename = file.filename or "image.jpg"
 file_ext = (
     original_filename.split(".")[-1] if "." in original_filename else "jpg"
@@ -16428,7 +16429,8 @@ image_url = f"{str(request.base_url)}static_images/{temp_filename}"
 print(f"&gt;&gt;&gt; 待处理图片 URL: {image_url}")
 
 </t>
-<t tx="swot.20260228005743.1">req_key = "i2i_multi_style_zx2x"
+<t tx="swot.20260228005743.1">@language python
+req_key = "i2i_multi_style_zx2x"
 submit_form = {
     "req_key": req_key,
     # "template_id": "felt_keychain",
