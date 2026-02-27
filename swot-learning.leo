@@ -406,6 +406,12 @@
 <v t="swot.20260215225306.1"><vh>@path neovim</vh>
 <v t="swot.20260226111454.1"><vh>@adoc lazyvim-hotkeys.adoc</vh>
 <v t="swot.20260226110618.1"><vh>LazyVim 快捷键</vh>
+<v t="swot.20260227082545.1"><vh>LazyVim 搜索快捷键</vh>
+<v t="swot.20260227083255.1"><vh>Telescope 搜索</vh></v>
+<v t="swot.20260227083342.1"><vh>解决“搜索列表消失”的痛点</vh></v>
+<v t="swot.20260227083614.1"><vh>全局替换神器：Spectre</vh></v>
+<v t="swot.20260227083629.1"><vh>与 Leo-Editor `cff` 的逻辑对比</vh></v>
+</v>
 <v t="swot.20260226110833.1"><vh>LazyVim 函数跳转</vh>
 <v t="swot.20260226110918.1"><vh>1. 使用 Treesitter 快捷键 (推荐)</vh></v>
 <v t="swot.20260226110950.1"><vh>2. 使用符号搜索 (Symbol Search)</vh></v>
@@ -1048,7 +1054,8 @@
 <v t="swot.20260226073510.1"><vh>waiting for leo-editor adoc 命令增加 @data 配置</vh></v>
 <v t="swot.20260226075849.1"><vh>waiting for writing myLeoSettings.leo usage .adoc</vh></v>
 <v t="swot.20260226085349.1"><vh>leo-editor support paste markdown content</vh></v>
-<v t="swot.20260226085753.1"><vh>adoc-live 命令应该开启一个守护</vh></v>
+<v t="swot.20260226085753.1"><vh>adoc-live 命令应该开启一个守护线程</vh></v>
+<v t="swot.20260226142220.1"><vh>生成键盘热力图</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -15981,7 +15988,8 @@ def start_server(port=8099):
 :note-caption: ❕
 :important-caption: ❗
 :warning-caption: ‼️
-caution-caption: ⚠️
+:caution-caption: ⚠️
+
 </t>
 <t tx="swot.20260226112148.1">在 LazyVim 中，代码报错和警告被称为 *Diagnostics*（诊断）。
 可以通过以下快捷键在文件内快速跳转或查看详细错误。
@@ -16083,6 +16091,76 @@ def open_browser():
     webbrowser.open("http://localhost:8099")
 
 threading.Thread(target=open_browser, daemon=True).start()
+
+</t>
+<t tx="swot.20260226142220.1"></t>
+<t tx="swot.20260227082545.1"></t>
+<t tx="swot.20260227083255.1">LazyVim 默认使用 *Telescope* 作为其搜索引擎的核心，提供强大的模糊搜索和实时检索功能。
+[cols="2,5", options="header"]
+|===
+| 快捷键 | 功能描述
+| `[space] [space]` | *Find Files*: 搜索当前项目中的文件名。
+| `[space] s g` | *Live Grep*: 在当前项目中搜索字符串内容（实时匹配）。
+| `[space] s w` | *Search Word*: 搜索光标下的单词。
+| `[space] s R` | *Resume*: 呼出上一次搜索的列表及光标位置（非常重要）。
+| `[space] s /` | *Search History*: 查看并搜索你的搜索历史记录。
+|===
+</t>
+<t tx="swot.20260227083342.1">在进行代码重构（如 `write_black_sentinels` 清理）时，频繁进入文件后丢失搜索结果是最常见的问题。
+
+[upperalpha]
+. 方案：使用 Resume 命令（推荐）
++
+这是最快的方法。当进入某个文件查看完代码，想要回到刚才的搜索结果列表时：
++
+[lowergreek]
+1. 按下 `[space] s R`。
+2. 之前的 Telescope 窗口会**原封不动**地弹出。
+3. 你可以继续选择下一个匹配项。
+
+
+
+. 方案：发送至 Quickfix 列表
++
+如果希望搜索列表像 Leo 的 `cff` 结果一样持久化在屏幕底部：
++
+[lowergreek]
+1. 在 Telescope 搜索结果窗口中，按下 `Ctrl + q`。
+2. 所有的结果会被发送到 Neovim 的 *Quickfix List* 中。
+3. 使用 `:copen` 命令打开列表窗口。
+4. 使用 `[q` 和 `]q` 在结果之间快速跳转，无需再次呼出窗口。
+// 这个方法我没有试，因为我把 `Ctrl + q` 绑定到微信上了
+</t>
+<t tx="swot.20260227083614.1">当需要像 IDE 一样在全项目范围内批量修改代码（例如将所有 `write_black_sentinels` 相关的逻辑重命名）时，Spectre 是最佳选择。
+
+* **触发快捷键**: `[space] s r`
+* **底层动力**: 由 `ripgrep` 提供搜索支持，速度极快。
+
+Spectre 内部操作流
+
+1. **输入搜索词**: 在第一行输入你要查找的内容。
+2. **输入替换词**: 在第二行输入你想要替换成的内容。
+3. **预览结果**: 界面下方会实时显示受影响的文件和具体的代码行对比。
+4. **执行替换**:
+    * 按下 `leader + R` (通常是 `\R` 或 `,R`): 替换**当前光标所在文件**中的所有匹配项。
+    * 按下 `leader + A` (通常是 `\A` 或 `,A`): 替换**全项目**中所有的匹配项。
+5. **确认**: 替换完成后，Spectre 会自动保存这些修改后的文件。
+
+[CAUTION]
+批量替换具有破坏性。在执行 `leader + A` 之前，务必确保你的 Git 工作区是干净的，以便随时回滚。
+
+
+为什么它显示 "ripgrep"? 这是因为：
+
+1. **ripgrep (rg)** 是目前世界上最快的文本搜索工具。
+2. **Spectre** 本身只是一个“壳”，它负责把 `ripgrep` 搜索出来的结果以可视化的方式呈现出来，并提供替换逻辑。 
+3. **Telescope (`&lt;space&gt;sg`)** 同样使用 `ripgrep`，但它更偏向于“跳转”；而 **Spectre (`&lt;space&gt;sr`)** 更偏向于“修改”。
+
+</t>
+<t tx="swot.20260227083629.1">对于习惯 Leo-Editor 的用户，理解这两种工具的差异有助于提升效率：
+
+* **Leo `cff`**: 直接在 *Outline* 中创建物理克隆节点。结果是持久的，修改克隆即修改原始代码。
+* **LazyVim Telescope**: 提供一个 *Virtual Overlay*（虚拟浮层）。列表通过 `[space] s R` 实现逻辑上的持久。
 
 </t>
 </tnodes>

@@ -459,11 +459,18 @@ body.toc2.toc-right {
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
+<h1>LazyVim 快捷键</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
-<ul class="sectlevel0">
-<li><a href="#_lazyvim_快捷键">LazyVim 快捷键</a>
 <ul class="sectlevel1">
+<li><a href="#_lazyvim_搜索快捷键">LazyVim 搜索快捷键</a>
+<ul class="sectlevel2">
+<li><a href="#_telescope_搜索">Telescope 搜索</a></li>
+<li><a href="#_解决搜索列表消失的痛点">解决“搜索列表消失”的痛点</a></li>
+<li><a href="#_全局替换神器spectre">全局替换神器：Spectre</a></li>
+<li><a href="#_与_leo_editor_cff_的逻辑对比">与 Leo-Editor <code>cff</code> 的逻辑对比</a></li>
+</ul>
+</li>
 <li><a href="#_lazyvim_函数跳转">LazyVim 函数跳转</a>
 <ul class="sectlevel2">
 <li><a href="#_1_使用_treesitter_快捷键_推荐">1. 使用 Treesitter 快捷键 (推荐)</a></li>
@@ -490,15 +497,11 @@ body.toc2.toc-right {
 </ul>
 </li>
 </ul>
-</li>
-</ul>
 </div>
 </div>
 <div id="content">
-<div class="paragraph">
-<p>caution-caption: ⚠️</p>
-</div>
-<h1 id="_lazyvim_快捷键" class="sect0">LazyVim 快捷键</h1>
+<div id="preamble">
+<div class="sectionbody">
 <button id="toggleButton">目录开关</button>
 <script>
     // 获取按钮和 div 元素
@@ -517,6 +520,196 @@ body.toc2.toc-right {
         }
     });
 </script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lazyvim_搜索快捷键">LazyVim 搜索快捷键</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_telescope_搜索">Telescope 搜索</h3>
+<div class="paragraph">
+<p>LazyVim 默认使用 <strong>Telescope</strong> 作为其搜索引擎的核心，提供强大的模糊搜索和实时检索功能。</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 28.5714%;">
+<col style="width: 71.4286%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">快捷键</th>
+<th class="tableblock halign-left valign-top">功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[space] [space]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Find Files</strong>: 搜索当前项目中的文件名。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[space] s g</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Live Grep</strong>: 在当前项目中搜索字符串内容（实时匹配）。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[space] s w</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Search Word</strong>: 搜索光标下的单词。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[space] s R</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Resume</strong>: 呼出上一次搜索的列表及光标位置（非常重要）。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[space] s /</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Search History</strong>: 查看并搜索你的搜索历史记录。</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_解决搜索列表消失的痛点">解决“搜索列表消失”的痛点</h3>
+<div class="paragraph">
+<p>在进行代码重构（如 <code>write_black_sentinels</code> 清理）时，频繁进入文件后丢失搜索结果是最常见的问题。</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>方案：使用 Resume 命令（推荐）</p>
+<div class="paragraph">
+<p>这是最快的方法。当进入某个文件查看完代码，想要回到刚才的搜索结果列表时：</p>
+</div>
+<div class="olist lowergreek">
+<ol class="lowergreek">
+<li>
+<p>按下 <code>[space] s R</code>。</p>
+</li>
+<li>
+<p>之前的 Telescope 窗口会<strong>原封不动</strong>地弹出。</p>
+</li>
+<li>
+<p>你可以继续选择下一个匹配项。</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>方案：发送至 Quickfix 列表</p>
+<div class="paragraph">
+<p>如果希望搜索列表像 Leo 的 <code>cff</code> 结果一样持久化在屏幕底部：</p>
+</div>
+<div class="olist lowergreek">
+<ol class="lowergreek">
+<li>
+<p>在 Telescope 搜索结果窗口中，按下 <code>Ctrl + q</code>。</p>
+</li>
+<li>
+<p>所有的结果会被发送到 Neovim 的 <strong>Quickfix List</strong> 中。</p>
+</li>
+<li>
+<p>使用 <code>:copen</code> 命令打开列表窗口。</p>
+</li>
+<li>
+<p>使用 <code>[q</code> 和 <code>]q</code> 在结果之间快速跳转，无需再次呼出窗口。</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_全局替换神器spectre">全局替换神器：Spectre</h3>
+<div class="paragraph">
+<p>当需要像 IDE 一样在全项目范围内批量修改代码（例如将所有 <code>write_black_sentinels</code> 相关的逻辑重命名）时，Spectre 是最佳选择。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>触发快捷键</strong>: <code>[space] s r</code></p>
+</li>
+<li>
+<p><strong>底层动力</strong>: 由 <code>ripgrep</code> 提供搜索支持，速度极快。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Spectre 内部操作流</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>输入搜索词</strong>: 在第一行输入你要查找的内容。</p>
+</li>
+<li>
+<p><strong>输入替换词</strong>: 在第二行输入你想要替换成的内容。</p>
+</li>
+<li>
+<p><strong>预览结果</strong>: 界面下方会实时显示受影响的文件和具体的代码行对比。</p>
+</li>
+<li>
+<p><strong>执行替换</strong>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>按下 <code>leader + R</code> (通常是 <code>\R</code> 或 <code>,R</code>): 替换<strong>当前光标所在文件</strong>中的所有匹配项。</p>
+</li>
+<li>
+<p>按下 <code>leader + A</code> (通常是 <code>\A</code> 或 <code>,A</code>): 替换<strong>全项目</strong>中所有的匹配项。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>确认</strong>: 替换完成后，Spectre 会自动保存这些修改后的文件。</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="⚠️"></i>
+</td>
+<td class="content">
+批量替换具有破坏性。在执行 <code>leader + A</code> 之前，务必确保你的 Git 工作区是干净的，以便随时回滚。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>为什么它显示 "ripgrep"? 这是因为：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>ripgrep (rg)</strong> 是目前世界上最快的文本搜索工具。</p>
+</li>
+<li>
+<p><strong>Spectre</strong> 本身只是一个“壳”，它负责把 <code>ripgrep</code> 搜索出来的结果以可视化的方式呈现出来，并提供替换逻辑。</p>
+</li>
+<li>
+<p><strong>Telescope (<code>&lt;space&gt;sg</code>)</strong> 同样使用 <code>ripgrep</code>，但它更偏向于“跳转”；而 <strong>Spectre (<code>&lt;space&gt;sr</code>)</strong> 更偏向于“修改”。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_与_leo_editor_cff_的逻辑对比">与 Leo-Editor <code>cff</code> 的逻辑对比</h3>
+<div class="paragraph">
+<p>对于习惯 Leo-Editor 的用户，理解这两种工具的差异有助于提升效率：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Leo <code>cff</code></strong>: 直接在 <strong>Outline</strong> 中创建物理克隆节点。结果是持久的，修改克隆即修改原始代码。</p>
+</li>
+<li>
+<p><strong>LazyVim Telescope</strong>: 提供一个 <strong>Virtual Overlay</strong>（虚拟浮层）。列表通过 <code>[space] s R</code> 实现逻辑上的持久。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_lazyvim_函数跳转">LazyVim 函数跳转</h2>
 <div class="sectionbody">
@@ -819,13 +1012,13 @@ body.toc2.toc-right {
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>代码操作/快速修复</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>&lt;leader&gt;ca</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Code Action</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">重构的“万金油”，LSP 提供的绝大多数重构建议（如提取、移动）都藏在这里面。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">局部当前行相关。重构的“万金油”，LSP 提供的绝大多数重构建议（如提取、移动）都藏在这里面。</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>源操作 (如优化导入)</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>&lt;leader&gt;cA</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Source Action</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">文件级别。通常是预定义的“批处理”任务。</p></td>
 </tr>
 </tbody>
 </table>
@@ -926,7 +1119,7 @@ body.toc2.toc-right {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-26 12:59:35 +0800
+Last updated 2026-02-27 08:52:54 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
