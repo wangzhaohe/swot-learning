@@ -1,3 +1,8 @@
+# @+leo-ver=5-thin
+# @+node:swot.20260228003431.1: * @file main.py
+# @@language python
+# @+<< import >>
+# @+node:swot.20260228003519.1: ** << import >>
 import os
 import base64
 import asyncio
@@ -10,41 +15,52 @@ from fastapi.responses import Response
 # 引入自定义的火山引擎服务模块
 from volc_service import submit_image_task, get_task_result
 
-app = FastAPI(title="火山引擎图像特效 - URL中转版")
+# @-<< import >>
 
-# ==================================================
 # 创建一个本地临时目录，用于临时托管前端上传的图片
-# ==================================================
 TEMP_IMG_DIR = "temp_uploads"
 os.makedirs(TEMP_IMG_DIR, exist_ok=True)
 
-# 核心步骤：将该目录挂载为服务，允许通过公网 URL 访问里面的文件
-app.mount("/static_images", StaticFiles(directory=TEMP_IMG_DIR), name="static_images")
+app = FastAPI(title="火山引擎图像特效 - URL中转版")
 
+# 核心步骤：将该目录挂载为服务，允许通过公网 URL 访问里面的文件
+app.mount(
+    "/static_images",
+    StaticFiles(directory=TEMP_IMG_DIR),
+    name="static_images"
+)
 
 @app.post("/generate/angel-figurine", summary="异步生成手办特效")
 async def generate_angel_figurine(request: Request, file: UploadFile = File(...)):
+    # @+others
+    # @+node:swot.20260228003942.1: ** generate_angel_figurine
+    # @@language python
     temp_filepath = ""
     try:
+        # @+<< 获取上传图片并生成URL >>
+        # @+node:swot.20260228005708.1: *3* << 获取上传图片并生成URL >>
         # 确保 filename 即使为 None 也能安全处理
         original_filename = file.filename or "image.jpg"
         file_ext = (
             original_filename.split(".")[-1] if "." in original_filename else "jpg"
         )
+
         # 为了防止文件名冲突，使用时间戳+随机数
         temp_filename = f"img_{int(time.time())}_{os.urandom(4).hex()}.{file_ext}"
         temp_filepath = os.path.join(TEMP_IMG_DIR, temp_filename)
 
-        # 1. 保存上传的文件到本地挂载的静态目录
+        # 保存上传的文件到本地挂载的静态目录
         with open(temp_filepath, "wb") as buffer:
             buffer.write(await file.read())
 
-        # 2. 构造火山引擎可访问的公网路径
+        # 构造火山引擎可访问的公网路径
         # NOTE: 本地开发必须配合 ngrok/localtunnel 等工具，确保 base_url 是公网地址
         image_url = f"{str(request.base_url)}static_images/{temp_filename}"
         print(f">>> 待处理图片 URL: {image_url}")
 
-        # 3. 提交任务到火山引擎
+        # @-<< 获取上传图片并生成URL >>
+        # @+<< 提交任务到火山引擎生成卡通图片 >>
+        # @+node:swot.20260228005743.1: *3* << 提交任务到火山引擎生成卡通图片 >>
         req_key = "i2i_multi_style_zx2x"
         submit_form = {
             "req_key": req_key,
@@ -67,10 +83,17 @@ async def generate_angel_figurine(request: Request, file: UploadFile = File(...)
 
         print(f">>> 任务提交成功，Task ID: {task_id}")
 
-        # 4. 轮询查询结果
+        # @-<< 提交任务到火山引擎生成卡通图片 >>
+        # @+<< 轮询任务从火山引擎保存卡通图片 forloop 次数 >>
+        # @+node:swot.20260228005837.1: *3* << 轮询任务从火山引擎保存卡通图片 forloop 次数 >>
+        # @@language python
         max_retries = 20  # 增加轮询次数到 20 次，与测试用例看齐
+
         for attempt in range(max_retries):
-            # 使用 asyncio.sleep 避免阻塞 FastAPI 的主事件循环
+            # @+others
+            # @+node:swot.20260228011127.1: *4* 获取卡通图片
+            # 使用 asyncio.sleep 避免阻塞 FastAPI 的主事件循环。
+            # 因为火山引擎不能马上返回新生成的卡通图片，让 fastapi 去干别的事吧
             await asyncio.sleep(2)
             print(f">>> 正在查询结果 (第 {attempt + 1} 次)...")
 
@@ -83,6 +106,8 @@ async def generate_angel_figurine(request: Request, file: UploadFile = File(...)
             data = result_resp.get("data", {})
             task_status = data.get("status")
 
+            # @+others
+            # @+node:swot.20260228011403.1: *5* 判断任务状态
             if task_status and task_status.lower() == "done":
                 print(">>> 任务完成，正在返回图片！")
                 images = data.get("binary_data_base64", [])
@@ -103,12 +128,17 @@ async def generate_angel_figurine(request: Request, file: UploadFile = File(...)
                 raise HTTPException(
                     status_code=400, detail="图片生成失败，服务端状态为 FAILED"
                 )
+            # @-others
+
+            # @-others
 
         # 超时处理
         if os.path.exists(temp_filepath):
             os.remove(temp_filepath)
         raise HTTPException(status_code=504, detail="处理超时，请稍后再试")
 
+        # @-<< 轮询任务从火山引擎保存卡通图片 forloop 次数 >>
+        
     except HTTPException:
         # 兜底清理：调试期间，发生 HTTP 异常时不删除图片，方便排查
         # if temp_filepath and os.path.exists(temp_filepath):
@@ -125,8 +155,11 @@ async def generate_angel_figurine(request: Request, file: UploadFile = File(...)
         error_detail = e.decode("utf-8") if isinstance(e, bytes) else str(e)
         raise HTTPException(status_code=500, detail=f"服务器内部错误: {error_detail}")
 
+    # @-others
 
 if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+# @-leo

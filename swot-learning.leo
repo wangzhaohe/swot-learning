@@ -31,7 +31,44 @@
 <v t="swot.20260215190317.1"><vh>@adoc 2026-02-15_调用_api_把人像照片生成卡通像方案研究.adoc</vh>
 <v t="swot.20260215190821.1"><vh>2026-02-15_调用_api_把人像照片生成卡通像方案研究</vh>
 <v t="swot.20260215194832.1"><vh>大厂API收集</vh></v>
+<v t="swot.20260227100449.1"><vh>2026-02-27 火山引擎图像特效测试</vh>
+<v t="swot.20260227101112.1"><vh>1. 测试需求</vh></v>
+<v t="swot.20260227101453.1"><vh>2. 测试步骤</vh>
+<v t="swot.20260227115412.1"><vh>2.1 环境搭建</vh>
+<v t="swot.20260227112248.1"><vh>content</vh></v>
 </v>
+<v t="swot.20260227115427.1"><vh>2.2 单文件测试 + 封装服务</vh>
+<v t="swot.20260227135918.1"><vh>&lt;&lt; 初始化密钥 &gt;&gt;</vh></v>
+<v t="swot.20260227145753.1"><vh>&lt;&lt; def submit_image_task &gt;&gt;</vh></v>
+<v t="swot.20260227145817.1"><vh>&lt;&lt; def get_task_result &gt;&gt;</vh></v>
+<v t="swot.20260227145834.1"><vh>&lt;&lt; def main &gt;&gt;</vh>
+<v t="swot.20260227152125.1"><vh>提交任务</vh></v>
+<v t="swot.20260227152244.1"><vh>循环获取生成卡通图片</vh></v>
+</v>
+</v>
+<v t="swot.20260227120621.1"><vh>2.3 服务测试 fastapi</vh>
+<v t="swot.20260228005708.1"><vh>&lt;&lt; 获取上传图片并生成URL &gt;&gt;</vh></v>
+<v t="swot.20260228005743.1"><vh>&lt;&lt; 提交任务到火山引擎生成卡通图片 &gt;&gt;</vh></v>
+<v t="swot.20260228005837.1"><vh>&lt;&lt; 轮询任务从火山引擎保存卡通图片 forloop 次数 &gt;&gt;</vh>
+<v t="swot.20260228011127.1"><vh>获取卡通图片</vh>
+<v t="swot.20260228011403.1"><vh>判断任务状态</vh></v>
+</v>
+</v>
+</v>
+</v>
+<v t="swot.20260227101853.1"><vh>3. 测试总结</vh>
+<v t="swot.20260228010448.1"><vh>测试方式一: 使用 volc_service.py 上传图片</vh></v>
+<v t="swot.20260228010459.1"><vh>测试方式二: 使用 fastapi 上传图片</vh></v>
+</v>
+</v>
+</v>
+</v>
+<v t="swot.20260227105826.1"><vh>@path test_img2carton_from_huoshan_engine</vh>
+<v t="swot.20260227105912.1"><vh>@clean requirements.txt</vh>
+<v t="swot.20260227112248.1"></v>
+</v>
+<v t="swot.20260227133640.1"><vh>@file volc_service.py</vh></v>
+<v t="swot.20260228003431.1"><vh>@file main.py</vh></v>
 </v>
 </v>
 <v t="swot.20250508124711.1" descendentVnodeUnknownAttributes="7d710028580b000000302e302e302e322e302e3271017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d323271077573580b000000302e302e302e322e302e3371087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30322d3232710e75735809000000302e302e302e322e34710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30312d3330711575735807000000302e302e302e3371167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30322d3032711c7573752e"><vh>@path asciidoctor</vh>
@@ -888,7 +925,7 @@
 </v>
 </v>
 </v>
-<v t="swot.20260220145006.1"><vh>@path tools</vh>
+<v t="swot.20260220145006.1" descendentVnodeUnknownAttributes="7d71005803000000302e3171017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b15580a000000707269736574646174657106580a000000323032362d30322d3237710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58240000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f78626c6b2e706e67710d580700000072656c50617468710e580d000000636c656f2f78626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>@path tools</vh>
 <v t="swot.20260220171008.1"><vh>@path key_mouse</vh>
 <v t="swot.20260220165251.1"><vh>@adoc 键皇战况统计系统开发设计.adoc</vh>
 <v t="swot.20260220170018.1"><vh>键皇战况统计系统开发设计</vh>
@@ -935,6 +972,8 @@
 <v t="swot.20260220153302.1"><vh>@file index.html</vh></v>
 </v>
 </v>
+<v t="swot.20260227210346.1" descendentVnodeUnknownAttributes="7d710058010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b15580a000000707269736574646174657106580a000000323032362d30322d3237710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58240000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f78626c6b2e706e67710d580700000072656c50617468710e580d000000636c656f2f78626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>内网穿透工具 localtunnel -- 不好用</vh></v>
+<v t="swot.20260228002347.1"><vh>解决 clash verge 规则不让 Cloudflare Tunnel 出去的问题</vh></v>
 </v>
 <v t="swot.20251026093202.1"><vh>@path wubi86</vh>
 <v t="swot.20251026094157.1"><vh>@adoc wubi86.adoc</vh>
@@ -13783,7 +13822,7 @@ pause
 *   **说明**：这是腾讯云人脸特效产品的API文档直链，提供了“人像动漫化”动作的接口说明，支持生成多种风格的卡通图片。
 
 
-4. 火山引擎 - 智能创作服务
+4. 火山引擎 - 智能创作服务: #已经测试，目前不符合需求#
 *   **直达入口**： https://www.volcengine.com/docs/86081/1660198?lang=zh
 *   **说明**：火山引擎将此类功能归类在“智能创作”或“视频特效”中，该文档页面包含了人像风格化的处理能力。
 
@@ -16162,6 +16201,325 @@ Spectre 内部操作流
 * **Leo `cff`**: 直接在 *Outline* 中创建物理克隆节点。结果是持久的，修改克隆即修改原始代码。
 * **LazyVim Telescope**: 提供一个 *Virtual Overlay*（虚拟浮层）。列表通过 `[space] s R` 实现逻辑上的持久。
 
+</t>
+<t tx="swot.20260227100449.1">@language asciidoc
+图像特效：
+https://www.volcengine.com/docs/86081/1804566?lang=zh
+
+python sdk:
+https://www.volcengine.com/docs/6444/1340578?lang=zh#0f05efc9
+
+
+</t>
+<t tx="swot.20260227101112.1">@language asciidoc
+1. 上传一张人像照片，可以生成卡通图片（目的是为了后续将卡通图片转换成 3D 模型供打印机使用）。
+
+2. 生成的图片要有 4 个面，即正面、后面、左侧、右侧（方便生成更精细的 3D 模型）。
+
+</t>
+<t tx="swot.20260227101453.1"></t>
+<t tx="swot.20260227101853.1">@language asciidoc
+从火山引擎提供的图像特效模板来看，都是有场景的效果，目前不符合需求。
+
+IMPORTANT: 但是有一个可能的应用，即生成的特定场景的图片，如 acrylic_ornaments：亚克力挂饰、angel_figurine：天使形象手办、furry_dream_doll：毛茸茸梦幻娃娃 等等可能成为新的应用方式。再考虑……
+
+</t>
+<t tx="swot.20260227105826.1"></t>
+<t tx="swot.20260227105912.1" _mod_time="4741da67fdf47df8a92e">@language text
+@others
+</t>
+<t tx="swot.20260227112248.1">fastapi
+uvicorn
+python-multipart
+python-dotenv
+volcengine
+</t>
+<t tx="swot.20260227115412.1">@language asciidoc
+使用火山引擎提供的 python SDK (github starts 最多，应该比较完善)
+
+.requirements.txt
+....
+@others
+....
+
+.run commands
+[source,console]
+----
+source your env
+pip install -r requirements.txt
+----
+
+.测试密钥：使用了 sam 提供的 AK/SK，保存于 `.env` 文件中，未上传到仓库
+[source,python]
+----
+VOLC_AK=你的AK号
+VOLC_SK=你的密钥
+----
+
+</t>
+<t tx="swot.20260227115427.1">@language asciidoc
+生成 python 本地运行的测试文件，提供一张网络照片，查看生成效果。
+
+- #火山引擎支持网络照片 url 提供素材#
+- 火山引擎不支持本地图片上传
+- 火山引擎不支持 base64 照片上传
+ 
+NOTE: 同时该文件可以作为模块被 main.py 调用。
+
+.初始化密钥
+[source,console]
+----
+&lt;&lt; 初始化密钥 &gt;&gt;
+----
+
+.定义提交图片函数
+[source,python]
+----
+&lt;&lt; def submit_image_task &gt;&gt;
+----
+
+.定义获取卡通图片函数
+[source,python]
+----
+&lt;&lt; def get_task_result &gt;&gt;
+----
+
+.定义主函数，用于本地独立测试
+[source,python]
+----
+&lt;&lt; def main &gt;&gt;
+----
+</t>
+<t tx="swot.20260227120621.1">@language asciidoc
+使用 python fastapi 框架生成 web 后端服务
+
+.获取上传图片并生成URL
+[source,python]
+----
+&lt;&lt; 获取上传图片并生成URL &gt;&gt;
+----
+
+.提交任务到火山引擎生成卡通图片
+[source,python]
+----
+&lt;&lt; 提交任务到火山引擎生成卡通图片 &gt;&gt;
+----
+
+.轮询任务从火山引擎保存卡通图片 forloop 次数
+[source,python]
+----
+&lt;&lt; 轮询任务从火山引擎保存卡通图片 forloop 次数 &gt;&gt;
+----
+
+</t>
+<t tx="swot.20260227135918.1">@language python
+load_dotenv()
+
+# 全局初始化，避免被 main.py 调用时每次发起请求都重新建立实例
+visual_service = VisualService()
+visual_service.set_ak(os.getenv("VOLC_AK"))
+visual_service.set_sk(os.getenv("VOLC_SK"))
+
+
+</t>
+<t tx="swot.20260227145753.1">@language python
+def submit_image_task(submit_form: dict) -&gt; dict:
+    """提交异步图像任务"""
+    return visual_service.cv_sync2async_submit_task(submit_form)
+
+
+</t>
+<t tx="swot.20260227145817.1">@language python
+def get_task_result(req_key: str, task_id: str) -&gt; dict:
+    """获取异步任务结果"""
+    get_form = {"req_key": req_key, "task_id": task_id}
+    return visual_service.cv_sync2async_get_result(get_form)
+
+
+</t>
+<t tx="swot.20260227145834.1">@language python
+def main():
+    @others
+
+
+</t>
+<t tx="swot.20260227152125.1">@language python
+print("&gt;&gt;&gt; 1. 准备调用 CVSync2AsyncSubmitTask 提交任务...")
+
+test_image_url = (
+    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&amp;q=80"
+)
+req_key = "i2i_multi_style_zx2x"
+
+submit_form = {
+    "req_key": req_key,
+    # "template_id": "acrylic_ornaments",
+    "template_id": "furry_dream_doll",
+    "image_input1": test_image_url,
+}
+
+submit_resp = submit_image_task(submit_form)
+print(f"提交响应: {submit_resp}")
+
+if submit_resp.get("code") != 10000:
+    print("提交任务失败，请检查上面打印的错误信息。")
+    return
+
+task_id = submit_resp.get("data", {}).get("task_id")
+print(f"提交成功！拿到 Task ID: {task_id}")
+
+</t>
+<t tx="swot.20260227152244.1">@language python
+for i in range(30):
+    time.sleep(2)
+    print(f"&gt;&gt;&gt; 2. 第 {i + 1} 次查询结果...")
+    result_resp = get_task_result(req_key, task_id)
+
+    # 注意这里获取的是 'status' 字段
+    status = result_resp.get("data", {}).get("status")
+
+    # 兼容大小写
+    if status and status.lower() == "done":
+        images = result_resp.get("data", {}).get("binary_data_base64", [])
+        if images:
+            with open("img/result_angel_5.jpg", "wb") as f:
+                f.write(base64.b64decode(images[0]))
+            print("任务完成！图片已保存为 result_angel.jpg")
+        return
+    elif status in ["FAILED", "FAIL"]:
+        print(f"任务生成失败！服务端返回: {result_resp}")
+        return
+
+print("超时未完成")
+
+</t>
+<t tx="swot.20260227210346.1" annotate="7d71002858080000007072696f7269747971014b15580a000000707269736574646174657102580a000000323032362d30322d32377103752e" icons="5d71007d7101285804000000747970657102580400000066696c657103680358240000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f78626c6b2e706e677104580700000072656c506174687105580d000000636c656f2f78626c6b2e706e677106580500000077686572657107580e0000006265666f7265486561646c696e6571085807000000796f666673657471094b005807000000786f6666736574710a4b02580400000078706164710b4b0158020000006f6e710c5805000000766e6f6465710d5808000000636c656f49636f6e710e580100000031710f75612e">[source,console]
+----
+pnpm install -g localtunnel
+lt --port 8000  # macos 上被 alias 成 ll -tr 了，用不了
+npx localtunnel --port 8000
+----
+
+.输出
+....
+your url is: https://abc123.loca.lt
+....
+
+</t>
+<t tx="swot.20260228002347.1">实际上 github push 也有这样的问题
+</t>
+<t tx="swot.20260228005708.1"># 确保 filename 即使为 None 也能安全处理
+original_filename = file.filename or "image.jpg"
+file_ext = (
+    original_filename.split(".")[-1] if "." in original_filename else "jpg"
+)
+
+# 为了防止文件名冲突，使用时间戳+随机数
+temp_filename = f"img_{int(time.time())}_{os.urandom(4).hex()}.{file_ext}"
+temp_filepath = os.path.join(TEMP_IMG_DIR, temp_filename)
+
+# 保存上传的文件到本地挂载的静态目录
+with open(temp_filepath, "wb") as buffer:
+    buffer.write(await file.read())
+
+# 构造火山引擎可访问的公网路径
+# NOTE: 本地开发必须配合 ngrok/localtunnel 等工具，确保 base_url 是公网地址
+image_url = f"{str(request.base_url)}static_images/{temp_filename}"
+print(f"&gt;&gt;&gt; 待处理图片 URL: {image_url}")
+
+</t>
+<t tx="swot.20260228005743.1">req_key = "i2i_multi_style_zx2x"
+submit_form = {
+    "req_key": req_key,
+    # "template_id": "felt_keychain",
+    "template_id": "furry_dream_doll",
+    "image_input1": image_url,
+}
+
+print("&gt;&gt;&gt; 正在提交任务...")
+
+# 使用 asyncio.to_thread 防止同步函数阻塞事件循环
+submit_resp = await asyncio.to_thread(submit_image_task, submit_form)
+
+if submit_resp.get("code") != 10000:
+    raise HTTPException(status_code=400, detail=f"提交任务失败: {submit_resp}")
+
+task_id = submit_resp.get("data", {}).get("task_id")
+if not task_id:
+    raise HTTPException(status_code=500, detail="未能获取到 task_id")
+
+print(f"&gt;&gt;&gt; 任务提交成功，Task ID: {task_id}")
+
+</t>
+<t tx="swot.20260228005837.1">@language python
+max_retries = 20  # 增加轮询次数到 20 次，与测试用例看齐
+
+for attempt in range(max_retries):
+    @others
+
+# 超时处理
+if os.path.exists(temp_filepath):
+    os.remove(temp_filepath)
+raise HTTPException(status_code=504, detail="处理超时，请稍后再试")
+
+</t>
+<t tx="swot.20260228010448.1">
+原始图片来源，gemini 提供的一张网上图片
+https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&amp;q=80
+
+image:https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&amp;q=80[testimg,360,]
+image:test_img2carton_from_huoshan_engine/img/result_angel_5.jpg[test5,360,]
+image:test_img2carton_from_huoshan_engine/img/result_angel_1.jpg[test1,360,]
+
+下面是生成的图像展示：
+
+image:test_img2carton_from_huoshan_engine/img/result_angel_2.jpg[test2,360,]
+image:test_img2carton_from_huoshan_engine/img/result_angel_3.jpg[test3,360,]
+image:test_img2carton_from_huoshan_engine/img/result_angel_4.jpg[test4,360,]
+
+</t>
+<t tx="swot.20260228010459.1">
+image:test_img2carton_from_huoshan_engine/waiting_upload_img/weixin_20260226152047_1536_979.png[testimg,360,]
+image:test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的图片2.jpeg[test5,360,]
+image:test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的图片.jpeg[test5,360,]
+</t>
+<t tx="swot.20260228011127.1"># 使用 asyncio.sleep 避免阻塞 FastAPI 的主事件循环。
+# 因为火山引擎不能马上返回新生成的卡通图片，让 fastapi 去干别的事吧
+await asyncio.sleep(2)
+print(f"&gt;&gt;&gt; 正在查询结果 (第 {attempt + 1} 次)...")
+
+# 查询接口也是同步的，同样丢进线程池
+result_resp = await asyncio.to_thread(get_task_result, req_key, task_id)
+
+if result_resp.get("code") != 10000:
+    raise HTTPException(status_code=400, detail=f"查询报错: {result_resp}")
+
+data = result_resp.get("data", {})
+task_status = data.get("status")
+
+@others
+
+</t>
+<t tx="swot.20260228011403.1">if task_status and task_status.lower() == "done":
+    print("&gt;&gt;&gt; 任务完成，正在返回图片！")
+    images = data.get("binary_data_base64", [])
+
+    # 任务成功，清理本地临时图片
+    if os.path.exists(temp_filepath):
+        os.remove(temp_filepath)
+
+    if images:
+        result_bytes = base64.b64decode(images[0])
+        return Response(content=result_bytes, media_type="image/jpeg")
+    else:
+        raise HTTPException(
+            status_code=500, detail="任务完成但没有返回图片数据"
+        )
+
+elif task_status in ["FAILED", "FAIL"]:
+    raise HTTPException(
+        status_code=400, detail="图片生成失败，服务端状态为 FAILED"
+    )
 </t>
 </tnodes>
 </leo_file>
