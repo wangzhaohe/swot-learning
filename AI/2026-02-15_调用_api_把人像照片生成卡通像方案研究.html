@@ -542,14 +542,18 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_2_测试步骤">2. 测试步骤</a>
 <ul class="sectlevel3">
 <li><a href="#_2_1_环境搭建">2.1 环境搭建</a></li>
-<li><a href="#_2_2_单文件测试_封装服务">2.2 单文件测试 + 封装服务</a></li>
-<li><a href="#_2_3_服务测试_fastapi">2.3 服务测试 fastapi</a></li>
+<li><a href="#_2_2_单文件开发并测试_封装模块">2.2 单文件开发并测试 + 封装模块</a></li>
+<li><a href="#_2_3_fastapi_web服务开发">2.3 fastapi Web服务开发</a></li>
 </ul>
 </li>
 <li><a href="#_3_测试总结">3. 测试总结</a>
 <ul class="sectlevel3">
 <li><a href="#_测试方式一_使用_volc_service_py_上传图片">测试方式一: 使用 volc_service.py 上传图片</a></li>
-<li><a href="#_测试方式二_使用_fastapi_上传图片">测试方式二: 使用 fastapi 上传图片</a></li>
+<li><a href="#_测试方式二_使用_fastapi_上传图片cloudflared_内网穿透技术">测试方式二: 使用 fastapi 上传图片（cloudflared 内网穿透技术）</a>
+<ul class="sectlevel4">
+<li><a href="#_网页上传图片测试案例">网页上传图片测试案例</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -668,6 +672,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li>
 <p>生成的图片要有 4 个面，即正面、后面、左侧、右侧（方便生成更精细的 3D 模型）。</p>
 </li>
+<li>
+<p>生成的卡通图片不要背景。</p>
+</li>
 </ol>
 </div>
 </div>
@@ -704,7 +711,7 @@ volcengine</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_2_2_单文件测试_封装服务">2.2 单文件测试 + 封装服务</h4>
+<h4 id="_2_2_单文件开发并测试_封装模块">2.2 单文件开发并测试 + 封装模块</h4>
 <div class="paragraph">
 <p>生成 python 本地运行的测试文件，提供一张网络照片，查看生成效果。</p>
 </div>
@@ -814,7 +821,7 @@ volcengine</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_2_3_服务测试_fastapi">2.3 服务测试 fastapi</h4>
+<h4 id="_2_3_fastapi_web服务开发">2.3 fastapi Web服务开发</h4>
 <div class="paragraph">
 <p>使用 python fastapi 框架生成 web 后端服务</p>
 </div>
@@ -838,7 +845,7 @@ volcengine</pre>
 <span class="tok-c1"># 构造火山引擎可访问的公网路径</span>
 <span class="tok-c1"># NOTE: 本地开发必须配合 ngrok/localtunnel 等工具，确保 base_url 是公网地址</span>
 <span class="tok-n">image_url</span> <span class="tok-o">=</span> <span class="tok-sa">f</span><span class="tok-s2">&quot;</span><span class="tok-si">{</span><span class="tok-nb">str</span><span class="tok-p">(</span><span class="tok-n">request</span><span class="tok-o">.</span><span class="tok-n">base_url</span><span class="tok-p">)</span><span class="tok-si">}</span><span class="tok-s2">static_images/</span><span class="tok-si">{</span><span class="tok-n">temp_filename</span><span class="tok-si">}</span><span class="tok-s2">&quot;</span>
-<span class="tok-nb">print</span><span class="tok-p">(</span><span class="tok-sa">f</span><span class="tok-s2">&quot;&gt;&gt;&gt; 待处理图片 URL: </span><span class="tok-si">{</span><span class="tok-n">image_url</span><span class="tok-si">}</span><span class="tok-s2">&quot;</span><span class="tok-p">)</span></code></pre>
+<span class="tok-nb">print</span><span class="tok-p">(</span><span class="tok-sa">f</span><span class="tok-s2">&quot;&gt;&gt;&gt; 提交给火山的 URL: </span><span class="tok-si">{</span><span class="tok-n">image_url</span><span class="tok-si">}</span><span class="tok-s2">&quot;</span><span class="tok-p">)</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -875,7 +882,7 @@ volcengine</pre>
 <span class="tok-k">for</span> <span class="tok-n">attempt</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">max_retries</span><span class="tok-p">):</span>
     <span class="tok-c1"># 使用 asyncio.sleep 避免阻塞 FastAPI 的主事件循环。</span>
     <span class="tok-c1"># 因为火山引擎不能马上返回新生成的卡通图片，让 fastapi 去干别的事吧</span>
-    <span class="tok-k">await</span> <span class="tok-n">asyncio</span><span class="tok-o">.</span><span class="tok-n">sleep</span><span class="tok-p">(</span><span class="tok-mi">2</span><span class="tok-p">)</span>
+    <span class="tok-k">await</span> <span class="tok-n">asyncio</span><span class="tok-o">.</span><span class="tok-n">sleep</span><span class="tok-p">(</span><span class="tok-mi">2</span><span class="tok-p">)</span>  <span class="tok-c1"># Very IMPORTANT!!!</span>
     <span class="tok-nb">print</span><span class="tok-p">(</span><span class="tok-sa">f</span><span class="tok-s2">&quot;&gt;&gt;&gt; 正在查询结果 (第 </span><span class="tok-si">{</span><span class="tok-n">attempt</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-si">}</span><span class="tok-s2"> 次)...&quot;</span><span class="tok-p">)</span>
 
     <span class="tok-c1"># 查询接口也是同步的，同样丢进线程池</span>
@@ -955,9 +962,50 @@ volcengine</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_测试方式二_使用_fastapi_上传图片">测试方式二: 使用 fastapi 上传图片</h4>
+<h4 id="_测试方式二_使用_fastapi_上传图片cloudflared_内网穿透技术">测试方式二: 使用 fastapi 上传图片（cloudflared 内网穿透技术）</h4>
 <div class="paragraph">
-<p><span class="image"><img src="test_img2carton_from_huoshan_engine/waiting_upload_img/weixin_20260226152047_1536_979.png" alt="testimg" width="360"></span>
+<p>Swagger 方式测试 Web api 页面: <a href="http://127.0.0.1:8000/docs" class="bare">http://127.0.0.1:8000/docs</a></p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="‼️"></i>
+</td>
+<td class="content">
+本地 ip 无法提供外网图片 url 给火山引擎，因为火山引擎要外网图片 url 才行。
+参考下面使用 cloudflared 的方法。
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">安装并使用 cloudflared</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">brew install cloudflared</span>
+<span class="tok-go">cloudflared tunnel --url http://localhost:8000</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>找到终端输出中类似 <a href="https://your-random-name.trycloudflare.com" class="bare">https://your-random-name.trycloudflare.com</a> 的地址。
+再拼接上 /docs 即可。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+开发调试用 ngrok 很爽！你可以试一试……
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_网页上传图片测试案例">网页上传图片测试案例</h5>
+<div class="paragraph">
+<p><span class="image"><img src="test_img2carton_from_huoshan_engine/waiting_upload_img/boyA.png" alt="testimg" width="360"></span>
 <span class="image"><img src="test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的图片2.jpeg" alt="test5" width="360"></span>
 <span class="image"><img src="test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的图片.jpeg" alt="test5" width="360"></span></p>
 </div>
@@ -966,9 +1014,10 @@ volcengine</pre>
 </div>
 </div>
 </div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-28 01:24:14 +0800
+Last updated 2026-02-28 10:12:46 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

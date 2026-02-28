@@ -39,6 +39,7 @@ async def generate_angel_figurine(request: Request, file: UploadFile = File(...)
     try:
         # @+<< 获取上传图片并生成URL >>
         # @+node:swot.20260228005708.1: *3* << 获取上传图片并生成URL >>
+        # @@language python
         # 确保 filename 即使为 None 也能安全处理
         original_filename = file.filename or "image.jpg"
         file_ext = (
@@ -56,11 +57,11 @@ async def generate_angel_figurine(request: Request, file: UploadFile = File(...)
         # 构造火山引擎可访问的公网路径
         # NOTE: 本地开发必须配合 ngrok/localtunnel 等工具，确保 base_url 是公网地址
         image_url = f"{str(request.base_url)}static_images/{temp_filename}"
-        print(f">>> 待处理图片 URL: {image_url}")
-
+        print(f">>> 提交给火山的 URL: {image_url}")
         # @-<< 获取上传图片并生成URL >>
         # @+<< 提交任务到火山引擎生成卡通图片 >>
         # @+node:swot.20260228005743.1: *3* << 提交任务到火山引擎生成卡通图片 >>
+        # @@language python
         req_key = "i2i_multi_style_zx2x"
         submit_form = {
             "req_key": req_key,
@@ -91,10 +92,10 @@ async def generate_angel_figurine(request: Request, file: UploadFile = File(...)
 
         for attempt in range(max_retries):
             # @+others
-            # @+node:swot.20260228011127.1: *4* 获取卡通图片
+            # @+node:swot.20260228011127.1: *4* 从火山引擎获取卡通图片
             # 使用 asyncio.sleep 避免阻塞 FastAPI 的主事件循环。
             # 因为火山引擎不能马上返回新生成的卡通图片，让 fastapi 去干别的事吧
-            await asyncio.sleep(2)
+            await asyncio.sleep(2)  # Very IMPORTANT!!!
             print(f">>> 正在查询结果 (第 {attempt + 1} 次)...")
 
             # 查询接口也是同步的，同样丢进线程池
@@ -107,7 +108,7 @@ async def generate_angel_figurine(request: Request, file: UploadFile = File(...)
             task_status = data.get("status")
 
             # @+others
-            # @+node:swot.20260228011403.1: *5* 判断任务状态
+            # @+node:swot.20260228011403.1: *5* 判断任务状态 task_status
             if task_status and task_status.lower() == "done":
                 print(">>> 任务完成，正在返回图片！")
                 images = data.get("binary_data_base64", [])

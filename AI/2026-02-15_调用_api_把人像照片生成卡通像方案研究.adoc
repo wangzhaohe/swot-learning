@@ -5,7 +5,7 @@
 :toc:
 :toc: right
 :toc-title: 目录
-:toclevels: 3
+:toclevels: 4
 :tip-caption: ⚡
 :note-caption: ❕
 :important-caption: ❗
@@ -71,6 +71,8 @@ https://www.volcengine.com/docs/6444/1340578?lang=zh#0f05efc9
 
 2. 生成的图片要有 4 个面，即正面、后面、左侧、右侧（方便生成更精细的 3D 模型）。
 
+3. 生成的卡通图片不要背景。
+
 === 2. 测试步骤
 
 
@@ -100,7 +102,7 @@ VOLC_AK=你的AK号
 VOLC_SK=你的密钥
 ----
 
-==== 2.2 单文件测试 + 封装服务
+==== 2.2 单文件开发并测试 + 封装模块
 生成 python 本地运行的测试文件，提供一张网络照片，查看生成效果。
 
 - #火山引擎支持网络照片 url 提供素材#
@@ -197,7 +199,7 @@ def main():
 
 ----
 
-==== 2.3 服务测试 fastapi
+==== 2.3 fastapi Web服务开发
 使用 python fastapi 框架生成 web 后端服务
 
 .获取上传图片并生成URL
@@ -220,8 +222,7 @@ with open(temp_filepath, "wb") as buffer:
 # 构造火山引擎可访问的公网路径
 # NOTE: 本地开发必须配合 ngrok/localtunnel 等工具，确保 base_url 是公网地址
 image_url = f"{str(request.base_url)}static_images/{temp_filename}"
-print(f">>> 待处理图片 URL: {image_url}")
-
+print(f">>> 提交给火山的 URL: {image_url}")
 ----
 
 .提交任务到火山引擎生成卡通图片
@@ -259,7 +260,7 @@ max_retries = 20  # 增加轮询次数到 20 次，与测试用例看齐
 for attempt in range(max_retries):
     # 使用 asyncio.sleep 避免阻塞 FastAPI 的主事件循环。
     # 因为火山引擎不能马上返回新生成的卡通图片，让 fastapi 去干别的事吧
-    await asyncio.sleep(2)
+    await asyncio.sleep(2)  # Very IMPORTANT!!!
     print(f">>> 正在查询结果 (第 {attempt + 1} 次)...")
 
     # 查询接口也是同步的，同样丢进线程池
@@ -306,7 +307,6 @@ raise HTTPException(status_code=504, detail="处理超时，请稍后再试")
 IMPORTANT: 但是有一个可能的应用，即生成的特定场景的图片，如 acrylic_ornaments：亚克力挂饰、angel_figurine：天使形象手办、furry_dream_doll：毛茸茸梦幻娃娃 等等可能成为新的应用方式。再考虑……
 
 ==== 测试方式一: 使用 volc_service.py 上传图片
-
 原始图片来源，gemini 提供的一张网上图片
 https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80
 
@@ -320,9 +320,27 @@ image:test_img2carton_from_huoshan_engine/img/result_angel_2.jpg[test2,360,]
 image:test_img2carton_from_huoshan_engine/img/result_angel_3.jpg[test3,360,]
 image:test_img2carton_from_huoshan_engine/img/result_angel_4.jpg[test4,360,]
 
-==== 测试方式二: 使用 fastapi 上传图片
+==== 测试方式二: 使用 fastapi 上传图片（cloudflared 内网穿透技术）
+Swagger 方式测试 Web api 页面: http://127.0.0.1:8000/docs
 
-image:test_img2carton_from_huoshan_engine/waiting_upload_img/weixin_20260226152047_1536_979.png[testimg,360,]
+WARNING: 本地 ip 无法提供外网图片 url 给火山引擎，因为火山引擎要外网图片 url 才行。
+参考下面使用 cloudflared 的方法。
+
+.安装并使用 cloudflared
+[source,console]
+----
+brew install cloudflared
+cloudflared tunnel --url http://localhost:8000
+----
+
+找到终端输出中类似 https://your-random-name.trycloudflare.com 的地址。
+再拼接上 /docs 即可。
+
+
+TIP: 开发调试用 ngrok 很爽！你可以试一试……
+
+===== 网页上传图片测试案例
+image:test_img2carton_from_huoshan_engine/waiting_upload_img/boyA.png[testimg,360,]
 image:test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的图片2.jpeg[test5,360,]
 image:test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的图片.jpeg[test5,360,]
 
