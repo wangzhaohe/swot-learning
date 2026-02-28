@@ -116,7 +116,7 @@
 <v t="swot.20250712224747.1"><vh>@command count-all-nodes</vh></v>
 <v t="swot.20220809083113.1"><vh>@command create-nodes-from-body</vh></v>
 <v t="swot.20181207204040.2"><vh>@command fquick-selected @key=Shift-Ctrl-F</vh></v>
-<v t="swot.20260227090439.1"><vh>@command focus-to-nav @key=Shift-Ctrl-N</vh></v>
+<v t="swot.20260227090439.1"><vh>@command focus-to-nav @key=Alt-N</vh></v>
 <v t="swot.20211114155413.1"><vh>@command tfs</vh></v>
 <v t="swot.20250918220343.1"><vh>@command tf</vh></v>
 </v>
@@ -427,7 +427,8 @@ goto-next-history-node = Ctrl-]
 goto-line = Ctrl-g
 goto-first-sibling = Alt-Home
 goto-last-sibling = Alt-End
-
+goto-first-node = Ctrl-Alt-Home
+goto-last-node = Ctrl-Alt-End
 expand-all-subheads = Ctrl-Shift-E
 contract-all-subheads = Ctrl-Shift-N
 select-to-matching-bracket = Ctrl-Shift-M
@@ -1756,6 +1757,7 @@ bclick;;=$("button").click(function(){
 </t>
 <t tx="swot.20221230160721.1"></t>
 <t tx="swot.20221230220909.1">toc;;=@language asciidoc
+\::author: Swot
 \::source-highlighter: pygments
 \::icons: font
 \::scripts: cjk
