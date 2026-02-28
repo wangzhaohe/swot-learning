@@ -37,7 +37,7 @@
 <v t="swot.20260227115412.1"><vh>2.1 环境搭建</vh>
 <v t="swot.20260227112248.1"><vh>content</vh></v>
 </v>
-<v t="swot.20260227115427.1"><vh>2.2 单文件测试 + 封装服务</vh>
+<v t="swot.20260227115427.1"><vh>2.2 单文件开发并测试 + 封装模块</vh>
 <v t="swot.20260227135918.1"><vh>&lt;&lt; 初始化密钥 &gt;&gt;</vh></v>
 <v t="swot.20260227145753.1"><vh>&lt;&lt; def submit_image_task &gt;&gt;</vh></v>
 <v t="swot.20260227145817.1"><vh>&lt;&lt; def get_task_result &gt;&gt;</vh></v>
@@ -46,19 +46,21 @@
 <v t="swot.20260227152244.1"><vh>循环获取生成卡通图片</vh></v>
 </v>
 </v>
-<v t="swot.20260227120621.1"><vh>2.3 服务测试 fastapi</vh>
+<v t="swot.20260227120621.1"><vh>2.3 fastapi Web服务开发</vh>
 <v t="swot.20260228005708.1"><vh>&lt;&lt; 获取上传图片并生成URL &gt;&gt;</vh></v>
 <v t="swot.20260228005743.1"><vh>&lt;&lt; 提交任务到火山引擎生成卡通图片 &gt;&gt;</vh></v>
 <v t="swot.20260228005837.1"><vh>&lt;&lt; 轮询任务从火山引擎保存卡通图片 forloop 次数 &gt;&gt;</vh>
-<v t="swot.20260228011127.1"><vh>获取卡通图片</vh>
-<v t="swot.20260228011403.1"><vh>判断任务状态</vh></v>
+<v t="swot.20260228011127.1"><vh>从火山引擎获取卡通图片</vh>
+<v t="swot.20260228011403.1"><vh>判断任务状态 task_status</vh></v>
 </v>
 </v>
 </v>
 </v>
 <v t="swot.20260227101853.1"><vh>3. 测试总结</vh>
 <v t="swot.20260228010448.1"><vh>测试方式一: 使用 volc_service.py 上传图片</vh></v>
-<v t="swot.20260228010459.1"><vh>测试方式二: 使用 fastapi 上传图片</vh></v>
+<v t="swot.20260228010459.1"><vh>测试方式二: 使用 fastapi 上传图片（cloudflared 内网穿透技术）</vh>
+<v t="swot.20260228092356.1"><vh>网页上传图片测试案例</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -1093,8 +1095,9 @@
 <v t="swot.20260226073510.1"><vh>waiting for leo-editor adoc 命令增加 @data 配置</vh></v>
 <v t="swot.20260226075849.1"><vh>waiting for writing myLeoSettings.leo usage .adoc</vh></v>
 <v t="swot.20260226085349.1"><vh>leo-editor support paste markdown content</vh></v>
-<v t="swot.20260226085753.1"><vh>adoc-live 命令应该开启一个守护线程</vh></v>
-<v t="swot.20260226142220.1"><vh>生成键盘热力图</vh></v>
+<v t="swot.20260226085753.1"><vh>adoc-live 命令应该开启一个守护线程，参考 key_mouse.py 的做法</vh></v>
+<v t="swot.20260226142220.1"><vh>key_mouse.py 生成键盘热力图</vh></v>
+<v t="swot.20260228093352.1"><vh>解决 clash verge 不允许 cloudflared 在规则模式下出去的问题</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -13776,7 +13779,7 @@ pause
 :toc:
 :toc: right
 :toc-title: 目录
-:toclevels: 3
+:toclevels: 4
 :tip-caption: ⚡
 :note-caption: ❕
 :important-caption: ❗
@@ -16216,6 +16219,8 @@ https://www.volcengine.com/docs/6444/1340578?lang=zh#0f05efc9
 
 2. 生成的图片要有 4 个面，即正面、后面、左侧、右侧（方便生成更精细的 3D 模型）。
 
+3. 生成的卡通图片不要背景。
+
 </t>
 <t tx="swot.20260227101453.1"></t>
 <t tx="swot.20260227101853.1">@language asciidoc
@@ -16426,8 +16431,7 @@ with open(temp_filepath, "wb") as buffer:
 # 构造火山引擎可访问的公网路径
 # NOTE: 本地开发必须配合 ngrok/localtunnel 等工具，确保 base_url 是公网地址
 image_url = f"{str(request.base_url)}static_images/{temp_filename}"
-print(f"&gt;&gt;&gt; 待处理图片 URL: {image_url}")
-
+print(f"&gt;&gt;&gt; 提交给火山的 URL: {image_url}")
 </t>
 <t tx="swot.20260228005743.1">@language python
 req_key = "i2i_multi_style_zx2x"
@@ -16465,7 +16469,7 @@ if os.path.exists(temp_filepath):
 raise HTTPException(status_code=504, detail="处理超时，请稍后再试")
 
 </t>
-<t tx="swot.20260228010448.1">
+<t tx="swot.20260228010448.1">@language asciidoc
 原始图片来源，gemini 提供的一张网上图片
 https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&amp;q=80
 
@@ -16480,14 +16484,29 @@ image:test_img2carton_from_huoshan_engine/img/result_angel_3.jpg[test3,360,]
 image:test_img2carton_from_huoshan_engine/img/result_angel_4.jpg[test4,360,]
 
 </t>
-<t tx="swot.20260228010459.1">
-image:test_img2carton_from_huoshan_engine/waiting_upload_img/weixin_20260226152047_1536_979.png[testimg,360,]
-image:test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的图片2.jpeg[test5,360,]
-image:test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的图片.jpeg[test5,360,]
+<t tx="swot.20260228010459.1">@language asciidoc
+Swagger 方式测试 Web api 页面: http://127.0.0.1:8000/docs
+
+WARNING: 本地 ip 无法提供外网图片 url 给火山引擎，因为火山引擎要外网图片 url 才行。
+参考下面使用 cloudflared 的方法。
+
+.安装并使用 cloudflared
+[source,console]
+----
+brew install cloudflared
+cloudflared tunnel --url http://localhost:8000
+----
+
+找到终端输出中类似 https://your-random-name.trycloudflare.com 的地址。
+再拼接上 /docs 即可。
+
+
+TIP: 开发调试用 ngrok 很爽！你可以试一试……
+
 </t>
 <t tx="swot.20260228011127.1"># 使用 asyncio.sleep 避免阻塞 FastAPI 的主事件循环。
 # 因为火山引擎不能马上返回新生成的卡通图片，让 fastapi 去干别的事吧
-await asyncio.sleep(2)
+await asyncio.sleep(2)  # Very IMPORTANT!!!
 print(f"&gt;&gt;&gt; 正在查询结果 (第 {attempt + 1} 次)...")
 
 # 查询接口也是同步的，同样丢进线程池
@@ -16523,5 +16542,12 @@ elif task_status in ["FAILED", "FAIL"]:
         status_code=400, detail="图片生成失败，服务端状态为 FAILED"
     )
 </t>
+<t tx="swot.20260228092356.1">@language asciidoc
+image:test_img2carton_from_huoshan_engine/waiting_upload_img/boyA.png[testimg,360,]
+image:test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的图片2.jpeg[test5,360,]
+image:test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的图片.jpeg[test5,360,]
+
+</t>
+<t tx="swot.20260228093352.1"></t>
 </tnodes>
 </leo_file>
