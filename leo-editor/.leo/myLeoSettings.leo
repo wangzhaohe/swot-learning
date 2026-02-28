@@ -122,7 +122,7 @@
 </v>
 <v t="swot.20210123215332.1"><vh>openwith</vh>
 <v t="swot.20181207203732.1"><vh>@openwith chrome = Alt+Shift+C</vh></v>
-<v t="swot.20210123215352.1"><vh>@openwith neovim = Alt+Shift+N</vh></v>
+<v t="swot.20210123215352.1"><vh>@openwith nvim = Alt+Shift+N</vh></v>
 <v t="swot.20200928054105.1"><vh>@openwith typora = Alt+Shift+T</vh></v>
 <v t="swot.20201221092830.1"><vh>@openwith vscode = Alt+Shift+V</vh></v>
 <v t="swot.20220211080234.1"><vh>@openwith nodejs = Alt+Shift+J</vh></v>
@@ -982,13 +982,9 @@ kind:   subprocess.Popen
 arg:     "/usr/local/bin/code"
 </t>
 <t tx="swot.20210123215332.1"></t>
-<t tx="swot.20210123215352.1"># 'subprocess.Popen','C:/Program Files/Microsoft Office/Office/WINWORD.exe',None
-
-ext:    
+<t tx="swot.20210123215352.1">ext:    
 kind:   subprocess.Popen
-# arg:    "gnome-terminal -- nvim"
-# arg:    "/Applications/MacVim.app/Contents/bin/mvim"
-arg: "/Users/swot/app/nvim-osx64/bin/nvim"
+arg: "/Users/swot/app/nvim-macos-x86_64/bin/nvim"
 </t>
 <t tx="swot.20210129110742.1">The format string used when creating the Time/Date string for the Insert Time/Date command.
 See the Python documentation for time.strftime for full details.
@@ -1757,7 +1753,7 @@ bclick;;=$("button").click(function(){
 </t>
 <t tx="swot.20221230160721.1"></t>
 <t tx="swot.20221230220909.1">toc;;=@language asciidoc
-\::author: Swot
+\::author: https://github.com/wangzhaohe/swot-learning
 \::source-highlighter: pygments
 \::icons: font
 \::scripts: cjk

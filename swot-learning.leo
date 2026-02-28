@@ -132,6 +132,7 @@
 </v>
 </v>
 </v>
+<v t="swot.20260228211241.1"><vh>@path podman</vh></v>
 <v t="swot.20250508160844.1"><vh>@path git</vh>
 <v t="swot.20250508161005.1"><vh>@adoc git.adoc</vh>
 <v t="swot.20250508161024.1"><vh>Git</vh>
@@ -276,9 +277,9 @@
 </v>
 <v t="swot.20250831095539.1"><vh>基于 x86 的库如何在 macos arm 架构下运行</vh></v>
 <v t="swot.20250831100251.1"><vh>列操作模式 rectangle</vh></v>
+<v t="swot.20260222103905.1"><vh>找出右键菜单 open with nvim 与命令 open with nvim 不一样的原因</vh></v>
 </v>
 </v>
-<v t="swot.20260222103905.1"><vh>找出右键菜单 open with neovim 与命令 open-with-neovim 不一样的原因</vh></v>
 </v>
 <v t="swot.20250511104537.1" descendentVnodeUnknownAttributes="7d7100285809000000302e312e302e392e3671017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d3237710775735809000000302e312e302e392e3871087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30342d3237710e7573580a000000302e312e302e31302e33710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30342d323771157573580a000000302e312e302e31302e3671167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30352d3031711c7573580a000000302e312e302e31302e39711d7d711e5808000000616e6e6f74617465711f7d71202858080000007072696f7269747971214d0f27580a000000707269736574646174657122580a000000323032352d30342d323771237573580c000000302e312e302e31332e352e3071247d71255808000000616e6e6f7461746571267d71272858080000007072696f7269747971284d0f27580a000000707269736574646174657129580a000000323032352d30352d3330712a7573580c000000302e312e302e31332e362e32712b7d712c5808000000616e6e6f74617465712d7d712e2858080000007072696f72697479712f4d0f27580a000000707269736574646174657130580a000000323032352d30352d333071317573580c000000302e312e302e31332e372e3071327d71335808000000616e6e6f7461746571347d71352858080000007072696f7269747971364d0f27580a000000707269736574646174657137580a000000323032352d30352d333071387573580c000000302e312e302e31332e382e3171397d713a5808000000616e6e6f74617465713b7d713c2858080000007072696f72697479713d4d0f27580a00000070726973657464617465713e580a000000323032352d30352d3330713f7573752e"><vh>@path nuxt/nuxt3</vh>
 <v t="swot.20250511104555.1"><vh>Plan</vh>
@@ -1101,7 +1102,6 @@
 </v>
 <v t="swot.20260221211911.1"><vh>&lt;&lt; 4. 双轨制存盘策略 &gt;&gt; self.force_save() 替代了好多代码</vh></v>
 <v t="swot.20260221213206.1"><vh>status 看懂</vh></v>
-<v t="swot.20260222103905.1"></v>
 <v t="swot.20260226073510.1"><vh>waiting for leo-editor adoc 命令增加 @data 配置</vh></v>
 <v t="swot.20260226075849.1"><vh>waiting for writing myLeoSettings.leo usage .adoc</vh></v>
 <v t="swot.20260226085349.1"><vh>leo-editor support paste markdown content</vh></v>
@@ -1249,21 +1249,30 @@ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
     python launchLeo.py
 </t>
 <t tx="swot.20250508134307.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
 :icons: font
 :scripts: cjk
+:stem: latexmath
+:experimental:
 :toc:
 :toc: right
-:toc-title: Table of Contents
-:toclevels: 3</t>
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
 <t tx="swot.20250508134351.1">
 ++++
-&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
 &lt;script&gt;
     // 获取按钮和 div 元素
     const toggleButton = document.getElementById('toggleButton');
     const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
 
     // 添加点击事件监听器
     toggleButton.addEventListener('click', () =&gt; {
@@ -9636,7 +9645,7 @@ https://aibi8.com/news/3140.html
 </t>
 <t tx="swot.20250831100251.1">The following is from LeoDocs.leo. Selecting some text with mouse or keyboard arrow key, then between the first cursor and the end cursor is the columns that being selected.
 
-------
+---
 
 .. _`Emacs rectangle commands`: http://www.gnu.org/software/emacs/manual/html_node/emacs/Rectangles.html
 
@@ -9672,6 +9681,7 @@ Placing the cursor immediately before the first "I", holding shift and moving it
 [largo] because I don't even know what they're supposed to accomplish. A few
 [largo] examples:
 ....
+
 </t>
 <t tx="swot.20250906075341.1"></t>
 <t tx="swot.20250906075354.1">@language asciidoc
@@ -15641,7 +15651,26 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 如果在 `git diff` 中仍看到其他不可思议的改动，通常是格式化工具清理了行尾不可见空格（Trailing Whitespace），这属于正常的代码优化。
 ====
 </t>
-<t tx="swot.20260222103905.1"></t>
+<t tx="swot.20260222103905.1">1. 系统导出 EDITOR 方式
++
+.~/.zshrc 中导出了 EDITOR 后，leo 右键菜单中就有「open with nvim」
+[source,python]
+----
+export EDITOR=/Users/swot/app/nvim-macos-x86_64/bin/nvim
+----
+
+
+2. 配置快捷键方式
++
+.unl://myLeoSettings.leo#@settings--&gt;openwith--&gt;@openwith nvim = Alt+Shift+N
+[source,text]
+----
+ext:    
+kind:   subprocess.Popen
+arg: "/Users/swot/app/nvim-macos-x86_64/bin/nvim"
+----
+
+</t>
 <t tx="swot.20260222110100.1">def on_command(self, tag, keywords):
     """catch not trigger textChanged command"""
     if keywords.get("c") == self.c:
@@ -16650,5 +16679,6 @@ NOTE: ** 虽然很多大数据框架可以在 Java 8/11 上运行，但 2026 年
 ****
 
 </t>
+<t tx="swot.20260228211241.1"></t>
 </tnodes>
 </leo_file>

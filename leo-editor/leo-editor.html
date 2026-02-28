@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
+<meta name="author" content="https://github.com/wangzhaohe/swot-learning">
 <title>Learning Leo</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -532,8 +533,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <body class="article toc2 toc-right">
 <div id="header">
 <h1>Learning Leo</h1>
+<div class="details">
+<span id="author" class="author">https://github.com/wangzhaohe/swot-learning</span><br>
+</div>
 <div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
+<div id="toctitle">目录</div>
 <ul class="sectlevel1">
 <li><a href="#_install_leo_editor_from_source">Install leo-editor from source</a></li>
 <li><a href="#_config_leo_editor">Config leo-editor</a>
@@ -551,18 +555,19 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_基于_x86_的库如何在_macos_arm_架构下运行">基于 x86 的库如何在 macos arm 架构下运行</a></li>
 <li><a href="#_列操作模式_rectangle">列操作模式 rectangle</a></li>
+<li><a href="#_找出右键菜单_open_with_nvim_与命令_open_with_nvim_不一样的原因">找出右键菜单 open with nvim 与命令 open with nvim 不一样的原因</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<button id="toggleButton">Table of Contents</button>
+<button id="toggleButton">目录开关</button>
 <script>
     // 获取按钮和 div 元素
     const toggleButton = document.getElementById('toggleButton');
     const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
 
     // 添加点击事件监听器
     toggleButton.addEventListener('click', () => {
@@ -627,7 +632,7 @@ NOTE: jupyter-client-7.3.4 has bug, and can&#8217;t run <code>qtconsole</code>
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-note" title="❕"></i>
 </td>
 <td class="content">
 <div class="title">Change pip source</div>
@@ -799,14 +804,22 @@ NOTE: jupyter-client-7.3.4 has bug, and can&#8217;t run <code>qtconsole</code>
 <div class="paragraph">
 <p>The following is from LeoDocs.leo. Selecting some text with mouse or keyboard arrow key, then between the first cursor and the end cursor is the columns that being selected.</p>
 </div>
+<hr>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>_`Emacs rectangle commands`: <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Rectangles.html" class="bare">http://www.gnu.org/software/emacs/manual/html_node/emacs/Rectangles.html</a></p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">The following commands emulate the `Emacs rectangle commands`_</dt>
+</dl>
+</div>
+</li>
+</ol>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre>.. _`Emacs rectangle commands`: http://www.gnu.org/software/emacs/manual/html_node/emacs/Rectangles.html
-
-The following commands emulate the `Emacs rectangle commands`_::
-
-```
-rectangle-clear
+<pre class="pygments highlight"><code><span></span>rectangle-clear
 rectangle-delete
 
 rectangle-open
@@ -815,35 +828,95 @@ rectangle-close
 rectangle-kill
 rectangle-yank
 
-rectangle-string
-```
-
-Given::
-
-```
-I'm really glad the docs are being updated. I know that's a
-monumental task. I only use a fraction of Leo's commands, mostly
-because I don't even know what they're supposed to accomplish. A few
-examples:
-```
-
-Placing the cursor immediately before the first "I", holding shift and moving it to immediately before the word`examples` selects a zero width rectangle from the beginning to the end of the selection (zero width because the selection starts and ends in the same column. Then running `rectangle-string [largo]&lt;space&gt;&lt;enter&gt;` yields::
-
-....
-[largo] I'm really glad the docs are being updated. I know that's a
+rectangle-string</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Given</dt>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>I&#39;m really glad the docs are being updated. I know that&#39;s a
+monumental task. I only use a fraction of Leo&#39;s commands, mostly
+because I don&#39;t even know what they&#39;re supposed to accomplish. A few
+examples:</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Placing the cursor immediately before the first "I", holding shift and moving it to immediately before the word`examples` selects a zero width rectangle from the beginning to the end of the selection (zero width because the selection starts and ends in the same column. Then running <code>rectangle-string [largo]&lt;space&gt;&lt;enter&gt;</code> yields</dt>
+</dl>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[largo] I'm really glad the docs are being updated. I know that's a
 [largo] monumental task. I only use a fraction of Leo's commands, mostly
 [largo] because I don't even know what they're supposed to accomplish. A few
-[largo] examples:
-....</pre>
+[largo] examples:</pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_找出右键菜单_open_with_nvim_与命令_open_with_nvim_不一样的原因">找出右键菜单 open with nvim 与命令 open with nvim 不一样的原因</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>系统导出 EDITOR 方式</p>
+<div class="listingblock">
+<div class="title">~/.zshrc 中导出了 EDITOR 后，leo 右键菜单中就有「open with nvim」</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">export</span> <span class="tok-n">EDITOR</span><span class="tok-o">=/</span><span class="tok-n">Users</span><span class="tok-o">/</span><span class="tok-n">swot</span><span class="tok-o">/</span><span class="tok-n">app</span><span class="tok-o">/</span><span class="tok-n">nvim</span><span class="tok-o">-</span><span class="tok-n">macos</span><span class="tok-o">-</span><span class="tok-n">x86_64</span><span class="tok-o">/</span><span class="tok-nb">bin</span><span class="tok-o">/</span><span class="tok-n">nvim</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>配置快捷键方式</p>
+<div class="listingblock">
+<div class="title">unl://myLeoSettings.leo#@settings-&#8594;openwith-&#8594;@openwith nvim = Alt+Shift+N</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>ext:
+kind:   subprocess.Popen
+arg: &quot;/Users/swot/app/nvim-macos-x86_64/bin/nvim&quot;</code></pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-21 09:12:57 +0800
+Last updated 2026-02-28 22:02:55 +0800
 </div>
 </div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>
