@@ -171,7 +171,7 @@ body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-b
 body.toc2.toc-right{padding-left:0;padding-right:15em}
 body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
 @media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
-#toc.toc2{width:30em}
+#toc.toc2{width:35em}
 #toc.toc2 #toctitle{font-size:1.375em}
 #toc.toc2>ul{font-size:.95em}
 #toc.toc2 ul ul{padding-left:1.25em}
@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #toggleButton {
     position: fixed;
     top: 10px;
-    left: 10px;
+    right: 10px;
     z-index: 1000;
     /*background-color: lightgrey;*/
     color: #AB2C21;
@@ -537,6 +537,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel1">
 <li><a href="#_git_worktree">git worktree</a></li>
 <li><a href="#_git_subtree">git subtree</a></li>
+<li><a href="#_git_rm_cached">git rm --cached</a></li>
 <li><a href="#_git_filter_repo_delete_file_from_all_git_commit">git-filter-repo &#8594; delete file from all git commit</a></li>
 </ul>
 </div>
@@ -786,6 +787,97 @@ git worktree add ../v2.0-release v2.0</pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_git_rm_cached">git rm --cached</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>如果想要忽略的文件 <code>.DS_Store</code> 已经进入了版本库并推送到远端，简单的 <code>gitignore</code> 是不起作用的。你需要先从暂存区（Index）中将其删除，然后提交并推送。</p>
+</div>
+<div class="paragraph">
+<p>按照以下步骤操作即可：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>从 Git 中移除跟踪</p>
+<div class="paragraph">
+<p>使用 <code>git rm --cached</code> 命令。这会从 Git 的跟踪列表中删除文件，但<strong>保留</strong>你本地磁盘上的实际文件。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span><span class="tok-c1"># 如果只想删除特定的 .DS_Store</span>
+git<span class="tok-w"> </span>rm<span class="tok-w"> </span>--cached<span class="tok-w"> </span>.DS_Store
++
+<span class="tok-c1"># 如果想删除项目中所有的 .DS_Store（推荐）</span>
+find<span class="tok-w"> </span>.<span class="tok-w"> </span>-name<span class="tok-w"> </span>.DS_Store<span class="tok-w"> </span>-print0<span class="tok-w"> </span><span class="tok-p">|</span><span class="tok-w"> </span>xargs<span class="tok-w"> </span>-0<span class="tok-w"> </span>git<span class="tok-w"> </span>rm<span class="tok-w"> </span>--cached</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>更新 .gitignore</p>
+<div class="paragraph">
+<p>确保你的 <code>.gitignore</code> 文件中已经包含了 <code>.DS_Store</code>，防止它下次又被误传。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span><span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-s2">&quot;.DS_Store&quot;</span><span class="tok-w"> </span>&gt;&gt;<span class="tok-w"> </span>.gitignore
+<span class="tok-c1"># 如果是全局忽略，也可以针对所有项目生效</span>
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-s2">&quot;**/.DS_Store&quot;</span><span class="tok-w"> </span>&gt;&gt;<span class="tok-w"> </span>.gitignore</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>提交更改</p>
+<div class="paragraph">
+<p>将这次“删除动作”提交到本地仓库。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>git<span class="tok-w"> </span>add<span class="tok-w"> </span>.gitignore
+git<span class="tok-w"> </span>commit<span class="tok-w"> </span>-m<span class="tok-w"> </span><span class="tok-s2">&quot;chore: 从版本控制中移除 .DS_Store 并添加到 gitignore&quot;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>推送到远端</p>
+<div class="paragraph">
+<p>将更改推送到服务器，这样其他协作成员在 <code>pull</code> 之后，他们本地的 <code>.DS_Store</code> 也会退出 Git 跟踪。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>git<span class="tok-w"> </span>push<span class="tok-w"> </span>origin<span class="tok-w"> </span>&lt;你的分支名&gt;</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<hr>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">小提示</div>
+<div class="paragraph">
+<p>如果你想一劳永逸，不再为每个项目手动添加 <code>.DS_Store</code>，可以设置一个<strong>全局 Git 忽略文件</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>git<span class="tok-w"> </span>config<span class="tok-w"> </span>--global<span class="tok-w"> </span>core.excludesfile<span class="tok-w"> </span>~/.gitignore_global
+<span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-s2">&quot;.DS_Store&quot;</span><span class="tok-w"> </span>&gt;&gt;<span class="tok-w"> </span>~/.gitignore_global</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这样你电脑上所有的 Git 仓库都会默认忽略这个文件。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_git_filter_repo_delete_file_from_all_git_commit">git-filter-repo &#8594; delete file from all git commit</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -858,7 +950,7 @@ git<span class="tok-w"> </span>push<span class="tok-w"> </span>--force<span clas
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-20 18:32:30 +0800
+Last updated 2026-03-01 08:37:12 +0800
 </div>
 </div>
 </body>

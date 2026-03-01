@@ -6,6 +6,7 @@
 <preferences/>
 <find_panel_settings/>
 <vnodes>
+<v t="swot.20260301080950.1"><vh>@leo ../TJISE-inner/TJISE-inner.leo</vh></v>
 <v t="swot.20250508123413.1"><vh>@adoc README.adoc</vh>
 <v t="swot.20250508123515.1"><vh>learning contents</vh>
 <v t="swot.20250508125533.1"><vh>Read document</vh></v>
@@ -132,12 +133,12 @@
 </v>
 </v>
 </v>
-<v t="swot.20260228211241.1"><vh>@path podman</vh></v>
 <v t="swot.20250508160844.1"><vh>@path git</vh>
 <v t="swot.20250508161005.1"><vh>@adoc git.adoc</vh>
 <v t="swot.20250508161024.1"><vh>Git</vh>
 <v t="swot.20250520181051.1"><vh>git worktree</vh></v>
 <v t="swot.20250520181057.1"><vh>git subtree</vh></v>
+<v t="swot.20260301082550.1"><vh>git rm --cached</vh></v>
 <v t="swot.20250508161032.1"><vh>git-filter-repo -&gt; delete file from all git commit</vh></v>
 </v>
 </v>
@@ -150,6 +151,25 @@
 <v t="swot.20260116212521.1"><vh>原始文本素材 -- 用 markdown 展示了标题大小的效果</vh></v>
 </v>
 <v t="swot.20260116203328.1"><vh>HTML HyperText Markup Language</vh></v>
+</v>
+</v>
+<v t="swot.20250508105043.2"><vh>@path leo-editor</vh>
+<v t="swot.20250508134307.1"><vh>@adoc leo-editor.adoc</vh>
+<v t="swot.20250508134351.1"><vh>Learning Leo</vh>
+<v t="swot.20250508134253.1"><vh>Install leo-editor from source</vh></v>
+<v t="swot.20260218100311.1"><vh>Config leo-editor</vh>
+<v t="swot.20260218100553.1"><vh>复制 leo 自定义配置文件</vh></v>
+<v t="swot.20260218100631.1"><vh>复制 leo 主题文件</vh></v>
+</v>
+<v t="swot.20250609210130.1"><vh>Nav Search</vh></v>
+<v t="swot.20250508154257.1"><vh>Teaching by leo-editor</vh>
+<v t="swot.20250508154257.3"><vh>write code</vh></v>
+<v t="swot.20250508154257.2"><vh>write document</vh></v>
+</v>
+<v t="swot.20250831095539.1"><vh>基于 x86 的库如何在 macos arm 架构下运行</vh></v>
+<v t="swot.20250831100251.1"><vh>列操作模式 rectangle</vh></v>
+<v t="swot.20260222103905.1"><vh>找出右键菜单 open with nvim 与命令 open with nvim 不一样的原因</vh></v>
+</v>
 </v>
 </v>
 <v t="swot.20260215211454.1"><vh>@path java</vh>
@@ -262,24 +282,45 @@
 <v t="swot.20251210103828.1"><vh>@path js</vh>
 <v t="swot.20251210103835.1"><vh>pnpm -&gt; https://pnpm.io/</vh></v>
 </v>
-<v t="swot.20250508105043.2"><vh>@path leo-editor</vh>
-<v t="swot.20250508134307.1"><vh>@adoc leo-editor.adoc</vh>
-<v t="swot.20250508134351.1"><vh>Learning Leo</vh>
-<v t="swot.20250508134253.1"><vh>Install leo-editor from source</vh></v>
-<v t="swot.20260218100311.1"><vh>Config leo-editor</vh>
-<v t="swot.20260218100553.1"><vh>复制 leo 自定义配置文件</vh></v>
-<v t="swot.20260218100631.1"><vh>复制 leo 主题文件</vh></v>
+<v t="swot.20260215225306.1"><vh>@path neovim</vh>
+<v t="swot.20260226111454.1"><vh>@adoc lazyvim-hotkeys.adoc</vh>
+<v t="swot.20260226110618.1"><vh>LazyVim 快捷键</vh>
+<v t="swot.20260227082545.1"><vh>LazyVim 搜索快捷键</vh>
+<v t="swot.20260227083255.1"><vh>Telescope 搜索</vh></v>
+<v t="swot.20260227083342.1"><vh>解决“搜索列表消失”的痛点</vh></v>
+<v t="swot.20260227083614.1"><vh>全局替换神器：Spectre</vh></v>
+<v t="swot.20260227083629.1"><vh>与 Leo-Editor `cff` 的逻辑对比</vh></v>
 </v>
-<v t="swot.20250609210130.1"><vh>Nav Search</vh></v>
-<v t="swot.20250508154257.1"><vh>Teaching by leo-editor</vh>
-<v t="swot.20250508154257.3"><vh>write code</vh></v>
-<v t="swot.20250508154257.2"><vh>write document</vh></v>
+<v t="swot.20260226110833.1"><vh>LazyVim 函数跳转</vh>
+<v t="swot.20260226110918.1"><vh>1. 使用 Treesitter 快捷键 (推荐)</vh></v>
+<v t="swot.20260226110950.1"><vh>2. 使用符号搜索 (Symbol Search)</vh></v>
+<v t="swot.20260226111027.1"><vh>3. 使用符号大纲 (Symbols Outline)</vh></v>
+<v t="swot.20260226111107.1"><vh>4. 基础 Vim 跳转 (兜底方案)</vh></v>
+<v t="swot.20260226111124.1"><vh>5. 总结表</vh></v>
 </v>
-<v t="swot.20250831095539.1"><vh>基于 x86 的库如何在 macos arm 架构下运行</vh></v>
-<v t="swot.20250831100251.1"><vh>列操作模式 rectangle</vh></v>
-<v t="swot.20260222103905.1"><vh>找出右键菜单 open with nvim 与命令 open with nvim 不一样的原因</vh></v>
+<v t="swot.20260226112148.1"><vh>LazyVim 诊断与报错（Diagnostics）</vh>
+<v t="swot.20260226112252.1"><vh>1. 基础跳转 (Basic Navigation)</vh></v>
+<v t="swot.20260226112258.1"><vh>2. 查看详细诊断信息 (Inspection)</vh></v>
+<v t="swot.20260226112304.1"><vh>3. 批量处理 (Trouble 插件)</vh></v>
+<v t="swot.20260226112309.1"><vh>4. 快速修复 (Quick Fix)</vh></v>
+</v>
+<v t="swot.20260226123304.1"><vh>LazyVim 代码重构 (Refactoring) </vh>
+<v t="swot.20260226123524.1"><vh>1. 核心重构操作 (Core Refactoring)</vh></v>
+<v t="swot.20260226123530.1"><vh>2. 导航与搜索 (Navigation)</vh></v>
+<v t="swot.20260226123535.1"><vh>3. 高级重构 (Refactoring.nvim)</vh></v>
+<v t="swot.20260226123539.1"><vh>4. 格式化 (Formatting)</vh></v>
 </v>
 </v>
+</v>
+<v t="swot.20260222101217.1"><vh>@adoc Neovim与Leo-editor格式化冲突解决方案总结.adoc</vh>
+<v t="swot.20260222101313.1"><vh>lazyvim 自动格式化分开 leo-editor @# 为 @ # 解决方案</vh>
+<v t="swot.20260222100358.1"><vh>问题背景 (Background)</vh></v>
+<v t="swot.20260222101450.1"><vh>核心原理 (Principles)</vh></v>
+<v t="swot.20260222101458.1"><vh>技术实现 (Implementation)</vh></v>
+<v t="swot.20260222101511.1"><vh>方案评估 (Evaluation)</vh></v>
+</v>
+</v>
+<v t="swot.20260218173307.1"><vh>item2 启动 lazyvim 后切换标签会导致编辑器当前行下面变灰，按键会跳到别的行的问题</vh></v>
 </v>
 <v t="swot.20250511104537.1" descendentVnodeUnknownAttributes="7d7100285809000000302e312e302e392e3671017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d3237710775735809000000302e312e302e392e3871087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30342d3237710e7573580a000000302e312e302e31302e33710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30342d323771157573580a000000302e312e302e31302e3671167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30352d3031711c7573580a000000302e312e302e31302e39711d7d711e5808000000616e6e6f74617465711f7d71202858080000007072696f7269747971214d0f27580a000000707269736574646174657122580a000000323032352d30342d323771237573580c000000302e312e302e31332e352e3071247d71255808000000616e6e6f7461746571267d71272858080000007072696f7269747971284d0f27580a000000707269736574646174657129580a000000323032352d30352d3330712a7573580c000000302e312e302e31332e362e32712b7d712c5808000000616e6e6f74617465712d7d712e2858080000007072696f72697479712f4d0f27580a000000707269736574646174657130580a000000323032352d30352d333071317573580c000000302e312e302e31332e372e3071327d71335808000000616e6e6f7461746571347d71352858080000007072696f7269747971364d0f27580a000000707269736574646174657137580a000000323032352d30352d333071387573580c000000302e312e302e31332e382e3171397d713a5808000000616e6e6f74617465713b7d713c2858080000007072696f72697479713d4d0f27580a00000070726973657464617465713e580a000000323032352d30352d3330713f7573752e"><vh>@path nuxt/nuxt3</vh>
 <v t="swot.20250511104555.1"><vh>Plan</vh>
@@ -453,46 +494,7 @@
 </v>
 </v>
 </v>
-<v t="swot.20260215225306.1"><vh>@path neovim</vh>
-<v t="swot.20260226111454.1"><vh>@adoc lazyvim-hotkeys.adoc</vh>
-<v t="swot.20260226110618.1"><vh>LazyVim 快捷键</vh>
-<v t="swot.20260227082545.1"><vh>LazyVim 搜索快捷键</vh>
-<v t="swot.20260227083255.1"><vh>Telescope 搜索</vh></v>
-<v t="swot.20260227083342.1"><vh>解决“搜索列表消失”的痛点</vh></v>
-<v t="swot.20260227083614.1"><vh>全局替换神器：Spectre</vh></v>
-<v t="swot.20260227083629.1"><vh>与 Leo-Editor `cff` 的逻辑对比</vh></v>
-</v>
-<v t="swot.20260226110833.1"><vh>LazyVim 函数跳转</vh>
-<v t="swot.20260226110918.1"><vh>1. 使用 Treesitter 快捷键 (推荐)</vh></v>
-<v t="swot.20260226110950.1"><vh>2. 使用符号搜索 (Symbol Search)</vh></v>
-<v t="swot.20260226111027.1"><vh>3. 使用符号大纲 (Symbols Outline)</vh></v>
-<v t="swot.20260226111107.1"><vh>4. 基础 Vim 跳转 (兜底方案)</vh></v>
-<v t="swot.20260226111124.1"><vh>5. 总结表</vh></v>
-</v>
-<v t="swot.20260226112148.1"><vh>LazyVim 诊断与报错（Diagnostics）</vh>
-<v t="swot.20260226112252.1"><vh>1. 基础跳转 (Basic Navigation)</vh></v>
-<v t="swot.20260226112258.1"><vh>2. 查看详细诊断信息 (Inspection)</vh></v>
-<v t="swot.20260226112304.1"><vh>3. 批量处理 (Trouble 插件)</vh></v>
-<v t="swot.20260226112309.1"><vh>4. 快速修复 (Quick Fix)</vh></v>
-</v>
-<v t="swot.20260226123304.1"><vh>LazyVim 代码重构 (Refactoring) </vh>
-<v t="swot.20260226123524.1"><vh>1. 核心重构操作 (Core Refactoring)</vh></v>
-<v t="swot.20260226123530.1"><vh>2. 导航与搜索 (Navigation)</vh></v>
-<v t="swot.20260226123535.1"><vh>3. 高级重构 (Refactoring.nvim)</vh></v>
-<v t="swot.20260226123539.1"><vh>4. 格式化 (Formatting)</vh></v>
-</v>
-</v>
-</v>
-<v t="swot.20260222101217.1"><vh>@adoc Neovim与Leo-editor格式化冲突解决方案总结.adoc</vh>
-<v t="swot.20260222101313.1"><vh>lazyvim 自动格式化分开 leo-editor @# 为 @ # 解决方案</vh>
-<v t="swot.20260222100358.1"><vh>问题背景 (Background)</vh></v>
-<v t="swot.20260222101450.1"><vh>核心原理 (Principles)</vh></v>
-<v t="swot.20260222101458.1"><vh>技术实现 (Implementation)</vh></v>
-<v t="swot.20260222101511.1"><vh>方案评估 (Evaluation)</vh></v>
-</v>
-</v>
-<v t="swot.20260218173307.1"><vh>item2 启动 lazyvim 后切换标签会导致编辑器当前行下面变灰，按键会跳到别的行的问题</vh></v>
-</v>
+<v t="swot.20260228211241.1"><vh>@path podman</vh></v>
 <v t="swot.20260215082206.1"><vh>@path postgresql</vh>
 <v t="swot.20260215160552.1"><vh>@adoc Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统.adoc</vh>
 <v t="swot.20260215162708.1"><vh>Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统</vh>
@@ -16680,5 +16682,65 @@ NOTE: ** 虽然很多大数据框架可以在 Java 8/11 上运行，但 2026 年
 
 </t>
 <t tx="swot.20260228211241.1"></t>
+<t tx="swot.20260301080950.1"></t>
+<t tx="swot.20260301082550.1">@language asciidoc
+如果想要忽略的文件 `.DS_Store` 已经进入了版本库并推送到远端，简单的 `gitignore` 是不起作用的。你需要先从暂存区（Index）中将其删除，然后提交并推送。
+
+按照以下步骤操作即可：
+
+1. 从 Git 中移除跟踪
++
+使用 `git rm --cached` 命令。这会从 Git 的跟踪列表中删除文件，但**保留**你本地磁盘上的实际文件。
++
+```bash
+# 如果只想删除特定的 .DS_Store
+git rm --cached .DS_Store
++
+# 如果想删除项目中所有的 .DS_Store（推荐）
+find . -name .DS_Store -print0 | xargs -0 git rm --cached
+```
+
+2. 更新 .gitignore
++
+确保你的 `.gitignore` 文件中已经包含了 `.DS_Store`，防止它下次又被误传。
++
+```bash
+echo ".DS_Store" &gt;&gt; .gitignore
+# 如果是全局忽略，也可以针对所有项目生效
+echo "**/.DS_Store" &gt;&gt; .gitignore
+```
+
+3. 提交更改
++
+将这次“删除动作”提交到本地仓库。
++
+```bash
+git add .gitignore
+git commit -m "chore: 从版本控制中移除 .DS_Store 并添加到 gitignore"
+```
+
+4. 推送到远端
++
+将更改推送到服务器，这样其他协作成员在 `pull` 之后，他们本地的 `.DS_Store` 也会退出 Git 跟踪。
++
+```bash
+git push origin &lt;你的分支名&gt;
+```
+
+---
+
+.小提示
+[TIP]
+====
+如果你想一劳永逸，不再为每个项目手动添加 `.DS_Store`，可以设置一个**全局 Git 忽略文件**：
+
+```bash
+git config --global core.excludesfile ~/.gitignore_global
+echo ".DS_Store" &gt;&gt; ~/.gitignore_global
+```
+
+这样你电脑上所有的 Git 仓库都会默认忽略这个文件。
+====
+</t>
 </tnodes>
 </leo_file>

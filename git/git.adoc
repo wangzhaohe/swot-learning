@@ -190,6 +190,65 @@ git subtree pull --prefix=vendor/libfoo https://github.com/example/libfoo.git ma
 
 可以在主项目中开发子项目的代码，然后使用 `git subtree push` 将其推送回原仓库，实现双向同步。
 
+== git rm --cached
+如果想要忽略的文件 `.DS_Store` 已经进入了版本库并推送到远端，简单的 `gitignore` 是不起作用的。你需要先从暂存区（Index）中将其删除，然后提交并推送。
+
+按照以下步骤操作即可：
+
+1. 从 Git 中移除跟踪
++
+使用 `git rm --cached` 命令。这会从 Git 的跟踪列表中删除文件，但**保留**你本地磁盘上的实际文件。
++
+```bash
+# 如果只想删除特定的 .DS_Store
+git rm --cached .DS_Store
++
+# 如果想删除项目中所有的 .DS_Store（推荐）
+find . -name .DS_Store -print0 | xargs -0 git rm --cached
+```
+
+2. 更新 .gitignore
++
+确保你的 `.gitignore` 文件中已经包含了 `.DS_Store`，防止它下次又被误传。
++
+```bash
+echo ".DS_Store" >> .gitignore
+# 如果是全局忽略，也可以针对所有项目生效
+echo "**/.DS_Store" >> .gitignore
+```
+
+3. 提交更改
++
+将这次“删除动作”提交到本地仓库。
++
+```bash
+git add .gitignore
+git commit -m "chore: 从版本控制中移除 .DS_Store 并添加到 gitignore"
+```
+
+4. 推送到远端
++
+将更改推送到服务器，这样其他协作成员在 `pull` 之后，他们本地的 `.DS_Store` 也会退出 Git 跟踪。
++
+```bash
+git push origin <你的分支名>
+```
+
+---
+
+.小提示
+[TIP]
+====
+如果你想一劳永逸，不再为每个项目手动添加 `.DS_Store`，可以设置一个**全局 Git 忽略文件**：
+
+```bash
+git config --global core.excludesfile ~/.gitignore_global
+echo ".DS_Store" >> ~/.gitignore_global
+```
+
+这样你电脑上所有的 Git 仓库都会默认忽略这个文件。
+====
+
 == git-filter-repo -> delete file from all git commit
 https://github.com/newren/git-filter-repo
 
