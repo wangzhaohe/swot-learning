@@ -684,14 +684,23 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_实验一环境与项目初始化_4学时">实验一：环境与项目初始化 (4学时)</a>
 <ul class="sectlevel3">
 <li><a href="#_直接安装开发环境_intellij_idea略">直接安装开发环境 IntelliJ IDEA&#8201;&#8212;&#8201;略</a></li>
+<li><a href="#_容器介绍docker_vs_podman">容器介绍：docker vs podman</a></li>
 <li><a href="#_wsl2_安装容器环境_podman重点">WSL2 安装容器环境 podman&#8201;&#8212;&#8201;重点</a>
 <ul class="sectlevel4">
 <li><a href="#_检查_windows_虚拟化环境状态并安装_wsl2_引擎">检查 windows 虚拟化环境状态并安装 WSL2 引擎</a></li>
 <li><a href="#_在_wsl2_引擎下安装_podman">在 WSL2 引擎下安装 podman</a></li>
 </ul>
 </li>
-<li><a href="#_jdk17">JDK17</a></li>
-<li><a href="#_maven">Maven</a></li>
+<li><a href="#_podman_安装_jdk17">podman 安装 JDK17</a></li>
+<li><a href="#_idea_使用_podman_jdk17_开发测试">IDEA 使用 podman JDK17 开发测试</a>
+<ul class="sectlevel4">
+<li><a href="#_创建基础_java_项目">创建基础 Java 项目</a></li>
+<li><a href="#_关联容器_jdk_解决智能提示">关联容器 JDK (解决智能提示)</a></li>
+<li><a href="#_配置运行目标_run_on_podman">配置运行目标 (Run on Podman)</a></li>
+<li><a href="#_结果验证">结果验证</a></li>
+<li><a href="#_社区版本_idea_运行_podman_容器_jdk17_方法">社区版本 IDEA 运行 podman 容器 jdk17 方法</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_实验二数据模型与实体类开发_4学时">实验二：数据模型与实体类开发 (4学时)</a>
@@ -2385,44 +2394,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="sect3">
 <h4 id="_代码实现查询用户信息">代码实现：查询用户信息</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.sql.*</span><span class="tok-p">;</span>
-
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">JDBCDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// 数据库连接信息（假设是 MySQL）</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">URL</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;jdbc:mysql://localhost:3306/door_db&quot;</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">USER</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;root&quot;</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">PASS</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;123456&quot;</span><span class="tok-p">;</span>
-
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">findUserByCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorSystemException</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-c1">// SQL 语句：去 users 表里找卡号对应的姓名</span>
-<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">sql</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;SELECT name FROM users WHERE card_id = ?&quot;</span><span class="tok-p">;</span>
-
-<span class="tok-w">        </span><span class="tok-c1">// 使用 try-with-resources，自动关闭连接，防止“占线”</span>
-<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Connection</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">DriverManager</span><span class="tok-p">.</span><span class="tok-na">getConnection</span><span class="tok-p">(</span><span class="tok-n">URL</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">USER</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">PASS</span><span class="tok-p">);</span>
-<span class="tok-w">             </span><span class="tok-n">PreparedStatement</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-p">.</span><span class="tok-na">prepareStatement</span><span class="tok-p">(</span><span class="tok-n">sql</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
-<span class="tok-w">            </span><span class="tok-c1">// 设置参数</span>
-<span class="tok-w">            </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">setString</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">);</span>
-
-<span class="tok-w">            </span><span class="tok-c1">// 执行查询</span>
-<span class="tok-w">            </span><span class="tok-n">ResultSet</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">executeQuery</span><span class="tok-p">();</span>
-
-<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">next</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">                </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">getString</span><span class="tok-p">(</span><span class="tok-s">&quot;name&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;数据库查询成功！该卡所属用户为：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">                </span><span class="tok-c1">// 找不到时，抛出我们统一定义的异常</span>
-<span class="tok-w">                </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorSystemException</span><span class="tok-p">(</span><span class="tok-s">&quot;数据库中未找到卡号为 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 的用户&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-p">}</span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">SQLException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-c1">// 将底层的 SQL 错误包装成我们的门禁系统错误</span>
-<span class="tok-w">            </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorSystemException</span><span class="tok-p">(</span><span class="tok-s">&quot;数据库连接失败：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
-<span class="tok-w">        </span><span class="tok-p">}</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
-<span class="tok-p">}</span></code></pre>
-</div>
+<div class="paragraph">
+<p>我们将之前定义的 <code>User</code> 对象和 <code>DoorSystemException</code> 结合进来。</p>
 </div>
 </div>
 <div class="sect3">
@@ -2543,49 +2516,48 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="sect3">
 <h4 id="_多线程_程序的分身术">多线程 —— “程序的分身术”</h4>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>知识点说明</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>进程</strong>：像是一个工厂（比如整个门禁系统）。</p>
+</li>
+<li>
+<p><strong>线程</strong>：像是工厂里的工人。一个工厂可以有很多工人同时干活。</p>
+</li>
+<li>
+<p><strong>为什么要学？</strong>：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>生活举例</p>
 <div class="paragraph">
-<p>class HealthCheckThread extends Thread {
-    public void run() {
-        while (true) {
-            System.out.println("系统自检中：硬件状态正常&#8230;&#8203;");
-            try { Thread.sleep(5000); } catch (InterruptedException e) {}
-        }
-    }
-}</p>
+<p>你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。</p>
 </div>
-<div class="paragraph">
-<p>public class MultiThreadDemo {
-    public static void main(String[] args) {
-        // 2. 启动自检“分身”
-        HealthCheckThread check = new HealthCheckThread();
-        check.start();</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>        // 3. 主线程继续处理刷卡
-        System.out.println("主系统：准备就绪，请刷卡...");
-    }
-}</pre>
-</div>
-</div>
+</li>
+<li>
+<p>代码实现：模拟门禁自检与刷卡同时进行</p>
 <div class="listingblock">
 <div class="content">
-<pre>==== 反射机制 —— “程序的 X 光机”
-public class ReflectionDemo {
-    public static void main(String[] args) throws Exception {
-        // 通过类名，直接“抓取”这个类的结构
-        Class clazz = Class.forName("User");
+<pre class="pygments highlight"><code data-lang="java"><span></span>
+<span class="tok-o">====</span><span class="tok-w"> </span><span class="tok-n">反射机制</span><span class="tok-w"> </span><span class="tok-err">——</span><span class="tok-w"> </span><span class="tok-err">“</span><span class="tok-n">程序的</span><span class="tok-w"> </span><span class="tok-n">X</span><span class="tok-w"> </span><span class="tok-n">光机</span><span class="tok-err">”</span>
+<span class="tok-n">知识点说明</span>
 
-        System.out.println("类的名字是：" + clazz.getName());
+<span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">反射</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Reflection</span><span class="tok-p">)</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-n">平时我们用类</span><span class="tok-err">，</span><span class="tok-n">是先看到图纸再造房子</span><span class="tok-err">。</span><span class="tok-n">反射则是房子已经在那了</span><span class="tok-err">，</span><span class="tok-n">我们拿个</span><span class="tok-err">“</span><span class="tok-n">X光机</span><span class="tok-err">”</span><span class="tok-n">去扫</span><span class="tok-err">，</span><span class="tok-n">看看它里面有什么属性和方法</span><span class="tok-err">。</span>
+<span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">核心价值</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-n">它是很多框架</span><span class="tok-err">（</span><span class="tok-n">如</span><span class="tok-w"> </span><span class="tok-n">Spring</span><span class="tok-err">）</span><span class="tok-n">的灵魂</span><span class="tok-err">，</span><span class="tok-n">让程序在运行时动态地加载类</span><span class="tok-err">。</span>
 
-        // 获取所有定义的属性名字
-        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
-        for (var f : fields) {
-            System.out.println("发现属性：" + f.getName());
-        }
-    }
-}</pre>
+
+<span class="tok-p">.</span><span class="tok-na">代码举例</span><span class="tok-err">（</span><span class="tok-n">看看</span><span class="tok-w"> </span><span class="tok-n">User</span><span class="tok-w"> </span><span class="tok-n">类里有什么</span><span class="tok-err">）</span>
+<span class="tok-o">[</span><span class="tok-n">source</span><span class="tok-p">,</span><span class="tok-n">java</span><span class="tok-o">]</span></code></pre>
 </div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect3">
@@ -2729,7 +2701,90 @@ public class ReflectionDemo {
 </div>
 <div class="sect3">
 <h4 id="_直接安装开发环境_intellij_idea略">直接安装开发环境 IntelliJ IDEA&#8201;&#8212;&#8201;略</h4>
-
+<div class="paragraph">
+<p>idea 下载地址：
+<a href="https://www.jetbrains.com/idea/download/" class="bare">https://www.jetbrains.com/idea/download/</a></p>
+</div>
+<div class="paragraph">
+<p>在 Idea 创建新项目时可以直接安装 java jdk17。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_容器介绍docker_vs_podman">容器介绍：docker vs podman</h4>
+<div class="paragraph">
+<p>用一句话概括：容器是带上所有“行李”的一键式运行环境。</p>
+</div>
+<div class="paragraph">
+<p>如果展开成三个关键词，它的作用就是：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>封装：把代码和它运行所需的依赖（库、环境、配置）像罐头一样封在一起。</p>
+</li>
+<li>
+<p>隔离：让应用像住在独立公寓里一样，互不干扰，不污染宿主机系统。</p>
+</li>
+<li>
+<p>一致：确保程序在开发电脑、测试服务器和云端运行得完全一模一样。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>一言以蔽之： 容器消灭了 “在我电脑上明明能跑” 这种程序员最头疼的借口。</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<caption class="title">Table 3. 常用容器 Docker vs Podman 核心特性对比表</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">维度</th>
+<th class="tableblock halign-left valign-top">Docker (传统霸主)</th>
+<th class="tableblock halign-left valign-top">Podman (红帽新锐)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>架构模型</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C/S 架构，依赖后台守护进程 <code>dockerd</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">典型的 Fork-Exec 模型，无守护进程 (Daemonless)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>权限管理</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">默认需要 Root 权限，安全风险相对较高</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">原生支持 <strong>Rootless</strong> 模式，普通用户即可运行</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Kubernetes 集成</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">需通过额外工具转换</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">原生支持 <strong>Pod</strong> 概念，可直接导出/导入 Kubernetes YAML</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>系统集成</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用自带的 Restart Policy 自动重启</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">完美集成 <strong>systemd</strong>，可作为原生系统服务管理</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>命令行兼容性</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">标准 <code>docker</code> 命令</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">与 Docker CLI 几乎完全一致 (alias docker=podman)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>生态与桌面端</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">生态极度丰富，Docker Desktop 在 Win/Mac 体验领先</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">社区快速增长，Podman Desktop 正在发力</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>镜像存放</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">由 Docker Daemon 统一管理存储</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">存放在用户家目录（Rootless）或 /var/lib/containers</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_wsl2_安装容器环境_podman重点">WSL2 安装容器环境 podman&#8201;&#8212;&#8201;重点</h4>
@@ -3052,7 +3107,7 @@ podman-machine-default*  wsl         8 minutes ago  Currently running  8        
 </div>
 </div>
 <div class="sect3">
-<h4 id="_jdk17">JDK17</h4>
+<h4 id="_podman_安装_jdk17">podman 安装 JDK17</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp"># </span>拉取镜像<span class="tok-w"> </span><span class="tok-o">(</span>使用<span class="tok-w"> </span>Eclipse<span class="tok-w"> </span>Temurin<span class="tok-w"> </span>发行版<span class="tok-o">)</span>
@@ -3072,8 +3127,150 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 </div>
 </div>
 <div class="sect3">
-<h4 id="_maven">Maven</h4>
-
+<h4 id="_idea_使用_podman_jdk17_开发测试">IDEA 使用 podman JDK17 开发测试</h4>
+<div class="paragraph">
+<p>本手册指导如何在 macOS 上，利用 Podman 容器作为 JDK 17 环境进行 Java 基础开发，实现本地「零 JDK 安装」。</p>
+</div>
+<div class="sect4">
+<h5 id="_创建基础_java_项目">创建基础 Java 项目</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>点击 <strong>New Project</strong>。</p>
+</li>
+<li>
+<p><strong>Name</strong>: <code>JavaBasics</code></p>
+</li>
+<li>
+<p><strong>Language</strong>: <code>Java</code></p>
+</li>
+<li>
+<p><strong>Build system</strong>: <code>IntelliJ</code> (⚠️ 务必选此项，不使用 Maven/Gradle)</p>
+</li>
+<li>
+<p><strong>JDK</strong>: 此时下拉框选 <code>No SDK</code>。</p>
+</li>
+<li>
+<p>点击 <strong>Create</strong>。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_关联容器_jdk_解决智能提示">关联容器 JDK (解决智能提示)</h5>
+<div class="paragraph">
+<p>此步骤将 Podman 镜像内的 JDK 类库索引到本地 IDEA，消除代码红线。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>进入 <strong>File</strong> &#8594; <strong>Project Structure</strong> (<code>Cmd + ;</code>) &#8594; <strong>SDKs</strong>。</p>
+</li>
+<li>
+<p>点击 <strong>+</strong> &#8594; <strong>Add JDK&#8230;&#8203;</strong> &#8594; <strong>On Target&#8230;&#8203;</strong>。</p>
+</li>
+<li>
+<p>选择 <strong>Docker</strong> 目标：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Server</strong>: 选择刚才配好的 <code>Podman</code>。</p>
+</li>
+<li>
+<p><strong>Image</strong>: 选择 <code>eclipse-temurin:17-jdk</code>。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>点击 <strong>Next</strong>，IDEA 会启动容器并扫描 JDK 核心模块（如 <code>java.base</code>）。</p>
+</li>
+<li>
+<p>扫描完成后，在 <strong>Project</strong> 选项卡中，确保 <strong>Project SDK</strong> 选中该容器 JDK。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_配置运行目标_run_on_podman">配置运行目标 (Run on Podman)</h5>
+<div class="paragraph">
+<p>确保代码实际在容器内执行，而非本地。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Main</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;运行环境 OS: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">getProperty</span><span class="tok-p">(</span><span class="tok-s">&quot;os.name&quot;</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;JDK 运行版本: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">getProperty</span><span class="tok-p">(</span><span class="tok-s">&quot;java.version&quot;</span><span class="tok-p">));</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>点击代码左侧的绿色运行箭头，选择 <strong>Modify Run Configuration&#8230;&#8203;</strong>。</p>
+</li>
+<li>
+<p>找到 <strong>Run on</strong> 下拉菜单，点击 <strong>New Target&#8230;&#8203;</strong> &#8594; <strong>Docker</strong>。</p>
+</li>
+<li>
+<p>配置参数：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Server</strong>: <code>Podman</code></p>
+</li>
+<li>
+<p><strong>Image</strong>: <code>eclipse-temurin:17-jdk</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>保存并运行。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_结果验证">结果验证</h5>
+<div class="paragraph">
+<p>运行成功后，IDEA 控制台应输出如下信息：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>运行环境 OS: Linux
+JDK 运行版本: 17.0.18</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>由于操作系统显示为 <code>Linux</code>，证明代码已成功脱离 macOS 本地环境，运行在 Podman 容器中。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_社区版本_idea_运行_podman_容器_jdk17_方法">社区版本 IDEA 运行 podman 容器 jdk17 方法</h5>
+<div class="listingblock">
+<div class="title">Arguments：</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">run --rm -i -v $FileDir$:/src -w /src eclipse-temurin:17-jdk sh -c &quot;javac *.java &amp;&amp; java $FileNameWithoutExtension$&quot;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>-i 参数，如果程序需要 Scanner 输入数据，控制台也能支持交互。</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -3227,7 +3424,7 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-02 09:44:02 +0800
+Last updated 2026-03-02 16:04:48 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -864,44 +864,7 @@ public void loadUsers() throws DoorSystemException {
 4.  **挂断电话 (关闭资源)**：干完活必须挂电话，否则仓库线路会被占满。
 
 ==== 代码实现：查询用户信息
-[source,java]
-----
-import java.sql.*;
-
-public class JDBCDemo {
-    // 数据库连接信息（假设是 MySQL）
-    private static final String URL = "jdbc:mysql://localhost:3306/door_db";
-    private static final String USER = "root";
-    private static final String PASS = "123456";
-
-    public void findUserByCard(String cardId) throws DoorSystemException {
-        // SQL 语句：去 users 表里找卡号对应的姓名
-        String sql = "SELECT name FROM users WHERE card_id = ?";
-
-        // 使用 try-with-resources，自动关闭连接，防止“占线”
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            // 设置参数
-            pstmt.setString(1, cardId);
-
-            // 执行查询
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                String name = rs.getString("name");
-                System.out.println("数据库查询成功！该卡所属用户为：" + name);
-            } else {
-                // 找不到时，抛出我们统一定义的异常
-                throw new DoorSystemException("数据库中未找到卡号为 " + cardId + " 的用户");
-            }
-        } catch (SQLException e) {
-            // 将底层的 SQL 错误包装成我们的门禁系统错误
-            throw new DoorSystemException("数据库连接失败：" + e.getMessage());
-        }
-    }
-}
-----
+我们将之前定义的 `User` 对象和 `DoorSystemException` 结合进来。
 
 ==== 防止 SQL 注入 —— “拒绝陌生人的小纸条”
 . 知识点说明
@@ -941,43 +904,32 @@ public class JDBCDemo {
 * *本节要求*：理解“分身术”的原理，让程序能同时干多件事；了解反射这一“透视眼”技术。
 
 ==== 多线程 —— “程序的分身术”
-// 1. 定义一个自检任务
-class HealthCheckThread extends Thread {
-    public void run() {
-        while (true) {
-            System.out.println("系统自检中：硬件状态正常...");
-            try { Thread.sleep(5000); } catch (InterruptedException e) {}
-        }
-    }
-}
+[upperalpha]
+. 知识点说明
+* **进程**：像是一个工厂（比如整个门禁系统）。
+* **线程**：像是工厂里的工人。一个工厂可以有很多工人同时干活。
+* **为什么要学？**：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。
 
-public class MultiThreadDemo {
-    public static void main(String[] args) {
-        // 2. 启动自检“分身”
-        HealthCheckThread check = new HealthCheckThread();
-        check.start(); 
 
-        // 3. 主线程继续处理刷卡
-        System.out.println("主系统：准备就绪，请刷卡...");
-    }
-}
+. 生活举例
++
+你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。
+
+
+. 代码实现：模拟门禁自检与刷卡同时进行
++
+[source,java]
 ----
 
 ==== 反射机制 —— “程序的 X 光机”
-public class ReflectionDemo {
-    public static void main(String[] args) throws Exception {
-        // 通过类名，直接“抓取”这个类的结构
-        Class clazz = Class.forName("User");
+知识点说明
 
-        System.out.println("类的名字是：" + clazz.getName());
+* **反射 (Reflection)**：平时我们用类，是先看到图纸再造房子。反射则是房子已经在那了，我们拿个“X光机”去扫，看看它里面有什么属性和方法。
+* **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
 
-        // 获取所有定义的属性名字
-        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
-        for (var f : fields) {
-            System.out.println("发现属性：" + f.getName());
-        }
-    }
-}
+
+.代码举例（看看 User 类里有什么）
+[source,java]
 ----
 
 ==== 小结
@@ -1054,7 +1006,58 @@ public class CentralServer {
 * *目标*：搭建 JDK 与 IntelliJ IDEA 环境，完成项目骨架搭建。
 
 ==== 直接安装开发环境 IntelliJ IDEA -- 略
+idea 下载地址：
+https://www.jetbrains.com/idea/download/
 
+在 Idea 创建新项目时可以直接安装 java jdk17。
+
+==== 容器介绍：docker vs podman
+用一句话概括：容器是带上所有“行李”的一键式运行环境。
+
+如果展开成三个关键词，它的作用就是：
+
+* 封装：把代码和它运行所需的依赖（库、环境、配置）像罐头一样封在一起。
+
+* 隔离：让应用像住在独立公寓里一样，互不干扰，不污染宿主机系统。
+
+* 一致：确保程序在开发电脑、测试服务器和云端运行得完全一模一样。
+
+一言以蔽之： 容器消灭了 “在我电脑上明明能跑” 这种程序员最头疼的借口。
+
+
+.常用容器 Docker vs Podman 核心特性对比表
+[cols="2,4,4", options="header", stripes=even]
+|===
+| 维度 | Docker (传统霸主) | Podman (红帽新锐)
+
+| **架构模型**
+| C/S 架构，依赖后台守护进程 `dockerd`
+| 典型的 Fork-Exec 模型，无守护进程 (Daemonless)
+
+| **权限管理**
+| 默认需要 Root 权限，安全风险相对较高
+| 原生支持 **Rootless** 模式，普通用户即可运行
+
+| **Kubernetes 集成**
+| 需通过额外工具转换
+| 原生支持 **Pod** 概念，可直接导出/导入 Kubernetes YAML
+
+| **系统集成**
+| 使用自带的 Restart Policy 自动重启
+| 完美集成 **systemd**，可作为原生系统服务管理
+
+| **命令行兼容性**
+| 标准 `docker` 命令
+| 与 Docker CLI 几乎完全一致 (alias docker=podman)
+
+| **生态与桌面端**
+| 生态极度丰富，Docker Desktop 在 Win/Mac 体验领先
+| 社区快速增长，Podman Desktop 正在发力
+
+| **镜像存放**
+| 由 Docker Daemon 统一管理存储
+| 存放在用户家目录（Rootless）或 /var/lib/containers
+|===
 
 ==== WSL2 安装容器环境 podman -- 重点
 什么是 WSL2？ (地基/虚拟化引擎)
@@ -1253,7 +1256,7 @@ NAME                     VM TYPE     CREATED        LAST UP            CPUS     
 podman-machine-default*  wsl         8 minutes ago  Currently running  8           2GiB        100GiB
 ....
 
-==== JDK17
+==== podman 安装 JDK17
 [source,console]
 ----
 # 拉取镜像 (使用 Eclipse Temurin 发行版)
@@ -1270,8 +1273,71 @@ OpenJDK Runtime Environment Temurin-17.0.18+8 (build 17.0.18+8)
 OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing)
 ....
 
-==== Maven
+==== IDEA 使用 podman JDK17 开发测试
+本手册指导如何在 macOS 上，利用 Podman 容器作为 JDK 17 环境进行 Java 基础开发，实现本地「零 JDK 安装」。
 
+===== 创建基础 Java 项目
+1. 点击 **New Project**。
+2. **Name**: `JavaBasics`
+3. **Language**: `Java`
+4. **Build system**: `IntelliJ` (⚠️ 务必选此项，不使用 Maven/Gradle)
+5. **JDK**: 此时下拉框选 `No SDK`。
+6. 点击 **Create**。
+
+===== 关联容器 JDK (解决智能提示)
+此步骤将 Podman 镜像内的 JDK 类库索引到本地 IDEA，消除代码红线。
+
+1. 进入 **File** -> **Project Structure** (`Cmd + ;`) -> **SDKs**。
+2. 点击 **+** -> **Add JDK...** -> **On Target...**。
+3. 选择 **Docker** 目标：
+   * **Server**: 选择刚才配好的 `Podman`。
+   * **Image**: 选择 `eclipse-temurin:17-jdk`。
+4. 点击 **Next**，IDEA 会启动容器并扫描 JDK 核心模块（如 `java.base`）。
+5. 扫描完成后，在 **Project** 选项卡中，确保 **Project SDK** 选中该容器 JDK。
+
+===== 配置运行目标 (Run on Podman)
+确保代码实际在容器内执行，而非本地。
+
+[source,java]
+----
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("运行环境 OS: " + System.getProperty("os.name"));
+        System.out.println("JDK 运行版本: " + System.getProperty("java.version"));
+    }
+}
+----
+
+1. 点击代码左侧的绿色运行箭头，选择 **Modify Run Configuration...**。
+2. 找到 **Run on** 下拉菜单，点击 **New Target...** -> **Docker**。
+3. 配置参数：
+   * **Server**: `Podman`
+   * **Image**: `eclipse-temurin:17-jdk`
+4. 保存并运行。
+
+===== 结果验证
+运行成功后，IDEA 控制台应输出如下信息：
+
+[source,text]
+----
+运行环境 OS: Linux
+JDK 运行版本: 17.0.18
+----
+
+[NOTE]
+====
+由于操作系统显示为 `Linux`，证明代码已成功脱离 macOS 本地环境，运行在 Podman 容器中。
+====
+
+===== 社区版本 IDEA 运行 podman 容器 jdk17 方法
+
+.Arguments：
+[source,console]
+----
+run --rm -i -v $FileDir$:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java && java $FileNameWithoutExtension$"
+----
+
+-i 参数，如果程序需要 Scanner 输入数据，控制台也能支持交互。
 
 === 实验二：数据模型与实体类开发 (4学时)
 * *目标*：根据需求设计实体类及自定义异常类。

@@ -275,6 +275,7 @@
 <v t="swot.20260215212047.1"><vh>3. 实验内容：JavaSE 门禁系统实训（共 36 学时）</vh>
 <v t="swot.20260215212525.1"><vh>实验一：环境与项目初始化 (4学时)</vh>
 <v t="swot.20260301091031.1"><vh>直接安装开发环境 IntelliJ IDEA -- 略</vh></v>
+<v t="swot.20260302160035.1"><vh>容器介绍：docker vs podman</vh></v>
 <v t="swot.20260301091119.1"><vh>WSL2 安装容器环境 podman -- 重点</vh>
 <v t="swot.20260301092031.1"><vh>检查 windows 虚拟化环境状态并安装 WSL2 引擎</vh>
 <v t="swot.20260301160117.1"><vh>查看 BIOS 是否开启虚拟化支持</vh></v>
@@ -284,8 +285,14 @@
 </v>
 <v t="swot.20260301110904.1"><vh>在 WSL2 引擎下安装 podman</vh></v>
 </v>
-<v t="swot.20260301133243.1"><vh>JDK17</vh></v>
-<v t="swot.20260302095530.1"><vh>IDEA 使用 JDK17 开发测试</vh></v>
+<v t="swot.20260301133243.1"><vh>podman 安装 JDK17</vh></v>
+<v t="swot.20260302095530.1"><vh>IDEA 使用 podman JDK17 开发测试</vh>
+<v t="swot.20260302102453.1"><vh>创建基础 Java 项目</vh></v>
+<v t="swot.20260302102505.1"><vh>关联容器 JDK (解决智能提示)</vh></v>
+<v t="swot.20260302102514.1"><vh>配置运行目标 (Run on Podman)</vh></v>
+<v t="swot.20260302102542.1"><vh>结果验证</vh></v>
+<v t="swot.20260302135453.1"><vh>社区版本 IDEA 运行 podman 容器 jdk17 方法</vh></v>
+</v>
 </v>
 <v t="swot.20260215212523.1"><vh>实验二：数据模型与实体类开发 (4学时)</vh>
 <v t="swot.20260216075118.1"><vh>class User 用户实体类</vh></v>
@@ -1131,7 +1138,7 @@
 <v t="swot.20260226142220.1"><vh>key_mouse.py 生成键盘热力图</vh></v>
 <v t="swot.20260228093352.1"><vh>解决 clash verge 不允许 cloudflared 在规则模式下出去的问题</vh></v>
 <v t="swot.20260228152238.1"><vh>leo 作为 PIM 应用：可能认到 file:/// 协议</vh></v>
-<v t="swot.20260228152306.1"><vh>newHeadline</vh></v>
+<v t="swot.20260228152306.1"><vh>leo 插件 body-style.py 影响了 zoom-out &amp; zoom-in</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -16774,7 +16781,12 @@ echo ".DS_Store" &gt;&gt; ~/.gitignore_global
 </t>
 <t tx="swot.20260301085004.1"></t>
 <t tx="swot.20260301085626.1"></t>
-<t tx="swot.20260301091031.1"></t>
+<t tx="swot.20260301091031.1">idea 下载地址：
+https://www.jetbrains.com/idea/download/
+
+在 Idea 创建新项目时可以直接安装 java jdk17。
+
+</t>
 <t tx="swot.20260301091119.1">什么是 WSL2？ (地基/虚拟化引擎)
 
 - 全称： Windows Subsystem for Linux 2。
@@ -16987,6 +16999,115 @@ PS C:\Windows\system32&gt; wsl -l -v
 IMPORTANT: 一定一定记得要重启 Windows 操作系统！！！
 
 </t>
-<t tx="swot.20260302095530.1"></t>
+<t tx="swot.20260302095530.1">本手册指导如何在 macOS 上，利用 Podman 容器作为 JDK 17 环境进行 Java 基础开发，实现本地「零 JDK 安装」。
+</t>
+<t tx="swot.20260302102453.1">1. 点击 **New Project**。
+2. **Name**: `JavaBasics`
+3. **Language**: `Java`
+4. **Build system**: `IntelliJ` (⚠️ 务必选此项，不使用 Maven/Gradle)
+5. **JDK**: 此时下拉框选 `No SDK`。
+6. 点击 **Create**。
+
+</t>
+<t tx="swot.20260302102505.1">此步骤将 Podman 镜像内的 JDK 类库索引到本地 IDEA，消除代码红线。
+
+1. 进入 **File** -&gt; **Project Structure** (`Cmd + ;`) -&gt; **SDKs**。
+2. 点击 **+** -&gt; **Add JDK...** -&gt; **On Target...**。
+3. 选择 **Docker** 目标：
+   * **Server**: 选择刚才配好的 `Podman`。
+   * **Image**: 选择 `eclipse-temurin:17-jdk`。
+4. 点击 **Next**，IDEA 会启动容器并扫描 JDK 核心模块（如 `java.base`）。
+5. 扫描完成后，在 **Project** 选项卡中，确保 **Project SDK** 选中该容器 JDK。
+</t>
+<t tx="swot.20260302102514.1">确保代码实际在容器内执行，而非本地。
+
+[source,java]
+----
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("运行环境 OS: " + System.getProperty("os.name"));
+        System.out.println("JDK 运行版本: " + System.getProperty("java.version"));
+    }
+}
+----
+
+1. 点击代码左侧的绿色运行箭头，选择 **Modify Run Configuration...**。
+2. 找到 **Run on** 下拉菜单，点击 **New Target...** -&gt; **Docker**。
+3. 配置参数：
+   * **Server**: `Podman`
+   * **Image**: `eclipse-temurin:17-jdk`
+4. 保存并运行。
+
+</t>
+<t tx="swot.20260302102542.1">运行成功后，IDEA 控制台应输出如下信息：
+
+[source,text]
+----
+运行环境 OS: Linux
+JDK 运行版本: 17.0.18
+----
+
+[NOTE]
+====
+由于操作系统显示为 `Linux`，证明代码已成功脱离 macOS 本地环境，运行在 Podman 容器中。
+====
+
+</t>
+<t tx="swot.20260302135453.1">
+.Arguments：
+[source,console]
+----
+run --rm -i -v $FileDir$:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java &amp;&amp; java $FileNameWithoutExtension$"
+----
+
+-i 参数，如果程序需要 Scanner 输入数据，控制台也能支持交互。
+
+</t>
+<t tx="swot.20260302160035.1">用一句话概括：容器是带上所有“行李”的一键式运行环境。
+
+如果展开成三个关键词，它的作用就是：
+
+* 封装：把代码和它运行所需的依赖（库、环境、配置）像罐头一样封在一起。
+
+* 隔离：让应用像住在独立公寓里一样，互不干扰，不污染宿主机系统。
+
+* 一致：确保程序在开发电脑、测试服务器和云端运行得完全一模一样。
+
+一言以蔽之： 容器消灭了 “在我电脑上明明能跑” 这种程序员最头疼的借口。
+
+
+.常用容器 Docker vs Podman 核心特性对比表
+[cols="2,4,4", options="header", stripes=even]
+|===
+| 维度 | Docker (传统霸主) | Podman (红帽新锐)
+
+| **架构模型**
+| C/S 架构，依赖后台守护进程 `dockerd`
+| 典型的 Fork-Exec 模型，无守护进程 (Daemonless)
+
+| **权限管理**
+| 默认需要 Root 权限，安全风险相对较高
+| 原生支持 **Rootless** 模式，普通用户即可运行
+
+| **Kubernetes 集成**
+| 需通过额外工具转换
+| 原生支持 **Pod** 概念，可直接导出/导入 Kubernetes YAML
+
+| **系统集成**
+| 使用自带的 Restart Policy 自动重启
+| 完美集成 **systemd**，可作为原生系统服务管理
+
+| **命令行兼容性**
+| 标准 `docker` 命令
+| 与 Docker CLI 几乎完全一致 (alias docker=podman)
+
+| **生态与桌面端**
+| 生态极度丰富，Docker Desktop 在 Win/Mac 体验领先
+| 社区快速增长，Podman Desktop 正在发力
+
+| **镜像存放**
+| 由 Docker Daemon 统一管理存储
+| 存放在用户家目录（Rootless）或 /var/lib/containers
+|===</t>
 </tnodes>
 </leo_file>
