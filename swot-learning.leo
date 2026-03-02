@@ -6,7 +6,6 @@
 <preferences/>
 <find_panel_settings/>
 <vnodes>
-<v t="swot.20260301080950.1"><vh>@leo ../TJISE-inner/TJISE-inner.leo</vh></v>
 <v t="swot.20250508123413.1"><vh>@adoc README.adoc</vh>
 <v t="swot.20250508123515.1"><vh>learning contents</vh>
 <v t="swot.20250508125533.1"><vh>Read document</vh></v>
@@ -173,7 +172,9 @@
 </v>
 </v>
 <v t="swot.20260215211454.1"><vh>@path java</vh>
-<v t="swot.20260216182522.1"><vh>@path javaBase</vh>
+<v t="swot.20260216182522.1"><vh>@path javaBase</vh></v>
+</v>
+<v t="swot.20260301085004.1"><vh>@path 大软3+2</vh>
 <v t="swot.20260215212755.1"><vh>@adoc Java高级程序设计进阶.adoc</vh>
 <v t="swot.20260215211506.1"><vh>高级程序设计进阶（Java）</vh>
 <v t="swot.20260215213152.1"><vh>1. 课程基本信息</vh></v>
@@ -188,14 +189,23 @@
 <v t="swot.20260228155456.1"><vh>2.2 Java 版本选择 Java17(LTS)</vh>
 <v t="swot.20260228164614.1"><vh>避坑指南</vh></v>
 </v>
-<v t="swot.20260215212238.1"><vh>2.3 面向对象基础 (4学时)</vh>
+<v t="swot.20260301085626.1"><vh>2.3 Java 之解惑</vh>
+<v t="swot.20260214104720.1"><vh>编译、解释与 JIT 的三角关系</vh></v>
+<v t="swot.20260214104711.1"><vh>为什么 AI 偏爱 Python 而非 Java？</vh></v>
+<v t="swot.20260214105028.1"><vh>类型的本质与负担</vh></v>
+<v t="swot.20260214100122.1"><vh>商业版权与开源治理</vh>
+<v t="swot.20260224095544.1"><vh>甲骨文 (Oracle) 与 Java 诉讼</vh></v>
+<v t="swot.20260224095534.1"><vh>Python (PSF) 的自由之路</vh></v>
+</v>
+</v>
+<v t="swot.20260215212238.1"><vh>2.4 面向对象基础 (4学时)</vh>
 <v t="swot.20260215222431.1"><vh>类与对象 —— “图纸”与“实物”</vh></v>
 <v t="swot.20260215222514.1"><vh>封装 —— “电视机外壳”</vh></v>
 <v t="swot.20260215222546.1"><vh>继承与多态 —— “父子关系”与“七十二变”</vh></v>
 <v t="swot.20260215222615.1"><vh>接口设计 —— “万能插座标准”</vh></v>
 <v t="swot.20260216074225.1"><vh>小结</vh></v>
 </v>
-<v t="swot.20260215212244.1"><vh>2.4 常用工具类 (4学时)</vh>
+<v t="swot.20260215212244.1"><vh>2.5 常用工具类 (4学时)</vh>
 <v t="swot.20260216081800.1"><vh>String：文字的“修剪与检查”</vh>
 <v t="swot.20260216081956.1"><vh>class StringDemo</vh></v>
 </v>
@@ -204,7 +214,7 @@
 </v>
 <v t="swot.20260216080055.1"><vh>小结</vh></v>
 </v>
-<v t="swot.20260215212333.1"><vh>2.5 异常处理机制 (4学时)</vh>
+<v t="swot.20260215212333.1"><vh>2.6 异常处理机制 (4学时)</vh>
 <v t="swot.20260216085926.1"><vh>什么是异常？ —— “生活的备选方案”</vh></v>
 <v t="swot.20260216085934.1"><vh>try-catch-finally —— “安全气囊”</vh>
 <v t="swot.20260216090424.1"><vh>class ExceptionDemo</vh></v>
@@ -218,7 +228,7 @@
 </v>
 <v t="swot.20260216085347.1"><vh>小结</vh></v>
 </v>
-<v t="swot.20260215212328.1"><vh>2.6 集合框架 (4学时)</vh>
+<v t="swot.20260215212328.1"><vh>2.7 集合框架 (4学时)</vh>
 <v t="swot.20260216105105.1"><vh>ArrayList —— “自动伸缩的排队队伍”</vh>
 <v t="swot.20260216105325.1"><vh>class ListDemo 代码举例（存储一堆用户）</vh></v>
 </v>
@@ -227,7 +237,7 @@
 </v>
 <v t="swot.20260216103228.1"><vh>小结</vh></v>
 </v>
-<v t="swot.20260215212323.1"><vh>2.7 IO 流技术 (6学时)</vh>
+<v t="swot.20260215212323.1"><vh>2.8 IO 流技术 (6学时)</vh>
 <v t="swot.20260216115239.1"><vh>为什么要学 IO？ —— “大脑”与“笔记本”</vh></v>
 <v t="swot.20260216115250.1"><vh>File 类 —— “文件管理员”</vh>
 <v t="swot.20260216123452.1"><vh>class FileDemo 代码举例</vh></v>
@@ -240,7 +250,7 @@
 <v t="swot.20260216115314.1"><vh>实战演示：读取文件并抛出自定义异常</vh></v>
 <v t="swot.20260216115335.1"><vh>小结</vh></v>
 </v>
-<v t="swot.20260215212313.1"><vh>2.8 Java 数据库编程 (6学时)</vh>
+<v t="swot.20260215212313.1"><vh>2.9 Java 数据库编程 (6学时)</vh>
 <v t="swot.20260216191659.1"><vh>为什么要用数据库？ —— “记事本”升级为“大仓库”</vh></v>
 <v t="swot.20260216191709.1"><vh>JDBC 操作的“四大步骤” —— “打电话订货”</vh></v>
 <v t="swot.20260216191718.1"><vh>代码实现：查询用户信息</vh></v>
@@ -248,12 +258,12 @@
 <v t="swot.20260216191751.1"><vh>实验预告：实验三 数据库驱动开发</vh></v>
 <v t="swot.20260216194309.1"><vh>小结</vh></v>
 </v>
-<v t="swot.20260215212309.1"><vh>2.9 多线程与反射 (4学时)</vh>
+<v t="swot.20260215212309.1"><vh>2.10 多线程与反射 (4学时)</vh>
 <v t="swot.20260216213100.1"><vh>多线程 —— “程序的分身术”</vh></v>
 <v t="swot.20260216213110.1"><vh>反射机制 —— “程序的 X 光机”</vh></v>
 <v t="swot.20260217014753.1"><vh>小结</vh></v>
 </v>
-<v t="swot.20260215212257.1"><vh>2.10 网络编程 (4学时)</vh>
+<v t="swot.20260215212257.1"><vh>2.11 网络编程 (4学时)</vh>
 <v t="swot.20260216212750.1"><vh>网络基础 —— “寄快递”</vh></v>
 <v t="swot.20260216213241.1"><vh>Socket 编程 —— “打通电话”</vh>
 <v t="swot.20260217014602.1"><vh>代码举例：门禁终端（客户端）发送刷卡请求</vh></v>
@@ -263,7 +273,20 @@
 </v>
 </v>
 <v t="swot.20260215212047.1"><vh>3. 实验内容：JavaSE 门禁系统实训（共 36 学时）</vh>
-<v t="swot.20260215212525.1"><vh>实验一：环境与项目初始化 (4学时)</vh></v>
+<v t="swot.20260215212525.1"><vh>实验一：环境与项目初始化 (4学时)</vh>
+<v t="swot.20260301091031.1"><vh>直接安装开发环境 IntelliJ IDEA -- 略</vh></v>
+<v t="swot.20260301091119.1"><vh>WSL2 安装容器环境 podman -- 重点</vh>
+<v t="swot.20260301092031.1"><vh>检查 windows 虚拟化环境状态并安装 WSL2 引擎</vh>
+<v t="swot.20260301160117.1"><vh>查看 BIOS 是否开启虚拟化支持</vh></v>
+<v t="swot.20260301160214.1"><vh>查看 windows 是否安装了适用于 Linux 的 Windows 子系统</vh></v>
+<v t="swot.20260301113512.1"><vh>再次确认 wsl 版本为 2</vh></v>
+<v t="swot.20260301111720.1"><vh>删除 ubuntu Linux 系统</vh></v>
+</v>
+<v t="swot.20260301110904.1"><vh>在 WSL2 引擎下安装 podman</vh></v>
+</v>
+<v t="swot.20260301133243.1"><vh>JDK17</vh></v>
+<v t="swot.20260302095530.1"><vh>IDEA 使用 JDK17 开发测试</vh></v>
+</v>
 <v t="swot.20260215212523.1"><vh>实验二：数据模型与实体类开发 (4学时)</vh>
 <v t="swot.20260216075118.1"><vh>class User 用户实体类</vh></v>
 <v t="swot.20260216075612.1"><vh>关于 User 类小结</vh></v>
@@ -274,7 +297,6 @@
 <v t="swot.20260215212518.1"><vh>实验五：认证算法实现 (6学时)</vh></v>
 <v t="swot.20260215212516.1"><vh>实验六：持久化层升级 (6学时)</vh></v>
 <v t="swot.20260215212514.1"><vh>实验七：系统集成与发布 (6学时)</vh></v>
-</v>
 </v>
 </v>
 </v>
@@ -893,36 +915,33 @@
 <v t="swot.20260224073020.1"><vh>4. 架构总结及思考</vh></v>
 </v>
 <v t="swot.20260214094024.1"><vh>2026-02-14 开发语言解惑汇总</vh>
-<v t="swot.20260214100040.1"><vh>1. 编程语言执行机制与性能哲学</vh>
-<v t="swot.20260214104811.1"><vh>1.1 Lua：极致的嵌入式胶水</vh></v>
-<v t="swot.20260214104720.1"><vh>1.2 编译、解释与 JIT 的三角关系</vh></v>
-<v t="swot.20260214104711.1"><vh>1.3 为什么 AI 偏爱 Python 而非 Java？</vh></v>
+<v t="swot.20260214100040.1"><vh>编程语言执行机制与性能哲学</vh>
+<v t="swot.20260214104811.1"><vh>Lua：极致的嵌入式胶水</vh></v>
+<v t="swot.20260214104720.1"></v>
+<v t="swot.20260214104711.1"></v>
 </v>
-<v t="swot.20260214100053.1"><vh>2. Web 图形与计算架构演进</vh>
-<v t="swot.20260214104443.1"><vh>2.1 WebAssembly (WASM)</vh></v>
-<v t="swot.20260214104450.1"><vh>2.2 从 WebGL 到 WebGPU 的跨越</vh></v>
-<v t="swot.20260224104320.1"><vh>2.3 Three.js / Unity / UE 技术选型深度对比</vh>
-<v t="swot.20260224105240.1"><vh>2.3.1 核心定位与技术栈概览</vh></v>
-<v t="swot.20260224105328.1"><vh>2.3.2 三者深度解析</vh>
-<v t="swot.20260224110717.1"><vh>2.3.2.1 Three.js：网页端的“无冕之王”</vh></v>
-<v t="swot.20260224110708.1"><vh>2.3.2.2 Unity：全能的“斜杠青年”</vh></v>
-<v t="swot.20260224110658.1"><vh>2.3.2.3 Unreal Engine：极致的视觉天花板</vh></v>
+<v t="swot.20260214100053.1"><vh>Web 图形与计算架构演进</vh>
+<v t="swot.20260214104443.1"><vh>WebAssembly (WASM)</vh></v>
+<v t="swot.20260214104450.1"><vh>从 WebGL 到 WebGPU 的跨越</vh></v>
+<v t="swot.20260224104320.1"><vh>Three.js / Unity / UE 技术选型深度对比</vh>
+<v t="swot.20260224105240.1"><vh>核心定位与技术栈概览</vh></v>
+<v t="swot.20260224105328.1"><vh>三者深度解析</vh>
+<v t="swot.20260224110717.1"><vh>Three.js：网页端的“无冕之王”</vh></v>
+<v t="swot.20260224110708.1"><vh>Unity：全能的“斜杠青年”</vh></v>
+<v t="swot.20260224110658.1"><vh>Unreal Engine：极致的视觉天花板</vh></v>
 </v>
-<v t="swot.20260224110244.1"><vh>2.3.3 场景决策指南</vh></v>
+<v t="swot.20260224110244.1"><vh>场景决策指南</vh></v>
 </v>
 </v>
-<v t="swot.20260214100102.1"><vh>3. 类型系统的深度工程化</vh>
-<v t="swot.20260214105028.1"><vh>3.1 类型的本质与负担</vh></v>
-<v t="swot.20260214100115.1"><vh>3.2 零编译的类型方案：JSDoc + .d.ts</vh>
+<v t="swot.20260214100102.1"><vh>类型系统的深度工程化</vh>
+<v t="swot.20260214105028.1"></v>
+<v t="swot.20260214100115.1"><vh>零编译的类型方案：JSDoc + .d.ts</vh>
 <v t="swot.20260214113041.1"><vh>&lt;&lt; jsconfig.json &gt;&gt;</vh></v>
 <v t="swot.20260214113129.1"><vh>&lt;&lt; global.d.ts &gt;&gt;</vh></v>
 <v t="swot.20260214113154.1"><vh>&lt;&lt; main.js &gt;&gt;</vh></v>
 </v>
 </v>
-<v t="swot.20260214100122.1"><vh>4. 商业版权与开源治理</vh>
-<v t="swot.20260224095544.1"><vh>甲骨文 (Oracle) 与 Java 诉讼</vh></v>
-<v t="swot.20260224095534.1"><vh>Python (PSF) 的自由之路</vh></v>
-</v>
+<v t="swot.20260214100122.1"></v>
 </v>
 </v>
 </v>
@@ -1056,6 +1075,7 @@
 </v>
 </v>
 </v>
+<v t="swot.20260301080950.1"><vh>@leo ../TJISE-inner/TJISE-inner.leo</vh></v>
 <v t="swot.20260218173421.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3271017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b64580a000000707269736574646174657106580a000000323032362d30322d3139710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58260000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f63686b626c6b2e706e67710d580700000072656c50617468710e580f000000636c656f2f63686b626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755805000000302e322e3071197d711a285808000000616e6e6f74617465711b7d711c2858080000007072696f72697479711d4b64580a00000070726973657464617465711e580a000000323032362d30322d3139711f75580500000069636f6e7371205d71217d712228680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e6771236810681168124b0068134b0268144b0168156816681768187561755803000000302e3371247d7125285808000000616e6e6f7461746571267d71272858080000007072696f7269747971284b64580a000000707269736574646174657129580a000000323032362d30322d3139712a75580500000069636f6e73712b5d712c7d712d28680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e67712e6810681168124b0068134b0268144b0168156816681768187561755805000000302e332e30712f7d71305808000000616e6e6f7461746571317d71322858080000007072696f7269747971334d0f27580a000000707269736574646174657134580a000000323032362d30322d3139713575735803000000302e3471367d7137285808000000616e6e6f7461746571387d71392858080000007072696f72697479713a4b64580a00000070726973657464617465713b580a000000323032362d30322d3139713c75580500000069636f6e73713d5d713e7d713f28680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e6771406810681168124b0068134b0268144b0168156816681768187561755805000000302e342e3071417d71425808000000616e6e6f7461746571437d71442858080000007072696f7269747971454d0f27580a000000707269736574646174657146580a000000323032362d30322d313971477573752e"><vh>@spot</vh>
 <v t="swot.20250508220045.1"></v>
 <v t="swot.20260220074315.1"><vh>waiting for github response, then can delete them</vh></v>
@@ -1316,21 +1336,30 @@ If these comments in the code could be formatted like an article, the effect wou
 </t>
 <t tx="swot.20250508160844.1"></t>
 <t tx="swot.20250508161005.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
 :icons: font
 :scripts: cjk
+:stem: latexmath
+:experimental:
 :toc:
 :toc: right
-:toc-title: Table of Contents
-:toclevels: 3</t>
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
 <t tx="swot.20250508161024.1">
 ++++
-&lt;button id="toggleButton"&gt;Table of Contents&lt;/button&gt;
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
 &lt;script&gt;
     // 获取按钮和 div 元素
     const toggleButton = document.getElementById('toggleButton');
     const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
 
     // 添加点击事件监听器
     toggleButton.addEventListener('click', () =&gt; {
@@ -13965,12 +13994,13 @@ pause
 :toc:
 :toc: right
 :toc-title: 目录
-:toclevels: 3
+:toclevels: 4
 :tip-caption: ⚡
 :note-caption: ❕
 :important-caption: ❗
 :warning-caption: ‼️
 :caution-caption: ⚠️
+
 </t>
 <t tx="swot.20260215213152.1">@language asciidoc
 .课程基本信息
@@ -16666,7 +16696,7 @@ image:test_img2carton_from_huoshan_engine/img/通过fastapi请求火山返回的
 - **Spark 3.5+** 已经正式支持 Java 17。
 - **Flink 1.18+** 也加入了对 Java 17 的支持。
 +
-NOTE: ** 虽然很多大数据框架可以在 Java 8/11 上运行，但 2026 年的企业级大数据平台正在全面向 17 迁移。Java 21 在大数据生态中的支持目前仍处于“试用”或“部分支持”阶段，容易遇到兼容性坑。
+NOTE: 虽然很多大数据框架可以在 Java 8/11 上运行，但 2026 年的企业级大数据平台正在全面向 17 迁移。Java 21 在大数据生态中的支持目前仍处于“试用”或“部分支持”阶段，容易遇到兼容性坑。
 
 
 4. 配套的其他库
@@ -16742,5 +16772,221 @@ echo ".DS_Store" &gt;&gt; ~/.gitignore_global
 这样你电脑上所有的 Git 仓库都会默认忽略这个文件。
 ====
 </t>
+<t tx="swot.20260301085004.1"></t>
+<t tx="swot.20260301085626.1"></t>
+<t tx="swot.20260301091031.1"></t>
+<t tx="swot.20260301091119.1">什么是 WSL2？ (地基/虚拟化引擎)
+
+- 全称： Windows Subsystem for Linux 2。
+
+- 本质： 它是微软开发的一个 Windows 功能组件。
+
+- 功能： 它在 Windows 内部提供了一个真实的 Linux 内核。
+        它负责处理硬件资源（CPU、内存、网络）的分配，让 Linux 能够直接运行在 Windows 上。
+
+- 特点： 它本身不是一个可以让你操作的界面，它只是一个运行环境。没有它，Linux 系统无法在 Windows 上跑起来。
+
+</t>
+<t tx="swot.20260301092031.1">请在你的 Windows 搜索栏输入 PowerShell，
+右键点击并选择 “以管理员身份运行”，打开命令行工具。
+
+</t>
+<t tx="swot.20260301110904.1">[upperalpha]
+. 下载地址
+  ** https://github.com/containers/podman/releases[Podman GitHub Releases]
+  ** 找最新的 .exe 安装文件
+
+
+. 安装完成后，在 PowerShell 输入
++
+.初始化 podman 机器并开启
+[source,console]
+----
+# 限制 Podman 虚拟机使用 4G 内存，2 核 CPU
+podman machine init --cpus 2 --memory 4096
+
+# 可以再改
+podman machine set --cpus 4 --memory 4096
+
+# 查看设置
+&gt; podman machine inspect --format '{{.Resources.CPUs}} CPU, {{.Resources.Memory}} MB'
+
+podman machine start
+
+# 不用了就释放计算机内存资源
+podman machine stop
+----
+
+
+如果 init 自动下载太慢了，直接下载镜像再导入。 +
+https://github.com/containers/podman/releases
+
+[source,console]
+----
+# 彻底清理旧的失败记录
+podman machine rm -f
+
+# 手动指定你下载好的那个 141MB 的文件
+podman machine init --image "D:\rootfs.tar.xz"
+
+# 启动
+podman machine start
+----
+
+.成功后再查看 machine list 就有了
+....
+PS C:\Windows\system32&gt; podman.exe machine list
+NAME                     VM TYPE     CREATED        LAST UP            CPUS        MEMORY      DISK SIZE
+podman-machine-default*  wsl         8 minutes ago  Currently running  8           2GiB        100GiB
+....
+</t>
+<t tx="swot.20260301111720.1">如果你已经手快执行了 `wsl --install` 并且 Ubuntu 已经出现在你的菜单里了，也不用重装系统，直接在 PowerShell 里输入这行命令就能把它彻底删掉：
+
+[source,console]
+----
+wsl --unregister Ubuntu
+----
+
+这样你就回到了一个“只有 WSL2 引擎，没有 Ubuntu”的纯净状态了。
+
+</t>
+<t tx="swot.20260301113512.1">.查看 wsl 状态：一定要是版本 2
+....
+PS C:\Windows\system32&gt; wsl --status
+默认版本: 2
+当前计算机配置不支持 WSL1。
+若要使用 WSL1，请启用“Windows Subsystem for Linux”可选组件。
+....
+
+
+.不是版本 2，则需要进行设置
+....
+wsl --set-default-version 2
+....
+
+</t>
+<t tx="swot.20260301133243.1">[source,console]
+----
+# 拉取镜像 (使用 Eclipse Temurin 发行版)
+podman pull eclipse-temurin:17-jdk
+
+# 启动一个交互式容器来测试 java 版本
+podman run -it --rm eclipse-temurin:17-jdk java -version
+----
+
+.output result
+....
+openjdk version "17.0.18" 2026-01-20
+OpenJDK Runtime Environment Temurin-17.0.18+8 (build 17.0.18+8)
+OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing)
+....
+
+</t>
+<t tx="swot.20260301160117.1">[source,console]
+----
+(Get-CimInstance -ClassName Win32_Processor).VirtualizationFirmwareEnabled
+# 返回 True 表示 BIOS 已开启虚拟化支持。
+# 或者进入「任务管理器」-&gt; 「性能」-&gt; 「CPU」-&gt; 「虚拟化」是否为「已启用」
+----
+
+如果是“已禁用”，就必须进 BIOS 了。
+
+WSL2 和 Podman 实际上是在 Windows 内部运行了一个极简的虚拟机。为了让这个虚拟机运行得飞快（接近原生性能），CPU 必须从硬件层面提供支持：
+
+* Intel 处理器： 叫 VT-x (Virtualization Technology)。
+* AMD 处理器： 叫 SVM (Secure Virtual Machine)。
+
+
+如何进入 BIOS 并开启？
+不同品牌的笔记本进入方式略有不同，但逻辑是一样的：
+
+第一步：进入 BIOS
+
+- **常见热键：** 关机状态下按下电源键，然后不停地狂按 `F2`（联想、戴尔、华硕等常见）或 `F10` (HP) 或 `Del` (微星、组装机)。 
+- **通用方法（Windows 内）：** `设置` -&gt; `系统` -&gt; `恢复` -&gt; `高级启动` -&gt; `立即重新启动`。重启后选择 `疑难解答` -&gt; `高级选项` -&gt; `UEFI 固件设置`。
+  
+第二步：找到开关（通常在 Advanced 或 Configuration 菜单下）
+
+进入 BIOS 后，寻找类似以下的字样并将其设置为 **Enabled**：
+
+- **Intel 平台：** `Intel Virtualization Technology` 或 `VT-x`。
+- **AMD 平台：** `SVM Mode` 或 `Secure Virtual Machine`。
+- **某些笔记本：** 可能会藏在 `Security` -&gt; `Virtualization` 路径下。
+  
+第三步：保存退出
+
+通常按 `F10` 保存并退出。
+</t>
+<t tx="swot.20260301160214.1">[source,console]
+----
+wsl -l -v
+----
+
+你可能会看到的三种结果：
+
+[upperalpha]
+. 列表为空 (No distributions)
+* 提示：适用于 Linux 的 Windows 子系统没有已安装的分发版。
+* 解读： 你的 WSL2 地基已经打好了，但是上面没盖任何房子（没装 Ubuntu，也没装 Podman）。
+* 状态： 完美！这正是你想要的状态。你现在可以直接去安装 Podman，它会创建自己的专属环境。
+
+
+. 出现列表，版本为 2
+* 提示：NAME: podman-machine-default, STATE: Running, VERSION: 2
+* 解读： 你已经安装过 Podman 且它正在运行，它用的是 WSL2 引擎。
+* 状态： 一切正常，你可以开始写 Java 代码了。
+
+
+. 错误提示：'wsl' 不是内部或外部命令 或 未安装适用于 Linux 的 Windows 子系统。
+* 解读： 你的 Windows 还没有开启 WSL 功能。
+* 操作： 有两种方式来开启
+  ** 方式一：要执行 dism.exe 命令来开启 #(我没使用方式一，用了方式二)#
++
+.直接复制在 power shell 中执行
+[source,console]
+----
+# 开启 WSL 基础功能
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+# 开启 WSL2 必需的虚拟机平台
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+# 提示：请立即重启电脑！
+Write-Host "操作完成！请手动重启电脑以生效。" -ForegroundColor Yellow
+----
+  ** 方式二：直接运行 `wsl --install --no-distribution` （这会开启 WSL 但不装 Ubuntu）。
++
+.方式二运行后显示
+....
+PS C:\Windows\system32&gt; wsl --install --no-distribution
+正在下载: 适用于 Linux 的 Windows 子系统 2.6.3
+正在安装: 适用于 Linux 的 Windows 子系统 2.6.3
+已安装 适用于 Linux 的 Windows 子系统 2.6.3。
+正在安装 Windows 可选组件: VirtualMachinePlatform
+
+部署映像服务和管理工具
+版本: 10.0.26100.5074
+映像版本: 10.0.26200.7840
+
+启用一个或多个功能
+[==========================100.0%==========================]
+操作成功完成。
+请求的操作成功。直到重新启动系统前更改将不会生效。
+....
++
+.再运行 ws -l -v 就会显示 wsl 底座已经ok了
+....
+PS C:\Windows\system32&gt; wsl -l -v
+适用于 Linux 的 Windows 子系统没有已安装的分发。
+可通过安装包含以下说明的分发来解决此问题：
+
+使用“wsl.exe --list --online' ”列出可用的分发
+和 “wsl.exe --install &lt;Distro&gt;” 进行安装。
+....
+
+IMPORTANT: 一定一定记得要重启 Windows 操作系统！！！
+
+</t>
+<t tx="swot.20260302095530.1"></t>
 </tnodes>
 </leo_file>

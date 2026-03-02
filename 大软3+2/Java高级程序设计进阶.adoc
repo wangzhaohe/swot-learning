@@ -1,3 +1,4 @@
+:author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
 :icons: font
 :scripts: cjk
@@ -5,7 +6,7 @@
 :toc:
 :toc: right
 :toc-title: 目录
-:toclevels: 3
+:toclevels: 4
 :tip-caption: ⚡
 :note-caption: ❕
 :important-caption: ❗
@@ -48,14 +49,155 @@
 == 2. 理论教学内容（共 36 学时）
 
 
-=== 2.1 面向对象基础 (4学时)
+=== 2.1 Java 发展简史：从 Oak 到现代化云原生
+
+
+==== 起源时代：Green Project (1991 - 1995)
+Java 最初并非为了互联网设计，而是为了控制电视机顶盒等家用电器。
+
+* **1991年**：James Gosling 带领 "Green Team" 启动项目，最初命名为 **Oak**。
+
+* **1995年**：正式更名为 **Java**。恰逢万维网（WWW）爆发，Sun Microsystems 顺势推出了 **Java Applet**，使浏览器能够运行复杂的交互式程序，Java 因此迅速走红。
+
+==== 奠基时代：J2SE 1.2 与三位一体 (1998 - 2004)
+这是 Java 确立企业级江湖地位的关键时期。
+
+* **1998年 (JDK 1.2)**：更名为 **Java 2**。
+
+* **体系划分**：为了应对不同场景，Java 拆分为三个关键版本：
+  ** **J2SE (Standard Edition)**: 核心标准版。
+  ** **J2EE (Enterprise Edition)**: 企业级服务器版，开启了大规模分布式开发的时代。
+  ** **J2ME (Micro Edition)**: 移动与嵌入式开发版（功能机时代的霸主）。
+
+* **2004年 (JDK 5.0)**：语言层面的质变。引入了**泛型 (Generics)**、**注解 (Annotations)**、**枚举 (Enums)** 和 **增强型 for 循环**，极大提升了开发安全性。
+
+==== 动荡与重生：Oracle 收购与开源 (2006 - 2014)
+* **2006年**：Sun 宣布将 Java 源代码以 GPL 协议开源，**OpenJDK** 诞生，这保证了 Java 生态的自由与长寿。
+
+* **2010年**：**Oracle 正式完成对 Sun 的收购**。虽然引发了法律诉讼和社区动荡，但 Java 的研发步入标准化商业运作。
+
+* **2014年 (Java 8)**：**里程碑式的飞跃**。
+  ** 引入 **Lambda 表达式** 和 **Stream API**，让 Java 具备了现代函数式编程的简洁性。
+  ** 它是目前全球生产环境中使用率最高、最稳定的版本之一。
+
+==== 快速更迭：六个月发布周期 (2017 - 2026)
+为了应对云原生时代对轻量化和高性能的需求，Java 改变了慢节奏的传统。
+
+[cols="1,3,2"]
+|===
+| 版本 | 核心特性 | 意义
+
+| **Java 9** | 模块化系统 (Project Jigsaw) | 瘦身成功，让 JVM 能够按需加载。
+| **Java 17** | 密封类 (Sealed Classes)、Record 类型 | 提升了代码的简洁度与建模能力。
+| **Java 21** | **虚拟线程 (Virtual Threads)** | 革命性地解决了高并发下的线程开销问题。
+| **Java 25** | (最新 LTS) 持续优化内存与启动速度 | 进一步巩固在容器化环境中的优势。
+|===
+
+==== 总结：Java 为什么长盛不衰？
+[upperalpha]
+. **向下兼容性**：核心原则是“不破坏旧代码”，保护了企业级资产。
+
+. **JVM 经济圈**：不仅仅是语言，更是一个强大的运行时平台（支持 Kotlin, Scala 等）。
+
+. **自我革新**：从 Project Loom (并发) 到 Project Valhalla (性能)，Java 始终在吸收现代语言的优点。
+
+> "Write Once, Run Anywhere." -- Java 的核心信念
+
+=== 2.2 Java 版本选择 Java17(LTS)
+虽然 2026 年 Java 21 和 Java 25 已经普及，但考虑到『微服务』、『大数据』的配套库需求，Java 17 是目前的“平衡之王”。
+选择原因如下：
+
+1. 正常的 Web 开发
+
+- **兼容性：** 现代主流 Web 框架（Spring Boot 3.x, Quarkus, Micronaut）的**最低要求**通常就是 Java 17。
+- **Podman 实践：** 推荐使用 `eclipse-temurin:17-jdk` 作为基础镜像。它是社区最推荐的 OpenJDK 发行版，体积适中且极其稳定。
+
+
+2. 微服务开发 (Spring Cloud / Eureka)
+
+- **配套库支持：** 你提到的 **Eureka**、Config Server、Gateway 等 Spring Cloud 组件，在 Java 17 上运行最为完美。
+- **Spring Boot 3.x：** 它是微服务的标准，而 Spring Boot 3 开始不再支持 Java 8。如果你用 Java 17，可以无缝使用所有最新的微服务特性。
+
+
+3. 大数据开发 (Spark / Flink / Hadoop)
+
+- **Spark 3.5+** 已经正式支持 Java 17。
+- **Flink 1.18+** 也加入了对 Java 17 的支持。
++
+NOTE: 虽然很多大数据框架可以在 Java 8/11 上运行，但 2026 年的企业级大数据平台正在全面向 17 迁移。Java 21 在大数据生态中的支持目前仍处于“试用”或“部分支持”阶段，容易遇到兼容性坑。
+
+
+4. 配套的其他库
+
+- **生态链：** 无论是数据库驱动、消息队列（Kafka, RabbitMQ）还是日志系统（Log4j2），在 Java 17 上都有成熟的 native 支持。
+
+==== 避坑指南
+****
+* 不要选 Java 8： 除非要维护 10 年前的老项目，否则在 2026 年学习 Java 8 会错失大量现代特性（如 Record, Sealed Classes, Virtual Threads）。
+
+* 谨慎对待 Java 21/25： 虽然它们有“虚拟线程”等神级特性，但在**大数据框架（如较旧版本的 Hadoop）**中可能会遇到反射调用失败或内存非法访问的问题。
+****
+
+=== 2.3 Java 之解惑
+
+
+==== 编译、解释与 JIT 的三角关系
+* **JavaScript (JS)：** 为了跨平台和网络分发而采用源码传输。比如 Chrome 浏览器的现代引擎（V8）使用 **JIT (Just-In-Time)** 在运行时将热点代码转为机器码。
+    ** 跨平台与碎片化（最大的障碍）： 浏览器环境极其复杂。Chrome、Safari、Firefox 都有不同的内核，且运行在 Windows、Android、iOS 等各种硬件架构上。如果 JS 是编译后的二进制文件，开发者就得像发布安卓 App 或 Windows 软件一样，为每个平台编译一个版本。目前的 JS 代码（文本）由浏览器实时解析，确保了**“一份代码，到处运行”**。
+    ** 网络传输效率： 编译后的二进制文件往往比压缩后的文本（Gzip/Brotli）大得多。在 Web 早期，带宽极其珍贵，传输文本更高效。
+    ** 安全性： 浏览器是一个高度受限的“沙箱”。如果执行预编译的代码，浏览器很难实时监控代码是否在非法操作内存，安全性会大打折扣。
+    ** 当前的“中间方案”： 实际上，现代浏览器已经进化了。它们不再是简单的“逐行解释”，而是采用了 JIT (Just-In-Time) 编译技术。
+    ** 现在的做法是： JS 代码以文本形式传给浏览器，浏览器在运行过程中，把经常执行的热点代码直接编译成机器码。这兼顾了文本传输的灵活性和编译语言的高性能。
+
+* **Java：** 属于“先编译、后解释、再 JIT”的混合语言。源码转为平台无关的**字节码**，由 JVM 执行。JIT 优化使其后期性能接近 C++。
+    ** 第一阶段：编译（Compile）
+        *** 开发者写完 .java 源代码后，使用 javac 命令进行编译。但它生成的不是 CPU 能直接读懂的机器码，而是 字节码（Bytecode，即 .class 文件）。
+        *** 特点： 字节码是平台无关的，它不针对特定的 CPU。
+    ** 第二阶段：解释与执行（Runtime）
+        *** 当你在电脑上运行 Java 程序时，JVM（Java 虚拟机） 登场了。
+        *** 解释： JVM 逐行读取字节码并将其翻译成当前机器的指令。
+        *** JIT 编译： JVM 非常聪明，如果它发现某段代码运行了很多次，它会直接把这段字节码编译成机器码并缓存起来，下次直接运行，速度飞快。
+
+* **Python：** 标准实现（CPython）也是字节码，但缺乏原生 JIT，且受限于**动态类型**的运行时检查，性能较差。
+
+* **PyPy：** 带有 JIT 的 Python 实现，虽快但受限于 **C 扩展（C-API）兼容性**，未能在 AI 领域取代 CPython。
+    ** 兼容性天敌（C 扩展）： Python 强大的核心在于它的生态（NumPy, Pandas, PyTorch）。这些库是用 C 语言写的。PyPy 运行纯 Python 代码极快，但在调用这些 C 扩展时，会有巨大的转换开销，甚至比标准 Python 还慢。
+    ** 部署成本： 很多企业级应用更看重稳定性。标准 CPython 简单可靠，而 PyPy 的 JIT 内存占用更高，且偶尔会有难以预料的性能波动（JIT 预热过程）。
+
+==== 为什么 AI 偏爱 Python 而非 Java？
+* **性能错位：** AI 的重型矩阵运算在底层 C++/CUDA 中完成，Python 仅作为“指挥官”。
+* **开发体验：** Python 语法更符合数学家思维（简洁、像数学公式）。
+* **内存管理：** Java 的 **GC (垃圾回收)** 机制在处理海量张量数据时容易产生停顿，且 Java 的强类型在实验性开发中显得繁琐。
+
+NOTE: 虽然 Java 在 AI 训练 领域不行，但在 大数据处理（Hadoop, Spark）和 企业级推理（将模型部署到后端）领域，Java 依然是主力。
+
+==== 类型的本质与负担
+* **Java(名义类型)：** 类型是程序的物理骨架，不可剥离。
+
+* **Python：** 运行过程中根本不看类型。
+    ** 现状： 现在的 Python 开发者（尤其是后端和 AI 工程师）大量使用 Type Hints。虽然 Python 解释器运行时依然忽略这些类型，但开发者会配合 mypy 或 PyCharm 这种工具进行静态检查。
+    ** 为什么用？ 就像你说的，Python 太灵活了。如果没有类型标注，过三个月你自己都不知道这个函数返回的是列表还是字典。
+    ** 库的标配： 像 FastAPI 或 Pydantic 这种现代库，完全是基于类型标注构建的。如果你不写类型，这些库甚至无法工作。
+
+* **TypeScript (TS)：** 编译时进行**类型擦除**，转换后的 JS 代码通常比源码更简洁（去掉了 interface 等声明），运行效率由 JS 引擎决定。
+
+==== 商业版权与开源治理
+
+
+===== 甲骨文 (Oracle) 与 Java 诉讼
+* **核心矛盾：** 尽管 Java 开源，但 Oracle 拥有商标权及特定商业组件所有权。其官司重心在于**“API 的组织结构和命名”**是否受版权保护（如 Oracle vs. Google）。
+
+===== Python (PSF) 的自由之路
+* **管理模式：** 归属于非营利基金会（PSF）。其许可证极其开放（PSF License），鼓励连接一切而不设商业关卡。
+
+=== 2.4 面向对象基础 (4学时)
 * *核心知识点*：类与对象、抽象与封装、属性与方法、继承与多态、接口设计。
 
 * *教学要求*：深入理解面向对象设计思想，熟练掌握接口与抽象类的应用场景。
 
 * *教学目标*：让学生从“执行者”转变为“设计者”，理解 Java 程序的组织逻辑。
 
-==== 2.1.1 类与对象 —— “图纸”与“实物”
+==== 类与对象 —— “图纸”与“实物”
 **1. 知识点说明**
 
 * **类 (Class)**：相当于一张**手机设计图纸**。它规定了手机应该有的样子（颜色、价格）和功能（打电话）。
@@ -87,7 +229,7 @@ public class TestPhone {
     public static void main(String[] args) {
         // 使用 new 关键字，根据图纸造出一台真实的手机
         Phone myPhone = new Phone(); 
-        
+
         myPhone.brand = "华为"; // 给这台手机贴上品牌
         myPhone.call("张三");   // 让这台手机执行功能
     }
@@ -101,7 +243,7 @@ public class TestPhone {
 如何执行？ ::
 答：
 
-==== 2.1.2 封装 —— “电视机外壳”
+==== 封装 —— “电视机外壳”
 **1. 知识点说明**
 
 * **私有化 (private)**：把数据藏在里面，不让外人乱碰。
@@ -138,7 +280,7 @@ class BankAccount {
 如何测试运行这个例子？ ::
 答：
 
-==== 2.1.3 继承与多态 —— “父子关系”与“七十二变”
+==== 继承与多态 —— “父子关系”与“七十二变”
 **1. 知识点说明**
 
 * **继承 (extends)**：子承父业。儿子自动学会父亲的本事，不用重写。
@@ -179,7 +321,7 @@ class Cat extends Animal {
 如何执行这个例子？ ::
 答：
 
-==== 2.1.4 接口设计 —— “万能插座标准”
+==== 接口设计 —— “万能插座标准”
 **1. 知识点说明**
 
 * **接口 (interface)**：它不干活，它只负责**定规矩**。
@@ -210,7 +352,7 @@ class SmartPhone implements Chargeable {
 }
 ----
 
-==== 2.1.5 小结
+==== 小结
 针对基础弱学生的教学小贴士
 
 - 互动环节：讲“类与对象”时，可以让学生描述一下他邻座的那位学生（属性：性别、发型；行为：记笔记、打哈欠），这就是在“抽象成类”。
@@ -219,12 +361,12 @@ class SmartPhone implements Chargeable {
 
 - 实验挂钩：这部分的理论可以直接对应你大纲里的 实验二：数据模型开发 ，让他们亲手写出 User 类。
 
-=== 2.2 常用工具类 (4学时)
+=== 2.5 常用工具类 (4学时)
 * *核心知识点*：String/StringBuilder、Math类、包装类、日期时间类（Date/Calendar/SimpleDateFormat）。
 * *总教学要求*：掌握 Java 核心 API 的使用方法及性能差异。
 * *本节要求*：掌握最常用的 String 字符串处理和 Date 时间记录方法。
 
-==== 2.2.1 String：文字的“修剪与检查”
+==== String：文字的“修剪与检查”
 [upperalpha]
 . 为什么要学？
 * 门禁系统拿到的卡号可能有空格，或者我们需要检查卡号长度是否正确。
@@ -244,15 +386,15 @@ class SmartPhone implements Chargeable {
 public class StringDemo {
     public static void main(String[] args) {
         String inputCard = "  A1234567  ";
-        
+
         // 1. 去掉多余空格
         String cleanCard = inputCard.trim();
-        
+
         // 2. 检查长度是否是 8 位
         if(cleanCard.length() == 8) {
             System.out.println("卡号格式正确");
         }
-        
+
         // 3. 比较卡号（注意：字符串比较千万不能用 ==，要用 .equals()）
         if(cleanCard.equals("A1234567")) {
             System.out.println("欢迎回家，管理员！");
@@ -261,7 +403,7 @@ public class StringDemo {
 }
 ----
 
-==== 2.2.2 Date：记录刷卡的“那一瞬间”
+==== Date：记录刷卡的“那一瞬间”
 [upperalpha]
 . 知识点说明 +
 门禁系统必须记录：谁在**什么时候**刷了卡？
@@ -297,7 +439,7 @@ public class DateDemo {
 }
 ----
 
-==== 2.2.3 小结
+==== 小结
 关于 String 比较：
 
 * 重点强调：一定要反复强调 String 比较用 .equals()，而不是 ==。
@@ -308,14 +450,14 @@ public class DateDemo {
 * 虽然 Java 8 之后有了 LocalDateTime，但对基础弱的学生来说，Date + SimpleDateFormat 的代码量更少，概念更直观。
 * 建议第一阶段先教这个，等他们实验五、六需要更精确的操作时，再提新 API。
 
-=== 2.3 异常处理机制 (4学时)
+=== 2.6 异常处理机制 (4学时)
 * *核心知识点*：异常体系结构、try-catch-finally、throw/throws、自定义异常。
 * *教学要求*：能够编写健壮的代码，防止程序因为一点小意外就“直接罢工” 。
 
 在开发门禁系统时，最怕程序因为一点小错就彻底崩溃（比如读卡器坏了，整个系统不应该直接蓝屏）。
 这就是异常处理机制 要解决的问题。
 
-==== 2.3.1 什么是异常？ —— “生活的备选方案”
+==== 什么是异常？ —— “生活的备选方案”
 [upperalpha]
 . 知识点说明
 * 程序运行就像开车，即使你技术再好，也可能遇到“爆胎”或“封路”。
@@ -324,7 +466,7 @@ public class DateDemo {
 . 生活举例
 * 你出门上班，计划是坐地铁。但如果地铁停运了（异常），你应该去坐公交（处理异常），而不是直接原地消失。
 
-==== 2.3.2 try-catch-finally —— “安全气囊”
+==== try-catch-finally —— “安全气囊”
 [upperalpha]
 . 核心招式
 * **try**：试着运行这段代码（可能有危险）。
@@ -351,13 +493,13 @@ public class ExceptionDemo {
             // 不管读没读到，都要重置读卡器状态
             System.out.println(">> 读卡器指示灯重置完毕。");
         }
-        
+
         System.out.println("系统继续运行中...");
     }
 }
 ----
 
-==== 2.3.3 throw 与 throws —— “甩锅与上报”
+==== throw 与 throws —— “甩锅与上报”
 [upperalpha]
 . 知识点说明
 * **throw**：手动抛出一个异常。比如：我发现你余额不足，我手动报个错。
@@ -380,7 +522,7 @@ public class DoorService {
 }
 ----
 
-==== 2.3.4 自定义异常 —— “定制报警器”
+==== 自定义异常 —— “定制报警器”
 为什么要学？
 
 * Java 自带的异常（如 `NullPointerException`）太泛泛了。
@@ -427,12 +569,12 @@ public void swipeCard(String cardId) throws DoorSystemException {
 
 * 让学生写一个除法运算器，输入 10 / 0。观察程序崩溃的样子，然后教他们用 try-catch 捕获 ArithmeticException 并输出“分母不能为 0”。这种立竿见影的效果最能激发学习兴趣。
 
-=== 2.4 集合框架 (4学时)
+=== 2.7 集合框架 (4学时)
 * *核心知识点*：Collection 与 Map 接口、List (ArrayList/LinkedList)、Set (HashSet/TreeSet)、Map (HashMap/TreeMap)。
 * *教学要求*：理解不同数据结构的特性，并能根据需求选择合适的集合。
 * *本节要求*：学会用 `ArrayList` 和 `HashMap` 来管理成千上万个用户信息。
 
-==== 2.4.1 ArrayList —— “自动伸缩的排队队伍”
+==== ArrayList —— “自动伸缩的排队队伍”
 知识点说明
 
 * 传统的数组（Array）容量是死的，开辟了 10 个位子就只能坐 10 个人。
@@ -463,7 +605,7 @@ public class ListDemo {
 }
 ----
 
-==== 2.4.2 HashMap —— “宿舍号对应学生”
+==== HashMap —— “宿舍号对应学生”
 [upperalpha]
 . 知识点说明
     * 如果要在 1 万个人里找“张三”，`ArrayList` 要从头翻到尾（很累）。
@@ -499,7 +641,7 @@ public class MapDemo {
 }
 ----
 
-==== 2.4.3 小结
+==== 小结
 [upperalpha]
 . **关于泛型 `< >`**：
   * 这就像“贴标签”。
@@ -512,14 +654,14 @@ public class MapDemo {
 . **避开复杂原理**：
   * 这个阶段，先**不要**讲 HashMap 的哈希碰撞、红黑树、负载因子。只需要知道 `put`（存）和 `get`（取）就行。
 
-=== 2.5 IO 流技术 (6学时)
+=== 2.8 IO 流技术 (6学时)
 * *核心知识点*：File 类、字节流与字符流、缓冲流、转换流、序列化（对象流）、随机存取文件。
 
 * *教学要求*：掌握文件读写操作及流的关闭规范。
     ** 让程序拥有“持久记忆”。
     ** 学习如何将门禁系统的用户信息存入硬盘，实现关机后数据不丢失。
 
-==== 2.5.1 为什么要学 IO？ —— “大脑”与“笔记本”
+==== 为什么要学 IO？ —— “大脑”与“笔记本”
 知识点说明
 
 * **内存 (RAM)**：像人的大脑，程序运行极快，但一断电（关机）数据就全丢了。我们之前创建的 `ArrayList` 就在这里。
@@ -532,7 +674,7 @@ public class MapDemo {
 **Input (输入)**：把纸上的名单**读**进脑子里（读取文件）。
 ====
 
-==== 2.5.2 File 类 —— “文件管理员”
+==== File 类 —— “文件管理员”
 知识点说明
 
 * 在操作文件内容之前，先要找到文件。
@@ -547,7 +689,7 @@ public class FileDemo {
     public static void main(String[] args) {
         // 创建一个文件对象（注意：这只是建立了联系，不代表文件一定存在）
         File file = new File("users.txt");
-        
+
         if (file.exists()) {
             System.out.println("找到名单文件了！大小是：" + file.length() + " 字节");
         } else {
@@ -557,7 +699,7 @@ public class FileDemo {
 }
 ----
 
-==== 2.5.3 字符缓冲流 —— “高效搬运工”
+==== 字符缓冲流 —— “高效搬运工”
 知识点说明
 
 * **FileWriter | FileReader**：像用小勺子挖水，一次只能搬一点，无缓冲区。
@@ -621,11 +763,11 @@ public class SaveUserDemo {
 // 所有的流创建都放在 try (...) 内部
 // 执行完毕后，Java 会自动调用 close()，即使中间出了异常也会关
 try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
-    
+
     writer.write("新用户：张三");
     writer.newLine(); // BufferedWriter 特有的换行方法，非常好用
     writer.write("新用户：李四");
-    
+
 } catch (IOException e) {
     // 捕获可能的文件读写异常
     e.printStackTrace();
@@ -638,7 +780,7 @@ try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true
 .. **追加数据**：第二个参数 `true` 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。
 ****
 
-==== 2.5.4 序列化 —— “数据冷冻技术”
+==== 序列化 —— “数据冷冻技术”
 **1. 知识点说明**
 
 如果想直接把一整个 `User` 对象（包含姓名、卡号、状态等）原封不动“冻结”并存进硬盘，就需要**序列化**。
@@ -663,7 +805,7 @@ public class User implements Serializable {
 }
 ----
 
-==== 2.5.5 实战演示：读取文件并抛出自定义异常
+==== 实战演示：读取文件并抛出自定义异常
 我们将之前学的 **DoorSystemException** 融入进来。如果读取文件失败，直接上报门禁系统异常。
 
 [source,java]
@@ -684,7 +826,7 @@ public void loadUsers() throws DoorSystemException {
 }
 ----
 
-==== 2.5.6 小结
+==== 小结
 - **“小水桶”实验**： 
     ** 用碗喝汤和用勺子喝汤的区别，可以立刻明白为什么 `BufferedWriter` 比 `FileWriter` 快。
 
@@ -699,11 +841,11 @@ public void loadUsers() throws DoorSystemException {
 这就是为什么我们后面需要学习 **2.6 JDBC 数据库编程** 的原因——引入专业的“数据仓库”。
 ****
 
-=== 2.6 Java 数据库编程 (6学时)
+=== 2.9 Java 数据库编程 (6学时)
 * *核心知识点*：JDBC 架构、Connection/Statement/ResultSet、预编译 SQL、事务处理。
 * *教学要求*：学会使用 Java 连接数据库，让门禁系统具备“海量数据”的管理能力。
 
-==== 2.6.1 为什么要用数据库？ —— “记事本”升级为“大仓库”
+==== 为什么要用数据库？ —— “记事本”升级为“大仓库”
 . 知识点说明
 * **IO 文件 (2.5节)**：像是个人的小账本。数据多了不好找（比如在 10 万行里找一个卡号），且容易写乱。
 * **数据库 (Database)**：专业的数字化仓库。自带索引，找人“瞬间即达”，且支持多个人同时读写。
@@ -713,7 +855,7 @@ public void loadUsers() throws DoorSystemException {
 * **大白话**：它就是一套**“标准翻译协议”**。
     ** 不管后台是 MySQL、Oracle 还是 SQL Server，Java 程序员只需要学一套 JDBC 的写法，就能跟所有数据库沟通。
 
-==== 2.6.2 JDBC 操作的“四大步骤” —— “打电话订货”
+==== JDBC 操作的“四大步骤” —— “打电话订货”
 要把 Java 里的数据存进数据库，就像打电话给仓库订货：
 
 1.  **准备电话线 (加载驱动)**：告诉 Java 你要连接哪种类型的仓库（MySQL 还是其他）。
@@ -721,9 +863,7 @@ public void loadUsers() throws DoorSystemException {
 3.  **下订单 (执行 SQL)**：用 SQL 语言告诉仓库你要干什么（增删改查）。
 4.  **挂断电话 (关闭资源)**：干完活必须挂电话，否则仓库线路会被占满。
 
-==== 2.6.3 代码实现：查询用户信息
-我们将之前定义的 `User` 对象和 `DoorSystemException` 结合进来。
-
+==== 代码实现：查询用户信息
 [source,java]
 ----
 import java.sql.*;
@@ -763,7 +903,7 @@ public class JDBCDemo {
 }
 ----
 
-==== 2.6.4 防止 SQL 注入 —— “拒绝陌生人的小纸条”
+==== 防止 SQL 注入 —— “拒绝陌生人的小纸条”
 . 知识点说明
 +
 初学者喜欢用字符串拼接 SQL，比如 `sql = "SELECT * FROM users WHERE name = '" + input + "'"`。
@@ -774,14 +914,14 @@ public class JDBCDemo {
 * **拼接字符串**：就像把客户的话直接印在合同里，别人改了话术，合同就变了。
 * **PreparedStatement**：就像一份填空题模版。你只能在空位填内容，不能修改题目的逻辑。**这是安全底线！**
 
-==== 2.6.5 实验预告：实验三 数据库驱动开发
+==== 实验预告：实验三 数据库驱动开发
 在接下来的实验中，我们将：
 
 .  在 MySQL 中创建 `user_table`。
 .  编写一个 `DBUtils` 工具类，专门负责开/关数据库。
 .  实现门禁系统的“刷卡记录”保存功能（把每次刷卡的时间、卡号存入数据库）。
 
-==== 2.6.6 小结
+==== 小结
 .  **不要死记硬背**：
     * JDBC 的代码很长，初学者容易记不住。**“Ctrl+C/Ctrl+V 是程序员的常态”**。
     * 重点是理解那四个步骤，具体的代码可以查手册或复制模版。
@@ -795,28 +935,12 @@ public class JDBCDemo {
 .  **可视化辅助**：
     * 在写代码前，先用图形化工具（如 Navicat 或 IDEA 自带的 Database 窗口）手动往表里填数据。看到表里的数据，再写 Java 去查，成就感会很强。
 
-=== 2.7 多线程与反射 (4学时)
+=== 2.10 多线程与反射 (4学时)
 * *核心知识点*：线程创建与生命周期、同步机制（synchronized）、反射 API、动态代理。
 * *教学要求*：理解并发编程基础及 Java 语言的动态特性。
 * *本节要求*：理解“分身术”的原理，让程序能同时干多件事；了解反射这一“透视眼”技术。
 
-==== 2.7.1 多线程 —— “程序的分身术”
-[upperalpha]
-. 知识点说明
-* **进程**：像是一个工厂（比如整个门禁系统）。
-* **线程**：像是工厂里的工人。一个工厂可以有很多工人同时干活。
-* **为什么要学？**：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。
-
-
-. 生活举例
-+
-你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。
-
-
-. 代码实现：模拟门禁自检与刷卡同时进行
-+
-[source,java]
-----
+==== 多线程 —— “程序的分身术”
 // 1. 定义一个自检任务
 class HealthCheckThread extends Thread {
     public void run() {
@@ -839,16 +963,7 @@ public class MultiThreadDemo {
 }
 ----
 
-==== 2.7.2 反射机制 —— “程序的 X 光机”
-知识点说明
-
-* **反射 (Reflection)**：平时我们用类，是先看到图纸再造房子。反射则是房子已经在那了，我们拿个“X光机”去扫，看看它里面有什么属性和方法。
-* **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
-
-
-.代码举例（看看 User 类里有什么）
-[source,java]
-----
+==== 反射机制 —— “程序的 X 光机”
 public class ReflectionDemo {
     public static void main(String[] args) throws Exception {
         // 通过类名，直接“抓取”这个类的结构
@@ -865,7 +980,7 @@ public class ReflectionDemo {
 }
 ----
 
-==== 2.7.3 小结
+==== 小结
 [upperalpha]
 . **多线程的坑**：
    * 多线程虽然好用，但不要乱用。两个工人都去抢一个笔记本（共享资源）会打架（死锁/线程安全）。
@@ -873,19 +988,19 @@ public class ReflectionDemo {
 . **反射的定位**：
    * 基础阶段，不需要能写出复杂的反射逻辑，只要知道“原来 Java 可以在运行的时候去拆解一个类”就可以了。
 
-=== 2.8 网络编程 (4学时)
+=== 2.11 网络编程 (4学时)
 * *核心知识点*：TCP/UDP 协议、Socket 编程、URL 处理。
 * *教学要求*：能够实现简单的 C/S 架构通信。
 * *本节要求*：理解 TCP 通信流程，实现门禁终端与服务器的“跨空间对话”。
 
-==== 2.8.1 网络基础 —— “寄快递”
+==== 网络基础 —— “寄快递”
 知识点说明
 
 * **IP 地址**：收件人的地址（哪台电脑）。
 * **端口号 (Port)**：收件人的姓名/房间号（电脑里的哪个程序）。
 * **TCP 协议**：像发快递，必须收件人签收了，寄件人才放心（可靠连接）。
 
-==== 2.8.2 Socket 编程 —— “打通电话”
+==== Socket 编程 —— “打通电话”
 
 
 ===== 代码举例：门禁终端（客户端）发送刷卡请求
@@ -927,7 +1042,7 @@ public class CentralServer {
 }
 ----
 
-==== 2.8.3 小结
+==== 小结
 **网络编程的演示**：
 
    * 演示这一课时，最好**开两个命令行窗口**。一个跑服务器，一个跑客户端，可以看到一台电脑里的两个程序在“聊天”，这种直观感非常重要。
@@ -937,6 +1052,226 @@ public class CentralServer {
 
 === 实验一：环境与项目初始化 (4学时)
 * *目标*：搭建 JDK 与 IntelliJ IDEA 环境，完成项目骨架搭建。
+
+==== 直接安装开发环境 IntelliJ IDEA -- 略
+
+
+==== WSL2 安装容器环境 podman -- 重点
+什么是 WSL2？ (地基/虚拟化引擎)
+
+- 全称： Windows Subsystem for Linux 2。
+
+- 本质： 它是微软开发的一个 Windows 功能组件。
+
+- 功能： 它在 Windows 内部提供了一个真实的 Linux 内核。
+        它负责处理硬件资源（CPU、内存、网络）的分配，让 Linux 能够直接运行在 Windows 上。
+
+- 特点： 它本身不是一个可以让你操作的界面，它只是一个运行环境。没有它，Linux 系统无法在 Windows 上跑起来。
+
+===== 检查 windows 虚拟化环境状态并安装 WSL2 引擎
+请在你的 Windows 搜索栏输入 PowerShell，
+右键点击并选择 “以管理员身份运行”，打开命令行工具。
+
+====== 查看 BIOS 是否开启虚拟化支持
+[source,console]
+----
+(Get-CimInstance -ClassName Win32_Processor).VirtualizationFirmwareEnabled
+# 返回 True 表示 BIOS 已开启虚拟化支持。
+# 或者进入「任务管理器」-> 「性能」-> 「CPU」-> 「虚拟化」是否为「已启用」
+----
+
+如果是“已禁用”，就必须进 BIOS 了。
+
+WSL2 和 Podman 实际上是在 Windows 内部运行了一个极简的虚拟机。为了让这个虚拟机运行得飞快（接近原生性能），CPU 必须从硬件层面提供支持：
+
+* Intel 处理器： 叫 VT-x (Virtualization Technology)。
+* AMD 处理器： 叫 SVM (Secure Virtual Machine)。
+
+
+如何进入 BIOS 并开启？
+不同品牌的笔记本进入方式略有不同，但逻辑是一样的：
+
+第一步：进入 BIOS
+
+- **常见热键：** 关机状态下按下电源键，然后不停地狂按 `F2`（联想、戴尔、华硕等常见）或 `F10` (HP) 或 `Del` (微星、组装机)。 
+- **通用方法（Windows 内）：** `设置` -> `系统` -> `恢复` -> `高级启动` -> `立即重新启动`。重启后选择 `疑难解答` -> `高级选项` -> `UEFI 固件设置`。
+
+第二步：找到开关（通常在 Advanced 或 Configuration 菜单下）
+
+进入 BIOS 后，寻找类似以下的字样并将其设置为 **Enabled**：
+
+- **Intel 平台：** `Intel Virtualization Technology` 或 `VT-x`。
+- **AMD 平台：** `SVM Mode` 或 `Secure Virtual Machine`。
+- **某些笔记本：** 可能会藏在 `Security` -> `Virtualization` 路径下。
+
+第三步：保存退出
+
+通常按 `F10` 保存并退出。
+
+====== 查看 windows 是否安装了适用于 Linux 的 Windows 子系统
+[source,console]
+----
+wsl -l -v
+----
+
+你可能会看到的三种结果：
+
+[upperalpha]
+. 列表为空 (No distributions)
+* 提示：适用于 Linux 的 Windows 子系统没有已安装的分发版。
+* 解读： 你的 WSL2 地基已经打好了，但是上面没盖任何房子（没装 Ubuntu，也没装 Podman）。
+* 状态： 完美！这正是你想要的状态。你现在可以直接去安装 Podman，它会创建自己的专属环境。
+
+
+. 出现列表，版本为 2
+* 提示：NAME: podman-machine-default, STATE: Running, VERSION: 2
+* 解读： 你已经安装过 Podman 且它正在运行，它用的是 WSL2 引擎。
+* 状态： 一切正常，你可以开始写 Java 代码了。
+
+
+. 错误提示：'wsl' 不是内部或外部命令 或 未安装适用于 Linux 的 Windows 子系统。
+* 解读： 你的 Windows 还没有开启 WSL 功能。
+* 操作： 有两种方式来开启
+  ** 方式一：要执行 dism.exe 命令来开启 #(我没使用方式一，用了方式二)#
++
+.直接复制在 power shell 中执行
+[source,console]
+----
+# 开启 WSL 基础功能
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+# 开启 WSL2 必需的虚拟机平台
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+# 提示：请立即重启电脑！
+Write-Host "操作完成！请手动重启电脑以生效。" -ForegroundColor Yellow
+----
+  ** 方式二：直接运行 `wsl --install --no-distribution` （这会开启 WSL 但不装 Ubuntu）。
++
+.方式二运行后显示
+....
+PS C:\Windows\system32> wsl --install --no-distribution
+正在下载: 适用于 Linux 的 Windows 子系统 2.6.3
+正在安装: 适用于 Linux 的 Windows 子系统 2.6.3
+已安装 适用于 Linux 的 Windows 子系统 2.6.3。
+正在安装 Windows 可选组件: VirtualMachinePlatform
+
+部署映像服务和管理工具
+版本: 10.0.26100.5074
+映像版本: 10.0.26200.7840
+
+启用一个或多个功能
+[==========================100.0%==========================]
+操作成功完成。
+请求的操作成功。直到重新启动系统前更改将不会生效。
+....
++
+.再运行 ws -l -v 就会显示 wsl 底座已经ok了
+....
+PS C:\Windows\system32> wsl -l -v
+适用于 Linux 的 Windows 子系统没有已安装的分发。
+可通过安装包含以下说明的分发来解决此问题：
+
+使用“wsl.exe --list --online' ”列出可用的分发
+和 “wsl.exe --install <Distro>” 进行安装。
+....
+
+IMPORTANT: 一定一定记得要重启 Windows 操作系统！！！
+
+====== 再次确认 wsl 版本为 2
+.查看 wsl 状态：一定要是版本 2
+....
+PS C:\Windows\system32> wsl --status
+默认版本: 2
+当前计算机配置不支持 WSL1。
+若要使用 WSL1，请启用“Windows Subsystem for Linux”可选组件。
+....
+
+
+.不是版本 2，则需要进行设置
+....
+wsl --set-default-version 2
+....
+
+====== 删除 ubuntu Linux 系统
+如果你已经手快执行了 `wsl --install` 并且 Ubuntu 已经出现在你的菜单里了，也不用重装系统，直接在 PowerShell 里输入这行命令就能把它彻底删掉：
+
+[source,console]
+----
+wsl --unregister Ubuntu
+----
+
+这样你就回到了一个“只有 WSL2 引擎，没有 Ubuntu”的纯净状态了。
+
+===== 在 WSL2 引擎下安装 podman
+[upperalpha]
+. 下载地址
+  ** https://github.com/containers/podman/releases[Podman GitHub Releases]
+  ** 找最新的 .exe 安装文件
+
+
+. 安装完成后，在 PowerShell 输入
++
+.初始化 podman 机器并开启
+[source,console]
+----
+# 限制 Podman 虚拟机使用 4G 内存，2 核 CPU
+podman machine init --cpus 2 --memory 4096
+
+# 可以再改
+podman machine set --cpus 4 --memory 4096
+
+# 查看设置
+> podman machine inspect --format '{{.Resources.CPUs}} CPU, {{.Resources.Memory}} MB'
+
+podman machine start
+
+# 不用了就释放计算机内存资源
+podman machine stop
+----
+
+
+如果 init 自动下载太慢了，直接下载镜像再导入。 +
+https://github.com/containers/podman/releases
+
+[source,console]
+----
+# 彻底清理旧的失败记录
+podman machine rm -f
+
+# 手动指定你下载好的那个 141MB 的文件
+podman machine init --image "D:\rootfs.tar.xz"
+
+# 启动
+podman machine start
+----
+
+.成功后再查看 machine list 就有了
+....
+PS C:\Windows\system32> podman.exe machine list
+NAME                     VM TYPE     CREATED        LAST UP            CPUS        MEMORY      DISK SIZE
+podman-machine-default*  wsl         8 minutes ago  Currently running  8           2GiB        100GiB
+....
+
+==== JDK17
+[source,console]
+----
+# 拉取镜像 (使用 Eclipse Temurin 发行版)
+podman pull eclipse-temurin:17-jdk
+
+# 启动一个交互式容器来测试 java 版本
+podman run -it --rm eclipse-temurin:17-jdk java -version
+----
+
+.output result
+....
+openjdk version "17.0.18" 2026-01-20
+OpenJDK Runtime Environment Temurin-17.0.18+8 (build 17.0.18+8)
+OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing)
+....
+
+==== Maven
+
 
 === 实验二：数据模型与实体类开发 (4学时)
 * *目标*：根据需求设计实体类及自定义异常类。
@@ -997,7 +1332,7 @@ public class User {
     public void setCardId(String cardId) {
         this.cardId = cardId;
     }
-    
+
     // ... id 和 isActive 的 Getter/Setter 省略，实际开发中需补全
 }
 ----
