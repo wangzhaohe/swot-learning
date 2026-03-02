@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<meta name="author" content="https://github.com/wangzhaohe/swot-learning">
+<title>Java高级程序设计进阶实验-JavaSE 门禁系统实训（共 36 学时）</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:35em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+/* table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7} */
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#9e9e9e}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+
+/* 自定义输出 HTML 样式 */
+/* 固定按钮在左上角 */
+#toggleButton {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    /*background-color: lightgrey;*/
+    color: #AB2C21;
+    border: none;
+    /*padding: 6px 10px;*/
+    cursor: pointer;
+}
+/*#toc.toc2{width:40em}*/
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:85em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+
+body.toc2.toc-right {
+    padding-left: 0;
+    padding-right: 0em;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+pre.pygments .hll { background-color: #ffffcc }
+pre.pygments { background: #f8f8f8; }
+pre.pygments .tok-c { color: #3D7B7B; font-style: italic } /* Comment */
+pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
+pre.pygments .tok-k { color: #008000; font-weight: bold } /* Keyword */
+pre.pygments .tok-o { color: #666666 } /* Operator */
+pre.pygments .tok-ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+pre.pygments .tok-cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+pre.pygments .tok-cp { color: #9C6500 } /* Comment.Preproc */
+pre.pygments .tok-cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+pre.pygments .tok-c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+pre.pygments .tok-cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
+pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
+pre.pygments .tok-ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+pre.pygments .tok-gr { color: #E40000 } /* Generic.Error */
+pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
+pre.pygments .tok-gi { color: #008400 } /* Generic.Inserted */
+pre.pygments .tok-go { color: #717171 } /* Generic.Output */
+pre.pygments .tok-gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
+pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+pre.pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
+pre.pygments .tok-kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+pre.pygments .tok-kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+pre.pygments .tok-kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+pre.pygments .tok-kp { color: #008000 } /* Keyword.Pseudo */
+pre.pygments .tok-kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+pre.pygments .tok-kt { color: #B00040 } /* Keyword.Type */
+pre.pygments .tok-m { color: #666666 } /* Literal.Number */
+pre.pygments .tok-s { color: #BA2121 } /* Literal.String */
+pre.pygments .tok-na { color: #687822 } /* Name.Attribute */
+pre.pygments .tok-nb { color: #008000 } /* Name.Builtin */
+pre.pygments .tok-nc { color: #0000FF; font-weight: bold } /* Name.Class */
+pre.pygments .tok-no { color: #880000 } /* Name.Constant */
+pre.pygments .tok-nd { color: #AA22FF } /* Name.Decorator */
+pre.pygments .tok-ni { color: #717171; font-weight: bold } /* Name.Entity */
+pre.pygments .tok-ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+pre.pygments .tok-nf { color: #0000FF } /* Name.Function */
+pre.pygments .tok-nl { color: #767600 } /* Name.Label */
+pre.pygments .tok-nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+pre.pygments .tok-nt { color: #008000; font-weight: bold } /* Name.Tag */
+pre.pygments .tok-nv { color: #19177C } /* Name.Variable */
+pre.pygments .tok-ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+pre.pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
+pre.pygments .tok-mb { color: #666666 } /* Literal.Number.Bin */
+pre.pygments .tok-mf { color: #666666 } /* Literal.Number.Float */
+pre.pygments .tok-mh { color: #666666 } /* Literal.Number.Hex */
+pre.pygments .tok-mi { color: #666666 } /* Literal.Number.Integer */
+pre.pygments .tok-mo { color: #666666 } /* Literal.Number.Oct */
+pre.pygments .tok-sa { color: #BA2121 } /* Literal.String.Affix */
+pre.pygments .tok-sb { color: #BA2121 } /* Literal.String.Backtick */
+pre.pygments .tok-sc { color: #BA2121 } /* Literal.String.Char */
+pre.pygments .tok-dl { color: #BA2121 } /* Literal.String.Delimiter */
+pre.pygments .tok-sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+pre.pygments .tok-s2 { color: #BA2121 } /* Literal.String.Double */
+pre.pygments .tok-se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+pre.pygments .tok-sh { color: #BA2121 } /* Literal.String.Heredoc */
+pre.pygments .tok-si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+pre.pygments .tok-sx { color: #008000 } /* Literal.String.Other */
+pre.pygments .tok-sr { color: #A45A77 } /* Literal.String.Regex */
+pre.pygments .tok-s1 { color: #BA2121 } /* Literal.String.Single */
+pre.pygments .tok-ss { color: #19177C } /* Literal.String.Symbol */
+pre.pygments .tok-bp { color: #008000 } /* Name.Builtin.Pseudo */
+pre.pygments .tok-fm { color: #0000FF } /* Name.Function.Magic */
+pre.pygments .tok-vc { color: #19177C } /* Name.Variable.Class */
+pre.pygments .tok-vg { color: #19177C } /* Name.Variable.Global */
+pre.pygments .tok-vi { color: #19177C } /* Name.Variable.Instance */
+pre.pygments .tok-vm { color: #19177C } /* Name.Variable.Magic */
+pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body class="article toc2 toc-right">
+<div id="header">
+<h1>Java高级程序设计进阶实验-JavaSE 门禁系统实训（共 36 学时）</h1>
+<div class="details">
+<span id="author" class="author">https://github.com/wangzhaohe/swot-learning</span><br>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">目录</div>
+<ul class="sectlevel1">
+<li><a href="#_实验一环境与项目初始化_4学时">实验一：环境与项目初始化 (4学时)</a>
+<ul class="sectlevel2">
+<li><a href="#_安装开发环境_intellij_idea_和_jdk_17">安装开发环境 IntelliJ IDEA 和 JDK 17</a></li>
+<li><a href="#_容器介绍docker_vs_podman">容器介绍：docker vs podman</a></li>
+<li><a href="#_wsl2_安装容器环境_podman重点">WSL2 安装容器环境 podman&#8201;&#8212;&#8201;重点</a>
+<ul class="sectlevel3">
+<li><a href="#_检查_windows_虚拟化环境状态并安装_wsl2_引擎">检查 windows 虚拟化环境状态并安装 WSL2 引擎</a></li>
+<li><a href="#_在_wsl2_引擎下安装_podman">在 WSL2 引擎下安装 podman</a></li>
+</ul>
+</li>
+<li><a href="#_podman_安装_jdk17">podman 安装 JDK17</a></li>
+<li><a href="#_idea_使用_podman_jdk17_运行_java_项目">IDEA 使用 podman JDK17 运行 java 项目</a>
+<ul class="sectlevel3">
+<li><a href="#_社区版本_idea_运行_podman_容器_jdk17_方法">社区版本 IDEA 运行 podman 容器 jdk17 方法</a></li>
+<li><a href="#_实际开发与验证的落地建议">实际开发与验证的落地建议</a></li>
+</ul>
+</li>
+<li><a href="#_深度思考为什么坚持在容器中运行_java">深度思考：为什么坚持在容器中运行 Java？</a></li>
+</ul>
+</li>
+<li><a href="#_实验二数据模型与实体类开发_4学时">实验二：数据模型与实体类开发 (4学时)</a>
+<ul class="sectlevel2">
+<li><a href="#_class_user_用户实体类">class User 用户实体类</a></li>
+<li><a href="#_关于_user_类小结">关于 User 类小结</a></li>
+<li><a href="#_class_doorsystemexception_门禁系统异常类代码实现">class DoorSystemException 门禁系统异常类代码实现</a></li>
+</ul>
+</li>
+<li><a href="#_实验三系统逻辑接口设计_6学时">实验三：系统逻辑接口设计 (6学时)</a></li>
+<li><a href="#_实验四单元测试与验证_4学时">实验四：单元测试与验证 (4学时)</a></li>
+<li><a href="#_实验五认证算法实现_6学时">实验五：认证算法实现 (6学时)</a></li>
+<li><a href="#_实验六持久化层升级_6学时">实验六：持久化层升级 (6学时)</a></li>
+<li><a href="#_实验七系统集成与发布_6学时">实验七：系统集成与发布 (6学时)</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<button id="toggleButton">目录开关</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_实验一环境与项目初始化_4学时">实验一：环境与项目初始化 (4学时)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>目标</strong>：搭建 JDK 与 IntelliJ IDEA 环境，完成项目骨架搭建。</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_安装开发环境_intellij_idea_和_jdk_17">安装开发环境 IntelliJ IDEA 和 JDK 17</h3>
+<div class="paragraph">
+<p>idea 下载地址：
+<a href="https://www.jetbrains.com/idea/download/" class="bare">https://www.jetbrains.com/idea/download/</a></p>
+</div>
+<div class="paragraph">
+<p>在 Idea 创建新项目时可以直接安装 java jdk17，参考下图：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/click_download_jdk.png" alt="select_download" width="740">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/download_jdk.png" alt="download" width="480">
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+这样就可以开发 java 程序了。
+下面在 podman 容器中运行 java 程序是提高的内容，初学者可以忽略！
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="‼️"></i>
+</td>
+<td class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>如果使用社区版本的 IDEA，仍然需要在本地安装 JDK17，因为 podman 容器中只是运行环境，无法提供代码补全和语法检查等功能。</p>
+</li>
+<li>
+<p>旗舰版 (Ultimate)可以通过 "Remote Robot" 或 "On Target" 功能，让 IDEA 直接去读容器里的 JDK 文件来做代码补全，实现真正的“本地零安装”。</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_容器介绍docker_vs_podman">容器介绍：docker vs podman</h3>
+<div class="paragraph">
+<p>用一句话概括：容器是带上所有“行李”的一键式运行环境。</p>
+</div>
+<div class="paragraph">
+<p>如果展开成三个关键词，它的作用就是：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>封装：把代码和它运行所需的依赖（库、环境、配置）像罐头一样封在一起。</p>
+</li>
+<li>
+<p>隔离：让应用像住在独立公寓里一样，互不干扰，不污染宿主机系统。</p>
+</li>
+<li>
+<p>一致：确保程序在开发电脑、测试服务器和云端运行得完全一模一样。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>一言以蔽之： 容器消灭了 “在我电脑上明明能跑” 这种程序员最头疼的借口。</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<caption class="title">Table 1. 常用容器 Docker vs Podman 核心特性对比表</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">维度</th>
+<th class="tableblock halign-left valign-top">Docker (传统霸主)</th>
+<th class="tableblock halign-left valign-top">Podman (红帽新锐)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>架构模型</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C/S 架构，依赖后台守护进程 <code>dockerd</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">典型的 Fork-Exec 模型，无守护进程 (Daemonless)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>权限管理</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">默认需要 Root 权限，安全风险相对较高</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">原生支持 <strong>Rootless</strong> 模式，普通用户即可运行</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Kubernetes 集成</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">需通过额外工具转换</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">原生支持 <strong>Pod</strong> 概念，可直接导出/导入 Kubernetes YAML</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>系统集成</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用自带的 Restart Policy 自动重启</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">完美集成 <strong>systemd</strong>，可作为原生系统服务管理</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>命令行兼容性</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">标准 <code>docker</code> 命令</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">与 Docker CLI 几乎完全一致 (alias docker=podman)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>生态与桌面端</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">生态极度丰富，Docker Desktop 在 Win/Mac 体验领先</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">社区快速增长，Podman Desktop 正在发力</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>镜像存放</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">由 Docker Daemon 统一管理存储</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">存放在用户家目录（Rootless）或 /var/lib/containers</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_wsl2_安装容器环境_podman重点">WSL2 安装容器环境 podman&#8201;&#8212;&#8201;重点</h3>
+<div class="paragraph">
+<p>什么是 WSL2？ (地基/虚拟化引擎)</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>全称： Windows Subsystem for Linux 2。</p>
+</li>
+<li>
+<p>本质： 它是微软开发的一个 Windows 功能组件。</p>
+</li>
+<li>
+<p>功能： 它在 Windows 内部提供了一个真实的 Linux 内核。
+它负责处理硬件资源（CPU、内存、网络）的分配，让 Linux 能够直接运行在 Windows 上。</p>
+</li>
+<li>
+<p>特点： 它本身不是一个可以让你操作的界面，它只是一个运行环境。没有它，Linux 系统无法在 Windows 上跑起来。</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_检查_windows_虚拟化环境状态并安装_wsl2_引擎">检查 windows 虚拟化环境状态并安装 WSL2 引擎</h4>
+<div class="paragraph">
+<p>请在你的 Windows 搜索栏输入 PowerShell，
+右键点击并选择 “以管理员身份运行”，打开命令行工具。</p>
+</div>
+<div class="sect4">
+<h5 id="_查看_bios_是否开启虚拟化支持">查看 BIOS 是否开启虚拟化支持</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp tok-gp-VirtualEnv">(Get-CimInstance -ClassName Win32_Processor)</span><span class="tok-go">.VirtualizationFirmwareEnabled</span>
+<span class="tok-gp"># </span>返回<span class="tok-w"> </span>True<span class="tok-w"> </span>表示<span class="tok-w"> </span>BIOS<span class="tok-w"> </span>已开启虚拟化支持。
+<span class="tok-gp"># </span>或者进入「任务管理器」-&gt;<span class="tok-w"> </span>「性能」-&gt;<span class="tok-w"> </span>「CPU」-&gt;<span class="tok-w"> </span>「虚拟化」是否为「已启用」</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果是“已禁用”，就必须进 BIOS 了。</p>
+</div>
+<div class="paragraph">
+<p>WSL2 和 Podman 实际上是在 Windows 内部运行了一个极简的虚拟机。为了让这个虚拟机运行得飞快（接近原生性能），CPU 必须从硬件层面提供支持：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Intel 处理器： 叫 VT-x (Virtualization Technology)。</p>
+</li>
+<li>
+<p>AMD 处理器： 叫 SVM (Secure Virtual Machine)。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>如何进入 BIOS 并开启？
+不同品牌的笔记本进入方式略有不同，但逻辑是一样的：</p>
+</div>
+<div class="paragraph">
+<p>第一步：进入 BIOS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>常见热键：</strong> 关机状态下按下电源键，然后不停地狂按 <code>F2</code>（联想、戴尔、华硕等常见）或 <code>F10</code> (HP) 或 <code>Del</code> (微星、组装机)。</p>
+</li>
+<li>
+<p><strong>通用方法（Windows 内）：</strong> <code>设置</code> &#8594; <code>系统</code> &#8594; <code>恢复</code> &#8594; <code>高级启动</code> &#8594; <code>立即重新启动</code>。重启后选择 <code>疑难解答</code> &#8594; <code>高级选项</code> &#8594; <code>UEFI 固件设置</code>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>第二步：找到开关（通常在 Advanced 或 Configuration 菜单下）</p>
+</div>
+<div class="paragraph">
+<p>进入 BIOS 后，寻找类似以下的字样并将其设置为 <strong>Enabled</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Intel 平台：</strong> <code>Intel Virtualization Technology</code> 或 <code>VT-x</code>。</p>
+</li>
+<li>
+<p><strong>AMD 平台：</strong> <code>SVM Mode</code> 或 <code>Secure Virtual Machine</code>。</p>
+</li>
+<li>
+<p><strong>某些笔记本：</strong> 可能会藏在 <code>Security</code> &#8594; <code>Virtualization</code> 路径下。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>第三步：保存退出</p>
+</div>
+<div class="paragraph">
+<p>通常按 <code>F10</code> 保存并退出。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_查看_windows_是否安装了适用于_linux_的_windows_子系统">查看 windows 是否安装了适用于 Linux 的 Windows 子系统</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">wsl -l -v</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你可能会看到的三种结果：</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>列表为空 (No distributions)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>提示：适用于 Linux 的 Windows 子系统没有已安装的分发版。</p>
+</li>
+<li>
+<p>解读： 你的 WSL2 地基已经打好了，但是上面没盖任何房子（没装 Ubuntu，也没装 Podman）。</p>
+</li>
+<li>
+<p>状态： 完美！这正是你想要的状态。你现在可以直接去安装 Podman，它会创建自己的专属环境。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>出现列表，版本为 2</p>
+<div class="ulist">
+<ul>
+<li>
+<p>提示：NAME: podman-machine-default, STATE: Running, VERSION: 2</p>
+</li>
+<li>
+<p>解读： 你已经安装过 Podman 且它正在运行，它用的是 WSL2 引擎。</p>
+</li>
+<li>
+<p>状态： 一切正常，你可以开始写 Java 代码了。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>错误提示：'wsl' 不是内部或外部命令 或 未安装适用于 Linux 的 Windows 子系统。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>解读： 你的 Windows 还没有开启 WSL 功能。</p>
+</li>
+<li>
+<p>操作： 有两种方式来开启</p>
+<div class="ulist">
+<ul>
+<li>
+<p>方式一：要执行 dism.exe 命令来开启 <mark>(我没使用方式一，用了方式二)</mark></p>
+<div class="listingblock">
+<div class="title">直接复制在 power shell 中执行</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp"># </span>开启<span class="tok-w"> </span>WSL<span class="tok-w"> </span>基础功能
+<span class="tok-go">dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart</span>
+
+<span class="tok-gp"># </span>开启<span class="tok-w"> </span>WSL2<span class="tok-w"> </span>必需的虚拟机平台
+<span class="tok-go">dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart</span>
+
+<span class="tok-gp"># </span>提示：请立即重启电脑！
+<span class="tok-go">Write-Host &quot;操作完成！请手动重启电脑以生效。&quot; -ForegroundColor Yellow</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>方式二：直接运行 <code>wsl --install --no-distribution</code> （这会开启 WSL 但不装 Ubuntu）。</p>
+<div class="literalblock">
+<div class="title">方式二运行后显示</div>
+<div class="content">
+<pre>PS C:\Windows\system32&gt; wsl --install --no-distribution
+正在下载: 适用于 Linux 的 Windows 子系统 2.6.3
+正在安装: 适用于 Linux 的 Windows 子系统 2.6.3
+已安装 适用于 Linux 的 Windows 子系统 2.6.3。
+正在安装 Windows 可选组件: VirtualMachinePlatform
+
+部署映像服务和管理工具
+版本: 10.0.26100.5074
+映像版本: 10.0.26200.7840
+
+启用一个或多个功能
+[==========================100.0%==========================]
+操作成功完成。
+请求的操作成功。直到重新启动系统前更改将不会生效。</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">再运行 ws -l -v 就会显示 wsl 底座已经ok了</div>
+<div class="content">
+<pre>PS C:\Windows\system32&gt; wsl -l -v
+适用于 Linux 的 Windows 子系统没有已安装的分发。
+可通过安装包含以下说明的分发来解决此问题：
+
+使用“wsl.exe --list --online' ”列出可用的分发
+和 “wsl.exe --install &lt;Distro&gt;” 进行安装。</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+一定一定记得要重启 Windows 操作系统！！！
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_再次确认_wsl_版本为_2">再次确认 wsl 版本为 2</h5>
+<div class="literalblock">
+<div class="title">查看 wsl 状态：一定要是版本 2</div>
+<div class="content">
+<pre>PS C:\Windows\system32&gt; wsl --status
+默认版本: 2
+当前计算机配置不支持 WSL1。
+若要使用 WSL1，请启用“Windows Subsystem for Linux”可选组件。</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">不是版本 2，则需要进行设置</div>
+<div class="content">
+<pre>wsl --set-default-version 2</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_删除_ubuntu_linux_系统">删除 ubuntu Linux 系统</h5>
+<div class="paragraph">
+<p>如果你已经手快执行了 <code>wsl --install</code> 并且 Ubuntu 已经出现在你的菜单里了，也不用重装系统，直接在 PowerShell 里输入这行命令就能把它彻底删掉：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">wsl --unregister Ubuntu</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这样你就回到了一个“只有 WSL2 引擎，没有 Ubuntu”的纯净状态了。</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_在_wsl2_引擎下安装_podman">在 WSL2 引擎下安装 podman</h4>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>下载地址</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/containers/podman/releases">Podman GitHub Releases</a></p>
+</li>
+<li>
+<p>找最新的 .exe 安装文件</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>安装完成后，在 PowerShell 输入</p>
+<div class="listingblock">
+<div class="title">初始化 podman 机器并开启</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp"># </span>限制<span class="tok-w"> </span>Podman<span class="tok-w"> </span>虚拟机使用<span class="tok-w"> </span>4G<span class="tok-w"> </span>内存，2<span class="tok-w"> </span>核<span class="tok-w"> </span>CPU
+<span class="tok-go">podman machine init --cpus 2 --memory 4096</span>
+
+<span class="tok-gp"># </span>可以再改
+<span class="tok-go">podman machine set --cpus 4 --memory 4096</span>
+
+<span class="tok-gp"># </span>查看设置
+<span class="tok-go">&gt; podman machine inspect --format &#39;{{.Resources.CPUs}} CPU, {{.Resources.Memory}} MB&#39;</span>
+
+<span class="tok-go">podman machine start</span>
+
+<span class="tok-gp"># </span>不用了就释放计算机内存资源
+<span class="tok-go">podman machine stop</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>如果 init 自动下载太慢了，直接下载镜像再导入。<br>
+<a href="https://github.com/containers/podman/releases" class="bare">https://github.com/containers/podman/releases</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp"># </span>彻底清理旧的失败记录
+<span class="tok-go">podman machine rm -f</span>
+
+<span class="tok-gp"># </span>手动指定你下载好的那个<span class="tok-w"> </span>141MB<span class="tok-w"> </span>的文件
+<span class="tok-go">podman machine init --image &quot;D:\rootfs.tar.xz&quot;</span>
+
+<span class="tok-gp"># </span>启动
+<span class="tok-go">podman machine start</span></code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">成功后再查看 machine list 就有了</div>
+<div class="content">
+<pre>PS C:\Windows\system32&gt; podman.exe machine list
+NAME                     VM TYPE     CREATED        LAST UP            CPUS        MEMORY      DISK SIZE
+podman-machine-default*  wsl         8 minutes ago  Currently running  8           2GiB        100GiB</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_podman_安装_jdk17">podman 安装 JDK17</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp"># </span>拉取镜像<span class="tok-w"> </span><span class="tok-o">(</span>使用<span class="tok-w"> </span>Eclipse<span class="tok-w"> </span>Temurin<span class="tok-w"> </span>发行版<span class="tok-o">)</span>
+<span class="tok-go">podman pull eclipse-temurin:17-jdk</span>
+
+<span class="tok-gp"># </span>启动一个交互式容器来测试<span class="tok-w"> </span>java<span class="tok-w"> </span>版本
+<span class="tok-go">podman run -it --rm eclipse-temurin:17-jdk java -version</span></code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">output result</div>
+<div class="content">
+<pre>openjdk version "17.0.18" 2026-01-20
+OpenJDK Runtime Environment Temurin-17.0.18+8 (build 17.0.18+8)
+OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing)</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_idea_使用_podman_jdk17_运行_java_项目">IDEA 使用 podman JDK17 运行 java 项目</h3>
+<div class="paragraph">
+<p><strong>IntelliJ IDEA Community (社区版)</strong> 默认不支持原生的 "Run Targets" 功能。
+本方法通过 <strong>External Tools (外部工具)</strong> 模拟旗舰版的远程运行体验，实现“本地编码、容器运行”的无缝衔接。</p>
+</div>
+<div class="sect3">
+<h4 id="_社区版本_idea_运行_podman_容器_jdk17_方法">社区版本 IDEA 运行 podman 容器 jdk17 方法</h4>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>External Tool 参数设置</p>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. 请在 <code>Settings</code> &#8594; <code>Tools</code> &#8594; <code>External Tools</code> 中添加以下配置：</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">配置项</th>
+<th class="tableblock halign-left valign-top">填写内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Name</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Run in Podman (Auto)</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Program</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>podman</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>run --rm -i -v $FileDir$:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java &amp;&amp; java $FileNameWithoutExtension$"</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Working directory</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$FileDir$</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>命令详解</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>run --rm</code>: 容器运行结束即销毁，保持系统整洁。</p>
+</li>
+<li>
+<p><code>-i</code> 参数，如果程序需要 Scanner 输入数据，控制台也能支持交互。</p>
+</li>
+<li>
+<p><code>-v $FileDir$:/src</code>: 将 IDEA 当前打开文件所在的目录映射到容器 <code>/src</code>。</p>
+</li>
+<li>
+<p><code>-w /src</code>: 指定容器内的工作目录，确保 <code>javac</code> 能找到源码。</p>
+</li>
+<li>
+<p><code>sh -c</code>: 启动容器内的 Shell 以支持 <code>&amp;&amp;</code> 逻辑。</p>
+</li>
+<li>
+<p><code>javac *.java</code>: <strong>万能编译</strong>，自动处理目录下所有 Java 类的依赖。</p>
+</li>
+<li>
+<p><code>java $FileNameWithoutExtension$</code>: 动态获取当前文件名（不含后缀）并运行。</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/external_tools_run_in_podman.png" alt="external tools run in podman" width="640">
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>快捷键绑定 (Keymap)</p>
+<div class="paragraph">
+<p>为了实现“一键运行”，建议进行以下操作：</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>打开 <code>Settings</code> &#8594; <code>Keymap</code>。</p>
+</li>
+<li>
+<p>搜索 <code>Run in Podman</code>。</p>
+</li>
+<li>
+<p>右键选择 <code>Add Keyboard Shortcut</code>，建议绑定为 <strong><code>Option + R</code></strong> (Mac) 或 <strong><code>Alt + R</code></strong> (Win)。</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>验证测试</p>
+<div class="listingblock">
+<div class="title">查看程序运行结果，即可知道是否在 podman 中运行成功。</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Main</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;========= Podman 环境测试 =========&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 验证运行操作系统（如果是 Linux，说明 Podman 成功了）</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">os</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">getProperty</span><span class="tok-p">(</span><span class="tok-s">&quot;os.name&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;当前运行操作系统: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">os</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 验证 JDK 版本</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">version</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">getProperty</span><span class="tok-p">(</span><span class="tok-s">&quot;java.version&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;当前 JDK 版本: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">version</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 验证环境变量</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">user</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">getProperty</span><span class="tok-p">(</span><span class="tok-s">&quot;user.name&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;当前容器用户: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">user</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-s">&quot;Linux&quot;</span><span class="tok-p">.</span><span class="tok-na">equalsIgnoreCase</span><span class="tok-p">(</span><span class="tok-n">os</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;✅ 成功！代码正在 Podman 容器内运行。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;❌ 警告：代码仍在 macOS 本地运行，请检查 Run on 设置。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;==================================&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>如果您想在容器里进行 Debug，需要配置 Remote JVM Debug。请自行搜索AI去解决。</p>
+</li>
+<li>
+<p>如果以后项目引入了 Maven 或 Gradle 依赖，建议将本地的 <code>.m2</code> 目录也通过 <code>-v</code> 挂载到容器中，以加速构建。</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_实际开发与验证的落地建议">实际开发与验证的落地建议</h4>
+<div class="paragraph">
+<p>如果没有 IDEA 专业版本，实际开发与验证的流程建议如下：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>日常写代码/Debug：直接用本地 JDK 17，享受最快的响应速度。</p>
+</li>
+<li>
+<p>最后验证：写完一个阶段了，按下你配好的 Option + R（Podman），看一眼在 Linux 下报不报错。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>这叫“本地开发，容器验证”，是性价比最高的工作流。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>VSCode 的 Dev Containers (开发容器)可以解决这个问题，但是就得用 VSCode 进行开发了。
+看个人和团队喜好吧。</p>
+</li>
+<li>
+<p>直接在 podman 容器里用 lazyvim 开发，更不错。</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_深度思考为什么坚持在容器中运行_java">深度思考：为什么坚持在容器中运行 Java？</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>彻底抹平“环境熵增”</p>
+<div class="quoteblock">
+<blockquote>
+“本地环境是一块不断被污染的实验田，而容器是永恒纯净的无菌室。”
+</blockquote>
+<div class="attribution">
+&#8212; 架构师思维
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>宿主机解耦</strong>：你的 Mac/Windows 不需要安装数据库、不需要配置复杂的环境变量。从而解决“在我机器上能跑”的玄学问题。</p>
+</li>
+<li>
+<p><strong>版本隔离</strong>：你可以同时运行 JDK 8、11、17、21 的不同项目，它们在各自的容器里互不干扰。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>预演“云原生”发布流程</p>
+<div class="paragraph">
+<p>现代企业应用最终都会跑在 <strong>Kubernetes (K8s)</strong> 或 <strong>Docker Swarm</strong> 上。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>镜像对齐</strong>：你在 Podman 里用的 <code>eclipse-temurin:17-jdk</code> 镜像，通常就是生产环境的基础镜像。</p>
+</li>
+<li>
+<p><strong>配置对齐</strong>：在容器里跑代码，会强制你思考：我的配置文件在哪里？我的日志往哪儿输出？我的内存限制是多少？这些都是线上运行的核心问题。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>极速入职与迁移 (Onboarding)</p>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>想象一下：一个新同事加入项目。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>传统方式</strong>：配置 JDK、安装 Maven、设置环境变量、解决 Mac M1/M2 兼容性问题&#8230;&#8203; 耗时一天。</p>
+</li>
+<li>
+<p><strong>容器方式</strong>：安装 Podman，执行你的 <code>External Tool</code> 命令。耗时 5 分钟。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>社区版“折腾”的附加价值</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>在 <strong>Ultimate 版</strong>里，这一切都是自动的，你会觉得理所当然；</p>
+</li>
+<li>
+<p>在 <strong>Community 版</strong>里，你手写了 <code>mount</code> 挂载、<code>working dir</code> 切换、<code>sh -c</code> 脚本。</p>
+</li>
+<li>
+<p>这些“折腾”让你真正理解了：<strong>IDE 是如何通过宿主机与 Linux 虚拟机（Podman Machine）进行通信的。</strong> 这种底层感知力，才是最值钱的。</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_实验二数据模型与实体类开发_4学时">实验二：数据模型与实体类开发 (4学时)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>目标</strong>：根据需求设计实体类及自定义异常类。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>实验目标</strong>：学会定义一个标准的“实体类”（Entity），用于存储门禁系统中的用户信息。</p>
+</div>
+<h3 id="_1_什么是实体类" class="discrete">1. 什么是实体类？</h3>
+<div class="paragraph">
+<p>在门禁系统中，我们需要一个东西来代表“人”。实体类就像一张<strong>电子入职登记表</strong>，把一个人的信息打包在一起。</p>
+</div>
+<h3 id="_2_标准的_user_类要求" class="discrete">2. 标准的 User 类要求</h3>
+<div class="paragraph">
+<p>为了保证数据的安全，我们要遵循上一节学的“封装”原则：
+1. 属性全部私有 (<code>private</code>)。
+2. 提供公共的 <code>Getter/Setter</code> 方法。
+3. 提供一个无参构造方法和一个全参构造方法。</p>
+</div>
+<h3 id="_3_代码实现" class="discrete">3. 代码实现</h3>
+<div class="sect2">
+<h3 id="_class_user_用户实体类">class User 用户实体类</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 用户实体类：代表一个拥有门禁卡的人</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">User</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">;</span><span class="tok-w">        </span><span class="tok-c1">// 工号</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">;</span><span class="tok-w">      </span><span class="tok-c1">// 姓名</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">;</span><span class="tok-w">    </span><span class="tok-c1">// 门禁卡号</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-n">isActive</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 账户是否激活</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 无参数构造方法（Java 习惯，方便以后框架使用）</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">User</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 全参数构造方法（方便一句话创建用户）</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">User</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-n">isActive</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">id</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">cardId</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">isActive</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">isActive</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// Getter 和 Setter（就像开关，外界通过它们读写数据）</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">getName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">setName</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">getCardId</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">setCardId</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">cardId</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// ... id 和 isActive 的 Getter/Setter 省略，实际开发中需补全</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_关于_user_类小结">关于 User 类小结</h3>
+<div class="paragraph">
+<p>private + Getter|Setter 是 Java 的“潜规则”，虽然写起来累，但可以保护数据不被乱改（例如可以在 setCardId 里加逻辑，长度不对就不给存）。</p>
+</div>
+<div class="paragraph">
+<p>在 IDEA 中演示 Alt + Insert 快捷键自动生成这些代码，学生会觉得很神奇，从而降低抗拒感。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_class_doorsystemexception_门禁系统异常类代码实现">class DoorSystemException 门禁系统异常类代码实现</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 自定义异常：专门处理门禁系统的异常情况</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DoorSystemException</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">DoorSystemException</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">message</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">message</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 把错误信息传给父类去处理</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_实验三系统逻辑接口设计_6学时">实验三：系统逻辑接口设计 (6学时)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>目标</strong>：利用接口和抽象类定义门禁系统的核心业务逻辑。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_实验四单元测试与验证_4学时">实验四：单元测试与验证 (4学时)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>目标</strong>：编写测试类，对功能模块进行逻辑覆盖测试。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_实验五认证算法实现_6学时">实验五：认证算法实现 (6学时)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>目标</strong>：实现门禁系统的核心认证算法及权限校验。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_实验六持久化层升级_6学时">实验六：持久化层升级 (6学时)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>目标</strong>：将原有的文件存储或内存存储升级为 JDBC 数据库存储。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_实验七系统集成与发布_6学时">实验七：系统集成与发布 (6学时)</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>目标</strong>：完成模块整合，开发主程序交互逻辑，提交最终成果。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2026-03-02 23:46:09 +0800
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>

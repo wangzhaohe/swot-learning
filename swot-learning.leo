@@ -174,7 +174,7 @@
 <v t="swot.20260215211454.1"><vh>@path java</vh>
 <v t="swot.20260216182522.1"><vh>@path javaBase</vh></v>
 </v>
-<v t="swot.20260301085004.1"><vh>@path 大软3+2</vh>
+<v t="swot.20260301085004.1" descendentVnodeUnknownAttributes="7d7100580b000000302e312e302e302e342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303271077573732e"><vh>@path 大软3+2</vh>
 <v t="swot.20260215212755.1"><vh>@adoc Java高级程序设计进阶.adoc</vh>
 <v t="swot.20260215211506.1"><vh>高级程序设计进阶（Java）</vh>
 <v t="swot.20260215213152.1"><vh>1. 课程基本信息</vh></v>
@@ -272,9 +272,12 @@
 <v t="swot.20260216221239.1"><vh>小结</vh></v>
 </v>
 </v>
-<v t="swot.20260215212047.1"><vh>3. 实验内容：JavaSE 门禁系统实训（共 36 学时）</vh>
-<v t="swot.20260215212525.1"><vh>实验一：环境与项目初始化 (4学时)</vh>
-<v t="swot.20260301091031.1"><vh>直接安装开发环境 IntelliJ IDEA -- 略</vh></v>
+</v>
+</v>
+<v t="swot.20260302215851.1" descendentVnodeUnknownAttributes="7d71005809000000302e302e302e342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303271077573732e"><vh>@adoc Java高级程序设计进阶实验.adoc</vh>
+<v t="swot.20260302215945.1" descendentVnodeUnknownAttributes="7d71005807000000302e302e342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303271077573732e"><vh>Java高级程序设计进阶实验-JavaSE 门禁系统实训（共 36 学时）</vh>
+<v t="swot.20260215212525.1" descendentVnodeUnknownAttributes="7d71005805000000302e342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303271077573732e"><vh>实验一：环境与项目初始化 (4学时)</vh>
+<v t="swot.20260301091031.1"><vh>安装开发环境 IntelliJ IDEA 和 JDK 17</vh></v>
 <v t="swot.20260302160035.1"><vh>容器介绍：docker vs podman</vh></v>
 <v t="swot.20260301091119.1"><vh>WSL2 安装容器环境 podman -- 重点</vh>
 <v t="swot.20260301092031.1"><vh>检查 windows 虚拟化环境状态并安装 WSL2 引擎</vh>
@@ -286,13 +289,13 @@
 <v t="swot.20260301110904.1"><vh>在 WSL2 引擎下安装 podman</vh></v>
 </v>
 <v t="swot.20260301133243.1"><vh>podman 安装 JDK17</vh></v>
-<v t="swot.20260302095530.1"><vh>IDEA 使用 podman JDK17 开发测试</vh>
-<v t="swot.20260302102453.1"><vh>创建基础 Java 项目</vh></v>
-<v t="swot.20260302102505.1"><vh>关联容器 JDK (解决智能提示)</vh></v>
-<v t="swot.20260302102514.1"><vh>配置运行目标 (Run on Podman)</vh></v>
-<v t="swot.20260302102542.1"><vh>结果验证</vh></v>
-<v t="swot.20260302135453.1"><vh>社区版本 IDEA 运行 podman 容器 jdk17 方法</vh></v>
+<v t="swot.20260302095530.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303271077573732e"><vh>IDEA 使用 podman JDK17 运行 java 项目</vh>
+<v t="swot.20260302135453.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303271077573732e"><vh>社区版本 IDEA 运行 podman 容器 jdk17 方法</vh>
+<v t="swot.20260302234509.1"><vh>class Main</vh></v>
 </v>
+<v t="swot.20260302162704.1"><vh>实际开发与验证的落地建议</vh></v>
+</v>
+<v t="swot.20260302161253.1"><vh>深度思考：为什么坚持在容器中运行 Java？</vh></v>
 </v>
 <v t="swot.20260215212523.1"><vh>实验二：数据模型与实体类开发 (4学时)</vh>
 <v t="swot.20260216075118.1"><vh>class User 用户实体类</vh></v>
@@ -306,6 +309,8 @@
 <v t="swot.20260215212514.1"><vh>实验七：系统集成与发布 (6学时)</vh></v>
 </v>
 </v>
+<v t="swot.20260302234107.1"><vh>@clean code/jdk_test/src/Main.java</vh>
+<v t="swot.20260302234509.1"></v>
 </v>
 </v>
 <v t="swot.20251210103828.1"><vh>@path js</vh>
@@ -13914,9 +13919,6 @@ pause
 &lt;/script&gt;
 ++++
 </t>
-<t tx="swot.20260215212047.1">@language asciidoc
-实验部分以“门禁系统”为核心案例，采用综合性实验形式。
-</t>
 <t tx="swot.20260215212100.1"></t>
 <t tx="swot.20260215212238.1">* *核心知识点*：类与对象、抽象与封装、属性与方法、继承与多态、接口设计。
 
@@ -16784,7 +16786,22 @@ echo ".DS_Store" &gt;&gt; ~/.gitignore_global
 <t tx="swot.20260301091031.1">idea 下载地址：
 https://www.jetbrains.com/idea/download/
 
-在 Idea 创建新项目时可以直接安装 java jdk17。
+在 Idea 创建新项目时可以直接安装 java jdk17，参考下图：
+
+image::img/click_download_jdk.png[select_download,740,]
+
+image::img/download_jdk.png[download,480,]
+
+
+IMPORTANT: 这样就可以开发 java 程序了。
+下面在 podman 容器中运行 java 程序是提高的内容，初学者可以忽略！
+
+
+[WARNING]
+====
+* 如果使用社区版本的 IDEA，仍然需要在本地安装 JDK17，因为 podman 容器中只是运行环境，无法提供代码补全和语法检查等功能。
+* 旗舰版 (Ultimate)可以通过 "Remote Robot" 或 "On Target" 功能，让 IDEA 直接去读容器里的 JDK 文件来做代码补全，实现真正的“本地零安装”。
+====
 
 </t>
 <t tx="swot.20260301091119.1">什么是 WSL2？ (地基/虚拟化引擎)
@@ -16999,69 +17016,56 @@ PS C:\Windows\system32&gt; wsl -l -v
 IMPORTANT: 一定一定记得要重启 Windows 操作系统！！！
 
 </t>
-<t tx="swot.20260302095530.1">本手册指导如何在 macOS 上，利用 Podman 容器作为 JDK 17 环境进行 Java 基础开发，实现本地「零 JDK 安装」。
-</t>
-<t tx="swot.20260302102453.1">1. 点击 **New Project**。
-2. **Name**: `JavaBasics`
-3. **Language**: `Java`
-4. **Build system**: `IntelliJ` (⚠️ 务必选此项，不使用 Maven/Gradle)
-5. **JDK**: 此时下拉框选 `No SDK`。
-6. 点击 **Create**。
+<t tx="swot.20260302095530.1">**IntelliJ IDEA Community (社区版)** 默认不支持原生的 "Run Targets" 功能。
+本方法通过 **External Tools (外部工具)** 模拟旗舰版的远程运行体验，实现“本地编码、容器运行”的无缝衔接。
 
 </t>
-<t tx="swot.20260302102505.1">此步骤将 Podman 镜像内的 JDK 类库索引到本地 IDEA，消除代码红线。
+<t tx="swot.20260302135453.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032362d30332d30327103752e">[upperalpha]
+. External Tool 参数设置
++
+.请在 `Settings` -&gt; `Tools` -&gt; `External Tools` 中添加以下配置：
+[cols="1,3", options="header"]
+|===
+| 配置项 | 填写内容
+| **Name** | `Run in Podman (Auto)`
+| **Program** | `podman`
+| **Arguments** | `run --rm -i -v $FileDir$:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java &amp;&amp; java $FileNameWithoutExtension$"`
+| **Working directory** | `$FileDir$`
+|===
++
+命令详解
 
-1. 进入 **File** -&gt; **Project Structure** (`Cmd + ;`) -&gt; **SDKs**。
-2. 点击 **+** -&gt; **Add JDK...** -&gt; **On Target...**。
-3. 选择 **Docker** 目标：
-   * **Server**: 选择刚才配好的 `Podman`。
-   * **Image**: 选择 `eclipse-temurin:17-jdk`。
-4. 点击 **Next**，IDEA 会启动容器并扫描 JDK 核心模块（如 `java.base`）。
-5. 扫描完成后，在 **Project** 选项卡中，确保 **Project SDK** 选中该容器 JDK。
-</t>
-<t tx="swot.20260302102514.1">确保代码实际在容器内执行，而非本地。
+* `run --rm`: 容器运行结束即销毁，保持系统整洁。
+* `-i` 参数，如果程序需要 Scanner 输入数据，控制台也能支持交互。
+* `-v $FileDir$:/src`: 将 IDEA 当前打开文件所在的目录映射到容器 `/src`。
+* `-w /src`: 指定容器内的工作目录，确保 `javac` 能找到源码。
+* `sh -c`: 启动容器内的 Shell 以支持 `&amp;&amp;` 逻辑。
+* `javac *.java`: **万能编译**，自动处理目录下所有 Java 类的依赖。
+* `java $FileNameWithoutExtension$`: 动态获取当前文件名（不含后缀）并运行。
++
+image::img/external_tools_run_in_podman.png[,640,]
 
+. 快捷键绑定 (Keymap)
++
+为了实现“一键运行”，建议进行以下操作：
+
+.. 打开 `Settings` -&gt; `Keymap`。
+.. 搜索 `Run in Podman`。
+.. 右键选择 `Add Keyboard Shortcut`，建议绑定为 **`Option + R`** (Mac) 或 **`Alt + R`** (Win)。
+
+. 验证测试
++
+.查看程序运行结果，即可知道是否在 podman 中运行成功。
 [source,java]
 ----
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("运行环境 OS: " + System.getProperty("os.name"));
-        System.out.println("JDK 运行版本: " + System.getProperty("java.version"));
-    }
-}
+@others
 ----
 
-1. 点击代码左侧的绿色运行箭头，选择 **Modify Run Configuration...**。
-2. 找到 **Run on** 下拉菜单，点击 **New Target...** -&gt; **Docker**。
-3. 配置参数：
-   * **Server**: `Podman`
-   * **Image**: `eclipse-temurin:17-jdk`
-4. 保存并运行。
-
-</t>
-<t tx="swot.20260302102542.1">运行成功后，IDEA 控制台应输出如下信息：
-
-[source,text]
-----
-运行环境 OS: Linux
-JDK 运行版本: 17.0.18
-----
-
-[NOTE]
+[TIP]
 ====
-由于操作系统显示为 `Linux`，证明代码已成功脱离 macOS 本地环境，运行在 Podman 容器中。
+* 如果您想在容器里进行 Debug，需要配置 Remote JVM Debug。请自行搜索AI去解决。
+* 如果以后项目引入了 Maven 或 Gradle 依赖，建议将本地的 `.m2` 目录也通过 `-v` 挂载到容器中，以加速构建。
 ====
-
-</t>
-<t tx="swot.20260302135453.1">
-.Arguments：
-[source,console]
-----
-run --rm -i -v $FileDir$:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java &amp;&amp; java $FileNameWithoutExtension$"
-----
-
--i 参数，如果程序需要 Scanner 输入数据，控制台也能支持交互。
-
 </t>
 <t tx="swot.20260302160035.1">用一句话概括：容器是带上所有“行李”的一键式运行环境。
 
@@ -17109,5 +17113,126 @@ run --rm -i -v $FileDir$:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java
 | 由 Docker Daemon 统一管理存储
 | 存放在用户家目录（Rootless）或 /var/lib/containers
 |===</t>
+<t tx="swot.20260302161253.1">[upperalpha]
+. 彻底抹平“环境熵增”
+[quote, 架构师思维]
+“本地环境是一块不断被污染的实验田，而容器是永恒纯净的无菌室。”
+
+* **宿主机解耦**：你的 Mac/Windows 不需要安装数据库、不需要配置复杂的环境变量。从而解决“在我机器上能跑”的玄学问题。
+* **版本隔离**：你可以同时运行 JDK 8、11、17、21 的不同项目，它们在各自的容器里互不干扰。
+
+. 预演“云原生”发布流程
++
+现代企业应用最终都会跑在 **Kubernetes (K8s)** 或 **Docker Swarm** 上。
+
+* **镜像对齐**：你在 Podman 里用的 `eclipse-temurin:17-jdk` 镜像，通常就是生产环境的基础镜像。
+* **配置对齐**：在容器里跑代码，会强制你思考：我的配置文件在哪里？我的日志往哪儿输出？我的内存限制是多少？这些都是线上运行的核心问题。
+
+. 极速入职与迁移 (Onboarding)
++
+[EXAMPLE]
+====
+想象一下：一个新同事加入项目。
+
+* **传统方式**：配置 JDK、安装 Maven、设置环境变量、解决 Mac M1/M2 兼容性问题... 耗时一天。
+* **容器方式**：安装 Podman，执行你的 `External Tool` 命令。耗时 5 分钟。
+====
+
+. 社区版“折腾”的附加价值
++
+[TIP]
+====
+* 在 **Ultimate 版**里，这一切都是自动的，你会觉得理所当然；
+* 在 **Community 版**里，你手写了 `mount` 挂载、`working dir` 切换、`sh -c` 脚本。
+* 这些“折腾”让你真正理解了：**IDE 是如何通过宿主机与 Linux 虚拟机（Podman Machine）进行通信的。** 这种底层感知力，才是最值钱的。
+====
+</t>
+<t tx="swot.20260302162704.1">如果没有 IDEA 专业版本，实际开发与验证的流程建议如下：
+
+. 日常写代码/Debug：直接用本地 JDK 17，享受最快的响应速度。
+
+. 最后验证：写完一个阶段了，按下你配好的 Option + R（Podman），看一眼在 Linux 下报不报错。
+
+这叫“本地开发，容器验证”，是性价比最高的工作流。
+
+
+[TIP]
+====
+* VSCode 的 Dev Containers (开发容器)可以解决这个问题，但是就得用 VSCode 进行开发了。
+看个人和团队喜好吧。
+
+* 直接在 podman 容器里用 lazyvim 开发，更不错。
+====
+
+</t>
+<t tx="swot.20260302215851.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
+<t tx="swot.20260302215945.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260302234107.1" _mod_time="4741da696bf41e0e932e">@language java
+@others
+</t>
+<t tx="swot.20260302234509.1">@language java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("========= Podman 环境测试 =========");
+
+        // 验证运行操作系统（如果是 Linux，说明 Podman 成功了）
+        String os = System.getProperty("os.name");
+        System.out.println("当前运行操作系统: " + os);
+
+        // 验证 JDK 版本
+        String version = System.getProperty("java.version");
+        System.out.println("当前 JDK 版本: " + version);
+
+        // 验证环境变量
+        String user = System.getProperty("user.name");
+        System.out.println("当前容器用户: " + user);
+
+        if ("Linux".equalsIgnoreCase(os)) {
+            System.out.println("✅ 成功！代码正在 Podman 容器内运行。");
+        } else {
+            System.out.println("❌ 警告：代码仍在 macOS 本地运行，请检查 Run on 设置。");
+        }
+
+        System.out.println("==================================");
+    }
+}
+</t>
 </tnodes>
 </leo_file>
