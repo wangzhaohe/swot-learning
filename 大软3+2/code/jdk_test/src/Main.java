@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println("========= Podman 环境测试 =========");
+        System.out.println("========= 环境测试 =========");
 
         // 验证运行操作系统（如果是 Linux，说明 Podman 成功了）
         String os = System.getProperty("os.name");

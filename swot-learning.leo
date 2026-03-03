@@ -17293,13 +17293,13 @@ podman run --rm -i -v /Users/swot/swot-learning/大软3+2/code/first-java/src:/s
 &lt;/script&gt;
 ++++
 </t>
-<t tx="swot.20260302234107.1" _mod_time="4741da69ba5b5d14012e">@language java
+<t tx="swot.20260302234107.1" _mod_time="4741da69ba7d6e09bc2e">@language java
 @others
 </t>
 <t tx="swot.20260302234509.1">@language java
 public class Main {
     public static void main(String[] args) {
-        System.out.println("========= Podman 环境测试 =========");
+        System.out.println("========= 环境测试 =========");
 
         // 验证运行操作系统（如果是 Linux，说明 Podman 成功了）
         String os = System.getProperty("os.name");
