@@ -206,11 +206,12 @@
 <v t="swot.20260303140042.1"><vh>变量与数据类型 —— “门禁系统的信息容器”</vh></v>
 <v t="swot.20260303140426.1"><vh>运算符与分支语句 (if/else) —— “智能保安的判断逻辑”</vh></v>
 <v t="swot.20260303140703.1"><vh>循环结构 (for/while) —— “不知疲倦的读卡器”</vh></v>
-<v t="swot.20260303142304.1"><vh>newHeadline</vh></v>
-<v t="swot.20260303140714.1"><vh>语法基石小结 -&gt; 需要补充完整 ......</vh></v>
+<v t="swot.20260303142304.1"><vh>方法 (Methods) —— “打包好的安检流水线”</vh></v>
+<v t="swot.20260303140714.1"><vh>语法基石小结</vh></v>
 </v>
 <v t="swot.20260215212238.1"><vh>面向对象基础 (4学时)</vh>
 <v t="swot.20260215222431.1"><vh>类与对象 —— “图纸”与“实物”</vh></v>
+<v t="swot.20260303160354.1"><vh>static 关键字 —— “门禁系统的全局广播站”</vh></v>
 <v t="swot.20260215222514.1"><vh>封装 —— “电视机外壳”</vh></v>
 <v t="swot.20260215222546.1"><vh>继承与多态 —— “父子关系”与“七十二变”</vh></v>
 <v t="swot.20260215222615.1"><vh>接口设计 —— “万能插座标准”</vh></v>
@@ -14073,14 +14074,6 @@ public class TestPhone {
     }
 }
 ----
-
-[qanda]
-放在哪个文件里？ ::
-答：
-
-如何执行？ ::
-答：
-
 </t>
 <t tx="swot.20260215222514.1">**1. 知识点说明**
 
@@ -17434,13 +17427,78 @@ public class LoopDemo {
 ----
 
 </t>
-<t tx="swot.20260303140714.1">* 很多同学在写 `if` 判断时，容易把双等号 `==` 写成单等号 `=`。
-在 Java 中 `=` 是用来赋值的，`==` 才是用来比较数字和布尔值的。（回顾：字符串比较一定要用 `.equals()` ）。
+<t tx="swot.20260303140714.1">本章我们补齐了盖起门禁大楼所需的全部“基础砖块”。针对初学者，请务必在脑海中刻下以下几条铁律：
 
-* 在实验环节中，我们可以利用 `while` 循环加上控制台输入（`Scanner`），让整个门禁系统真正“跑”起来，而不是运行一次就结束。
+* **严谨的“强类型”**：
+  Java 是极其严谨的，装什么货就必须配什么箱子（类型）。千万不要试图把小数存进 `int` 里，或者把文本赋值给 `boolean`。
+
+* **致命的单双等号 (`=` vs `==`)**：
+  很多时候在写 `if` 判断时，极易把双等号 `==` 写成单等号 `=`。在 Java 中 `=` 是用来赋值的，`==` 才是用来比较数字和布尔值的。**再次重申：字符串的比较绝对不能用 `==`，必须用 `.equals()`**。
+
+* **让程序“活”起来的循环**：
+  死循环不一定是 Bug。在接下来的实验环节中，我们正是要利用无限 `while` 循环，加上控制台输入（`Scanner`），让整个门禁系统真正处于“持续待机”的监听状态，而不是运行一次就结束退出了。
+
+* **告别“面条代码”的方法思维**：
+  不要把成百上千行的代码全塞进 `main` 方法里！学完方法后，要养成“把复杂逻辑拆解、打包”的习惯。让 `main` 方法只负责做个宏观的“调度员”，具体的脏活累活交给各个自定义方法去干。
+
+&gt; 到目前为止，我们写的代码还是“面向过程”的（一条流水线跑到底）。有了变量装数据、有了 if/while 做逻辑、有了方法做打包，下一章，我们将正式踏入 Java 的核心——**“面向对象”**，学习如何把这些零散的砖块，组装成一台真正具有独立功能的门禁机器！
 
 </t>
-<t tx="swot.20260303142304.1"></t>
+<t tx="swot.20260303142304.1">[upperalpha]
+. 为什么要学？
++
+如果每天有 1000 个人刷卡，难道要写 1000 次校验卡号格式的 `if/else` 吗？
++
+**方法（也叫函数）**就是把一段经常使用的代码“打包”起来，起个名字。以后只要喊这个名字，这段代码就会自动执行。
+
+
+. 知识点说明
+* **参数 (Parameters)**：交给流水线的原材料（比如：待校验的卡号）。
+* **返回值 (Return Value)**：
+  *** 流水线处理完给的结果（比如：格式是否正确的 `boolean` 结果）。
+  *** `void` 代表只干活，不返回结果。
+
+
+. 代码举例（封装门禁卡校验逻辑）
++
+[source,java]
+----
+public class MethodDemo {
+    
+    // 主程序：系统的入口
+    public static void main(String[] args) {
+        String card1 = "A1234567";
+        String card2 = "B999";
+        
+        // 直接“呼叫”我们写好的方法，并接收返回值
+        boolean result1 = checkCardFormat(card1);
+        boolean result2 = checkCardFormat(card2);
+        
+        System.out.println("卡号 " + card1 + " 校验结果：" + result1);
+        System.out.println("卡号 " + card2 + " 校验结果：" + result2);
+    }
+
+    /**
+     * 自定义方法：专门用来校验门禁卡格式
+     * @param cardId 输入的卡号
+     * @return 如果以 A 开头且长度为 8，返回 true，否则返回 false
+     */
+    public static boolean checkCardFormat(String cardId) {
+        System.out.println("&gt;&gt;&gt; 安检流水线启动，正在扫描卡号: " + cardId);
+        if (cardId.startsWith("A") &amp;&amp; cardId.length() == 8) {
+            return true; // 检验合格，打回 true，方法立刻结束
+        } else {
+            return false; // 检验不合格，打回 false
+        }
+    }
+}
+----
+
+
+. 小结与避坑
+* **初学者的痛点**：很多时候会忘记写 `return`，或者在声明了返回 `boolean` 的方法里 `return 1`。强调“承诺给什么类型，就必须返回什么类型”。
+* **教学互动**：可以写一个 `public static void openDoor(String doorName)` 方法，不需要返回值，只要打印出“XX大门已开启，欢迎您”即可，体会 `void` 的用法。
+</t>
 <t tx="swot.20260303142423.1">如果 `podman machine init` 自动下载太慢了，直接下载镜像再导入。 +
 https://github.com/containers/podman-wsl-fedora/releases
 
@@ -17462,6 +17520,70 @@ PS C:\Windows\system32&gt; podman.exe machine list
 NAME                     VM TYPE     CREATED        LAST UP            CPUS        MEMORY      DISK SIZE
 podman-machine-default*  wsl         8 minutes ago  Currently running  8           2GiB        100GiB
 ....
+
+</t>
+<t tx="swot.20260303160354.1">[upperalpha]
+. 为什么要学？
+在写面向对象代码时，最容易让人崩溃的就是：为什么我不能直接在 `main` 方法里调用我自己写的另一个方法？为什么必须要 `new` 一个对象出来？这就涉及到 `static`（静态）的本质。
+
+
+. 知识点说明
+* **非静态（实例成员）**：属于**具体某个对象**的私有财产。比如“南大门的地理位置”、“北大门的地理位置”，每台门禁机是不一样的。必须 `new` 出具体的门禁机，才能访问。
+* **静态（static 成员）**：属于**整个类**的共享财产，就像挂在墙上的全局广播站。比如“今天全校总共刷卡多少次”，所有门禁机共享这一个数字。不需要 `new`，直接通过 `类名.变量名` 就能看。
+
+
+. 场景举例（单台门禁机 vs 监控中心）
++
+[source,java]
+----
+@language java
+class DoorMachine {
+    // 非静态变量：属于每台具体的机器（私有财产）
+    String location; 
+    
+    // 静态变量：属于整个安保系统共享（全局统计）
+    static int totalSwipes = 0; 
+    
+    // 构造方法：出厂时设置安装位置
+    public DoorMachine(String loc) {
+        this.location = loc;
+    }
+    
+    // 刷卡动作
+    public void swipe() {
+        System.out.println(this.location + "门禁机：收到刷卡请求！");
+        totalSwipes++; // 每次刷卡，全局统计数据 +1
+    }
+}
+
+public class StaticDemo {
+    public static void main(String[] args) {
+        // 1. 造两台具体的门禁机
+        DoorMachine southDoor = new DoorMachine("南大门");
+        DoorMachine northDoor = new DoorMachine("北大门");
+        
+        // 2. 它们各自独立工作（调用非静态方法）
+        southDoor.swipe(); 
+        northDoor.swipe();
+        northDoor.swipe();
+        
+        // 3. 查看全局数据（调用静态变量，直接用【类名.变量名】）
+        System.out.println("--- 监控中心系统 ---");
+        System.out.println("今日全校累计刷卡总数：" + DoorMachine.totalSwipes); 
+    }
+}
+----
+
+
+. 核心避坑铁律
+[IMPORTANT]
+====
+**静态不能直接访问非静态！**
+
+* `main` 方法天生就是 `static` 的。
+* 如果在 `main` 里面想调用一个非静态的方法，Java 会报错。因为 Java 不知道你到底想调用“南大门”的方法，还是“北大门”的方法。
+* 所以必须先 `new` 一个具体的门出来！
+====
 
 </t>
 </tnodes>

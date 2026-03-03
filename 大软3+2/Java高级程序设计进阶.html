@@ -579,12 +579,14 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_变量与数据类型_门禁系统的信息容器">变量与数据类型 —— “门禁系统的信息容器”</a></li>
 <li><a href="#_运算符与分支语句_ifelse_智能保安的判断逻辑">运算符与分支语句 (if/else) —— “智能保安的判断逻辑”</a></li>
 <li><a href="#_循环结构_forwhile_不知疲倦的读卡器">循环结构 (for/while) —— “不知疲倦的读卡器”</a></li>
-<li><a href="#_语法基石小结_需要补充完整">语法基石小结 &#8594; 需要补充完整 &#8230;&#8203;&#8230;&#8203;</a></li>
+<li><a href="#_方法_methods_打包好的安检流水线">方法 (Methods) —— “打包好的安检流水线”</a></li>
+<li><a href="#_语法基石小结">语法基石小结</a></li>
 </ul>
 </li>
 <li><a href="#_面向对象基础_4学时">面向对象基础 (4学时)</a>
 <ul class="sectlevel2">
 <li><a href="#_类与对象_图纸与实物">类与对象 —— “图纸”与“实物”</a></li>
+<li><a href="#_static_关键字_门禁系统的全局广播站">static 关键字 —— “门禁系统的全局广播站”</a></li>
 <li><a href="#_封装_电视机外壳">封装 —— “电视机外壳”</a></li>
 <li><a href="#_继承与多态_父子关系与七十二变">继承与多态 —— “父子关系”与“七十二变”</a></li>
 <li><a href="#_接口设计_万能插座标准">接口设计 —— “万能插座标准”</a></li>
@@ -1440,17 +1442,124 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_语法基石小结_需要补充完整">语法基石小结 &#8594; 需要补充完整 &#8230;&#8203;&#8230;&#8203;</h3>
+<h3 id="_方法_methods_打包好的安检流水线">方法 (Methods) —— “打包好的安检流水线”</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>为什么要学？</p>
+<div class="paragraph">
+<p>如果每天有 1000 个人刷卡，难道要写 1000 次校验卡号格式的 <code>if/else</code> 吗？</p>
+</div>
+<div class="paragraph">
+<p><strong>方法（也叫函数）</strong>就是把一段经常使用的代码“打包”起来，起个名字。以后只要喊这个名字，这段代码就会自动执行。</p>
+</div>
+</li>
+<li>
+<p>知识点说明</p>
 <div class="ulist">
 <ul>
 <li>
-<p>很多同学在写 <code>if</code> 判断时，容易把双等号 <code>==</code> 写成单等号 <code>=</code>。
-在 Java 中 <code>=</code> 是用来赋值的，<code>==</code> 才是用来比较数字和布尔值的。（回顾：字符串比较一定要用 <code>.equals()</code> ）。</p>
+<p><strong>参数 (Parameters)</strong>：交给流水线的原材料（比如：待校验的卡号）。</p>
 </li>
 <li>
-<p>在实验环节中，我们可以利用 <code>while</code> 循环加上控制台输入（<code>Scanner</code>），让整个门禁系统真正“跑”起来，而不是运行一次就结束。</p>
+<p><strong>返回值 (Return Value)</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>流水线处理完给的结果（比如：格式是否正确的 <code>boolean</code> 结果）。</p>
+</li>
+<li>
+<p><code>void</code> 代表只干活，不返回结果。</p>
 </li>
 </ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>代码举例（封装门禁卡校验逻辑）</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">MethodDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 主程序：系统的入口</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">card1</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;A1234567&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">card2</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;B999&quot;</span><span class="tok-p">;</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 直接“呼叫”我们写好的方法，并接收返回值</span>
+<span class="tok-w">        </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-n">result1</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">checkCardFormat</span><span class="tok-p">(</span><span class="tok-n">card1</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-n">result2</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">checkCardFormat</span><span class="tok-p">(</span><span class="tok-n">card2</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;卡号 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">card1</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 校验结果：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">result1</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;卡号 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">card2</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 校验结果：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">result2</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 自定义方法：专门用来校验门禁卡格式</span>
+<span class="tok-cm">     * @param cardId 输入的卡号</span>
+<span class="tok-cm">     * @return 如果以 A 开头且长度为 8，返回 true，否则返回 false</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">checkCardFormat</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;&gt;&gt;&gt; 安检流水线启动，正在扫描卡号: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">cardId</span><span class="tok-p">.</span><span class="tok-na">startsWith</span><span class="tok-p">(</span><span class="tok-s">&quot;A&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 检验合格，打回 true，方法立刻结束</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 检验不合格，打回 false</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>小结与避坑</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>初学者的痛点</strong>：很多时候会忘记写 <code>return</code>，或者在声明了返回 <code>boolean</code> 的方法里 <code>return 1</code>。强调“承诺给什么类型，就必须返回什么类型”。</p>
+</li>
+<li>
+<p><strong>教学互动</strong>：可以写一个 <code>public static void openDoor(String doorName)</code> 方法，不需要返回值，只要打印出“XX大门已开启，欢迎您”即可，体会 <code>void</code> 的用法。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_语法基石小结">语法基石小结</h3>
+<div class="paragraph">
+<p>本章我们补齐了盖起门禁大楼所需的全部“基础砖块”。针对初学者，请务必在脑海中刻下以下几条铁律：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>严谨的“强类型”</strong>：
+Java 是极其严谨的，装什么货就必须配什么箱子（类型）。千万不要试图把小数存进 <code>int</code> 里，或者把文本赋值给 <code>boolean</code>。</p>
+</li>
+<li>
+<p><strong>致命的单双等号 (<code>=</code> vs <code>==</code>)</strong>：
+很多时候在写 <code>if</code> 判断时，极易把双等号 <code>==</code> 写成单等号 <code>=</code>。在 Java 中 <code>=</code> 是用来赋值的，<code>==</code> 才是用来比较数字和布尔值的。<strong>再次重申：字符串的比较绝对不能用 <code>==</code>，必须用 <code>.equals()</code></strong>。</p>
+</li>
+<li>
+<p><strong>让程序“活”起来的循环</strong>：
+死循环不一定是 Bug。在接下来的实验环节中，我们正是要利用无限 <code>while</code> 循环，加上控制台输入（<code>Scanner</code>），让整个门禁系统真正处于“持续待机”的监听状态，而不是运行一次就结束退出了。</p>
+</li>
+<li>
+<p><strong>告别“面条代码”的方法思维</strong>：
+不要把成百上千行的代码全塞进 <code>main</code> 方法里！学完方法后，要养成“把复杂逻辑拆解、打包”的习惯。让 <code>main</code> 方法只负责做个宏观的“调度员”，具体的脏活累活交给各个自定义方法去干。</p>
+</li>
+</ul>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>到目前为止，我们写的代码还是“面向过程”的（一条流水线跑到底）。有了变量装数据、有了 if/while 做逻辑、有了方法做打包，下一章，我们将正式踏入 Java 的核心——<strong>“面向对象”</strong>，学习如何把这些零散的砖块，组装成一台真正具有独立功能的门禁机器！</p>
+</div>
+</blockquote>
 </div>
 </div>
 </div>
@@ -1529,17 +1638,94 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
-<div class="qlist qanda">
-<ol>
+</div>
+<div class="sect2">
+<h3 id="_static_关键字_门禁系统的全局广播站">static 关键字 —— “门禁系统的全局广播站”</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
 <li>
-<p><em>放在哪个文件里？ </em></p>
-<p>答：</p>
+<p>为什么要学？
+在写面向对象代码时，最容易让人崩溃的就是：为什么我不能直接在 <code>main</code> 方法里调用我自己写的另一个方法？为什么必须要 <code>new</code> 一个对象出来？这就涉及到 <code>static</code>（静态）的本质。</p>
 </li>
 <li>
-<p><em>如何执行？ </em></p>
-<p>答：</p>
+<p>知识点说明</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>非静态（实例成员）</strong>：属于<strong>具体某个对象</strong>的私有财产。比如“南大门的地理位置”、“北大门的地理位置”，每台门禁机是不一样的。必须 <code>new</code> 出具体的门禁机，才能访问。</p>
+</li>
+<li>
+<p><strong>静态（static 成员）</strong>：属于<strong>整个类</strong>的共享财产，就像挂在墙上的全局广播站。比如“今天全校总共刷卡多少次”，所有门禁机共享这一个数字。不需要 <code>new</code>，直接通过 <code>类名.变量名</code> 就能看。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>场景举例（单台门禁机 vs 监控中心）</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">class</span> <span class="tok-nc">DoorMachine</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 非静态变量：属于每台具体的机器（私有财产）</span>
+<span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">location</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 静态变量：属于整个安保系统共享（全局统计）</span>
+<span class="tok-w">    </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">totalSwipes</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 构造方法：出厂时设置安装位置</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">DoorMachine</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">loc</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">location</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">loc</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 刷卡动作</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">swipe</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">location</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;门禁机：收到刷卡请求！&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">totalSwipes</span><span class="tok-o">++</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 每次刷卡，全局统计数据 +1</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">StaticDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 1. 造两台具体的门禁机</span>
+<span class="tok-w">        </span><span class="tok-n">DoorMachine</span><span class="tok-w"> </span><span class="tok-n">southDoor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorMachine</span><span class="tok-p">(</span><span class="tok-s">&quot;南大门&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">DoorMachine</span><span class="tok-w"> </span><span class="tok-n">northDoor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorMachine</span><span class="tok-p">(</span><span class="tok-s">&quot;北大门&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 2. 它们各自独立工作（调用非静态方法）</span>
+<span class="tok-w">        </span><span class="tok-n">southDoor</span><span class="tok-p">.</span><span class="tok-na">swipe</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">northDoor</span><span class="tok-p">.</span><span class="tok-na">swipe</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">northDoor</span><span class="tok-p">.</span><span class="tok-na">swipe</span><span class="tok-p">();</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 3. 查看全局数据（调用静态变量，直接用【类名.变量名】）</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;--- 监控中心系统 ---&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;今日全校累计刷卡总数：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">DoorMachine</span><span class="tok-p">.</span><span class="tok-na">totalSwipes</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>核心避坑铁律</p>
 </li>
 </ol>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>静态不能直接访问非静态！</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>main</code> 方法天生就是 <code>static</code> 的。</p>
+</li>
+<li>
+<p>如果在 <code>main</code> 里面想调用一个非静态的方法，Java 会报错。因为 Java 不知道你到底想调用“南大门”的方法，还是“北大门”的方法。</p>
+</li>
+<li>
+<p>所以必须先 <code>new</code> 一个具体的门出来！</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -2985,7 +3171,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-03 14:20:39 +0800
+Last updated 2026-03-03 16:31:35 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
