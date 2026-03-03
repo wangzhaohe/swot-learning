@@ -16845,6 +16845,10 @@ podman machine set --cpus 4 --memory 4096
 # 查看设置
 &gt; podman machine inspect --format '{{.Resources.CPUs}} CPU, {{.Resources.Memory}} MB'
 
+# 查看 podman 虚拟机
+podman machine list
+
+# 启动 podman 虚拟机
 podman machine start
 
 # 不用了就释放计算机内存资源
@@ -16853,7 +16857,7 @@ podman machine stop
 
 
 如果 init 自动下载太慢了，直接下载镜像再导入。 +
-https://github.com/containers/podman/releases
+https://github.com/containers/podman-wsl-fedora/releases
 
 [source,console]
 ----
