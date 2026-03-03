@@ -548,6 +548,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_检查_windows_虚拟化环境状态并安装_wsl2_引擎">检查 windows 虚拟化环境状态并安装 WSL2 引擎</a></li>
 <li><a href="#_在_wsl2_引擎下安装_podman">在 WSL2 引擎下安装 podman</a></li>
+<li><a href="#_直接导入_podman_rootfs_方式">直接导入 podman rootfs 方式</a></li>
 </ul>
 </li>
 <li><a href="#_podman_安装_jdk17">podman 安装 JDK17</a></li>
@@ -658,6 +659,18 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;==================================&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">本机运行结果</div>
+<div class="content">
+<pre>/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar=53662 -Dfile.encoding=UTF-8 -classpath /Users/swot/swot-learning/大软3+2/code/first-java/out/production/first-java Main
+========= Podman 环境测试 =========
+当前运行操作系统: Mac OS X
+当前 JDK 版本: 17.0.18
+当前容器用户: swot
+❌ 警告：代码仍在 macOS 本地运行，请检查 Run on 设置。
+==================================</pre>
 </div>
 </div>
 </div>
@@ -1072,8 +1085,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ol>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_直接导入_podman_rootfs_方式">直接导入 podman rootfs 方式</h4>
 <div class="paragraph">
-<p>如果 init 自动下载太慢了，直接下载镜像再导入。<br>
+<p>如果 <code>podman machine init</code> 自动下载太慢了，直接下载镜像再导入。<br>
 <a href="https://github.com/containers/podman-wsl-fedora/releases" class="bare">https://github.com/containers/podman-wsl-fedora/releases</a></p>
 </div>
 <div class="listingblock">
@@ -1126,17 +1142,12 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 </div>
 <div class="sect3">
 <h4 id="_社区版本_idea_运行_podman_容器_jdk17_方法">社区版本 IDEA 运行 podman 容器 jdk17 方法</h4>
-<div class="literalblock">
-<div class="content">
-<pre> [upperalpha]
-. External Tool 参数设置</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>+
-.请在 <code>Settings</code> &#8594; <code>Tools</code> &#8594; <code>External Tools</code> 中添加以下配置：</p>
-</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>External Tool 参数设置</p>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">请在 IDEA 的 <code>Settings</code> &#8594; <code>Tools</code> &#8594; <code>External Tools</code> 中添加以下配置：</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 75%;">
@@ -1167,8 +1178,7 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 </tbody>
 </table>
 <div class="paragraph">
-<p>+
-命令详解</p>
+<p>命令详解</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1197,8 +1207,10 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 <img src="img/external_tools_run_in_podman.png" alt="external tools run in podman" width="640">
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
+</ul>
+</div>
+</li>
 <li>
 <p>快捷键绑定 (Keymap)</p>
 <div class="paragraph">
@@ -1250,11 +1262,20 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
-</li>
-</ol>
+<div class="literalblock">
+<div class="title">podman 运行结果</div>
+<div class="content">
+<pre>podman run --rm -i -v /Users/swot/swot-learning/大软3+2/code/first-java/src:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java &amp;&amp; java Main"
+========= Podman 环境测试 =========
+当前运行操作系统: Linux
+当前 JDK 版本: 17.0.18
+当前容器用户: root
+✅ 成功！代码正在 Podman 容器内运行。
+==================================</pre>
+</div>
 </div>
 </li>
-</ul>
+</ol>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1282,7 +1303,7 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 <div class="sect3">
 <h4 id="_实际开发与验证的落地建议">实际开发与验证的落地建议</h4>
 <div class="paragraph">
-<p>如果没有 IDEA 专业版本，实际开发与验证的流程建议如下：</p>
+<p>如果没有 IDEA 旗舰版本，实际开发与验证的流程建议如下：</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1394,10 +1415,10 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 <div class="ulist">
 <ul>
 <li>
-<p>在 <strong>Ultimate 版</strong>里，这一切都是自动的，你会觉得理所当然；</p>
+<p>在 <strong>Ultimate 旗舰版</strong>里，这一切都是自动的，你会觉得理所当然；</p>
 </li>
 <li>
-<p>在 <strong>Community 版</strong>里，你手写了 <code>mount</code> 挂载、<code>working dir</code> 切换、<code>sh -c</code> 脚本。</p>
+<p>在 <strong>Community 社区版</strong>里，你手写了 <code>mount</code> 挂载、<code>working dir</code> 切换、<code>sh -c</code> 脚本。</p>
 </li>
 <li>
 <p>这些“折腾”让你真正理解了：<strong>IDE 是如何通过宿主机与 Linux 虚拟机（Podman Machine）进行通信的。</strong> 这种底层感知力，才是最值钱的。</p>
@@ -1575,7 +1596,7 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-03 11:21:44 +0800
+Last updated 2026-03-03 15:07:37 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

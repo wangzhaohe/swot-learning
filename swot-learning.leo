@@ -206,6 +206,7 @@
 <v t="swot.20260303140042.1"><vh>变量与数据类型 —— “门禁系统的信息容器”</vh></v>
 <v t="swot.20260303140426.1"><vh>运算符与分支语句 (if/else) —— “智能保安的判断逻辑”</vh></v>
 <v t="swot.20260303140703.1"><vh>循环结构 (for/while) —— “不知疲倦的读卡器”</vh></v>
+<v t="swot.20260303142304.1"><vh>newHeadline</vh></v>
 <v t="swot.20260303140714.1"><vh>语法基石小结 -&gt; 需要补充完整 ......</vh></v>
 </v>
 <v t="swot.20260215212238.1"><vh>面向对象基础 (4学时)</vh>
@@ -299,6 +300,7 @@
 <v t="swot.20260301111720.1"><vh>删除 ubuntu Linux 系统</vh></v>
 </v>
 <v t="swot.20260301110904.1"><vh>在 WSL2 引擎下安装 podman</vh></v>
+<v t="swot.20260303142423.1"><vh>直接导入 podman rootfs 方式</vh></v>
 </v>
 <v t="swot.20260301133243.1"><vh>podman 安装 JDK17</vh></v>
 <v t="swot.20260302095530.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303271077573732e"><vh>IDEA 使用 podman JDK17 运行 java 项目</vh>
@@ -16814,6 +16816,17 @@ image::img/download_jdk.png[download,480,]
 @others
 ----
 
+.本机运行结果
+....
+/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar=53662 -Dfile.encoding=UTF-8 -classpath /Users/swot/swot-learning/大软3+2/code/first-java/out/production/first-java Main
+========= Podman 环境测试 =========
+当前运行操作系统: Mac OS X
+当前 JDK 版本: 17.0.18
+当前容器用户: swot
+❌ 警告：代码仍在 macOS 本地运行，请检查 Run on 设置。
+==================================
+....
+
 </t>
 <t tx="swot.20260301091119.1">什么是 WSL2？ (地基/虚拟化引擎)
 
@@ -16861,28 +16874,6 @@ podman machine start
 podman machine stop
 ----
 
-
-如果 init 自动下载太慢了，直接下载镜像再导入。 +
-https://github.com/containers/podman-wsl-fedora/releases
-
-[source,console]
-----
-# 彻底清理旧的失败记录
-podman machine rm -f
-
-# 手动指定你下载好的那个 141MB 的文件
-podman machine init --image "D:\rootfs.tar.xz"
-
-# 启动
-podman machine start
-----
-
-.成功后再查看 machine list 就有了
-....
-PS C:\Windows\system32&gt; podman.exe machine list
-NAME                     VM TYPE     CREATED        LAST UP            CPUS        MEMORY      DISK SIZE
-podman-machine-default*  wsl         8 minutes ago  Currently running  8           2GiB        100GiB
-....
 </t>
 <t tx="swot.20260301111720.1">如果你已经手快执行了 `wsl --install` 并且 Ubuntu 已经出现在你的菜单里了，也不用重装系统，直接在 PowerShell 里输入这行命令就能把它彻底删掉：
 
@@ -17035,10 +17026,11 @@ IMPORTANT: 一定一定记得要重启 Windows 操作系统！！！
 本方法通过 **External Tools (外部工具)** 模拟旗舰版的远程运行体验，实现“本地编码、容器运行”的无缝衔接。
 
 </t>
-<t tx="swot.20260302135453.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032362d30332d30327103752e"> [upperalpha]
+<t tx="swot.20260302135453.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032362d30332d30327103752e">[upperalpha]
 . External Tool 参数设置
 +
-.请在 `Settings` -&gt; `Tools` -&gt; `External Tools` 中添加以下配置：
+.请在 IDEA 的 `Settings` -&gt; `Tools` -&gt; `External Tools` 中添加以下配置：
+[caption=]
 [cols="1,3", options="header"]
 |===
 | 配置项 | 填写内容
@@ -17075,6 +17067,18 @@ image::img/external_tools_run_in_podman.png[,640,]
 ----
 @others
 ----
++
+.podman 运行结果
+....
+podman run --rm -i -v /Users/swot/swot-learning/大软3+2/code/first-java/src:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java &amp;&amp; java Main"
+========= Podman 环境测试 =========
+当前运行操作系统: Linux
+当前 JDK 版本: 17.0.18
+当前容器用户: root
+✅ 成功！代码正在 Podman 容器内运行。
+==================================
+....
+
 
 .本期资料未实现
 [TIP]
@@ -17158,12 +17162,12 @@ image::img/external_tools_run_in_podman.png[,640,]
 +
 [TIP]
 ====
-* 在 **Ultimate 版**里，这一切都是自动的，你会觉得理所当然；
-* 在 **Community 版**里，你手写了 `mount` 挂载、`working dir` 切换、`sh -c` 脚本。
+* 在 **Ultimate 旗舰版**里，这一切都是自动的，你会觉得理所当然；
+* 在 **Community 社区版**里，你手写了 `mount` 挂载、`working dir` 切换、`sh -c` 脚本。
 * 这些“折腾”让你真正理解了：**IDE 是如何通过宿主机与 Linux 虚拟机（Podman Machine）进行通信的。** 这种底层感知力，才是最值钱的。
 ====
 </t>
-<t tx="swot.20260302162704.1">如果没有 IDEA 专业版本，实际开发与验证的流程建议如下：
+<t tx="swot.20260302162704.1">如果没有 IDEA 旗舰版本，实际开发与验证的流程建议如下：
 
 . 日常写代码/Debug：直接用本地 JDK 17，享受最快的响应速度。
 
@@ -17434,6 +17438,30 @@ public class LoopDemo {
 在 Java 中 `=` 是用来赋值的，`==` 才是用来比较数字和布尔值的。（回顾：字符串比较一定要用 `.equals()` ）。
 
 * 在实验环节中，我们可以利用 `while` 循环加上控制台输入（`Scanner`），让整个门禁系统真正“跑”起来，而不是运行一次就结束。
+
+</t>
+<t tx="swot.20260303142304.1"></t>
+<t tx="swot.20260303142423.1">如果 `podman machine init` 自动下载太慢了，直接下载镜像再导入。 +
+https://github.com/containers/podman-wsl-fedora/releases
+
+[source,console]
+----
+# 彻底清理旧的失败记录
+podman machine rm -f
+
+# 手动指定你下载好的那个 141MB 的文件
+podman machine init --image "D:\rootfs.tar.xz"
+
+# 启动
+podman machine start
+----
+
+.成功后再查看 machine list 就有了
+....
+PS C:\Windows\system32&gt; podman.exe machine list
+NAME                     VM TYPE     CREATED        LAST UP            CPUS        MEMORY      DISK SIZE
+podman-machine-default*  wsl         8 minutes ago  Currently running  8           2GiB        100GiB
+....
 
 </t>
 </tnodes>

@@ -83,6 +83,17 @@ public class Main {
 }
 ----
 
+.本机运行结果
+....
+/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar=53662 -Dfile.encoding=UTF-8 -classpath /Users/swot/swot-learning/大软3+2/code/first-java/out/production/first-java Main
+========= Podman 环境测试 =========
+当前运行操作系统: Mac OS X
+当前 JDK 版本: 17.0.18
+当前容器用户: swot
+❌ 警告：代码仍在 macOS 本地运行，请检查 Run on 设置。
+==================================
+....
+
 === 先说 podman 容器运行注意事项
 [WARNING]
 ====
@@ -319,8 +330,8 @@ podman machine start
 podman machine stop
 ----
 
-
-如果 init 自动下载太慢了，直接下载镜像再导入。 +
+==== 直接导入 podman rootfs 方式
+如果 `podman machine init` 自动下载太慢了，直接下载镜像再导入。 +
 https://github.com/containers/podman-wsl-fedora/releases
 
 [source,console]
@@ -364,10 +375,11 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 本方法通过 **External Tools (外部工具)** 模拟旗舰版的远程运行体验，实现“本地编码、容器运行”的无缝衔接。
 
 ==== 社区版本 IDEA 运行 podman 容器 jdk17 方法
- [upperalpha]
+[upperalpha]
 . External Tool 参数设置
 +
-.请在 `Settings` -> `Tools` -> `External Tools` 中添加以下配置：
+.请在 IDEA 的 `Settings` -> `Tools` -> `External Tools` 中添加以下配置：
+[caption=]
 [cols="1,3", options="header"]
 |===
 | 配置项 | 填写内容
@@ -428,6 +440,18 @@ public class Main {
     }
 }
 ----
++
+.podman 运行结果
+....
+podman run --rm -i -v /Users/swot/swot-learning/大软3+2/code/first-java/src:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java && java Main"
+========= Podman 环境测试 =========
+当前运行操作系统: Linux
+当前 JDK 版本: 17.0.18
+当前容器用户: root
+✅ 成功！代码正在 Podman 容器内运行。
+==================================
+....
+
 
 .本期资料未实现
 [TIP]
@@ -437,7 +461,7 @@ public class Main {
 ====
 
 ==== 实际开发与验证的落地建议
-如果没有 IDEA 专业版本，实际开发与验证的流程建议如下：
+如果没有 IDEA 旗舰版本，实际开发与验证的流程建议如下：
 
 . 日常写代码/Debug：直接用本地 JDK 17，享受最快的响应速度。
 
@@ -484,8 +508,8 @@ public class Main {
 +
 [TIP]
 ====
-* 在 **Ultimate 版**里，这一切都是自动的，你会觉得理所当然；
-* 在 **Community 版**里，你手写了 `mount` 挂载、`working dir` 切换、`sh -c` 脚本。
+* 在 **Ultimate 旗舰版**里，这一切都是自动的，你会觉得理所当然；
+* 在 **Community 社区版**里，你手写了 `mount` 挂载、`working dir` 切换、`sh -c` 脚本。
 * 这些“折腾”让你真正理解了：**IDE 是如何通过宿主机与 Linux 虚拟机（Podman Machine）进行通信的。** 这种底层感知力，才是最值钱的。
 ====
 
