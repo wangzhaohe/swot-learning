@@ -210,9 +210,9 @@
 <v t="swot.20260303140714.1"><vh>语法基石小结</vh></v>
 </v>
 <v t="swot.20260215212238.1"><vh>面向对象基础 (4学时)</vh>
-<v t="swot.20260215222431.1"><vh>类与对象 —— “图纸”与“实物”</vh></v>
+<v t="swot.20260215222431.1"><vh>类与对象 —— “图纸”与“实物” -&gt; 改成门禁例子</vh></v>
 <v t="swot.20260303160354.1"><vh>static 关键字 —— “门禁系统的全局广播站”</vh></v>
-<v t="swot.20260215222514.1"><vh>封装 —— “电视机外壳”</vh></v>
+<v t="swot.20260215222514.1"><vh>封装 —— “门禁卡的智能芯片”</vh></v>
 <v t="swot.20260215222546.1"><vh>继承与多态 —— “父子关系”与“七十二变”</vh></v>
 <v t="swot.20260215222615.1"><vh>接口设计 —— “万能插座标准”</vh></v>
 <v t="swot.20260303164345.1"><vh>包管理与访问权限 —— “大楼的房间划分与门锁”</vh></v>
@@ -14077,42 +14077,113 @@ public class TestPhone {
 }
 ----
 </t>
-<t tx="swot.20260215222514.1">**1. 知识点说明**
+<t tx="swot.20260215222514.1">[upperalpha]
+. 知识点说明
+* **私有化 (private)**：把核心数据（如工号、姓名、卡号、状态）藏在类内部的“芯片”里，防止外部代码直接乱碰和非法篡改。
+* **Getter|Setter (安全读写窗口)**：你想读取或修改数据？不能直接硬改，必须通过类提供的“安全按钮”（方法）来进行。
+* **只读保护（Read-Only）**：如果某个数据（比如工号）绝不允许修改，**只需不写它的 Setter 方法即可**。这样外部就彻底失去了修改它的途径。
 
-* **私有化 (private)**：把数据藏在里面，不让外人乱碰。
-* **Getter|Setter (遥控器)**：你想改数据？必须通过我提供的“按钮”。
 
-**2. 生活举例**
-电视机内部电路很复杂，你不需要（也不应该）拆开机壳去拨弄电线，你只需要按遥控器上的“音量+”即可。
+. 生活举例
++
+门禁卡内部的存储芯片是密封的，你不需要（也不应该）拆开卡片去强行改变里面的磁性数据。你只需要把卡放在读卡器上，让系统通过标准的读写接口，安全地读取卡号或更新卡片状态。而像出厂序列号这种数据，更是被硬件锁死，只能看不能改。
 
-**3. 代码举例**
-
+. 代码举例
++
 [source,java]
 ----
-class BankAccount {
-    private double balance = 100.0; // 私有的余额，别人不能直接用 .balance 修改
+@language java
+/**
+ * 用户实体类：代表一个拥有门禁卡的人
+ * 对应实验二：数据模型与实体类开发
+ */
+class User {
+    // 1. 私有化属性：像芯片数据一样锁起来，外部无法直接用 .获取
+    private String id;        // 工号 (绝对核心，不可修改)
+    private String name;      // 姓名 (允许修改，但需校验)
+    private String cardId;    // 门禁卡号 (允许换卡)
+    private boolean isActive; // 账户是否激活 (允许挂失/解挂)
 
-    // 提供一个存钱的“按钮”（方法）
-    public void deposit(double money) {
-        if (money &gt; 0) {
-            balance += money;
-            System.out.println("存钱成功！当前余额：" + balance);
+    // 2. 无参数构造方法：Java 编程习惯
+    public User() {}
+
+    // 3. 全参数构造方法：发卡时一键初始化信息
+    public User(String id, String name, String cardId, boolean isActive) {
+        this.id = id;
+        this.name = name;
+        this.cardId = cardId;
+        this.isActive = isActive;
+    }
+
+    // ================== 核心防线 ==================
+    // 4. 工号的 Getter：只提供“查看”窗口
+    public String getId() {
+        return id;
+    }
+    // 【关键点】故意不提供 setId() 方法！
+    // 外部世界永远无法修改工号，实现了真正的“只读”保护。
+    // ==============================================
+
+    // 5. 姓名等其他属性的 Getter 和 Setter（对外提供的“安全读写接口”）
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        // 封装的最大好处：可以在修改数据时加入安全校验逻辑
+        if (name != null &amp;&amp; !name.trim().isEmpty()) {
+            this.name = name;
         } else {
-            System.out.println("警告：存钱金额不能为负数！");
+            System.out.println("【警告】姓名不能为空，修改失败！");
         }
     }
 
-    // 提供一个看余额的“只读窗口”
-    public double getBalance() {
-        return balance;
+    public String getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
+
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // 1. 系统正常发卡
+        User user = new User("001", "张三", "A1234567", true);
+        System.out.println("发卡成功！工号：" + user.getId() + "，姓名：" + user.getName());
+
+        // 2. 尝试非法修改姓名（触发 Setter 内部的拦截逻辑）
+        System.out.println("\n--- 尝试置空姓名 ---");
+        user.setName(""); 
+
+        // 3. 正常修改姓名（通过合法的 Setter 接口）
+        System.out.println("\n--- 尝试正常修改姓名 ---");
+        user.setName("张三(已转正)");
+        System.out.println("更新后姓名：" + user.getName());
+
+        // 4. 尝试修改“只读”的工号属性
+        System.out.println("\n--- 尝试修改工号 ---");
+        // 下面这行代码如果取消注释，直接会【编译报错】！
+        // user.setId("002"); // 错误：找不到 setId 方法
+        // user.id = "002";   // 错误：id 是私有的 (private)
+        System.out.println("【系统拦截】由于没有提供 setId 方法，工号已被彻底锁死，无法修改！当前工号仍为：" + user.getId());
+
+        // 5. 模拟卡片挂失操作
+        System.out.println("\n--- 模拟挂失操作 ---");
+        user.setIsActive(false);
+        System.out.println("卡片当前是否可用：" + (user.isIsActive() ? "是" : "否"));
     }
 }
 ----
-
-[qanda]
-如何测试运行这个例子？ ::
-答：
-
 </t>
 <t tx="swot.20260215222546.1">**1. 知识点说明**
 
@@ -17473,6 +17544,7 @@ public class LoopDemo {
 +
 [source,java]
 ----
+@language java
 public class MethodDemo {
     
     // 主程序：系统的入口
