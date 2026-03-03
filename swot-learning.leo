@@ -202,6 +202,12 @@
 <v t="swot.20260303082003.1"><vh>详细拆解</vh></v>
 <v t="swot.20260303081942.1"><vh>总结对比</vh></v>
 </v>
+<v t="swot.20260303134931.1"><vh>Java 语法基石（温故知新）</vh>
+<v t="swot.20260303140042.1"><vh>变量与数据类型 —— “门禁系统的信息容器”</vh></v>
+<v t="swot.20260303140426.1"><vh>运算符与分支语句 (if/else) —— “智能保安的判断逻辑”</vh></v>
+<v t="swot.20260303140703.1"><vh>循环结构 (for/while) —— “不知疲倦的读卡器”</vh></v>
+<v t="swot.20260303140714.1"><vh>语法基石小结 -&gt; 需要补充完整 ......</vh></v>
+</v>
 <v t="swot.20260215212238.1"><vh>面向对象基础 (4学时)</vh>
 <v t="swot.20260215222431.1"><vh>类与对象 —— “图纸”与“实物”</vh></v>
 <v t="swot.20260215222514.1"><vh>封装 —— “电视机外壳”</vh></v>
@@ -17309,6 +17315,125 @@ Java 允许在一个 `.java` 源文件中定义多个类，但需遵循以下限
 ====
 如果类声明为 `public`，文件名**必须**与类名完全一致（包括大小写）。
 ====
+
+</t>
+<t tx="swot.20260303134931.1">* *核心知识点*：变量与数据类型、运算符、分支语句（if/else）、循环结构（for/while）。
+
+* *教学要求*：快速唤醒编程逻辑记忆，掌握 Java 最基本的语法骨架，为后续编写门禁系统业务逻辑打下地基。
+
+</t>
+<t tx="swot.20260303140042.1">[upperalpha]
+. 知识点说明
++
+程序运行需要处理数据，变量就是用来装数据的“带标签的盒子”。Java 是强类型语言，装什么货就必须用什么盒子。
+
+* `int` (整数)：适合记录刷卡次数、楼层号。
+* `double` (小数)：适合记录账户余额。
+* `boolean` (布尔)：只有 true（是）和 false（否），极其适合做状态判断（如：门是否开启、卡是否激活）。
+* `String` (字符串)：虽然不是基本类型，但最常用，用来记录姓名、卡号等文本。
+
+. 代码举例（定义门禁卡基础信息）
++
+[source,java]
+----
+@language java
+public class VariableDemo {
+    public static void main(String[] args) {
+        // 声明并初始化变量
+        String userName = "张三";
+        String cardId = "A1234567";
+        int swipeCount = 0;          // 今日刷卡次数
+        boolean isActive = true;     // 卡片是否挂失？true代表正常
+        
+        System.out.println("用户：" + userName + "，卡号：" + cardId + "，状态正常：" + isActive);
+    }
+}
+----
+
+</t>
+<t tx="swot.20260303140426.1">[upperalpha]
+. 知识点说明
++
+门禁系统的核心就是“判断”。刷卡时，系统需要对比条件，决定是开门还是报警。
+
+* `==` (等于)、`!=` (不等于)、`&gt;` (大于)。
+* `&amp;&amp;` (并且：两个条件都得满足)、`||` (或者：满足一个就行)。
+
+
+. 代码举例（模拟简单的刷卡校验）
++
+[source,java]
+----
+@language java
+public class IfElseDemo {
+    public static void main(String[] args) {
+        boolean isCardValid = true;  // 卡片有效
+        int currentHour = 23;        // 当前时间是晚上 23 点
+        
+        // 门禁规则：卡片必须有效，且时间必须在早6点到晚22点之间才能正常进入
+        if (isCardValid &amp;&amp; (currentHour &gt;= 6 &amp;&amp; currentHour &lt;= 22)) {
+            System.out.println("滴！验证通过，大门已开启。");
+        } else if (!isCardValid) {
+            System.out.println("警报：无效卡片！");
+        } else {
+            System.out.println("提示：已过门禁时间，请联系管理员。");
+        }
+    }
+}
+----
+
+</t>
+<t tx="swot.20260303140703.1">[upperalpha]
+. 知识点说明
++
+计算机最擅长的就是做重复的苦力活。
+* **`while` 循环**：只要条件满足，就一直干。适合“不知道具体要执行多少次”的场景（比如读卡器一直通电等待刷卡）。
+* **`for` 循环**：明确知道要执行多少次。适合“遍历、计数”的场景（比如找出今天刷卡超过 5 次的人）。
+
+
+. 代码举例（使用 while 模拟读卡器待机，使用 for 模拟批量授权）
++
+[source,java]
+----
+@language java
+import java.util.Scanner;
+
+public class LoopDemo {
+    public static void main(String[] args) {
+        // --- for 循环演示：批量给 3 张新卡初始化 ---
+        System.out.println("--- 批量发卡程序启动 ---");
+        for (int i = 1; i &lt;= 3; i++) {
+            System.out.println("正在制作第 " + i + " 张门禁卡...");
+        }
+
+        // --- while 循环演示：模拟读卡器持续工作 ---
+        Scanner scanner = new Scanner(System.in);
+        boolean powerOn = true;
+
+        System.out.println("\n--- 读卡器已就绪，请输入卡号 (输入 exit 关闭机器) ---");
+
+        while (powerOn) {
+            System.out.print("请刷卡 &gt; ");
+            String input = scanner.nextLine();
+
+            if (input.equals("exit")) {
+                System.out.println("收到关机指令，读卡器关闭。");
+                powerOn = false; // 打断循环条件
+                // break; // 也可以直接使用 break 跳出循环
+            } else {
+                System.out.println("读取到卡号：" + input + "，处理中...");
+            }
+        }
+        scanner.close();
+    }
+}
+----
+
+</t>
+<t tx="swot.20260303140714.1">* 很多同学在写 `if` 判断时，容易把双等号 `==` 写成单等号 `=`。
+在 Java 中 `=` 是用来赋值的，`==` 才是用来比较数字和布尔值的。（回顾：字符串比较一定要用 `.equals()` ）。
+
+* 在实验环节中，我们可以利用 `while` 循环加上控制台输入（`Scanner`），让整个门禁系统真正“跑”起来，而不是运行一次就结束。
 
 </t>
 </tnodes>

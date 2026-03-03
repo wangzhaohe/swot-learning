@@ -198,7 +198,7 @@ NOTE: 虽然 Java 在 AI 训练 领域不行，但在 大数据处理（Hadoop, 
 如果类声明为 `public`，文件名**必须**与类名完全一致（包括大小写）。
 ====
 
-=== 详细拆解 -> 待完善格式
+=== 详细拆解
 [upperalpha]
 . 强制一致的情况：`public` 类
 +
@@ -217,7 +217,7 @@ public class MyDemo {
 
 . 可以不一致的情况：非 `public` 类
 +
-如果类没有 `public` 修饰符（默认包访问权限），文件名可以自由命名。
+如果类没有 `public` 修饰符（使用的是默认包访问权限），文件名可以自由命名。
 
 * **类名**：`class Secret`
 * **文件名**：可以叫 `Internal.java`
@@ -241,10 +241,126 @@ Java 允许在一个 `.java` 源文件中定义多个类，但需遵循以下限
 | 包含 `public class A` 和 `class B` | **必须**叫 `A.java` | 以 public 类为准
 |===
 
-[TIP]
+[IMPORTANT]
 ====
 即便语法允许不一致，但在实际开发中（无论是使用 IntelliJ IDEA 还是 Neovim），建议始终保持 **一个文件一个类** 且 **名称完全一致**，这符合主流编程规范并能减少 LSP 报错。
 ====
+
+== Java 语法基石（温故知新）
+* *核心知识点*：变量与数据类型、运算符、分支语句（if/else）、循环结构（for/while）。
+
+* *教学要求*：快速唤醒编程逻辑记忆，掌握 Java 最基本的语法骨架，为后续编写门禁系统业务逻辑打下地基。
+
+=== 变量与数据类型 —— “门禁系统的信息容器”
+[upperalpha]
+. 知识点说明
++
+程序运行需要处理数据，变量就是用来装数据的“带标签的盒子”。Java 是强类型语言，装什么货就必须用什么盒子。
+
+* `int` (整数)：适合记录刷卡次数、楼层号。
+* `double` (小数)：适合记录账户余额。
+* `boolean` (布尔)：只有 true（是）和 false（否），极其适合做状态判断（如：门是否开启、卡是否激活）。
+* `String` (字符串)：虽然不是基本类型，但最常用，用来记录姓名、卡号等文本。
+
+. 代码举例（定义门禁卡基础信息）
++
+[source,java]
+----
+public class VariableDemo {
+    public static void main(String[] args) {
+        // 声明并初始化变量
+        String userName = "张三";
+        String cardId = "A1234567";
+        int swipeCount = 0;          // 今日刷卡次数
+        boolean isActive = true;     // 卡片是否挂失？true代表正常
+
+        System.out.println("用户：" + userName + "，卡号：" + cardId + "，状态正常：" + isActive);
+    }
+}
+----
+
+=== 运算符与分支语句 (if/else) —— “智能保安的判断逻辑”
+[upperalpha]
+. 知识点说明
++
+门禁系统的核心就是“判断”。刷卡时，系统需要对比条件，决定是开门还是报警。
+
+* `==` (等于)、`!=` (不等于)、`>` (大于)。
+* `&&` (并且：两个条件都得满足)、`||` (或者：满足一个就行)。
+
+
+. 代码举例（模拟简单的刷卡校验）
++
+[source,java]
+----
+public class IfElseDemo {
+    public static void main(String[] args) {
+        boolean isCardValid = true;  // 卡片有效
+        int currentHour = 23;        // 当前时间是晚上 23 点
+
+        // 门禁规则：卡片必须有效，且时间必须在早6点到晚22点之间才能正常进入
+        if (isCardValid && (currentHour >= 6 && currentHour <= 22)) {
+            System.out.println("滴！验证通过，大门已开启。");
+        } else if (!isCardValid) {
+            System.out.println("警报：无效卡片！");
+        } else {
+            System.out.println("提示：已过门禁时间，请联系管理员。");
+        }
+    }
+}
+----
+
+=== 循环结构 (for/while) —— “不知疲倦的读卡器”
+[upperalpha]
+. 知识点说明
++
+计算机最擅长的就是做重复的苦力活。
+* **`while` 循环**：只要条件满足，就一直干。适合“不知道具体要执行多少次”的场景（比如读卡器一直通电等待刷卡）。
+* **`for` 循环**：明确知道要执行多少次。适合“遍历、计数”的场景（比如找出今天刷卡超过 5 次的人）。
+
+
+. 代码举例（使用 while 模拟读卡器待机，使用 for 模拟批量授权）
++
+[source,java]
+----
+import java.util.Scanner;
+
+public class LoopDemo {
+    public static void main(String[] args) {
+        // --- for 循环演示：批量给 3 张新卡初始化 ---
+        System.out.println("--- 批量发卡程序启动 ---");
+        for (int i = 1; i <= 3; i++) {
+            System.out.println("正在制作第 " + i + " 张门禁卡...");
+        }
+
+        // --- while 循环演示：模拟读卡器持续工作 ---
+        Scanner scanner = new Scanner(System.in);
+        boolean powerOn = true;
+
+        System.out.println("\n--- 读卡器已就绪，请输入卡号 (输入 exit 关闭机器) ---");
+
+        while (powerOn) {
+            System.out.print("请刷卡 > ");
+            String input = scanner.nextLine();
+
+            if (input.equals("exit")) {
+                System.out.println("收到关机指令，读卡器关闭。");
+                powerOn = false; // 打断循环条件
+                // break; // 也可以直接使用 break 跳出循环
+            } else {
+                System.out.println("读取到卡号：" + input + "，处理中...");
+            }
+        }
+        scanner.close();
+    }
+}
+----
+
+=== 语法基石小结 -> 需要补充完整 ......
+* 很多同学在写 `if` 判断时，容易把双等号 `==` 写成单等号 `=`。
+在 Java 中 `=` 是用来赋值的，`==` 才是用来比较数字和布尔值的。（回顾：字符串比较一定要用 `.equals()` ）。
+
+* 在实验环节中，我们可以利用 `while` 循环加上控制台输入（`Scanner`），让整个门禁系统真正“跑”起来，而不是运行一次就结束。
 
 == 面向对象基础 (4学时)
 * *核心知识点*：类与对象、抽象与封装、属性与方法、继承与多态、接口设计。
@@ -920,44 +1036,7 @@ public void loadUsers() throws DoorSystemException {
 4.  **挂断电话 (关闭资源)**：干完活必须挂电话，否则仓库线路会被占满。
 
 === 代码实现：查询用户信息
-[source,java]
-----
-import java.sql.*;
-
-public class JDBCDemo {
-    // 数据库连接信息（假设是 MySQL）
-    private static final String URL = "jdbc:mysql://localhost:3306/door_db";
-    private static final String USER = "root";
-    private static final String PASS = "123456";
-
-    public void findUserByCard(String cardId) throws DoorSystemException {
-        // SQL 语句：去 users 表里找卡号对应的姓名
-        String sql = "SELECT name FROM users WHERE card_id = ?";
-
-        // 使用 try-with-resources，自动关闭连接，防止“占线”
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            // 设置参数
-            pstmt.setString(1, cardId);
-
-            // 执行查询
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                String name = rs.getString("name");
-                System.out.println("数据库查询成功！该卡所属用户为：" + name);
-            } else {
-                // 找不到时，抛出我们统一定义的异常
-                throw new DoorSystemException("数据库中未找到卡号为 " + cardId + " 的用户");
-            }
-        } catch (SQLException e) {
-            // 将底层的 SQL 错误包装成我们的门禁系统错误
-            throw new DoorSystemException("数据库连接失败：" + e.getMessage());
-        }
-    }
-}
-----
+我们将之前定义的 `User` 对象和 `DoorSystemException` 结合进来。
 
 === 防止 SQL 注入 —— “拒绝陌生人的小纸条”
 . 知识点说明
@@ -997,43 +1076,32 @@ public class JDBCDemo {
 * *本节要求*：理解“分身术”的原理，让程序能同时干多件事；了解反射这一“透视眼”技术。
 
 === 多线程 —— “程序的分身术”
-// 1. 定义一个自检任务
-class HealthCheckThread extends Thread {
-    public void run() {
-        while (true) {
-            System.out.println("系统自检中：硬件状态正常...");
-            try { Thread.sleep(5000); } catch (InterruptedException e) {}
-        }
-    }
-}
+[upperalpha]
+. 知识点说明
+* **进程**：像是一个工厂（比如整个门禁系统）。
+* **线程**：像是工厂里的工人。一个工厂可以有很多工人同时干活。
+* **为什么要学？**：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。
 
-public class MultiThreadDemo {
-    public static void main(String[] args) {
-        // 2. 启动自检“分身”
-        HealthCheckThread check = new HealthCheckThread();
-        check.start(); 
 
-        // 3. 主线程继续处理刷卡
-        System.out.println("主系统：准备就绪，请刷卡...");
-    }
-}
+. 生活举例
++
+你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。
+
+
+. 代码实现：模拟门禁自检与刷卡同时进行
++
+[source,java]
 ----
 
 === 反射机制 —— “程序的 X 光机”
-public class ReflectionDemo {
-    public static void main(String[] args) throws Exception {
-        // 通过类名，直接“抓取”这个类的结构
-        Class clazz = Class.forName("User");
+知识点说明
 
-        System.out.println("类的名字是：" + clazz.getName());
+* **反射 (Reflection)**：平时我们用类，是先看到图纸再造房子。反射则是房子已经在那了，我们拿个“X光机”去扫，看看它里面有什么属性和方法。
+* **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
 
-        // 获取所有定义的属性名字
-        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
-        for (var f : fields) {
-            System.out.println("发现属性：" + f.getName());
-        }
-    }
-}
+
+.代码举例（看看 User 类里有什么）
+[source,java]
 ----
 
 === 小结
