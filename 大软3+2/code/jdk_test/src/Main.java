@@ -17,7 +17,7 @@ public class Main {
         if ("Linux".equalsIgnoreCase(os)) {
             System.out.println("✅ 成功！代码正在 Podman 容器内运行。");
         } else {
-            System.out.println("❌ 警告：代码仍在 macOS 本地运行，请检查 Run on 设置。");
+            System.out.println("❌ 警告：代码仍在 macOS 本地运行。");
         }
 
         System.out.println("==================================");

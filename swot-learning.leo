@@ -325,7 +325,7 @@
 <v t="swot.20260215212514.1"><vh>实验七：系统集成与发布 (6学时)</vh></v>
 </v>
 </v>
-<v t="swot.20260303074452.1"><vh>@code</vh>
+<v t="swot.20260303074452.1"><vh>@path code</vh>
 <v t="swot.20260302234107.1"><vh>@clean jdk_test/src/Main.java</vh>
 <v t="swot.20260302234509.1"></v>
 </v>
@@ -17293,7 +17293,7 @@ podman run --rm -i -v /Users/swot/swot-learning/大软3+2/code/first-java/src:/s
 &lt;/script&gt;
 ++++
 </t>
-<t tx="swot.20260302234107.1">@language java
+<t tx="swot.20260302234107.1" _mod_time="4741da69ba5b5d14012e">@language java
 @others
 </t>
 <t tx="swot.20260302234509.1">@language java
@@ -17316,7 +17316,7 @@ public class Main {
         if ("Linux".equalsIgnoreCase(os)) {
             System.out.println("✅ 成功！代码正在 Podman 容器内运行。");
         } else {
-            System.out.println("❌ 警告：代码仍在 macOS 本地运行，请检查 Run on 设置。");
+            System.out.println("❌ 警告：代码仍在 macOS 本地运行。");
         }
 
         System.out.println("==================================");
