@@ -590,6 +590,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_封装_电视机外壳">封装 —— “电视机外壳”</a></li>
 <li><a href="#_继承与多态_父子关系与七十二变">继承与多态 —— “父子关系”与“七十二变”</a></li>
 <li><a href="#_接口设计_万能插座标准">接口设计 —— “万能插座标准”</a></li>
+<li><a href="#_包管理与访问权限_大楼的房间划分与门锁">包管理与访问权限 —— “大楼的房间划分与门锁”</a></li>
 <li><a href="#_小结">小结</a></li>
 </ul>
 </li>
@@ -1537,20 +1538,59 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="ulist">
 <ul>
 <li>
-<p><strong>严谨的“强类型”</strong>：
-Java 是极其严谨的，装什么货就必须配什么箱子（类型）。千万不要试图把小数存进 <code>int</code> 里，或者把文本赋值给 <code>boolean</code>。</p>
+<p>严谨的“强类型”：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Java 是极其严谨的，装什么货就必须配什么箱子（类型）。</p>
 </li>
 <li>
-<p><strong>致命的单双等号 (<code>=</code> vs <code>==</code>)</strong>：
-很多时候在写 <code>if</code> 判断时，极易把双等号 <code>==</code> 写成单等号 <code>=</code>。在 Java 中 <code>=</code> 是用来赋值的，<code>==</code> 才是用来比较数字和布尔值的。<strong>再次重申：字符串的比较绝对不能用 <code>==</code>，必须用 <code>.equals()</code></strong>。</p>
+<p>千万不要试图把小数存进 <code>int</code> 里，或者把文本赋值给 <code>boolean</code>。</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p><strong>让程序“活”起来的循环</strong>：
-死循环不一定是 Bug。在接下来的实验环节中，我们正是要利用无限 <code>while</code> 循环，加上控制台输入（<code>Scanner</code>），让整个门禁系统真正处于“持续待机”的监听状态，而不是运行一次就结束退出了。</p>
+<p>致命的单双等号 (<code>=</code> vs <code>==</code>)：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>很多时候在写 <code>if</code> 判断时，极易把双等号 <code>==</code> 写成单等号 <code>=</code>。</p>
 </li>
 <li>
-<p><strong>告别“面条代码”的方法思维</strong>：
-不要把成百上千行的代码全塞进 <code>main</code> 方法里！学完方法后，要养成“把复杂逻辑拆解、打包”的习惯。让 <code>main</code> 方法只负责做个宏观的“调度员”，具体的脏活累活交给各个自定义方法去干。</p>
+<p>在 Java 中 <code>=</code> 是用来赋值的，<code>==</code> 才是用来比较数字和布尔值的。</p>
+</li>
+<li>
+<p>再次重申：字符串的比较绝对不能用 <code>==</code>，必须用 <code>.equals()</code>。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>让程序“活”起来的循环：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>死循环不一定是 Bug。在接下来的实验环节中，我们正是要利用无限 <code>while</code> 循环，加上控制台输入（<code>Scanner</code>），让整个门禁系统真正处于“持续待机”的监听状态，而不是运行一次就结束退出了。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>告别“面条代码”的方法思维：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>不要把成百上千行的代码全塞进 <code>main</code> 方法里！</p>
+</li>
+<li>
+<p>学完方法后，要养成“把复杂逻辑拆解、打包”的习惯。</p>
+</li>
+<li>
+<p>让 <code>main</code> 方法只负责做个宏观的“调度员”，具体的脏活累活交给各个自定义方法去干。</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -1879,6 +1919,106 @@ Java 是极其严谨的，装什么货就必须配什么箱子（类型）。千
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_包管理与访问权限_大楼的房间划分与门锁">包管理与访问权限 —— “大楼的房间划分与门锁”</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>为什么要学？</p>
+<div class="paragraph">
+<p>如果我们把门禁系统的所有代码（用户实体、刷卡逻辑、数据库连接、主程序）全塞在一个文件夹里，随着代码变多，就会变成一个混乱的“垃圾堆”。</p>
+</div>
+<div class="paragraph">
+<p><strong>包 (Package)</strong> 就是用来给代码分类建文件夹的；而<strong>访问权限 (Modifiers)</strong> 就是这些文件夹和房间上的“门锁”。</p>
+</div>
+</li>
+<li>
+<p>项目结构标准划分（包管理）</p>
+<div class="paragraph">
+<p>在企业级开发中，我们通常按照功能来建包（推荐使用倒置域名命名法）。为了让门禁系统看起来像一个真正的工程，咱们的目录应该长这样：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>src/
+├── com.swot.door.entity    // 实体包：存放 User 类（只存数据模型）
+├── com.swot.door.exception // 异常包：存放 DoorSystemException 类
+├── com.swot.door.utils     // 工具包：存放后续要写的 DBUtils 数据库工具
+└── com.swot.door.main      // 启动包：存放包含 main 方法的主程序</pre>
+</div>
+</div>
+</li>
+<li>
+<p>访问权限（门锁的级别）</p>
+<div class="paragraph">
+<p>Java 中有四种权限，初学阶段不需要死记硬背，只要牢记最极端的两个即可：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">权限修饰符</th>
+<th class="tableblock halign-left valign-top">生活比喻</th>
+<th class="tableblock halign-left valign-top">作用范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>public</strong> (公共)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">随便进的“大厅”</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">任何包、任何类都可以直接访问和调用。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>private</strong> (私有)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">锁死的“保险柜”</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">只有<strong>当前类自己</strong>的内部才能访问，外部绝对进不来。（所以实体类的属性必须是 private！）</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>(注：还有 <code>protected</code> 和默认权限，它们主要与同包或子类有关，后续学框架时再深究。)</strong></p>
+</div>
+</li>
+<li>
+<p>代码举例（跨房间叫人：import）</p>
+<div class="paragraph">
+<p>当你把类分到不同的包里后，如果 <code>Main</code> 程序想要用到另一个包里的 <code>User</code> 类，就必须使用 <code>import</code> 来指明路径（就像告诉 Java 去哪个房间找人）。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.main</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 1. 声明自己所在的包（必须在文件的第一行）</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity.User</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 2. 导入其他包里的类（跨房间叫人）</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Main</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 只有 import 了，这里才能认识 User 类，否则编译器会报错找不到类</span>
+<span class="tok-w">        </span><span class="tok-n">User</span><span class="tok-w"> </span><span class="tok-n">u1</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">User</span><span class="tok-p">(</span><span class="tok-s">&quot;001&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;张三&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;A123&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;用户创建成功：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">u1</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>小结</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>规范第一</strong>：从今天起，告别“默认包（Default Package）”。写任何类之前，先建好 <code>package</code>。</p>
+</li>
+<li>
+<p><strong>权限铁律</strong>：提供给别人调用的类和方法，尽量用 <code>public</code>；自己内部保存的数据属性，死死锁住用 <code>private</code>，然后开一扇带安检的窗口（<code>public</code> 的 Getter/Setter）。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect2">
@@ -3171,7 +3311,7 @@ Java 是极其严谨的，装什么货就必须配什么箱子（类型）。千
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-03 16:31:35 +0800
+Last updated 2026-03-03 16:50:16 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
