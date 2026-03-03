@@ -210,7 +210,7 @@
 <v t="swot.20260303140714.1"><vh>语法基石小结</vh></v>
 </v>
 <v t="swot.20260215212238.1"><vh>面向对象基础 (4学时)</vh>
-<v t="swot.20260215222431.1"><vh>类与对象 —— “图纸”与“实物” -&gt; 改成门禁例子</vh></v>
+<v t="swot.20260215222431.1"><vh>类与对象 —— “设计图纸”与“门禁实物”</vh></v>
 <v t="swot.20260303160354.1"><vh>static 关键字 —— “门禁系统的全局广播站”</vh></v>
 <v t="swot.20260215222514.1"><vh>封装 —— “门禁卡的智能芯片”</vh></v>
 <v t="swot.20260215222546.1"><vh>继承与多态 —— “父子关系”与“七十二变”</vh></v>
@@ -14039,40 +14039,49 @@ pause
 | 考核方式 | 大作业 (70%) + 平时成绩 (30%)
 |===
 </t>
-<t tx="swot.20260215222431.1">**1. 知识点说明**
+<t tx="swot.20260215222431.1">[upperalpha]
+. 知识点说明
+* 类 (Class)：相当于一张门禁机的设计图纸 。它规定了门禁机应该长什么样（安装位置、型号）以及能干什么（读取卡号、开启大门）。
+* 对象 (Object)：是根据图纸生产出来的具体某一台门禁机 。
++
+记住一句话：你不能刷“图纸”进门，你只能刷装在墙上的“门禁机实体” 。在 Java 中，我们要先写类，再用 new 关键字制造出对象 。
 
-* **类 (Class)**：相当于一张**手机设计图纸**。它规定了手机应该有的样子（颜色、价格）和功能（打电话）。
-* **对象 (Object)**：是根据图纸生产出来的**具体手机**。
 
-[TIP]
-====
-**记住一句话**：你不能给“图纸”打电话，你只能给“手机实体”打电话。 +
-在 Java 中，我们要先写类，再 `new` 出对象。
-====
-
-**2. 代码举例**
-
+. 代码举例
++
 [source,java]
 ----
-// 1. 定义类（设计图纸）
-class Phone {
-    String brand;  // 属性：品牌
-    int price;     // 属性：价格
+@language java
+// 1. 定义类（门禁机设计图纸）
+class DoorMachine {
+    String location;  // 属性：安装位置（如：南大门、图书馆入口）
+    String model;     // 属性：机器型号
 
-    // 行为：打电话的功能
-    void call(String name) {
-        System.out.println("正在给 " + name + " 打电话...");
+    // 行为：开启大门的功能
+    void openDoor(String userName) {
+        System.out.println(
+            "【" + location + "】验证通过！欢迎您，" + userName + "。大门已开启。"
+        );
     }
 }
 
-// 2. 使用类（造手机并使用）
-public class TestPhone {
+// 2. 使用类（安装并使用具体的门禁机）
+public class TestDoorSystem {
     public static void main(String[] args) {
-        // 使用 new 关键字，根据图纸造出一台真实的手机
-        Phone myPhone = new Phone(); 
-        
-        myPhone.brand = "华为"; // 给这台手机贴上品牌
-        myPhone.call("张三");   // 让这台手机执行功能
+        // 使用 new 关键字，根据图纸造出一台真实的门禁机
+        DoorMachine southGate = new DoorMachine();
+
+        // 给这台具体的机器设置属性
+        southGate.location = "学校南大门";
+        southGate.model = "SWOT-A100";
+
+        // 让这台机器执行功能：刷卡开门
+        southGate.openDoor("张三");
+
+        // 我们还可以根据同一张图纸，再造一台放在图书馆
+        DoorMachine libraryGate = new DoorMachine();
+        libraryGate.location = "图书馆主楼";
+        libraryGate.openDoor("李四");
     }
 }
 ----

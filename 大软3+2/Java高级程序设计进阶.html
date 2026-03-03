@@ -585,7 +585,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_面向对象基础_4学时">面向对象基础 (4学时)</a>
 <ul class="sectlevel2">
-<li><a href="#_类与对象_图纸与实物">类与对象 —— “图纸”与“实物”</a></li>
+<li><a href="#_类与对象_设计图纸与门禁实物">类与对象 —— “设计图纸”与“门禁实物”</a></li>
 <li><a href="#_static_关键字_门禁系统的全局广播站">static 关键字 —— “门禁系统的全局广播站”</a></li>
 <li><a href="#_封装_门禁卡的智能芯片">封装 —— “门禁卡的智能芯片”</a></li>
 <li><a href="#_继承与多态_父子关系与七十二变">继承与多态 —— “父子关系”与“七十二变”</a></li>
@@ -1621,62 +1621,65 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </div>
 <div class="sect2">
-<h3 id="_类与对象_图纸与实物">类与对象 —— “图纸”与“实物”</h3>
-<div class="paragraph">
-<p><strong>1. 知识点说明</strong></p>
-</div>
+<h3 id="_类与对象_设计图纸与门禁实物">类与对象 —— “设计图纸”与“门禁实物”</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>知识点说明</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>类 (Class)</strong>：相当于一张<strong>手机设计图纸</strong>。它规定了手机应该有的样子（颜色、价格）和功能（打电话）。</p>
+<p>类 (Class)：相当于一张门禁机的设计图纸 。它规定了门禁机应该长什么样（安装位置、型号）以及能干什么（读取卡号、开启大门）。</p>
 </li>
 <li>
-<p><strong>对象 (Object)</strong>：是根据图纸生产出来的<strong>具体手机</strong>。</p>
+<p>对象 (Object)：是根据图纸生产出来的具体某一台门禁机 。</p>
+<div class="paragraph">
+<p>记住一句话：你不能刷“图纸”进门，你只能刷装在墙上的“门禁机实体” 。在 Java 中，我们要先写类，再用 new 关键字制造出对象 。</p>
+</div>
 </li>
 </ul>
 </div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="⚡"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p><strong>记住一句话</strong>：你不能给“图纸”打电话，你只能给“手机实体”打电话。<br>
-在 Java 中，我们要先写类，再 <code>new</code> 出对象。</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p><strong>2. 代码举例</strong></p>
-</div>
+</li>
+<li>
+<p>代码举例</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 1. 定义类（设计图纸）</span>
-<span class="tok-kd">class</span> <span class="tok-nc">Phone</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">brand</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 属性：品牌</span>
-<span class="tok-w">    </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">price</span><span class="tok-p">;</span><span class="tok-w">     </span><span class="tok-c1">// 属性：价格</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 1. 定义类（门禁机设计图纸）</span>
+<span class="tok-kd">class</span> <span class="tok-nc">DoorMachine</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">location</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 属性：安装位置（如：南大门、图书馆入口）</span>
+<span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">model</span><span class="tok-p">;</span><span class="tok-w">     </span><span class="tok-c1">// 属性：机器型号</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// 行为：打电话的功能</span>
-<span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">call</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;正在给 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 打电话...&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-c1">// 行为：开启大门的功能</span>
+<span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">openDoor</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">userName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-s">&quot;【&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">location</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;】验证通过！欢迎您，&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">userName</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;。大门已开启。&quot;</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
-<span class="tok-c1">// 2. 使用类（造手机并使用）</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">TestPhone</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-c1">// 2. 使用类（安装并使用具体的门禁机）</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">TestDoorSystem</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-c1">// 使用 new 关键字，根据图纸造出一台真实的手机</span>
-<span class="tok-w">        </span><span class="tok-n">Phone</span><span class="tok-w"> </span><span class="tok-n">myPhone</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Phone</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-c1">// 使用 new 关键字，根据图纸造出一台真实的门禁机</span>
+<span class="tok-w">        </span><span class="tok-n">DoorMachine</span><span class="tok-w"> </span><span class="tok-n">southGate</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorMachine</span><span class="tok-p">();</span>
 
-<span class="tok-w">        </span><span class="tok-n">myPhone</span><span class="tok-p">.</span><span class="tok-na">brand</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;华为&quot;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 给这台手机贴上品牌</span>
-<span class="tok-w">        </span><span class="tok-n">myPhone</span><span class="tok-p">.</span><span class="tok-na">call</span><span class="tok-p">(</span><span class="tok-s">&quot;张三&quot;</span><span class="tok-p">);</span><span class="tok-w">   </span><span class="tok-c1">// 让这台手机执行功能</span>
+<span class="tok-w">        </span><span class="tok-c1">// 给这台具体的机器设置属性</span>
+<span class="tok-w">        </span><span class="tok-n">southGate</span><span class="tok-p">.</span><span class="tok-na">location</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;学校南大门&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-n">southGate</span><span class="tok-p">.</span><span class="tok-na">model</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;SWOT-A100&quot;</span><span class="tok-p">;</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 让这台机器执行功能：刷卡开门</span>
+<span class="tok-w">        </span><span class="tok-n">southGate</span><span class="tok-p">.</span><span class="tok-na">openDoor</span><span class="tok-p">(</span><span class="tok-s">&quot;张三&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 我们还可以根据同一张图纸，再造一台放在图书馆</span>
+<span class="tok-w">        </span><span class="tok-n">DoorMachine</span><span class="tok-w"> </span><span class="tok-n">libraryGate</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorMachine</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">libraryGate</span><span class="tok-p">.</span><span class="tok-na">location</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;图书馆主楼&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-n">libraryGate</span><span class="tok-p">.</span><span class="tok-na">openDoor</span><span class="tok-p">(</span><span class="tok-s">&quot;李四&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect2">
@@ -3098,8 +3101,44 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="sect2">
 <h3 id="_代码实现查询用户信息">代码实现：查询用户信息</h3>
-<div class="paragraph">
-<p>我们将之前定义的 <code>User</code> 对象和 <code>DoorSystemException</code> 结合进来。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.sql.*</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">JDBCDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 数据库连接信息（假设是 MySQL）</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">URL</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;jdbc:mysql://localhost:3306/door_db&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">USER</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;root&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">PASS</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;123456&quot;</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">findUserByCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorSystemException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// SQL 语句：去 users 表里找卡号对应的姓名</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">sql</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;SELECT name FROM users WHERE card_id = ?&quot;</span><span class="tok-p">;</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 使用 try-with-resources，自动关闭连接，防止“占线”</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Connection</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">DriverManager</span><span class="tok-p">.</span><span class="tok-na">getConnection</span><span class="tok-p">(</span><span class="tok-n">URL</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">USER</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">PASS</span><span class="tok-p">);</span>
+<span class="tok-w">             </span><span class="tok-n">PreparedStatement</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-p">.</span><span class="tok-na">prepareStatement</span><span class="tok-p">(</span><span class="tok-n">sql</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 设置参数</span>
+<span class="tok-w">            </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">setString</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">);</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 执行查询</span>
+<span class="tok-w">            </span><span class="tok-n">ResultSet</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">executeQuery</span><span class="tok-p">();</span>
+
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">next</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">getString</span><span class="tok-p">(</span><span class="tok-s">&quot;name&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;数据库查询成功！该卡所属用户为：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-c1">// 找不到时，抛出我们统一定义的异常</span>
+<span class="tok-w">                </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorSystemException</span><span class="tok-p">(</span><span class="tok-s">&quot;数据库中未找到卡号为 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 的用户&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">SQLException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 将底层的 SQL 错误包装成我们的门禁系统错误</span>
+<span class="tok-w">            </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorSystemException</span><span class="tok-p">(</span><span class="tok-s">&quot;数据库连接失败：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -3222,48 +3261,49 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="sect2">
 <h3 id="_多线程_程序的分身术">多线程 —— “程序的分身术”</h3>
-<div class="olist upperalpha">
-<ol class="upperalpha" type="A">
-<li>
-<p>知识点说明</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>进程</strong>：像是一个工厂（比如整个门禁系统）。</p>
-</li>
-<li>
-<p><strong>线程</strong>：像是工厂里的工人。一个工厂可以有很多工人同时干活。</p>
-</li>
-<li>
-<p><strong>为什么要学？</strong>：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>生活举例</p>
 <div class="paragraph">
-<p>你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。</p>
+<p>class HealthCheckThread extends Thread {
+    public void run() {
+        while (true) {
+            System.out.println("系统自检中：硬件状态正常&#8230;&#8203;");
+            try { Thread.sleep(5000); } catch (InterruptedException e) {}
+        }
+    }
+}</p>
 </div>
-</li>
-<li>
-<p>代码实现：模拟门禁自检与刷卡同时进行</p>
+<div class="paragraph">
+<p>public class MultiThreadDemo {
+    public static void main(String[] args) {
+        // 2. 启动自检“分身”
+        HealthCheckThread check = new HealthCheckThread();
+        check.start();</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        // 3. 主线程继续处理刷卡
+        System.out.println("主系统：准备就绪，请刷卡...");
+    }
+}</pre>
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span>
-<span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-n">反射机制</span><span class="tok-w"> </span><span class="tok-err">——</span><span class="tok-w"> </span><span class="tok-err">“</span><span class="tok-n">程序的</span><span class="tok-w"> </span><span class="tok-n">X</span><span class="tok-w"> </span><span class="tok-n">光机</span><span class="tok-err">”</span>
-<span class="tok-n">知识点说明</span>
+<pre>=== 反射机制 —— “程序的 X 光机”
+public class ReflectionDemo {
+    public static void main(String[] args) throws Exception {
+        // 通过类名，直接“抓取”这个类的结构
+        Class clazz = Class.forName("User");
 
-<span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">反射</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Reflection</span><span class="tok-p">)</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-n">平时我们用类</span><span class="tok-err">，</span><span class="tok-n">是先看到图纸再造房子</span><span class="tok-err">。</span><span class="tok-n">反射则是房子已经在那了</span><span class="tok-err">，</span><span class="tok-n">我们拿个</span><span class="tok-err">“</span><span class="tok-n">X光机</span><span class="tok-err">”</span><span class="tok-n">去扫</span><span class="tok-err">，</span><span class="tok-n">看看它里面有什么属性和方法</span><span class="tok-err">。</span>
-<span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">核心价值</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-n">它是很多框架</span><span class="tok-err">（</span><span class="tok-n">如</span><span class="tok-w"> </span><span class="tok-n">Spring</span><span class="tok-err">）</span><span class="tok-n">的灵魂</span><span class="tok-err">，</span><span class="tok-n">让程序在运行时动态地加载类</span><span class="tok-err">。</span>
+        System.out.println("类的名字是：" + clazz.getName());
 
-
-<span class="tok-p">.</span><span class="tok-na">代码举例</span><span class="tok-err">（</span><span class="tok-n">看看</span><span class="tok-w"> </span><span class="tok-n">User</span><span class="tok-w"> </span><span class="tok-n">类里有什么</span><span class="tok-err">）</span>
-<span class="tok-o">[</span><span class="tok-n">source</span><span class="tok-p">,</span><span class="tok-n">java</span><span class="tok-o">]</span></code></pre>
+        // 获取所有定义的属性名字
+        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+        for (var f : fields) {
+            System.out.println("发现属性：" + f.getName());
+        }
+    }
+}</pre>
 </div>
-</div>
-</li>
-</ol>
 </div>
 </div>
 <div class="sect2">
@@ -3394,7 +3434,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-03 18:02:01 +0800
+Last updated 2026-03-03 22:31:12 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
