@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
 <meta name="author" content="https://github.com/wangzhaohe/swot-learning">
-<title>Java高级程序设计进阶实验-JavaSE 门禁系统实训（共 36 学时）</title>
+<title>Java高级程序设计进阶实验&#8212;&#8203;JavaSE 门禁系统实训（共 36 学时）</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -532,7 +532,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Java高级程序设计进阶实验-JavaSE 门禁系统实训（共 36 学时）</h1>
+<h1>Java高级程序设计进阶实验&#8212;&#8203;JavaSE 门禁系统实训（共 36 学时）</h1>
 <div class="details">
 <span id="author" class="author">https://github.com/wangzhaohe/swot-learning</span><br>
 </div>
@@ -542,6 +542,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_实验一环境与项目初始化_4学时">实验一：环境与项目初始化 (4学时)</a>
 <ul class="sectlevel2">
 <li><a href="#_安装开发环境_intellij_idea_和_jdk_17">安装开发环境 IntelliJ IDEA 和 JDK 17</a></li>
+<li><a href="#_先说_podman_容器运行注意事项">先说 podman 容器运行注意事项</a></li>
 <li><a href="#_容器介绍docker_vs_podman">容器介绍：docker vs podman</a></li>
 <li><a href="#_wsl2_安装容器环境_podman重点">WSL2 安装容器环境 podman&#8201;&#8212;&#8201;重点</a>
 <ul class="sectlevel3">
@@ -610,7 +611,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="sect2">
 <h3 id="_安装开发环境_intellij_idea_和_jdk_17">安装开发环境 IntelliJ IDEA 和 JDK 17</h3>
 <div class="paragraph">
-<p>idea 下载地址：
+<p>idea 下载地址：（注意选择自己电脑相应 cpu 架构的安装包）
 <a href="https://www.jetbrains.com/idea/download/" class="bare">https://www.jetbrains.com/idea/download/</a></p>
 </div>
 <div class="paragraph">
@@ -626,19 +627,42 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <img src="img/download_jdk.png" alt="download" width="480">
 </div>
 </div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="❗"></i>
-</td>
-<td class="content">
-这样就可以开发 java 程序了。
-下面在 podman 容器中运行 java 程序是提高的内容，初学者可以忽略！
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>这样就可以使用 IDEA 创建项目，进行 java 程序的开发了，</p>
 </div>
+<div class="listingblock">
+<div class="title">查看程序运行结果</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Main</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;========= Podman 环境测试 =========&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 验证运行操作系统（如果是 Linux，说明 Podman 成功了）</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">os</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">getProperty</span><span class="tok-p">(</span><span class="tok-s">&quot;os.name&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;当前运行操作系统: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">os</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 验证 JDK 版本</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">version</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">getProperty</span><span class="tok-p">(</span><span class="tok-s">&quot;java.version&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;当前 JDK 版本: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">version</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 验证环境变量</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">user</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">getProperty</span><span class="tok-p">(</span><span class="tok-s">&quot;user.name&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;当前容器用户: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">user</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-s">&quot;Linux&quot;</span><span class="tok-p">.</span><span class="tok-na">equalsIgnoreCase</span><span class="tok-p">(</span><span class="tok-n">os</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;✅ 成功！代码正在 Podman 容器内运行。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;❌ 警告：代码仍在 macOS 本地运行，请检查 Run on 设置。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;==================================&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_先说_podman_容器运行注意事项">先说 podman 容器运行注意事项</h3>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -649,13 +673,25 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="ulist">
 <ul>
 <li>
-<p>如果使用社区版本的 IDEA，仍然需要在本地安装 JDK17，因为 podman 容器中只是运行环境，无法提供代码补全和语法检查等功能。</p>
+<p>如果想使用 podman 运行程序，但是你使用了社区版本的 IDEA，<mark>仍然需要在本地安装 JDK17</mark>，因为 podman 容器中只是运行环境，无法提供代码补全和语法检查等功能。</p>
 </li>
 <li>
 <p>旗舰版 (Ultimate)可以通过 "Remote Robot" 或 "On Target" 功能，让 IDEA 直接去读容器里的 JDK 文件来做代码补全，实现真正的“本地零安装”。</p>
 </li>
 </ul>
 </div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+下面在 podman 容器中运行 java 程序是提高的内容，初学者可以忽略！
 </td>
 </tr>
 </table>
@@ -1086,12 +1122,17 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 </div>
 <div class="sect3">
 <h4 id="_社区版本_idea_运行_podman_容器_jdk17_方法">社区版本 IDEA 运行 podman 容器 jdk17 方法</h4>
-<div class="olist upperalpha">
-<ol class="upperalpha" type="A">
-<li>
-<p>External Tool 参数设置</p>
+<div class="literalblock">
+<div class="content">
+<pre> [upperalpha]
+. External Tool 参数设置</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>+
+.请在 <code>Settings</code> &#8594; <code>Tools</code> &#8594; <code>External Tools</code> 中添加以下配置：</p>
+</div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. 请在 <code>Settings</code> &#8594; <code>Tools</code> &#8594; <code>External Tools</code> 中添加以下配置：</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 75%;">
@@ -1122,7 +1163,8 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 </tbody>
 </table>
 <div class="paragraph">
-<p>命令详解</p>
+<p>+
+命令详解</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1151,10 +1193,8 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 <img src="img/external_tools_run_in_podman.png" alt="external tools run in podman" width="640">
 </div>
 </div>
-</li>
-</ul>
-</div>
-</li>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>快捷键绑定 (Keymap)</p>
 <div class="paragraph">
@@ -1177,7 +1217,7 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 <li>
 <p>验证测试</p>
 <div class="listingblock">
-<div class="title">查看程序运行结果，即可知道是否在 podman 中运行成功。</div>
+<div class="title">查看程序运行结果，即可验证是否在 podman 中运行成功。</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Main</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -1209,6 +1249,9 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 </li>
 </ol>
 </div>
+</li>
+</ul>
+</div>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -1216,6 +1259,7 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 <i class="fa icon-tip" title="⚡"></i>
 </td>
 <td class="content">
+<div class="title">本期资料未实现</div>
 <div class="ulist">
 <ul>
 <li>
@@ -1527,7 +1571,7 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-02 23:46:09 +0800
+Last updated 2026-03-03 08:04:58 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
