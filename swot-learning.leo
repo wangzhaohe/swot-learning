@@ -220,16 +220,35 @@
 <v t="swot.20260215212238.1"><vh>面向对象基础 (4学时)</vh>
 <v t="swot.20260215222431.1"><vh>类与对象 —— “设计图纸”与“门禁实物”</vh>
 <v t="swot.20260304114839.1"><vh>@clean code/testBasicSyntax/src/DoorMachineDemo.java</vh>
-<v t="swot.20260304114644.1"><vh>BB class DoorMachineV01</vh></v>
+<v t="swot.20260304114644.1"><vh>BB class DoorMachineV01 门禁机器</vh></v>
 </v>
 </v>
 <v t="swot.20260303160354.1"><vh>static 关键字 —— “门禁系统的全局广播站”</vh>
 <v t="swot.20260304120034.1"><vh>@clean code/testBasicSyntax/src/StaticDemo.java</vh>
-<v t="swot.20260304115940.1"><vh>BB DoorMachineV02</vh></v>
+<v t="swot.20260304115940.1"><vh>BB class DoorMachineV02 门禁机器</vh></v>
 </v>
 </v>
-<v t="swot.20260215222514.1"><vh>封装 —— “门禁卡的智能芯片” -&gt; 应该将 isActive 改成 getActive</vh></v>
-<v t="swot.20260215222546.1"><vh>继承与多态 —— “父子卡片”与“读卡器逻辑”</vh></v>
+<v t="swot.20260215222514.1"><vh>封装 —— “门禁卡的智能芯片”</vh>
+<v t="swot.20260304145656.1"><vh>@clean code/testBasicSyntax/src/DoorCardDemo.java</vh>
+<v t="swot.20260304145516.1"><vh>BB class DoorCard 门禁卡</vh></v>
+</v>
+</v>
+<v t="swot.20260215222546.1"><vh>继承与多态 —— “父子卡片”与“读卡器逻辑”</vh>
+<v t="swot.20260304152414.1"><vh>@clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java</vh>
+<v t="swot.20260304155927.1"><vh>BB class BaseDoorCard &lt;- Change from DoorCard 基础门卡</vh></v>
+<v t="swot.20260304162904.1"><vh>BB class StudentCard extends BaseDoorCard 学生卡</vh></v>
+<v t="swot.20260304163021.1"><vh>BB class AdminCard extends BaseDoorCard 管理员卡</vh></v>
+<v t="swot.20260304155948.1"><vh>BB class CardReader 读卡器</vh></v>
+</v>
+</v>
+<v t="swot.20260304170224.1"><vh>抽象类 --- 禁止基础门卡类创建新卡对象（因为没有这种卡）</vh>
+<v t="swot.20260304170758.1"><vh>@clean code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java</vh>
+<v t="swot.20260304171106.1"><vh>BB class BaseDoorCard -&gt; abstract</vh></v>
+<v t="swot.20260304173742.1"><vh>BB class StudentCard extends abstract BaseDoorCard 学生卡</vh></v>
+<v t="swot.20260304173902.1"><vh>BB class AdminCard extends abstract BaseDoorCard 管理员卡</vh></v>
+<v t="swot.20260304155948.1"></v>
+</v>
+</v>
 <v t="swot.20260215222615.1"><vh>接口设计 —— “万能插座标准”</vh></v>
 <v t="swot.20260303164345.1"><vh>包管理与访问权限 —— “大楼的房间划分与门锁”</vh></v>
 <v t="swot.20260216074225.1"><vh>面向对象基础小结</vh></v>
@@ -259,10 +278,10 @@
 </v>
 <v t="swot.20260303233432.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303371077573732e"><vh>集合框架（4学时）</vh>
 <v t="swot.20260216105105.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303371077573732e"><vh>ArrayList —— 封装门禁白名单</vh>
-<v t="swot.20260304104021.1"><vh>BB class AccessControlSystem -&gt; ArrayList</vh></v>
+<v t="swot.20260304104021.1"><vh>BB class AccessControlSystem -&gt; ArrayList 控制系统</vh></v>
 </v>
 <v t="swot.20260303233729.1"><vh>HashMap —— “瞬间定位的电子名册”</vh>
-<v t="swot.20260304104301.1"><vh>BB class AccessControlSystem -&gt; HashMap</vh></v>
+<v t="swot.20260304104301.1"><vh>BB class AccessControlSystem -&gt; HashMap 控制系统</vh></v>
 </v>
 <v t="swot.20260216103228.1"><vh>使用小结</vh></v>
 </v>
@@ -342,6 +361,9 @@
 </v>
 </v>
 <v t="swot.20260304111043.1"><vh>@path code/testBuildingBlocks</vh></v>
+<v t="swot.20260304165602.1"><vh>@adoc 测试输出没用的东西.adoc</vh>
+<v t="swot.20260304165736.1"><vh>测试输出没用的东西</vh></v>
+</v>
 </v>
 <v t="swot.20251210103828.1"><vh>@path js</vh>
 <v t="swot.20251210103835.1"><vh>pnpm -&gt; https://pnpm.io/</vh></v>
@@ -14081,85 +14103,6 @@ TIP: 记住一句话：你不能刷“图纸”进门，你只能刷装在墙上
 [source,java]
 ----
 @others
-@language java
-/**
- * 门禁卡类：模拟卡片内部的存储芯片。
- * 核心思想：数据安全，受控访问。
- */
-class DoorCard {
-    // 私有化属性：像芯片数据一样锁起来，外部无法直接用 . 来获取
-    private String serialNumber; // 卡片序列号 (硬件固化，绝对不可改)
-    private String ownerId;      // 持卡人工号 (写卡后不可随意更改)
-    private String ownerName;    // 持卡人姓名 (允许修改，但需校验)
-    private boolean active;      // 激活状态 (支持挂失/解挂)
-
-    // 无参数构造方法：Java 编程习惯
-    public DoorCard() {}
-
-    // 初始发卡：一键写入初始数据
-    public DoorCard(String serialNumber, String ownerId, String ownerName, boolean active) {
-        this.serialNumber = serialNumber;
-        this.ownerId = ownerId;
-        this.ownerName = ownerName;
-        this.active = active;
-    }
-
-    // 序列号：只有 Getter，没有 Setter (真正的硬件只读)
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-    // 工号：只有 Getter，没有 Setter (一旦绑定，禁止外部直接篡改)
-    public String getOwnerId() {
-        return ownerId;
-    }
-    // 姓名：提供 Setter，但加入“安检”逻辑
-    public String getOwnerName() {
-        return ownerName;
-    }
-    public void setOwnerName(String ownerName) {
-        if (ownerName != null &amp;&amp; ownerName.length() &gt;= 2) {
-            this.ownerName = ownerName;
-        } else {
-            System.out.println("【系统纠错】更名失败：姓名格式合法性校验未通过！");
-        }
-    }
-    // 状态：标准的读写接口
-    public boolean isActive() {
-        return active;
-    }
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        // 1. 系统正常发卡
-        User user = new User("001", "张三", "A1234567", true);
-        System.out.println("发卡成功！工号：" + user.getId() + "，姓名：" + user.getName());
-
-        // 2. 尝试非法修改姓名（触发 Setter 内部的拦截逻辑）
-        System.out.println("\n--- 尝试置空姓名 ---");
-        user.setName(""); 
-
-        // 3. 正常修改姓名（通过合法的 Setter 接口）
-        System.out.println("\n--- 尝试正常修改姓名 ---");
-        user.setName("张三(已转正)");
-        System.out.println("更新后姓名：" + user.getName());
-
-        // 4. 尝试修改“只读”的工号属性
-        System.out.println("\n--- 尝试修改工号 ---");
-        // 下面这行代码如果取消注释，直接会【编译报错】！
-        // user.setId("002"); // 错误：找不到 setId 方法
-        // user.id = "002";   // 错误：id 是私有的 (private)
-        System.out.println("【系统拦截】由于没有提供 setId 方法，工号已被彻底锁死，无法修改！当前工号仍为：" + user.getId());
-
-        // 5. 模拟卡片挂失操作
-        System.out.println("\n--- 模拟挂失操作 ---");
-        user.setIsActive(false);
-        System.out.println("卡片当前是否可用：" + (user.isIsActive() ? "是" : "否"));
-    }
-}
 ----
 </t>
 <t tx="swot.20260215222546.1">[upperalpha]
@@ -14171,63 +14114,12 @@ public class Main {
 +
 [source,java]
 ----
-@language java
-// --- 1. 定义卡片体系 (继承) ---
-class AccessCard {
-    String cardId;
-
-    // 父类定义通用的权限检查标准
-    void validate() {
-        System.out.println("正在读取通用卡片...");
-    }
-}
-
-class StudentCard extends AccessCard {
-    @Override
-    void validate() {
-        System.out.println("【学生卡】已确认：开启图书馆/教学楼权限。");
-    }
-}
-
-class AdminCard extends AccessCard {
-    @Override
-    void validate() {
-        System.out.println("【管理员卡】已确认：开启全校所有大门权限（含机房）。");
-    }
-}
-
-// --- 2. 读卡器服务类 (展示多态的精髓) ---
-class DoorReader {
-    /**
-     * 这里就是多态的精髓！
-     * 方法参数是父类 AccessCard，这意味着它能接收任何类型的子类卡片。
-     */
-    public void readCard(AccessCard card) {
-        System.out.print("读卡器感应中 -&gt; ");
-        // 运行时 Java 会自动根据“卡片的真实身份”去调用对应的 validate()
-        card.validate(); 
-    }
-}
-
-// --- 3. 运行测试 ---
-public class Main {
-    public static void main(String[] args) {
-        DoorReader myReader = new DoorReader();
-
-        // 准备好不同的卡片（向上转型）
-        AccessCard sCard = new StudentCard();
-        AccessCard aCard = new AdminCard();
-
-        // 统一调用读卡器的同一个方法，产生不同的行为
-        myReader.readCard(sCard); // 输出学生权限
-        myReader.readCard(aCard); // 输出管理员权限
-    }
-}
+@others
 ----
 
 . 为什么这样设计？
-  * **解耦性**：`DoorReader` 硬件逻辑与具体的卡片类型解耦。它不需要知道什么是“学生卡”，它只认识“门禁卡”。
-  * **可扩展性**：如果增加“教师卡”或“访客卡”，只需新建子类继承 `AccessCard`，`DoorReader` 的代码一行都不用改。
+  * **解耦性**：`CardReader` 硬件逻辑与具体的卡片类型解耦。它不需要知道什么是“学生卡”，它只认识“门禁卡”。
+  * **可扩展性**：如果增加“教师卡”或“访客卡”，只需新建子类继承 `BaseDoorCard`，`CardReader` 的代码一行都不用改。
 </t>
 <t tx="swot.20260215222615.1">@language asciidoc
 **1. 知识点说明**
@@ -17743,8 +17635,9 @@ class DoorMachineV01 {
 }
 
 </t>
-<t tx="swot.20260304114839.1" _mod_time="4741da69ebec181b312e">@language java
+<t tx="swot.20260304114839.1" _mod_time="4741da69facfe110362e">@language java
 @others
+// @clean code/testBasicSyntax/src/DoorMachineDemo.java
 // 使用类（安装并使用具体的门禁机）
 public class DoorMachineDemo {
     public static void main(String[] args) {
@@ -17786,8 +17679,9 @@ class DoorMachineV02 {
     }
 }
 </t>
-<t tx="swot.20260304120034.1" _mod_time="4741da69ec09b1ff502e">@language java
+<t tx="swot.20260304120034.1" _mod_time="4741da69f60de2a2372e">@language java
 @others
+// @clean code/testBasicSyntax/src/StaticDemo.java
 public class StaticDemo {
     public static void main(String[] args) {
         // 1. 造两台具体的门禁机
@@ -17802,6 +17696,305 @@ public class StaticDemo {
         // 3. 查看全局数据（调用静态变量，直接用【类名.变量名】）
         System.out.println("--- 监控中心系统 ---");
         System.out.println("今日全校累计刷卡总数：" + DoorMachineV02.totalSwipes);
+    }
+}
+</t>
+<t tx="swot.20260304145516.1">@language java
+/**
+ * 门禁卡类：模拟卡片内部的存储芯片。
+ * 核心思想：数据安全，受控访问。
+ */
+class DoorCard {
+    // 私有化属性：像芯片数据一样锁起来，外部无法直接用 . 来获取
+    private String serialNumber; // 卡片序列号 (硬件固化，绝对不可改)
+    private String ownerId;      // 持卡人工号 (写卡后不可随意更改)
+    private String ownerName;    // 持卡人姓名 (允许修改，但需校验)
+    private boolean active;      // 激活状态 (支持挂失/解挂)
+
+    // 无参数构造方法：Java 编程习惯
+    public DoorCard() {}
+
+    // 初始发卡：一键写入初始数据
+    public DoorCard(String serialNumber, String ownerId, String ownerName, boolean active) {
+        this.serialNumber = serialNumber;
+        this.ownerId = ownerId;
+        this.ownerName = ownerName;
+        this.active = active;
+    }
+
+    // 序列号：只有 Getter，没有 Setter (真正的硬件只读)
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+    // 工号：只有 Getter，没有 Setter (一旦绑定，禁止外部直接篡改)
+    public String getOwnerId() {
+        return ownerId;
+    }
+    // 姓名：提供 Setter，但加入“安检”逻辑
+    public String getOwnerName() {
+        return ownerName;
+    }
+    public void setOwnerName(String ownerName) {
+        if (ownerName != null &amp;&amp; ownerName.length() &gt;= 2) {
+            this.ownerName = ownerName;
+        } else {
+            System.out.println("【系统纠错】更名失败：姓名格式合法性校验未通过！");
+        }
+    }
+    // 状态：标准的读写接口
+    public boolean isActive() {
+        return active;
+    }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+}
+</t>
+<t tx="swot.20260304145656.1" _mod_time="4741da69f975117c2f2e">@language java
+@others
+// @clean code/testBasicSyntax/src/DoorCardDemo.java
+public class DoorCardDemo {
+    public static void main(String[] args) {
+        // 制作一张新卡
+        DoorCard myCard = new DoorCard("SN-9527", "EMP001", "周星星", true);
+        System.out.println("--- 读卡成功 ---");
+        System.out.println("序列号：" + myCard.getSerialNumber());
+        System.out.println("持卡人：" + myCard.getOwnerName());
+
+        // 模拟非法篡改核心数据（序列号）
+        // myCard.serialNumber = "SN-0001";   // 编译报错：private 属性不允许直接读取
+        // myCard.setSerialNumber("SN-0001"); // 编译报错：根本没写这个方法，改不了！
+
+        // 通过合法渠道修改信息
+        System.out.println("\n--- 正在办理更名手续 ---");
+        myCard.setOwnerName("周星驰");  // 成功
+        myCard.setOwnerName("");       // 拦截：触发 Setter 内部校验
+
+        // 模拟卡片挂失操作
+        System.out.println("\n--- 模拟挂失操作 ---");
+        myCard.setActive(false);
+        System.out.println("卡片状态：" + (myCard.isActive() ? "有效" : "已失效/已挂失"));
+    }
+}
+</t>
+<t tx="swot.20260304152414.1" _mod_time="4741da69fc5cbb57792e">@language java
+@others
+public class InheritanceAndPolymorphismDemo {
+    public static void main(String[] args) {
+        CardReader cardReader = new CardReader();
+
+        // 准备好不同的卡片（向上转型）
+        BaseDoorCard studentCard = new StudentCard("S-2024-001", "小明");
+        BaseDoorCard adminCard = new AdminCard("A-007", "张老师");
+
+        // 统一调用读卡器的同一个方法，产生不同的行为
+        cardReader.readCard(studentCard); // 输出学生权限
+        cardReader.readCard(adminCard); // 输出管理员权限
+    }
+}
+
+</t>
+<t tx="swot.20260304155927.1">@language java
+/**
+ * 类名：BaseDoorCard (由 DoorCard 演化而来)
+ */
+class BaseDoorCard {
+    private String serialNumber;
+    private String ownerName;
+
+    public BaseDoorCard(String serialNumber, String ownerName) {
+        this.serialNumber = serialNumber;
+        this.ownerName = ownerName;
+    }
+
+    // 封装逻辑：Getter
+    public String getOwnerName() { return ownerName; }
+
+    // 多态的核心：父类定义一个“动作标准”
+    public void validate() {
+        System.out.println("【基础校验】正在核验卡片物理信息...");
+    }
+}
+</t>
+<t tx="swot.20260304155948.1">@language java
+// 读卡器服务类 (展示多态的精髓) 
+// 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
+class CardReader {
+    // 这里传入的是 BaseDoorCard，展示了多态的兼容性
+    public void readCard(BaseDoorCard card) {
+        System.out.print("读卡器感应 -&gt; ");
+        card.validate(); // 自动触发对应的子类方法
+    }
+}
+</t>
+<t tx="swot.20260304162904.1">@language java
+class StudentCard extends BaseDoorCard {
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承父类的构造
+    }
+
+    @Override
+    public void validate() {
+        super.validate(); // 先执行父类的通用检测
+        System.out.println("【学生卡】检测成功：确认 " + getOwnerName() + " 的图书馆访问权限。");
+    }
+}
+</t>
+<t tx="swot.20260304163021.1">@language java
+class AdminCard extends BaseDoorCard {
+    public AdminCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public void validate() {
+        super.validate(); // 先执行父类的通用检测
+        System.out.println("【管理员卡】检测成功：开启全校所有通道。");
+    }
+}
+</t>
+<t tx="swot.20260304165602.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
+<t tx="swot.20260304165736.1">
+++++
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+&lt;script&gt;
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () =&gt; {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260304170224.1">这一版在继承的基础上 ，通过 abstract 关键字从语义和语法上解决了“BaseDoorCard 不应被实例化”的问题。
+
+另外还通过声明包，解决类名冲突问题。
+代码举例如下：
+
+[source,java]
+----
+@others
+----
+</t>
+<t tx="swot.20260304170758.1" _mod_time="4741da6a009493c38b2e">@language java
+// @clean code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
+// 通过声明包，解决类名冲突问题
+package use_abstraction;  // 必须匹配文件夹的名字
+
+@others
+
+// --- 运行测试 ---
+public class AbstractClassDemo {
+    public static void main(String[] args) {
+        CardReader cardReader = new CardReader();
+
+        // 向上转型：父类引用指向子类对象
+        BaseDoorCard studentCard = new StudentCard("S-2024-001", "小明");
+        BaseDoorCard adminCard = new AdminCard("A-007", "张老师");
+
+        cardReader.readCard(studentCard);
+        System.out.println("--------------------");
+        cardReader.readCard(adminCard);
+
+        // 演示抽象类的约束：
+        // BaseDoorCard mysteryCard = new BaseDoorCard("X-000", "未知"); 
+        // 上行代码会报错：'BaseDoorCard' is abstract; cannot be instantiated
+    }
+}
+</t>
+<t tx="swot.20260304171106.1">@language java
+/**
+ * 类名：BaseDoorCardAbs (抽象类)
+ * 演化点：使用了 abstract 关键字。
+ * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
+ * 2. 规范：强制子类必须实现特定的权限说明逻辑。
+ */
+abstract class BaseDoorCard {
+    private String serialNumber;
+    private String ownerName;
+
+    public BaseDoorCard(String serialNumber, String ownerName) {
+        this.serialNumber = serialNumber;
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerName() { return ownerName; }
+
+    /**
+     * 通用逻辑：所有卡片都要进行的物理核验。
+     * 抽象类可以拥有具体实现的方法。
+     */
+    public void validate() {
+        System.out.println("【基础校验】正在核验卡片物理信息...");
+    }
+
+    /**
+     * 抽象方法：强制规范。
+     * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。
+     */
+    public abstract void showAccessScope();
+}
+</t>
+<t tx="swot.20260304173742.1">@language java
+// --- 子类必须实现抽象方法 ---
+class StudentCard extends BaseDoorCard {
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承并调用父类构造器
+    }
+
+    @Override
+    public void validate() {
+        super.validate(); // 执行通用检测
+        showAccessScope(); // 执行个性化权限展示
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+    }
+}
+</t>
+<t tx="swot.20260304173902.1">@language java
+class AdminCard extends BaseDoorCard {
+    public AdminCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public void validate() {
+        super.validate();
+        showAccessScope();
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
     }
 }
 </t>

@@ -17,6 +17,7 @@ class DoorMachineV02 {
         totalSwipes++; // 每次刷卡，全局统计数据 +1
     }
 }
+// @clean code/testBasicSyntax/src/StaticDemo.java
 public class StaticDemo {
     public static void main(String[] args) {
         // 1. 造两台具体的门禁机
