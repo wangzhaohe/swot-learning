@@ -833,36 +833,136 @@ public class AbstractClassDemo {
 }
 ----
 
-=== 接口设计 —— “万能插座标准”
-**1. 知识点说明**
+=== 接口设计 —— “功能准入协议”
+[upperalpha]
+. 知识点说明
 
-* **接口 (interface)**：它不干活，它只负责**定规矩**。
-* 它规定了“如果你想当某种东西，你必须能干什么”。
+* 接口 (interface)：它不干活，只负责定规矩。
+* 生活举例：USB 标准。不管你是鼠标还是 U 盘，只要符合 USB 规范，电脑就能识别。
+* 在门禁系统中的应用：有些卡只能开门（继承 BaseDoorCard），有些卡还能打饭（实现 Payable 接口）。
 
-**2. 生活举例**
-**USB 标准**。不管你是鼠标、键盘还是 U 盘，只要你符合 USB 的形状和规范，电脑就能识别你。
 
-**3. 代码举例**
-
+. 代码举例
++
 [source,java]
 ----
-// 定义一个“充电”标准
-interface Chargeable {
-    void charge(); // 谁实现这个接口，谁就必须能充电
-}
+// @clean code/testBasicSyntax/src/use_interface/InterfaceDemo.java
+package use_interface;
 
-class ElectricCar implements Chargeable {
-    public void charge() {
-        System.out.println("连接充电桩，新能源车充电中...");
+/**
+ * 支付接口：定义了“能够支付”的规范
+ */
+interface Payable {
+    void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
+}
+/**
+ * 类名：BaseDoorCardAbs (抽象类)
+ * 演化点：使用了 abstract 关键字。
+ * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
+ * 2. 规范：强制子类必须实现特定的权限说明逻辑。
+ */
+abstract class BaseDoorCard {
+    private String serialNumber;
+    private String ownerName;
+
+    public BaseDoorCard(String serialNumber, String ownerName) {
+        this.serialNumber = serialNumber;
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerName() { return ownerName; }
+
+    /**
+     * 通用逻辑：所有卡片都要进行的物理核验。
+     * 抽象类可以拥有具体实现的方法。
+     */
+    public void validate() {
+        System.out.println("【基础校验】正在核验卡片物理信息...");
+    }
+
+    /**
+     * 抽象方法：强制规范。
+     * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。
+     */
+    public abstract void showAccessScope();
+}
+/**
+ * 学生卡：既是门禁卡，又能支付 (多重身份)
+ */
+class StudentCard extends BaseDoorCard implements Payable {
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承并调用父类构造器
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+    }
+
+    @Override
+    public void validate() {
+        super.validate(); // 执行通用检测
+        showAccessScope(); // 执行个性化权限展示
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
     }
 }
 
-class SmartPhone implements Chargeable {
-    public void charge() {
-        System.out.println("连接数据线，手机快速充电中...");
+class AdminCard extends BaseDoorCard {
+    public AdminCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public void validate() {
+        super.validate();
+        showAccessScope();
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
     }
 }
+/**
+ * 食堂刷卡机：它不关心你是哪种卡，它只认“Payable”接口
+ */
+class CanteenReader {
+    public void processPayment(Payable card, double price) {
+        System.out.println("--- 食堂刷卡机感应中 ---");
+        card.pay(price); // 只要实现了 Payable，就一定有 pay 方法
+    }
+}
+
+
+public class InterfaceDemo {
+    public static void main(String[] args) {
+        StudentCard studentCard = new StudentCard("S-2024-001", "小明");
+        AdminCard adminCard = new AdminCard("A-007", "张老师");
+
+        CanteenReader canteen = new CanteenReader();
+
+        // 1. 学生卡实现了 Payable，可以打饭
+        canteen.processPayment(studentCard, 15.0);
+
+        // 2. 管理员卡没实现 Payable，下面这行代码在编译时就会报错
+        // canteen.processPayment(adminCard, 20.0); // 编译不通过：张老师的卡不能在食堂付钱
+    }
+}
+
 ----
+
+. 设计说明
+* 区分“是什么”与“能干什么”：
+  ** extends (继承) 代表 身份：它“是一个”门禁卡 。
+  ** implements (接口) 代表 能力：它“具备”支付功能 。
+
+* 解耦的极高境界：CanteenReader（食堂机器）完全不需要知道 BaseDoorCard。哪怕以后学校引入了“手机刷脸支付”，只要刷脸系统实现了 Payable 接口，食堂机器照样能用。
+
+* 安全性：通过接口，我们从代码层面限制了“只有该付钱的卡才能付钱”，避免了管理员误刷卡消费的逻辑错误。
 
 === 包管理与访问权限 —— “大楼的房间划分与门锁”
 [upperalpha]

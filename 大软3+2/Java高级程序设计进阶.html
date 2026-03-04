@@ -590,7 +590,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_封装_门禁卡的智能芯片">封装 —— “门禁卡的智能芯片”</a></li>
 <li><a href="#_继承与多态_父子卡片与读卡器逻辑">继承与多态 —— “父子卡片”与“读卡器逻辑”</a></li>
 <li><a href="#_抽象类_禁止基础门卡类创建新卡对象因为没有这种卡">抽象类 --- 禁止基础门卡类创建新卡对象（因为没有这种卡）</a></li>
-<li><a href="#_接口设计_万能插座标准">接口设计 —— “万能插座标准”</a></li>
+<li><a href="#_接口设计_功能准入协议">接口设计 —— “功能准入协议”</a></li>
 <li><a href="#_包管理与访问权限_大楼的房间划分与门锁">包管理与访问权限 —— “大楼的房间划分与门锁”</a></li>
 <li><a href="#_面向对象基础小结">面向对象基础小结</a></li>
 </ul>
@@ -2102,46 +2102,165 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_接口设计_万能插座标准">接口设计 —— “万能插座标准”</h3>
-<div class="paragraph">
-<p><strong>1. 知识点说明</strong></p>
-</div>
+<h3 id="_接口设计_功能准入协议">接口设计 —— “功能准入协议”</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>知识点说明</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>接口 (interface)</strong>：它不干活，它只负责<strong>定规矩</strong>。</p>
+<p>接口 (interface)：它不干活，只负责定规矩。</p>
 </li>
 <li>
-<p>它规定了“如果你想当某种东西，你必须能干什么”。</p>
+<p>生活举例：USB 标准。不管你是鼠标还是 U 盘，只要符合 USB 规范，电脑就能识别。</p>
+</li>
+<li>
+<p>在门禁系统中的应用：有些卡只能开门（继承 BaseDoorCard），有些卡还能打饭（实现 Payable 接口）。</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p><strong>2. 生活举例</strong>
-<strong>USB 标准</strong>。不管你是鼠标、键盘还是 U 盘，只要你符合 USB 的形状和规范，电脑就能识别你。</p>
-</div>
-<div class="paragraph">
-<p><strong>3. 代码举例</strong></p>
-</div>
+</li>
+<li>
+<p>代码举例</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 定义一个“充电”标准</span>
-<span class="tok-kd">interface</span> <span class="tok-nc">Chargeable</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">charge</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 谁实现这个接口，谁就必须能充电</span>
-<span class="tok-p">}</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/use_interface/InterfaceDemo.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">use_interface</span><span class="tok-p">;</span>
 
-<span class="tok-kd">class</span> <span class="tok-nc">ElectricCar</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">Chargeable</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">charge</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;连接充电桩，新能源车充电中...&quot;</span><span class="tok-p">);</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 支付接口：定义了“能够支付”的规范</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">interface</span> <span class="tok-nc">Payable</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">pay</span><span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 谁实现这个接口，谁就必须具备支付功能</span>
+<span class="tok-p">}</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 类名：BaseDoorCardAbs (抽象类)</span>
+<span class="tok-cm"> * 演化点：使用了 abstract 关键字。</span>
+<span class="tok-cm"> * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。</span>
+<span class="tok-cm"> * 2. 规范：强制子类必须实现特定的权限说明逻辑。</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">BaseDoorCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">ownerName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">getOwnerName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 通用逻辑：所有卡片都要进行的物理核验。</span>
+<span class="tok-cm">     * 抽象类可以拥有具体实现的方法。</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【基础校验】正在核验卡片物理信息...&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 抽象方法：强制规范。</span>
+<span class="tok-cm">     * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">showAccessScope</span><span class="tok-p">();</span>
+<span class="tok-p">}</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 学生卡：既是门禁卡，又能支付 (多重身份)</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">class</span> <span class="tok-nc">StudentCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">Payable</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">StudentCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 继承并调用父类构造器</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">pay</span><span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【食堂消费】学生 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">getOwnerName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 支付了 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 元。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 执行通用检测</span>
+<span class="tok-w">        </span><span class="tok-n">showAccessScope</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 执行个性化权限展示</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">showAccessScope</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【权限范围】学生卡：确认 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">getOwnerName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 的图书馆/教学楼访问权限。&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
-<span class="tok-kd">class</span> <span class="tok-nc">SmartPhone</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">Chargeable</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">charge</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;连接数据线，手机快速充电中...&quot;</span><span class="tok-p">);</span>
+<span class="tok-kd">class</span> <span class="tok-nc">AdminCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">AdminCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">showAccessScope</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">showAccessScope</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【权限范围】管理员卡：开启全校所有通道，含机房与档案室。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 食堂刷卡机：它不关心你是哪种卡，它只认“Payable”接口</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">class</span> <span class="tok-nc">CanteenReader</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">processPayment</span><span class="tok-p">(</span><span class="tok-n">Payable</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">price</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;--- 食堂刷卡机感应中 ---&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">pay</span><span class="tok-p">(</span><span class="tok-n">price</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 只要实现了 Payable，就一定有 pay 方法</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">InterfaceDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">StudentCard</span><span class="tok-w"> </span><span class="tok-n">studentCard</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">(</span><span class="tok-s">&quot;S-2024-001&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;小明&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">AdminCard</span><span class="tok-w"> </span><span class="tok-n">adminCard</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">AdminCard</span><span class="tok-p">(</span><span class="tok-s">&quot;A-007&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;张老师&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-n">CanteenReader</span><span class="tok-w"> </span><span class="tok-n">canteen</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CanteenReader</span><span class="tok-p">();</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 1. 学生卡实现了 Payable，可以打饭</span>
+<span class="tok-w">        </span><span class="tok-n">canteen</span><span class="tok-p">.</span><span class="tok-na">processPayment</span><span class="tok-p">(</span><span class="tok-n">studentCard</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">15.0</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 2. 管理员卡没实现 Payable，下面这行代码在编译时就会报错</span>
+<span class="tok-w">        </span><span class="tok-c1">// canteen.processPayment(adminCard, 20.0); // 编译不通过：张老师的卡不能在食堂付钱</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
+</div>
+</li>
+<li>
+<p>设计说明</p>
+<div class="ulist">
+<ul>
+<li>
+<p>区分“是什么”与“能干什么”：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>extends (继承) 代表 身份：它“是一个”门禁卡 。</p>
+</li>
+<li>
+<p>implements (接口) 代表 能力：它“具备”支付功能 。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>解耦的极高境界：CanteenReader（食堂机器）完全不需要知道 BaseDoorCard。哪怕以后学校引入了“手机刷脸支付”，只要刷脸系统实现了 Payable 接口，食堂机器照样能用。</p>
+</li>
+<li>
+<p>安全性：通过接口，我们从代码层面限制了“只有该付钱的卡才能付钱”，避免了管理员误刷卡消费的逻辑错误。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect2">
@@ -3638,7 +3757,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-04 17:58:51 +0800
+Last updated 2026-03-04 23:09:11 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -244,12 +244,20 @@
 <v t="swot.20260304170224.1"><vh>抽象类 --- 禁止基础门卡类创建新卡对象（因为没有这种卡）</vh>
 <v t="swot.20260304170758.1"><vh>@clean code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java</vh>
 <v t="swot.20260304171106.1"><vh>BB class BaseDoorCard -&gt; abstract</vh></v>
-<v t="swot.20260304173742.1"><vh>BB class StudentCard extends abstract BaseDoorCard 学生卡</vh></v>
-<v t="swot.20260304173902.1"><vh>BB class AdminCard extends abstract BaseDoorCard 管理员卡</vh></v>
+<v t="swot.20260304173742.1"><vh>BB class StudentCard extends BaseDoorCard 学生卡</vh></v>
+<v t="swot.20260304173902.1"><vh>BB class AdminCard extends BaseDoorCard 管理员卡</vh></v>
 <v t="swot.20260304155948.1"></v>
 </v>
 </v>
-<v t="swot.20260215222615.1"><vh>接口设计 —— “万能插座标准”</vh></v>
+<v t="swot.20260215222615.1"><vh>接口设计 —— “功能准入协议”</vh>
+<v t="swot.20260304220859.1"><vh>@clean code/testBasicSyntax/src/use_interface/InterfaceDemo.java</vh>
+<v t="swot.20260304221446.1"><vh>BB interface Payable 支付接口</vh></v>
+<v t="swot.20260304171106.1"></v>
+<v t="swot.20260304221906.1"><vh>BB class StudentCard extends BaseDoorCard implements Payable 学生卡</vh></v>
+<v t="swot.20260304173902.1"></v>
+<v t="swot.20260304222616.1"><vh>BB class CanteenReader 食堂刷卡机</vh></v>
+</v>
+</v>
 <v t="swot.20260303164345.1"><vh>包管理与访问权限 —— “大楼的房间划分与门锁”</vh></v>
 <v t="swot.20260216074225.1"><vh>面向对象基础小结</vh></v>
 </v>
@@ -14122,35 +14130,30 @@ TIP: 记住一句话：你不能刷“图纸”进门，你只能刷装在墙上
   * **可扩展性**：如果增加“教师卡”或“访客卡”，只需新建子类继承 `BaseDoorCard`，`CardReader` 的代码一行都不用改。
 </t>
 <t tx="swot.20260215222615.1">@language asciidoc
-**1. 知识点说明**
+[upperalpha]
+. 知识点说明
 
-* **接口 (interface)**：它不干活，它只负责**定规矩**。
-* 它规定了“如果你想当某种东西，你必须能干什么”。
+* 接口 (interface)：它不干活，只负责定规矩。
+* 生活举例：USB 标准。不管你是鼠标还是 U 盘，只要符合 USB 规范，电脑就能识别。
+* 在门禁系统中的应用：有些卡只能开门（继承 BaseDoorCard），有些卡还能打饭（实现 Payable 接口）。
 
-**2. 生活举例**
-**USB 标准**。不管你是鼠标、键盘还是 U 盘，只要你符合 USB 的形状和规范，电脑就能识别你。
 
-**3. 代码举例**
-
+. 代码举例
++
 [source,java]
 ----
-// 定义一个“充电”标准
-interface Chargeable {
-    void charge(); // 谁实现这个接口，谁就必须能充电
-}
-
-class ElectricCar implements Chargeable {
-    public void charge() {
-        System.out.println("连接充电桩，新能源车充电中...");
-    }
-}
-
-class SmartPhone implements Chargeable {
-    public void charge() {
-        System.out.println("连接数据线，手机快速充电中...");
-    }
-}
+@others
 ----
+
+. 设计说明
+* 区分“是什么”与“能干什么”：
+  ** extends (继承) 代表 身份：它“是一个”门禁卡 。
+  ** implements (接口) 代表 能力：它“具备”支付功能 。
+
+* 解耦的极高境界：CanteenReader（食堂机器）完全不需要知道 BaseDoorCard。哪怕以后学校引入了“手机刷脸支付”，只要刷脸系统实现了 Payable 接口，食堂机器照样能用。
+
+* 安全性：通过接口，我们从代码层面限制了“只有该付钱的卡才能付钱”，避免了管理员误刷卡消费的逻辑错误。
+
 </t>
 <t tx="swot.20260215225306.1"></t>
 <t tx="swot.20260216074225.1">面向对象是 Java 的核心灵魂。大家不需要死记硬背枯燥的理论，只需在脑海中牢记这四个核心比喻：
@@ -17997,6 +18000,75 @@ class AdminCard extends BaseDoorCard {
         System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
     }
 }
+</t>
+<t tx="swot.20260304220859.1" _mod_time="4741da6a12696ec6e32e">@language java
+// @clean code/testBasicSyntax/src/use_interface/InterfaceDemo.java
+package use_interface;
+
+@others
+
+public class InterfaceDemo {
+    public static void main(String[] args) {
+        StudentCard studentCard = new StudentCard("S-2024-001", "小明");
+        AdminCard adminCard = new AdminCard("A-007", "张老师");
+
+        CanteenReader canteen = new CanteenReader();
+
+        // 1. 学生卡实现了 Payable，可以打饭
+        canteen.processPayment(studentCard, 15.0);
+
+        // 2. 管理员卡没实现 Payable，下面这行代码在编译时就会报错
+        // canteen.processPayment(adminCard, 20.0); // 编译不通过：张老师的卡不能在食堂付钱
+    }
+}
+
+</t>
+<t tx="swot.20260304221446.1">@language asciidoc
+/**
+ * 支付接口：定义了“能够支付”的规范
+ */
+interface Payable {
+    void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
+}
+</t>
+<t tx="swot.20260304221906.1">@language java
+/**
+ * 学生卡：既是门禁卡，又能支付 (多重身份)
+ */
+class StudentCard extends BaseDoorCard implements Payable {
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承并调用父类构造器
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+    }
+
+    @Override
+    public void validate() {
+        super.validate(); // 执行通用检测
+        showAccessScope(); // 执行个性化权限展示
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+    }
+}
+
+</t>
+<t tx="swot.20260304222616.1">@language java
+/**
+ * 食堂刷卡机：它不关心你是哪种卡，它只认“Payable”接口
+ */
+class CanteenReader {
+    public void processPayment(Payable card, double price) {
+        System.out.println("--- 食堂刷卡机感应中 ---");
+        card.pay(price); // 只要实现了 Payable，就一定有 pay 方法
+    }
+}
+
 </t>
 </tnodes>
 </leo_file>
