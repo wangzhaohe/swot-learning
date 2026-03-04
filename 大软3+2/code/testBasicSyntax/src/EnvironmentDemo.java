@@ -1,4 +1,5 @@
-public class Main {
+// @edit code/testBasicSyntax/src/EnvironmentDemo.java
+public class EnvironmentDemo {
     public static void main(String[] args) {
         System.out.println("========= 环境测试 =========");
 

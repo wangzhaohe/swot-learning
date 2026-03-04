@@ -53,12 +53,13 @@ image::img/download_jdk.png[download,480,]
 这样就可以使用 IDEA 创建项目，进行 java 程序的开发了，
 
 
-.查看程序运行结果
+.MyDemo.java 查看程序运行结果
 [source,java]
 ----
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("========= Podman 环境测试 =========");
+// @edit code/testBasicSyntax/src/EnvironmentDemo.java
+public class MyDemo {
+    public static void EnvironmentDemo(String[] args) {
+        System.out.println("========= 环境测试 =========");
 
         // 验证运行操作系统（如果是 Linux，说明 Podman 成功了）
         String os = System.getProperty("os.name");
@@ -75,7 +76,7 @@ public class Main {
         if ("Linux".equalsIgnoreCase(os)) {
             System.out.println("✅ 成功！代码正在 Podman 容器内运行。");
         } else {
-            System.out.println("❌ 警告：代码仍在 macOS 本地运行，请检查 Run on 设置。");
+            System.out.println("❌ 警告：代码仍在 macOS 本地运行。");
         }
 
         System.out.println("==================================");
@@ -85,7 +86,6 @@ public class Main {
 
 .本机运行结果
 ....
-/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar=53662 -Dfile.encoding=UTF-8 -classpath /Users/swot/swot-learning/大软3+2/code/first-java/out/production/first-java Main
 ========= Podman 环境测试 =========
 当前运行操作系统: Mac OS X
 当前 JDK 版本: 17.0.18
@@ -414,9 +414,10 @@ image::img/external_tools_run_in_podman.png[,640,]
 .查看程序运行结果，即可验证是否在 podman 中运行成功。
 [source,java]
 ----
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("========= Podman 环境测试 =========");
+// @edit code/testBasicSyntax/src/EnvironmentDemo.java
+public class MyDemo {
+    public static void EnvironmentDemo(String[] args) {
+        System.out.println("========= 环境测试 =========");
 
         // 验证运行操作系统（如果是 Linux，说明 Podman 成功了）
         String os = System.getProperty("os.name");
@@ -433,7 +434,7 @@ public class Main {
         if ("Linux".equalsIgnoreCase(os)) {
             System.out.println("✅ 成功！代码正在 Podman 容器内运行。");
         } else {
-            System.out.println("❌ 警告：代码仍在 macOS 本地运行，请检查 Run on 设置。");
+            System.out.println("❌ 警告：代码仍在 macOS 本地运行。");
         }
 
         System.out.println("==================================");
@@ -443,7 +444,6 @@ public class Main {
 +
 .podman 运行结果
 ....
-podman run --rm -i -v /Users/swot/swot-learning/大软3+2/code/first-java/src:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java && java Main"
 ========= Podman 环境测试 =========
 当前运行操作系统: Linux
 当前 JDK 版本: 17.0.18

@@ -236,9 +236,9 @@ Java 允许在一个 `.java` 源文件中定义多个类，但需遵循以下限
 [cols="1,2,2", options="header"]
 |===
 | 场景 | 文件名要求 | 示例
-| 包含 `public class A` | **必须**叫 `A.java` | 强制一致
+| 包含 `public class MyDemo` | **必须**叫 `MyDemo.java` | 强制一致
 | 包含 `class B` (非 public) | 可以叫 `B.java` 或 `Custom.java` | 灵活命名
-| 包含 `public class A` 和 `class B` | **必须**叫 `A.java` | 以 public 类为准
+| 包含 `public class MyDemo` 和 `class B` | **必须**叫 `MyDemo.java` | 以 public 类为准
 |===
 
 [IMPORTANT]
@@ -262,17 +262,19 @@ Java 允许在一个 `.java` 源文件中定义多个类，但需遵循以下限
 * `boolean` (布尔)：只有 true（是）和 false（否），极其适合做状态判断（如：门是否开启、卡是否激活）。
 * `String` (字符串)：虽然不是基本类型，但最常用，用来记录姓名、卡号等文本。
 
+
 . 代码举例（定义门禁卡基础信息）
 +
 [source,java]
 ----
+// @edit code/testBasicSyntax/src/VariableDemo.java
 public class VariableDemo {
     public static void main(String[] args) {
         // 声明并初始化变量
         String userName = "张三";
         String cardId = "A1234567";
-        int swipeCount = 0;          // 今日刷卡次数
-        boolean isActive = true;     // 卡片是否挂失？true代表正常
+        int swipeCount = 0;          // 刷卡次数
+        boolean isActive = true;     // 卡片是否激活？true 代表已激活，false 代表未激活
 
         System.out.println("用户：" + userName + "，卡号：" + cardId + "，状态正常：" + isActive);
     }
@@ -293,6 +295,7 @@ public class VariableDemo {
 +
 [source,java]
 ----
+// @edit code/testBasicSyntax/src/IfElseDemo.java
 public class IfElseDemo {
     public static void main(String[] args) {
         boolean isCardValid = true;  // 卡片有效
@@ -315,6 +318,7 @@ public class IfElseDemo {
 . 知识点说明
 +
 计算机最擅长的就是做重复的苦力活。
+
 * **`while` 循环**：只要条件满足，就一直干。适合“不知道具体要执行多少次”的场景（比如读卡器一直通电等待刷卡）。
 * **`for` 循环**：明确知道要执行多少次。适合“遍历、计数”的场景（比如找出今天刷卡超过 5 次的人）。
 
@@ -323,6 +327,7 @@ public class IfElseDemo {
 +
 [source,java]
 ----
+// @edit code/testBasicSyntax/src/LoopDemo.java
 import java.util.Scanner;
 
 public class LoopDemo {
@@ -332,7 +337,6 @@ public class LoopDemo {
         for (int i = 1; i <= 3; i++) {
             System.out.println("正在制作第 " + i + " 张门禁卡...");
         }
-
         // --- while 循环演示：模拟读卡器持续工作 ---
         Scanner scanner = new Scanner(System.in);
         boolean powerOn = true;
@@ -358,12 +362,7 @@ public class LoopDemo {
 
 === 方法 (Methods) —— “打包好的安检流水线”
 [upperalpha]
-. 为什么要学？
-+
-如果每天有 1000 个人刷卡，难道要写 1000 次校验卡号格式的 `if/else` 吗？
-+
 **方法（也叫函数）**就是把一段经常使用的代码“打包”起来，起个名字。以后只要喊这个名字，这段代码就会自动执行。
-
 
 . 知识点说明
 * **参数 (Parameters)**：交给流水线的原材料（比如：待校验的卡号）。
@@ -377,20 +376,6 @@ public class LoopDemo {
 [source,java]
 ----
 public class MethodDemo {
-
-    // 主程序：系统的入口
-    public static void main(String[] args) {
-        String card1 = "A1234567";
-        String card2 = "B999";
-
-        // 直接“呼叫”我们写好的方法，并接收返回值
-        boolean result1 = checkCardFormat(card1);
-        boolean result2 = checkCardFormat(card2);
-
-        System.out.println("卡号 " + card1 + " 校验结果：" + result1);
-        System.out.println("卡号 " + card2 + " 校验结果：" + result2);
-    }
-
     /**
      * 自定义方法：专门用来校验门禁卡格式
      * @param cardId 输入的卡号
@@ -403,6 +388,19 @@ public class MethodDemo {
         } else {
             return false; // 检验不合格，打回 false
         }
+    }
+
+    // 主程序：系统的入口
+    public static void main(String[] args) {
+        String card1 = "A1234567";
+        String card2 = "B999";
+        
+        // 直接“呼叫”我们写好的方法，并接收返回值
+        boolean result1 = checkCardFormat(card1);
+        boolean result2 = checkCardFormat(card2);
+        
+        System.out.println("卡号 " + card1 + " 校验结果：" + result1);
+        System.out.println("卡号 " + card2 + " 校验结果：" + result2);
     }
 }
 ----
@@ -447,15 +445,15 @@ public class MethodDemo {
 * 类 (Class)：相当于一张门禁机的设计图纸 。它规定了门禁机应该长什么样（安装位置、型号）以及能干什么（读取卡号、开启大门）。
 * 对象 (Object)：是根据图纸生产出来的具体某一台门禁机 。
 +
-记住一句话：你不能刷“图纸”进门，你只能刷装在墙上的“门禁机实体” 。在 Java 中，我们要先写类，再用 new 关键字制造出对象 。
+TIP: 记住一句话：你不能刷“图纸”进门，你只能刷装在墙上的“门禁机实体” 。在 Java 中，我们要先写类，再用 new 关键字制造出对象 。
 
 
 . 代码举例
 +
 [source,java]
 ----
-// 1. 定义类（门禁机设计图纸）
-class DoorMachine {
+// 定义类（门禁机设计图纸）
+class DoorMachineV01 {
     String location;  // 属性：安装位置（如：南大门、图书馆入口）
     String model;     // 属性：机器型号
 
@@ -467,11 +465,11 @@ class DoorMachine {
     }
 }
 
-// 2. 使用类（安装并使用具体的门禁机）
-public class TestDoorSystem {
+// 使用类（安装并使用具体的门禁机）
+public class DoorMachineDemo {
     public static void main(String[] args) {
         // 使用 new 关键字，根据图纸造出一台真实的门禁机
-        DoorMachine southGate = new DoorMachine();
+        DoorMachineV01 southGate = new DoorMachineV01();
 
         // 给这台具体的机器设置属性
         southGate.location = "学校南大门";
@@ -481,7 +479,7 @@ public class TestDoorSystem {
         southGate.openDoor("张三");
 
         // 我们还可以根据同一张图纸，再造一台放在图书馆
-        DoorMachine libraryGate = new DoorMachine();
+        DoorMachineV01 libraryGate = new DoorMachineV01();
         libraryGate.location = "图书馆主楼";
         libraryGate.openDoor("李四");
     }
@@ -495,7 +493,9 @@ public class TestDoorSystem {
 
 
 . 知识点说明
+
 * **非静态（实例成员）**：属于**具体某个对象**的私有财产。比如“南大门的地理位置”、“北大门的地理位置”，每台门禁机是不一样的。必须 `new` 出具体的门禁机，才能访问。
+
 * **静态（static 成员）**：属于**整个类**的共享财产，就像挂在墙上的全局广播站。比如“今天全校总共刷卡多少次”，所有门禁机共享这一个数字。不需要 `new`，直接通过 `类名.变量名` 就能看。
 
 
@@ -503,15 +503,16 @@ public class TestDoorSystem {
 +
 [source,java]
 ----
-class DoorMachine {
+class DoorMachineV02 {
     // 非静态变量：属于每台具体的机器（私有财产）
-    String location; 
+    String location;  // 属性：安装位置（如：南大门、图书馆入口）
+    String model;     // 属性：机器型号
 
     // 静态变量：属于整个安保系统共享（全局统计）
-    static int totalSwipes = 0; 
+    static int totalSwipes = 0;
 
     // 构造方法：出厂时设置安装位置
-    public DoorMachine(String loc) {
+    public DoorMachineV02(String loc) {
         this.location = loc;
     }
 
@@ -521,21 +522,20 @@ class DoorMachine {
         totalSwipes++; // 每次刷卡，全局统计数据 +1
     }
 }
-
 public class StaticDemo {
     public static void main(String[] args) {
         // 1. 造两台具体的门禁机
-        DoorMachine southDoor = new DoorMachine("南大门");
-        DoorMachine northDoor = new DoorMachine("北大门");
+        DoorMachineV02 southDoor = new DoorMachineV02("南大门");
+        DoorMachineV02 northDoor = new DoorMachineV02("北大门");
 
         // 2. 它们各自独立工作（调用非静态方法）
-        southDoor.swipe(); 
+        southDoor.swipe();
         northDoor.swipe();
         northDoor.swipe();
 
         // 3. 查看全局数据（调用静态变量，直接用【类名.变量名】）
         System.out.println("--- 监控中心系统 ---");
-        System.out.println("今日全校累计刷卡总数：" + DoorMachine.totalSwipes); 
+        System.out.println("今日全校累计刷卡总数：" + DoorMachineV02.totalSwipes);
     }
 }
 ----
@@ -551,7 +551,7 @@ public class StaticDemo {
 * 所以必须先 `new` 一个具体的门出来！
 ====
 
-=== 封装 —— “门禁卡的智能芯片”
+=== 封装 —— “门禁卡的智能芯片” -> 应该将 isActive 改成 getActive
 [upperalpha]
 . 知识点说明
 * **私有化 (private)**：把核心数据（如工号、姓名、卡号、状态）藏在类内部的“芯片”里，防止外部代码直接乱碰和非法篡改。
@@ -568,64 +568,52 @@ public class StaticDemo {
 [source,java]
 ----
 /**
- * 用户实体类：代表一个拥有门禁卡的人
- * 对应实验二：数据模型与实体类开发
+ * 门禁卡类：模拟卡片内部的存储芯片。
+ * 核心思想：数据安全，受控访问。
  */
-class User {
-    // 1. 私有化属性：像芯片数据一样锁起来，外部无法直接用 .获取
-    private String id;        // 工号 (绝对核心，不可修改)
-    private String name;      // 姓名 (允许修改，但需校验)
-    private String cardId;    // 门禁卡号 (允许换卡)
-    private boolean isActive; // 账户是否激活 (允许挂失/解挂)
+class DoorCard {
+    // 私有化属性：像芯片数据一样锁起来，外部无法直接用 . 来获取
+    private String serialNumber; // 卡片序列号 (硬件固化，绝对不可改)
+    private String ownerId;      // 持卡人工号 (写卡后不可随意更改)
+    private String ownerName;    // 持卡人姓名 (允许修改，但需校验)
+    private boolean active;      // 激活状态 (支持挂失/解挂)
 
-    // 2. 无参数构造方法：Java 编程习惯
-    public User() {}
+    // 无参数构造方法：Java 编程习惯
+    public DoorCard() {}
 
-    // 3. 全参数构造方法：发卡时一键初始化信息
-    public User(String id, String name, String cardId, boolean isActive) {
-        this.id = id;
-        this.name = name;
-        this.cardId = cardId;
-        this.isActive = isActive;
+    // 初始发卡：一键写入初始数据
+    public DoorCard(String serialNumber, String ownerId, String ownerName, boolean active) {
+        this.serialNumber = serialNumber;
+        this.ownerId = ownerId;
+        this.ownerName = ownerName;
+        this.active = active;
     }
 
-    // ================== 核心防线 ==================
-    // 4. 工号的 Getter：只提供“查看”窗口
-    public String getId() {
-        return id;
+    // 序列号：只有 Getter，没有 Setter (真正的硬件只读)
+    public String getSerialNumber() {
+        return serialNumber;
     }
-    // 【关键点】故意不提供 setId() 方法！
-    // 外部世界永远无法修改工号，实现了真正的“只读”保护。
-    // ==============================================
-
-    // 5. 姓名等其他属性的 Getter 和 Setter（对外提供的“安全读写接口”）
-    public String getName() {
-        return name;
+    // 工号：只有 Getter，没有 Setter (一旦绑定，禁止外部直接篡改)
+    public String getOwnerId() {
+        return ownerId;
     }
-
-    public void setName(String name) {
-        // 封装的最大好处：可以在修改数据时加入安全校验逻辑
-        if (name != null && !name.trim().isEmpty()) {
-            this.name = name;
+    // 姓名：提供 Setter，但加入“安检”逻辑
+    public String getOwnerName() {
+        return ownerName;
+    }
+    public void setOwnerName(String ownerName) {
+        if (ownerName != null && ownerName.length() >= 2) {
+            this.ownerName = ownerName;
         } else {
-            System.out.println("【警告】姓名不能为空，修改失败！");
+            System.out.println("【系统纠错】更名失败：姓名格式合法性校验未通过！");
         }
     }
-
-    public String getCardId() {
-        return cardId;
+    // 状态：标准的读写接口
+    public boolean isActive() {
+        return active;
     }
-
-    public void setCardId(String cardId) {
-        this.cardId = cardId;
-    }
-
-    public boolean isIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
 
@@ -659,46 +647,72 @@ public class Main {
 }
 ----
 
-=== 继承与多态 —— “父子关系”与“七十二变”
-**1. 知识点说明**
+=== 继承与多态 —— “父子卡片”与“读卡器逻辑”
+[upperalpha]
+. 知识点说明
+* **继承 (Inheritance)**：子类自动拥有父类的特征。所有卡片（学生卡、管理员卡）都有卡号，我们只需在父类定义一次。
+* **多态 (Polymorphism)**：同一种动作，不同的反应。读卡器只需要喊一声“校验”，不同身份的卡片会自动展示不同的权限。
 
-* **继承 (extends)**：子承父业。儿子自动学会父亲的本事，不用重写。
-* **多态**：同一个动作（命令），不同的对象表现出不同的结果。
-
-**2. 生活举例**
-老板喊一声“开工！”，程序员开始敲代码，厨师开始炒菜。同样的命令，不同职业反应不同。
-
-**3. 代码举例**
-
+. 代码举例
++
 [source,java]
 ----
-// 父类：动物
-class Animal {
-    void shout() {
-        System.out.println("动物发出叫声");
+// --- 1. 定义卡片体系 (继承) ---
+class AccessCard {
+    String cardId;
+
+    // 父类定义通用的权限检查标准
+    void validate() {
+        System.out.println("正在读取通用卡片...");
     }
 }
 
-// 子类：狗，继承动物
-class Dog extends Animal {
-    @Override // “重写”父亲的方法，改为狗的叫声
-    void shout() {
-        System.out.println("汪汪叫！");
-    }
-}
-
-// 子类：猫，继承动物
-class Cat extends Animal {
+class StudentCard extends AccessCard {
     @Override
-    void shout() {
-        System.out.println("喵喵叫！");
+    void validate() {
+        System.out.println("【学生卡】已确认：开启图书馆/教学楼权限。");
+    }
+}
+
+class AdminCard extends AccessCard {
+    @Override
+    void validate() {
+        System.out.println("【管理员卡】已确认：开启全校所有大门权限（含机房）。");
+    }
+}
+
+// --- 2. 读卡器服务类 (展示多态的精髓) ---
+class DoorReader {
+    /**
+     * 这里就是多态的精髓！
+     * 方法参数是父类 AccessCard，这意味着它能接收任何类型的子类卡片。
+     */
+    public void readCard(AccessCard card) {
+        System.out.print("读卡器感应中 -> ");
+        // 运行时 Java 会自动根据“卡片的真实身份”去调用对应的 validate()
+        card.validate(); 
+    }
+}
+
+// --- 3. 运行测试 ---
+public class Main {
+    public static void main(String[] args) {
+        DoorReader myReader = new DoorReader();
+
+        // 准备好不同的卡片（向上转型）
+        AccessCard sCard = new StudentCard();
+        AccessCard aCard = new AdminCard();
+
+        // 统一调用读卡器的同一个方法，产生不同的行为
+        myReader.readCard(sCard); // 输出学生权限
+        myReader.readCard(aCard); // 输出管理员权限
     }
 }
 ----
 
-[qanda]
-如何执行这个例子？ ::
-答：
+. 为什么这样设计？
+  * **解耦性**：`DoorReader` 硬件逻辑与具体的卡片类型解耦。它不需要知道什么是“学生卡”，它只认识“门禁卡”。
+  * **可扩展性**：如果增加“教师卡”或“访客卡”，只需新建子类继承 `AccessCard`，`DoorReader` 的代码一行都不用改。
 
 === 接口设计 —— “万能插座标准”
 **1. 知识点说明**
@@ -1011,90 +1025,161 @@ public void swipeCard(String cardId) throws DoorSystemException {
 
 * 让学生写一个除法运算器，输入 10 / 0。观察程序崩溃的样子，然后教他们用 try-catch 捕获 ArithmeticException 并输出“分母不能为 0”。这种立竿见影的效果最能激发学习兴趣。
 
-== 集合框架 (4学时)
-* *核心知识点*：Collection 与 Map 接口、List (ArrayList/LinkedList)、Set (HashSet/TreeSet)、Map (HashMap/TreeMap)。
-* *教学要求*：理解不同数据结构的特性，并能根据需求选择合适的集合。
-* *本节要求*：学会用 `ArrayList` 和 `HashMap` 来管理成千上万个用户信息。
+== 集合框架（4学时）
 
-=== ArrayList —— “自动伸缩的排队队伍”
-知识点说明
 
-* 传统的数组（Array）容量是死的，开辟了 10 个位子就只能坐 10 个人。
+=== ArrayList —— 封装门禁白名单
+[upperalpha]
+. **知识点说明**
+* 传统的数组容量是固定的，开辟了 10 个位子就只能坐 10 个人。
+* **ArrayList**：像一个会变魔术的排队队伍。人多它就变长，人少它就缩短，非常适合存储不确定数量的门禁卡信息 。
+* **泛型 `<AccessCard>`**：这就像给盒子贴标签，告诉 Java 这个集合只能装“门禁卡”，装入其他类型（如字符串）编译器会直接报错。
 
-* **ArrayList**：像一个会变魔术的排队队伍。人多它就变长，人少它就缩短。
-
-==== class ListDemo 代码举例（存储一堆用户）
+. 代码举例：模拟早高峰批量刷卡进校
++
 [source,java]
 ----
 import java.util.ArrayList;
 
-public class ListDemo {
+/**
+ * 门禁管理系统：负责维护白名单和调度硬件
+ */
+class AccessControlSystem {
+    // 将名单封装在类内部，设置为 private 确保安全
+    private ArrayList<AccessCard> whitelist = new ArrayList<>();
+    private DoorReader reader = new DoorReader();
+
+    // 提供标准的方法来注册新卡片
+    public void registerCard(AccessCard card) {
+        whitelist.add(card);
+        System.out.println("系统消息：新卡片已录入白名单。");
+    }
+
+    // 执行系统自检：模拟所有人依次进校
+    public void executeMorningCheck() {
+        System.out.println("\n=== 门禁系统：早高峰自动校验程序启动 ===");
+        if (whitelist.isEmpty()) {
+            System.out.println("警告：白名单为空，系统拒绝所有访问。");
+            return;
+        }
+        for (AccessCard card : whitelist) {
+            reader.readCard(card);
+        }
+    }
+}
+// --- 运行测试 ---
+public class Main {
     public static void main(String[] args) {
-        // 1. 创建一个专门装 User 的集合
-        ArrayList<User> userList = new ArrayList<>();
+        // 1. 初始化管理系统
+        AccessControlSystem system = new AccessControlSystem();
 
-        // 2. 添加用户
-        userList.add(new User("001", "张三", "A123", true));
-        userList.add(new User("002", "李四", "B456", true));
+        // 2. 录入授权卡片（此时 main 不再直接操作 ArrayList）
+        system.registerCard(new StudentCard());
+        system.registerCard(new AdminCard());
+        system.registerCard(new StudentCard());
 
-        // 3. 看看现在有多少人
-        System.out.println("当前用户总数：" + userList.size());
-
-        // 4. 拿走第一个人的信息
-        User firstUser = userList.get(0);
-        System.out.println("第一位用户是：" + firstUser.getName());
+        // 3. 启动业务逻辑
+        system.executeMorningCheck();
     }
 }
 ----
 
-=== HashMap —— “宿舍号对应学生”
+.ArrayList 的核心操作小结
+[cols="1,3"]
+|===
+| 操作方法 | 作用说明
+
+| `add(E e)` | 向名单末尾添加一张新卡。
+| `size()` | 返回当前名单中卡片的总数。
+| `get(int index)` | 根据索引位置获取指定的卡片。
+| `remove(int index)` | 从名单中注销并移除某张卡片。
+|===
+
+TIP: **选择理由**：如果只是想按顺序存储并遍历名单，使用 `ArrayList` 是效率最高且最简单直观的选择 。
+
+=== HashMap —— “瞬间定位的电子名册”
 [upperalpha]
 . 知识点说明
-    * 如果要在 1 万个人里找“张三”，`ArrayList` 要从头翻到尾（很累）。
-    * **HashMap**：就像宿舍管理员的登记表。左边是**房号(Key)**，右边是**学生(Value)**。你只要报出房号，立刻就能找到人。
+* 键值对 (Key-Value)：`HashMap` 存储的是成对的信息。
+  ** **Key (键)**：卡号（唯一且不重复）。
+  ** **Value (值)**：对应的卡片对象（包含姓名、权限等）。
+* 检索效率：它不是按顺序找，而是通过哈希算法“瞬间抵达”。无论名单里有 10 个人还是 10 万个人，查找速度几乎是一样的。
 
-. 生活举例
-    * 门禁系统：**卡号** -> **用户信息**。
-    * 只要刷一下卡，系统瞬间从万千数据中定位到你。
 
-==== MapDemo 代码举例（快速查找用户）
+. 代码重构：利用 HashMap 升级管理系统
++
 [source,java]
 ----
 import java.util.HashMap;
 
-public class MapDemo {
-    public static void main(String[] args) {
-        // K=卡号(String), V=用户信息(User)
-        HashMap<String, User> userMap = new HashMap<>();
+/**
+ * 门禁管理系统（高性能版）
+ */
+class AccessControlSystem {
+    // 使用 HashMap 存储，Key 是卡号(String)，Value 是卡片对象(AccessCard)
+    private HashMap<String, AccessCard> whitelistMap = new HashMap<>();
+    private DoorReader reader = new DoorReader();
 
-        // 1. 存入数据
-        User u1 = new User("001", "张三", "CARD_888", true);
-        userMap.put(u1.getCardId(), u1);
+    // 录入新卡片：关联卡号与对象
+    public void registerCard(String cardId, AccessCard card) {
+        whitelistMap.put(cardId, card);
+        System.out.println("系统消息：卡号 [" + cardId + "] 授权成功。");
+    }
 
-        // 2. 模拟刷卡：输入卡号，瞬间找人
-        String inputId = "CARD_888";
-        if (userMap.containsKey(inputId)) {
-            User found = userMap.get(inputId);
-            System.out.println("刷卡成功！欢迎 " + found.getName());
+    // 模拟真实刷卡：根据输入的卡号瞬间检索
+    public void onSwipe(String inputId) {
+        System.out.println("\n--- 读卡器感应中，卡号：" + inputId + " ---");
+        
+        // 瞬间判断卡号是否存在
+        if (whitelistMap.containsKey(inputId)) {
+            AccessCard card = whitelistMap.get(inputId); // 毫秒级提取
+            reader.readCard(card);
         } else {
-            System.out.println("查无此卡！");
+            System.out.println("【警告】校验失败：此卡未在系统注册！");
         }
+    }
+}
+// --- 运行测试 ---
+public class Main {
+    public static void main(String[] args) {
+        AccessControlSystem system = new AccessControlSystem();
+
+        // 1. 系统初始化（录入数据）
+        system.registerCard("CARD_001", new StudentCard());
+        system.registerCard("ADMIN_999", new AdminCard());
+
+        // 2. 模拟真实刷卡场景
+        system.onSwipe("CARD_001");   // 合法学生卡
+        system.onSwipe("ADMIN_999");  // 合法管理员卡
+        system.onSwipe("UNKNOWN_666");// 非法卡片
     }
 }
 ----
 
-=== 小结
+.架构思考：ArrayList 与 HashMap 的协同
+[TIP]
+====
+在门禁系统中，我们通常会同时使用两者 ：
+* **ArrayList**：用于“批量展示”或“导出”所有名单 。
+* **HashMap**：用于“刷卡瞬间”的极速比对校验 。
+====
+
+=== 使用小结
 [upperalpha]
-. **关于泛型 `< >`**：
-  * 这就像“贴标签”。
-  * `ArrayList<User>` 就是告诉 Java，这个盒子里只能装 `User` 类型的货，装个苹果或者字符串，编译器会直接报错拦住。
+. 泛型 < > 的“保安”作用
++
+无论是 ArrayList<AccessCard> 还是 HashMap<String, AccessCard>，尖括号里的内容就是类型限制：
 
-. **ArrayList vs HashMap 的选择**：
-  * 如果只是想**按顺序存**，用 `ArrayList`；
-  * 如果想根据某个东西（比如卡号、工号）快速找人，必须用 `HashMap`。
+* 强制约束：告诉 Java “这个容器只能装门禁卡”。
+* 安全防范：如果你不小心把“一张照片”存进去，编译器会立刻报错。这保证了程序运行到“刷卡逻辑”时，拿出来的绝对是“卡片”，不会导致系统崩溃。
 
-. **避开复杂原理**：
-  * 这个阶段，先**不要**讲 HashMap 的哈希碰撞、红黑树、负载因子。只需要知道 `put`（存）和 `get`（取）就行。
+
+. 开发实战建议：协同作战
++
+在真实的门禁管理类中，我们通常双管齐下：
+
+* 用 ArrayList 存储原始数据：当你需要导出所有名单、或者按录入顺序查看最近注册的用户时，它是最佳选择。
+* 用 HashMap 建立检索索引：当硬件读取到卡号，需要 0.01 秒判定是否开门时，必须调取 HashMap。
 
 == IO 流技术 (6学时)
 * *核心知识点*：File 类、字节流与字符流、缓冲流、转换流、序列化（对象流）、随机存取文件。
@@ -1306,44 +1391,7 @@ public void loadUsers() throws DoorSystemException {
 4.  **挂断电话 (关闭资源)**：干完活必须挂电话，否则仓库线路会被占满。
 
 === 代码实现：查询用户信息
-[source,java]
-----
-import java.sql.*;
-
-public class JDBCDemo {
-    // 数据库连接信息（假设是 MySQL）
-    private static final String URL = "jdbc:mysql://localhost:3306/door_db";
-    private static final String USER = "root";
-    private static final String PASS = "123456";
-
-    public void findUserByCard(String cardId) throws DoorSystemException {
-        // SQL 语句：去 users 表里找卡号对应的姓名
-        String sql = "SELECT name FROM users WHERE card_id = ?";
-
-        // 使用 try-with-resources，自动关闭连接，防止“占线”
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            // 设置参数
-            pstmt.setString(1, cardId);
-
-            // 执行查询
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                String name = rs.getString("name");
-                System.out.println("数据库查询成功！该卡所属用户为：" + name);
-            } else {
-                // 找不到时，抛出我们统一定义的异常
-                throw new DoorSystemException("数据库中未找到卡号为 " + cardId + " 的用户");
-            }
-        } catch (SQLException e) {
-            // 将底层的 SQL 错误包装成我们的门禁系统错误
-            throw new DoorSystemException("数据库连接失败：" + e.getMessage());
-        }
-    }
-}
-----
+我们将之前定义的 `User` 对象和 `DoorSystemException` 结合进来。
 
 === 防止 SQL 注入 —— “拒绝陌生人的小纸条”
 . 知识点说明
@@ -1383,43 +1431,32 @@ public class JDBCDemo {
 * *本节要求*：理解“分身术”的原理，让程序能同时干多件事；了解反射这一“透视眼”技术。
 
 === 多线程 —— “程序的分身术”
-// 1. 定义一个自检任务
-class HealthCheckThread extends Thread {
-    public void run() {
-        while (true) {
-            System.out.println("系统自检中：硬件状态正常...");
-            try { Thread.sleep(5000); } catch (InterruptedException e) {}
-        }
-    }
-}
+[upperalpha]
+. 知识点说明
+* **进程**：像是一个工厂（比如整个门禁系统）。
+* **线程**：像是工厂里的工人。一个工厂可以有很多工人同时干活。
+* **为什么要学？**：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。
 
-public class MultiThreadDemo {
-    public static void main(String[] args) {
-        // 2. 启动自检“分身”
-        HealthCheckThread check = new HealthCheckThread();
-        check.start(); 
 
-        // 3. 主线程继续处理刷卡
-        System.out.println("主系统：准备就绪，请刷卡...");
-    }
-}
+. 生活举例
++
+你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。
+
+
+. 代码实现：模拟门禁自检与刷卡同时进行
++
+[source,java]
 ----
 
 === 反射机制 —— “程序的 X 光机”
-public class ReflectionDemo {
-    public static void main(String[] args) throws Exception {
-        // 通过类名，直接“抓取”这个类的结构
-        Class clazz = Class.forName("User");
+知识点说明
 
-        System.out.println("类的名字是：" + clazz.getName());
+* **反射 (Reflection)**：平时我们用类，是先看到图纸再造房子。反射则是房子已经在那了，我们拿个“X光机”去扫，看看它里面有什么属性和方法。
+* **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
 
-        // 获取所有定义的属性名字
-        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
-        for (var f : fields) {
-            System.out.println("发现属性：" + f.getName());
-        }
-    }
-}
+
+.代码举例（看看 User 类里有什么）
+[source,java]
 ----
 
 === 小结
