@@ -635,8 +635,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="title">MyDemo.java 查看程序运行结果</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @edit code/testBasicSyntax/src/EnvironmentDemo.java</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">MyDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">EnvironmentDemo</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">EnvironmentDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;========= 环境测试 =========&quot;</span><span class="tok-p">);</span>
 
 <span class="tok-w">        </span><span class="tok-c1">// 验证运行操作系统（如果是 Linux，说明 Podman 成功了）</span>
@@ -1146,66 +1146,65 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 <ol class="upperalpha" type="A">
 <li>
 <p>External Tool 参数设置</p>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">请在 IDEA 的 <code>Settings</code> &#8594; <code>Tools</code> &#8594; <code>External Tools</code> 中添加以下配置：</caption>
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">配置项</th>
-<th class="tableblock halign-left valign-top">填写内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Name</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Run in Podman (Auto)</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Program</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>podman</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>run --rm -i -v $FileDir$:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java &amp;&amp; java $FileNameWithoutExtension$"</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Working directory</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$FileDir$</code></p></td>
-</tr>
-</tbody>
-</table>
 <div class="paragraph">
-<p>命令详解</p>
+<p>请在 IDEA 的 <code>Settings</code> &#8594; <code>Tools</code> &#8594; <code>External Tools</code> 中添加以下配置：</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>Program: podman</p>
+</li>
+<li>
+<p>Arguments:
+run --rm -i -v "$SourcepathEntry$":/src -w /src -e DIR="$FileDirRelativeToSourcepath$" -e NAME="$FileNameWithoutExtension$" -e FILE="$FileName$" eclipse-temurin:17-jdk bash -c "if [ x${DIR} = x ] || [ x${DIR} = x. ]; then SRC=${FILE}; FQCN=${NAME}; else SRC=${DIR}/${FILE}; S=/; P=.; FQCN=${DIR//${S}/${P}}.${NAME}; fi; mkdir -p /tmp/out &amp;&amp; javac -d /tmp/out -sourcepath . ${SRC} &amp;&amp; java -cp /tmp/out ${FQCN}"</p>
+</li>
+<li>
+<p>Working directory: $SourcepathEntry$</p>
+<div class="imageblock">
+<div class="content">
+<img src="img/external_tools_run_in_podman.png" alt="external tools run in podman" width="640">
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Arguments 命令详解:</p>
 <div class="ulist">
 <ul>
 <li>
 <p><code>run --rm</code>: 容器运行结束即销毁，保持系统整洁。</p>
 </li>
 <li>
-<p><code>-i</code> 参数，如果程序需要 Scanner 输入数据，控制台也能支持交互。</p>
+<p><code>-i</code>: 支持交互模式，如果程序中使用 <code>Scanner</code> 等读取输入，控制台可正常交互。</p>
 </li>
 <li>
-<p><code>-v $FileDir$:/src</code>: 将 IDEA 当前打开文件所在的目录映射到容器 <code>/src</code>。</p>
+<p><code>-v "$SourcepathEntry$":/src</code>: <strong>核心逻辑</strong>。将 IDEA 的源码根目录映射到容器 <code>/src</code>，确保 <code>javac</code> 能根据包名（Package）正确索引依赖类。</p>
 </li>
 <li>
-<p><code>-w /src</code>: 指定容器内的工作目录，确保 <code>javac</code> 能找到源码。</p>
+<p><code>-w /src</code>: 设置容器工作目录为源码根目录。</p>
 </li>
 <li>
-<p><code>sh -c</code>: 启动容器内的 Shell 以支持 <code>&amp;&amp;</code> 逻辑。</p>
+<p><code>-e DIR/NAME/FILE</code>: 通过环境变量将 IDEA 宏（相对路径、文件名、无后缀名）传入容器，供后续 Shell 脚本调用。</p>
 </li>
 <li>
-<p><code>javac *.java</code>: <strong>万能编译</strong>，自动处理目录下所有 Java 类的依赖。</p>
+<p><code>bash -c "&#8230;&#8203;"</code>: 在容器内启动 Bash 解释器以执行复杂的条件判断逻辑：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>包路径自动化</strong>: 脚本会自动检测 <code>DIR</code> 是否为空。若不为空，则利用 <code>${DIR//${S}/${P}}</code> 语法将路径分隔符 <code>/</code> 替换为 <code>.</code>，从而动态构建出正确的<strong>全限定类名 (FQCN)</strong>。</p>
 </li>
 <li>
-<p><code>java $FileNameWithoutExtension$</code>: 动态获取当前文件名（不含后缀）并运行。</p>
-<div class="imageblock">
-<div class="content">
-<img src="img/external_tools_run_in_podman.png" alt="external tools run in podman" width="640">
-</div>
+<p><strong>编译隔离</strong>: <code>mkdir -p /tmp/out</code> 在容器内存中创建临时目录。</p>
+</li>
+<li>
+<p><strong>精准编译</strong>: <code>javac -d /tmp/out</code> 将编译产物输出到临时目录，避免在宿主机源码文件夹下生成 <code>.class</code> 文件，保持代码目录纯净。</p>
+</li>
+<li>
+<p><strong>动态运行</strong>: <code>java -cp /tmp/out ${FQCN}</code> 自动指向编译输出目录并运行生成的类。</p>
+</li>
+</ul>
 </div>
 </li>
 </ul>
@@ -1236,8 +1235,8 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 <div class="title">查看程序运行结果，即可验证是否在 podman 中运行成功。</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @edit code/testBasicSyntax/src/EnvironmentDemo.java</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">MyDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">EnvironmentDemo</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">EnvironmentDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;========= 环境测试 =========&quot;</span><span class="tok-p">);</span>
 
 <span class="tok-w">        </span><span class="tok-c1">// 验证运行操作系统（如果是 Linux，说明 Podman 成功了）</span>
@@ -1270,7 +1269,7 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 当前运行操作系统: Linux
 当前 JDK 版本: 17.0.18
 当前容器用户: root
-✅ 成功！代码正在 Podman 容器内运行。
+成功！代码正在 Podman 容器内运行。
 ==================================</pre>
 </div>
 </div>
@@ -1596,7 +1595,7 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-04 11:35:00 +0800
+Last updated 2026-03-05 18:10:50 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

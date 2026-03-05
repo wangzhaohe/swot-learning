@@ -1008,7 +1008,7 @@ public class InterfaceDemo {
 
 * 安全性：通过接口，我们从代码层面限制了“只有该付钱的卡才能付钱”，避免了管理员误刷卡消费的逻辑错误。
 
-=== 包管理与访问权限 —— “大楼的房间划分与门锁”
+=== 包管理 —— “大楼的房间划分”
 [upperalpha]
 . 为什么要学？
 +
@@ -1020,7 +1020,7 @@ public class InterfaceDemo {
 
 . 项目结构标准划分（包管理）
 +
-在企业级开发中，通常按照功能来建包（推荐使用倒置域名命名法）。为了让门禁系统看起来像一个真正的工程，咱们的目录应该长这样：
+在企业级开发中，通常按照功能来建包（推荐使用倒置域名命名法）。为了让门禁系统看起来像一个真正的工程，目录应该长这样：
 +
 ----
 src/
@@ -1031,6 +1031,22 @@ src/
 ----
 
 
+. 小结
+* **规范第一**：从今天起，告别“默认包（Default Package）”。写任何类之前，先建好 `package`。
+
+
+.IDEA External Tools 让 podman 运行 java 代码
+****
+* Program:
+podman
+* Arguments:
+run --rm -i -v "$SourcepathEntry$":/src -w /src -e DIR="$FileDirRelativeToSourcepath$" -e NAME="$FileNameWithoutExtension$" -e FILE="$FileName$" eclipse-temurin:17-jdk bash -c "if [ x${DIR} = x ] || [ x${DIR} = x. ]; then SRC=${FILE}; FQCN=${NAME}; else SRC=${DIR}/${FILE}; S=/; P=.; FQCN=${DIR//${S}/${P}}.${NAME}; fi; mkdir -p /tmp/out && javac -d /tmp/out -sourcepath . ${SRC} && java -cp /tmp/out ${FQCN}"
+* Working directory:
+$SourcepathEntry$
+****
+
+=== 访问权限 —— “房间门锁”
+[upperalpha]
 . 访问权限（门锁的级别）
 +
 Java 中有四种权限，初学阶段不需要死记硬背，只要牢记最极端的两个即可：
@@ -1066,7 +1082,6 @@ public class Main {
 
 
 . 小结
-* **规范第一**：从今天起，告别“默认包（Default Package）”。写任何类之前，先建好 `package`。
 * **权限铁律**：提供给别人调用的类和方法，尽量用 `public`；自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
 
 === 面向对象基础小结

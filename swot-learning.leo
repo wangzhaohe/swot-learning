@@ -258,7 +258,8 @@
 <v t="swot.20260304222616.1"><vh>BB class CanteenReader 食堂刷卡机</vh></v>
 </v>
 </v>
-<v t="swot.20260303164345.1"><vh>包管理与访问权限 —— “大楼的房间划分与门锁”</vh></v>
+<v t="swot.20260303164345.1"><vh>包管理 —— “大楼的房间划分” -&gt; 属于架构上的设计</vh></v>
+<v t="swot.20260305112121.1"><vh>访问权限 —— “房间门锁”</vh></v>
 <v t="swot.20260216074225.1"><vh>面向对象基础小结</vh></v>
 </v>
 <v t="swot.20260215212244.1"><vh>常用工具类 (4学时)</vh>
@@ -1211,6 +1212,7 @@
 <v t="swot.20260305091955.1"><vh>leo-editor body 编辑时，执行 ctrl+z 光标位置会跳到可见范围最底下的一行 bug</vh></v>
 <v t="swot.20260305092401.1"><vh>leo-editor body 编辑时，执行 ctrl + shift + z 光标位置会重置到第一行的 bug</vh></v>
 </v>
+<v t="swot.20260305093354.1"><vh>@adoc 下的 @file 不能保存问题</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -17024,28 +17026,26 @@ IMPORTANT: 一定一定记得要重启 Windows 操作系统！！！
 <t tx="swot.20260302135453.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032362d30332d30327103752e">[upperalpha]
 . External Tool 参数设置
 +
-.请在 IDEA 的 `Settings` -&gt; `Tools` -&gt; `External Tools` 中添加以下配置：
-[caption=]
-[cols="1,3", options="header"]
-|===
-| 配置项 | 填写内容
-| **Name** | `Run in Podman (Auto)`
-| **Program** | `podman`
-| **Arguments** | `run --rm -i -v $FileDir$:/src -w /src eclipse-temurin:17-jdk sh -c "javac *.java &amp;&amp; java $FileNameWithoutExtension$"`
-| **Working directory** | `$FileDir$`
-|===
-+
-命令详解
+请在 IDEA 的 `Settings` -&gt; `Tools` -&gt; `External Tools` 中添加以下配置：
 
-* `run --rm`: 容器运行结束即销毁，保持系统整洁。
-* `-i` 参数，如果程序需要 Scanner 输入数据，控制台也能支持交互。
-* `-v $FileDir$:/src`: 将 IDEA 当前打开文件所在的目录映射到容器 `/src`。
-* `-w /src`: 指定容器内的工作目录，确保 `javac` 能找到源码。
-* `sh -c`: 启动容器内的 Shell 以支持 `&amp;&amp;` 逻辑。
-* `javac *.java`: **万能编译**，自动处理目录下所有 Java 类的依赖。
-* `java $FileNameWithoutExtension$`: 动态获取当前文件名（不含后缀）并运行。
+* Program: podman 
+* Arguments:
+run --rm -i -v "$SourcepathEntry$":/src -w /src -e DIR="$FileDirRelativeToSourcepath$" -e NAME="$FileNameWithoutExtension$" -e FILE="$FileName$" eclipse-temurin:17-jdk bash -c "if [ x${DIR} = x ] || [ x${DIR} = x. ]; then SRC=${FILE}; FQCN=${NAME}; else SRC=${DIR}/${FILE}; S=/; P=.; FQCN=${DIR//${S}/${P}}.${NAME}; fi; mkdir -p /tmp/out &amp;&amp; javac -d /tmp/out -sourcepath . ${SRC} &amp;&amp; java -cp /tmp/out ${FQCN}"
+* Working directory: $SourcepathEntry$
 +
 image::img/external_tools_run_in_podman.png[,640,]
+
+. Arguments 命令详解:
+* `run --rm`: 容器运行结束即销毁，保持系统整洁。
+* `-i`: 支持交互模式，如果程序中使用 `Scanner` 等读取输入，控制台可正常交互。
+* `-v "$SourcepathEntry$":/src`: **核心逻辑**。将 IDEA 的源码根目录映射到容器 `/src`，确保 `javac` 能根据包名（Package）正确索引依赖类。
+* `-w /src`: 设置容器工作目录为源码根目录。
+* `-e DIR/NAME/FILE`: 通过环境变量将 IDEA 宏（相对路径、文件名、无后缀名）传入容器，供后续 Shell 脚本调用。
+* `bash -c "..."`: 在容器内启动 Bash 解释器以执行复杂的条件判断逻辑：
+** **包路径自动化**: 脚本会自动检测 `DIR` 是否为空。若不为空，则利用 `${DIR//${S}/${P}}` 语法将路径分隔符 `/` 替换为 `.`，从而动态构建出正确的**全限定类名 (FQCN)**。
+** **编译隔离**: `mkdir -p /tmp/out` 在容器内存中创建临时目录。
+** **精准编译**: `javac -d /tmp/out` 将编译产物输出到临时目录，避免在宿主机源码文件夹下生成 `.class` 文件，保持代码目录纯净。
+** **动态运行**: `java -cp /tmp/out ${FQCN}` 自动指向编译输出目录并运行生成的类。
 
 . 快捷键绑定 (Keymap)
 +
@@ -17069,7 +17069,7 @@ image::img/external_tools_run_in_podman.png[,640,]
 当前运行操作系统: Linux
 当前 JDK 版本: 17.0.18
 当前容器用户: root
-✅ 成功！代码正在 Podman 容器内运行。
+成功！代码正在 Podman 容器内运行。
 ==================================
 ....
 
@@ -17453,7 +17453,7 @@ podman-machine-default*  wsl         8 minutes ago  Currently running  8        
 
 . 项目结构标准划分（包管理）
 +
-在企业级开发中，通常按照功能来建包（推荐使用倒置域名命名法）。为了让门禁系统看起来像一个真正的工程，咱们的目录应该长这样：
+在企业级开发中，通常按照功能来建包（推荐使用倒置域名命名法）。为了让门禁系统看起来像一个真正的工程，目录应该长这样：
 +
 ----
 src/
@@ -17464,43 +17464,8 @@ src/
 ----
 
 
-. 访问权限（门锁的级别）
-+
-Java 中有四种权限，初学阶段不需要死记硬背，只要牢记最极端的两个即可：
-+
-[cols="1,1,3", options="header"]
-|===
-| 权限修饰符 | 生活比喻 | 作用范围
-| **public** (公共) | 随便进的“大厅” | 任何包、任何类都可以直接访问和调用。
-| **private** (私有) | 锁死的“保险柜” | 只有**当前类自己**的内部才能访问，外部绝对进不来。（所以实体类的属性必须是 private！）
-|===
-+
-*(注：还有 `protected` 和默认权限，它们主要与同包或子类有关，后续学框架时再深究。)*
-
-
-. 代码举例（跨房间叫人：import）
-+
-当你把类分到不同的包里后，如果 `Main` 程序想要用到另一个包里的 `User` 类，就必须使用 `import` 来指明路径（就像告诉 Java 去哪个房间找人）。
-+
-[source,java]
-----
-package com.swot.door.main; // 1. 声明自己所在的包（必须在文件的第一行）
-
-import com.swot.door.entity.User; // 2. 导入其他包里的类（跨房间叫人）
-
-public class Main {
-    public static void main(String[] args) {
-        // 只有 import 了，这里才能认识 User 类，否则编译器会报错找不到类
-        User u1 = new User("001", "张三", "A123", true); 
-        System.out.println("用户创建成功：" + u1.getName());
-    }
-}
-----
-
-
 . 小结
 * **规范第一**：从今天起，告别“默认包（Default Package）”。写任何类之前，先建好 `package`。
-* **权限铁律**：提供给别人调用的类和方法，尽量用 `public`；自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
 </t>
 <t tx="swot.20260303233432.1"></t>
 <t tx="swot.20260303233729.1">[upperalpha]
@@ -17803,7 +17768,7 @@ class DoorCard {
     }
 }
 </t>
-<t tx="swot.20260304145656.1" _mod_time="4741da6a36872187892e">@language java
+<t tx="swot.20260304145656.1" _mod_time="4741da6a3a6c053bec2e">@language java
 @others
 // code/testBasicSyntax/src/DoorCardDemo.java
 public class DoorCardDemo {
@@ -18173,5 +18138,44 @@ y
 z
 </t>
 <t tx="swot.20260305092636.1"></t>
+<t tx="swot.20260305093354.1"></t>
+<t tx="swot.20260305112121.1">[upperalpha]
+. 访问权限（门锁的级别）
++
+Java 中有四种权限，初学阶段不需要死记硬背，只要牢记最极端的两个即可：
++
+[cols="1,1,3", options="header"]
+|===
+| 权限修饰符 | 生活比喻 | 作用范围
+| **public** (公共) | 随便进的“大厅” | 任何包、任何类都可以直接访问和调用。
+| **private** (私有) | 锁死的“保险柜” | 只有**当前类自己**的内部才能访问，外部绝对进不来。（所以实体类的属性必须是 private！）
+|===
++
+*(注：还有 `protected` 和默认权限，它们主要与同包或子类有关，后续学框架时再深究。)*
+
+
+. 代码举例（跨房间叫人：import）
++
+当你把类分到不同的包里后，如果 `Main` 程序想要用到另一个包里的 `User` 类，就必须使用 `import` 来指明路径（就像告诉 Java 去哪个房间找人）。
++
+[source,java]
+----
+package com.swot.door.main; // 1. 声明自己所在的包（必须在文件的第一行）
+
+import com.swot.door.entity.User; // 2. 导入其他包里的类（跨房间叫人）
+
+public class Main {
+    public static void main(String[] args) {
+        // 只有 import 了，这里才能认识 User 类，否则编译器会报错找不到类
+        User u1 = new User("001", "张三", "A123", true); 
+        System.out.println("用户创建成功：" + u1.getName());
+    }
+}
+----
+
+
+. 小结
+* **权限铁律**：提供给别人调用的类和方法，尽量用 `public`；自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
+</t>
 </tnodes>
 </leo_file>
