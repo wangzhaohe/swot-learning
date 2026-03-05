@@ -2236,23 +2236,57 @@ hd;;=hdfs dfs
 </t>
 <t tx="swot.20241016234556.1">dir;;=
 \:++++
-\:&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
-\:&lt;script&gt;
-\:    // 获取按钮和 div 元素
-\:    const toggleButton = document.getElementById('toggleButton');
-\:    const contentDiv = document.getElementById('toc');
-\:    contentDiv.style.display = 'block';
+\:&lt;style&gt;
+\:/* 1. 默认状态：顺应你原本的展开状态 */
+\:#toc {
+\:    min-width: 0 !important;
+\:    max-height: 100vh;
+\:    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+\:    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+\:    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
 \:
-\:    // 添加点击事件监听器
-\:    toggleButton.addEventListener('click', () =&gt; {
-\:        // 切换 div 的显示状态
-\:        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-\:        if (contentDiv.style.display === 'none') {
-\:            contentDiv.style.display = 'block';
-\:        } else {
-\:            contentDiv.style.display = 'none';
-\:        }
-\:    });
+\:    white-space: nowrap !important;
+\:    max-width: 530px;
+\:    opacity: 1;
+\:
+\:    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+\:                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+\:                opacity 0.3s ease;
+\:}
+\:
+\:/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+\:#toc.collapsed {
+\:    max-width: 0 !important; /* 宽度强制缩到 0 */
+\:    opacity: 0 !important; /* 透明度消失 */
+\:
+\:    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+\:    padding-left: 0 !important;
+\:    padding-right: 0 !important;
+\:    border-left: none !important;
+\:    border-right: none !important;
+\:}
+\:
+\:/* 3. 修复行间距（保留你需要的紧凑排版） */
+\:#toc ul, #toc li {
+\:    margin-top: 0 !important;
+\:    margin-bottom: 8px !important;
+\:    line-height: 1.4 !important;
+\:    padding-top: 0 !important;
+\:    padding-bottom: 0 !important;
+\:}
+\:&lt;/style&gt;
+\:
+\:&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+\:
+\:&lt;script&gt;
+\:const toggleButton = document.getElementById('toggleButton');
+\:const contentDiv = document.getElementById('toc');
+\:
+\:// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+\:// 默认没有任何类名，所以默认是自然展开的。
+\:toggleButton.addEventListener('click', () =&gt; {
+\:    contentDiv.classList.toggle('collapsed');
+\:});
 \:&lt;/script&gt;
 \:++++
 \:
