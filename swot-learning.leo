@@ -18211,7 +18211,8 @@ public class Main {
 
 
 . 小结
-* **权限铁律**：提供给别人调用的类和方法，尽量用 `public`；自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
+* **权限铁律**：提供给别人调用的类和方法，尽量用 `public`；
+* 自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
 </t>
 </tnodes>
 </leo_file>
