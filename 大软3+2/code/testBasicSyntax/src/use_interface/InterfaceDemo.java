@@ -1,4 +1,4 @@
-// @clean code/testBasicSyntax/src/use_interface/InterfaceDemo.java
+// code/testBasicSyntax/src/use_interface/InterfaceDemo.java
 package use_interface;
 
 /**
@@ -101,7 +101,7 @@ public class InterfaceDemo {
         canteen.processPayment(studentCard, 15.0);
 
         // 2. 管理员卡没实现 Payable，下面这行代码在编译时就会报错
-         canteen.processPayment(adminCard, 20.0); // 编译不通过：张老师的卡不能在食堂付钱
+        // canteen.processPayment(adminCard, 20.0); // 编译不通过：张老师的卡不能在食堂付钱
     }
 }
 

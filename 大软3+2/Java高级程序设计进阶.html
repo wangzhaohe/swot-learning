@@ -586,7 +586,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_面向对象基础_4学时">面向对象基础 (4学时)</a>
 <ul class="sectlevel2">
 <li><a href="#_类与对象_设计图纸与门禁实物">类与对象 —— “设计图纸”与“门禁实物”</a></li>
-<li><a href="#_static_关键字_门禁系统的全局广播站">static 关键字 —— “门禁系统的全局广播站”</a></li>
+<li><a href="#_static_关键字_门禁系统的全局可访问属性">static 关键字 —— “门禁系统的全局可访问属性”</a></li>
 <li><a href="#_封装_门禁卡的智能芯片">封装 —— “门禁卡的智能芯片”</a></li>
 <li><a href="#_继承与多态_父子卡片与读卡器逻辑">继承与多态 —— “父子卡片”与“读卡器逻辑”</a></li>
 <li><a href="#_抽象类_禁止基础门卡类创建新卡对象因为没有这种卡">抽象类 --- 禁止基础门卡类创建新卡对象（因为没有这种卡）</a></li>
@@ -1662,7 +1662,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
-<span class="tok-c1">// @clean code/testBasicSyntax/src/DoorMachineDemo.java</span>
+<span class="tok-c1">// code/testBasicSyntax/src/DoorMachineDemo.java</span>
 <span class="tok-c1">// 使用类（安装并使用具体的门禁机）</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DoorMachineDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -1689,12 +1689,24 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_static_关键字_门禁系统的全局广播站">static 关键字 —— “门禁系统的全局广播站”</h3>
+<h3 id="_static_关键字_门禁系统的全局可访问属性">static 关键字 —— “门禁系统的全局可访问属性”</h3>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
-<p>为什么要学？
-在写面向对象代码时，最容易让人崩溃的就是：为什么我不能直接在 <code>main</code> 方法里调用我自己写的另一个方法？为什么必须要 <code>new</code> 一个对象出来？这就涉及到 <code>static</code>（静态）的本质。</p>
+<p>为什么要学？</p>
+<div class="ulist">
+<ul>
+<li>
+<p>在写面向对象代码时，最容易让人崩溃的就是：为什么我不能直接调用一个类里的普通属性或者方法？</p>
+</li>
+<li>
+<p>为什么必须要 <code>new</code> 一个对象出来再调用？</p>
+</li>
+<li>
+<p>这就涉及到 <code>static</code>（静态）的本质。</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p>知识点说明</p>
@@ -1719,7 +1731,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-w">    </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">model</span><span class="tok-p">;</span><span class="tok-w">     </span><span class="tok-c1">// 属性：机器型号</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// 静态变量：属于整个安保系统共享（全局统计）</span>
-<span class="tok-w">    </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">totalSwipes</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">totalSwipes</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// new added</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// 构造方法：出厂时设置安装位置</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">DoorMachineV02</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">loc</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -1732,7 +1744,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-w">        </span><span class="tok-n">totalSwipes</span><span class="tok-o">++</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 每次刷卡，全局统计数据 +1</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
-<span class="tok-c1">// @clean code/testBasicSyntax/src/StaticDemo.java</span>
+<span class="tok-c1">// code/testBasicSyntax/src/StaticDemo.java</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">StaticDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-c1">// 1. 造两台具体的门禁机</span>
@@ -1746,7 +1758,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 
 <span class="tok-w">        </span><span class="tok-c1">// 3. 查看全局数据（调用静态变量，直接用【类名.变量名】）</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;--- 监控中心系统 ---&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;今日全校累计刷卡总数：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">DoorMachineV02</span><span class="tok-p">.</span><span class="tok-na">totalSwipes</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;今日全校累计刷卡总数：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">DoorMachineV02</span><span class="tok-p">.</span><span class="tok-na">totalSwipes</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 3</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -1771,7 +1783,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p>如果在 <code>main</code> 里面想调用一个非静态的方法，Java 会报错。因为 Java 不知道你到底想调用“南大门”的方法，还是“北大门”的方法。</p>
 </li>
 <li>
-<p>所以必须先 <code>new</code> 一个具体的门出来！</p>
+<p>所以必须先 <code>new</code> 一个具体的门禁机出来！</p>
 </li>
 </ul>
 </div>
@@ -1849,7 +1861,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【系统纠错】更名失败：姓名格式合法性校验未通过！&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
-<span class="tok-w">    </span><span class="tok-c1">// 状态：标准的读写接口</span>
+<span class="tok-w">    </span><span class="tok-c1">// 状态：标准的读写接口，isActive 比 getActive 更容易理解</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">isActive</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">active</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
@@ -1857,7 +1869,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">active</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">active</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
-<span class="tok-c1">// @clean code/testBasicSyntax/src/DoorCardDemo.java</span>
+<span class="tok-c1">// code/testBasicSyntax/src/DoorCardDemo.java</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DoorCardDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-c1">// 制作一张新卡</span>
@@ -1885,6 +1897,97 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </li>
 </ol>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">关于 Java 中 <code>return active;</code> 省略 <code>this</code> 的解析</div>
+<div class="paragraph">
+<p>在 Java 中，<code>return active;</code> 和 <code>return this.active;</code> 在当前的代码里<strong>效果是完全一样的</strong>。
+之所以这里没有写 <code>this</code>，主要涉及 Java 的<strong>作用域优先级（Scope Priority）</strong>和<strong>编码习惯</strong>。</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>为什么可以省略 <code>this</code>？</p>
+<div class="paragraph">
+<p>在 Java 中，当方法内<strong>没有重名</strong>的局部变量时，编译器会自动去寻找类成员变量（Field）。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>没有冲突：</strong> 在 <code>isActive()</code> 方法内部，你没有定义一个叫 <code>active</code> 的局部变量，也没有同名的参数。</p>
+</li>
+<li>
+<p><strong>自动定位：</strong> 既然内部找不到，Java 就会自动向上寻找，发现类中定义了 <code>private boolean active;</code>，于是它就直接使用了这个变量。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>什么时候必须使用 <code>this</code>？</p>
+<div class="paragraph">
+<p>对比一下你的 <code>setActive</code> 方法和 <code>isActive</code> 方法，区别一目了然：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">方法类型</th>
+<th class="tableblock halign-left valign-top">代码示例</th>
+<th class="tableblock halign-left valign-top">为什么必须/不必用 <code>this</code>？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Setter</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>this.active = active;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>必须用</strong>。参数名也叫 <code>active</code>。如果不加 <code>this</code>，Java 会认为你在执行“局部变量 = 局部变量”，导致成员变量无法被正确赋值。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Getter</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>return active;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>可选</strong>。该方法没有参数。由于不存在重名冲突，Java 明确知道这个 <code>active</code> 指的就是类里的成员变量。</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>两种风格的博弈</p>
+<div class="paragraph">
+<p>虽然省略 <code>this</code> 是合法的，但程序员通常分为两个流派：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>极简派（最常见）： 只要不冲突就不写 <code>this</code>。代码更清爽，遵循“默认即成员”的直觉。</p>
+</li>
+<li>
+<p>显式派：无论是否冲突，访问成员变量必带 <code>this</code>（例如 <code>return this.active;</code>）。这能让人一眼看出哪个是类的属性，特别是在代码量巨大的时候。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>结论：</strong> 在你的 <code>DoorCard</code> 类中，<code>return active;</code> 不写 <code>this</code> 是完全正确的写法。这体现了 Java 的变量寻址机制，即在没有局部干扰时自动指向成员变量。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -2002,7 +2105,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java</span>
 <span class="tok-c1">// 通过声明包，解决类名冲突问题</span>
 <span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">use_abstraction</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 必须匹配文件夹的名字</span>
 
@@ -2079,8 +2182,6 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="tok-w">        </span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 自动触发对应的子类方法</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
-
-<span class="tok-c1">// --- 运行测试 ---</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">AbstractClassDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">CardReader</span><span class="tok-w"> </span><span class="tok-n">cardReader</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CardReader</span><span class="tok-p">();</span>
@@ -2125,7 +2226,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p>代码举例</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/use_interface/InterfaceDemo.java</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// code/testBasicSyntax/src/use_interface/InterfaceDemo.java</span>
 <span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">use_interface</span><span class="tok-p">;</span>
 
 <span class="tok-cm">/**</span>
@@ -2275,10 +2376,10 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="ulist">
 <ul>
 <li>
-<p><strong>包 (Package)</strong> 就是用来给代码分类建文件夹的；</p>
+<p>包 (Package) 就是用来给代码分类建文件夹的，可以比喻成房间；</p>
 </li>
 <li>
-<p>而<strong>访问权限 (Modifiers)</strong> 就是这些文件夹和房间上的“门锁”。</p>
+<p>而<strong>访问权限 (Modifiers)</strong> 就是这些文件夹，即房间上的“门锁”。</p>
 </li>
 </ul>
 </div>
@@ -3757,7 +3858,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-04 23:09:11 +0800
+Last updated 2026-03-05 09:19:27 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

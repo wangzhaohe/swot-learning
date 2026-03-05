@@ -39,7 +39,7 @@ class DoorCard {
             System.out.println("【系统纠错】更名失败：姓名格式合法性校验未通过！");
         }
     }
-    // 状态：标准的读写接口
+    // 状态：标准的读写接口，isActive 比 getActive 更容易理解
     public boolean isActive() {
         return active;
     }
@@ -47,7 +47,7 @@ class DoorCard {
         this.active = active;
     }
 }
-// @clean code/testBasicSyntax/src/DoorCardDemo.java
+// code/testBasicSyntax/src/DoorCardDemo.java
 public class DoorCardDemo {
     public static void main(String[] args) {
         // 制作一张新卡

@@ -1,4 +1,4 @@
-// @clean code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
+// code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
 // 通过声明包，解决类名冲突问题
 package use_abstraction;  // 必须匹配文件夹的名字
 
@@ -75,8 +75,6 @@ class CardReader {
         card.validate(); // 自动触发对应的子类方法
     }
 }
-
-// --- 运行测试 ---
 public class AbstractClassDemo {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();

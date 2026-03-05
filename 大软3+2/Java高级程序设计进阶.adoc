@@ -467,7 +467,7 @@ class DoorMachineV01 {
     }
 }
 
-// @clean code/testBasicSyntax/src/DoorMachineDemo.java
+// code/testBasicSyntax/src/DoorMachineDemo.java
 // 使用类（安装并使用具体的门禁机）
 public class DoorMachineDemo {
     public static void main(String[] args) {
@@ -489,10 +489,12 @@ public class DoorMachineDemo {
 }
 ----
 
-=== static 关键字 —— “门禁系统的全局广播站”
+=== static 关键字 —— “门禁系统的全局可访问属性”
 [upperalpha]
 . 为什么要学？
-在写面向对象代码时，最容易让人崩溃的就是：为什么我不能直接在 `main` 方法里调用我自己写的另一个方法？为什么必须要 `new` 一个对象出来？这就涉及到 `static`（静态）的本质。
+* 在写面向对象代码时，最容易让人崩溃的就是：为什么我不能直接调用一个类里的普通属性或者方法？
+* 为什么必须要 `new` 一个对象出来再调用？
+* 这就涉及到 `static`（静态）的本质。
 
 
 . 知识点说明
@@ -512,7 +514,7 @@ class DoorMachineV02 {
     String model;     // 属性：机器型号
 
     // 静态变量：属于整个安保系统共享（全局统计）
-    static int totalSwipes = 0;
+    static int totalSwipes = 0;  // new added
 
     // 构造方法：出厂时设置安装位置
     public DoorMachineV02(String loc) {
@@ -525,7 +527,7 @@ class DoorMachineV02 {
         totalSwipes++; // 每次刷卡，全局统计数据 +1
     }
 }
-// @clean code/testBasicSyntax/src/StaticDemo.java
+// code/testBasicSyntax/src/StaticDemo.java
 public class StaticDemo {
     public static void main(String[] args) {
         // 1. 造两台具体的门禁机
@@ -539,7 +541,7 @@ public class StaticDemo {
 
         // 3. 查看全局数据（调用静态变量，直接用【类名.变量名】）
         System.out.println("--- 监控中心系统 ---");
-        System.out.println("今日全校累计刷卡总数：" + DoorMachineV02.totalSwipes);
+        System.out.println("今日全校累计刷卡总数：" + DoorMachineV02.totalSwipes);  // 3
     }
 }
 ----
@@ -552,7 +554,7 @@ public class StaticDemo {
 
 * `main` 方法天生就是 `static` 的。
 * 如果在 `main` 里面想调用一个非静态的方法，Java 会报错。因为 Java 不知道你到底想调用“南大门”的方法，还是“北大门”的方法。
-* 所以必须先 `new` 一个具体的门出来！
+* 所以必须先 `new` 一个具体的门禁机出来！
 ====
 
 === 封装 —— “门禁卡的智能芯片”
@@ -612,7 +614,7 @@ class DoorCard {
             System.out.println("【系统纠错】更名失败：姓名格式合法性校验未通过！");
         }
     }
-    // 状态：标准的读写接口
+    // 状态：标准的读写接口，isActive 比 getActive 更容易理解
     public boolean isActive() {
         return active;
     }
@@ -620,7 +622,7 @@ class DoorCard {
         this.active = active;
     }
 }
-// @clean code/testBasicSyntax/src/DoorCardDemo.java
+// code/testBasicSyntax/src/DoorCardDemo.java
 public class DoorCardDemo {
     public static void main(String[] args) {
         // 制作一张新卡
@@ -645,6 +647,50 @@ public class DoorCardDemo {
     }
 }
 ----
+
+
+.关于 Java 中 `return active;` 省略 `this` 的解析
+****
+在 Java 中，`return active;` 和 `return this.active;` 在当前的代码里**效果是完全一样的**。
+之所以这里没有写 `this`，主要涉及 Java 的**作用域优先级（Scope Priority）**和**编码习惯**。
+
+[upperalpha]
+. 为什么可以省略 `this`？
++
+在 Java 中，当方法内**没有重名**的局部变量时，编译器会自动去寻找类成员变量（Field）。
+
+* **没有冲突：** 在 `isActive()` 方法内部，你没有定义一个叫 `active` 的局部变量，也没有同名的参数。
+* **自动定位：** 既然内部找不到，Java 就会自动向上寻找，发现类中定义了 `private boolean active;`，于是它就直接使用了这个变量。
+
+. 什么时候必须使用 `this`？
++
+对比一下你的 `setActive` 方法和 `isActive` 方法，区别一目了然：
++
+[cols="1,2,2", options="header"]
+|===
+| 方法类型 | 代码示例 | 为什么必须/不必用 `this`？
+
+| **Setter**
+| `this.active = active;`
+| **必须用**。参数名也叫 `active`。如果不加 `this`，Java 会认为你在执行“局部变量 = 局部变量”，导致成员变量无法被正确赋值。
+
+| **Getter**
+| `return active;`
+| **可选**。该方法没有参数。由于不存在重名冲突，Java 明确知道这个 `active` 指的就是类里的成员变量。
+|===
+
+. 两种风格的博弈
++
+虽然省略 `this` 是合法的，但程序员通常分为两个流派：
+
+** 极简派（最常见）： 只要不冲突就不写 `this`。代码更清爽，遵循“默认即成员”的直觉。
+** 显式派：无论是否冲突，访问成员变量必带 `this`（例如 `return this.active;`）。这能让人一眼看出哪个是类的属性，特别是在代码量巨大的时候。
+
+[NOTE]
+====
+**结论：** 在你的 `DoorCard` 类中，`return active;` 不写 `this` 是完全正确的写法。这体现了 Java 的变量寻址机制，即在没有局部干扰时自动指向成员变量。
+====
+****
 
 === 继承与多态 —— “父子卡片”与“读卡器逻辑”
 [upperalpha]
@@ -735,7 +781,7 @@ public class InheritanceAndPolymorphismDemo {
 
 [source,java]
 ----
-// @clean code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
+// code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
 // 通过声明包，解决类名冲突问题
 package use_abstraction;  // 必须匹配文件夹的名字
 
@@ -812,8 +858,6 @@ class CardReader {
         card.validate(); // 自动触发对应的子类方法
     }
 }
-
-// --- 运行测试 ---
 public class AbstractClassDemo {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();
@@ -846,7 +890,7 @@ public class AbstractClassDemo {
 +
 [source,java]
 ----
-// @clean code/testBasicSyntax/src/use_interface/InterfaceDemo.java
+// code/testBasicSyntax/src/use_interface/InterfaceDemo.java
 package use_interface;
 
 /**
@@ -970,8 +1014,8 @@ public class InterfaceDemo {
 +
 如果我们把门禁系统的所有代码（用户实体、刷卡逻辑、数据库连接、主程序）全塞在一个文件夹里，随着代码变多，就会变成一个混乱的“垃圾堆”。
 
-* **包 (Package)** 就是用来给代码分类建文件夹的；
-* 而**访问权限 (Modifiers)** 就是这些文件夹和房间上的“门锁”。
+* 包 (Package) 就是用来给代码分类建文件夹的，可以比喻成房间；
+* 而**访问权限 (Modifiers)** 就是这些文件夹，即房间上的“门锁”。
 
 
 . 项目结构标准划分（包管理）

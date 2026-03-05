@@ -11,7 +11,7 @@ class DoorMachineV01 {
     }
 }
 
-// @clean code/testBasicSyntax/src/DoorMachineDemo.java
+// code/testBasicSyntax/src/DoorMachineDemo.java
 // 使用类（安装并使用具体的门禁机）
 public class DoorMachineDemo {
     public static void main(String[] args) {

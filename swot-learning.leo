@@ -223,7 +223,7 @@
 <v t="swot.20260304114644.1"><vh>BB class DoorMachineV01 门禁机器</vh></v>
 </v>
 </v>
-<v t="swot.20260303160354.1"><vh>static 关键字 —— “门禁系统的全局广播站”</vh>
+<v t="swot.20260303160354.1"><vh>static 关键字 —— “门禁系统的全局可访问属性”</vh>
 <v t="swot.20260304120034.1"><vh>@clean code/testBasicSyntax/src/StaticDemo.java</vh>
 <v t="swot.20260304115940.1"><vh>BB class DoorMachineV02 门禁机器</vh></v>
 </v>
@@ -1148,7 +1148,7 @@
 </v>
 </v>
 <v t="swot.20260301080950.1"><vh>@leo ../TJISE-inner/TJISE-inner.leo</vh></v>
-<v t="swot.20260218173421.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3271017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b64580a000000707269736574646174657106580a000000323032362d30322d3139710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58260000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f63686b626c6b2e706e67710d580700000072656c50617468710e580f000000636c656f2f63686b626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755805000000302e322e3071197d711a285808000000616e6e6f74617465711b7d711c2858080000007072696f72697479711d4b64580a00000070726973657464617465711e580a000000323032362d30322d3139711f75580500000069636f6e7371205d71217d712228680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e6771236810681168124b0068134b0268144b0168156816681768187561755803000000302e3371247d7125285808000000616e6e6f7461746571267d71272858080000007072696f7269747971284b64580a000000707269736574646174657129580a000000323032362d30322d3139712a75580500000069636f6e73712b5d712c7d712d28680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e67712e6810681168124b0068134b0268144b0168156816681768187561755805000000302e332e30712f7d71305808000000616e6e6f7461746571317d71322858080000007072696f7269747971334d0f27580a000000707269736574646174657134580a000000323032362d30322d3139713575735803000000302e3471367d7137285808000000616e6e6f7461746571387d71392858080000007072696f72697479713a4b64580a00000070726973657464617465713b580a000000323032362d30322d3139713c75580500000069636f6e73713d5d713e7d713f28680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e6771406810681168124b0068134b0268144b0168156816681768187561755805000000302e342e3071417d71425808000000616e6e6f7461746571437d71442858080000007072696f7269747971454d0f27580a000000707269736574646174657146580a000000323032362d30322d3139714775735806000000302e31362e3071487d71495808000000616e6e6f74617465714a7d714b2858080000007072696f72697479714c4d0f27580a00000070726973657464617465714d580a000000323032362d30332d3033714e7573752e"><vh>@spot</vh>
+<v t="swot.20260218173421.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3271017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b64580a000000707269736574646174657106580a000000323032362d30322d3139710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58260000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f63686b626c6b2e706e67710d580700000072656c50617468710e580f000000636c656f2f63686b626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755805000000302e322e3071197d711a285808000000616e6e6f74617465711b7d711c2858080000007072696f72697479711d4b64580a00000070726973657464617465711e580a000000323032362d30322d3139711f75580500000069636f6e7371205d71217d712228680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e6771236810681168124b0068134b0268144b0168156816681768187561755803000000302e3371247d7125285808000000616e6e6f7461746571267d71272858080000007072696f7269747971284b64580a000000707269736574646174657129580a000000323032362d30322d3139712a75580500000069636f6e73712b5d712c7d712d28680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e67712e6810681168124b0068134b0268144b0168156816681768187561755805000000302e332e30712f7d71305808000000616e6e6f7461746571317d71322858080000007072696f7269747971334d0f27580a000000707269736574646174657134580a000000323032362d30322d3139713575735803000000302e3471367d7137285808000000616e6e6f7461746571387d71392858080000007072696f72697479713a4b64580a00000070726973657464617465713b580a000000323032362d30322d3139713c75580500000069636f6e73713d5d713e7d713f28680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e6771406810681168124b0068134b0268144b0168156816681768187561755805000000302e342e3071417d71425808000000616e6e6f7461746571437d71442858080000007072696f7269747971454d0f27580a000000707269736574646174657146580a000000323032362d30322d3139714775735806000000302e31352e3071487d71495808000000616e6e6f74617465714a7d714b2858080000007072696f72697479714c4d0f27580a00000070726973657464617465714d580a000000323032362d30332d3033714e7573752e"><vh>@spot</vh>
 <v t="swot.20250508220045.1"></v>
 <v t="swot.20260220074315.1"><vh>waiting for github response, then can delete them</vh></v>
 <v t="swot.20260219084120.1" descendentVnodeUnknownAttributes="7d71002858010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b64580a000000707269736574646174657106580a000000323032362d30322d3139710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58260000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f63686b626c6b2e706e67710d580700000072656c50617468710e580f000000636c656f2f63686b626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e711758010000003171187561755803000000302e3071197d711a285808000000616e6e6f74617465711b7d711c2858080000007072696f72697479711d4b64580a00000070726973657464617465711e580a000000323032362d30322d3139711f75580500000069636f6e7371205d71217d712228680b680c680c680d680e580f000000636c656f2f63686b626c6b2e706e6771236810681168124b0068134b0268144b016815681668176818756175752e"><vh>adoc 生成 html 测试 ignore 屏蔽</vh>
@@ -1202,10 +1202,14 @@
 <v t="swot.20260226085753.1"><vh>adoc-live 命令应该开启一个守护线程，参考 key_mouse.py 的做法</vh></v>
 <v t="swot.20260226142220.1"><vh>key_mouse.py 生成键盘热力图</vh></v>
 <v t="swot.20260228093352.1"><vh>解决 clash verge 不允许 cloudflared 在规则模式下出去的问题</vh></v>
-<v t="swot.20260228152238.1"><vh>leo 作为 PIM 应用：可能认到 file:/// 协议</vh></v>
-<v t="swot.20260228152306.1"><vh>leo 插件 body-style.py 影响了 zoom-out &amp; zoom-in</vh></v>
+<v t="swot.20260228152238.1"><vh>leo 作为 PIM 应用：可以认到 file:/// 协议，但是是绝对路径，这样不好。要是能相对路径就太棒了！！！</vh></v>
 <v t="swot.20260304075643.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303371077573732e"><vh>adoc 命令处理这个节点有 bug，现在在顶端加了 @language asciidoc 后，下面又有 @language java，则 source 的格式化不对了 2026-03-04</vh>
 <v t="swot.20260304080545.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303371077573732e"><vh>ArrayList —— 封装门禁白名单 -&gt; 还需要引入其它的类才能跑起来</vh></v>
+</v>
+<v t="swot.20260305092636.1"><vh>body-style.py Bug</vh>
+<v t="swot.20260228152306.1"><vh>leo 插件 body-style.py 影响了 zoom-out &amp; zoom-in</vh></v>
+<v t="swot.20260305091955.1"><vh>leo-editor body 编辑时，执行 ctrl+z 光标位置会跳到可见范围最底下的一行 bug</vh></v>
+<v t="swot.20260305092401.1"><vh>leo-editor body 编辑时，执行 ctrl + shift + z 光标位置会重置到第一行的 bug</vh></v>
 </v>
 </v>
 </vnodes>
@@ -14112,6 +14116,50 @@ TIP: 记住一句话：你不能刷“图纸”进门，你只能刷装在墙上
 ----
 @others
 ----
+
+
+.关于 Java 中 `return active;` 省略 `this` 的解析
+****
+在 Java 中，`return active;` 和 `return this.active;` 在当前的代码里**效果是完全一样的**。
+之所以这里没有写 `this`，主要涉及 Java 的**作用域优先级（Scope Priority）**和**编码习惯**。
+
+[upperalpha]
+. 为什么可以省略 `this`？
++
+在 Java 中，当方法内**没有重名**的局部变量时，编译器会自动去寻找类成员变量（Field）。
+
+* **没有冲突：** 在 `isActive()` 方法内部，你没有定义一个叫 `active` 的局部变量，也没有同名的参数。
+* **自动定位：** 既然内部找不到，Java 就会自动向上寻找，发现类中定义了 `private boolean active;`，于是它就直接使用了这个变量。
+
+. 什么时候必须使用 `this`？
++
+对比一下你的 `setActive` 方法和 `isActive` 方法，区别一目了然：
++
+[cols="1,2,2", options="header"]
+|===
+| 方法类型 | 代码示例 | 为什么必须/不必用 `this`？
+
+| **Setter**
+| `this.active = active;`
+| **必须用**。参数名也叫 `active`。如果不加 `this`，Java 会认为你在执行“局部变量 = 局部变量”，导致成员变量无法被正确赋值。
+
+| **Getter**
+| `return active;`
+| **可选**。该方法没有参数。由于不存在重名冲突，Java 明确知道这个 `active` 指的就是类里的成员变量。
+|===
+
+. 两种风格的博弈
++
+虽然省略 `this` 是合法的，但程序员通常分为两个流派：
+
+** 极简派（最常见）： 只要不冲突就不写 `this`。代码更清爽，遵循“默认即成员”的直觉。
+** 显式派：无论是否冲突，访问成员变量必带 `this`（例如 `return this.active;`）。这能让人一眼看出哪个是类的属性，特别是在代码量巨大的时候。
+
+[NOTE]
+====
+**结论：** 在你的 `DoorCard` 类中，`return active;` 不写 `this` 是完全正确的写法。这体现了 Java 的变量寻址机制，即在没有局部干扰时自动指向成员变量。
+====
+****
 </t>
 <t tx="swot.20260215222546.1">[upperalpha]
 . 知识点说明
@@ -17364,7 +17412,9 @@ podman-machine-default*  wsl         8 minutes ago  Currently running  8        
 </t>
 <t tx="swot.20260303160354.1">[upperalpha]
 . 为什么要学？
-在写面向对象代码时，最容易让人崩溃的就是：为什么我不能直接在 `main` 方法里调用我自己写的另一个方法？为什么必须要 `new` 一个对象出来？这就涉及到 `static`（静态）的本质。
+* 在写面向对象代码时，最容易让人崩溃的就是：为什么我不能直接调用一个类里的普通属性或者方法？
+* 为什么必须要 `new` 一个对象出来再调用？
+* 这就涉及到 `static`（静态）的本质。
 
 
 . 知识点说明
@@ -17389,7 +17439,7 @@ podman-machine-default*  wsl         8 minutes ago  Currently running  8        
 
 * `main` 方法天生就是 `static` 的。
 * 如果在 `main` 里面想调用一个非静态的方法，Java 会报错。因为 Java 不知道你到底想调用“南大门”的方法，还是“北大门”的方法。
-* 所以必须先 `new` 一个具体的门出来！
+* 所以必须先 `new` 一个具体的门禁机出来！
 ====
 </t>
 <t tx="swot.20260303164345.1">[upperalpha]
@@ -17397,8 +17447,8 @@ podman-machine-default*  wsl         8 minutes ago  Currently running  8        
 +
 如果我们把门禁系统的所有代码（用户实体、刷卡逻辑、数据库连接、主程序）全塞在一个文件夹里，随着代码变多，就会变成一个混乱的“垃圾堆”。
 
-* **包 (Package)** 就是用来给代码分类建文件夹的；
-* 而**访问权限 (Modifiers)** 就是这些文件夹和房间上的“门锁”。
+* 包 (Package) 就是用来给代码分类建文件夹的，可以比喻成房间；
+* 而**访问权限 (Modifiers)** 就是这些文件夹，即房间上的“门锁”。
 
 
 . 项目结构标准划分（包管理）
@@ -17638,9 +17688,9 @@ class DoorMachineV01 {
 }
 
 </t>
-<t tx="swot.20260304114839.1" _mod_time="4741da69facfe110362e">@language java
+<t tx="swot.20260304114839.1" _mod_time="4741da6a33df6990172e">@language java
 @others
-// @clean code/testBasicSyntax/src/DoorMachineDemo.java
+// code/testBasicSyntax/src/DoorMachineDemo.java
 // 使用类（安装并使用具体的门禁机）
 public class DoorMachineDemo {
     public static void main(String[] args) {
@@ -17668,7 +17718,7 @@ class DoorMachineV02 {
     String model;     // 属性：机器型号
 
     // 静态变量：属于整个安保系统共享（全局统计）
-    static int totalSwipes = 0;
+    static int totalSwipes = 0;  // new added
 
     // 构造方法：出厂时设置安装位置
     public DoorMachineV02(String loc) {
@@ -17682,9 +17732,9 @@ class DoorMachineV02 {
     }
 }
 </t>
-<t tx="swot.20260304120034.1" _mod_time="4741da69f60de2a2372e">@language java
+<t tx="swot.20260304120034.1" _mod_time="4741da6a34749f24a12e">@language java
 @others
-// @clean code/testBasicSyntax/src/StaticDemo.java
+// code/testBasicSyntax/src/StaticDemo.java
 public class StaticDemo {
     public static void main(String[] args) {
         // 1. 造两台具体的门禁机
@@ -17698,7 +17748,7 @@ public class StaticDemo {
 
         // 3. 查看全局数据（调用静态变量，直接用【类名.变量名】）
         System.out.println("--- 监控中心系统 ---");
-        System.out.println("今日全校累计刷卡总数：" + DoorMachineV02.totalSwipes);
+        System.out.println("今日全校累计刷卡总数：" + DoorMachineV02.totalSwipes);  // 3
     }
 }
 </t>
@@ -17744,7 +17794,7 @@ class DoorCard {
             System.out.println("【系统纠错】更名失败：姓名格式合法性校验未通过！");
         }
     }
-    // 状态：标准的读写接口
+    // 状态：标准的读写接口，isActive 比 getActive 更容易理解
     public boolean isActive() {
         return active;
     }
@@ -17753,9 +17803,9 @@ class DoorCard {
     }
 }
 </t>
-<t tx="swot.20260304145656.1" _mod_time="4741da69f975117c2f2e">@language java
+<t tx="swot.20260304145656.1" _mod_time="4741da6a36872187892e">@language java
 @others
-// @clean code/testBasicSyntax/src/DoorCardDemo.java
+// code/testBasicSyntax/src/DoorCardDemo.java
 public class DoorCardDemo {
     public static void main(String[] args) {
         // 制作一张新卡
@@ -17780,7 +17830,7 @@ public class DoorCardDemo {
     }
 }
 </t>
-<t tx="swot.20260304152414.1" _mod_time="4741da69fc5cbb57792e">@language java
+<t tx="swot.20260304152414.1" _mod_time="4741da6a349ca5b2c82e">@language java
 @others
 public class InheritanceAndPolymorphismDemo {
     public static void main(String[] args) {
@@ -17905,14 +17955,12 @@ class AdminCard extends BaseDoorCard {
 @others
 ----
 </t>
-<t tx="swot.20260304170758.1" _mod_time="4741da6a009493c38b2e">@language java
-// @clean code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
+<t tx="swot.20260304170758.1" _mod_time="4741da6a349ca78bcb2e">@language java
+// code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
 // 通过声明包，解决类名冲突问题
 package use_abstraction;  // 必须匹配文件夹的名字
 
 @others
-
-// --- 运行测试 ---
 public class AbstractClassDemo {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();
@@ -18001,8 +18049,8 @@ class AdminCard extends BaseDoorCard {
     }
 }
 </t>
-<t tx="swot.20260304220859.1" _mod_time="4741da6a12696ec6e32e">@language java
-// @clean code/testBasicSyntax/src/use_interface/InterfaceDemo.java
+<t tx="swot.20260304220859.1" _mod_time="4741da6a349ca8ffdc2e">@language java
+// code/testBasicSyntax/src/use_interface/InterfaceDemo.java
 package use_interface;
 
 @others
@@ -18070,5 +18118,60 @@ class CanteenReader {
 }
 
 </t>
+<t tx="swot.20260305091955.1">a
+b
+c
+d
+e
+f
+g
+h
+i
+j
+k
+l
+m
+n
+o
+p
+q
+r
+s
+t 
+u
+v
+w
+x
+y
+z
+</t>
+<t tx="swot.20260305092401.1">a
+b
+c
+d
+e
+f
+g
+h
+i
+j
+k
+l
+m
+n
+o
+p
+q
+r
+s
+t 
+u
+v
+w
+x
+y
+z
+</t>
+<t tx="swot.20260305092636.1"></t>
 </tnodes>
 </leo_file>

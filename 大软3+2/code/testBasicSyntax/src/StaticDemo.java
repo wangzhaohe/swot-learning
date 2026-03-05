@@ -4,7 +4,7 @@ class DoorMachineV02 {
     String model;     // 属性：机器型号
 
     // 静态变量：属于整个安保系统共享（全局统计）
-    static int totalSwipes = 0;
+    static int totalSwipes = 0;  // new added
 
     // 构造方法：出厂时设置安装位置
     public DoorMachineV02(String loc) {
@@ -17,7 +17,7 @@ class DoorMachineV02 {
         totalSwipes++; // 每次刷卡，全局统计数据 +1
     }
 }
-// @clean code/testBasicSyntax/src/StaticDemo.java
+// code/testBasicSyntax/src/StaticDemo.java
 public class StaticDemo {
     public static void main(String[] args) {
         // 1. 造两台具体的门禁机
@@ -31,6 +31,6 @@ public class StaticDemo {
 
         // 3. 查看全局数据（调用静态变量，直接用【类名.变量名】）
         System.out.println("--- 监控中心系统 ---");
-        System.out.println("今日全校累计刷卡总数：" + DoorMachineV02.totalSwipes);
+        System.out.println("今日全校累计刷卡总数：" + DoorMachineV02.totalSwipes);  // 3
     }
 }
