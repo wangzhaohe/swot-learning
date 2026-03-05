@@ -378,6 +378,15 @@
 <v t="swot.20251210103835.1"><vh>pnpm -&gt; https://pnpm.io/</vh></v>
 </v>
 <v t="swot.20260215225306.1"><vh>@path neovim</vh>
+<v t="swot.20260306003733.1"><vh>@adoc LazyVim_Java_JDK_17_开发环境配置指南_手动降级版.adoc</vh>
+<v t="swot.20260306003747.1"><vh>LazyVim Java JDK 17 开发环境配置指南 (手动降级版)</vh>
+<v t="swot.20260306003750.1"><vh>步骤 1: 环境准备与清理</vh></v>
+<v t="swot.20260306004114.1"><vh>步骤 2: 手动下载兼容版 jdtls (v1.33)</vh></v>
+<v t="swot.20260306004104.1"><vh>步骤 3: 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)</vh></v>
+<v t="swot.20260306004048.1"><vh>步骤 4: 配置快捷运行 (~/.config/nvim/lua/config/keymaps.lua)</vh></v>
+<v t="swot.20260306004036.1"><vh>步骤 5: 验证</vh></v>
+</v>
+</v>
 <v t="swot.20260226111454.1"><vh>@adoc lazyvim-hotkeys.adoc</vh>
 <v t="swot.20260226110618.1"><vh>LazyVim 快捷键</vh>
 <v t="swot.20260227082545.1"><vh>LazyVim 搜索快捷键</vh>
@@ -408,7 +417,7 @@
 </v>
 </v>
 <v t="swot.20260222101217.1"><vh>@adoc Neovim与Leo-editor格式化冲突解决方案总结.adoc</vh>
-<v t="swot.20260222101313.1"><vh>lazyvim 自动格式化分开 leo-editor @# 为 @ # 解决方案</vh>
+<v t="swot.20260222101313.1"><vh>lazyvim 自动格式化分开 leo-editor @# 为 @ # 解决方案 -&gt; leo 已经强制使用 @ # 了，所以这个文档意义不大了</vh>
 <v t="swot.20260222100358.1"><vh>问题背景 (Background)</vh></v>
 <v t="swot.20260222101450.1"><vh>核心原理 (Principles)</vh></v>
 <v t="swot.20260222101458.1"><vh>技术实现 (Implementation)</vh></v>
@@ -17804,7 +17813,7 @@ class DoorCard {
     }
 }
 </t>
-<t tx="swot.20260304145656.1" _mod_time="4741da6a3a6c053bec2e">@language java
+<t tx="swot.20260304145656.1" _mod_time="4741da6a6d9704516e2e">@language java
 @others
 // code/testBasicSyntax/src/DoorCardDemo.java
 public class DoorCardDemo {
@@ -17831,7 +17840,7 @@ public class DoorCardDemo {
     }
 }
 </t>
-<t tx="swot.20260304152414.1" _mod_time="4741da6a349ca5b2c82e">@language java
+<t tx="swot.20260304152414.1" _mod_time="4741da6a6c658983192e">@language java
 @others
 public class InheritanceAndPolymorphismDemo {
     public static void main(String[] args) {
@@ -17871,15 +17880,17 @@ class BaseDoorCard {
 }
 </t>
 <t tx="swot.20260304155948.1">@language java
-// 读卡器服务类 (展示多态的精髓) 
+
+// 读卡器服务类 (展示多态的精髓)
 // 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
 class CardReader {
-    // 这里传入的是 BaseDoorCard，展示了多态的兼容性
-    public void readCard(BaseDoorCard card) {
-        System.out.print("读卡器感应 -&gt; ");
-        card.validate(); // 自动触发对应的子类方法
-    }
+  // 这里传入的是 BaseDoorCard，展示了多态的兼容性
+  public void readCard(BaseDoorCard card) {
+    System.out.print("读卡器感应 -&gt; ");
+    card.validate(); // 自动触发对应的子类方法
+  }
 }
+
 </t>
 <t tx="swot.20260304162904.1">@language java
 class StudentCard extends BaseDoorCard {
@@ -17956,28 +17967,28 @@ class AdminCard extends BaseDoorCard {
 @others
 ----
 </t>
-<t tx="swot.20260304170758.1" _mod_time="4741da6a349ca78bcb2e">@language java
+<t tx="swot.20260304170758.1" _mod_time="4741da6a6e456e1d8a2e">@language java
 // code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
 // 通过声明包，解决类名冲突问题
-package use_abstraction;  // 必须匹配文件夹的名字
+package use_abstraction; // 必须匹配文件夹的名字
 
 @others
 public class AbstractClassDemo {
-    public static void main(String[] args) {
-        CardReader cardReader = new CardReader();
+  public static void main(String[] args) {
+    CardReader cardReader = new CardReader();
 
-        // 向上转型：父类引用指向子类对象
-        BaseDoorCard studentCard = new StudentCard("S-2024-001", "小明");
-        BaseDoorCard adminCard = new AdminCard("A-007", "张老师");
+    // 向上转型：父类引用指向子类对象
+    BaseDoorCard studentCard = new StudentCard("S-2024-001", "小明");
+    BaseDoorCard adminCard = new AdminCard("A-007", "张老师");
 
-        cardReader.readCard(studentCard);
-        System.out.println("--------------------");
-        cardReader.readCard(adminCard);
+    cardReader.readCard(studentCard);
+    System.out.println("--------------------");
+    cardReader.readCard(adminCard);
 
-        // 演示抽象类的约束：
-        // BaseDoorCard mysteryCard = new BaseDoorCard("X-000", "未知"); 
-        // 上行代码会报错：'BaseDoorCard' is abstract; cannot be instantiated
-    }
+    // 演示抽象类的约束：
+    // BaseDoorCard mysteryCard = new BaseDoorCard("X-000", "未知");
+    // 上行代码会报错：'BaseDoorCard' is abstract; cannot be instantiated
+  }
 }
 </t>
 <t tx="swot.20260304171106.1">@language java
@@ -17988,122 +17999,122 @@ public class AbstractClassDemo {
  * 2. 规范：强制子类必须实现特定的权限说明逻辑。
  */
 abstract class BaseDoorCard {
-    private String serialNumber;
-    private String ownerName;
+  private String serialNumber;
+  private String ownerName;
 
-    public BaseDoorCard(String serialNumber, String ownerName) {
-        this.serialNumber = serialNumber;
-        this.ownerName = ownerName;
-    }
+  public BaseDoorCard(String serialNumber, String ownerName) {
+    this.serialNumber = serialNumber;
+    this.ownerName = ownerName;
+  }
 
-    public String getOwnerName() { return ownerName; }
+  public String getOwnerName() {
+    return ownerName;
+  }
 
-    /**
-     * 通用逻辑：所有卡片都要进行的物理核验。
-     * 抽象类可以拥有具体实现的方法。
-     */
-    public void validate() {
-        System.out.println("【基础校验】正在核验卡片物理信息...");
-    }
+  /**
+   * 通用逻辑：所有卡片都要进行的物理核验。
+   * 抽象类可以拥有具体实现的方法。
+   */
+  public void validate() {
+    System.out.println("【基础校验】正在核验卡片物理信息...");
+  }
 
-    /**
-     * 抽象方法：强制规范。
-     * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。
-     */
-    public abstract void showAccessScope();
+  /**
+   * 抽象方法：强制规范。
+   * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。
+   */
+  public abstract void showAccessScope();
 }
+
 </t>
 <t tx="swot.20260304173742.1">@language java
 // --- 子类必须实现抽象方法 ---
 class StudentCard extends BaseDoorCard {
-    public StudentCard(String serialNumber, String ownerName) {
-        super(serialNumber, ownerName); // 继承并调用父类构造器
-    }
+  public StudentCard(String serialNumber, String ownerName) {
+    super(serialNumber, ownerName); // 继承并调用父类构造器
+  }
 
-    @Override
-    public void validate() {
-        super.validate(); // 执行通用检测
-        showAccessScope(); // 执行个性化权限展示
-    }
+  @Override
+  public void validate() {
+    super.validate(); // 执行通用检测
+    showAccessScope(); // 执行个性化权限展示
+  }
 
-    @Override
-    public void showAccessScope() {
-        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
-    }
+  @Override
+  public void showAccessScope() {
+    System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+  }
 }
+
 </t>
 <t tx="swot.20260304173902.1">@language java
 class AdminCard extends BaseDoorCard {
-    public AdminCard(String serialNumber, String ownerName) {
-        super(serialNumber, ownerName);
-    }
+  public AdminCard(String serialNumber, String ownerName) {
+    super(serialNumber, ownerName);
+  }
 
-    @Override
-    public void validate() {
-        super.validate();
-        showAccessScope();
-    }
+  @Override
+  public void validate() {
+    super.validate();
+    showAccessScope();
+  }
 
-    @Override
-    public void showAccessScope() {
-        System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
-    }
+  @Override
+  public void showAccessScope() {
+    System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
+  }
 }
+
 </t>
-<t tx="swot.20260304220859.1" _mod_time="4741da6a349ca8ffdc2e">@language java
+<t tx="swot.20260304220859.1" _mod_time="4741da6a6e220494ee2e">@language java
 // code/testBasicSyntax/src/use_interface/InterfaceDemo.java
 package use_interface;
 
 @others
 
-public class InterfaceDemo {
-    public static void main(String[] args) {
-        StudentCard studentCard = new StudentCard("S-2024-001", "小明");
-        AdminCard adminCard = new AdminCard("A-007", "张老师");
+    CanteenReader canteen = new CanteenReader();
 
-        CanteenReader canteen = new CanteenReader();
+    // 1. 学生卡实现了 Payable，可以打饭
+    canteen.processPayment(studentCard, 15.0);
 
-        // 1. 学生卡实现了 Payable，可以打饭
-        canteen.processPayment(studentCard, 15.0);
-
-        // 2. 管理员卡没实现 Payable，下面这行代码在编译时就会报错
-        // canteen.processPayment(adminCard, 20.0); // 编译不通过：张老师的卡不能在食堂付钱
-    }
+    // 2. 管理员卡没实现 Payable，下面这行代码在编译时就会报错
+    // canteen.processPayment(adminCard, 20.0); // 编译不通过：张老师的卡不能在食堂付钱
+  }
 }
-
 </t>
 <t tx="swot.20260304221446.1">@language asciidoc
 /**
  * 支付接口：定义了“能够支付”的规范
  */
 interface Payable {
-    void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
+  void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
+
 </t>
 <t tx="swot.20260304221906.1">@language java
 /**
  * 学生卡：既是门禁卡，又能支付 (多重身份)
  */
 class StudentCard extends BaseDoorCard implements Payable {
-    public StudentCard(String serialNumber, String ownerName) {
-        super(serialNumber, ownerName); // 继承并调用父类构造器
-    }
+  public StudentCard(String serialNumber, String ownerName) {
+    super(serialNumber, ownerName); // 继承并调用父类构造器
+  }
 
-    @Override
-    public void pay(double amount) {
-        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
-    }
+  @Override
+  public void pay(double amount) {
+    System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+  }
 
-    @Override
-    public void validate() {
-        super.validate(); // 执行通用检测
-        showAccessScope(); // 执行个性化权限展示
-    }
+  @Override
+  public void validate() {
+    super.validate(); // 执行通用检测
+    showAccessScope(); // 执行个性化权限展示
+  }
 
-    @Override
-    public void showAccessScope() {
-        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
-    }
+  @Override
+  public void showAccessScope() {
+    System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+  }
 }
 
 </t>
@@ -18112,12 +18123,16 @@ class StudentCard extends BaseDoorCard implements Payable {
  * 食堂刷卡机：它不关心你是哪种卡，它只认“Payable”接口
  */
 class CanteenReader {
-    public void processPayment(Payable card, double price) {
-        System.out.println("--- 食堂刷卡机感应中 ---");
-        card.pay(price); // 只要实现了 Payable，就一定有 pay 方法
-    }
+  public void processPayment(Payable card, double price) {
+    System.out.println("--- 食堂刷卡机感应中 ---");
+    card.pay(price); // 只要实现了 Payable，就一定有 pay 方法
+  }
 }
 
+public class InterfaceDemo {
+  public static void main(String[] args) {
+    StudentCard studentCard = new StudentCard("S-2024-001", "小明");
+    AdminCard adminCard = new AdminCard("A-007", "张老师");
 </t>
 <t tx="swot.20260305091955.1">a
 b
@@ -18213,6 +18228,212 @@ public class Main {
 . 小结
 * **权限铁律**：提供给别人调用的类和方法，尽量用 `public`；
 * 自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
+</t>
+<t tx="swot.20260306003733.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
+<t tx="swot.20260306003747.1">
+++++
+&lt;style&gt;
+/* 1. 默认状态：顺应你原本的展开状态 */
+#toc {
+    min-width: 0 !important;
+    max-height: 100vh;
+    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
+
+    white-space: nowrap !important;
+    max-width: 530px;
+    opacity: 1;
+
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+#toc.collapsed {
+    max-width: 0 !important; /* 宽度强制缩到 0 */
+    opacity: 0 !important; /* 透明度消失 */
+
+    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 3. 修复行间距（保留你需要的紧凑排版） */
+#toc ul, #toc li {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+// 默认没有任何类名，所以默认是自然展开的。
+toggleButton.addEventListener('click', () =&gt; {
+    contentDiv.classList.toggle('collapsed');
+});
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260306003750.1">在开始配置前，必须确保清理掉 Mason 自动安装的、要求 JDK 21 的最新版插件。
+
+1. **安装 JDK 17**: 确保系统已安装 Temurin 17 或其他 JDK 17 版本。
+
+2. **清理 Mason 插件**:
+   * 进入 Neovim，执行 `:Mason`。
+   * 找到 `jdtls`，按 `X` 卸载（因为 Mason 默认安装的版本要求 JDK 21）。
+
+3. **禁用 LazyExtras Java 扩展**:
+   * 执行 `:LazyExtras`，确保 `lang.java` **没有** 被勾选（避免官方配置干扰手动配置）。
+
+</t>
+<t tx="swot.20260306004036.1">1. **检查 LSP**: 打开 `.java` 文件，输入 `:LspInfo`，应显示 `jdtls` 正在运行 (Active)。
+
+2. **运行代码**: 按下 `空格 + r + j`，应能看到正常的控制台输出。
+</t>
+<t tx="swot.20260306004048.1">解决 Java `package` 包名运行报错的关键。此脚本会自动切换模式并进入 `src` 目录运行正确的类名。
+
+[source,lua]
+----
+@language lua
+-- 终极 Java 一键运行 (自带编译 + 包名支持)
+vim.keymap.set("n", "&lt;leader&gt;rj", function()
+  vim.cmd("write") -- 保存当前文件
+
+  local file_path = vim.fn.expand("%:p")
+  local src_marker = vim.fs.find({ "src" }, { upward = true })[1]
+
+  if not src_marker then
+    -- 如果没找到 src 目录，直接用 Java 11+ 的单文件模式运行源码
+    vim.cmd("split | term java " .. file_path)
+    return
+  end
+
+  local project_root = vim.fs.dirname(src_marker)
+  local src_dir = project_root .. "/src"
+
+  -- 1. 获取相对路径用于编译 (例如: use_abstraction/AbstractClassDemo.java)
+  local relative_file = file_path:sub(#src_dir + 2)
+
+  -- 2. 获取包名全称用于运行 (例如: use_abstraction.AbstractClassDemo)
+  local class_with_path = relative_file:gsub("%.java$", "")
+  local full_class_name = class_with_path:gsub("/", ".")
+
+  -- 3. 核心指令：先 cd 到 src，执行 javac 编译，成功后执行 java 运行
+  local run_cmd = "cd " .. src_dir .. " &amp;&amp; javac " .. relative_file .. " &amp;&amp; java " .. full_class_name
+
+  vim.cmd("split | term " .. run_cmd)
+end, { desc = "Java 编译并运行" })
+----
+</t>
+<t tx="swot.20260306004104.1">创建此文件，手动接管 `nvim-jdtls` 的启动逻辑，跳过 Mason 的版本检查。
+
+[source,lua]
+----
+@language lua
+return {
+  {
+    "mfussenegger/nvim-jdtls",
+    ft = { "java" },
+    config = function()
+      local java_bin = "/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java"
+      local jdtls_path = vim.fn.expand("~/jdtls_1.33")
+      local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
+      local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+
+      -- ==== 核心修复 1：动态获取并合并底层能力（支持 blink.cmp） ====
+      local client_capabilities = vim.lsp.protocol.make_client_capabilities()
+      local has_blink, blink = pcall(require, "blink.cmp")
+      if has_blink then
+        client_capabilities = blink.get_lsp_capabilities(client_capabilities)
+      end
+
+      local config = {
+        cmd = {
+          java_bin,
+          "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+          "-Dosgi.bundles.defaultStartLevel=4",
+          "-Declipse.product=org.eclipse.jdt.ls.core.product",
+          "-Dlog.protocol=true",
+          "-Dlog.level=ALL",
+          "-Xmx1g",
+          "--add-modules=ALL-SYSTEM",
+          "--add-opens",
+          "java.base/java.util=ALL-UNNAMED",
+          "--add-opens",
+          "java.base/java.lang=ALL-UNNAMED",
+          "-jar",
+          launcher_jar,
+          "-configuration",
+          jdtls_path .. "/config_mac",
+          "-data",
+          workspace_dir,
+        },
+        root_dir = require("jdtls.setup").find_root({ ".git", "pom.xml", ".idea", "testBasicSyntax.iml" })
+          or vim.fn.getcwd(),
+
+        -- ==== 核心修复 2：注入能力与默认设置 ====
+        capabilities = client_capabilities,
+        settings = {
+          java = {
+            signatureHelp = { enabled = true },
+            contentProvider = { preferred = "fernflower" },
+            -- 开启完整的语法分析和错误报告
+            configuration = { updateBuildConfiguration = "interactive" },
+            references = { includeDecompiledSources = true },
+            inlayHints = { parameterNames = { enabled = "all" } },
+          },
+        },
+      }
+
+      require("jdtls").start_or_attach(config)
+    end,
+  },
+}
+----
+</t>
+<t tx="swot.20260306004114.1">由于最新版 `jdtls` 强制要求 Java 21 运行，我们手动下载支持 Java 17 的最后一个稳定版本。 +
+https://download.eclipse.org/justj/?file=jdtls/milestones/1.33.0
+
+[source,bash]
+----
+# 创建存放目录
+mkdir -p ~/jdtls_1.33 &amp;&amp; cd ~/jdtls_1.33
+
+# 下载 v1.33.0 归档包
+curl -fSL "https://download.eclipse.org/jdtls/milestones/1.33.0/jdt-language-server-1.33.0-202402151717.tar.gz" -o jdtls.tar.gz
+
+# 解压
+tar -xzvf jdtls.tar.gz
+----
+
 </t>
 </tnodes>
 </leo_file>
