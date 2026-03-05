@@ -85,7 +85,7 @@
 <v t="swot.20200908084141.65"><vh>@string status-font-style = @font-style</vh></v>
 </v>
 </v>
-<v t="swot.20181202012654.205" descendentVnodeUnknownAttributes="7d7100580a000000302e32362e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@settings</vh>
+<v t="swot.20181202012654.205" descendentVnodeUnknownAttributes="7d7100580a000000302e32372e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@settings</vh>
 <v t="swot.20200916152454.1"><vh>@enabled-plugins</vh></v>
 <v t="swot.20210129110804.1"><vh>@string headline-time-format-string = %Y-%m-%d</vh></v>
 <v t="swot.20210129110742.1"><vh>@string body-time-format-string = %Y-%m-%d %H:%M:%S</vh></v>
@@ -147,6 +147,7 @@
 <v t="swot.20181207204117.1"><vh>@bool show_iconbar = False</vh></v>
 <v t="swot.20181219183905.1"><vh>@bool outline_tabs_show_close = False</vh></v>
 <v t="swot.20211014175000.1"><vh>@bool show-tips = False</vh></v>
+<v t="swot.20260305080526.1"><vh>@string qt-layout-name = layout-vertical-thirds</vh></v>
 <v t="swot.20200806093010.1"><vh>@string todo_time_name = hours</vh></v>
 <v t="swot.20230824225611.1"><vh>@string unl-status-kind = legacy</vh></v>
 <v t="swot.20220917160028.1"><vh>@int tab-width = -4</vh></v>
@@ -2496,5 +2497,6 @@ add a space with comment:
 # @+node:swot.20260222193522.1: * @file ...
 </t>
 <t tx="swot.20260227090439.1">c.k.simulateCommand('find-quick-selected')</t>
+<t tx="swot.20260305080526.1"></t>
 </tnodes>
 </leo_file>
