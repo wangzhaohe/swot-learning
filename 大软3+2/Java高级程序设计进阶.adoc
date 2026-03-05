@@ -16,23 +16,57 @@
 = 高级程序设计进阶理论教学内容（Java）共36学时
 
 ++++
-<button id="toggleButton">目录开关</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+<style>
+/* 1. 默认状态：顺应你原本的展开状态 */
+#toc {
+    min-width: 0 !important;
+    max-height: 100vh;
+    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    white-space: nowrap !important;
+    max-width: 530px;
+    opacity: 1;
+
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+#toc.collapsed {
+    max-width: 0 !important; /* 宽度强制缩到 0 */
+    opacity: 0 !important; /* 透明度消失 */
+
+    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 3. 修复行间距（保留你需要的紧凑排版） */
+#toc ul, #toc li {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+</style>
+
+<button id="toggleButton">目录开关</button>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+// 默认没有任何类名，所以默认是自然展开的。
+toggleButton.addEventListener('click', () => {
+    contentDiv.classList.toggle('collapsed');
+});
 </script>
 ++++
 
@@ -1660,7 +1694,44 @@ public void loadUsers() throws DoorSystemException {
 4.  **挂断电话 (关闭资源)**：干完活必须挂电话，否则仓库线路会被占满。
 
 === 代码实现：查询用户信息
-我们将之前定义的 `User` 对象和 `DoorSystemException` 结合进来。
+[source,java]
+----
+import java.sql.*;
+
+public class JDBCDemo {
+    // 数据库连接信息（假设是 MySQL）
+    private static final String URL = "jdbc:mysql://localhost:3306/door_db";
+    private static final String USER = "root";
+    private static final String PASS = "123456";
+
+    public void findUserByCard(String cardId) throws DoorSystemException {
+        // SQL 语句：去 users 表里找卡号对应的姓名
+        String sql = "SELECT name FROM users WHERE card_id = ?";
+
+        // 使用 try-with-resources，自动关闭连接，防止“占线”
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // 设置参数
+            pstmt.setString(1, cardId);
+
+            // 执行查询
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String name = rs.getString("name");
+                System.out.println("数据库查询成功！该卡所属用户为：" + name);
+            } else {
+                // 找不到时，抛出我们统一定义的异常
+                throw new DoorSystemException("数据库中未找到卡号为 " + cardId + " 的用户");
+            }
+        } catch (SQLException e) {
+            // 将底层的 SQL 错误包装成我们的门禁系统错误
+            throw new DoorSystemException("数据库连接失败：" + e.getMessage());
+        }
+    }
+}
+----
 
 === 防止 SQL 注入 —— “拒绝陌生人的小纸条”
 . 知识点说明
@@ -1700,32 +1771,43 @@ public void loadUsers() throws DoorSystemException {
 * *本节要求*：理解“分身术”的原理，让程序能同时干多件事；了解反射这一“透视眼”技术。
 
 === 多线程 —— “程序的分身术”
-[upperalpha]
-. 知识点说明
-* **进程**：像是一个工厂（比如整个门禁系统）。
-* **线程**：像是工厂里的工人。一个工厂可以有很多工人同时干活。
-* **为什么要学？**：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。
+// 1. 定义一个自检任务
+class HealthCheckThread extends Thread {
+    public void run() {
+        while (true) {
+            System.out.println("系统自检中：硬件状态正常...");
+            try { Thread.sleep(5000); } catch (InterruptedException e) {}
+        }
+    }
+}
 
+public class MultiThreadDemo {
+    public static void main(String[] args) {
+        // 2. 启动自检“分身”
+        HealthCheckThread check = new HealthCheckThread();
+        check.start(); 
 
-. 生活举例
-+
-你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。
-
-
-. 代码实现：模拟门禁自检与刷卡同时进行
-+
-[source,java]
+        // 3. 主线程继续处理刷卡
+        System.out.println("主系统：准备就绪，请刷卡...");
+    }
+}
 ----
 
 === 反射机制 —— “程序的 X 光机”
-知识点说明
+public class ReflectionDemo {
+    public static void main(String[] args) throws Exception {
+        // 通过类名，直接“抓取”这个类的结构
+        Class clazz = Class.forName("User");
 
-* **反射 (Reflection)**：平时我们用类，是先看到图纸再造房子。反射则是房子已经在那了，我们拿个“X光机”去扫，看看它里面有什么属性和方法。
-* **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
+        System.out.println("类的名字是：" + clazz.getName());
 
-
-.代码举例（看看 User 类里有什么）
-[source,java]
+        // 获取所有定义的属性名字
+        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+        for (var f : fields) {
+            System.out.println("发现属性：" + f.getName());
+        }
+    }
+}
 ----
 
 === 小结

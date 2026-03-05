@@ -699,23 +699,57 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<button id="toggleButton">目录开关</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+<style>
+/* 1. 默认状态：顺应你原本的展开状态 */
+#toc {
+    min-width: 0 !important;
+    max-height: 100vh;
+    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    white-space: nowrap !important;
+    max-width: 530px;
+    opacity: 1;
+
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+#toc.collapsed {
+    max-width: 0 !important; /* 宽度强制缩到 0 */
+    opacity: 0 !important; /* 透明度消失 */
+
+    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 3. 修复行间距（保留你需要的紧凑排版） */
+#toc ul, #toc li {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+</style>
+
+<button id="toggleButton">目录开关</button>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+// 默认没有任何类名，所以默认是自然展开的。
+toggleButton.addEventListener('click', () => {
+    contentDiv.classList.toggle('collapsed');
+});
 </script>
 </div>
 </div>
@@ -3595,8 +3629,44 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="sect2">
 <h3 id="_代码实现查询用户信息">代码实现：查询用户信息</h3>
-<div class="paragraph">
-<p>我们将之前定义的 <code>User</code> 对象和 <code>DoorSystemException</code> 结合进来。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.sql.*</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">JDBCDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 数据库连接信息（假设是 MySQL）</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">URL</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;jdbc:mysql://localhost:3306/door_db&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">USER</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;root&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">PASS</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;123456&quot;</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">findUserByCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorSystemException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// SQL 语句：去 users 表里找卡号对应的姓名</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">sql</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;SELECT name FROM users WHERE card_id = ?&quot;</span><span class="tok-p">;</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 使用 try-with-resources，自动关闭连接，防止“占线”</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Connection</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">DriverManager</span><span class="tok-p">.</span><span class="tok-na">getConnection</span><span class="tok-p">(</span><span class="tok-n">URL</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">USER</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">PASS</span><span class="tok-p">);</span>
+<span class="tok-w">             </span><span class="tok-n">PreparedStatement</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-p">.</span><span class="tok-na">prepareStatement</span><span class="tok-p">(</span><span class="tok-n">sql</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 设置参数</span>
+<span class="tok-w">            </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">setString</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">);</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 执行查询</span>
+<span class="tok-w">            </span><span class="tok-n">ResultSet</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">executeQuery</span><span class="tok-p">();</span>
+
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">next</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">getString</span><span class="tok-p">(</span><span class="tok-s">&quot;name&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;数据库查询成功！该卡所属用户为：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-c1">// 找不到时，抛出我们统一定义的异常</span>
+<span class="tok-w">                </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorSystemException</span><span class="tok-p">(</span><span class="tok-s">&quot;数据库中未找到卡号为 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 的用户&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">SQLException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 将底层的 SQL 错误包装成我们的门禁系统错误</span>
+<span class="tok-w">            </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorSystemException</span><span class="tok-p">(</span><span class="tok-s">&quot;数据库连接失败：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -3719,48 +3789,49 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div class="sect2">
 <h3 id="_多线程_程序的分身术">多线程 —— “程序的分身术”</h3>
-<div class="olist upperalpha">
-<ol class="upperalpha" type="A">
-<li>
-<p>知识点说明</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>进程</strong>：像是一个工厂（比如整个门禁系统）。</p>
-</li>
-<li>
-<p><strong>线程</strong>：像是工厂里的工人。一个工厂可以有很多工人同时干活。</p>
-</li>
-<li>
-<p><strong>为什么要学？</strong>：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>生活举例</p>
 <div class="paragraph">
-<p>你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。</p>
+<p>class HealthCheckThread extends Thread {
+    public void run() {
+        while (true) {
+            System.out.println("系统自检中：硬件状态正常&#8230;&#8203;");
+            try { Thread.sleep(5000); } catch (InterruptedException e) {}
+        }
+    }
+}</p>
 </div>
-</li>
-<li>
-<p>代码实现：模拟门禁自检与刷卡同时进行</p>
+<div class="paragraph">
+<p>public class MultiThreadDemo {
+    public static void main(String[] args) {
+        // 2. 启动自检“分身”
+        HealthCheckThread check = new HealthCheckThread();
+        check.start();</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        // 3. 主线程继续处理刷卡
+        System.out.println("主系统：准备就绪，请刷卡...");
+    }
+}</pre>
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span>
-<span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-n">反射机制</span><span class="tok-w"> </span><span class="tok-err">——</span><span class="tok-w"> </span><span class="tok-err">“</span><span class="tok-n">程序的</span><span class="tok-w"> </span><span class="tok-n">X</span><span class="tok-w"> </span><span class="tok-n">光机</span><span class="tok-err">”</span>
-<span class="tok-n">知识点说明</span>
+<pre>=== 反射机制 —— “程序的 X 光机”
+public class ReflectionDemo {
+    public static void main(String[] args) throws Exception {
+        // 通过类名，直接“抓取”这个类的结构
+        Class clazz = Class.forName("User");
 
-<span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">反射</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Reflection</span><span class="tok-p">)</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-n">平时我们用类</span><span class="tok-err">，</span><span class="tok-n">是先看到图纸再造房子</span><span class="tok-err">。</span><span class="tok-n">反射则是房子已经在那了</span><span class="tok-err">，</span><span class="tok-n">我们拿个</span><span class="tok-err">“</span><span class="tok-n">X光机</span><span class="tok-err">”</span><span class="tok-n">去扫</span><span class="tok-err">，</span><span class="tok-n">看看它里面有什么属性和方法</span><span class="tok-err">。</span>
-<span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">核心价值</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-n">它是很多框架</span><span class="tok-err">（</span><span class="tok-n">如</span><span class="tok-w"> </span><span class="tok-n">Spring</span><span class="tok-err">）</span><span class="tok-n">的灵魂</span><span class="tok-err">，</span><span class="tok-n">让程序在运行时动态地加载类</span><span class="tok-err">。</span>
+        System.out.println("类的名字是：" + clazz.getName());
 
-
-<span class="tok-p">.</span><span class="tok-na">代码举例</span><span class="tok-err">（</span><span class="tok-n">看看</span><span class="tok-w"> </span><span class="tok-n">User</span><span class="tok-w"> </span><span class="tok-n">类里有什么</span><span class="tok-err">）</span>
-<span class="tok-o">[</span><span class="tok-n">source</span><span class="tok-p">,</span><span class="tok-n">java</span><span class="tok-o">]</span></code></pre>
+        // 获取所有定义的属性名字
+        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+        for (var f : fields) {
+            System.out.println("发现属性：" + f.getName());
+        }
+    }
+}</pre>
 </div>
-</div>
-</li>
-</ol>
 </div>
 </div>
 <div class="sect2">
@@ -3891,7 +3962,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-05 19:53:30 +0800
+Last updated 2026-03-05 21:13:43 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
