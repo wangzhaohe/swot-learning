@@ -1,0 +1,120 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+
+= 测试输出没用的东西
+
+++++
+<button id="toggleButton">目录开关</button>
+<script>
+    // 获取按钮和 div 元素
+    const toggleButton = document.getElementById('toggleButton');
+    const contentDiv = document.getElementById('toc');
+    contentDiv.style.display = 'block';
+
+    // 添加点击事件监听器
+    toggleButton.addEventListener('click', () => {
+        // 切换 div 的显示状态
+        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
+        if (contentDiv.style.display === 'none') {
+            contentDiv.style.display = 'block';
+        } else {
+            contentDiv.style.display = 'none';
+        }
+    });
+</script>
+++++
+
+== 继承与多态 —— “父子卡片”与“读卡器逻辑”
+[upperalpha]
+. 知识点说明
+* **继承 (Inheritance)**：子类自动拥有父类的特征。所有卡片（学生卡、管理员卡）都有卡号，我们只需在父类定义一次。
+* **多态 (Polymorphism)**：同一种动作，不同的反应。读卡器只需要喊一声“校验”，不同身份的卡片会自动展示不同的权限。
+
+. 代码举例
++
+[source,java]
+----
+/**
+ * 类名：BaseDoorCard (由 DoorCard 演化而来)
+ */
+class BaseDoorCard {
+    private String serialNumber;
+    private String ownerName;
+
+    public BaseDoorCard(String serialNumber, String ownerName) {
+        this.serialNumber = serialNumber;
+        this.ownerName = ownerName;
+    }
+
+    // 封装逻辑：Getter
+    public String getOwnerName() { return ownerName; }
+
+    // 多态的核心：父类定义一个“动作标准”
+    public void validate() {
+        System.out.println("【基础校验】正在核验卡片物理信息...");
+    }
+}
+class StudentCard extends BaseDoorCard {
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承父类的构造
+    }
+
+    @Override
+    public void validate() {
+        super.validate(); // 先执行父类的通用检测
+        System.out.println("【学生卡】检测成功：确认 " + getOwnerName() + " 的图书馆访问权限。");
+    }
+}
+class AdminCard extends BaseDoorCard {
+    public AdminCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public void validate() {
+        super.validate(); // 先执行父类的通用检测
+        System.out.println("【管理员卡】检测成功：开启全校所有通道。");
+    }
+}
+// 读卡器服务类 (展示多态的精髓) 
+// 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
+class CardReader {
+    // 这里传入的是 BaseDoorCard，展示了多态的兼容性
+    public void readCard(BaseDoorCard card) {
+        System.out.print("读卡器感应 -> ");
+        card.validate(); // 自动触发对应的子类方法
+    }
+}
+public class InheritanceAndPolymorphismDemo {
+    public static void main(String[] args) {
+        CardReader cardReader = new CardReader();
+
+        // 准备好不同的卡片（向上转型）
+        BaseDoorCard studentCard = new StudentCard("S-2024-001", "小明");
+        BaseDoorCard adminCard = new AdminCard("A-007", "张老师");
+
+        // 统一调用读卡器的同一个方法，产生不同的行为
+        cardReader.readCard(studentCard); // 输出学生权限
+        cardReader.readCard(adminCard); // 输出管理员权限
+    }
+}
+
+----
+
+. 为什么这样设计？
+  * **解耦性**：`CardReader` 硬件逻辑与具体的卡片类型解耦。它不需要知道什么是“学生卡”，它只认识“门禁卡”。
+  * **可扩展性**：如果增加“教师卡”或“访客卡”，只需新建子类继承 `BaseDoorCard`，`CardReader` 的代码一行都不用改。
+

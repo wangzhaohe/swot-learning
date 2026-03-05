@@ -17035,7 +17035,7 @@ run --rm -i -v "$SourcepathEntry$":/src -w /src -e DIR="$FileDirRelativeToSource
 +
 image::img/external_tools_run_in_podman.png[,640,]
 
-. Arguments 命令详解:
+. Arguments 命令详解: (多功能适配命令)
 * `run --rm`: 容器运行结束即销毁，保持系统整洁。
 * `-i`: 支持交互模式，如果程序中使用 `Scanner` 等读取输入，控制台可正常交互。
 * `-v "$SourcepathEntry$":/src`: **核心逻辑**。将 IDEA 的源码根目录映射到容器 `/src`，确保 `javac` 能根据包名（Package）正确索引依赖类。
