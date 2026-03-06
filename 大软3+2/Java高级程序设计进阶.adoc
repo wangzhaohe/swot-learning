@@ -332,8 +332,8 @@ public class VariableDemo {
 // @edit code/testBasicSyntax/src/IfElseDemo.java
 public class IfElseDemo {
     public static void main(String[] args) {
-        boolean isCardValid = true;  // 卡片有效
-        int currentHour = 23;        // 当前时间是晚上 23 点
+        boolean isCardValid = true; // 卡片有效
+        int currentHour = 23; // 当前时间是晚上 23 点
 
         // 门禁规则：卡片必须有效，且时间必须在早6点到晚22点之间才能正常进入
         if (isCardValid && (currentHour >= 6 && currentHour <= 22)) {
@@ -743,30 +743,36 @@ class BaseDoorCard {
     private String serialNumber;
     private String ownerName;
 
+    // 全参构造器
     public BaseDoorCard(String serialNumber, String ownerName) {
         this.serialNumber = serialNumber;
         this.ownerName = ownerName;
     }
 
     // 封装逻辑：Getter
-    public String getOwnerName() { return ownerName; }
+    public String getOwnerName() {
+        return ownerName;
+    }
 
     // 多态的核心：父类定义一个“动作标准”
     public void validate() {
         System.out.println("【基础校验】正在核验卡片物理信息...");
     }
 }
+
 class StudentCard extends BaseDoorCard {
     public StudentCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName); // 继承父类的构造
     }
 
+    // 重写父类的方法 validate()
     @Override
     public void validate() {
-        super.validate(); // 先执行父类的通用检测
+        super.validate(); // 先执行父类的 validate() 方法，进行通用检测
         System.out.println("【学生卡】检测成功：确认 " + getOwnerName() + " 的图书馆访问权限。");
     }
 }
+
 class AdminCard extends BaseDoorCard {
     public AdminCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName);
@@ -778,7 +784,8 @@ class AdminCard extends BaseDoorCard {
         System.out.println("【管理员卡】检测成功：开启全校所有通道。");
     }
 }
-// 读卡器服务类 (展示多态的精髓) 
+
+// 读卡器服务类 (展示多态的精髓)
 // 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
 class CardReader {
     // 这里传入的是 BaseDoorCard，展示了多态的兼容性
@@ -787,6 +794,7 @@ class CardReader {
         card.validate(); // 自动触发对应的子类方法
     }
 }
+
 public class InheritanceAndPolymorphismDemo {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();
@@ -800,7 +808,6 @@ public class InheritanceAndPolymorphismDemo {
         cardReader.readCard(adminCard); // 输出管理员权限
     }
 }
-
 ----
 
 . 为什么这样设计？
@@ -817,7 +824,7 @@ public class InheritanceAndPolymorphismDemo {
 ----
 // code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
 // 通过声明包，解决类名冲突问题
-package use_abstraction;  // 必须匹配文件夹的名字
+package use_abstraction; // 必须匹配文件夹的名字
 
 /**
  * 类名：BaseDoorCardAbs (抽象类)
@@ -834,7 +841,9 @@ abstract class BaseDoorCard {
         this.ownerName = ownerName;
     }
 
-    public String getOwnerName() { return ownerName; }
+    public String getOwnerName() {
+        return ownerName;
+    }
 
     /**
      * 通用逻辑：所有卡片都要进行的物理核验。
@@ -850,6 +859,7 @@ abstract class BaseDoorCard {
      */
     public abstract void showAccessScope();
 }
+
 // --- 子类必须实现抽象方法 ---
 class StudentCard extends BaseDoorCard {
     public StudentCard(String serialNumber, String ownerName) {
@@ -867,6 +877,7 @@ class StudentCard extends BaseDoorCard {
         System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
     }
 }
+
 class AdminCard extends BaseDoorCard {
     public AdminCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName);
@@ -883,7 +894,8 @@ class AdminCard extends BaseDoorCard {
         System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
     }
 }
-// 读卡器服务类 (展示多态的精髓) 
+
+// 读卡器服务类 (展示多态的精髓)
 // 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
 class CardReader {
     // 这里传入的是 BaseDoorCard，展示了多态的兼容性
@@ -892,6 +904,7 @@ class CardReader {
         card.validate(); // 自动触发对应的子类方法
     }
 }
+
 public class AbstractClassDemo {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();
@@ -905,7 +918,7 @@ public class AbstractClassDemo {
         cardReader.readCard(adminCard);
 
         // 演示抽象类的约束：
-        // BaseDoorCard mysteryCard = new BaseDoorCard("X-000", "未知"); 
+        // BaseDoorCard mysteryCard = new BaseDoorCard("X-000", "未知");
         // 上行代码会报错：'BaseDoorCard' is abstract; cannot be instantiated
     }
 }
@@ -933,6 +946,7 @@ package use_interface;
 interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
+
 /**
  * 类名：BaseDoorCardAbs (抽象类)
  * 演化点：使用了 abstract 关键字。
@@ -948,7 +962,9 @@ abstract class BaseDoorCard {
         this.ownerName = ownerName;
     }
 
-    public String getOwnerName() { return ownerName; }
+    public String getOwnerName() {
+        return ownerName;
+    }
 
     /**
      * 通用逻辑：所有卡片都要进行的物理核验。
@@ -964,6 +980,7 @@ abstract class BaseDoorCard {
      */
     public abstract void showAccessScope();
 }
+
 /**
  * 学生卡：既是门禁卡，又能支付 (多重身份)
  */
@@ -1005,6 +1022,7 @@ class AdminCard extends BaseDoorCard {
         System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
     }
 }
+
 /**
  * 食堂刷卡机：它不关心你是哪种卡，它只认“Payable”接口
  */
@@ -1014,7 +1032,6 @@ class CanteenReader {
         card.pay(price); // 只要实现了 Payable，就一定有 pay 方法
     }
 }
-
 
 public class InterfaceDemo {
     public static void main(String[] args) {
@@ -1030,7 +1047,6 @@ public class InterfaceDemo {
         // canteen.processPayment(adminCard, 20.0); // 编译不通过：张老师的卡不能在食堂付钱
     }
 }
-
 ----
 
 . 设计说明
@@ -1695,6 +1711,8 @@ public void loadUsers() throws DoorSystemException {
 4.  **挂断电话 (关闭资源)**：干完活必须挂电话，否则仓库线路会被占满。
 
 === 代码实现：查询用户信息
+我们将之前定义的 `User` 对象和 `DoorSystemException` 结合进来。
+
 [source,java]
 ----
 import java.sql.*;
@@ -1772,6 +1790,22 @@ public class JDBCDemo {
 * *本节要求*：理解“分身术”的原理，让程序能同时干多件事；了解反射这一“透视眼”技术。
 
 === 多线程 —— “程序的分身术”
+[upperalpha]
+. 知识点说明
+* **进程**：像是一个工厂（比如整个门禁系统）。
+* **线程**：像是工厂里的工人。一个工厂可以有很多工人同时干活。
+* **为什么要学？**：如果门禁程序只有一个线程，那么它在下载更新包时，可能就没法响应用户的刷卡请求了。
+
+
+. 生活举例
++
+你在火锅店吃饭，一个服务员（线程）负责点菜，另一个服务员（线程）负责倒水。如果只有一个服务员，他去厨房端菜时，你就没法叫他加水了。
+
+
+. 代码实现：模拟门禁自检与刷卡同时进行
++
+[source,java]
+----
 // 1. 定义一个自检任务
 class HealthCheckThread extends Thread {
     public void run() {
@@ -1795,6 +1829,15 @@ public class MultiThreadDemo {
 ----
 
 === 反射机制 —— “程序的 X 光机”
+知识点说明
+
+* **反射 (Reflection)**：平时我们用类，是先看到图纸再造房子。反射则是房子已经在那了，我们拿个“X光机”去扫，看看它里面有什么属性和方法。
+* **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
+
+
+.代码举例（看看 User 类里有什么）
+[source,java]
+----
 public class ReflectionDemo {
     public static void main(String[] args) throws Exception {
         // 通过类名，直接“抓取”这个类的结构
