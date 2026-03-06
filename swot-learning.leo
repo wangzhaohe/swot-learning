@@ -236,8 +236,8 @@
 <v t="swot.20260215222546.1"><vh>继承与多态 —— “父子卡片”与“读卡器逻辑”</vh>
 <v t="swot.20260304152414.1"><vh>@clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java</vh>
 <v t="swot.20260304155927.1"><vh>BB class BaseDoorCard &lt;- Change from DoorCard 基础门卡</vh></v>
-<v t="swot.20260304162904.1"><vh>BB class StudentCard extends BaseDoorCard 学生卡</vh></v>
-<v t="swot.20260304163021.1"><vh>BB class AdminCard extends BaseDoorCard 管理员卡</vh></v>
+<v t="swot.20260304162904.1"><vh>BB class StudentCard extends BaseDoorCard 学生卡继承自基础门卡</vh></v>
+<v t="swot.20260304163021.1"><vh>BB class AdminCard extends BaseDoorCard 管理员卡继承自基础门卡</vh></v>
 <v t="swot.20260304155948.1"><vh>BB class CardReader 读卡器</vh></v>
 </v>
 </v>
@@ -380,11 +380,18 @@
 <v t="swot.20260215225306.1"><vh>@path neovim</vh>
 <v t="swot.20260306003733.1"><vh>@adoc LazyVim_Java_JDK_17_开发环境配置指南_手动降级版.adoc</vh>
 <v t="swot.20260306003747.1"><vh>LazyVim Java JDK 17 开发环境配置指南 (手动降级版)</vh>
-<v t="swot.20260306003750.1"><vh>步骤 1: 环境准备与清理</vh></v>
-<v t="swot.20260306004114.1"><vh>步骤 2: 手动下载兼容版 jdtls (v1.33)</vh></v>
-<v t="swot.20260306004104.1"><vh>步骤 3: 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)</vh></v>
-<v t="swot.20260306004048.1"><vh>步骤 4: 配置快捷运行 (~/.config/nvim/lua/config/keymaps.lua)</vh></v>
-<v t="swot.20260306004036.1"><vh>步骤 5: 验证</vh></v>
+<v t="swot.20260306003750.1"><vh>1. 环境准备与清理</vh></v>
+<v t="swot.20260306004114.1"><vh>2. 手动下载兼容版 jdtls (v1.33)</vh></v>
+<v t="swot.20260306004104.1"><vh>3. 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)</vh></v>
+<v t="swot.20260306082055.1"><vh>4. 配置最后加载 (~/.config/nvim/after/ftplugin/java.lua)</vh>
+<v t="swot.20260306092624.1"><vh>强制当前缓冲区的缩进为 4 空格</vh></v>
+<v t="swot.20260306092634.1"><vh>配置 jdtls 的启动参数</vh></v>
+<v t="swot.20260306092646.1"><vh>获取 blink.cmp 的底层能力</vh></v>
+<v t="swot.20260306092706.1"><vh>强制 LSP 格式化时使用 4 空格</vh></v>
+<v t="swot.20260306004048.1"><vh>配置快捷运行</vh></v>
+<v t="swot.20260306092724.1"><vh>核心：每次打开 java 文件时，触发挂载</vh></v>
+</v>
+<v t="swot.20260306004036.1"><vh>5. 验证</vh></v>
 </v>
 </v>
 <v t="swot.20260226111454.1"><vh>@adoc lazyvim-hotkeys.adoc</vh>
@@ -17840,7 +17847,7 @@ public class DoorCardDemo {
     }
 }
 </t>
-<t tx="swot.20260304152414.1" _mod_time="4741da6a6c658983192e">@language java
+<t tx="swot.20260304152414.1" _mod_time="4741da6a8b8d3824472e">@language java
 @others
 public class InheritanceAndPolymorphismDemo {
     public static void main(String[] args) {
@@ -17855,7 +17862,6 @@ public class InheritanceAndPolymorphismDemo {
         cardReader.readCard(adminCard); // 输出管理员权限
     }
 }
-
 </t>
 <t tx="swot.20260304155927.1">@language java
 /**
@@ -17865,30 +17871,33 @@ class BaseDoorCard {
     private String serialNumber;
     private String ownerName;
 
+    // 全参构造器
     public BaseDoorCard(String serialNumber, String ownerName) {
         this.serialNumber = serialNumber;
         this.ownerName = ownerName;
     }
 
     // 封装逻辑：Getter
-    public String getOwnerName() { return ownerName; }
+    public String getOwnerName() {
+        return ownerName;
+    }
 
     // 多态的核心：父类定义一个“动作标准”
     public void validate() {
         System.out.println("【基础校验】正在核验卡片物理信息...");
     }
 }
+
 </t>
 <t tx="swot.20260304155948.1">@language java
-
 // 读卡器服务类 (展示多态的精髓)
 // 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
 class CardReader {
-  // 这里传入的是 BaseDoorCard，展示了多态的兼容性
-  public void readCard(BaseDoorCard card) {
-    System.out.print("读卡器感应 -&gt; ");
-    card.validate(); // 自动触发对应的子类方法
-  }
+    // 这里传入的是 BaseDoorCard，展示了多态的兼容性
+    public void readCard(BaseDoorCard card) {
+        System.out.print("读卡器感应 -&gt; ");
+        card.validate(); // 自动触发对应的子类方法
+    }
 }
 
 </t>
@@ -17898,12 +17907,14 @@ class StudentCard extends BaseDoorCard {
         super(serialNumber, ownerName); // 继承父类的构造
     }
 
+    // 重写父类的方法 validate()
     @Override
     public void validate() {
-        super.validate(); // 先执行父类的通用检测
+        super.validate(); // 先执行父类的 validate() 方法，进行通用检测
         System.out.println("【学生卡】检测成功：确认 " + getOwnerName() + " 的图书馆访问权限。");
     }
 }
+
 </t>
 <t tx="swot.20260304163021.1">@language java
 class AdminCard extends BaseDoorCard {
@@ -17917,6 +17928,7 @@ class AdminCard extends BaseDoorCard {
         System.out.println("【管理员卡】检测成功：开启全校所有通道。");
     }
 }
+
 </t>
 <t tx="swot.20260304165602.1">@language asciidoc
 :author: https://github.com/wangzhaohe/swot-learning
@@ -17967,28 +17979,28 @@ class AdminCard extends BaseDoorCard {
 @others
 ----
 </t>
-<t tx="swot.20260304170758.1" _mod_time="4741da6a6e456e1d8a2e">@language java
+<t tx="swot.20260304170758.1" _mod_time="4741da6a88581f39372e">@language java
 // code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
 // 通过声明包，解决类名冲突问题
 package use_abstraction; // 必须匹配文件夹的名字
 
 @others
 public class AbstractClassDemo {
-  public static void main(String[] args) {
-    CardReader cardReader = new CardReader();
+    public static void main(String[] args) {
+        CardReader cardReader = new CardReader();
 
-    // 向上转型：父类引用指向子类对象
-    BaseDoorCard studentCard = new StudentCard("S-2024-001", "小明");
-    BaseDoorCard adminCard = new AdminCard("A-007", "张老师");
+        // 向上转型：父类引用指向子类对象
+        BaseDoorCard studentCard = new StudentCard("S-2024-001", "小明");
+        BaseDoorCard adminCard = new AdminCard("A-007", "张老师");
 
-    cardReader.readCard(studentCard);
-    System.out.println("--------------------");
-    cardReader.readCard(adminCard);
+        cardReader.readCard(studentCard);
+        System.out.println("--------------------");
+        cardReader.readCard(adminCard);
 
-    // 演示抽象类的约束：
-    // BaseDoorCard mysteryCard = new BaseDoorCard("X-000", "未知");
-    // 上行代码会报错：'BaseDoorCard' is abstract; cannot be instantiated
-  }
+        // 演示抽象类的约束：
+        // BaseDoorCard mysteryCard = new BaseDoorCard("X-000", "未知");
+        // 上行代码会报错：'BaseDoorCard' is abstract; cannot be instantiated
+    }
 }
 </t>
 <t tx="swot.20260304171106.1">@language java
@@ -17999,87 +18011,87 @@ public class AbstractClassDemo {
  * 2. 规范：强制子类必须实现特定的权限说明逻辑。
  */
 abstract class BaseDoorCard {
-  private String serialNumber;
-  private String ownerName;
+    private String serialNumber;
+    private String ownerName;
 
-  public BaseDoorCard(String serialNumber, String ownerName) {
-    this.serialNumber = serialNumber;
-    this.ownerName = ownerName;
-  }
+    public BaseDoorCard(String serialNumber, String ownerName) {
+        this.serialNumber = serialNumber;
+        this.ownerName = ownerName;
+    }
 
-  public String getOwnerName() {
-    return ownerName;
-  }
+    public String getOwnerName() {
+        return ownerName;
+    }
 
-  /**
-   * 通用逻辑：所有卡片都要进行的物理核验。
-   * 抽象类可以拥有具体实现的方法。
-   */
-  public void validate() {
-    System.out.println("【基础校验】正在核验卡片物理信息...");
-  }
+    /**
+     * 通用逻辑：所有卡片都要进行的物理核验。
+     * 抽象类可以拥有具体实现的方法。
+     */
+    public void validate() {
+        System.out.println("【基础校验】正在核验卡片物理信息...");
+    }
 
-  /**
-   * 抽象方法：强制规范。
-   * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。
-   */
-  public abstract void showAccessScope();
+    /**
+     * 抽象方法：强制规范。
+     * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。
+     */
+    public abstract void showAccessScope();
 }
 
 </t>
 <t tx="swot.20260304173742.1">@language java
 // --- 子类必须实现抽象方法 ---
 class StudentCard extends BaseDoorCard {
-  public StudentCard(String serialNumber, String ownerName) {
-    super(serialNumber, ownerName); // 继承并调用父类构造器
-  }
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承并调用父类构造器
+    }
 
-  @Override
-  public void validate() {
-    super.validate(); // 执行通用检测
-    showAccessScope(); // 执行个性化权限展示
-  }
+    @Override
+    public void validate() {
+        super.validate(); // 执行通用检测
+        showAccessScope(); // 执行个性化权限展示
+    }
 
-  @Override
-  public void showAccessScope() {
-    System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
-  }
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+    }
 }
 
 </t>
 <t tx="swot.20260304173902.1">@language java
 class AdminCard extends BaseDoorCard {
-  public AdminCard(String serialNumber, String ownerName) {
-    super(serialNumber, ownerName);
-  }
+    public AdminCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
 
-  @Override
-  public void validate() {
-    super.validate();
-    showAccessScope();
-  }
+    @Override
+    public void validate() {
+        super.validate();
+        showAccessScope();
+    }
 
-  @Override
-  public void showAccessScope() {
-    System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
-  }
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
+    }
 }
 
 </t>
-<t tx="swot.20260304220859.1" _mod_time="4741da6a6e220494ee2e">@language java
+<t tx="swot.20260304220859.1" _mod_time="4741da6a86f81b699a2e">@language java
 // code/testBasicSyntax/src/use_interface/InterfaceDemo.java
 package use_interface;
 
 @others
 
-    CanteenReader canteen = new CanteenReader();
+        CanteenReader canteen = new CanteenReader();
 
-    // 1. 学生卡实现了 Payable，可以打饭
-    canteen.processPayment(studentCard, 15.0);
+        // 1. 学生卡实现了 Payable，可以打饭
+        canteen.processPayment(studentCard, 15.0);
 
-    // 2. 管理员卡没实现 Payable，下面这行代码在编译时就会报错
-    // canteen.processPayment(adminCard, 20.0); // 编译不通过：张老师的卡不能在食堂付钱
-  }
+        // 2. 管理员卡没实现 Payable，下面这行代码在编译时就会报错
+        // canteen.processPayment(adminCard, 20.0); // 编译不通过：张老师的卡不能在食堂付钱
+    }
 }
 </t>
 <t tx="swot.20260304221446.1">@language asciidoc
@@ -18087,7 +18099,7 @@ package use_interface;
  * 支付接口：定义了“能够支付”的规范
  */
 interface Payable {
-  void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
+    void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
 
 </t>
@@ -18096,25 +18108,25 @@ interface Payable {
  * 学生卡：既是门禁卡，又能支付 (多重身份)
  */
 class StudentCard extends BaseDoorCard implements Payable {
-  public StudentCard(String serialNumber, String ownerName) {
-    super(serialNumber, ownerName); // 继承并调用父类构造器
-  }
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承并调用父类构造器
+    }
 
-  @Override
-  public void pay(double amount) {
-    System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
-  }
+    @Override
+    public void pay(double amount) {
+        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+    }
 
-  @Override
-  public void validate() {
-    super.validate(); // 执行通用检测
-    showAccessScope(); // 执行个性化权限展示
-  }
+    @Override
+    public void validate() {
+        super.validate(); // 执行通用检测
+        showAccessScope(); // 执行个性化权限展示
+    }
 
-  @Override
-  public void showAccessScope() {
-    System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
-  }
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+    }
 }
 
 </t>
@@ -18123,16 +18135,16 @@ class StudentCard extends BaseDoorCard implements Payable {
  * 食堂刷卡机：它不关心你是哪种卡，它只认“Payable”接口
  */
 class CanteenReader {
-  public void processPayment(Payable card, double price) {
-    System.out.println("--- 食堂刷卡机感应中 ---");
-    card.pay(price); // 只要实现了 Payable，就一定有 pay 方法
-  }
+    public void processPayment(Payable card, double price) {
+        System.out.println("--- 食堂刷卡机感应中 ---");
+        card.pay(price); // 只要实现了 Payable，就一定有 pay 方法
+    }
 }
 
 public class InterfaceDemo {
-  public static void main(String[] args) {
-    StudentCard studentCard = new StudentCard("S-2024-001", "小明");
-    AdminCard adminCard = new AdminCard("A-007", "张老师");
+    public static void main(String[] args) {
+        StudentCard studentCard = new StudentCard("S-2024-001", "小明");
+        AdminCard adminCard = new AdminCard("A-007", "张老师");
 </t>
 <t tx="swot.20260305091955.1">a
 b
@@ -18318,12 +18330,9 @@ toggleButton.addEventListener('click', () =&gt; {
 
 2. **运行代码**: 按下 `空格 + r + j`，应能看到正常的控制台输出。
 </t>
-<t tx="swot.20260306004048.1">解决 Java `package` 包名运行报错的关键。此脚本会自动切换模式并进入 `src` 目录运行正确的类名。
-
-[source,lua]
-----
-@language lua
+<t tx="swot.20260306004048.1">-- 解决 Java `package` 包名运行报错的关键。此脚本会自动切换模式并进入 `src` 目录运行正确的类名。
 -- 终极 Java 一键运行 (自带编译 + 包名支持)
+
 vim.keymap.set("n", "&lt;leader&gt;rj", function()
   vim.cmd("write") -- 保存当前文件
 
@@ -18350,71 +18359,18 @@ vim.keymap.set("n", "&lt;leader&gt;rj", function()
   local run_cmd = "cd " .. src_dir .. " &amp;&amp; javac " .. relative_file .. " &amp;&amp; java " .. full_class_name
 
   vim.cmd("split | term " .. run_cmd)
-end, { desc = "Java 编译并运行" })
-----
+end, { buffer = true, desc = "Java 编译并运行(带 Package 支持)" })
 </t>
 <t tx="swot.20260306004104.1">创建此文件，手动接管 `nvim-jdtls` 的启动逻辑，跳过 Mason 的版本检查。
 
 [source,lua]
 ----
 @language lua
+-- ~/.config/nvim/lua/plugins/java.lua
 return {
   {
     "mfussenegger/nvim-jdtls",
-    ft = { "java" },
-    config = function()
-      local java_bin = "/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java"
-      local jdtls_path = vim.fn.expand("~/jdtls_1.33")
-      local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
-      local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-
-      -- ==== 核心修复 1：动态获取并合并底层能力（支持 blink.cmp） ====
-      local client_capabilities = vim.lsp.protocol.make_client_capabilities()
-      local has_blink, blink = pcall(require, "blink.cmp")
-      if has_blink then
-        client_capabilities = blink.get_lsp_capabilities(client_capabilities)
-      end
-
-      local config = {
-        cmd = {
-          java_bin,
-          "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-          "-Dosgi.bundles.defaultStartLevel=4",
-          "-Declipse.product=org.eclipse.jdt.ls.core.product",
-          "-Dlog.protocol=true",
-          "-Dlog.level=ALL",
-          "-Xmx1g",
-          "--add-modules=ALL-SYSTEM",
-          "--add-opens",
-          "java.base/java.util=ALL-UNNAMED",
-          "--add-opens",
-          "java.base/java.lang=ALL-UNNAMED",
-          "-jar",
-          launcher_jar,
-          "-configuration",
-          jdtls_path .. "/config_mac",
-          "-data",
-          workspace_dir,
-        },
-        root_dir = require("jdtls.setup").find_root({ ".git", "pom.xml", ".idea", "testBasicSyntax.iml" })
-          or vim.fn.getcwd(),
-
-        -- ==== 核心修复 2：注入能力与默认设置 ====
-        capabilities = client_capabilities,
-        settings = {
-          java = {
-            signatureHelp = { enabled = true },
-            contentProvider = { preferred = "fernflower" },
-            -- 开启完整的语法分析和错误报告
-            configuration = { updateBuildConfiguration = "interactive" },
-            references = { includeDecompiledSources = true },
-            inlayHints = { parameterNames = { enabled = "all" } },
-          },
-        },
-      }
-
-      require("jdtls").start_or_attach(config)
-    end,
+    ft = { "java" }, -- 仅在此处声明当打开 java 文件时加载插件
   },
 }
 ----
@@ -18434,6 +18390,74 @@ curl -fSL "https://download.eclipse.org/jdtls/milestones/1.33.0/jdt-language-ser
 tar -xzvf jdtls.tar.gz
 ----
 
+</t>
+<t tx="swot.20260306082055.1">.~/.config/nvim/after/ftplugin/java.lua
+[source,lua]
+----
+@others
+----
+
+</t>
+<t tx="swot.20260306092624.1">vim.opt_local.shiftwidth = 4
+vim.opt_local.tabstop = 4
+vim.opt_local.softtabstop = 4
+vim.opt_local.expandtab = true
+
+</t>
+<t tx="swot.20260306092634.1">local java_bin = "/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java"
+local jdtls_path = vim.fn.expand("~/jdtls_1.33")
+local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
+local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+
+</t>
+<t tx="swot.20260306092646.1">local client_capabilities = vim.lsp.protocol.make_client_capabilities()
+local has_blink, blink = pcall(require, "blink.cmp")
+if has_blink then
+  client_capabilities = blink.get_lsp_capabilities(client_capabilities)
+end
+
+local config = {
+  cmd = {
+    java_bin,
+    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    "-Dosgi.bundles.defaultStartLevel=4",
+    "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    "-Dlog.protocol=true",
+    "-Dlog.level=ALL",
+    "-Xmx1g",
+    "--add-modules=ALL-SYSTEM",
+    "--add-opens",
+    "java.base/java.util=ALL-UNNAMED",
+    "--add-opens",
+    "java.base/java.lang=ALL-UNNAMED",
+    "-jar",
+    launcher_jar,
+    "-configuration",
+    jdtls_path .. "/config_mac",
+    "-data",
+    workspace_dir,
+  },
+  root_dir = require("jdtls.setup").find_root({ ".git", "pom.xml", ".idea", "testBasicSyntax.iml" }) or vim.fn.getcwd(),
+  capabilities = client_capabilities,
+  settings = {
+    java = {
+      signatureHelp = { enabled = true },
+      contentProvider = { preferred = "fernflower" },
+      configuration = { updateBuildConfiguration = "interactive" },
+      references = { includeDecompiledSources = true },
+      inlayHints = { parameterNames = { enabled = "all" } },
+    },
+  },
+}
+</t>
+<t tx="swot.20260306092706.1">vim.lsp.handlers["textDocument/formatting"] = vim.lsp.with(vim.lsp.handlers.formatting, {
+  tabSize = 4,
+  insertSpaces = true,
+})
+
+</t>
+<t tx="swot.20260306092724.1">
+require("jdtls").start_or_attach(config)
 </t>
 </tnodes>
 </leo_file>

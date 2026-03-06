@@ -545,11 +545,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
 <ul class="sectlevel1">
-<li><a href="#_步骤_1_环境准备与清理">步骤 1: 环境准备与清理</a></li>
-<li><a href="#_步骤_2_手动下载兼容版_jdtls_v1_33">步骤 2: 手动下载兼容版 jdtls (v1.33)</a></li>
-<li><a href="#_步骤_3_配置插件逻辑_confignvimluapluginsjava_lua">步骤 3: 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)</a></li>
-<li><a href="#_步骤_4_配置快捷运行_confignvimluaconfigkeymaps_lua">步骤 4: 配置快捷运行 (~/.config/nvim/lua/config/keymaps.lua)</a></li>
-<li><a href="#_步骤_5_验证">步骤 5: 验证</a></li>
+<li><a href="#_1_环境准备与清理">1. 环境准备与清理</a></li>
+<li><a href="#_2_手动下载兼容版_jdtls_v1_33">2. 手动下载兼容版 jdtls (v1.33)</a></li>
+<li><a href="#_3_配置插件逻辑_confignvimluapluginsjava_lua">3. 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)</a></li>
+<li><a href="#_4_配置最后加载_confignvimafterftpluginjava_lua">4. 配置最后加载 (~/.config/nvim/after/ftplugin/java.lua)</a></li>
+<li><a href="#_5_验证">5. 验证</a></li>
 </ul>
 </div>
 </div>
@@ -611,7 +611,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_步骤_1_环境准备与清理">步骤 1: 环境准备与清理</h2>
+<h2 id="_1_环境准备与清理">1. 环境准备与清理</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>在开始配置前，必须确保清理掉 Mason 自动安装的、要求 JDK 21 的最新版插件。</p>
@@ -649,7 +649,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_步骤_2_手动下载兼容版_jdtls_v1_33">步骤 2: 手动下载兼容版 jdtls (v1.33)</h2>
+<h2 id="_2_手动下载兼容版_jdtls_v1_33">2. 手动下载兼容版 jdtls (v1.33)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>由于最新版 <code>jdtls</code> 强制要求 Java 21 运行，我们手动下载支持 Java 17 的最后一个稳定版本。<br>
@@ -670,70 +670,18 @@ tar<span class="tok-w"> </span>-xzvf<span class="tok-w"> </span>jdtls.tar.gz</co
 </div>
 </div>
 <div class="sect1">
-<h2 id="_步骤_3_配置插件逻辑_confignvimluapluginsjava_lua">步骤 3: 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)</h2>
+<h2 id="_3_配置插件逻辑_confignvimluapluginsjava_lua">3. 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>创建此文件，手动接管 <code>nvim-jdtls</code> 的启动逻辑，跳过 Mason 的版本检查。</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="lua"><span></span><span class="tok-kr">return</span> <span class="tok-p">{</span>
+<pre class="pygments highlight"><code data-lang="lua"><span></span><span class="tok-c1">-- ~/.config/nvim/lua/plugins/java.lua</span>
+<span class="tok-kr">return</span> <span class="tok-p">{</span>
   <span class="tok-p">{</span>
     <span class="tok-s2">&quot;mfussenegger/nvim-jdtls&quot;</span><span class="tok-p">,</span>
-    <span class="tok-n">ft</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-s2">&quot;java&quot;</span> <span class="tok-p">},</span>
-    <span class="tok-n">config</span> <span class="tok-o">=</span> <span class="tok-kr">function</span><span class="tok-p">()</span>
-      <span class="tok-kd">local</span> <span class="tok-n">java_bin</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java&quot;</span>
-      <span class="tok-kd">local</span> <span class="tok-n">jdtls_path</span> <span class="tok-o">=</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">expand</span><span class="tok-p">(</span><span class="tok-s2">&quot;~/jdtls_1.33&quot;</span><span class="tok-p">)</span>
-      <span class="tok-kd">local</span> <span class="tok-n">launcher_jar</span> <span class="tok-o">=</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">glob</span><span class="tok-p">(</span><span class="tok-n">jdtls_path</span> <span class="tok-o">..</span> <span class="tok-s2">&quot;/plugins/org.eclipse.equinox.launcher_*.jar&quot;</span><span class="tok-p">)</span>
-      <span class="tok-kd">local</span> <span class="tok-n">workspace_dir</span> <span class="tok-o">=</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">stdpath</span><span class="tok-p">(</span><span class="tok-s2">&quot;cache&quot;</span><span class="tok-p">)</span> <span class="tok-o">..</span> <span class="tok-s2">&quot;/jdtls/&quot;</span> <span class="tok-o">..</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">fnamemodify</span><span class="tok-p">(</span><span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">getcwd</span><span class="tok-p">(),</span> <span class="tok-s2">&quot;:p:h:t&quot;</span><span class="tok-p">)</span>
-
-      <span class="tok-c1">-- ==== 核心修复 1：动态获取并合并底层能力（支持 blink.cmp） ====</span>
-      <span class="tok-kd">local</span> <span class="tok-n">client_capabilities</span> <span class="tok-o">=</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">lsp</span><span class="tok-p">.</span><span class="tok-n">protocol</span><span class="tok-p">.</span><span class="tok-n">make_client_capabilities</span><span class="tok-p">()</span>
-      <span class="tok-kd">local</span> <span class="tok-n">has_blink</span><span class="tok-p">,</span> <span class="tok-n">blink</span> <span class="tok-o">=</span> <span class="tok-nb">pcall</span><span class="tok-p">(</span><span class="tok-nb">require</span><span class="tok-p">,</span> <span class="tok-s2">&quot;blink.cmp&quot;</span><span class="tok-p">)</span>
-      <span class="tok-kr">if</span> <span class="tok-n">has_blink</span> <span class="tok-kr">then</span>
-        <span class="tok-n">client_capabilities</span> <span class="tok-o">=</span> <span class="tok-n">blink</span><span class="tok-p">.</span><span class="tok-n">get_lsp_capabilities</span><span class="tok-p">(</span><span class="tok-n">client_capabilities</span><span class="tok-p">)</span>
-      <span class="tok-kr">end</span>
-
-      <span class="tok-kd">local</span> <span class="tok-n">config</span> <span class="tok-o">=</span> <span class="tok-p">{</span>
-        <span class="tok-n">cmd</span> <span class="tok-o">=</span> <span class="tok-p">{</span>
-          <span class="tok-n">java_bin</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;-Declipse.application=org.eclipse.jdt.ls.core.id1&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;-Dosgi.bundles.defaultStartLevel=4&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;-Declipse.product=org.eclipse.jdt.ls.core.product&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;-Dlog.protocol=true&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;-Dlog.level=ALL&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;-Xmx1g&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;--add-modules=ALL-SYSTEM&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;--add-opens&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;java.base/java.util=ALL-UNNAMED&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;--add-opens&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;java.base/java.lang=ALL-UNNAMED&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;-jar&quot;</span><span class="tok-p">,</span>
-          <span class="tok-n">launcher_jar</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;-configuration&quot;</span><span class="tok-p">,</span>
-          <span class="tok-n">jdtls_path</span> <span class="tok-o">..</span> <span class="tok-s2">&quot;/config_mac&quot;</span><span class="tok-p">,</span>
-          <span class="tok-s2">&quot;-data&quot;</span><span class="tok-p">,</span>
-          <span class="tok-n">workspace_dir</span><span class="tok-p">,</span>
-        <span class="tok-p">},</span>
-        <span class="tok-n">root_dir</span> <span class="tok-o">=</span> <span class="tok-nb">require</span><span class="tok-p">(</span><span class="tok-s2">&quot;jdtls.setup&quot;</span><span class="tok-p">).</span><span class="tok-n">find_root</span><span class="tok-p">({</span> <span class="tok-s2">&quot;.git&quot;</span><span class="tok-p">,</span> <span class="tok-s2">&quot;pom.xml&quot;</span><span class="tok-p">,</span> <span class="tok-s2">&quot;.idea&quot;</span><span class="tok-p">,</span> <span class="tok-s2">&quot;testBasicSyntax.iml&quot;</span> <span class="tok-p">})</span>
-          <span class="tok-ow">or</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">getcwd</span><span class="tok-p">(),</span>
-
-        <span class="tok-c1">-- ==== 核心修复 2：注入能力与默认设置 ====</span>
-        <span class="tok-n">capabilities</span> <span class="tok-o">=</span> <span class="tok-n">client_capabilities</span><span class="tok-p">,</span>
-        <span class="tok-n">settings</span> <span class="tok-o">=</span> <span class="tok-p">{</span>
-          <span class="tok-n">java</span> <span class="tok-o">=</span> <span class="tok-p">{</span>
-            <span class="tok-n">signatureHelp</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">enabled</span> <span class="tok-o">=</span> <span class="tok-kc">true</span> <span class="tok-p">},</span>
-            <span class="tok-n">contentProvider</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">preferred</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;fernflower&quot;</span> <span class="tok-p">},</span>
-            <span class="tok-c1">-- 开启完整的语法分析和错误报告</span>
-            <span class="tok-n">configuration</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">updateBuildConfiguration</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;interactive&quot;</span> <span class="tok-p">},</span>
-            <span class="tok-n">references</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">includeDecompiledSources</span> <span class="tok-o">=</span> <span class="tok-kc">true</span> <span class="tok-p">},</span>
-            <span class="tok-n">inlayHints</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">parameterNames</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">enabled</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;all&quot;</span> <span class="tok-p">}</span> <span class="tok-p">},</span>
-          <span class="tok-p">},</span>
-        <span class="tok-p">},</span>
-      <span class="tok-p">}</span>
-
-      <span class="tok-nb">require</span><span class="tok-p">(</span><span class="tok-s2">&quot;jdtls&quot;</span><span class="tok-p">).</span><span class="tok-n">start_or_attach</span><span class="tok-p">(</span><span class="tok-n">config</span><span class="tok-p">)</span>
-    <span class="tok-kr">end</span><span class="tok-p">,</span>
+    <span class="tok-n">ft</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-s2">&quot;java&quot;</span> <span class="tok-p">},</span> <span class="tok-c1">-- 仅在此处声明当打开 java 文件时加载插件</span>
   <span class="tok-p">},</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -741,14 +689,68 @@ tar<span class="tok-w"> </span>-xzvf<span class="tok-w"> </span>jdtls.tar.gz</co
 </div>
 </div>
 <div class="sect1">
-<h2 id="_步骤_4_配置快捷运行_confignvimluaconfigkeymaps_lua">步骤 4: 配置快捷运行 (~/.config/nvim/lua/config/keymaps.lua)</h2>
+<h2 id="_4_配置最后加载_confignvimafterftpluginjava_lua">4. 配置最后加载 (~/.config/nvim/after/ftplugin/java.lua)</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>解决 Java <code>package</code> 包名运行报错的关键。此脚本会自动切换模式并进入 <code>src</code> 目录运行正确的类名。</p>
-</div>
 <div class="listingblock">
+<div class="title">~/.config/nvim/after/ftplugin/java.lua</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="lua"><span></span><span class="tok-c1">-- 终极 Java 一键运行 (自带编译 + 包名支持)</span>
+<pre class="pygments highlight"><code data-lang="lua"><span></span><span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">opt_local</span><span class="tok-p">.</span><span class="tok-n">shiftwidth</span> <span class="tok-o">=</span> <span class="tok-mi">4</span>
+<span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">opt_local</span><span class="tok-p">.</span><span class="tok-n">tabstop</span> <span class="tok-o">=</span> <span class="tok-mi">4</span>
+<span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">opt_local</span><span class="tok-p">.</span><span class="tok-n">softtabstop</span> <span class="tok-o">=</span> <span class="tok-mi">4</span>
+<span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">opt_local</span><span class="tok-p">.</span><span class="tok-n">expandtab</span> <span class="tok-o">=</span> <span class="tok-kc">true</span>
+
+<span class="tok-kd">local</span> <span class="tok-n">java_bin</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java&quot;</span>
+<span class="tok-kd">local</span> <span class="tok-n">jdtls_path</span> <span class="tok-o">=</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">expand</span><span class="tok-p">(</span><span class="tok-s2">&quot;~/jdtls_1.33&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">local</span> <span class="tok-n">launcher_jar</span> <span class="tok-o">=</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">glob</span><span class="tok-p">(</span><span class="tok-n">jdtls_path</span> <span class="tok-o">..</span> <span class="tok-s2">&quot;/plugins/org.eclipse.equinox.launcher_*.jar&quot;</span><span class="tok-p">)</span>
+<span class="tok-kd">local</span> <span class="tok-n">workspace_dir</span> <span class="tok-o">=</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">stdpath</span><span class="tok-p">(</span><span class="tok-s2">&quot;cache&quot;</span><span class="tok-p">)</span> <span class="tok-o">..</span> <span class="tok-s2">&quot;/jdtls/&quot;</span> <span class="tok-o">..</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">fnamemodify</span><span class="tok-p">(</span><span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">getcwd</span><span class="tok-p">(),</span> <span class="tok-s2">&quot;:p:h:t&quot;</span><span class="tok-p">)</span>
+
+<span class="tok-kd">local</span> <span class="tok-n">client_capabilities</span> <span class="tok-o">=</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">lsp</span><span class="tok-p">.</span><span class="tok-n">protocol</span><span class="tok-p">.</span><span class="tok-n">make_client_capabilities</span><span class="tok-p">()</span>
+<span class="tok-kd">local</span> <span class="tok-n">has_blink</span><span class="tok-p">,</span> <span class="tok-n">blink</span> <span class="tok-o">=</span> <span class="tok-nb">pcall</span><span class="tok-p">(</span><span class="tok-nb">require</span><span class="tok-p">,</span> <span class="tok-s2">&quot;blink.cmp&quot;</span><span class="tok-p">)</span>
+<span class="tok-kr">if</span> <span class="tok-n">has_blink</span> <span class="tok-kr">then</span>
+  <span class="tok-n">client_capabilities</span> <span class="tok-o">=</span> <span class="tok-n">blink</span><span class="tok-p">.</span><span class="tok-n">get_lsp_capabilities</span><span class="tok-p">(</span><span class="tok-n">client_capabilities</span><span class="tok-p">)</span>
+<span class="tok-kr">end</span>
+
+<span class="tok-kd">local</span> <span class="tok-n">config</span> <span class="tok-o">=</span> <span class="tok-p">{</span>
+  <span class="tok-n">cmd</span> <span class="tok-o">=</span> <span class="tok-p">{</span>
+    <span class="tok-n">java_bin</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;-Declipse.application=org.eclipse.jdt.ls.core.id1&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;-Dosgi.bundles.defaultStartLevel=4&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;-Declipse.product=org.eclipse.jdt.ls.core.product&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;-Dlog.protocol=true&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;-Dlog.level=ALL&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;-Xmx1g&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;--add-modules=ALL-SYSTEM&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;--add-opens&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;java.base/java.util=ALL-UNNAMED&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;--add-opens&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;java.base/java.lang=ALL-UNNAMED&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;-jar&quot;</span><span class="tok-p">,</span>
+    <span class="tok-n">launcher_jar</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;-configuration&quot;</span><span class="tok-p">,</span>
+    <span class="tok-n">jdtls_path</span> <span class="tok-o">..</span> <span class="tok-s2">&quot;/config_mac&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;-data&quot;</span><span class="tok-p">,</span>
+    <span class="tok-n">workspace_dir</span><span class="tok-p">,</span>
+  <span class="tok-p">},</span>
+  <span class="tok-n">root_dir</span> <span class="tok-o">=</span> <span class="tok-nb">require</span><span class="tok-p">(</span><span class="tok-s2">&quot;jdtls.setup&quot;</span><span class="tok-p">).</span><span class="tok-n">find_root</span><span class="tok-p">({</span> <span class="tok-s2">&quot;.git&quot;</span><span class="tok-p">,</span> <span class="tok-s2">&quot;pom.xml&quot;</span><span class="tok-p">,</span> <span class="tok-s2">&quot;.idea&quot;</span><span class="tok-p">,</span> <span class="tok-s2">&quot;testBasicSyntax.iml&quot;</span> <span class="tok-p">})</span> <span class="tok-ow">or</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">fn</span><span class="tok-p">.</span><span class="tok-n">getcwd</span><span class="tok-p">(),</span>
+  <span class="tok-n">capabilities</span> <span class="tok-o">=</span> <span class="tok-n">client_capabilities</span><span class="tok-p">,</span>
+  <span class="tok-n">settings</span> <span class="tok-o">=</span> <span class="tok-p">{</span>
+    <span class="tok-n">java</span> <span class="tok-o">=</span> <span class="tok-p">{</span>
+      <span class="tok-n">signatureHelp</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">enabled</span> <span class="tok-o">=</span> <span class="tok-kc">true</span> <span class="tok-p">},</span>
+      <span class="tok-n">contentProvider</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">preferred</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;fernflower&quot;</span> <span class="tok-p">},</span>
+      <span class="tok-n">configuration</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">updateBuildConfiguration</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;interactive&quot;</span> <span class="tok-p">},</span>
+      <span class="tok-n">references</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">includeDecompiledSources</span> <span class="tok-o">=</span> <span class="tok-kc">true</span> <span class="tok-p">},</span>
+      <span class="tok-n">inlayHints</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">parameterNames</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-n">enabled</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;all&quot;</span> <span class="tok-p">}</span> <span class="tok-p">},</span>
+    <span class="tok-p">},</span>
+  <span class="tok-p">},</span>
+<span class="tok-p">}</span>
+<span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">lsp</span><span class="tok-p">.</span><span class="tok-n">handlers</span><span class="tok-p">[</span><span class="tok-s2">&quot;textDocument/formatting&quot;</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">lsp</span><span class="tok-p">.</span><span class="tok-n">with</span><span class="tok-p">(</span><span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">lsp</span><span class="tok-p">.</span><span class="tok-n">handlers</span><span class="tok-p">.</span><span class="tok-n">formatting</span><span class="tok-p">,</span> <span class="tok-p">{</span>
+  <span class="tok-n">tabSize</span> <span class="tok-o">=</span> <span class="tok-mi">4</span><span class="tok-p">,</span>
+  <span class="tok-n">insertSpaces</span> <span class="tok-o">=</span> <span class="tok-kc">true</span><span class="tok-p">,</span>
+<span class="tok-p">})</span>
+
+<span class="tok-c1">-- 解决 Java `package` 包名运行报错的关键。此脚本会自动切换模式并进入 `src` 目录运行正确的类名。</span>
+<span class="tok-c1">-- 终极 Java 一键运行 (自带编译 + 包名支持)</span>
+
 <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">keymap</span><span class="tok-p">.</span><span class="tok-n">set</span><span class="tok-p">(</span><span class="tok-s2">&quot;n&quot;</span><span class="tok-p">,</span> <span class="tok-s2">&quot;&lt;leader&gt;rj&quot;</span><span class="tok-p">,</span> <span class="tok-kr">function</span><span class="tok-p">()</span>
   <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">cmd</span><span class="tok-p">(</span><span class="tok-s2">&quot;write&quot;</span><span class="tok-p">)</span> <span class="tok-c1">-- 保存当前文件</span>
 
@@ -775,13 +777,15 @@ tar<span class="tok-w"> </span>-xzvf<span class="tok-w"> </span>jdtls.tar.gz</co
   <span class="tok-kd">local</span> <span class="tok-n">run_cmd</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;cd &quot;</span> <span class="tok-o">..</span> <span class="tok-n">src_dir</span> <span class="tok-o">..</span> <span class="tok-s2">&quot; &amp;&amp; javac &quot;</span> <span class="tok-o">..</span> <span class="tok-n">relative_file</span> <span class="tok-o">..</span> <span class="tok-s2">&quot; &amp;&amp; java &quot;</span> <span class="tok-o">..</span> <span class="tok-n">full_class_name</span>
 
   <span class="tok-n">vim</span><span class="tok-p">.</span><span class="tok-n">cmd</span><span class="tok-p">(</span><span class="tok-s2">&quot;split | term &quot;</span> <span class="tok-o">..</span> <span class="tok-n">run_cmd</span><span class="tok-p">)</span>
-<span class="tok-kr">end</span><span class="tok-p">,</span> <span class="tok-p">{</span> <span class="tok-n">desc</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;Java 编译并运行&quot;</span> <span class="tok-p">})</span></code></pre>
+<span class="tok-kr">end</span><span class="tok-p">,</span> <span class="tok-p">{</span> <span class="tok-n">buffer</span> <span class="tok-o">=</span> <span class="tok-kc">true</span><span class="tok-p">,</span> <span class="tok-n">desc</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;Java 编译并运行(带 Package 支持)&quot;</span> <span class="tok-p">})</span>
+
+<span class="tok-nb">require</span><span class="tok-p">(</span><span class="tok-s2">&quot;jdtls&quot;</span><span class="tok-p">).</span><span class="tok-n">start_or_attach</span><span class="tok-p">(</span><span class="tok-n">config</span><span class="tok-p">)</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_步骤_5_验证">步骤 5: 验证</h2>
+<h2 id="_5_验证">5. 验证</h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
@@ -798,7 +802,7 @@ tar<span class="tok-w"> </span>-xzvf<span class="tok-w"> </span>jdtls.tar.gz</co
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-06 01:11:18 +0800
+Last updated 2026-03-06 09:36:17 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -71,7 +71,7 @@ toggleButton.addEventListener('click', () => {
 </script>
 ++++
 
-== 步骤 1: 环境准备与清理
+== 1. 环境准备与清理
 在开始配置前，必须确保清理掉 Mason 自动安装的、要求 JDK 21 的最新版插件。
 
 1. **安装 JDK 17**: 确保系统已安装 Temurin 17 或其他 JDK 17 版本。
@@ -83,7 +83,7 @@ toggleButton.addEventListener('click', () => {
 3. **禁用 LazyExtras Java 扩展**:
    * 执行 `:LazyExtras`，确保 `lang.java` **没有** 被勾选（避免官方配置干扰手动配置）。
 
-== 步骤 2: 手动下载兼容版 jdtls (v1.33)
+== 2. 手动下载兼容版 jdtls (v1.33)
 由于最新版 `jdtls` 强制要求 Java 21 运行，我们手动下载支持 Java 17 的最后一个稳定版本。 +
 https://download.eclipse.org/justj/?file=jdtls/milestones/1.33.0
 
@@ -99,78 +99,81 @@ curl -fSL "https://download.eclipse.org/jdtls/milestones/1.33.0/jdt-language-ser
 tar -xzvf jdtls.tar.gz
 ----
 
-== 步骤 3: 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)
+== 3. 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)
 创建此文件，手动接管 `nvim-jdtls` 的启动逻辑，跳过 Mason 的版本检查。
 
 [source,lua]
 ----
+-- ~/.config/nvim/lua/plugins/java.lua
 return {
   {
     "mfussenegger/nvim-jdtls",
-    ft = { "java" },
-    config = function()
-      local java_bin = "/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java"
-      local jdtls_path = vim.fn.expand("~/jdtls_1.33")
-      local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
-      local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-
-      -- ==== 核心修复 1：动态获取并合并底层能力（支持 blink.cmp） ====
-      local client_capabilities = vim.lsp.protocol.make_client_capabilities()
-      local has_blink, blink = pcall(require, "blink.cmp")
-      if has_blink then
-        client_capabilities = blink.get_lsp_capabilities(client_capabilities)
-      end
-
-      local config = {
-        cmd = {
-          java_bin,
-          "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-          "-Dosgi.bundles.defaultStartLevel=4",
-          "-Declipse.product=org.eclipse.jdt.ls.core.product",
-          "-Dlog.protocol=true",
-          "-Dlog.level=ALL",
-          "-Xmx1g",
-          "--add-modules=ALL-SYSTEM",
-          "--add-opens",
-          "java.base/java.util=ALL-UNNAMED",
-          "--add-opens",
-          "java.base/java.lang=ALL-UNNAMED",
-          "-jar",
-          launcher_jar,
-          "-configuration",
-          jdtls_path .. "/config_mac",
-          "-data",
-          workspace_dir,
-        },
-        root_dir = require("jdtls.setup").find_root({ ".git", "pom.xml", ".idea", "testBasicSyntax.iml" })
-          or vim.fn.getcwd(),
-
-        -- ==== 核心修复 2：注入能力与默认设置 ====
-        capabilities = client_capabilities,
-        settings = {
-          java = {
-            signatureHelp = { enabled = true },
-            contentProvider = { preferred = "fernflower" },
-            -- 开启完整的语法分析和错误报告
-            configuration = { updateBuildConfiguration = "interactive" },
-            references = { includeDecompiledSources = true },
-            inlayHints = { parameterNames = { enabled = "all" } },
-          },
-        },
-      }
-
-      require("jdtls").start_or_attach(config)
-    end,
+    ft = { "java" }, -- 仅在此处声明当打开 java 文件时加载插件
   },
 }
 ----
 
-== 步骤 4: 配置快捷运行 (~/.config/nvim/lua/config/keymaps.lua)
-解决 Java `package` 包名运行报错的关键。此脚本会自动切换模式并进入 `src` 目录运行正确的类名。
-
+== 4. 配置最后加载 (~/.config/nvim/after/ftplugin/java.lua)
+.~/.config/nvim/after/ftplugin/java.lua
 [source,lua]
 ----
+vim.opt_local.shiftwidth = 4
+vim.opt_local.tabstop = 4
+vim.opt_local.softtabstop = 4
+vim.opt_local.expandtab = true
+
+local java_bin = "/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java"
+local jdtls_path = vim.fn.expand("~/jdtls_1.33")
+local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
+local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+
+local client_capabilities = vim.lsp.protocol.make_client_capabilities()
+local has_blink, blink = pcall(require, "blink.cmp")
+if has_blink then
+  client_capabilities = blink.get_lsp_capabilities(client_capabilities)
+end
+
+local config = {
+  cmd = {
+    java_bin,
+    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    "-Dosgi.bundles.defaultStartLevel=4",
+    "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    "-Dlog.protocol=true",
+    "-Dlog.level=ALL",
+    "-Xmx1g",
+    "--add-modules=ALL-SYSTEM",
+    "--add-opens",
+    "java.base/java.util=ALL-UNNAMED",
+    "--add-opens",
+    "java.base/java.lang=ALL-UNNAMED",
+    "-jar",
+    launcher_jar,
+    "-configuration",
+    jdtls_path .. "/config_mac",
+    "-data",
+    workspace_dir,
+  },
+  root_dir = require("jdtls.setup").find_root({ ".git", "pom.xml", ".idea", "testBasicSyntax.iml" }) or vim.fn.getcwd(),
+  capabilities = client_capabilities,
+  settings = {
+    java = {
+      signatureHelp = { enabled = true },
+      contentProvider = { preferred = "fernflower" },
+      configuration = { updateBuildConfiguration = "interactive" },
+      references = { includeDecompiledSources = true },
+      inlayHints = { parameterNames = { enabled = "all" } },
+    },
+  },
+}
+vim.lsp.handlers["textDocument/formatting"] = vim.lsp.with(vim.lsp.handlers.formatting, {
+  tabSize = 4,
+  insertSpaces = true,
+})
+
+-- 解决 Java `package` 包名运行报错的关键。此脚本会自动切换模式并进入 `src` 目录运行正确的类名。
 -- 终极 Java 一键运行 (自带编译 + 包名支持)
+
 vim.keymap.set("n", "<leader>rj", function()
   vim.cmd("write") -- 保存当前文件
 
@@ -197,10 +200,12 @@ vim.keymap.set("n", "<leader>rj", function()
   local run_cmd = "cd " .. src_dir .. " && javac " .. relative_file .. " && java " .. full_class_name
 
   vim.cmd("split | term " .. run_cmd)
-end, { desc = "Java 编译并运行" })
+end, { buffer = true, desc = "Java 编译并运行(带 Package 支持)" })
+
+require("jdtls").start_or_attach(config)
 ----
 
-== 步骤 5: 验证
+== 5. 验证
 1. **检查 LSP**: 打开 `.java` 文件，输入 `:LspInfo`，应显示 `jdtls` 正在运行 (Active)。
 
 2. **运行代码**: 按下 `空格 + r + j`，应能看到正常的控制台输出。
