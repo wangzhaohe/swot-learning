@@ -1220,7 +1220,7 @@
 <v t="swot.20260226142220.1"><vh>key_mouse.py 生成键盘热力图</vh></v>
 <v t="swot.20260228093352.1"><vh>解决 clash verge 不允许 cloudflared 在规则模式下出去的问题</vh></v>
 <v t="swot.20260228152238.1"><vh>leo 作为 PIM 应用：可以认到 file:/// 协议，但是是绝对路径，这样不好。要是能相对路径就太棒了！！！</vh></v>
-<v t="swot.20260304075643.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303371077573732e"><vh>adoc 命令处理这个节点有 bug，现在在顶端加了 @language asciidoc 后，下面又有 @language java，则 source 的格式化不对了 2026-03-04</vh>
+<v t="swot.20260304075643.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303371077573732e"><vh>adoc 命令处理这个节点有 bug，现在在顶端加了 @language asciidoc 后，下面又有 @language java，则 source 的内容无法加载了 2026-03-04</vh>
 <v t="swot.20260304080545.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d303371077573732e"><vh>ArrayList —— 封装门禁白名单 -&gt; 还需要引入其它的类才能跑起来</vh></v>
 </v>
 <v t="swot.20260305092636.1"><vh>body-style.py Bug</vh>
@@ -14774,12 +14774,11 @@ try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true
 4.  **挂断电话 (关闭资源)**：干完活必须挂电话，否则仓库线路会被占满。
 
 </t>
-<t tx="swot.20260216191718.1">@language asciidoc
-我们将之前定义的 `User` 对象和 `DoorSystemException` 结合进来。
+<t tx="swot.20260216191718.1">我们将之前定义的 `User` 对象和 `DoorSystemException` 结合进来。
 
-@language java
 [source,java]
 ----
+@language java
 import java.sql.*;
 
 public class JDBCDemo {
@@ -14856,8 +14855,7 @@ public class JDBCDemo {
 * **端口号 (Port)**：收件人的姓名/房间号（电脑里的哪个程序）。
 * **TCP 协议**：像发快递，必须收件人签收了，寄件人才放心（可靠连接）。
 </t>
-<t tx="swot.20260216213100.1">@language asciidoc
-[upperalpha]
+<t tx="swot.20260216213100.1">[upperalpha]
 . 知识点说明
 * **进程**：像是一个工厂（比如整个门禁系统）。
 * **线程**：像是工厂里的工人。一个工厂可以有很多工人同时干活。
@@ -14896,8 +14894,7 @@ public class MultiThreadDemo {
 }
 ----
 </t>
-<t tx="swot.20260216213110.1">@language asciidoc
-知识点说明
+<t tx="swot.20260216213110.1">知识点说明
 
 * **反射 (Reflection)**：平时我们用类，是先看到图纸再造房子。反射则是房子已经在那了，我们拿个“X光机”去扫，看看它里面有什么属性和方法。
 * **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
