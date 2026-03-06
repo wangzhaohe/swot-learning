@@ -1,8 +1,8 @@
 // @edit code/testBasicSyntax/src/IfElseDemo.java
 public class IfElseDemo {
     public static void main(String[] args) {
-        boolean isCardValid = true;  // 卡片有效
-        int currentHour = 23;        // 当前时间是晚上 23 点
+        boolean isCardValid = true; // 卡片有效
+        int currentHour = 23; // 当前时间是晚上 23 点
 
         // 门禁规则：卡片必须有效，且时间必须在早6点到晚22点之间才能正常进入
         if (isCardValid && (currentHour >= 6 && currentHour <= 22)) {
