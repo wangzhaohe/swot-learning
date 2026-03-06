@@ -1,0 +1,103 @@
+--@+leo-ver=5-thin
+--@+node:swot.20260306153430.1: * @file ~/.config/nvim/after/ftplugin/java.lua
+--@@language lua
+--@+others
+--@+node:swot.20260306092624.1: ** 4.1 强制当前缓冲区的缩进为 4 空格
+vim.opt_local.shiftwidth = 4
+vim.opt_local.tabstop = 4
+vim.opt_local.softtabstop = 4
+vim.opt_local.expandtab = true
+
+--@+node:swot.20260306092634.1: ** 4.2 配置 jdtls 的启动参数
+--@@language lua
+local java_bin = "/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java"
+
+local jdtls_path = vim.fn.expand("~/jdtls_1.33")
+
+local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
+
+local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+
+--@+node:swot.20260306092646.1: ** 4.3 获取 blink.cmp 的底层能力
+--@@language lua
+local client_capabilities = vim.lsp.protocol.make_client_capabilities()
+local has_blink, blink = pcall(require, "blink.cmp")
+if has_blink then
+  client_capabilities = blink.get_lsp_capabilities(client_capabilities)
+end
+
+local config = {
+  cmd = {
+    java_bin,
+    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    "-Dosgi.bundles.defaultStartLevel=4",
+    "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    "-Dlog.protocol=true",
+    "-Dlog.level=ALL",
+    "-Xmx1g",
+    "--add-modules=ALL-SYSTEM",
+    "--add-opens",
+    "java.base/java.util=ALL-UNNAMED",
+    "--add-opens",
+    "java.base/java.lang=ALL-UNNAMED",
+    "-jar",
+    launcher_jar,
+    "-configuration",
+    jdtls_path .. "/config_mac",
+    "-data",
+    workspace_dir,
+  },
+  root_dir = require("jdtls.setup").find_root({ ".git", "pom.xml", ".idea", "testBasicSyntax.iml" }) or vim.fn.getcwd(),
+  capabilities = client_capabilities,
+  settings = {
+    java = {
+      signatureHelp = { enabled = true },
+      contentProvider = { preferred = "fernflower" },
+      configuration = { updateBuildConfiguration = "interactive" },
+      references = { includeDecompiledSources = true },
+      inlayHints = { parameterNames = { enabled = "all" } },
+    },
+  },
+}
+--@+node:swot.20260306092706.1: ** 4.4 强制 LSP 格式化时使用 4 空格
+--@@language lua
+vim.lsp.handlers["textDocument/formatting"] = vim.lsp.with(vim.lsp.handlers.formatting, {
+  tabSize = 4,
+  insertSpaces = true,
+})
+
+--@+node:swot.20260306004048.1: ** 4.5 配置快捷运行
+--@@language java
+vim.keymap.set("n", "<leader>rj", function()
+  vim.cmd("write") -- 保存当前文件
+
+  local file_path = vim.fn.expand("%:p")
+  local src_marker = vim.fs.find({ "src" }, { upward = true })[1]
+
+  if not src_marker then
+    -- 如果没找到 src 目录，直接用 Java 的单文件模式运行
+    vim.cmd("split | term java " .. file_path)
+    return
+  end
+
+  local project_root = vim.fs.dirname(src_marker)
+  local src_dir = project_root .. "/src"
+
+  -- 1. 获取相对路径及目录
+  local relative_file = file_path:sub(#src_dir + 2) -- 例: interfaceExample/Run.java
+  local relative_dir = vim.fn.fnamemodify(relative_file, ":h") -- 获取所在目录，例: interfaceExample
+
+  -- 2. 转换出完整的类名用于运行
+  local class_with_path = relative_file:gsub("%.java$", "")
+  local full_class_name = class_with_path:gsub("/", ".")
+
+  -- 3. 核心修复：使用 *.java 编译该目录下的所有关联文件，而非只编译当前文件
+  local run_cmd = "cd " .. src_dir .. " && javac " .. relative_dir .. "/*.java && java " .. full_class_name
+
+  vim.cmd("split | term " .. run_cmd)
+end, { buffer = true, desc = "Java 编译并运行(支持同包多文件)" })
+--@+node:swot.20260306092724.1: ** 4.6 核心：每次打开 java 文件时，触发挂载
+
+require("jdtls").start_or_attach(config)
+--@-others
+--@-leo
