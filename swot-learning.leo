@@ -391,12 +391,12 @@
 <v t="swot.20260306004114.1"><vh>2. 手动下载兼容版 jdtls (v1.33)</vh></v>
 <v t="swot.20260306004104.1"><vh>3. 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)</vh></v>
 <v t="swot.20260306082055.1"><vh>4. 配置最后加载 (~/.config/nvim/after/ftplugin/java.lua)</vh>
-<v t="swot.20260306092624.1"><vh>强制当前缓冲区的缩进为 4 空格</vh></v>
-<v t="swot.20260306092634.1"><vh>配置 jdtls 的启动参数</vh></v>
-<v t="swot.20260306092646.1"><vh>获取 blink.cmp 的底层能力</vh></v>
-<v t="swot.20260306092706.1"><vh>强制 LSP 格式化时使用 4 空格</vh></v>
-<v t="swot.20260306004048.1"><vh>配置快捷运行</vh></v>
-<v t="swot.20260306092724.1"><vh>核心：每次打开 java 文件时，触发挂载</vh></v>
+<v t="swot.20260306092624.1"><vh>4.1 强制当前缓冲区的缩进为 4 空格</vh></v>
+<v t="swot.20260306092634.1"><vh>4.2 配置 jdtls 的启动参数</vh></v>
+<v t="swot.20260306092646.1"><vh>4.3 获取 blink.cmp 的底层能力</vh></v>
+<v t="swot.20260306092706.1"><vh>4.4 强制 LSP 格式化时使用 4 空格</vh></v>
+<v t="swot.20260306004048.1"><vh>4.5 配置快捷运行</vh></v>
+<v t="swot.20260306092724.1"><vh>4.6 核心：每次打开 java 文件时，触发挂载</vh></v>
 </v>
 <v t="swot.20260306004036.1"><vh>5. 验证</vh></v>
 </v>
@@ -18337,7 +18337,8 @@ toggleButton.addEventListener('click', () =&gt; {
 
 2. **运行代码**: 按下 `空格 + r + j`，应能看到正常的控制台输出。
 </t>
-<t tx="swot.20260306004048.1">-- 解决 Java `package` 包名运行报错的关键。此脚本会自动切换模式并进入 `src` 目录运行正确的类名。
+<t tx="swot.20260306004048.1">@language lua
+-- 解决 Java `package` 包名运行报错的关键。此脚本会自动切换模式并进入 `src` 目录运行正确的类名。
 -- 终极 Java 一键运行 (自带编译 + 包名支持)
 
 vim.keymap.set("n", "&lt;leader&gt;rj", function()
@@ -18367,6 +18368,7 @@ vim.keymap.set("n", "&lt;leader&gt;rj", function()
 
   vim.cmd("split | term " .. run_cmd)
 end, { buffer = true, desc = "Java 编译并运行(带 Package 支持)" })
+
 </t>
 <t tx="swot.20260306004104.1">创建此文件，手动接管 `nvim-jdtls` 的启动逻辑，跳过 Mason 的版本检查。
 
@@ -18411,13 +18413,18 @@ vim.opt_local.softtabstop = 4
 vim.opt_local.expandtab = true
 
 </t>
-<t tx="swot.20260306092634.1">local java_bin = "/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java"
+<t tx="swot.20260306092634.1">@language lua
+local java_bin = "/Users/swot/Library/Java/JavaVirtualMachines/temurin-17.0.18/Contents/Home/bin/java"
+
 local jdtls_path = vim.fn.expand("~/jdtls_1.33")
+
 local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
+
 local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 
 </t>
-<t tx="swot.20260306092646.1">local client_capabilities = vim.lsp.protocol.make_client_capabilities()
+<t tx="swot.20260306092646.1">@language lua
+local client_capabilities = vim.lsp.protocol.make_client_capabilities()
 local has_blink, blink = pcall(require, "blink.cmp")
 if has_blink then
   client_capabilities = blink.get_lsp_capabilities(client_capabilities)
@@ -18457,7 +18464,8 @@ local config = {
   },
 }
 </t>
-<t tx="swot.20260306092706.1">vim.lsp.handlers["textDocument/formatting"] = vim.lsp.with(vim.lsp.handlers.formatting, {
+<t tx="swot.20260306092706.1">@language lua
+vim.lsp.handlers["textDocument/formatting"] = vim.lsp.with(vim.lsp.handlers.formatting, {
   tabSize = 4,
   insertSpaces = true,
 })
