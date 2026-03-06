@@ -94,7 +94,10 @@ vim.keymap.set("n", "<leader>rj", function()
   -- 技巧：将所有找到的文件路径写入 sources.txt，通过 javac @sources.txt 编译
   -- 这样既能解决所有跨包依赖，又能避免项目变大后命令行参数超长的报错
   local run_cmd = string.format(
-    "cd %s && find . -name '*.java' > sources.txt && javac @sources.txt && java %s",
+    "cd %s && mkdir -p ../out && find . -name '*.java' > sources.txt " ..
+    "&& javac -d ../out @sources.txt " ..
+    "&& rm sources.txt " ..
+    "&& java -cp ../out %s",
     vim.fn.shellescape(src_dir),
     full_class_name
   )

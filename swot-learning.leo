@@ -17843,7 +17843,7 @@ public class DoorCardDemo {
     }
 }
 </t>
-<t tx="swot.20260304152414.1" _mod_time="4741da6a9efc1f87522e">@language java
+<t tx="swot.20260304152414.1" _mod_time="4741da6aa2b96659202e">@language java
 // @clean code/testBasicSyntax/src/inheritanceExample/Run.java
 package inheritanceExample;
 
