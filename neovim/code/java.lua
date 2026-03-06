@@ -1,5 +1,5 @@
 --@+leo-ver=5-thin
---@+node:swot.20260306153430.1: * @file ~/.config/nvim/after/ftplugin/java.lua
+--@+node:swot.20260306153430.1: * @file code/java.lua
 --@@language lua
 --@+others
 --@+node:swot.20260306092624.1: ** 4.1 强制当前缓冲区的缩进为 4 空格
@@ -68,6 +68,8 @@ vim.lsp.handlers["textDocument/formatting"] = vim.lsp.with(vim.lsp.handlers.form
 
 --@+node:swot.20260306004048.1: ** 4.5 配置快捷运行
 --@@language java
+-- 终极 Java 一键运行 (全自动扫包 + 跨目录编译)
+
 vim.keymap.set("n", "<leader>rj", function()
   vim.cmd("write") -- 保存当前文件
 
@@ -75,27 +77,30 @@ vim.keymap.set("n", "<leader>rj", function()
   local src_marker = vim.fs.find({ "src" }, { upward = true })[1]
 
   if not src_marker then
-    -- 如果没找到 src 目录，直接用 Java 的单文件模式运行
-    vim.cmd("split | term java " .. file_path)
+    -- 单文件模式：如果没有包结构，直接用 Java 11+ 原生方式运行
+    vim.cmd("split | term java " .. vim.fn.shellescape(file_path))
     return
   end
 
   local project_root = vim.fs.dirname(src_marker)
   local src_dir = project_root .. "/src"
 
-  -- 1. 获取相对路径及目录
-  local relative_file = file_path:sub(#src_dir + 2) -- 例: interfaceExample/Run.java
-  local relative_dir = vim.fn.fnamemodify(relative_file, ":h") -- 获取所在目录，例: interfaceExample
-
-  -- 2. 转换出完整的类名用于运行
+  -- 1. 获取相对路径用于推导包名全称 (例如: use_abstraction.AbstractClassDemo)
+  local relative_file = file_path:sub(#src_dir + 2)
   local class_with_path = relative_file:gsub("%.java$", "")
   local full_class_name = class_with_path:gsub("/", ".")
 
-  -- 3. 核心修复：使用 *.java 编译该目录下的所有关联文件，而非只编译当前文件
-  local run_cmd = "cd " .. src_dir .. " && javac " .. relative_dir .. "/*.java && java " .. full_class_name
+  -- 2. 核心指令：扫描整个 src 目录下的所有 .java 文件并统一编译
+  -- 技巧：将所有找到的文件路径写入 sources.txt，通过 javac @sources.txt 编译
+  -- 这样既能解决所有跨包依赖，又能避免项目变大后命令行参数超长的报错
+  local run_cmd = string.format(
+    "cd %s && find . -name '*.java' > sources.txt && javac @sources.txt && java %s",
+    vim.fn.shellescape(src_dir),
+    full_class_name
+  )
 
   vim.cmd("split | term " .. run_cmd)
-end, { buffer = true, desc = "Java 编译并运行(支持同包多文件)" })
+end, { buffer = true, desc = "Java 编译并运行(支持全项目跨包依赖)" })
 --@+node:swot.20260306092724.1: ** 4.6 核心：每次打开 java 文件时，触发挂载
 
 require("jdtls").start_or_attach(config)
