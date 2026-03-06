@@ -17504,7 +17504,7 @@ podman-machine-default*  wsl         8 minutes ago  Currently running  8        
 +
 ----
 src/
-├── com.swot.door.entity    // 实体包：存放 User 类（只存数据模型）
+├── com.swot.door.entity    // 实体包：存放 门卡类（只存数据模型）
 ├── com.swot.door.exception // 异常包：存放 DoorSystemException 类
 ├── com.swot.door.utils     // 工具包：存放后续要写的 DBUtils 数据库工具
 └── com.swot.door.main      // 启动包：存放包含 main 方法的主程序
