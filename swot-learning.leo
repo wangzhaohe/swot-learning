@@ -233,20 +233,28 @@
 <v t="swot.20260304145516.1"><vh>BB class DoorCard 门禁卡</vh></v>
 </v>
 </v>
+<v t="swot.20260303164345.1"><vh>包管理 —— “大楼的房间划分” -&gt; 属于架构上的设计</vh></v>
 <v t="swot.20260215222546.1"><vh>继承与多态 —— “父子卡片”与“读卡器逻辑”</vh>
-<v t="swot.20260304152414.1"><vh>@clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java</vh>
+<v t="swot.20260306104543.1"><vh>@clean code/testBasicSyntax/src/com/swot/door/entity/BaseDoorCard.java</vh>
 <v t="swot.20260304155927.1"><vh>BB class BaseDoorCard &lt;- Change from DoorCard 基础门卡</vh></v>
+</v>
+<v t="swot.20260306105152.1"><vh>@clean code/testBasicSyntax/src/com/swot/door/entity/StudentCard.java</vh>
 <v t="swot.20260304162904.1"><vh>BB class StudentCard extends BaseDoorCard 学生卡继承自基础门卡</vh></v>
+</v>
+<v t="swot.20260306105353.1"><vh>@clean code/testBasicSyntax/src/com/swot/door/entity/AdminCard.java</vh>
 <v t="swot.20260304163021.1"><vh>BB class AdminCard extends BaseDoorCard 管理员卡继承自基础门卡</vh></v>
+</v>
+<v t="swot.20260306105535.1"><vh>@clean code/testBasicSyntax/src/com/swot/door/entity/CardReader.java</vh>
 <v t="swot.20260304155948.1"><vh>BB class CardReader 读卡器</vh></v>
 </v>
+<v t="swot.20260304152414.1"><vh>@clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java</vh></v>
 </v>
 <v t="swot.20260304170224.1"><vh>抽象类 --- 禁止基础门卡类创建新卡对象（因为没有这种卡）</vh>
 <v t="swot.20260304170758.1"><vh>@clean code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java</vh>
 <v t="swot.20260304171106.1"><vh>BB class BaseDoorCard -&gt; abstract</vh></v>
 <v t="swot.20260304173742.1"><vh>BB class StudentCard extends BaseDoorCard 学生卡</vh></v>
 <v t="swot.20260304173902.1"><vh>BB class AdminCard extends BaseDoorCard 管理员卡</vh></v>
-<v t="swot.20260304155948.1"></v>
+<v t="swot.20260306110338.1"><vh>BB class CardReader 读卡器</vh></v>
 </v>
 </v>
 <v t="swot.20260215222615.1"><vh>接口设计 —— “功能准入协议”</vh>
@@ -258,7 +266,6 @@
 <v t="swot.20260304222616.1"><vh>BB class CanteenReader 食堂刷卡机</vh></v>
 </v>
 </v>
-<v t="swot.20260303164345.1"><vh>包管理 —— “大楼的房间划分” -&gt; 属于架构上的设计</vh></v>
 <v t="swot.20260305112121.1"><vh>访问权限 —— “房间门锁”</vh></v>
 <v t="swot.20260216074225.1"><vh>面向对象基础小结</vh></v>
 </v>
@@ -14256,7 +14263,7 @@ TIP: 记住一句话：你不能刷“图纸”进门，你只能刷装在墙上
 
 </t>
 <t tx="swot.20260215225306.1"></t>
-<t tx="swot.20260216074225.1">面向对象是 Java 的核心灵魂。大家不需要死记硬背枯燥的理论，只需在脑海中牢记这四个核心比喻：
+<t tx="swot.20260216074225.1">面向对象是 Java 的核心灵魂。不需要死记硬背枯燥的理论，只需在脑海中牢记这四个核心比喻：
 
 * **类与对象**：类是“设计图纸”，对象是“实物”。你不能给图纸打电话，必须先用 `new` 制造出实物。
 
@@ -17495,7 +17502,6 @@ podman-machine-default*  wsl         8 minutes ago  Currently running  8        
 如果我们把门禁系统的所有代码（用户实体、刷卡逻辑、数据库连接、主程序）全塞在一个文件夹里，随着代码变多，就会变成一个混乱的“垃圾堆”。
 
 * 包 (Package) 就是用来给代码分类建文件夹的，可以比喻成房间；
-* 而**访问权限 (Modifiers)** 就是这些文件夹，即房间上的“门锁”。
 
 
 . 项目结构标准划分（包管理）
@@ -17844,8 +17850,13 @@ public class DoorCardDemo {
     }
 }
 </t>
-<t tx="swot.20260304152414.1" _mod_time="4741da6a8b8d3824472e">@language java
-@others
+<t tx="swot.20260304152414.1" _mod_time="4741da6a91b4019c7e2e">@language java
+// @clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java
+import com.swot.door.entity.AdminCard;
+import com.swot.door.entity.BaseDoorCard;
+import com.swot.door.entity.CardReader;
+import com.swot.door.entity.StudentCard;
+
 public class InheritanceAndPolymorphismDemo {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();
@@ -17864,7 +17875,7 @@ public class InheritanceAndPolymorphismDemo {
 /**
  * 类名：BaseDoorCard (由 DoorCard 演化而来)
  */
-class BaseDoorCard {
+public class BaseDoorCard {
     private String serialNumber;
     private String ownerName;
 
@@ -17884,12 +17895,11 @@ class BaseDoorCard {
         System.out.println("【基础校验】正在核验卡片物理信息...");
     }
 }
-
 </t>
 <t tx="swot.20260304155948.1">@language java
 // 读卡器服务类 (展示多态的精髓)
 // 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
-class CardReader {
+public class CardReader {
     // 这里传入的是 BaseDoorCard，展示了多态的兼容性
     public void readCard(BaseDoorCard card) {
         System.out.print("读卡器感应 -&gt; ");
@@ -17899,7 +17909,7 @@ class CardReader {
 
 </t>
 <t tx="swot.20260304162904.1">@language java
-class StudentCard extends BaseDoorCard {
+public class StudentCard extends BaseDoorCard {
     public StudentCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName); // 继承父类的构造
     }
@@ -17914,7 +17924,7 @@ class StudentCard extends BaseDoorCard {
 
 </t>
 <t tx="swot.20260304163021.1">@language java
-class AdminCard extends BaseDoorCard {
+public class AdminCard extends BaseDoorCard {
     public AdminCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName);
     }
@@ -17966,7 +17976,7 @@ class AdminCard extends BaseDoorCard {
 &lt;/script&gt;
 ++++
 </t>
-<t tx="swot.20260304170224.1">这一版在继承的基础上 ，通过 abstract 关键字从语义和语法上解决了“BaseDoorCard 不应被实例化”的问题。
+<t tx="swot.20260304170224.1">这一版在继承的基础上 ，通过 `abstract` 关键字从语义和语法上解决了 `BaseDoorCard` 不应被实例化”的问题。
 
 另外还通过声明包，解决类名冲突问题。
 代码举例如下：
@@ -17976,7 +17986,7 @@ class AdminCard extends BaseDoorCard {
 @others
 ----
 </t>
-<t tx="swot.20260304170758.1" _mod_time="4741da6a88581f39372e">@language java
+<t tx="swot.20260304170758.1" _mod_time="4741da6a910c99d34b2e">@language java
 // code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
 // 通过声明包，解决类名冲突问题
 package use_abstraction; // 必须匹配文件夹的名字
@@ -18455,6 +18465,38 @@ local config = {
 </t>
 <t tx="swot.20260306092724.1">
 require("jdtls").start_or_attach(config)
+</t>
+<t tx="swot.20260306104543.1" _mod_time="4741da6a915970108b2e">@language java
+// @clean code/testBasicSyntax/src/com/swot/door/entity/BaseDoorCard.java
+package com.swot.door.entity;
+@others
+</t>
+<t tx="swot.20260306105152.1" _mod_time="4741da6a9159709cf12e">@language java
+// @clean code/testBasicSyntax/src/com/swot/door/entity/StudentCard.java
+package com.swot.door.entity;
+@others
+</t>
+<t tx="swot.20260306105353.1" _mod_time="4741da6a915d36dcb62e">@language java
+// @clean code/testBasicSyntax/src/com/swot/door/entity/AdminCard.java
+package com.swot.door.entity;
+@others
+</t>
+<t tx="swot.20260306105535.1" _mod_time="4741da6a9163aee35f2e">@language java
+// @clean code/testBasicSyntax/src/com/swot/door/entity/CardReader.java
+package com.swot.door.entity;
+@others
+</t>
+<t tx="swot.20260306110338.1">@language java
+// 读卡器服务类 (展示多态的精髓)
+// 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
+class CardReader {
+    // 这里传入的是 BaseDoorCard，展示了多态的兼容性
+    public void readCard(BaseDoorCard card) {
+        System.out.print("读卡器感应 -&gt; ");
+        card.validate(); // 自动触发对应的子类方法
+    }
+}
+
 </t>
 </tnodes>
 </leo_file>

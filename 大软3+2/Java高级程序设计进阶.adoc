@@ -726,6 +726,33 @@ public class DoorCardDemo {
 ====
 ****
 
+=== 包管理 —— “大楼的房间划分” -> 属于架构上的设计
+[upperalpha]
+. 为什么要学？
++
+如果我们把门禁系统的所有代码（用户实体、刷卡逻辑、数据库连接、主程序）全塞在一个文件夹里，随着代码变多，就会变成一个混乱的“垃圾堆”。
+
+* 包 (Package) 就是用来给代码分类建文件夹的，可以比喻成房间；
+
+
+. 项目结构标准划分（包管理）
++
+在企业级开发中，通常按照功能来建包（推荐使用倒置域名命名法）。为了让门禁系统看起来像一个真正的工程，目录应该长这样：
++
+----
+src/
+├── com.swot.door.entity    // 实体包：存放 门卡类（只存数据模型）
+├── com.swot.door.exception // 异常包：存放 DoorSystemException 类
+├── com.swot.door.utils     // 工具包：存放后续要写的 DBUtils 数据库工具
+└── com.swot.door.main      // 启动包：存放包含 main 方法的主程序
+----
+
+
+. 小结
+* **规范第一**：从今天起，告别“默认包（Default Package）”。写任何类之前，先建好 `package`。
+
+TIP: 赶紧试着去改下自己的目录结构吧？加油！
+
 === 继承与多态 —— “父子卡片”与“读卡器逻辑”
 [upperalpha]
 . 知识点说明
@@ -736,10 +763,12 @@ public class DoorCardDemo {
 +
 [source,java]
 ----
+// @clean code/testBasicSyntax/src/com/swot/door/entity/BaseDoorCard.java
+package com.swot.door.entity;
 /**
  * 类名：BaseDoorCard (由 DoorCard 演化而来)
  */
-class BaseDoorCard {
+public class BaseDoorCard {
     private String serialNumber;
     private String ownerName;
 
@@ -759,8 +788,9 @@ class BaseDoorCard {
         System.out.println("【基础校验】正在核验卡片物理信息...");
     }
 }
-
-class StudentCard extends BaseDoorCard {
+// @clean code/testBasicSyntax/src/com/swot/door/entity/StudentCard.java
+package com.swot.door.entity;
+public class StudentCard extends BaseDoorCard {
     public StudentCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName); // 继承父类的构造
     }
@@ -773,7 +803,9 @@ class StudentCard extends BaseDoorCard {
     }
 }
 
-class AdminCard extends BaseDoorCard {
+// @clean code/testBasicSyntax/src/com/swot/door/entity/AdminCard.java
+package com.swot.door.entity;
+public class AdminCard extends BaseDoorCard {
     public AdminCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName);
     }
@@ -785,15 +817,23 @@ class AdminCard extends BaseDoorCard {
     }
 }
 
+// @clean code/testBasicSyntax/src/com/swot/door/entity/CardReader.java
+package com.swot.door.entity;
 // 读卡器服务类 (展示多态的精髓)
 // 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
-class CardReader {
+public class CardReader {
     // 这里传入的是 BaseDoorCard，展示了多态的兼容性
     public void readCard(BaseDoorCard card) {
         System.out.print("读卡器感应 -> ");
         card.validate(); // 自动触发对应的子类方法
     }
 }
+
+// @clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java
+import com.swot.door.entity.AdminCard;
+import com.swot.door.entity.BaseDoorCard;
+import com.swot.door.entity.CardReader;
+import com.swot.door.entity.StudentCard;
 
 public class InheritanceAndPolymorphismDemo {
     public static void main(String[] args) {
@@ -815,7 +855,7 @@ public class InheritanceAndPolymorphismDemo {
   * **可扩展性**：如果增加“教师卡”或“访客卡”，只需新建子类继承 `BaseDoorCard`，`CardReader` 的代码一行都不用改。
 
 === 抽象类 --- 禁止基础门卡类创建新卡对象（因为没有这种卡）
-这一版在继承的基础上 ，通过 abstract 关键字从语义和语法上解决了“BaseDoorCard 不应被实例化”的问题。
+这一版在继承的基础上 ，通过 `abstract` 关键字从语义和语法上解决了 `BaseDoorCard` 不应被实例化”的问题。
 
 另外还通过声明包，解决类名冲突问题。
 代码举例如下：
@@ -1058,34 +1098,6 @@ public class InterfaceDemo {
 
 * 安全性：通过接口，我们从代码层面限制了“只有该付钱的卡才能付钱”，避免了管理员误刷卡消费的逻辑错误。
 
-=== 包管理 —— “大楼的房间划分” -> 属于架构上的设计
-[upperalpha]
-. 为什么要学？
-+
-如果我们把门禁系统的所有代码（用户实体、刷卡逻辑、数据库连接、主程序）全塞在一个文件夹里，随着代码变多，就会变成一个混乱的“垃圾堆”。
-
-* 包 (Package) 就是用来给代码分类建文件夹的，可以比喻成房间；
-* 而**访问权限 (Modifiers)** 就是这些文件夹，即房间上的“门锁”。
-
-
-. 项目结构标准划分（包管理）
-+
-在企业级开发中，通常按照功能来建包（推荐使用倒置域名命名法）。为了让门禁系统看起来像一个真正的工程，目录应该长这样：
-+
-----
-src/
-├── com.swot.door.entity    // 实体包：存放 门卡类（只存数据模型）
-├── com.swot.door.exception // 异常包：存放 DoorSystemException 类
-├── com.swot.door.utils     // 工具包：存放后续要写的 DBUtils 数据库工具
-└── com.swot.door.main      // 启动包：存放包含 main 方法的主程序
-----
-
-
-. 小结
-* **规范第一**：从今天起，告别“默认包（Default Package）”。写任何类之前，先建好 `package`。
-
-TIP: 赶紧试着去改下自己的目录结构吧？加油！
-
 === 访问权限 —— “房间门锁”
 [upperalpha]
 . 访问权限（门锁的级别）
@@ -1127,7 +1139,7 @@ public class Main {
 * 自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
 
 === 面向对象基础小结
-面向对象是 Java 的核心灵魂。大家不需要死记硬背枯燥的理论，只需在脑海中牢记这四个核心比喻：
+面向对象是 Java 的核心灵魂。不需要死记硬背枯燥的理论，只需在脑海中牢记这四个核心比喻：
 
 * **类与对象**：类是“设计图纸”，对象是“实物”。你不能给图纸打电话，必须先用 `new` 制造出实物。
 

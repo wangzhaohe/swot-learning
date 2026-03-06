@@ -594,10 +594,10 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_类与对象_设计图纸与门禁实物">类与对象 —— “设计图纸”与“门禁实物”</a></li>
 <li><a href="#_static_关键字_门禁系统的全局可访问属性">static 关键字 —— “门禁系统的全局可访问属性”</a></li>
 <li><a href="#_封装_门禁卡的智能芯片">封装 —— “门禁卡的智能芯片”</a></li>
+<li><a href="#_包管理_大楼的房间划分_属于架构上的设计">包管理 —— “大楼的房间划分” &#8594; 属于架构上的设计</a></li>
 <li><a href="#_继承与多态_父子卡片与读卡器逻辑">继承与多态 —— “父子卡片”与“读卡器逻辑”</a></li>
 <li><a href="#_抽象类_禁止基础门卡类创建新卡对象因为没有这种卡">抽象类 --- 禁止基础门卡类创建新卡对象（因为没有这种卡）</a></li>
 <li><a href="#_接口设计_功能准入协议">接口设计 —— “功能准入协议”</a></li>
-<li><a href="#_包管理_大楼的房间划分_属于架构上的设计">包管理 —— “大楼的房间划分” &#8594; 属于架构上的设计</a></li>
 <li><a href="#_访问权限_房间门锁">访问权限 —— “房间门锁”</a></li>
 <li><a href="#_面向对象基础小结">面向对象基础小结</a></li>
 </ul>
@@ -2033,6 +2033,63 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect2">
+<h3 id="_包管理_大楼的房间划分_属于架构上的设计">包管理 —— “大楼的房间划分” &#8594; 属于架构上的设计</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>为什么要学？</p>
+<div class="paragraph">
+<p>如果我们把门禁系统的所有代码（用户实体、刷卡逻辑、数据库连接、主程序）全塞在一个文件夹里，随着代码变多，就会变成一个混乱的“垃圾堆”。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>包 (Package) 就是用来给代码分类建文件夹的，可以比喻成房间；</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>项目结构标准划分（包管理）</p>
+<div class="paragraph">
+<p>在企业级开发中，通常按照功能来建包（推荐使用倒置域名命名法）。为了让门禁系统看起来像一个真正的工程，目录应该长这样：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>src/
+├── com.swot.door.entity    // 实体包：存放 门卡类（只存数据模型）
+├── com.swot.door.exception // 异常包：存放 DoorSystemException 类
+├── com.swot.door.utils     // 工具包：存放后续要写的 DBUtils 数据库工具
+└── com.swot.door.main      // 启动包：存放包含 main 方法的主程序</pre>
+</div>
+</div>
+</li>
+<li>
+<p>小结</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>规范第一</strong>：从今天起，告别“默认包（Default Package）”。写任何类之前，先建好 <code>package</code>。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+赶紧试着去改下自己的目录结构吧？加油！
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_继承与多态_父子卡片与读卡器逻辑">继承与多态 —— “父子卡片”与“读卡器逻辑”</h3>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -2053,10 +2110,12 @@ toggleButton.addEventListener('click', () => {
 <p>代码举例</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-cm">/**</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/com/swot/door/entity/BaseDoorCard.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity</span><span class="tok-p">;</span>
+<span class="tok-cm">/**</span>
 <span class="tok-cm"> * 类名：BaseDoorCard (由 DoorCard 演化而来)</span>
 <span class="tok-cm"> */</span>
-<span class="tok-kd">class</span> <span class="tok-nc">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">;</span>
 
@@ -2076,8 +2135,9 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【基础校验】正在核验卡片物理信息...&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
-
-<span class="tok-kd">class</span> <span class="tok-nc">StudentCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-c1">// @clean code/testBasicSyntax/src/com/swot/door/entity/StudentCard.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity</span><span class="tok-p">;</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">StudentCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">StudentCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 继承父类的构造</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
@@ -2090,7 +2150,9 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
-<span class="tok-kd">class</span> <span class="tok-nc">AdminCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-c1">// @clean code/testBasicSyntax/src/com/swot/door/entity/AdminCard.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity</span><span class="tok-p">;</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">AdminCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">AdminCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
@@ -2102,15 +2164,23 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
+<span class="tok-c1">// @clean code/testBasicSyntax/src/com/swot/door/entity/CardReader.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity</span><span class="tok-p">;</span>
 <span class="tok-c1">// 读卡器服务类 (展示多态的精髓)</span>
 <span class="tok-c1">// 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard</span>
-<span class="tok-kd">class</span> <span class="tok-nc">CardReader</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">CardReader</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-c1">// 这里传入的是 BaseDoorCard，展示了多态的兼容性</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">readCard</span><span class="tok-p">(</span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">print</span><span class="tok-p">(</span><span class="tok-s">&quot;读卡器感应 -&gt; &quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 自动触发对应的子类方法</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
+
+<span class="tok-c1">// @clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity.AdminCard</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity.BaseDoorCard</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity.CardReader</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity.StudentCard</span><span class="tok-p">;</span>
 
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">InheritanceAndPolymorphismDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -2147,7 +2217,7 @@ toggleButton.addEventListener('click', () => {
 <div class="sect2">
 <h3 id="_抽象类_禁止基础门卡类创建新卡对象因为没有这种卡">抽象类 --- 禁止基础门卡类创建新卡对象（因为没有这种卡）</h3>
 <div class="paragraph">
-<p>这一版在继承的基础上 ，通过 abstract 关键字从语义和语法上解决了“BaseDoorCard 不应被实例化”的问题。</p>
+<p>这一版在继承的基础上 ，通过 <code>abstract</code> 关键字从语义和语法上解决了 <code>BaseDoorCard</code> 不应被实例化”的问题。</p>
 </div>
 <div class="paragraph">
 <p>另外还通过声明包，解决类名冲突问题。
@@ -2425,66 +2495,6 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_包管理_大楼的房间划分_属于架构上的设计">包管理 —— “大楼的房间划分” &#8594; 属于架构上的设计</h3>
-<div class="olist upperalpha">
-<ol class="upperalpha" type="A">
-<li>
-<p>为什么要学？</p>
-<div class="paragraph">
-<p>如果我们把门禁系统的所有代码（用户实体、刷卡逻辑、数据库连接、主程序）全塞在一个文件夹里，随着代码变多，就会变成一个混乱的“垃圾堆”。</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>包 (Package) 就是用来给代码分类建文件夹的，可以比喻成房间；</p>
-</li>
-<li>
-<p>而<strong>访问权限 (Modifiers)</strong> 就是这些文件夹，即房间上的“门锁”。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>项目结构标准划分（包管理）</p>
-<div class="paragraph">
-<p>在企业级开发中，通常按照功能来建包（推荐使用倒置域名命名法）。为了让门禁系统看起来像一个真正的工程，目录应该长这样：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>src/
-├── com.swot.door.entity    // 实体包：存放 门卡类（只存数据模型）
-├── com.swot.door.exception // 异常包：存放 DoorSystemException 类
-├── com.swot.door.utils     // 工具包：存放后续要写的 DBUtils 数据库工具
-└── com.swot.door.main      // 启动包：存放包含 main 方法的主程序</pre>
-</div>
-</div>
-</li>
-<li>
-<p>小结</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>规范第一</strong>：从今天起，告别“默认包（Default Package）”。写任何类之前，先建好 <code>package</code>。</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="⚡"></i>
-</td>
-<td class="content">
-赶紧试着去改下自己的目录结构吧？加油！
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
 <h3 id="_访问权限_房间门锁">访问权限 —— “房间门锁”</h3>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -2563,7 +2573,7 @@ toggleButton.addEventListener('click', () => {
 <div class="sect2">
 <h3 id="_面向对象基础小结">面向对象基础小结</h3>
 <div class="paragraph">
-<p>面向对象是 Java 的核心灵魂。大家不需要死记硬背枯燥的理论，只需在脑海中牢记这四个核心比喻：</p>
+<p>面向对象是 Java 的核心灵魂。不需要死记硬背枯燥的理论，只需在脑海中牢记这四个核心比喻：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -4031,7 +4041,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-06 09:53:17 +0800
+Last updated 2026-03-06 11:15:29 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
