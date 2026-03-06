@@ -2088,6 +2088,18 @@ toggleButton.addEventListener('click', () => {
 </tr>
 </table>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+不是所有的项目必须要严格地进行拆包，避免过度设计。根据实际架构而定，能够高效快速开发，易维护即可。
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_继承与多态_父子卡片与读卡器逻辑">继承与多态 —— “父子卡片”与“读卡器逻辑”</h3>
@@ -2110,12 +2122,12 @@ toggleButton.addEventListener('click', () => {
 <p>代码举例</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/com/swot/door/entity/BaseDoorCard.java</span>
-<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity</span><span class="tok-p">;</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/inheritanceExample/Card.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">inheritanceExample</span><span class="tok-p">;</span>
 <span class="tok-cm">/**</span>
 <span class="tok-cm"> * 类名：BaseDoorCard (由 DoorCard 演化而来)</span>
 <span class="tok-cm"> */</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">class</span> <span class="tok-nc">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">;</span>
 
@@ -2135,9 +2147,7 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【基础校验】正在核验卡片物理信息...&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
-<span class="tok-c1">// @clean code/testBasicSyntax/src/com/swot/door/entity/StudentCard.java</span>
-<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity</span><span class="tok-p">;</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">StudentCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">class</span> <span class="tok-nc">StudentCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">StudentCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 继承父类的构造</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
@@ -2150,9 +2160,7 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
-<span class="tok-c1">// @clean code/testBasicSyntax/src/com/swot/door/entity/AdminCard.java</span>
-<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity</span><span class="tok-p">;</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">AdminCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">class</span> <span class="tok-nc">AdminCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">AdminCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
@@ -2164,11 +2172,9 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
-<span class="tok-c1">// @clean code/testBasicSyntax/src/com/swot/door/entity/CardReader.java</span>
-<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity</span><span class="tok-p">;</span>
 <span class="tok-c1">// 读卡器服务类 (展示多态的精髓)</span>
 <span class="tok-c1">// 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">CardReader</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">class</span> <span class="tok-nc">CardReader</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-c1">// 这里传入的是 BaseDoorCard，展示了多态的兼容性</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">readCard</span><span class="tok-p">(</span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">print</span><span class="tok-p">(</span><span class="tok-s">&quot;读卡器感应 -&gt; &quot;</span><span class="tok-p">);</span>
@@ -2176,13 +2182,10 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
-<span class="tok-c1">// @clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity.AdminCard</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity.BaseDoorCard</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity.CardReader</span><span class="tok-p">;</span>
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity.StudentCard</span><span class="tok-p">;</span>
+<span class="tok-c1">// @clean code/testBasicSyntax/src/inheritanceExample/Run.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">inheritanceExample</span><span class="tok-p">;</span>
 
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">InheritanceAndPolymorphismDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Run</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">CardReader</span><span class="tok-w"> </span><span class="tok-n">cardReader</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CardReader</span><span class="tok-p">();</span>
 
@@ -2225,15 +2228,15 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/abstractionExample/Card.java</span>
 <span class="tok-c1">// 通过声明包，解决类名冲突问题</span>
-<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">use_abstraction</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 必须匹配文件夹的名字</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">abstractionExample</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 必须匹配文件夹的名字</span>
 
 <span class="tok-cm">/**</span>
 <span class="tok-cm"> * 类名：BaseDoorCardAbs (抽象类)</span>
 <span class="tok-cm"> * 演化点：使用了 abstract 关键字。</span>
 <span class="tok-cm"> * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。</span>
-<span class="tok-cm"> * 2. 规范：强制子类必须实现特定的权限说明逻辑。</span>
+<span class="tok-cm"> * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。</span>
 <span class="tok-cm"> */</span>
 <span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">;</span>
@@ -2277,7 +2280,7 @@ toggleButton.addEventListener('click', () => {
 
 <span class="tok-w">    </span><span class="tok-nd">@Override</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">showAccessScope</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【权限范围】学生卡：确认 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">getOwnerName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 的图书馆/教学楼访问权限。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【权限范围】学生卡：确认&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">getOwnerName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;的图书馆/教学楼访问权限。&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
@@ -2308,7 +2311,12 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">AbstractClassDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-c1">// code/testBasicSyntax/src/use_abstraction/Run.java</span>
+<span class="tok-c1">// 通过声明包，解决类名冲突问题</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">abstractionExample</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 必须匹配文件夹的名字</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Run</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">CardReader</span><span class="tok-w"> </span><span class="tok-n">cardReader</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CardReader</span><span class="tok-p">();</span>
 
@@ -2352,21 +2360,15 @@ toggleButton.addEventListener('click', () => {
 <p>代码举例</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// code/testBasicSyntax/src/use_interface/InterfaceDemo.java</span>
-<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">use_interface</span><span class="tok-p">;</span>
-
-<span class="tok-cm">/**</span>
-<span class="tok-cm"> * 支付接口：定义了“能够支付”的规范</span>
-<span class="tok-cm"> */</span>
-<span class="tok-kd">interface</span> <span class="tok-nc">Payable</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">pay</span><span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 谁实现这个接口，谁就必须具备支付功能</span>
-<span class="tok-p">}</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/interfaceExample/Card.java</span>
+<span class="tok-c1">// 通过声明包，解决类名冲突问题</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">interfaceExample</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 必须匹配文件夹的名字</span>
 
 <span class="tok-cm">/**</span>
 <span class="tok-cm"> * 类名：BaseDoorCardAbs (抽象类)</span>
 <span class="tok-cm"> * 演化点：使用了 abstract 关键字。</span>
 <span class="tok-cm"> * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。</span>
-<span class="tok-cm"> * 2. 规范：强制子类必须实现特定的权限说明逻辑。</span>
+<span class="tok-cm"> * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。</span>
 <span class="tok-cm"> */</span>
 <span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">;</span>
@@ -2448,7 +2450,18 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">InterfaceDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 支付接口：定义了“能够支付”的规范</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">interface</span> <span class="tok-nc">Payable</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">pay</span><span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 谁实现这个接口，谁就必须具备支付功能</span>
+<span class="tok-p">}</span>
+
+
+<span class="tok-c1">// @clean code/testBasicSyntax/src/interfaceExample/Run.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">interfaceExample</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Run</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">StudentCard</span><span class="tok-w"> </span><span class="tok-n">studentCard</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">(</span><span class="tok-s">&quot;S-2024-001&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;小明&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-n">AdminCard</span><span class="tok-w"> </span><span class="tok-n">adminCard</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">AdminCard</span><span class="tok-p">(</span><span class="tok-s">&quot;A-007&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;张老师&quot;</span><span class="tok-p">);</span>
@@ -4041,7 +4054,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-06 11:15:29 +0800
+Last updated 2026-03-06 15:51:41 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -753,6 +753,8 @@ src/
 
 TIP: 赶紧试着去改下自己的目录结构吧？加油！
 
+IMPORTANT: 不是所有的项目必须要严格地进行拆包，避免过度设计。根据实际架构而定，能够高效快速开发，易维护即可。
+
 === 继承与多态 —— “父子卡片”与“读卡器逻辑”
 [upperalpha]
 . 知识点说明
@@ -763,12 +765,12 @@ TIP: 赶紧试着去改下自己的目录结构吧？加油！
 +
 [source,java]
 ----
-// @clean code/testBasicSyntax/src/com/swot/door/entity/BaseDoorCard.java
-package com.swot.door.entity;
+// @clean code/testBasicSyntax/src/inheritanceExample/Card.java
+package inheritanceExample;
 /**
  * 类名：BaseDoorCard (由 DoorCard 演化而来)
  */
-public class BaseDoorCard {
+class BaseDoorCard {
     private String serialNumber;
     private String ownerName;
 
@@ -788,9 +790,7 @@ public class BaseDoorCard {
         System.out.println("【基础校验】正在核验卡片物理信息...");
     }
 }
-// @clean code/testBasicSyntax/src/com/swot/door/entity/StudentCard.java
-package com.swot.door.entity;
-public class StudentCard extends BaseDoorCard {
+class StudentCard extends BaseDoorCard {
     public StudentCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName); // 继承父类的构造
     }
@@ -803,9 +803,7 @@ public class StudentCard extends BaseDoorCard {
     }
 }
 
-// @clean code/testBasicSyntax/src/com/swot/door/entity/AdminCard.java
-package com.swot.door.entity;
-public class AdminCard extends BaseDoorCard {
+class AdminCard extends BaseDoorCard {
     public AdminCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName);
     }
@@ -817,11 +815,9 @@ public class AdminCard extends BaseDoorCard {
     }
 }
 
-// @clean code/testBasicSyntax/src/com/swot/door/entity/CardReader.java
-package com.swot.door.entity;
 // 读卡器服务类 (展示多态的精髓)
 // 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
-public class CardReader {
+class CardReader {
     // 这里传入的是 BaseDoorCard，展示了多态的兼容性
     public void readCard(BaseDoorCard card) {
         System.out.print("读卡器感应 -> ");
@@ -829,13 +825,10 @@ public class CardReader {
     }
 }
 
-// @clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java
-import com.swot.door.entity.AdminCard;
-import com.swot.door.entity.BaseDoorCard;
-import com.swot.door.entity.CardReader;
-import com.swot.door.entity.StudentCard;
+// @clean code/testBasicSyntax/src/inheritanceExample/Run.java
+package inheritanceExample;
 
-public class InheritanceAndPolymorphismDemo {
+public class Run {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();
 
@@ -862,15 +855,15 @@ public class InheritanceAndPolymorphismDemo {
 
 [source,java]
 ----
-// code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
+// @clean code/testBasicSyntax/src/abstractionExample/Card.java
 // 通过声明包，解决类名冲突问题
-package use_abstraction; // 必须匹配文件夹的名字
+package abstractionExample; // 必须匹配文件夹的名字
 
 /**
  * 类名：BaseDoorCardAbs (抽象类)
  * 演化点：使用了 abstract 关键字。
  * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
- * 2. 规范：强制子类必须实现特定的权限说明逻辑。
+ * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
  */
 abstract class BaseDoorCard {
     private String serialNumber;
@@ -914,7 +907,7 @@ class StudentCard extends BaseDoorCard {
 
     @Override
     public void showAccessScope() {
-        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+        System.out.println("【权限范围】学生卡：确认" + getOwnerName() + "的图书馆/教学楼访问权限。");
     }
 }
 
@@ -945,7 +938,12 @@ class CardReader {
     }
 }
 
-public class AbstractClassDemo {
+
+// code/testBasicSyntax/src/use_abstraction/Run.java
+// 通过声明包，解决类名冲突问题
+package abstractionExample; // 必须匹配文件夹的名字
+
+public class Run {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();
 
@@ -977,21 +975,15 @@ public class AbstractClassDemo {
 +
 [source,java]
 ----
-// code/testBasicSyntax/src/use_interface/InterfaceDemo.java
-package use_interface;
-
-/**
- * 支付接口：定义了“能够支付”的规范
- */
-interface Payable {
-    void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
-}
+// @clean code/testBasicSyntax/src/interfaceExample/Card.java
+// 通过声明包，解决类名冲突问题
+package interfaceExample; // 必须匹配文件夹的名字
 
 /**
  * 类名：BaseDoorCardAbs (抽象类)
  * 演化点：使用了 abstract 关键字。
  * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
- * 2. 规范：强制子类必须实现特定的权限说明逻辑。
+ * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
  */
 abstract class BaseDoorCard {
     private String serialNumber;
@@ -1073,7 +1065,18 @@ class CanteenReader {
     }
 }
 
-public class InterfaceDemo {
+/**
+ * 支付接口：定义了“能够支付”的规范
+ */
+interface Payable {
+    void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
+}
+
+
+// @clean code/testBasicSyntax/src/interfaceExample/Run.java
+package interfaceExample;
+
+public class Run {
     public static void main(String[] args) {
         StudentCard studentCard = new StudentCard("S-2024-001", "小明");
         AdminCard adminCard = new AdminCard("A-007", "张老师");

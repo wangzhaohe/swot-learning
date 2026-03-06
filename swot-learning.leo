@@ -235,36 +235,32 @@
 </v>
 <v t="swot.20260303164345.1"><vh>包管理 —— “大楼的房间划分” -&gt; 属于架构上的设计</vh></v>
 <v t="swot.20260215222546.1"><vh>继承与多态 —— “父子卡片”与“读卡器逻辑”</vh>
-<v t="swot.20260306104543.1"><vh>@clean code/testBasicSyntax/src/com/swot/door/entity/BaseDoorCard.java</vh>
+<v t="swot.20260306141254.1"><vh>@clean code/testBasicSyntax/src/inheritanceExample/Card.java</vh>
 <v t="swot.20260304155927.1"><vh>BB class BaseDoorCard &lt;- Change from DoorCard 基础门卡</vh></v>
-</v>
-<v t="swot.20260306105152.1"><vh>@clean code/testBasicSyntax/src/com/swot/door/entity/StudentCard.java</vh>
 <v t="swot.20260304162904.1"><vh>BB class StudentCard extends BaseDoorCard 学生卡继承自基础门卡</vh></v>
-</v>
-<v t="swot.20260306105353.1"><vh>@clean code/testBasicSyntax/src/com/swot/door/entity/AdminCard.java</vh>
 <v t="swot.20260304163021.1"><vh>BB class AdminCard extends BaseDoorCard 管理员卡继承自基础门卡</vh></v>
-</v>
-<v t="swot.20260306105535.1"><vh>@clean code/testBasicSyntax/src/com/swot/door/entity/CardReader.java</vh>
 <v t="swot.20260304155948.1"><vh>BB class CardReader 读卡器</vh></v>
 </v>
-<v t="swot.20260304152414.1"><vh>@clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java</vh></v>
+<v t="swot.20260304152414.1"><vh>@clean code/testBasicSyntax/src/inheritanceExample/Run.java</vh></v>
 </v>
 <v t="swot.20260304170224.1"><vh>抽象类 --- 禁止基础门卡类创建新卡对象（因为没有这种卡）</vh>
-<v t="swot.20260304170758.1"><vh>@clean code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java</vh>
+<v t="swot.20260306150601.1"><vh>@clean code/testBasicSyntax/src/abstractionExample/Card.java</vh>
 <v t="swot.20260304171106.1"><vh>BB class BaseDoorCard -&gt; abstract</vh></v>
 <v t="swot.20260304173742.1"><vh>BB class StudentCard extends BaseDoorCard 学生卡</vh></v>
 <v t="swot.20260304173902.1"><vh>BB class AdminCard extends BaseDoorCard 管理员卡</vh></v>
-<v t="swot.20260306110338.1"><vh>BB class CardReader 读卡器</vh></v>
+<v t="swot.20260304155948.1"></v>
 </v>
+<v t="swot.20260304170758.1"><vh>@clean code/testBasicSyntax/src/abstractionExample/Run.java</vh></v>
 </v>
 <v t="swot.20260215222615.1"><vh>接口设计 —— “功能准入协议”</vh>
-<v t="swot.20260304220859.1"><vh>@clean code/testBasicSyntax/src/use_interface/InterfaceDemo.java</vh>
-<v t="swot.20260304221446.1"><vh>BB interface Payable 支付接口</vh></v>
+<v t="swot.20260306151932.1"><vh>@clean code/testBasicSyntax/src/interfaceExample/Card.java</vh>
 <v t="swot.20260304171106.1"></v>
 <v t="swot.20260304221906.1"><vh>BB class StudentCard extends BaseDoorCard implements Payable 学生卡</vh></v>
 <v t="swot.20260304173902.1"></v>
 <v t="swot.20260304222616.1"><vh>BB class CanteenReader 食堂刷卡机</vh></v>
+<v t="swot.20260304221446.1"><vh>BB interface Payable 支付接口</vh></v>
 </v>
+<v t="swot.20260304220859.1"><vh>@clean code/testBasicSyntax/src/interfaceExample/Run.java</vh></v>
 </v>
 <v t="swot.20260305112121.1"><vh>访问权限 —— “房间门锁”</vh></v>
 <v t="swot.20260216074225.1"><vh>面向对象基础小结</vh></v>
@@ -391,12 +387,14 @@
 <v t="swot.20260306004114.1"><vh>2. 手动下载兼容版 jdtls (v1.33)</vh></v>
 <v t="swot.20260306004104.1"><vh>3. 配置插件逻辑 (~/.config/nvim/lua/plugins/java.lua)</vh></v>
 <v t="swot.20260306082055.1"><vh>4. 配置最后加载 (~/.config/nvim/after/ftplugin/java.lua)</vh>
+<v t="swot.20260306153430.1"><vh>@no-head @@file ~/.config/nvim/after/ftplugin/java.lua</vh>
 <v t="swot.20260306092624.1"><vh>4.1 强制当前缓冲区的缩进为 4 空格</vh></v>
 <v t="swot.20260306092634.1"><vh>4.2 配置 jdtls 的启动参数</vh></v>
 <v t="swot.20260306092646.1"><vh>4.3 获取 blink.cmp 的底层能力</vh></v>
 <v t="swot.20260306092706.1"><vh>4.4 强制 LSP 格式化时使用 4 空格</vh></v>
 <v t="swot.20260306004048.1"><vh>4.5 配置快捷运行</vh></v>
 <v t="swot.20260306092724.1"><vh>4.6 核心：每次打开 java 文件时，触发挂载</vh></v>
+</v>
 </v>
 <v t="swot.20260306004036.1"><vh>5. 验证</vh></v>
 </v>
@@ -17521,6 +17519,8 @@ src/
 * **规范第一**：从今天起，告别“默认包（Default Package）”。写任何类之前，先建好 `package`。
 
 TIP: 赶紧试着去改下自己的目录结构吧？加油！
+
+IMPORTANT: 不是所有的项目必须要严格地进行拆包，避免过度设计。根据实际架构而定，能够高效快速开发，易维护即可。
 </t>
 <t tx="swot.20260303233432.1"></t>
 <t tx="swot.20260303233729.1">[upperalpha]
@@ -17850,14 +17850,11 @@ public class DoorCardDemo {
     }
 }
 </t>
-<t tx="swot.20260304152414.1" _mod_time="4741da6a91b4019c7e2e">@language java
-// @clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java
-import com.swot.door.entity.AdminCard;
-import com.swot.door.entity.BaseDoorCard;
-import com.swot.door.entity.CardReader;
-import com.swot.door.entity.StudentCard;
+<t tx="swot.20260304152414.1" _mod_time="4741da6a9efc1f87522e">@language java
+// @clean code/testBasicSyntax/src/inheritanceExample/Run.java
+package inheritanceExample;
 
-public class InheritanceAndPolymorphismDemo {
+public class Run {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();
 
@@ -17875,7 +17872,7 @@ public class InheritanceAndPolymorphismDemo {
 /**
  * 类名：BaseDoorCard (由 DoorCard 演化而来)
  */
-public class BaseDoorCard {
+class BaseDoorCard {
     private String serialNumber;
     private String ownerName;
 
@@ -17899,7 +17896,7 @@ public class BaseDoorCard {
 <t tx="swot.20260304155948.1">@language java
 // 读卡器服务类 (展示多态的精髓)
 // 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
-public class CardReader {
+class CardReader {
     // 这里传入的是 BaseDoorCard，展示了多态的兼容性
     public void readCard(BaseDoorCard card) {
         System.out.print("读卡器感应 -&gt; ");
@@ -17909,7 +17906,7 @@ public class CardReader {
 
 </t>
 <t tx="swot.20260304162904.1">@language java
-public class StudentCard extends BaseDoorCard {
+class StudentCard extends BaseDoorCard {
     public StudentCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName); // 继承父类的构造
     }
@@ -17924,7 +17921,7 @@ public class StudentCard extends BaseDoorCard {
 
 </t>
 <t tx="swot.20260304163021.1">@language java
-public class AdminCard extends BaseDoorCard {
+class AdminCard extends BaseDoorCard {
     public AdminCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName);
     }
@@ -17986,13 +17983,12 @@ public class AdminCard extends BaseDoorCard {
 @others
 ----
 </t>
-<t tx="swot.20260304170758.1" _mod_time="4741da6a910c99d34b2e">@language java
-// code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
+<t tx="swot.20260304170758.1" _mod_time="4741da6aa13e036a4d2e">@language java
+// code/testBasicSyntax/src/use_abstraction/Run.java
 // 通过声明包，解决类名冲突问题
-package use_abstraction; // 必须匹配文件夹的名字
+package abstractionExample; // 必须匹配文件夹的名字
 
-@others
-public class AbstractClassDemo {
+public class Run {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();
 
@@ -18015,7 +18011,7 @@ public class AbstractClassDemo {
  * 类名：BaseDoorCardAbs (抽象类)
  * 演化点：使用了 abstract 关键字。
  * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
- * 2. 规范：强制子类必须实现特定的权限说明逻辑。
+ * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
  */
 abstract class BaseDoorCard {
     private String serialNumber;
@@ -18061,7 +18057,7 @@ class StudentCard extends BaseDoorCard {
 
     @Override
     public void showAccessScope() {
-        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+        System.out.println("【权限范围】学生卡：确认" + getOwnerName() + "的图书馆/教学楼访问权限。");
     }
 }
 
@@ -18085,11 +18081,14 @@ class AdminCard extends BaseDoorCard {
 }
 
 </t>
-<t tx="swot.20260304220859.1" _mod_time="4741da6a86f81b699a2e">@language java
-// code/testBasicSyntax/src/use_interface/InterfaceDemo.java
-package use_interface;
+<t tx="swot.20260304220859.1" _mod_time="4741da6aa0f17fd1fe2e">@language java
+// @clean code/testBasicSyntax/src/interfaceExample/Run.java
+package interfaceExample;
 
-@others
+public class Run {
+    public static void main(String[] args) {
+        StudentCard studentCard = new StudentCard("S-2024-001", "小明");
+        AdminCard adminCard = new AdminCard("A-007", "张老师");
 
         CanteenReader canteen = new CanteenReader();
 
@@ -18148,10 +18147,6 @@ class CanteenReader {
     }
 }
 
-public class InterfaceDemo {
-    public static void main(String[] args) {
-        StudentCard studentCard = new StudentCard("S-2024-001", "小明");
-        AdminCard adminCard = new AdminCard("A-007", "张老师");
 </t>
 <t tx="swot.20260305091955.1">a
 b
@@ -18337,10 +18332,7 @@ toggleButton.addEventListener('click', () =&gt; {
 
 2. **运行代码**: 按下 `空格 + r + j`，应能看到正常的控制台输出。
 </t>
-<t tx="swot.20260306004048.1">@language lua
--- 解决 Java `package` 包名运行报错的关键。此脚本会自动切换模式并进入 `src` 目录运行正确的类名。
--- 终极 Java 一键运行 (自带编译 + 包名支持)
-
+<t tx="swot.20260306004048.1">@language java
 vim.keymap.set("n", "&lt;leader&gt;rj", function()
   vim.cmd("write") -- 保存当前文件
 
@@ -18348,7 +18340,7 @@ vim.keymap.set("n", "&lt;leader&gt;rj", function()
   local src_marker = vim.fs.find({ "src" }, { upward = true })[1]
 
   if not src_marker then
-    -- 如果没找到 src 目录，直接用 Java 11+ 的单文件模式运行源码
+    -- 如果没找到 src 目录，直接用 Java 的单文件模式运行
     vim.cmd("split | term java " .. file_path)
     return
   end
@@ -18356,19 +18348,19 @@ vim.keymap.set("n", "&lt;leader&gt;rj", function()
   local project_root = vim.fs.dirname(src_marker)
   local src_dir = project_root .. "/src"
 
-  -- 1. 获取相对路径用于编译 (例如: use_abstraction/AbstractClassDemo.java)
-  local relative_file = file_path:sub(#src_dir + 2)
+  -- 1. 获取相对路径及目录
+  local relative_file = file_path:sub(#src_dir + 2) -- 例: interfaceExample/Run.java
+  local relative_dir = vim.fn.fnamemodify(relative_file, ":h") -- 获取所在目录，例: interfaceExample
 
-  -- 2. 获取包名全称用于运行 (例如: use_abstraction.AbstractClassDemo)
+  -- 2. 转换出完整的类名用于运行
   local class_with_path = relative_file:gsub("%.java$", "")
   local full_class_name = class_with_path:gsub("/", ".")
 
-  -- 3. 核心指令：先 cd 到 src，执行 javac 编译，成功后执行 java 运行
-  local run_cmd = "cd " .. src_dir .. " &amp;&amp; javac " .. relative_file .. " &amp;&amp; java " .. full_class_name
+  -- 3. 核心修复：使用 *.java 编译该目录下的所有关联文件，而非只编译当前文件
+  local run_cmd = "cd " .. src_dir .. " &amp;&amp; javac " .. relative_dir .. "/*.java &amp;&amp; java " .. full_class_name
 
   vim.cmd("split | term " .. run_cmd)
-end, { buffer = true, desc = "Java 编译并运行(带 Package 支持)" })
-
+end, { buffer = true, desc = "Java 编译并运行(支持同包多文件)" })
 </t>
 <t tx="swot.20260306004104.1">创建此文件，手动接管 `nvim-jdtls` 的启动逻辑，跳过 Mason 的版本检查。
 
@@ -18474,37 +18466,29 @@ vim.lsp.handlers["textDocument/formatting"] = vim.lsp.with(vim.lsp.handlers.form
 <t tx="swot.20260306092724.1">
 require("jdtls").start_or_attach(config)
 </t>
-<t tx="swot.20260306104543.1" _mod_time="4741da6a915970108b2e">@language java
-// @clean code/testBasicSyntax/src/com/swot/door/entity/BaseDoorCard.java
-package com.swot.door.entity;
+<t tx="swot.20260306141254.1" _mod_time="4741da6a9ef81f99762e">@language java
+// @clean code/testBasicSyntax/src/inheritanceExample/Card.java
+package inheritanceExample;
 @others
 </t>
-<t tx="swot.20260306105152.1" _mod_time="4741da6a9159709cf12e">@language java
-// @clean code/testBasicSyntax/src/com/swot/door/entity/StudentCard.java
-package com.swot.door.entity;
-@others
-</t>
-<t tx="swot.20260306105353.1" _mod_time="4741da6a915d36dcb62e">@language java
-// @clean code/testBasicSyntax/src/com/swot/door/entity/AdminCard.java
-package com.swot.door.entity;
-@others
-</t>
-<t tx="swot.20260306105535.1" _mod_time="4741da6a9163aee35f2e">@language java
-// @clean code/testBasicSyntax/src/com/swot/door/entity/CardReader.java
-package com.swot.door.entity;
-@others
-</t>
-<t tx="swot.20260306110338.1">@language java
-// 读卡器服务类 (展示多态的精髓)
-// 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
-class CardReader {
-    // 这里传入的是 BaseDoorCard，展示了多态的兼容性
-    public void readCard(BaseDoorCard card) {
-        System.out.print("读卡器感应 -&gt; ");
-        card.validate(); // 自动触发对应的子类方法
-    }
-}
+<t tx="swot.20260306150601.1" _mod_time="4741da6a9f43eb2cc82e">@language java
+// @clean code/testBasicSyntax/src/abstractionExample/Card.java
+// 通过声明包，解决类名冲突问题
+package abstractionExample; // 必须匹配文件夹的名字
 
+@others
+
+</t>
+<t tx="swot.20260306151932.1" _mod_time="4741da6aa025be72732e">@language java
+// @clean code/testBasicSyntax/src/interfaceExample/Card.java
+// 通过声明包，解决类名冲突问题
+package interfaceExample; // 必须匹配文件夹的名字
+
+@others
+
+</t>
+<t tx="swot.20260306153430.1">@language lua
+@others
 </t>
 </tnodes>
 </leo_file>

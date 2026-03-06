@@ -1,10 +1,7 @@
-// @clean code/testBasicSyntax/src/InheritanceAndPolymorphismDemo.java
-import com.swot.door.entity.AdminCard;
-import com.swot.door.entity.BaseDoorCard;
-import com.swot.door.entity.CardReader;
-import com.swot.door.entity.StudentCard;
+// @clean code/testBasicSyntax/src/inheritanceExample/Run.java
+package inheritanceExample;
 
-public class InheritanceAndPolymorphismDemo {
+public class Run {
     public static void main(String[] args) {
         CardReader cardReader = new CardReader();
 

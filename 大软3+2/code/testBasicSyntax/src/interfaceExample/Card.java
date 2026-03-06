@@ -1,12 +1,12 @@
-// code/testBasicSyntax/src/use_abstraction/AbstractClassDemo.java
+// @clean code/testBasicSyntax/src/interfaceExample/Card.java
 // 通过声明包，解决类名冲突问题
-package use_abstraction; // 必须匹配文件夹的名字
+package interfaceExample; // 必须匹配文件夹的名字
 
 /**
  * 类名：BaseDoorCardAbs (抽象类)
  * 演化点：使用了 abstract 关键字。
  * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
- * 2. 规范：强制子类必须实现特定的权限说明逻辑。
+ * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
  */
 abstract class BaseDoorCard {
     private String serialNumber;
@@ -36,10 +36,17 @@ abstract class BaseDoorCard {
     public abstract void showAccessScope();
 }
 
-// --- 子类必须实现抽象方法 ---
-class StudentCard extends BaseDoorCard {
+/**
+ * 学生卡：既是门禁卡，又能支付 (多重身份)
+ */
+class StudentCard extends BaseDoorCard implements Payable {
     public StudentCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName); // 继承并调用父类构造器
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
     }
 
     @Override
@@ -71,30 +78,21 @@ class AdminCard extends BaseDoorCard {
     }
 }
 
-// 读卡器服务类 (展示多态的精髓)
-// 它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
-class CardReader {
-    // 这里传入的是 BaseDoorCard，展示了多态的兼容性
-    public void readCard(BaseDoorCard card) {
-        System.out.print("读卡器感应 -> ");
-        card.validate(); // 自动触发对应的子类方法
+/**
+ * 食堂刷卡机：它不关心你是哪种卡，它只认“Payable”接口
+ */
+class CanteenReader {
+    public void processPayment(Payable card, double price) {
+        System.out.println("--- 食堂刷卡机感应中 ---");
+        card.pay(price); // 只要实现了 Payable，就一定有 pay 方法
     }
 }
 
-public class AbstractClassDemo {
-    public static void main(String[] args) {
-        CardReader cardReader = new CardReader();
-
-        // 向上转型：父类引用指向子类对象
-        BaseDoorCard studentCard = new StudentCard("S-2024-001", "小明");
-        BaseDoorCard adminCard = new AdminCard("A-007", "张老师");
-
-        cardReader.readCard(studentCard);
-        System.out.println("--------------------");
-        cardReader.readCard(adminCard);
-
-        // 演示抽象类的约束：
-        // BaseDoorCard mysteryCard = new BaseDoorCard("X-000", "未知");
-        // 上行代码会报错：'BaseDoorCard' is abstract; cannot be instantiated
-    }
+/**
+ * 支付接口：定义了“能够支付”的规范
+ */
+interface Payable {
+    void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
+
+
