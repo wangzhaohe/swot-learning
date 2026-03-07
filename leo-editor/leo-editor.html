@@ -455,6 +455,12 @@ body.toc2.toc-right {
     padding-left: 0;
     padding-right: 0em;
 }
+
+/* 设置整个 HTML 文档的滚动留白 */
+html {
+    scroll-padding-top: 10px; /* 这个数值就是跳转后标题距离屏幕顶部的像素 */
+    scroll-behavior: smooth;  /* 顺便加上平滑滚动效果，跳转不突兀 */
+}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -556,29 +562,64 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_基于_x86_的库如何在_macos_arm_架构下运行">基于 x86 的库如何在 macos arm 架构下运行</a></li>
 <li><a href="#_列操作模式_rectangle">列操作模式 rectangle</a></li>
 <li><a href="#_找出右键菜单_open_with_nvim_与命令_open_with_nvim_不一样的原因">找出右键菜单 open with nvim 与命令 open with nvim 不一样的原因</a></li>
+<li><a href="#_adoc_节点下的_file_不能保存问题"><code>@adoc</code> 节点下的 @file 不能保存问题</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<button id="toggleButton">目录开关</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+<style>
+/* 1. 默认状态：顺应你原本的展开状态 */
+#toc {
+    min-width: 0 !important;
+    max-height: 100vh;
+    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    white-space: nowrap !important;
+    max-width: 530px;
+    opacity: 1;
+
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+#toc.collapsed {
+    max-width: 0 !important; /* 宽度强制缩到 0 */
+    opacity: 0 !important; /* 透明度消失 */
+
+    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 3. 修复行间距（保留你需要的紧凑排版） */
+#toc ul, #toc li {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+</style>
+
+<button id="toggleButton">目录开关</button>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+// 默认没有任何类名，所以默认是自然展开的。
+toggleButton.addEventListener('click', () => {
+    contentDiv.classList.toggle('collapsed');
+});
 </script>
 </div>
 </div>
@@ -888,10 +929,24 @@ arg: &quot;/Users/swot/app/nvim-macos-x86_64/bin/nvim&quot;</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_adoc_节点下的_file_不能保存问题"><code>@adoc</code> 节点下的 @file 不能保存问题</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>这个是 leo-editor 源代码不允许，对于简单的文件，可以使用 @clean 来操作吧。</p>
+</div>
+<div class="paragraph">
+<p>如果后面真的必须要用 @file，再来评估一下更改 leo-editor 源代码会产生什么样的后果吧。</p>
+</div>
+<div class="paragraph">
+<p>我想 edreamleo 这样设计肯定是有原因的，先不去分析这个复杂的问题了。</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-28 22:02:55 +0800
+Last updated 2026-03-07 20:07:06 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

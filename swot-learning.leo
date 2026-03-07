@@ -168,6 +168,7 @@
 <v t="swot.20250831095539.1"><vh>基于 x86 的库如何在 macos arm 架构下运行</vh></v>
 <v t="swot.20250831100251.1"><vh>列操作模式 rectangle</vh></v>
 <v t="swot.20260222103905.1"><vh>找出右键菜单 open with nvim 与命令 open with nvim 不一样的原因</vh></v>
+<v t="swot.20260307200504.1"><vh>`@adoc` 节点下的 @file 不能保存问题</vh></v>
 </v>
 </v>
 </v>
@@ -1232,7 +1233,6 @@
 <v t="swot.20260305091955.1"><vh>leo-editor body 编辑时，执行 ctrl+z 光标位置会跳到可见范围最底下的一行 bug</vh></v>
 <v t="swot.20260305092401.1"><vh>leo-editor body 编辑时，执行 ctrl + shift + z 光标位置会重置到第一行的 bug</vh></v>
 </v>
-<v t="swot.20260305093354.1"><vh>@adoc 下的 @file 不能保存问题</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -1390,23 +1390,57 @@ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 </t>
 <t tx="swot.20250508134351.1">
 ++++
-&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
-&lt;script&gt;
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+&lt;style&gt;
+/* 1. 默认状态：顺应你原本的展开状态 */
+#toc {
+    min-width: 0 !important;
+    max-height: 100vh;
+    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () =&gt; {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    white-space: nowrap !important;
+    max-width: 530px;
+    opacity: 1;
+
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+#toc.collapsed {
+    max-width: 0 !important; /* 宽度强制缩到 0 */
+    opacity: 0 !important; /* 透明度消失 */
+
+    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 3. 修复行间距（保留你需要的紧凑排版） */
+#toc ul, #toc li {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+// 默认没有任何类名，所以默认是自然展开的。
+toggleButton.addEventListener('click', () =&gt; {
+    contentDiv.classList.toggle('collapsed');
+});
 &lt;/script&gt;
 ++++
 </t>
@@ -18148,7 +18182,6 @@ y
 z
 </t>
 <t tx="swot.20260305092636.1"></t>
-<t tx="swot.20260305093354.1"></t>
 <t tx="swot.20260305112121.1">[upperalpha]
 . 访问权限（门锁的级别）
 +
@@ -18539,6 +18572,13 @@ class AdminCard extends BaseDoorCard {
         System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
     }
 }
+
+</t>
+<t tx="swot.20260307200504.1">这个是 leo-editor 源代码不允许，对于简单的文件，可以使用 @clean 来操作吧。
+
+如果后面真的必须要用 @file，再来评估一下更改 leo-editor 源代码会产生什么样的后果吧。
+
+我想 edreamleo 这样设计肯定是有原因的，先不去分析这个复杂的问题了。
 
 </t>
 </tnodes>
