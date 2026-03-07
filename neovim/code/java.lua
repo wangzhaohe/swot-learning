@@ -67,14 +67,15 @@ vim.lsp.handlers["textDocument/formatting"] = vim.lsp.with(vim.lsp.handlers.form
 })
 
 --@+node:swot.20260306004048.1: ** 4.5 配置快捷运行
---@@language java
+--@@language lua
 -- 终极 Java 一键运行 (全自动扫包 + 跨目录编译)
-
 vim.keymap.set("n", "<leader>rj", function()
   vim.cmd("write") -- 保存当前文件
 
   local file_path = vim.fn.expand("%:p")
-  local src_marker = vim.fs.find({ "src" }, { upward = true })[1]
+  -- 修复：强制从当前文件的目录开始向上寻找 src
+  local current_dir = vim.fs.dirname(file_path)
+  local src_marker = vim.fs.find({ "src" }, { upward = true, path = current_dir })[1]
 
   if not src_marker then
     -- 单文件模式：如果没有包结构，直接用 Java 11+ 原生方式运行
@@ -85,7 +86,7 @@ vim.keymap.set("n", "<leader>rj", function()
   local project_root = vim.fs.dirname(src_marker)
   local src_dir = project_root .. "/src"
 
-  -- 1. 获取相对路径用于推导包名全称 (例如: use_abstraction.AbstractClassDemo)
+  -- 1. 获取相对路径用于推导包名全称
   local relative_file = file_path:sub(#src_dir + 2)
   local class_with_path = relative_file:gsub("%.java$", "")
   local full_class_name = class_with_path:gsub("/", ".")
@@ -104,6 +105,7 @@ vim.keymap.set("n", "<leader>rj", function()
 
   vim.cmd("split | term " .. run_cmd)
 end, { buffer = true, desc = "Java 编译并运行(支持全项目跨包依赖)" })
+
 --@+node:swot.20260306092724.1: ** 4.6 核心：每次打开 java 文件时，触发挂载
 
 require("jdtls").start_or_attach(config)
