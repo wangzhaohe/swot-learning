@@ -1166,84 +1166,207 @@ public class TeacherCard extends BaseDoorCard {
 * **接口**：它不干活，只定规矩（就像 USB 插座标准），谁想接入系统，谁就得按规矩实现功能。
 
 == 常用工具类 (4学时)
-* *核心知识点*：String/StringBuilder、Math类、包装类、日期时间类（Date/Calendar/SimpleDateFormat）。
-* *总教学要求*：掌握 Java 核心 API 的使用方法及性能差异。
-* *本节要求*：掌握最常用的 String 字符串处理和 Date 时间记录方法。
+本节要求：掌握最常用的 String 字符串处理和 Date 时间记录方法。
 
-=== String：文字的“修剪与检查”
 [upperalpha]
-. 为什么要学？
-* 门禁系统拿到的卡号可能有空格，或者我们需要检查卡号长度是否正确。
+. 门禁系统拿到的卡号可能有空格，或者我们需要检查卡号长度是否正确。
 * String 类就是我们的“文字加工厂”。
+  ** `length()`：数数有几个字（检查卡号位数）。
+  ** `trim()`：掐头去尾掉空格（防止用户不小心多打了空格）。
+  ** `equals()`：比较两个词长得是否**一模一样**（比对密码/卡号）。
+  ** `substring()`：切下一块肉（提取身份证里的生日）。
 
-. 核心招式：
-* `length()`：数数有几个字（检查卡号位数）。
-* `trim()`：掐头去尾掉空格（防止用户不小心多打了空格）。
-* `equals()`：比较两个词长得是否**一模一样**（比对密码/卡号）。
-* `substring()`：切下一块肉（提取身份证里的生日）。
+. 门禁系统必须记录：谁在 *什么时候* 刷了卡？
+  ** `new Date()`：获取此时此刻的系统时间。
+  ** `SimpleDateFormat`：把时间从“一串数字”变成“人能看懂的文字”。生活举例：
+    *** 就像相机的“时间水印”，`Date` 抓拍瞬间，`SimpleDateFormat` 决定水印印成 "2023/10/01" 还是 "10月1日"。
 
-. 代码举例：
 
-==== class StringDemo
+.代码举例
 [source,java]
 ----
-public class StringDemo {
-    public static void main(String[] args) {
-        String inputCard = "  A1234567  ";
+// @clean code/testBasicSyntax/src/stringDateExample/Card.java
+package stringDateExample;
 
-        // 1. 去掉多余空格
-        String cleanCard = inputCard.trim();
-
-        // 2. 检查长度是否是 8 位
-        if(cleanCard.length() == 8) {
-            System.out.println("卡号格式正确");
-        }
-
-        // 3. 比较卡号（注意：字符串比较千万不能用 ==，要用 .equals()）
-        if(cleanCard.equals("A1234567")) {
-            System.out.println("欢迎回家，管理员！");
-        }
-    }
-}
-----
-
-=== Date：记录刷卡的“那一瞬间”
-[upperalpha]
-. 知识点说明 +
-门禁系统必须记录：谁在**什么时候**刷了卡？
-* `new Date()`：获取此时此刻的系统时间。
-* `SimpleDateFormat`：把时间从“一串数字”变成“人能看懂的文字”。
-
-. 生活举例 +
-就像相机的“时间水印”，`Date` 抓拍瞬间，`SimpleDateFormat` 决定水印印成 "2023/10/01" 还是 "10月1日"。
-
-. 代码举例：
-
-==== class DateDemo
-[source,java]
-----
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
-public class DateDemo {
-    public static void main(String[] args) {
-        // 1. 获取当前时间（刷卡瞬间）
-        Date now = new Date();
-        System.out.println("原始时间对象：" + now); // 很难看：Mon Oct ...
+/**
+ * 类名：BaseDoorCardAbs (抽象类)
+ * 演化点：使用了 abstract 关键字。
+ * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
+ * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
+ */
+abstract class BaseDoorCard {
+    private String serialNumber;
+    private String ownerName;
 
-        // 2. 设定我们喜欢的格式：年-月-日 时:分:秒
-        // yyyy-MM-dd HH:mm:ss 是固定写法，别写错大小写哦
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public BaseDoorCard(String serialNumber, String ownerName) {
+        // -- new -- 增加去除卡号多余空格功能
+        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";
 
-        // 3. 转换
-        String timeStr = sdf.format(now);
-        System.out.println("刷卡时间记录：" + timeStr); 
-        // 输出：2023-10-27 10:30:05
+        // -- new -- 增加卡号长度校验
+        if (this.serialNumber.length() !=8) {
+            System.out.println("【数据异常】警告：新创建的卡号 [" + this.serialNumber + "] 长度非8位！");
+        }
+        this.ownerName = ownerName;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    /**
+     * 通用逻辑：所有卡片都要进行的物理核验。
+     * 抽象类可以拥有具体实现的方法。
+     */
+    public boolean validate() {
+        System.out.println("【系统日志】正在启动刷卡即时校验...");
+        // -- new -- 增加卡号长度校验
+        if (this.serialNumber.length() != 8) {
+            System.out.println("校验失败：卡号格式非法，拒绝通行！");
+            return false;
+        }
+        // 还可以配合 equals 检查是否在白名单中
+        System.out.println("物理校验通过。");
+        return true;
+    }
+
+    /**
+     * 抽象方法：强制规范。
+     * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。
+     */
+    public abstract void showAccessScope();
+}
+/**
+ * 学生卡：既是门禁卡，又能支付 (多重身份)
+ */
+class StudentCard extends BaseDoorCard implements Payable {
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承并调用父类构造器
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+    }
+
+    @Override
+    public boolean validate() {
+        boolean isValid = super.validate();
+        if (isValid) {
+            showAccessScope(); // 执行个性化权限展示
+        }
+        return isValid;
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
     }
 }
+
+class AdminCard extends BaseDoorCard {
+    public AdminCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public boolean validate() {
+        boolean isValid = super.validate();
+        if (isValid) {
+            showAccessScope();
+        }
+        return isValid;
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
+    }
+}
+
+
+/**
+ * 读卡器服务类：系统核心调度员
+ * 多态设计：它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
+ * 职责：记录时间、触发物理校验、识别特殊身份、展示多态权限
+ */
+class CardReader {
+    // 预设的超级管理员卡号：用于 equals() 比对卡号类别
+    private static final String ADMIN_ID = "A1234567";
+    
+    // 这里传入的是 BaseDoorCard，展示了多态的兼容性
+    public void readCard(BaseDoorCard card) {
+        // 1. 【时间记录】记录刷卡的“那一瞬间”
+        // yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String timeLog = sdf.format(new Date());
+    
+        System.out.println("\n[" + timeLog + "] 读卡器感应中...");
+
+        if (card.validate()) {
+            // 注意：字符串比较一定要用 .equals()，不能用 ==
+            if (card.getSerialNumber().equals(ADMIN_ID)) {
+                System.out.println("身份确认：[特权管理员] " + card.getOwnerName() + "，欢迎进入。");
+            } else {
+                // do nothing
+            }
+        } else {
+            // 若 validate() 失败，系统在 BaseDoorCard 内部也打印了错误信息
+            System.out.println("系统提示：请更换有效卡片。");
+        }
+    }
+}
+
+/**
+ * 支付接口：定义了“能够支付”的规范
+ */
+interface Payable {
+    void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
+}
+
+// @clean code/testBasicSyntax/src/stringDateExample/Run.java
+package stringDateExample;
+
+/**
+ * 门禁系统完整演示代码
+ * 涵盖知识点：抽象类、继承、多态、String(trim/length/equals)、Date、SimpleDateFormat
+ */
+public class Run {
+    public static void main(String[] args) {
+        // 初始化读卡器硬件
+        CardReader reader = new CardReader();
+
+        System.out.println("======= 门禁系统 1.0 启动 (测试环境) =======");
+
+        // 场景 A：正常学生卡 (测试 trim 功能：去除两端多余空格)
+        BaseDoorCard student = new StudentCard("  S2024001  ", "小明");
+        reader.readCard(student);
+
+        System.out.println("\n------------------------------------");
+
+        // 场景 B：非法卡片 (测试 length 双重校验拦截)
+        // 构造时会触发警告，刷卡时会因为长度不是 8 位被拦截
+        BaseDoorCard badCard = new StudentCard("B999", "非法入侵者");
+        reader.readCard(badCard);
+
+        System.out.println("\n------------------------------------");
+
+        // 场景 C：超级管理员卡 (测试 equals 识别特权身份)
+        BaseDoorCard admin = new AdminCard("A1234567", "王老师");
+        reader.readCard(admin);
+    }
+}
+
 ----
 
-=== 小结
+
+[NOTE]
+====
 关于 String 比较：
 
 * 重点强调：一定要反复强调 String 比较用 .equals()，而不是 ==。
@@ -1251,8 +1374,8 @@ public class DateDemo {
 
 关于 Date：
 
-* 虽然 Java 8 之后有了 LocalDateTime，但对基础弱的学生来说，Date + SimpleDateFormat 的代码量更少，概念更直观。
-* 建议第一阶段先教这个，等他们实验五、六需要更精确的操作时，再提新 API。
+* 虽然 Java 8 之后有了 LocalDateTime，但 Date + SimpleDateFormat 的代码量更少，概念更直观。
+====
 
 == 异常处理机制 (4学时)
 * *核心知识点*：异常体系结构、try-catch-finally、throw/throws、自定义异常。
