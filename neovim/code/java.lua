@@ -103,9 +103,18 @@ vim.keymap.set("n", "<leader>rj", function()
     full_class_name
   )
 
-  vim.cmd("split | term " .. run_cmd)
+  -- 使用 Snacks.terminal 开启下侧分栏
+  Snacks.terminal(run_cmd, {
+    cwd = src_dir,
+    interactive = false,
+    -- 核心：通过 win 参数指定布局为 split 并在下方
+    win = {
+      position = "bottom",
+      style = "terminal", -- 确保使用终端样式
+      height = 0.4,
+    },
+  })
 end, { buffer = true, desc = "Java 编译并运行(支持全项目跨包依赖)" })
-
 --@+node:swot.20260306092724.1: ** 4.6 核心：每次打开 java 文件时，触发挂载
 
 require("jdtls").start_or_attach(config)
