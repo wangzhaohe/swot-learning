@@ -598,7 +598,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_继承与多态_父子卡片与读卡器逻辑">继承与多态 —— “父子卡片”与“读卡器逻辑”</a></li>
 <li><a href="#_抽象类_禁止基础门卡类创建新卡对象因为没有这种卡">抽象类 --- 禁止基础门卡类创建新卡对象（因为没有这种卡）</a></li>
 <li><a href="#_接口设计_功能准入协议">接口设计 —— “功能准入协议”</a></li>
-<li><a href="#_访问权限_房间门锁">访问权限 —— “房间门锁”</a></li>
+<li><a href="#_访问权限_房间门锁_import_public_class">访问权限 —— “房间门锁” &#8594; import public class</a></li>
 <li><a href="#_面向对象基础小结">面向对象基础小结</a></li>
 </ul>
 </li>
@@ -2456,8 +2456,6 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-kd">interface</span> <span class="tok-nc">Payable</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">pay</span><span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 谁实现这个接口，谁就必须具备支付功能</span>
 <span class="tok-p">}</span>
-
-
 <span class="tok-c1">// @clean code/testBasicSyntax/src/interfaceExample/Run.java</span>
 <span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">interfaceExample</span><span class="tok-p">;</span>
 
@@ -2508,7 +2506,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_访问权限_房间门锁">访问权限 —— “房间门锁”</h3>
+<h3 id="_访问权限_房间门锁_import_public_class">访问权限 —— “房间门锁” &#8594; import public class</h3>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
@@ -2549,19 +2547,34 @@ toggleButton.addEventListener('click', () => {
 <li>
 <p>代码举例（跨房间叫人：import）</p>
 <div class="paragraph">
-<p>当你把类分到不同的包里后，如果 <code>Main</code> 程序想要用到另一个包里的 <code>User</code> 类，就必须使用 <code>import</code> 来指明路径（就像告诉 Java 去哪个房间找人）。</p>
+<p>当你把类分到不同的包里后，如果想要用到另一个包里的类，就必须使用 <code>import</code> 来指明路径（就像告诉 Java 去哪个房间找人）。</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.main</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 1. 声明自己所在的包（必须在文件的第一行）</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/importPublicExample/Run.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">importPublicExample</span><span class="tok-p">;</span>
 
-<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">com.swot.door.entity.User</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 2. 导入其他包里的类（跨房间叫人）</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">inheritanceExample.TeacherCard</span><span class="tok-p">;</span>
 
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Main</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Run</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-c1">// 只有 import 了，这里才能认识 User 类，否则编译器会报错找不到类</span>
-<span class="tok-w">        </span><span class="tok-n">User</span><span class="tok-w"> </span><span class="tok-n">u1</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">User</span><span class="tok-p">(</span><span class="tok-s">&quot;001&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;张三&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;A123&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;用户创建成功：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">u1</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-n">TeacherCard</span><span class="tok-w"> </span><span class="tok-n">teacherCard</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">TeacherCard</span><span class="tok-p">(</span><span class="tok-s">&quot;S-2024-001&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;王老师&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;持卡人：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">teacherCard</span><span class="tok-p">.</span><span class="tok-na">getOwnerName</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+<span class="tok-c1">// @clean code/testBasicSyntax/src/inheritanceExample/TeacherCard.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">inheritanceExample</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">TeacherCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">TeacherCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 继承父类的构造</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 重写父类的方法 validate()</span>
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 先执行父类的 validate() 方法，进行通用检测</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【教师卡】检测成功：确认 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">getOwnerName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 的实验室访问权限。&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -2572,7 +2585,7 @@ toggleButton.addEventListener('click', () => {
 <div class="ulist">
 <ul>
 <li>
-<p><strong>权限铁律</strong>：提供给别人调用的类和方法，尽量用 <code>public</code>；</p>
+<p><strong>权限铁律</strong>：提供给别人调用的类和方法，必须(must)用 <code>public</code>；</p>
 </li>
 <li>
 <p>自己内部保存的数据属性，死死锁住用 <code>private</code>，然后开一扇带安检的窗口（<code>public</code> 的 Getter/Setter）。</p>
@@ -4054,7 +4067,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-06 15:51:41 +0800
+Last updated 2026-03-07 10:50:59 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

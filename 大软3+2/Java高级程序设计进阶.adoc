@@ -1071,8 +1071,6 @@ class CanteenReader {
 interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
-
-
 // @clean code/testBasicSyntax/src/interfaceExample/Run.java
 package interfaceExample;
 
@@ -1101,7 +1099,7 @@ public class Run {
 
 * 安全性：通过接口，我们从代码层面限制了“只有该付钱的卡才能付钱”，避免了管理员误刷卡消费的逻辑错误。
 
-=== 访问权限 —— “房间门锁”
+=== 访问权限 —— “房间门锁” -> import public class
 [upperalpha]
 . 访问权限（门锁的级别）
 +
@@ -1119,26 +1117,41 @@ Java 中有四种权限，初学阶段不需要死记硬背，只要牢记最极
 
 . 代码举例（跨房间叫人：import）
 +
-当你把类分到不同的包里后，如果 `Main` 程序想要用到另一个包里的 `User` 类，就必须使用 `import` 来指明路径（就像告诉 Java 去哪个房间找人）。
+当你把类分到不同的包里后，如果想要用到另一个包里的类，就必须使用 `import` 来指明路径（就像告诉 Java 去哪个房间找人）。
 +
 [source,java]
 ----
-package com.swot.door.main; // 1. 声明自己所在的包（必须在文件的第一行）
+// @clean code/testBasicSyntax/src/importPublicExample/Run.java
+package importPublicExample;
 
-import com.swot.door.entity.User; // 2. 导入其他包里的类（跨房间叫人）
+import inheritanceExample.TeacherCard;
 
-public class Main {
+public class Run {
     public static void main(String[] args) {
-        // 只有 import 了，这里才能认识 User 类，否则编译器会报错找不到类
-        User u1 = new User("001", "张三", "A123", true); 
-        System.out.println("用户创建成功：" + u1.getName());
+        TeacherCard teacherCard = new TeacherCard("S-2024-001", "王老师");
+        System.out.println("持卡人：" + teacherCard.getOwnerName());
     }
 }
+// @clean code/testBasicSyntax/src/inheritanceExample/TeacherCard.java
+package inheritanceExample;
+
+public class TeacherCard extends BaseDoorCard {
+    public TeacherCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承父类的构造
+    }
+
+    // 重写父类的方法 validate()
+    @Override
+    public void validate() {
+        super.validate(); // 先执行父类的 validate() 方法，进行通用检测
+        System.out.println("【教师卡】检测成功：确认 " + getOwnerName() + " 的实验室访问权限。");
+    }
+}
+
 ----
 
-
 . 小结
-* **权限铁律**：提供给别人调用的类和方法，尽量用 `public`；
+* **权限铁律**：提供给别人调用的类和方法，必须(must)用 `public`；
 * 自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
 
 === 面向对象基础小结

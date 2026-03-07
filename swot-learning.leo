@@ -262,7 +262,12 @@
 </v>
 <v t="swot.20260304220859.1"><vh>@clean code/testBasicSyntax/src/interfaceExample/Run.java</vh></v>
 </v>
-<v t="swot.20260305112121.1"><vh>访问权限 —— “房间门锁”</vh></v>
+<v t="swot.20260305112121.1"><vh>访问权限 —— “房间门锁” -&gt; import public class</vh>
+<v t="swot.20260306174713.1"><vh>@clean code/testBasicSyntax/src/importPublicExample/Run.java</vh></v>
+<v t="swot.20260307071707.1"><vh>@clean code/testBasicSyntax/src/inheritanceExample/TeacherCard.java</vh>
+<v t="swot.20260307071825.1"><vh>BB class TeacherCard extends BaseDoorCard 教师卡继承自基础门卡</vh></v>
+</v>
+</v>
 <v t="swot.20260216074225.1"><vh>面向对象基础小结</vh></v>
 </v>
 <v t="swot.20260215212244.1"><vh>常用工具类 (4学时)</vh>
@@ -17843,7 +17848,7 @@ public class DoorCardDemo {
     }
 }
 </t>
-<t tx="swot.20260304152414.1" _mod_time="4741da6aa2b96659202e">@language java
+<t tx="swot.20260304152414.1" _mod_time="4741da6aa3487cd4f12e">@language java
 // @clean code/testBasicSyntax/src/inheritanceExample/Run.java
 package inheritanceExample;
 
@@ -18074,7 +18079,7 @@ class AdminCard extends BaseDoorCard {
 }
 
 </t>
-<t tx="swot.20260304220859.1" _mod_time="4741da6aa0f17fd1fe2e">@language java
+<t tx="swot.20260304220859.1" _mod_time="4741da6aa612189db82e">@language java
 // @clean code/testBasicSyntax/src/interfaceExample/Run.java
 package interfaceExample;
 
@@ -18100,7 +18105,6 @@ public class Run {
 interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
-
 </t>
 <t tx="swot.20260304221906.1">@language java
 /**
@@ -18214,26 +18218,15 @@ Java 中有四种权限，初学阶段不需要死记硬背，只要牢记最极
 
 . 代码举例（跨房间叫人：import）
 +
-当你把类分到不同的包里后，如果 `Main` 程序想要用到另一个包里的 `User` 类，就必须使用 `import` 来指明路径（就像告诉 Java 去哪个房间找人）。
+当你把类分到不同的包里后，如果想要用到另一个包里的类，就必须使用 `import` 来指明路径（就像告诉 Java 去哪个房间找人）。
 +
 [source,java]
 ----
-package com.swot.door.main; // 1. 声明自己所在的包（必须在文件的第一行）
-
-import com.swot.door.entity.User; // 2. 导入其他包里的类（跨房间叫人）
-
-public class Main {
-    public static void main(String[] args) {
-        // 只有 import 了，这里才能认识 User 类，否则编译器会报错找不到类
-        User u1 = new User("001", "张三", "A123", true); 
-        System.out.println("用户创建成功：" + u1.getName());
-    }
-}
+@others
 ----
 
-
 . 小结
-* **权限铁律**：提供给别人调用的类和方法，尽量用 `public`；
+* **权限铁律**：提供给别人调用的类和方法，必须(must)用 `public`；
 * 自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
 </t>
 <t tx="swot.20260306003733.1">@language asciidoc
@@ -18362,7 +18355,7 @@ tar -xzvf jdtls.tar.gz
 ----
 
 </t>
-<t tx="swot.20260306141254.1" _mod_time="4741da6a9ef81f99762e">@language java
+<t tx="swot.20260306141254.1" _mod_time="4741da6ae130e34f3c2e">@language java
 // @clean code/testBasicSyntax/src/inheritanceExample/Card.java
 package inheritanceExample;
 @others
@@ -18375,12 +18368,45 @@ package abstractionExample; // 必须匹配文件夹的名字
 @others
 
 </t>
-<t tx="swot.20260306151932.1" _mod_time="4741da6aa025be72732e">@language java
+<t tx="swot.20260306151932.1" _mod_time="4741da6aa68928898f2e">@language java
 // @clean code/testBasicSyntax/src/interfaceExample/Card.java
 // 通过声明包，解决类名冲突问题
 package interfaceExample; // 必须匹配文件夹的名字
 
 @others
+</t>
+<t tx="swot.20260306174713.1" _mod_time="4741da6ae1cb7bcb8f2e">@language java
+// @clean code/testBasicSyntax/src/importPublicExample/Run.java
+package importPublicExample;
+
+import inheritanceExample.TeacherCard;
+
+public class Run {
+    public static void main(String[] args) {
+        TeacherCard teacherCard = new TeacherCard("S-2024-001", "王老师");
+        System.out.println("持卡人：" + teacherCard.getOwnerName());
+    }
+}
+</t>
+<t tx="swot.20260307071707.1" _mod_time="4741da6ae4a40370d32e">@language java
+// @clean code/testBasicSyntax/src/inheritanceExample/TeacherCard.java
+package inheritanceExample;
+
+@others
+</t>
+<t tx="swot.20260307071825.1">@language java
+public class TeacherCard extends BaseDoorCard {
+    public TeacherCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承父类的构造
+    }
+
+    // 重写父类的方法 validate()
+    @Override
+    public void validate() {
+        super.validate(); // 先执行父类的 validate() 方法，进行通用检测
+        System.out.println("【教师卡】检测成功：确认 " + getOwnerName() + " 的实验室访问权限。");
+    }
+}
 
 </t>
 </tnodes>
