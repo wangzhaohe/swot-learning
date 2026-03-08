@@ -2439,14 +2439,12 @@ def find_adoc_node(p):
 
 target_node = find_adoc_node(p)
 
-if not target_node:
-    g.es("Error: No @adoc node found in the hierarchy!", color="red")
-else:
+if target_node:
     # --- 2. Resolve paths and filenames ---
     target_dir = c.getNodePath(target_node)
     adoc_file = target_node.h.replace("@adoc ", "").strip()
     html_filename = os.path.splitext(adoc_file)[0] + ".html"
-    
+
     # URL Encoding for special characters
     safe_filename = urllib.parse.quote(html_filename)
 
@@ -2473,19 +2471,21 @@ else:
 
     # --- 6. Smart Logic: Start or Update ---
     if server_key not in g.live_servers_active:
-        # Scenario A: First start. 
+        # Scenario A: First start.
         # Update UI in the MAIN thread (Safe)
         g.es(f"Starting Live Server: {html_filename}", color="blue")
-        
+
         # Launch process in background thread
         threading.Thread(target=run_server_process, daemon=True).start()
-        
+
         # Mark as active
         g.live_servers_active.add(server_key)
     else:
         # Scenario B: Update only.
         g.es(f"Updated: {html_filename}", color="green")
         g.es("Browser should auto-reload.", color="grey")
+else:
+    g.es("Error: No @adoc node found in the hierarchy!", color="red")
 </t>
 <t tx="swot.20260218222902.1"></t>
 <t tx="swot.20260219100306.1">import sys
