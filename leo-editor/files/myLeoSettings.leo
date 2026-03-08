@@ -2476,7 +2476,8 @@ if target_node:
         g.es(f"Starting Live Server: {html_filename}", color="blue")
 
         # Launch process in background thread
-        threading.Thread(target=run_server_process, daemon=True).start()
+        # threading.Thread(target=run_server_process, daemon=True).start()
+        run_server_process()
 
         # Mark as active
         g.live_servers_active.add(server_key)
