@@ -439,6 +439,9 @@ show-file-line = Ctrl-Shift-L
 adoc-live = Ctrl-/
 
 z-open-freewin = Ctrl-\
+
+toggle-find-in-headline-option = Ctrl-Shift-H
+toggle-find-in-body-option = Ctrl-Shift-B
 </t>
 <t tx="swot.20181207203732.1"># 'subprocess.Popen','C:/Program Files/Microsoft Office/Office/WINWORD.exe',None
 
@@ -2457,7 +2460,8 @@ else:
     # --- 4. Define the background task (NO UI UPDATES HERE) ---
     def run_server_process():
         # --entry-file opens the specific file
-        cmd = f'npx live-server --entry-file="{html_filename}"'
+        # 添加了 --watch 参数，严格限制只监听目标 HTML 文件
+        cmd = f'npx live-server --entry-file="{html_filename}" --watch="{html_filename}"'
         try:
             # Run in background. Do NOT use g.es here (it causes crashes).
             subprocess.Popen(cmd, cwd=target_dir, shell=True)
