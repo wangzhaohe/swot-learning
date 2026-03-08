@@ -287,6 +287,13 @@
 <v t="swot.20260215212333.1"><vh>异常处理机制 (4学时)</vh>
 <v t="swot.20260216085926.1"><vh>什么是异常？ —— “生活的备选方案”</vh></v>
 <v t="swot.20260216085934.1"><vh>try-catch-finally —— “安全气囊”</vh>
+<v t="swot.20260308192252.1"><vh>@clean code/testBasicSyntax/src/ExceptionExample/Card.java</vh>
+<v t="swot.20260307161520.1"></v>
+<v t="swot.20260307183104.1"></v>
+<v t="swot.20260307183113.1"></v>
+<v t="swot.20260308192355.1"><vh>BB class CardReader 读卡器 -&gt; Add try ... catch ...</vh></v>
+<v t="swot.20260304221446.1"></v>
+</v>
 <v t="swot.20260308104021.1"><vh>@clean code/testBasicSyntax/src/ExceptionExample/Run.java</vh></v>
 </v>
 <v t="swot.20260216085957.1"><vh>throw 与 throws —— “甩锅与上报”</vh>
@@ -18445,7 +18452,6 @@ public class TeacherCard extends BaseDoorCard {
 
 </t>
 <t tx="swot.20260307161320.1">@language java
-
 /**
  * 读卡器服务类：系统核心调度员
  * 多态设计：它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
@@ -18476,8 +18482,7 @@ class CardReader {
             System.out.println("系统提示：请更换有效卡片。");
         }
     }
-}
-</t>
+}</t>
 <t tx="swot.20260307161520.1">@language java
 /**
  * 类名：BaseDoorCardAbs (抽象类)
@@ -18486,7 +18491,7 @@ class CardReader {
  * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
  */
 abstract class BaseDoorCard {
-    private String serialNumber;
+    private final String serialNumber;  // 初始化后不可再变
     private String ownerName;
 
     public BaseDoorCard(String serialNumber, String ownerName) {
@@ -18564,7 +18569,7 @@ public class Run {
     }
 }
 </t>
-<t tx="swot.20260307175925.1" _mod_time="4741da6b31a9f69c042e">@language java
+<t tx="swot.20260307175925.1" _mod_time="4741da6b5a54f01e2a2e">@language java
 // @clean code/testBasicSyntax/src/stringDateExample/Card.java
 package stringDateExample;
 
@@ -18630,29 +18635,26 @@ class AdminCard extends BaseDoorCard {
 我想 edreamleo 这样设计肯定是有原因的，先不去分析这个复杂的问题了。
 
 </t>
-<t tx="swot.20260308104021.1" _mod_time="4741da6b49e772f2b92e">@language java
+<t tx="swot.20260308104021.1" _mod_time="4741da6b5a3093cf8f2e">@language java
+// @clean code/testBasicSyntax/src/ExceptionExample/Run.java
 package ExceptionExample;
 
 public class Run {
     public static void main(String[] args) {
-        String cardData = null; // 假设由于硬件故障，没读到数据
+        CardReader reader = new CardReader();
 
-        try {
-            // 尝试读取卡片长度
-            System.out.println("正在读取卡片...");
-            System.out.println("卡号长度为：" + cardData.length());
-        } catch (NullPointerException e) {
-            // 如果 cardData 是空的，程序会跳到这里，而不是直接崩溃
-            System.out.println("【警告】读卡器未检测到卡片，请重新刷卡！");
-        } finally {
-            // 不管读没读到，都要重置读卡器状态
-            System.out.println("&gt;&gt; 读卡器指示灯重置完毕。");
-        }
+        // 场景 A：正常卡片
+        reader.readCard(new StudentCard("  S1234567  ", "小明"));
+        System.out.println("------");
 
-        System.out.println("系统继续运行中...");
+        // 场景 B：非法长度卡片
+        reader.readCard(new StudentCard("B99", "非法入侵者"));
+        System.out.println("------");
+
+        // 场景 C：传入 null (模拟硬件未感应到对象)
+        reader.readCard(null);
     }
 }
-
 </t>
 <t tx="swot.20260308115402.1">import os
 import subprocess
@@ -18806,6 +18808,54 @@ ls -li /path/to/file1 /path/to/file2
 ----
 +
 If the first column (inode) matches across all files, they are hard links to the same data.
+</t>
+<t tx="swot.20260308192252.1" _mod_time="4741da6b5a54f1c1bf2e">@language java
+// @clean code/testBasicSyntax/src/ExceptionExample/Card.java
+package ExceptionExample;
+
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+@others
+</t>
+<t tx="swot.20260308192355.1">@language java
+/**
+ * 读卡器服务类：系统核心调度员
+ * 多态设计：它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
+ * 职责：记录时间、触发物理校验、识别特殊身份、展示多态权限
+ */
+class CardReader {
+    // 预设的超级管理员卡号：用于 equals() 比对卡号类别
+    private static final String ADMIN_ID = "A1234567";
+
+    // 这里传入的是 BaseDoorCard，展示了多态的兼容性
+    public void readCard(BaseDoorCard card) {
+        // 1. 【时间记录】记录刷卡的“那一瞬间”
+        // yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String timeLog = sdf.format(new Date());
+
+        System.out.println("\n[" + timeLog + "] 读卡器感应中...");
+
+        try {
+            if (card.validate()) {
+                // 注意：字符串比较一定要用 .equals()，不能用 ==
+                if (card.getSerialNumber().equals(ADMIN_ID)) {
+                    System.out.println("身份确认：[特权管理员] " + card.getOwnerName() + "，欢迎进入。");
+                }
+            } else {
+                // 若 validate() 失败，系统在 BaseDoorCard 内部也打印了错误信息
+                System.out.println("系统提示：请更换有效卡片。");
+            }
+        } catch(NullPointerException e) {
+            // 专门捕获“没读到卡”或“空指针”的情况
+            System.out.println("【硬件报警】未检测到有效卡片对象！(NullPointerException)");
+        } finally {
+            // 无论成功还是失败，都要重置读卡器状态
+            System.out.println("&gt;&gt; [状态流] 读卡器指示灯已重置为绿色闲置状态。");
+        }
+    }
+}
 </t>
 </tnodes>
 </leo_file>

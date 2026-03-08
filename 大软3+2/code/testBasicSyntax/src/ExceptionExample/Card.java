@@ -1,5 +1,5 @@
-// @clean code/testBasicSyntax/src/stringDateExample/Card.java
-package stringDateExample;
+// @clean code/testBasicSyntax/src/ExceptionExample/Card.java
+package ExceptionExample;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -108,26 +108,32 @@ class AdminCard extends BaseDoorCard {
 class CardReader {
     // 预设的超级管理员卡号：用于 equals() 比对卡号类别
     private static final String ADMIN_ID = "A1234567";
-    
+
     // 这里传入的是 BaseDoorCard，展示了多态的兼容性
     public void readCard(BaseDoorCard card) {
         // 1. 【时间记录】记录刷卡的“那一瞬间”
         // yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String timeLog = sdf.format(new Date());
-    
+
         System.out.println("\n[" + timeLog + "] 读卡器感应中...");
 
-        if (card.validate()) {
-            // 注意：字符串比较一定要用 .equals()，不能用 ==
-            if (card.getSerialNumber().equals(ADMIN_ID)) {
-                System.out.println("身份确认：[特权管理员] " + card.getOwnerName() + "，欢迎进入。");
+        try {
+            if (card.validate()) {
+                // 注意：字符串比较一定要用 .equals()，不能用 ==
+                if (card.getSerialNumber().equals(ADMIN_ID)) {
+                    System.out.println("身份确认：[特权管理员] " + card.getOwnerName() + "，欢迎进入。");
+                }
             } else {
-                // do nothing
+                // 若 validate() 失败，系统在 BaseDoorCard 内部也打印了错误信息
+                System.out.println("系统提示：请更换有效卡片。");
             }
-        } else {
-            // 若 validate() 失败，系统在 BaseDoorCard 内部也打印了错误信息
-            System.out.println("系统提示：请更换有效卡片。");
+        } catch(NullPointerException e) {
+            // 专门捕获“没读到卡”或“空指针”的情况
+            System.out.println("【硬件报警】未检测到有效卡片对象！(NullPointerException)");
+        } finally {
+            // 无论成功还是失败，都要重置读卡器状态
+            System.out.println(">> [状态流] 读卡器指示灯已重置为绿色闲置状态。");
         }
     }
 }

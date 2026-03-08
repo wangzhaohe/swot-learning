@@ -1198,7 +1198,7 @@ import java.text.SimpleDateFormat;
  * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
  */
 abstract class BaseDoorCard {
-    private String serialNumber;
+    private final String serialNumber;  // 初始化后不可再变
     private String ownerName;
 
     public BaseDoorCard(String serialNumber, String ownerName) {
@@ -1268,7 +1268,6 @@ class StudentCard extends BaseDoorCard implements Payable {
         System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
     }
 }
-
 class AdminCard extends BaseDoorCard {
     public AdminCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName);
@@ -1288,8 +1287,6 @@ class AdminCard extends BaseDoorCard {
         System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
     }
 }
-
-
 /**
  * 读卡器服务类：系统核心调度员
  * 多态设计：它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
@@ -1321,14 +1318,12 @@ class CardReader {
         }
     }
 }
-
 /**
  * 支付接口：定义了“能够支付”的规范
  */
 interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
-
 // @clean code/testBasicSyntax/src/stringDateExample/Run.java
 package stringDateExample;
 
@@ -1361,7 +1356,6 @@ public class Run {
         reader.readCard(admin);
     }
 }
-
 ----
 
 
@@ -1379,6 +1373,7 @@ public class Run {
 
 == 异常处理机制 (4学时)
 * *核心知识点*：异常体系结构、try-catch-finally、throw/throws、自定义异常。
+
 * *教学要求*：能够编写健壮的代码，防止程序因为一点小意外就“直接罢工” 。
 
 在开发门禁系统时，最怕程序因为一点小错就彻底崩溃（比如读卡器坏了，整个系统不应该直接蓝屏）。
@@ -1387,41 +1382,193 @@ public class Run {
 === 什么是异常？ —— “生活的备选方案”
 [upperalpha]
 . 知识点说明
+
 * 程序运行就像开车，即使你技术再好，也可能遇到“爆胎”或“封路”。
+
 * **异常 (Exception)**：不是程序写错了（那是 Bug），而是程序运行中遇到了**意外情况**（比如网络断了、文件找不到了）。
 
+
 . 生活举例
+
 * 你出门上班，计划是坐地铁。但如果地铁停运了（异常），你应该去坐公交（处理异常），而不是直接原地消失。
 
 === try-catch-finally —— “安全气囊”
 [upperalpha]
 . 核心招式
+
 * **try**：试着运行这段代码（可能有危险）。
+
 * **catch**：如果真的出事了，该怎么办？（抓捕异常并处理）。
+
 * **finally**：不管出不出事，最后都要执行的操作（比如关灯、锁门）。
 
-. 代码举例（模拟刷卡读取数据）
 
-==== class ExceptionDemo
+. 代码举例（模拟刷卡读取数据）
++
 [source,java]
 ----
-public class ExceptionDemo {
-    public static void main(String[] args) {
-        String cardData = null; // 假设由于硬件故障，没读到数据
+// @clean code/testBasicSyntax/src/ExceptionExample/Card.java
+package ExceptionExample;
+
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+/**
+ * 类名：BaseDoorCardAbs (抽象类)
+ * 演化点：使用了 abstract 关键字。
+ * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
+ * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
+ */
+abstract class BaseDoorCard {
+    private final String serialNumber;  // 初始化后不可再变
+    private String ownerName;
+
+    public BaseDoorCard(String serialNumber, String ownerName) {
+        // -- new -- 增加去除卡号多余空格功能
+        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";
+
+        // -- new -- 增加卡号长度校验
+        if (this.serialNumber.length() !=8) {
+            System.out.println("【数据异常】警告：新创建的卡号 [" + this.serialNumber + "] 长度非8位！");
+        }
+        this.ownerName = ownerName;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    /**
+     * 通用逻辑：所有卡片都要进行的物理核验。
+     * 抽象类可以拥有具体实现的方法。
+     */
+    public boolean validate() {
+        System.out.println("【系统日志】正在启动刷卡即时校验...");
+        // -- new -- 增加卡号长度校验
+        if (this.serialNumber.length() != 8) {
+            System.out.println("校验失败：卡号格式非法，拒绝通行！");
+            return false;
+        }
+        // 还可以配合 equals 检查是否在白名单中
+        System.out.println("物理校验通过。");
+        return true;
+    }
+
+    /**
+     * 抽象方法：强制规范。
+     * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。
+     */
+    public abstract void showAccessScope();
+}
+/**
+ * 学生卡：既是门禁卡，又能支付 (多重身份)
+ */
+class StudentCard extends BaseDoorCard implements Payable {
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承并调用父类构造器
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+    }
+
+    @Override
+    public boolean validate() {
+        boolean isValid = super.validate();
+        if (isValid) {
+            showAccessScope(); // 执行个性化权限展示
+        }
+        return isValid;
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+    }
+}
+class AdminCard extends BaseDoorCard {
+    public AdminCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public boolean validate() {
+        boolean isValid = super.validate();
+        if (isValid) {
+            showAccessScope();
+        }
+        return isValid;
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
+    }
+}
+/**
+ * 读卡器服务类：系统核心调度员
+ * 多态设计：它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard
+ * 职责：记录时间、触发物理校验、识别特殊身份、展示多态权限
+ */
+class CardReader {
+    // 预设的超级管理员卡号：用于 equals() 比对卡号类别
+    private static final String ADMIN_ID = "A1234567";
+
+    // 这里传入的是 BaseDoorCard，展示了多态的兼容性
+    public void readCard(BaseDoorCard card) {
+        // 1. 【时间记录】记录刷卡的“那一瞬间”
+        // yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String timeLog = sdf.format(new Date());
+
+        System.out.println("\n[" + timeLog + "] 读卡器感应中...");
 
         try {
-            // 尝试读取卡片长度
-            System.out.println("正在读取卡片...");
-            System.out.println("卡号长度为：" + cardData.length()); 
-        } catch (NullPointerException e) {
-            // 如果 cardData 是空的，程序会跳到这里，而不是直接崩溃
-            System.out.println("【警告】读卡器未检测到卡片，请重新刷卡！");
+            if (card.validate()) {
+                // 注意：字符串比较一定要用 .equals()，不能用 ==
+                if (card.getSerialNumber().equals(ADMIN_ID)) {
+                    System.out.println("身份确认：[特权管理员] " + card.getOwnerName() + "，欢迎进入。");
+                }
+            } else {
+                // 若 validate() 失败，系统在 BaseDoorCard 内部也打印了错误信息
+                System.out.println("系统提示：请更换有效卡片。");
+            }
+        } catch(NullPointerException e) {
+            // 专门捕获“没读到卡”或“空指针”的情况
+            System.out.println("【硬件报警】未检测到有效卡片对象！(NullPointerException)");
         } finally {
-            // 不管读没读到，都要重置读卡器状态
-            System.out.println(">> 读卡器指示灯重置完毕。");
+            // 无论成功还是失败，都要重置读卡器状态
+            System.out.println(">> [状态流] 读卡器指示灯已重置为绿色闲置状态。");
         }
+    }
+}
+/**
+ * 支付接口：定义了“能够支付”的规范
+ */
+interface Payable {
+    void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
+}
+// @clean code/testBasicSyntax/src/ExceptionExample/Run.java
+package ExceptionExample;
 
-        System.out.println("系统继续运行中...");
+public class Run {
+    public static void main(String[] args) {
+        CardReader reader = new CardReader();
+
+        // 场景 A：正常卡片
+        reader.readCard(new StudentCard("  S1234567  ", "小明"));
+        System.out.println("------");
+
+        // 场景 B：非法长度卡片
+        reader.readCard(new StudentCard("B99", "非法入侵者"));
+        System.out.println("------");
+
+        // 场景 C：传入 null (模拟硬件未感应到对象)
+        reader.readCard(null);
     }
 }
 ----
@@ -1429,8 +1576,11 @@ public class ExceptionDemo {
 === throw 与 throws —— “甩锅与上报”
 [upperalpha]
 . 知识点说明
+
 * **throw**：手动抛出一个异常。比如：我发现你余额不足，我手动报个错。
+
 * **throws**：写在方法头上，告诉调用者：“我这可能会出事，你自己看着办”。
+
 
 . 代码举例（模拟门禁权限检查）
 
@@ -1453,8 +1603,11 @@ public class DoorService {
 为什么要学？
 
 * Java 自带的异常（如 `NullPointerException`）太泛泛了。
+
 * 在门禁系统中，我们需要门禁系统的报警，比如统一使用 `DoorSystemException`。
+
 * 它更具通用性，以后不管是卡号不对、权限不足还是数据库连不上，都可以归并在这一类报警下。
+
 * **易读性**：看到这个报错，程序员立刻就知道是“门禁系统逻辑”出问题了，而不是简单的“空指针”。
 
 ==== class DoorSystemException 门禁系统异常类代码实现

@@ -30,4 +30,3 @@ public class Run {
         reader.readCard(admin);
     }
 }
-
