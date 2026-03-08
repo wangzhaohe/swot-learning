@@ -1,5 +1,5 @@
 // @clean code/testBasicSyntax/src/ExceptionExample/Card.java
-package ExceptionExample;
+package ExceptionTryExample;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;

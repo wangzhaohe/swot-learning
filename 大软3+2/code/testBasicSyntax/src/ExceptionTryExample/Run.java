@@ -1,5 +1,5 @@
 // @clean code/testBasicSyntax/src/ExceptionExample/Run.java
-package ExceptionExample;
+package ExceptionTryExample;
 
 public class Run {
     public static void main(String[] args) {
