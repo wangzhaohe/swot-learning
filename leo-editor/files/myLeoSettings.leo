@@ -2460,7 +2460,7 @@ else:
     # --- 4. Define the background task (NO UI UPDATES HERE) ---
     def run_server_process():
         # --entry-file opens the specific file
-        # 添加了 --watch 参数，严格限制只监听目标 HTML 文件
+        # --watch only watch the created html file
         cmd = f'npx live-server --entry-file="{html_filename}" --watch="{html_filename}"'
         try:
             # Run in background. Do NOT use g.es here (it causes crashes).
