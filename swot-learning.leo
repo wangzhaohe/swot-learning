@@ -404,8 +404,8 @@
 </v>
 </v>
 <v t="swot.20260304111043.1"><vh>@path code/testBuildingBlocks</vh></v>
-<v t="swot.20260304165602.1"><vh>@adoc 测试输出没用的东西.adoc</vh>
-<v t="swot.20260304165736.1"><vh>测试输出没用的东西</vh></v>
+<v t="swot.20260304165602.1"><vh>@adoc 给AI分析的资源.adoc</vh>
+<v t="swot.20260304165736.1"><vh>给AI分析的资源</vh></v>
 </v>
 </v>
 <v t="swot.20251210103828.1"><vh>@path js</vh>
