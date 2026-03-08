@@ -160,6 +160,9 @@
 <v t="swot.20260218100553.1"><vh>复制 leo 自定义配置文件</vh></v>
 <v t="swot.20260218100631.1"><vh>复制 leo 主题文件</vh></v>
 </v>
+<v t="swot.20260308160609.1"><vh>Setting leo-editor</vh>
+<v t="swot.20260308160626.1"><vh>@leo files/myLeoSettings.leo</vh></v>
+</v>
 <v t="swot.20250609210130.1"><vh>Nav Search</vh></v>
 <v t="swot.20250508154257.1"><vh>Teaching by leo-editor</vh>
 <v t="swot.20250508154257.3"><vh>write code</vh></v>
@@ -18673,5 +18676,10 @@ try:
         
 except Exception as e:
     g.es(f"❌ 扫描子进程失败: {e}")</t>
+<t tx="swot.20260308160609.1"></t>
+<t tx="swot.20260308160626.1">Alt + x
+
+open-at-leo-file
+</t>
 </tnodes>
 </leo_file>
