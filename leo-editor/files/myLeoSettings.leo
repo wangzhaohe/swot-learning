@@ -2424,7 +2424,10 @@ else:
 c.redraw()
 </t>
 <t tx="swot.20260218013134.1">@language python
-import subprocess, os, threading, urllib.parse
+import subprocess
+import os
+import atexit
+import leo.core.leoGlobals as g
 
 # 1. Search upwards for the @adoc node
 def find_adoc_node(p):
@@ -2437,6 +2440,7 @@ def find_adoc_node(p):
         curr.moveToParent()
     return None
 
+
 target_node = find_adoc_node(p)
 
 if target_node:
@@ -2445,46 +2449,55 @@ if target_node:
     adoc_file = target_node.h.replace("@adoc ", "").strip()
     html_filename = os.path.splitext(adoc_file)[0] + ".html"
 
-    # URL Encoding for special characters
-    safe_filename = urllib.parse.quote(html_filename)
-
     # Unique key to track active servers
     server_key = (target_dir, html_filename)
 
     # --- 3. Initialize global registry ---
-    if not hasattr(g, 'live_servers_active'):
-        g.live_servers_active = set()
+    if not hasattr(g, "live_servers_active"):
+        g.live_servers_active = {}
 
-    # --- 4. Define the background task (NO UI UPDATES HERE) ---
-    def run_server_process():
-        # --entry-file opens the specific file
-        # --watch only watch the created html file
-        cmd = f'npx live-server --entry-file="{html_filename}" --watch="{html_filename}"'
-        try:
-            # Run in background. Do NOT use g.es here (it causes crashes).
-            subprocess.Popen(cmd, cwd=target_dir, shell=True)
-        except Exception as e:
-            print(f"Server error: {e}") # print to terminal is thread-safe
+        # kill live server when leo-editor quit
+        def cleanup_servers():
+            for _, proc in g.live_servers_active.items():
+                if proc.poll() is None:
+                    proc.terminate()
+            g.live_servers_active.clear()
+        atexit.register(cleanup_servers)
 
-    # --- 5. Execute AsciiDoc conversion ---
-    c.executeMinibufferCommand('adoc')
+    # --- 4. Execute AsciiDoc conversion ---
+    c.executeMinibufferCommand("adoc")
 
-    # --- 6. Smart Logic: Start or Update ---
+    # --- 5. Smart Logic: Start or Update ---
     if server_key not in g.live_servers_active:
         # Scenario A: First start.
-        # Update UI in the MAIN thread (Safe)
         g.es(f"Starting Live Server: {html_filename}", color="blue")
 
-        # Launch process in background thread
-        # threading.Thread(target=run_server_process, daemon=True).start()
-        run_server_process()
-
-        # Mark as active
-        g.live_servers_active.add(server_key)
+        # --entry-file opens the specific file
+        # --watch only watch the created html file
+        cmd = [
+            "npx", 
+            "live-server", 
+            f"--entry-file={html_filename}", 
+            f"--watch={html_filename}"
+        ]
+        try:
+            process = subprocess.Popen(cmd, cwd=target_dir)
+            g.live_servers_active[server_key] = process
+        except Exception as e:
+            g.es(f"Server error: {e}", color="red")
     else:
         # Scenario B: Update only.
-        g.es(f"Updated: {html_filename}", color="green")
-        g.es("Browser should auto-reload.", color="grey")
+        process = g.live_servers_active[server_key]
+        # Check the live server running now?
+        if process.poll() is None:
+            g.es(f"Updated: {html_filename}", color="green")
+            g.es("Browser should auto-reload.", color="grey")
+        else:
+            del g.live_servers_active[server_key]
+            g.es(
+                f"Server for {html_filename} has stopped. Run again to restart.",
+                color="red",
+            )
 else:
     g.es("Error: No @adoc node found in the hierarchy!", color="red")
 </t>
