@@ -390,6 +390,13 @@
 <v t="swot.20251210103828.1"><vh>@path js</vh>
 <v t="swot.20251210103835.1"><vh>pnpm -&gt; https://pnpm.io/</vh></v>
 </v>
+<v t="swot.20260308181000.1"><vh>@path linux</vh>
+<v t="swot.20260308181026.1"><vh>@adoc linux_skills.adoc</vh>
+<v t="swot.20260308181053.1"><vh>Linux 技巧汇总</vh>
+<v t="swot.20260308181110.1"><vh>查找文件硬链接</vh></v>
+</v>
+</v>
+</v>
 <v t="swot.20260215225306.1"><vh>@path neovim</vh>
 <v t="swot.20260306003733.1"><vh>@adoc LazyVim_Java_JDK_17_开发环境配置指南_手动降级版.adoc</vh>
 <v t="swot.20260306003747.1"><vh>LazyVim Java JDK 17 开发环境配置指南 (手动降级版)</vh>
@@ -18623,7 +18630,7 @@ class AdminCard extends BaseDoorCard {
 我想 edreamleo 这样设计肯定是有原因的，先不去分析这个复杂的问题了。
 
 </t>
-<t tx="swot.20260308104021.1" _mod_time="4741da6b3d021f5c982e">@language java
+<t tx="swot.20260308104021.1" _mod_time="4741da6b49e772f2b92e">@language java
 package ExceptionExample;
 
 public class Run {
@@ -18645,6 +18652,7 @@ public class Run {
         System.out.println("系统继续运行中...");
     }
 }
+
 </t>
 <t tx="swot.20260308115402.1">import os
 import subprocess
@@ -18680,6 +18688,124 @@ except Exception as e:
 <t tx="swot.20260308160626.1">Alt + x
 
 open-at-leo-file
+</t>
+<t tx="swot.20260308181000.1"></t>
+<t tx="swot.20260308181026.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
+<t tx="swot.20260308181053.1">
+++++
+&lt;style&gt;
+/* 1. 默认状态：顺应你原本的展开状态 */
+#toc {
+    min-width: 0 !important;
+    max-height: 100vh;
+    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
+
+    white-space: nowrap !important;
+    max-width: 530px;
+    opacity: 1;
+
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+#toc.collapsed {
+    max-width: 0 !important; /* 宽度强制缩到 0 */
+    opacity: 0 !important; /* 透明度消失 */
+
+    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 3. 修复行间距（保留你需要的紧凑排版） */
+#toc ul, #toc li {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+// 默认没有任何类名，所以默认是自然展开的。
+toggleButton.addEventListener('click', () =&gt; {
+    contentDiv.classList.toggle('collapsed');
+});
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260308181110.1">When you see a link count greater than 1 in `ls -l`, it means multiple directory entries (filenames) point to the same **inode** on the disk.
+
+[upperalpha]
+. Identify the Inode
++
+First, you need the unique identifier for the file. Run the following command in your terminal:
++
+[source,bash]
+----
+ls -i myLeoSettings.leo
+----
++
+Look for the integer at the beginning of the output. This is your **inode number**.
+
+. Search by Inode
++
+Since hard links must reside on the same partition/file system, you can use the `find` command to scan for all filenames sharing that inode.
++
+Replace `1234567` with your actual inode number:
++
+[source,bash]
+----
+find ~ -inum 1234567 2&gt;/dev/null
+----
++
+[TIP]
+.Explanation of flags:
+====
+* `~`: Search starting from your home directory (adjust to `/` to search the entire system).
+* `-inum`: Filter results by the specific inode number.
+* `2&gt;/dev/null`: Silences "Permission Denied" errors for a cleaner output.
+====
+
+. Verification
++
+To confirm they are indeed the same file, list them together:
++
+[source,bash]
+----
+ls -li /path/to/file1 /path/to/file2
+----
++
+If the first column (inode) matches across all files, they are hard links to the same data.
 </t>
 </tnodes>
 </leo_file>

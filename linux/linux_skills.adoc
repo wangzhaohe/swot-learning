@@ -1,0 +1,118 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+
+= Linux 技巧汇总
+
+++++
+<style>
+/* 1. 默认状态：顺应你原本的展开状态 */
+#toc {
+    min-width: 0 !important;
+    max-height: 100vh;
+    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
+
+    white-space: nowrap !important;
+    max-width: 530px;
+    opacity: 1;
+
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+#toc.collapsed {
+    max-width: 0 !important; /* 宽度强制缩到 0 */
+    opacity: 0 !important; /* 透明度消失 */
+
+    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 3. 修复行间距（保留你需要的紧凑排版） */
+#toc ul, #toc li {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+</style>
+
+<button id="toggleButton">目录开关</button>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+// 默认没有任何类名，所以默认是自然展开的。
+toggleButton.addEventListener('click', () => {
+    contentDiv.classList.toggle('collapsed');
+});
+</script>
+++++
+
+== 查找文件硬链接
+When you see a link count greater than 1 in `ls -l`, it means multiple directory entries (filenames) point to the same **inode** on the disk.
+
+[upperalpha]
+. Identify the Inode
++
+First, you need the unique identifier for the file. Run the following command in your terminal:
++
+[source,bash]
+----
+ls -i myLeoSettings.leo
+----
++
+Look for the integer at the beginning of the output. This is your **inode number**.
+
+. Search by Inode
++
+Since hard links must reside on the same partition/file system, you can use the `find` command to scan for all filenames sharing that inode.
++
+Replace `1234567` with your actual inode number:
++
+[source,bash]
+----
+find ~ -inum 1234567 2>/dev/null
+----
++
+[TIP]
+.Explanation of flags:
+====
+* `~`: Search starting from your home directory (adjust to `/` to search the entire system).
+* `-inum`: Filter results by the specific inode number.
+* `2>/dev/null`: Silences "Permission Denied" errors for a cleaner output.
+====
+
+. Verification
++
+To confirm they are indeed the same file, list them together:
++
+[source,bash]
+----
+ls -li /path/to/file1 /path/to/file2
+----
++
+If the first column (inode) matches across all files, they are hard links to the same data.
+
