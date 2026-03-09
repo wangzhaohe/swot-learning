@@ -908,7 +908,7 @@ NOTE: 登录后让改密码，我已经把密码改成了 123456。
 .file -> /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml
 [%collapsible]
 ====
-[source,java]
+[source,scss]
 ----
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
@@ -1169,86 +1169,218 @@ under the License.
 ====
 
 ===== Maven 配置 Nexus
+.file -> /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml
+[%collapsible]
+====
+[source,scss]
+----
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
+    http://www.apache.org/licenses/LICENSE-2.0
 
-====== servers 配置用户名和密码
-# [source,scss]
-# ....
-<servers>
-    <server>
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!--
+ | This is the configuration file for Maven. It can be specified at two levels:
+ |
+ |  1. User Level. This settings.xml file provides configuration for a single user,
+ |                 and is normally provided in ${user.home}/.m2/settings.xml.
+ |
+ |                 NOTE: This location can be overridden with the CLI option:
+ |
+ |                 -s /path/to/user/settings.xml
+ |
+ |  2. Global Level. This settings.xml file provides configuration for all Maven
+ |                 users on a machine (assuming they're all using the same Maven
+ |                 installation). It's normally provided in
+ |                 ${maven.conf}/settings.xml.
+ |
+ |                 NOTE: This location can be overridden with the CLI option:
+ |
+ |                 -gs /path/to/global/settings.xml
+ |
+ | The sections in this sample file are intended to give you a running start at
+ | getting the most out of your Maven installation. Where appropriate, the default
+ | values (values used when the setting is not specified) are provided.
+ |
+ |-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+  <!-- localRepository
+   | The path to the local repository maven will use to store artifacts.
+   |
+   | Default: ${user.home}/.m2/repository
+  <localRepository>/path/to/local/repo</localRepository>
+  -->
+  <localRepository>/Users/swot/maven/repository</localRepository>
+
+  <!-- interactiveMode
+   | This will determine whether maven prompts you when it needs input. If set to false,
+   | maven will use a sensible default value, perhaps based on some other setting, for
+   | the parameter in question.
+   |
+   | Default: true
+  <interactiveMode>true</interactiveMode>
+  -->
+
+  <!-- offline
+   | Determines whether maven should attempt to connect to the network when executing a build.
+   | This will have an effect on artifact downloads, artifact deployment, and others.
+   |
+   | Default: false
+  <offline>false</offline>
+  -->
+
+  <!-- pluginGroups
+   | This is a list of additional group identifiers that will be searched when resolving plugins by their prefix, i.e.
+   | when invoking a command line like "mvn prefix:goal". Maven will automatically add the group identifiers
+   | "org.apache.maven.plugins" and "org.codehaus.mojo" if these are not already contained in the list.
+   |-->
+  <pluginGroups>
+    <!-- pluginGroup
+     | Specifies a further group identifier to use for plugin lookup.
+    <pluginGroup>com.your.plugins</pluginGroup>
+    -->
+  </pluginGroups>
+
+  <!-- TODO Since when can proxies be selected as depicted? -->
+  <!-- proxies
+   | This is a list of proxies which can be used on this machine to connect to the network.
+   | Unless otherwise specified (by system property or command-line switch), the first proxy
+   | specification in this list marked as active will be used.
+   |-->
+  <proxies>
+    <!-- proxy
+     | Specification for one proxy, to be used in connecting to the network.
+     |
+    <proxy>
+      <id>optional</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <username>proxyuser</username>
+      <password>proxypass</password>
+      <host>proxy.host.net</host>
+      <port>80</port>
+      <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
+    </proxy>
+    -->
+  </proxies>
+  <servers>
+      <server>
+          <id>maven-public</id>
+          <username>admin</username>
+          <password>123456</password>
+      </server>
+      <server>
+          <id>maven-releases</id>
+          <username>admin</username>
+          <password>123456</password>
+      </server>
+      <server>
+          <id>maven-snapshots</id>
+          <username>admin</username>
+          <password>123456</password>
+      </server>
+  </servers>
+  <mirrors>
+    <!-- <mirror> -->
+        <!-- <id>alimaven</id> -->
+        <!-- <mirrorOf>central</mirrorOf> -->
+        <!-- <name>阿里云公共仓库</name> -->
+        <!-- <url>https://maven.aliyun.com/repository/public</url> -->
+    <!-- </mirror> -->
+    <mirror>
+        <!-- 因为 maven-public 是 Group，所以只配置它就可以了 -->
         <id>maven-public</id>
-        <username>admin</username>
-        <password>123456</password>
-    </server>
-    <server>
-        <id>maven-releases</id>
-        <username>admin</username>
-        <password>123456</password>
-    </server>
-    <server>
-        <id>maven-snapshots</id>
-        <username>admin</username>
-        <password>123456</password>
-    </server>
-</servers>
-# ....
+        <!-- <mirrorOf>*</mirrorOf> -->
+        <!-- *,!central 就是给官方仓库开绿灯，让官方仓库的插件请求绕开私服，避免找不到插件而失败； -->
+        <!-- 同时保留私服对其它仓库的代理功能，兼顾速度与可用性。 -->
+        <mirrorOf>*,!central</mirrorOf>
+        <url>http://localhost:8081/repository/maven-public/</url>
+    </mirror>
+  </mirrors>
+  <profiles>
+    <profile>
+        <id>allow-snapshots</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <repositories>
+            <repository>
+                <id>maven-public</id>
+                <url>http://localhost:8081/repository/maven-public/</url>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>true</enabled>
+                </snapshots>
+            </repository>
+        </repositories>
+    </profile>
+  </profiles>
 
-====== mirrors 注释阿里私服 配置公司私服
-# [source,scss]
-# ....
-<mirrors>
-  <!-- <mirror> -->
-      <!-- <id>alimaven</id> -->
-      <!-- <mirrorOf>central</mirrorOf> -->
-      <!-- <name>阿里云公共仓库</name> -->
-      <!-- <url>https://maven.aliyun.com/repository/public</url> -->
-  <!-- </mirror> -->
-  <mirror>
-      <!-- 因为 maven-public 是 Group，所以只配置它就可以了 -->
-      <id>maven-public</id>
-      <!-- <mirrorOf>*</mirrorOf> -->
-      <!-- *,!central 就是给官方仓库开绿灯，让官方仓库的插件请求绕开私服，避免找不到插件而失败； -->
-      <!-- 同时保留私服对其它仓库的代理功能，兼顾速度与可用性。 -->
-      <mirrorOf>*,!central</mirrorOf>
-      <url>http://localhost:8081/repository/maven-public/</url>
-  </mirror>
-</mirrors>
-# ....
+  <!-- 这个配置就是告诉 Maven： -->
 
-====== profiles 支持项目部署
-# [source,scss]
-# ....
-<profiles>
-  <profile>
-      <id>allow-snapshots</id>
-      <activation>
-          <activeByDefault>true</activeByDefault>
-      </activation>
-      <repositories>
-          <repository>
-              <id>maven-public</id>
-              <url>http://localhost:8081/repository/maven-public/</url>
-              <releases>
-                  <enabled>true</enabled>
-              </releases>
-              <snapshots>
-                  <enabled>true</enabled>
-              </snapshots>
-          </repository>
-      </repositories>
-  </profile>
-</profiles>
-# ....
-#
-# 这个配置就是告诉 Maven：
-#
-# “默认启用一个叫 allow-snapshots 的 profile，把我的 Nexus 私服 maven-public 当作依赖仓库，并允许从里面下载 正式版和快照版 的依赖。”
+  <!-- “默认启用一个叫 allow-snapshots 的 profile，把我的 Nexus 私服 maven-public 当作依赖仓库，并允许从里面下载 正式版和快照版 的依赖。” -->
+  <!-- activeProfiles
+   | List of profiles that are active for all builds.
+   |
+  <activeProfiles>
+    <activeProfile>alwaysActiveProfile</activeProfile>
+    <activeProfile>anotherAlwaysActiveProfile</activeProfile>
+  </activeProfiles>
+  -->
+</settings>
+----
+====
 
 ===== Maven 聚合父模块配置项目发布到私服
+.file -> module-design/maven-general-manager/general-parent/pom.xml
+[%collapsible]
+====
+[source,scss]
+----
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.tjise</groupId>
+    <artifactId>general-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-====== file -> module-design/maven-general-manager/general-parent/pom.xml
-<?xml version="1.0" encoding="UTF-8"?>
+    <!-- 前端内容省略 -->
+    <distributionManagement>
+        <!-- release版本的发布地址 -->
+        <repository>
+            <id>maven-releases</id>
+            <url>http://localhost:8081/repository/maven-releases/</url>
+        </repository>
+
+        <!-- snapshot版本的发布地址 -->
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>http://localhost:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>
+----
+====
 
 ===== 测试发布项目
 WARNING: 不要演示了，网络不好时，总是下载依赖不成功！！！

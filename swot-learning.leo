@@ -317,7 +317,7 @@
 </v>
 </v>
 <v t="swot.20260309094910.102"><vh>Maven 配置 Nexus</vh>
-<v t="swot.20260309094910.103"><vh>@ignore-node file -&gt; /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml</vh>
+<v t="swot.20260309094910.103"><vh>file -&gt; /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml</vh>
 <v t="swot.20260309094910.104"><vh>servers 配置用户名和密码</vh></v>
 <v t="swot.20260309094910.105"><vh>mirrors 注释阿里私服 配置公司私服</vh></v>
 <v t="swot.20260309094910.106"><vh>profiles 支持项目部署</vh></v>
@@ -325,7 +325,7 @@
 </v>
 <v t="swot.20260309094910.107"><vh>Maven 聚合父模块配置项目发布到私服</vh>
 <v t="swot.20260309094910.108"><vh>file -&gt; module-design/maven-general-manager/general-parent/pom.xml</vh>
-<v t="swot.20260309094910.109"><vh>@ignore-node &lt;project&gt;</vh>
+<v t="swot.20260309094910.109"><vh>&lt;project&gt;</vh>
 <v t="swot.20260309094910.110"><vh>@ignore-tree </vh>
 <v t="swot.20260309094910.111"><vh>1) packaging 指定该父模块打包方式为 pom</vh></v>
 <v t="swot.20260309094910.112"><vh>2) parent 指定该模块的父模块依赖 Spring Boot 默认的 &lt;parent&gt;</vh></v>
@@ -19509,7 +19509,15 @@ image::img/maven_project_create2.png[,960]
   &lt;/mirror&gt;
 &lt;/mirrors&gt;
 </t>
-<t tx="swot.20260309094910.102"></t>
+<t tx="swot.20260309094910.102">.file -&gt; /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml
+[%collapsible]
+====
+[source,scss]
+----
+@others
+----
+====
+</t>
 <t tx="swot.20260309094910.103">@first &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 @language xml
 &lt;!--
@@ -19628,11 +19636,7 @@ under the License.
   --&gt;
 &lt;/settings&gt;
 </t>
-<t tx="swot.20260309094910.104">@doc
-[source,scss]
-....
-@c
-@language xml
+<t tx="swot.20260309094910.104">@language xml
 &lt;servers&gt;
     &lt;server&gt;
         &lt;id&gt;maven-public&lt;/id&gt;
@@ -19650,14 +19654,8 @@ under the License.
         &lt;password&gt;123456&lt;/password&gt;
     &lt;/server&gt;
 &lt;/servers&gt;
-@doc
-....
 </t>
-<t tx="swot.20260309094910.105">@doc
-[source,scss]
-....
-@c
-@language xml
+<t tx="swot.20260309094910.105">@language xml
 &lt;mirrors&gt;
   &lt;!-- &lt;mirror&gt; --&gt;
       &lt;!-- &lt;id&gt;alimaven&lt;/id&gt; --&gt;
@@ -19675,14 +19673,8 @@ under the License.
       &lt;url&gt;http://localhost:8081/repository/maven-public/&lt;/url&gt;
   &lt;/mirror&gt;
 &lt;/mirrors&gt;
-@doc
-....
 </t>
-<t tx="swot.20260309094910.106">@doc
-[source,scss]
-....
-@c
-@language xml
+<t tx="swot.20260309094910.106">@language xml
 &lt;profiles&gt;
   &lt;profile&gt;
       &lt;id&gt;allow-snapshots&lt;/id&gt;
@@ -19703,14 +19695,20 @@ under the License.
       &lt;/repositories&gt;
   &lt;/profile&gt;
 &lt;/profiles&gt;
-@doc
-....
 
-这个配置就是告诉 Maven：
+&lt;!-- 这个配置就是告诉 Maven： --&gt;
 
-“默认启用一个叫 allow-snapshots 的 profile，把我的 Nexus 私服 maven-public 当作依赖仓库，并允许从里面下载 正式版和快照版 的依赖。”
+&lt;!-- “默认启用一个叫 allow-snapshots 的 profile，把我的 Nexus 私服 maven-public 当作依赖仓库，并允许从里面下载 正式版和快照版 的依赖。” --&gt;
 </t>
-<t tx="swot.20260309094910.107"></t>
+<t tx="swot.20260309094910.107">.file -&gt; module-design/maven-general-manager/general-parent/pom.xml
+[%collapsible]
+====
+[source,scss]
+----
+@others
+----
+====
+</t>
 <t tx="swot.20260309094910.108">@first &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 @language xml
 @others
@@ -19724,6 +19722,7 @@ under the License.
     &lt;groupId&gt;com.tjise&lt;/groupId&gt;
     &lt;artifactId&gt;general-parent&lt;/artifactId&gt;
     &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+
     @others
 &lt;/project&gt;
 </t>
@@ -19870,11 +19869,8 @@ maven 中可以通过 &lt;modules&gt; 设置当前聚合模块所包含的子模
 image::img/maven_modules_package_success.png[]
 
 </t>
-<t tx="swot.20260309094910.117">@doc
-[source,scss]
-....
-@c
-@language xml
+<t tx="swot.20260309094910.117">@language xml
+&lt;!-- 前端内容省略 --&gt;
 &lt;distributionManagement&gt;
     &lt;!-- release版本的发布地址 --&gt;
     &lt;repository&gt;
@@ -19888,8 +19884,6 @@ image::img/maven_modules_package_success.png[]
         &lt;url&gt;http://localhost:8081/repository/maven-snapshots/&lt;/url&gt;
     &lt;/snapshotRepository&gt;
 &lt;/distributionManagement&gt;
-@doc
-....
 </t>
 <t tx="swot.20260309094910.118">@language asciidoc
 WARNING: 不要演示了，网络不好时，总是下载依赖不成功！！！
@@ -21684,7 +21678,7 @@ NOTE: 登录后让改密码，我已经把密码改成了 123456。
 <t tx="swot.20260309094910.98">.file -&gt; /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml
 [%collapsible]
 ====
-[source,java]
+[source,scss]
 ----
 @others
 ----
