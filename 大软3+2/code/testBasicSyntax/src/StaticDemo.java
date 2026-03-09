@@ -1,3 +1,4 @@
+// code/testBasicSyntax/src/StaticDemo.java
 class DoorMachineV02 {
     // 非静态变量：属于每台具体的机器（私有财产）
     String location;  // 属性：安装位置（如：南大门、图书馆入口）
@@ -17,7 +18,7 @@ class DoorMachineV02 {
         totalSwipes++; // 每次刷卡，全局统计数据 +1
     }
 }
-// code/testBasicSyntax/src/StaticDemo.java
+
 public class StaticDemo {
     public static void main(String[] args) {
         // 1. 造两台具体的门禁机

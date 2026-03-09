@@ -1,3 +1,4 @@
+// code/testBasicSyntax/src/DoorMachineDemo.java
 // 定义类（门禁机设计图纸）
 class DoorMachineV01 {
     String location;  // 属性：安装位置（如：南大门、图书馆入口）
@@ -11,7 +12,6 @@ class DoorMachineV01 {
     }
 }
 
-// code/testBasicSyntax/src/DoorMachineDemo.java
 // 使用类（安装并使用具体的门禁机）
 public class DoorMachineDemo {
     public static void main(String[] args) {

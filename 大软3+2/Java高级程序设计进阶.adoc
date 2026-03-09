@@ -468,7 +468,7 @@ public class MethodDemo {
 
 > 到目前为止，我们写的代码还是“面向过程”的（一条流水线跑到底）。有了变量装数据、有了 if/while 做逻辑、有了方法做打包，下一章，我们将正式踏入 Java 的核心——**“面向对象”**，学习如何把这些零散的砖块，组装成一台真正具有独立功能的门禁机器！
 
-== 面向对象基础 (4学时)
+== 面向对象基础 (4学时) -> 重中之重！！！
 * *核心知识点*：类与对象、抽象与封装、属性与方法、继承与多态、接口设计。
 
 * *教学要求*：深入理解面向对象设计思想，熟练掌握接口与抽象类的应用场景。
@@ -488,6 +488,7 @@ TIP: 记住一句话：你不能刷“图纸”进门，你只能刷装在墙上
 +
 [source,java]
 ----
+// code/testBasicSyntax/src/DoorMachineDemo.java
 // 定义类（门禁机设计图纸）
 class DoorMachineV01 {
     String location;  // 属性：安装位置（如：南大门、图书馆入口）
@@ -501,7 +502,6 @@ class DoorMachineV01 {
     }
 }
 
-// code/testBasicSyntax/src/DoorMachineDemo.java
 // 使用类（安装并使用具体的门禁机）
 public class DoorMachineDemo {
     public static void main(String[] args) {
@@ -542,6 +542,7 @@ public class DoorMachineDemo {
 +
 [source,java]
 ----
+// code/testBasicSyntax/src/StaticDemo.java
 class DoorMachineV02 {
     // 非静态变量：属于每台具体的机器（私有财产）
     String location;  // 属性：安装位置（如：南大门、图书馆入口）
@@ -561,7 +562,7 @@ class DoorMachineV02 {
         totalSwipes++; // 每次刷卡，全局统计数据 +1
     }
 }
-// code/testBasicSyntax/src/StaticDemo.java
+
 public class StaticDemo {
     public static void main(String[] args) {
         // 1. 造两台具体的门禁机
@@ -1115,9 +1116,10 @@ Java 中有四种权限，初学阶段不需要死记硬背，只要牢记最极
 *(注：还有 `protected` 和默认权限，它们主要与同包或子类有关，后续学框架时再深究。)*
 
 
-. 代码举例（跨房间叫人：import）
+. 代码举例（跨房间叫人：从其他包导入类）
 +
-当你把类分到不同的包里后，如果想要用到另一个包里的类，就必须使用 `import` 来指明路径（就像告诉 Java 去哪个房间找人）。
+* 当你把类分到不同的包里后，如果想要用到另一个包里的类，就必须使用 `import` 来指明路径（就像告诉 Java 去哪个房间找人）。
+* 因 public 类要求类名必须和文件名一样，所以我们新建一个 TeacherCard.java，里面的类名使用 TeacherCard。
 +
 [source,java]
 ----
@@ -1151,13 +1153,13 @@ public class TeacherCard extends BaseDoorCard {
 ----
 
 . 小结
-* **权限铁律**：提供给别人调用的类和方法，必须(must)用 `public`；
+* **权限铁律**：提供给别人调用的类和方法，##必须(must)用 `public`##；
 * 自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
 
 === 面向对象基础小结
 面向对象是 Java 的核心灵魂。不需要死记硬背枯燥的理论，只需在脑海中牢记这四个核心比喻：
 
-* **类与对象**：类是“设计图纸”，对象是“实物”。你不能给图纸打电话，必须先用 `new` 制造出实物。
+* **类与对象**：类是“设计图纸”，对象是“实物”。你不能给手机图纸打电话，必须先用 `new` 制造出手机实物才行。
 
 * **封装**：把重要数据锁在私有的保险柜里 (`private`)，只对外提供安全的交互窗口 (`public` Getter/Setter)。
 
@@ -2025,9 +2027,9 @@ public class Main {
 |===
 | 操作方法 | 作用说明
 
-| `add(E e)` | 向名单末尾添加一张新卡。
-| `size()` | 返回当前名单中卡片的总数。
-| `get(int index)` | 根据索引位置获取指定的卡片。
+| `add(E e)`          | 向名单末尾添加一张新卡。
+| `size()`            | 返回当前名单中卡片的总数。
+| `get(int index)`    | 根据索引位置获取指定的卡片。
 | `remove(int index)` | 从名单中注销并移除某张卡片。
 |===
 

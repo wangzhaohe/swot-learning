@@ -221,7 +221,7 @@
 </v>
 <v t="swot.20260303140714.1"><vh>语法基石小结</vh></v>
 </v>
-<v t="swot.20260215212238.1"><vh>面向对象基础 (4学时)</vh>
+<v t="swot.20260215212238.1"><vh>面向对象基础 (4学时) -&gt; 重中之重！！！</vh>
 <v t="swot.20260215222431.1"><vh>类与对象 —— “设计图纸”与“门禁实物”</vh>
 <v t="swot.20260304114839.1"><vh>@clean code/testBasicSyntax/src/DoorMachineDemo.java</vh>
 <v t="swot.20260304114644.1"><vh>BB class DoorMachineV01 门禁机器</vh></v>
@@ -14359,7 +14359,7 @@ TIP: 记住一句话：你不能刷“图纸”进门，你只能刷装在墙上
 <t tx="swot.20260215225306.1"></t>
 <t tx="swot.20260216074225.1">面向对象是 Java 的核心灵魂。不需要死记硬背枯燥的理论，只需在脑海中牢记这四个核心比喻：
 
-* **类与对象**：类是“设计图纸”，对象是“实物”。你不能给图纸打电话，必须先用 `new` 制造出实物。
+* **类与对象**：类是“设计图纸”，对象是“实物”。你不能给手机图纸打电话，必须先用 `new` 制造出手机实物才行。
 
 * **封装**：把重要数据锁在私有的保险柜里 (`private`)，只对外提供安全的交互窗口 (`public` Getter/Setter)。
 
@@ -14571,9 +14571,9 @@ public class Main {
 |===
 | 操作方法 | 作用说明
 
-| `add(E e)` | 向名单末尾添加一张新卡。
-| `size()` | 返回当前名单中卡片的总数。
-| `get(int index)` | 根据索引位置获取指定的卡片。
+| `add(E e)`          | 向名单末尾添加一张新卡。
+| `size()`            | 返回当前名单中卡片的总数。
+| `get(int index)`    | 根据索引位置获取指定的卡片。
 | `remove(int index)` | 从名单中注销并移除某张卡片。
 |===
 
@@ -17634,7 +17634,8 @@ public class Main {
 
 TIP: **选择理由**：如果只是想按顺序存储并遍历名单，使用 `ArrayList` 是效率最高且最简单直观的选择 。
 </t>
-<t tx="swot.20260304104021.1">import java.util.ArrayList;
+<t tx="swot.20260304104021.1">@language java
+import java.util.ArrayList;
 
 /**
  * 门禁管理系统：负责维护白名单和调度硬件
@@ -17706,11 +17707,11 @@ class DoorMachineV01 {
         );
     }
 }
-
 </t>
-<t tx="swot.20260304114839.1" _mod_time="4741da6a33df6990172e">@language java
-@others
+<t tx="swot.20260304114839.1" _mod_time="4741da6b8631fe22b22e">@language java
 // code/testBasicSyntax/src/DoorMachineDemo.java
+@others
+
 // 使用类（安装并使用具体的门禁机）
 public class DoorMachineDemo {
     public static void main(String[] args) {
@@ -17752,9 +17753,10 @@ class DoorMachineV02 {
     }
 }
 </t>
-<t tx="swot.20260304120034.1" _mod_time="4741da6a34749f24a12e">@language java
-@others
+<t tx="swot.20260304120034.1" _mod_time="4741da6b863b4e4d6b2e">@language java
 // code/testBasicSyntax/src/StaticDemo.java
+@others
+
 public class StaticDemo {
     public static void main(String[] args) {
         // 1. 造两台具体的门禁机
@@ -18265,9 +18267,10 @@ Java 中有四种权限，初学阶段不需要死记硬背，只要牢记最极
 *(注：还有 `protected` 和默认权限，它们主要与同包或子类有关，后续学框架时再深究。)*
 
 
-. 代码举例（跨房间叫人：import）
+. 代码举例（跨房间叫人：从其他包导入类）
 +
-当你把类分到不同的包里后，如果想要用到另一个包里的类，就必须使用 `import` 来指明路径（就像告诉 Java 去哪个房间找人）。
+* 当你把类分到不同的包里后，如果想要用到另一个包里的类，就必须使用 `import` 来指明路径（就像告诉 Java 去哪个房间找人）。
+* 因 public 类要求类名必须和文件名一样，所以我们新建一个 TeacherCard.java，里面的类名使用 TeacherCard。
 +
 [source,java]
 ----
@@ -18275,7 +18278,7 @@ Java 中有四种权限，初学阶段不需要死记硬背，只要牢记最极
 ----
 
 . 小结
-* **权限铁律**：提供给别人调用的类和方法，必须(must)用 `public`；
+* **权限铁律**：提供给别人调用的类和方法，##必须(must)用 `public`##；
 * 自己内部保存的数据属性，死死锁住用 `private`，然后开一扇带安检的窗口（`public` 的 Getter/Setter）。
 </t>
 <t tx="swot.20260306003733.1">@language asciidoc
@@ -18424,7 +18427,7 @@ package interfaceExample; // 必须匹配文件夹的名字
 
 @others
 </t>
-<t tx="swot.20260306174713.1" _mod_time="4741da6ae443e0c9c52e">@language java
+<t tx="swot.20260306174713.1" _mod_time="4741da6b85cf388d1f2e">@language java
 // @clean code/testBasicSyntax/src/importPublicExample/Run.java
 package importPublicExample;
 
