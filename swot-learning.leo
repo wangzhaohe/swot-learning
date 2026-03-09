@@ -443,6 +443,7 @@
 <v t="swot.20260216074225.1"><vh>面向对象基础小结</vh></v>
 </v>
 <v t="swot.20260215212244.1"><vh>常用工具类 (4学时)</vh>
+<v t="swot.20260309105029.1"><vh>应用工具类</vh>
 <v t="swot.20260307175925.1"><vh>@clean code/testBasicSyntax/src/stringDateExample/Card.java</vh>
 <v t="swot.20260307161520.1"><vh>BB class BaseDoorCard -&gt; abstract</vh></v>
 <v t="swot.20260307183104.1"><vh>BB class StudentCard extends BaseDoorCard implements Payable 学生卡</vh></v>
@@ -450,7 +451,10 @@
 <v t="swot.20260307161320.1"><vh>BB class CardReader 读卡器</vh></v>
 <v t="swot.20260304221446.1"></v>
 </v>
+</v>
+<v t="swot.20260309104957.1"><vh>运行类 Run.java</vh>
 <v t="swot.20260307175805.1"><vh>@clean code/testBasicSyntax/src/stringDateExample/Run.java</vh></v>
+</v>
 </v>
 <v t="swot.20260215212333.1"><vh>异常处理机制 (4学时)</vh>
 <v t="swot.20260216085926.1"><vh>什么是异常？ —— “生活的备选方案”</vh></v>
@@ -14295,16 +14299,10 @@ toggleButton.addEventListener('click', () =&gt; {
 . 门禁系统必须记录：谁在 *什么时候* 刷了卡？
   ** `new Date()`：获取此时此刻的系统时间。
   ** `SimpleDateFormat`：把时间从“一串数字”变成“人能看懂的文字”。生活举例：
-    *** 就像相机的“时间水印”，`Date` 抓拍瞬间，`SimpleDateFormat` 决定水印印成 "2023/10/01" 还是 "10月1日"。
+    *** 就像相机的“时间水印”，`Date` 抓拍瞬间，`SimpleDateFormat` 决定水印印成 "2026/10/01" 还是 "10月1日"。
 
-
-.代码举例
-[source,java]
-----
-@others
-----
-
-
+. 注意事项 
++
 [NOTE]
 ====
 关于 String 比较：
@@ -18270,7 +18268,7 @@ public class Run {
     }
 }
 </t>
-<t tx="swot.20260304221446.1">@language asciidoc
+<t tx="swot.20260304221446.1">@language java
 /**
  * 支付接口：定义了“能够支付”的规范
  */
@@ -18641,6 +18639,7 @@ class CardReader {
     
     // 这里传入的是 BaseDoorCard，展示了多态的兼容性
     public void readCard(BaseDoorCard card) {
+        // -- new -- 增加时间处理  &lt;4&gt;
         // 1. 【时间记录】记录刷卡的“那一瞬间”
         // yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -18674,10 +18673,10 @@ abstract class BaseDoorCard {
 
     public BaseDoorCard(String serialNumber, String ownerName) {
         // -- new -- 增加去除卡号多余空格功能
-        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";
+        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";  // &lt;1&gt; 
 
         // -- new -- 增加卡号长度校验
-        if (this.serialNumber.length() !=8) {
+        if (this.serialNumber.length() !=8) {  // &lt;2&gt;
             System.out.println("【数据异常】警告：新创建的卡号 [" + this.serialNumber + "] 长度非8位！");
         }
         this.ownerName = ownerName;
@@ -18697,7 +18696,7 @@ abstract class BaseDoorCard {
     public boolean validate() {
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         // -- new -- 增加卡号长度校验
-        if (this.serialNumber.length() != 8) {
+        if (this.serialNumber.length() != 8) {  // &lt;3&gt;
             System.out.println("校验失败：卡号格式非法，拒绝通行！");
             return false;
         }
@@ -18747,7 +18746,7 @@ public class Run {
     }
 }
 </t>
-<t tx="swot.20260307175925.1" _mod_time="4741da6b5a54f01e2a2e">@language java
+<t tx="swot.20260307175925.1" _mod_time="4741da6b8e1523ce902e">@language java
 // @clean code/testBasicSyntax/src/stringDateExample/Card.java
 package stringDateExample;
 
@@ -18987,7 +18986,7 @@ ls -li /path/to/file1 /path/to/file2
 +
 If the first column (inode) matches across all files, they are hard links to the same data.
 </t>
-<t tx="swot.20260308192252.1" _mod_time="4741da6b5bd0142fe12e">@language java
+<t tx="swot.20260308192252.1" _mod_time="4741da6b8dd40f493b2e">@language java
 // @clean code/testBasicSyntax/src/ExceptionExample/Card.java
 package ExceptionTryExample;
 
@@ -21907,5 +21906,19 @@ under the License.
 :warning-caption: ‼️
 :caution-caption: ⚠️
 </t>
+<t tx="swot.20260309104957.1">[source,java]
+----
+@others
+----
+</t>
+<t tx="swot.20260309105029.1">[source,java]
+----
+@others
+----
+
+&lt;1&gt; 制卡时 trim() 方法去除卡号多余空格
+&lt;2&gt; 制卡时 length() 方法增加卡号长度校验
+&lt;3&gt; 读卡时 length() 方法增加卡号长度校验
+&lt;4&gt; 增加时间处理</t>
 </tnodes>
 </leo_file>

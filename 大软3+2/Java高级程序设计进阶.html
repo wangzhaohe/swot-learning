@@ -602,7 +602,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_面向对象基础小结">面向对象基础小结</a></li>
 </ul>
 </li>
-<li><a href="#_常用工具类_4学时">常用工具类 (4学时)</a></li>
+<li><a href="#_常用工具类_4学时">常用工具类 (4学时)</a>
+<ul class="sectlevel2">
+<li><a href="#_应用工具类">应用工具类</a></li>
+<li><a href="#_运行类_run_java">运行类 Run.java</a></li>
+</ul>
+</li>
 <li><a href="#_异常处理机制_4学时">异常处理机制 (4学时)</a>
 <ul class="sectlevel2">
 <li><a href="#_什么是异常_生活的备选方案">什么是异常？ —— “生活的备选方案”</a></li>
@@ -2647,18 +2652,56 @@ toggleButton.addEventListener('click', () => {
 <div class="ulist">
 <ul>
 <li>
-<p>就像相机的“时间水印”，<code>Date</code> 抓拍瞬间，<code>SimpleDateFormat</code> 决定水印印成 "2023/10/01" 还是 "10月1日"。</p>
+<p>就像相机的“时间水印”，<code>Date</code> 抓拍瞬间，<code>SimpleDateFormat</code> 决定水印印成 "2026/10/01" 还是 "10月1日"。</p>
 </li>
 </ul>
 </div>
 </li>
 </ul>
+</div>
+</li>
+<li>
+<p>注意事项</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>关于 String 比较：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>重点强调：一定要反复强调 String 比较用 .equals()，而不是 ==。</p>
+</li>
+<li>
+<p>这是初学者最容易踩的坑，可以用“一个是比长相，一个是比灵魂”来打比方。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>关于 Date：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>虽然 Java 8 之后有了 LocalDateTime，但 Date + SimpleDateFormat 的代码量更少，概念更直观。</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </li>
 </ol>
 </div>
+<div class="sect2">
+<h3 id="_应用工具类">应用工具类</h3>
 <div class="listingblock">
-<div class="title">代码举例</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/stringDateExample/Card.java</span>
 <span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">stringDateExample</span><span class="tok-p">;</span>
@@ -2678,10 +2721,10 @@ toggleButton.addEventListener('click', () => {
 
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">BaseDoorCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-c1">// -- new -- 增加去除卡号多余空格功能</span>
-<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">.</span><span class="tok-na">trim</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">.</span><span class="tok-na">trim</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;&quot;</span><span class="tok-p">;</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 
 <span class="tok-w">        </span><span class="tok-c1">// -- new -- 增加卡号长度校验</span>
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【数据异常】警告：新创建的卡号 [&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;] 长度非8位！&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">ownerName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">;</span>
@@ -2701,7 +2744,7 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【系统日志】正在启动刷卡即时校验...&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-c1">// -- new -- 增加卡号长度校验</span>
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;校验失败：卡号格式非法，拒绝通行！&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">;</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
@@ -2773,6 +2816,7 @@ toggleButton.addEventListener('click', () => {
 
 <span class="tok-w">    </span><span class="tok-c1">// 这里传入的是 BaseDoorCard，展示了多态的兼容性</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">readCard</span><span class="tok-p">(</span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// -- new -- 增加时间处理  </span><i class="conum" data-value="4"></i><b>(4)</b>
 <span class="tok-w">        </span><span class="tok-c1">// 1. 【时间记录】记录刷卡的“那一瞬间”</span>
 <span class="tok-w">        </span><span class="tok-c1">// yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字</span>
 <span class="tok-w">        </span><span class="tok-n">SimpleDateFormat</span><span class="tok-w"> </span><span class="tok-n">sdf</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">SimpleDateFormat</span><span class="tok-p">(</span><span class="tok-s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="tok-p">);</span>
@@ -2798,8 +2842,35 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-cm"> */</span>
 <span class="tok-kd">interface</span> <span class="tok-nc">Payable</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">pay</span><span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 谁实现这个接口，谁就必须具备支付功能</span>
-<span class="tok-p">}</span>
-<span class="tok-c1">// @clean code/testBasicSyntax/src/stringDateExample/Run.java</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>制卡时 trim() 方法去除卡号多余空格</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>制卡时 length() 方法增加卡号长度校验</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>读卡时 length() 方法增加卡号长度校验</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>增加时间处理</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_运行类_run_java">运行类 Run.java</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/stringDateExample/Run.java</span>
 <span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">stringDateExample</span><span class="tok-p">;</span>
 
 <span class="tok-cm">/**</span>
@@ -2833,39 +2904,6 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="❕"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>关于 String 比较：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>重点强调：一定要反复强调 String 比较用 .equals()，而不是 ==。</p>
-</li>
-<li>
-<p>这是初学者最容易踩的坑，可以用“一个是比长相，一个是比灵魂”来打比方。</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>关于 Date：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>虽然 Java 8 之后有了 LocalDateTime，但 Date + SimpleDateFormat 的代码量更少，概念更直观。</p>
-</li>
-</ul>
-</div>
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -2964,10 +3002,10 @@ toggleButton.addEventListener('click', () => {
 
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">BaseDoorCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-c1">// -- new -- 增加去除卡号多余空格功能</span>
-<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">.</span><span class="tok-na">trim</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">.</span><span class="tok-na">trim</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;&quot;</span><span class="tok-p">;</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 
 <span class="tok-w">        </span><span class="tok-c1">// -- new -- 增加卡号长度校验</span>
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【数据异常】警告：新创建的卡号 [&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;] 长度非8位！&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">ownerName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">;</span>
@@ -2987,7 +3025,7 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【系统日志】正在启动刷卡即时校验...&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-c1">// -- new -- 增加卡号长度校验</span>
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;校验失败：卡号格式非法，拒绝通行！&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">;</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
@@ -4597,7 +4635,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-09 08:54:46 +0800
+Last updated 2026-03-09 11:02:46 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

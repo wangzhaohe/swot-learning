@@ -16,10 +16,10 @@ abstract class BaseDoorCard {
 
     public BaseDoorCard(String serialNumber, String ownerName) {
         // -- new -- 增加去除卡号多余空格功能
-        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";
+        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";  // <1> 
 
         // -- new -- 增加卡号长度校验
-        if (this.serialNumber.length() !=8) {
+        if (this.serialNumber.length() !=8) {  // <2>
             System.out.println("【数据异常】警告：新创建的卡号 [" + this.serialNumber + "] 长度非8位！");
         }
         this.ownerName = ownerName;
@@ -39,7 +39,7 @@ abstract class BaseDoorCard {
     public boolean validate() {
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         // -- new -- 增加卡号长度校验
-        if (this.serialNumber.length() != 8) {
+        if (this.serialNumber.length() != 8) {  // <3>
             System.out.println("校验失败：卡号格式非法，拒绝通行！");
             return false;
         }

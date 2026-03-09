@@ -1181,10 +1181,23 @@ public class TeacherCard extends BaseDoorCard {
 . 门禁系统必须记录：谁在 *什么时候* 刷了卡？
   ** `new Date()`：获取此时此刻的系统时间。
   ** `SimpleDateFormat`：把时间从“一串数字”变成“人能看懂的文字”。生活举例：
-    *** 就像相机的“时间水印”，`Date` 抓拍瞬间，`SimpleDateFormat` 决定水印印成 "2023/10/01" 还是 "10月1日"。
+    *** 就像相机的“时间水印”，`Date` 抓拍瞬间，`SimpleDateFormat` 决定水印印成 "2026/10/01" 还是 "10月1日"。
 
+. 注意事项 
++
+[NOTE]
+====
+关于 String 比较：
 
-.代码举例
+* 重点强调：一定要反复强调 String 比较用 .equals()，而不是 ==。
+* 这是初学者最容易踩的坑，可以用“一个是比长相，一个是比灵魂”来打比方。
+
+关于 Date：
+
+* 虽然 Java 8 之后有了 LocalDateTime，但 Date + SimpleDateFormat 的代码量更少，概念更直观。
+====
+
+=== 应用工具类
 [source,java]
 ----
 // @clean code/testBasicSyntax/src/stringDateExample/Card.java
@@ -1205,10 +1218,10 @@ abstract class BaseDoorCard {
 
     public BaseDoorCard(String serialNumber, String ownerName) {
         // -- new -- 增加去除卡号多余空格功能
-        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";
+        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";  // <1> 
 
         // -- new -- 增加卡号长度校验
-        if (this.serialNumber.length() !=8) {
+        if (this.serialNumber.length() !=8) {  // <2>
             System.out.println("【数据异常】警告：新创建的卡号 [" + this.serialNumber + "] 长度非8位！");
         }
         this.ownerName = ownerName;
@@ -1228,7 +1241,7 @@ abstract class BaseDoorCard {
     public boolean validate() {
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         // -- new -- 增加卡号长度校验
-        if (this.serialNumber.length() != 8) {
+        if (this.serialNumber.length() != 8) {  // <3>
             System.out.println("校验失败：卡号格式非法，拒绝通行！");
             return false;
         }
@@ -1300,6 +1313,7 @@ class CardReader {
     
     // 这里传入的是 BaseDoorCard，展示了多态的兼容性
     public void readCard(BaseDoorCard card) {
+        // -- new -- 增加时间处理  <4>
         // 1. 【时间记录】记录刷卡的“那一瞬间”
         // yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1326,6 +1340,16 @@ class CardReader {
 interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
+----
+
+<1> 制卡时 trim() 方法去除卡号多余空格
+<2> 制卡时 length() 方法增加卡号长度校验
+<3> 读卡时 length() 方法增加卡号长度校验
+<4> 增加时间处理
+
+=== 运行类 Run.java
+[source,java]
+----
 // @clean code/testBasicSyntax/src/stringDateExample/Run.java
 package stringDateExample;
 
@@ -1359,19 +1383,6 @@ public class Run {
     }
 }
 ----
-
-
-[NOTE]
-====
-关于 String 比较：
-
-* 重点强调：一定要反复强调 String 比较用 .equals()，而不是 ==。
-* 这是初学者最容易踩的坑，可以用“一个是比长相，一个是比灵魂”来打比方。
-
-关于 Date：
-
-* 虽然 Java 8 之后有了 LocalDateTime，但 Date + SimpleDateFormat 的代码量更少，概念更直观。
-====
 
 == 异常处理机制 (4学时)
 * *核心知识点*：异常体系结构、try-catch-finally、throw/throws、自定义异常。
@@ -1430,10 +1441,10 @@ abstract class BaseDoorCard {
 
     public BaseDoorCard(String serialNumber, String ownerName) {
         // -- new -- 增加去除卡号多余空格功能
-        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";
+        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";  // <1> 
 
         // -- new -- 增加卡号长度校验
-        if (this.serialNumber.length() !=8) {
+        if (this.serialNumber.length() !=8) {  // <2>
             System.out.println("【数据异常】警告：新创建的卡号 [" + this.serialNumber + "] 长度非8位！");
         }
         this.ownerName = ownerName;
@@ -1453,7 +1464,7 @@ abstract class BaseDoorCard {
     public boolean validate() {
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         // -- new -- 增加卡号长度校验
-        if (this.serialNumber.length() != 8) {
+        if (this.serialNumber.length() != 8) {  // <3>
             System.out.println("校验失败：卡号格式非法，拒绝通行！");
             return false;
         }

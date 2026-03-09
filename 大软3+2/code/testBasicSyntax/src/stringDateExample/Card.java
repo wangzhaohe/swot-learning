@@ -16,10 +16,10 @@ abstract class BaseDoorCard {
 
     public BaseDoorCard(String serialNumber, String ownerName) {
         // -- new -- 增加去除卡号多余空格功能
-        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";
+        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";  // <1> 
 
         // -- new -- 增加卡号长度校验
-        if (this.serialNumber.length() !=8) {
+        if (this.serialNumber.length() !=8) {  // <2>
             System.out.println("【数据异常】警告：新创建的卡号 [" + this.serialNumber + "] 长度非8位！");
         }
         this.ownerName = ownerName;
@@ -39,7 +39,7 @@ abstract class BaseDoorCard {
     public boolean validate() {
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         // -- new -- 增加卡号长度校验
-        if (this.serialNumber.length() != 8) {
+        if (this.serialNumber.length() != 8) {  // <3>
             System.out.println("校验失败：卡号格式非法，拒绝通行！");
             return false;
         }
@@ -111,6 +111,7 @@ class CardReader {
     
     // 这里传入的是 BaseDoorCard，展示了多态的兼容性
     public void readCard(BaseDoorCard card) {
+        // -- new -- 增加时间处理  <4>
         // 1. 【时间记录】记录刷卡的“那一瞬间”
         // yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
