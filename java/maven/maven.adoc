@@ -1,31 +1,73 @@
+:author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
 :icons: font
 :scripts: cjk
+:stem: latexmath
+:experimental:
 :toc:
 :toc: right
 :toc-title: 目录
 :toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
 
 = Maven
 
 ++++
-<button id="toggleButton">Table of Contents</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+<style>
+/* 1. 默认状态：顺应你原本的展开状态 */
+#toc {
+    min-width: 0 !important;
+    max-height: 100vh;
+    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    white-space: nowrap !important;
+    max-width: 530px;
+    opacity: 1;
+
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+#toc.collapsed {
+    max-width: 0 !important; /* 宽度强制缩到 0 */
+    opacity: 0 !important; /* 透明度消失 */
+
+    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 3. 修复行间距（保留你需要的紧凑排版） */
+#toc ul, #toc li {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+</style>
+
+<button id="toggleButton">目录开关</button>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+// 默认没有任何类名，所以默认是自然展开的。
+toggleButton.addEventListener('click', () => {
+    contentDiv.classList.toggle('collapsed');
+});
 </script>
 ++++
 
@@ -204,10 +246,10 @@ Maven 项目主要目录列出如下：
 ====
 
 === pom.xml 核心配置文件内容示例
-下面是 Maven 项目创建时默认生成的 pom.xml 文件
-
-[source,xml,linenums]
-----
+# 下面是 Maven 项目创建时默认生成的 pom.xml 文件
+#
+# [source,xml,linenums]
+# ----
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -229,7 +271,7 @@ Maven 项目主要目录列出如下：
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
-----
+# ----
 
 == Maven 坐标
 Maven 中的坐标用于描述仓库中资源(jar包)的位置，使用坐标来定义项目本身的坐标或引入项目中需要的依赖的坐标。
@@ -649,24 +691,18 @@ image::img/maven_missing_dependences_ok.png[]
 
 
 ===== general-pojo
-[source,xml]
-....
 <dependency>
     <groupId>com.tjise</groupId>
     <artifactId>general-pojo</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>
-....
 
 ===== general-utils
-[source,xml]
-....
 <dependency>
     <groupId>com.tjise</groupId>
     <artifactId>general-utils</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>
-....
 
 ==== 测试分模块后的项目
 运行项目，应该可以正常启动。然后可以使用 httpie 或者运行前端项目进行测试一下。
@@ -696,38 +732,7 @@ image::img/maven_create_parent_module.png[,800]
 3. 在父模块的 pom.xml 增加 <packaging>pom</packaging>
 
 ===== file -> module-design/maven-general-manager/general-parent/pom.xml
-
-
-====== 1) packaging 指定该父模块打包方式为 pom
-[source,xml]
-....
-<packaging>pom</packaging>
-....
-
-====== 2) parent 指定该模块的父模块依赖 Spring Boot 默认的 <parent>
-[source,scss]
-....
-<parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.18</version>
-    <relativePath/> <!-- lookup parent from repository 指从本地仓库查找父模块-->
-</parent>
-....
-
-====== 3) dependency 配置各个子模块共有的依赖（子模块会自动继承父模块的依赖）
-[source,scss]
-....
-<dependencies>
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.30</version>
-    </dependency>
-</dependencies>
-....
-
-* 若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准（实际上没有必要，一个项目最好版本不一致）。
+<?xml version="1.0" encoding="UTF-8"?>
 
 ==== 在子模块的 pom.xml 文件中，配置继承关系
 NOTE: 下面三个子模块中多余的 <groupId> 坐标可以删除，因为都已经在它们的 <parent> 坐标中指定了。
@@ -752,62 +757,13 @@ NOTE: 下面三个子模块中多余的 <groupId> 坐标可以删除，因为都
 IMPORTANT: relativePath 指定父模块的 pom 文件的相对位置（如果不指定，将从本地仓库/远程仓库查找该模块）。
 
 ===== file -> module-design/maven-general-manager/general-manager/pom.xml
-
-
-====== parent & self
-[source,scss]
-....
-<parent>
-    <groupId>com.tjise</groupId>
-    <artifactId>general-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <relativePath>../general-parent/pom.xml</relativePath>
-</parent>
-
-<!-- 可以删除 -->
-<!-- <groupId>com.tjise</groupId> -->
-<artifactId>general-manager</artifactId>
-<version>0.0.1-SNAPSHOT</version>
-<name>general-manager</name>
-....
+<?xml version="1.0" encoding="UTF-8"?>
 
 ===== file -> module-design/maven-general-manager/general-pojo/pom.xml
-
-
-====== parent & self
-[source,scss]
-....
-<parent>
-    <groupId>com.tjise</groupId>
-    <artifactId>general-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <relativePath>../general-parent/pom.xml</relativePath>
-</parent>
-
-<!-- 可以删除 -->
-<!-- <groupId>com.tjise</groupId> -->
-<artifactId>general-pojo</artifactId>
-<version>1.0-SNAPSHOT</version>
-....
+<?xml version="1.0" encoding="UTF-8"?>
 
 ===== file -> module-design/maven-general-manager/general-utils/pom.xml
-
-
-====== parent & self
-[source,scss]
-....
-<parent>
-    <groupId>com.tjise</groupId>
-    <artifactId>general-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <relativePath>../general-parent/pom.xml</relativePath>
-</parent>
-
-<!-- 可以删除 -->
-<!-- <groupId>com.tjise</groupId> -->
-<artifactId>general-utils</artifactId>
-<version>1.0-SNAPSHOT</version>
-....
+<?xml version="1.0" encoding="UTF-8"?>
 
 === 父模块版本锁定
 在 maven 中，可以在父模块的 pom 文件中通过 <dependencyManagement> 来统一管理**依赖版本**。
@@ -821,87 +777,10 @@ image::img/maven_dependencyManagement.png[]
 下面是变更的代码例子。
 
 ==== file -> module-design/maven-general-manager/general-parent/pom.xml
-
-
-===== dependencyManagement -> 在此父模块中指定依赖版本
-[source,scss,linenum]
-....
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.7.18</version>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>3.17.4</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.12.6</version>
-        </dependency>
-
-        <!-- 实现层: 运行时必需 -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.12.6</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- JSON 序列化支持: 运行时必需 -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.12.6</version>
-            <scope>runtime</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-....
+<?xml version="1.0" encoding="UTF-8"?>
 
 ==== file -> module-design/maven-general-manager/general-utils/pom.xml
-
-
-===== <dependencies>
-该子模块中依赖的具体版本号已经去掉了，maven 会自动引用父模块 <dependencyManagement> 定义好的依赖版本。
-
-[source,scss]
-....
-<dependencies>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>com.aliyun.oss</groupId>
-        <artifactId>aliyun-sdk-oss</artifactId>
-    </dependency>
-
-    <!-- 接口层: 编译时需要 -->
-    <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt-api</artifactId>
-    </dependency>
-
-    <!-- 实现层: 运行时必需 -->
-    <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt-impl</artifactId>
-        <scope>runtime</scope>
-    </dependency>
-
-    <!-- JSON 序列化支持: 运行时必需 -->
-    <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt-jackson</artifactId>
-        <scope>runtime</scope>
-    </dependency>
-</dependencies>
-....
+<?xml version="1.0" encoding="UTF-8"?>
 
 === 父模块中引用依赖的自定义版本属性
 为了方便在一个地方对所有的依赖版本号进行更改，可以在父组件 pom.xml 的 <properties> 坐标中自定义依赖版本号变量。然后在父模块中相应需要版本号的地方引用该变量即可。
@@ -909,79 +788,7 @@ image::img/maven_dependencyManagement.png[]
 image::img/maven_self_define_version_variable.png[]
 
 ==== file -> module-design/maven-general-manager/general-parent/pom.xml
-
-
-===== properties -> 在此自定义依赖版本变量来统一管理依赖版本号
-[source,scss]
-....
-<properties>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    <!-- 变量名是自定义的，如 lombok.version，这儿为了演示只定义了两个变量 -->
-    <lombok.version>1.18.30</lombok.version>
-    <oss.version>3.17.4</oss.version>
-</properties>
-....
-
-===== dependency           -> 在此引用自定义的依赖版本变量
-[source,scss]
-....
-<dependencies>
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <!-- 引用自定义版本号变量 -->
-        <version>${lombok.version}</version>
-    </dependency>
-</dependencies>
-....
-
-IMPORTANT: 若父子模块都配置了同一个依赖的不同版本，以子模块的版本为准。
-
-===== dependencyManagement -> 在此引用自定义的依赖版本变量
-[source,scss,linenum]
-....
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.7.18</version>
-        </dependency>
-        
-        <!-- 引用自定义版本号变量 -->
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>${oss.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.12.6</version>
-        </dependency>
-
-        <!-- 实现层: 运行时必需 -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.12.6</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- JSON 序列化支持: 运行时必需 -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.12.6</version>
-            <scope>runtime</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-....
+<?xml version="1.0" encoding="UTF-8"?>
 
 === 面试题: <dependencyManagement> 与 <dependencies>的区别是什么?
 <dependencies> 是直接依赖，在父模块配置了依赖，子模块会直接继承下来。 
@@ -1007,24 +814,7 @@ image::img/maven_package_no_dependence_jar.png[]
 NOTE: 直接使用前面的父模块即可，因为它只有一个 pom.xml 文件，符合条件。
 
 ==== file -> module-design/maven-general-manager/general-parent/pom.xml
-
-
-===== modules -> 配置聚合模块的子模块
-maven 中可以通过 <modules> 设置当前聚合模块所包含的子模块名称。聚合模块中所包含的模块，在构建时，会自动根据模块间的依赖关系设置构建顺序，与模块的配置书写位置无关。
-
-[source,scss]
-....
-<!-- 这三个 module 的书写顺序没有关系 -->
-<modules>
-    <module>../general-manager</module>
-    <module>../general-pojo</module>
-    <module>../general-utils</module>
-</modules>
-....
-
-此时使用 maven package 可以进行打包构建了。
-
-image::img/maven_modules_package_success.png[]
+<?xml version="1.0" encoding="UTF-8"?>
 
 === 面试题: 继承与聚合的区分
 作用
@@ -1115,9 +905,11 @@ NOTE: 登录后让改密码，我已经把密码改成了 123456。
 
 
 ===== Maven 原始配置备份
-
-
-====== file -> /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml
+.file -> /Users/swot/soft/apache-maven-3.9.9/conf/settings.xml
+[%collapsible]
+====
+[source,java]
+----
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -1223,7 +1015,59 @@ under the License.
     </proxy>
     -->
   </proxies>
-  @others
+  <!-- servers
+   | This is a list of authentication profiles, keyed by the server-id used within the system.
+   | Authentication profiles can be used whenever maven must make a connection to a remote server.
+   |-->
+  <servers>
+    <!-- server
+     | Specifies the authentication information to use when connecting to a particular server, identified by
+     | a unique name within the system (referred to by the 'id' attribute below).
+     |
+     | NOTE: You should either specify username/password OR privateKey/passphrase, since these pairings are
+     |       used together.
+     |
+    <server>
+      <id>deploymentRepo</id>
+      <username>repouser</username>
+      <password>repopwd</password>
+    </server>
+    -->
+
+    <!-- Another sample, using keys to authenticate.
+    <server>
+      <id>siteServer</id>
+      <privateKey>/path/to/private/key</privateKey>
+      <passphrase>optional; leave empty if not used.</passphrase>
+    </server>
+    -->
+  </servers>
+  <!-- mirrors
+   | This is a list of mirrors to be used in downloading artifacts from remote repositories.
+   |
+   | It works like this: a POM may declare a repository to use in resolving certain artifacts.
+   | However, this repository may have problems with heavy traffic at times, so people have mirrored
+   | it to several places.
+   |
+   | That repository definition will have a unique id, so we can create a mirror reference for that
+   | repository, to be used as an alternate download site. The mirror site will be the preferred
+   | server for that repository.
+   |-->
+  <mirrors>
+    <!-- mirror
+     | Specifies a repository mirror site to use instead of a given repository. The repository that
+     | this mirror serves has an ID that matches the mirrorOf element of this mirror. IDs are used
+     | for inheritance and direct lookup purposes, and must be unique across the set of mirrors.
+     |
+    <mirror>
+     -->
+    <mirror>
+        <id>alimaven</id>
+        <mirrorOf>central</mirrorOf>
+        <name>阿里云公共仓库</name>
+        <url>https://maven.aliyun.com/repository/public</url>
+    </mirror>
+  </mirrors>
   <!-- profiles
    | This is a list of profiles which can be activated in a variety of ways, and which can modify
    | the build process. Profiles provided in the settings.xml are intended to provide local machine-
@@ -1321,70 +1165,15 @@ under the License.
   </activeProfiles>
   -->
 </settings>
-
-====== servers 配置用户名和密码
-<!-- servers
- | This is a list of authentication profiles, keyed by the server-id used within the system.
- | Authentication profiles can be used whenever maven must make a connection to a remote server.
- |-->
-<servers>
-  <!-- server
-   | Specifies the authentication information to use when connecting to a particular server, identified by
-   | a unique name within the system (referred to by the 'id' attribute below).
-   |
-   | NOTE: You should either specify username/password OR privateKey/passphrase, since these pairings are
-   |       used together.
-   |
-  <server>
-    <id>deploymentRepo</id>
-    <username>repouser</username>
-    <password>repopwd</password>
-  </server>
-  -->
-
-  <!-- Another sample, using keys to authenticate.
-  <server>
-    <id>siteServer</id>
-    <privateKey>/path/to/private/key</privateKey>
-    <passphrase>optional; leave empty if not used.</passphrase>
-  </server>
-  -->
-</servers>
-
-====== mirrors 注释阿里私服 配置公司私服
-<!-- mirrors
- | This is a list of mirrors to be used in downloading artifacts from remote repositories.
- |
- | It works like this: a POM may declare a repository to use in resolving certain artifacts.
- | However, this repository may have problems with heavy traffic at times, so people have mirrored
- | it to several places.
- |
- | That repository definition will have a unique id, so we can create a mirror reference for that
- | repository, to be used as an alternate download site. The mirror site will be the preferred
- | server for that repository.
- |-->
-<mirrors>
-  <!-- mirror
-   | Specifies a repository mirror site to use instead of a given repository. The repository that
-   | this mirror serves has an ID that matches the mirrorOf element of this mirror. IDs are used
-   | for inheritance and direct lookup purposes, and must be unique across the set of mirrors.
-   |
-  <mirror>
-   -->
-  <mirror>
-      <id>alimaven</id>
-      <mirrorOf>central</mirrorOf>
-      <name>阿里云公共仓库</name>
-      <url>https://maven.aliyun.com/repository/public</url>
-  </mirror>
-</mirrors>
+----
+====
 
 ===== Maven 配置 Nexus
 
 
 ====== servers 配置用户名和密码
-[source,scss]
-....
+# [source,scss]
+# ....
 <servers>
     <server>
         <id>maven-public</id>
@@ -1402,11 +1191,11 @@ under the License.
         <password>123456</password>
     </server>
 </servers>
-....
+# ....
 
 ====== mirrors 注释阿里私服 配置公司私服
-[source,scss]
-....
+# [source,scss]
+# ....
 <mirrors>
   <!-- <mirror> -->
       <!-- <id>alimaven</id> -->
@@ -1424,11 +1213,11 @@ under the License.
       <url>http://localhost:8081/repository/maven-public/</url>
   </mirror>
 </mirrors>
-....
+# ....
 
 ====== profiles 支持项目部署
-[source,scss]
-....
+# [source,scss]
+# ....
 <profiles>
   <profile>
       <id>allow-snapshots</id>
@@ -1449,35 +1238,17 @@ under the License.
       </repositories>
   </profile>
 </profiles>
-....
-
-这个配置就是告诉 Maven：
-
-“默认启用一个叫 allow-snapshots 的 profile，把我的 Nexus 私服 maven-public 当作依赖仓库，并允许从里面下载 正式版和快照版 的依赖。”
+# ....
+#
+# 这个配置就是告诉 Maven：
+#
+# “默认启用一个叫 allow-snapshots 的 profile，把我的 Nexus 私服 maven-public 当作依赖仓库，并允许从里面下载 正式版和快照版 的依赖。”
 
 ===== Maven 聚合父模块配置项目发布到私服
 
 
 ====== file -> module-design/maven-general-manager/general-parent/pom.xml
-
-
-====== distributionManagement 配置项目发布到私服
-[source,scss]
-....
-<distributionManagement>
-    <!-- release版本的发布地址 -->
-    <repository>
-        <id>maven-releases</id>
-        <url>http://localhost:8081/repository/maven-releases/</url>
-    </repository>
-
-    <!-- snapshot版本的发布地址 -->
-    <snapshotRepository>
-        <id>maven-snapshots</id>
-        <url>http://localhost:8081/repository/maven-snapshots/</url>
-    </snapshotRepository>
-</distributionManagement>
-....
+<?xml version="1.0" encoding="UTF-8"?>
 
 ===== 测试发布项目
 WARNING: 不要演示了，网络不好时，总是下载依赖不成功！！！
