@@ -118,7 +118,7 @@ class CardReader {
 
         System.out.println("\n[" + timeLog + "] 读卡器感应中...");
 
-        try {
+        try {   // 加入捕获异常功能 <4>
             if (card.validate()) {
                 // 注意：字符串比较一定要用 .equals()，不能用 ==
                 if (card.getSerialNumber().equals(ADMIN_ID)) {
@@ -128,11 +128,11 @@ class CardReader {
                 // 若 validate() 失败，系统在 BaseDoorCard 内部也打印了错误信息
                 System.out.println("系统提示：请更换有效卡片。");
             }
-        } catch(NullPointerException e) {
+        } catch(NullPointerException e) {  // 获取异常分类 <5>
             // 专门捕获“没读到卡”或“空指针”的情况
             System.out.println("【硬件报警】未检测到有效卡片对象！(NullPointerException)");
         } finally {
-            // 无论成功还是失败，都要重置读卡器状态
+            // 无论成功还是失败，都要重置读卡器状态 <6>
             System.out.println(">> [状态流] 读卡器指示灯已重置为绿色闲置状态。");
         }
     }
