@@ -610,8 +610,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_异常处理机制_4学时">异常处理机制 (4学时)</a>
 <ul class="sectlevel2">
-<li><a href="#_什么是异常_生活的备选方案">什么是异常？ —— “生活的备选方案”</a></li>
-<li><a href="#_try_catch_finally_安全气囊">try-catch-finally —— “安全气囊”</a></li>
+<li><a href="#_try_catch_finally_捕获异常自己处理">try-catch-finally —— 捕获异常自己处理</a></li>
 <li><a href="#_throw_与_throws_甩锅与上报">throw 与 throws —— “甩锅与上报”</a></li>
 <li><a href="#_自定义异常_定制报警器">自定义异常 —— “定制报警器”</a></li>
 <li><a href="#_异常小结">异常小结</a></li>
@@ -2910,52 +2909,28 @@ toggleButton.addEventListener('click', () => {
 <div class="sect1">
 <h2 id="_异常处理机制_4学时">异常处理机制 (4学时)</h2>
 <div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><strong>核心知识点</strong>：异常体系结构、try-catch-finally、throw/throws、自定义异常。</p>
-</li>
-<li>
-<p><strong>教学要求</strong>：能够编写健壮的代码，防止程序因为一点小意外就“直接罢工” 。</p>
-</li>
-</ul>
-</div>
 <div class="paragraph">
-<p>在开发门禁系统时，最怕程序因为一点小错就彻底崩溃（比如读卡器坏了，整个系统不应该直接蓝屏）。
+<p>在开发门禁系统时，最怕程序因为一点小错就彻底崩溃（比如读卡器坏了，整个系统不应该直接挂掉）。
 这就是异常处理机制 要解决的问题。</p>
 </div>
-<div class="sect2">
-<h3 id="_什么是异常_生活的备选方案">什么是异常？ —— “生活的备选方案”</h3>
-<div class="olist upperalpha">
-<ol class="upperalpha" type="A">
-<li>
-<p>知识点说明</p>
 <div class="ulist">
 <ul>
 <li>
-<p>程序运行就像开车，即使你技术再好，也可能遇到“爆胎”或“封路”。</p>
+<p>核心知识点：异常体系结构、try-catch-finally、throw/throws、自定义异常。</p>
 </li>
 <li>
-<p><strong>异常 (Exception)</strong>：不是程序写错了（那是 Bug），而是程序运行中遇到了<strong>意外情况</strong>（比如网络断了、文件找不到了）。</p>
+<p>教学要求：能够编写 <mark>健壮的代码</mark>，防止程序因为一点小意外就“直接罢工” 。</p>
+</li>
+<li>
+<p>异常 (Exception)：不是程序写错了（那是 Bug），而是程序运行中遇到了<strong>意外情况</strong>（比如网络断了）。</p>
+</li>
+<li>
+<p>生活举例： 你出门上班，计划是坐地铁。但如果地铁停运了（异常），你应该去坐公交（处理异常），而不是就不去上班了。</p>
 </li>
 </ul>
-</div>
-</li>
-<li>
-<p>生活举例</p>
-<div class="ulist">
-<ul>
-<li>
-<p>你出门上班，计划是坐地铁。但如果地铁停运了（异常），你应该去坐公交（处理异常），而不是直接原地消失。</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
 </div>
 <div class="sect2">
-<h3 id="_try_catch_finally_安全气囊">try-catch-finally —— “安全气囊”</h3>
+<h3 id="_try_catch_finally_捕获异常自己处理">try-catch-finally —— 捕获异常自己处理</h3>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
@@ -2969,7 +2944,7 @@ toggleButton.addEventListener('click', () => {
 <p><strong>catch</strong>：如果真的出事了，该怎么办？（抓捕异常并处理）。</p>
 </li>
 <li>
-<p><strong>finally</strong>：不管出不出事，最后都要执行的操作（比如关灯、锁门）。</p>
+<p><strong>finally</strong>：不管出不出事，最后都要执行的操作（比如断开数据库链接、重置硬件读卡器状态）。</p>
 </li>
 </ul>
 </div>
@@ -3104,7 +3079,7 @@ toggleButton.addEventListener('click', () => {
 
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;\n[&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">timeLog</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;] 读卡器感应中...&quot;</span><span class="tok-p">);</span>
 
-<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">   </span><span class="tok-c1">// 加入捕获异常功能 </span><i class="conum" data-value="4"></i><b>(4)</b>
 <span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">                </span><span class="tok-c1">// 注意：字符串比较一定要用 .equals()，不能用 ==</span>
 <span class="tok-w">                </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">getSerialNumber</span><span class="tok-p">().</span><span class="tok-na">equals</span><span class="tok-p">(</span><span class="tok-n">ADMIN_ID</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -3114,11 +3089,11 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">                </span><span class="tok-c1">// 若 validate() 失败，系统在 BaseDoorCard 内部也打印了错误信息</span>
 <span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;系统提示：请更换有效卡片。&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">            </span><span class="tok-p">}</span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-p">(</span><span class="tok-n">NullPointerException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-p">(</span><span class="tok-n">NullPointerException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 获取异常分类 </span><i class="conum" data-value="5"></i><b>(5)</b>
 <span class="tok-w">            </span><span class="tok-c1">// 专门捕获“没读到卡”或“空指针”的情况</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【硬件报警】未检测到有效卡片对象！(NullPointerException)&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">finally</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-c1">// 无论成功还是失败，都要重置读卡器状态</span>
+<span class="tok-w">            </span><span class="tok-c1">// 无论成功还是失败，都要重置读卡器状态 </span><i class="conum" data-value="6"></i><b>(6)</b>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;&gt;&gt; [状态流] 读卡器指示灯已重置为绿色闲置状态。&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
@@ -3135,13 +3110,13 @@ toggleButton.addEventListener('click', () => {
 
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Run</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">CardReader</span><span class="tok-w"> </span><span class="tok-n">reader</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CardReader</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-n">CardReader</span><span class="tok-w"> </span><span class="tok-n">reader</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CardReader</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 初始化读卡器</span>
 
 <span class="tok-w">        </span><span class="tok-c1">// 场景 A：正常卡片</span>
 <span class="tok-w">        </span><span class="tok-n">reader</span><span class="tok-p">.</span><span class="tok-na">readCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">(</span><span class="tok-s">&quot;  S1234567  &quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;小明&quot;</span><span class="tok-p">));</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;------&quot;</span><span class="tok-p">);</span>
 
-<span class="tok-w">        </span><span class="tok-c1">// 场景 B：非法长度卡片</span>
+<span class="tok-w">        </span><span class="tok-c1">// 场景 B：非法长度卡片，位数不够</span>
 <span class="tok-w">        </span><span class="tok-n">reader</span><span class="tok-p">.</span><span class="tok-na">readCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">(</span><span class="tok-s">&quot;B99&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;非法入侵者&quot;</span><span class="tok-p">));</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;------&quot;</span><span class="tok-p">);</span>
 
@@ -3597,10 +3572,14 @@ toggleButton.addEventListener('click', () => {
 <p>传统的数组容量是固定的，开辟了 10 个位子就只能坐 10 个人。</p>
 </li>
 <li>
-<p><strong>ArrayList</strong>：像一个会变魔术的排队队伍。人多它就变长，人少它就缩短，非常适合存储不确定数量的门禁卡信息 。</p>
-</li>
+<p><code>ArrayList</code>：像一个会变魔术的排队队伍。人多它就变长，人少它就缩短，非常适合存储不确定数量的门禁卡信息 。</p>
+<div class="ulist">
+<ul>
 <li>
-<p><strong>泛型 <code>&lt;AccessCard&gt;</code></strong>：这就像给盒子贴标签，告诉 Java 这个集合只能装“门禁卡”，装入其他类型（如字符串）编译器会直接报错。</p>
+<p>配合泛型 &lt;BaseDoorCard&gt; 使用，就像给盒子贴标签，告诉 Java 这个集合只能装"门禁卡"，装入其他类型编译器会直接报错。</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -3609,47 +3588,191 @@ toggleButton.addEventListener('click', () => {
 <p>代码举例：模拟早高峰批量刷卡进校</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.ArrayList</span><span class="tok-p">;</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/ExceptionSelfdefineExample/DoorException.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">ArrayListExample</span><span class="tok-p">;</span>
 
 <span class="tok-cm">/**</span>
-<span class="tok-cm"> * 门禁管理系统：负责维护白名单和调度硬件</span>
+<span class="tok-cm"> * 自定义异常：专门处理门禁系统的异常情况</span>
 <span class="tok-cm"> */</span>
-<span class="tok-kd">class</span> <span class="tok-nc">AccessControlSystem</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// 将名单封装在类内部，设置为 private 确保安全</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">AccessCard</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;&gt;</span><span class="tok-p">();</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">DoorReader</span><span class="tok-w"> </span><span class="tok-n">reader</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorReader</span><span class="tok-p">();</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DoorException</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">DoorException</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">message</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">message</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 把错误信息传给父类去处理</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// 提供标准的方法来注册新卡片</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">registerCard</span><span class="tok-p">(</span><span class="tok-n">AccessCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">whitelist</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-n">card</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;系统消息：新卡片已录入白名单。&quot;</span><span class="tok-p">);</span>
+<span class="tok-c1">// @clean code/testBasicSyntax/src/ArrayListExample/AccessControlSystem.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">ArrayListExample</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.Date</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.text.SimpleDateFormat</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.ArrayList</span><span class="tok-p">;</span>
+
+<span class="tok-kd">class</span> <span class="tok-nc">AccessControlSystem</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 知识点：ArrayList 动态管理名单</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">BaseDoorCard</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;&gt;</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 知识点：封装门禁硬件（读卡器）</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">CardReader</span><span class="tok-w"> </span><span class="tok-n">reader</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CardReader</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">registerCard</span><span class="tok-p">(</span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">whitelist</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-n">card</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// add 操作 </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;系统：已录入卡片 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">getOwnerName</span><span class="tok-p">());</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// 执行系统自检：模拟所有人依次进校</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">executeMorningCheck</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;\n=== 门禁系统：早高峰自动校验程序启动 ===&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">whitelist</span><span class="tok-p">.</span><span class="tok-na">isEmpty</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;警告：白名单为空，系统拒绝所有访问。&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-p">;</span>
-<span class="tok-w">        </span><span class="tok-p">}</span>
-<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">AccessCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-n">reader</span><span class="tok-p">.</span><span class="tok-na">readCard</span><span class="tok-p">(</span><span class="tok-n">card</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">executeBatchCheck</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;\n--- 启动批量校验 (当前人数: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-p">.</span><span class="tok-na">size</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;) ---&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 取数量 </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 循环遍历 </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">            </span><span class="tok-n">reader</span><span class="tok-p">.</span><span class="tok-na">readCard</span><span class="tok-p">(</span><span class="tok-n">card</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 调用读卡器处理单次刷卡</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
-<span class="tok-c1">// --- 运行测试 ---</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Main</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 读卡器服务类：系统核心调度员</span>
+<span class="tok-cm"> * 多态设计：它可以接收 StudentCard，也可以接收 AdminCard，甚至未来的 TeacherCard</span>
+<span class="tok-cm"> * 职责：记录时间、触发物理校验、识别特殊身份、展示多态权限</span>
+<span class="tok-cm"> * 异常：捕获 validate() 异常并处理</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">class</span> <span class="tok-nc">CardReader</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 这里传入的是 BaseDoorCard，展示了多态的兼容性</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">readCard</span><span class="tok-p">(</span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 1. 【时间记录】记录刷卡的“那一瞬间”</span>
+<span class="tok-w">        </span><span class="tok-c1">// yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字</span>
+<span class="tok-w">        </span><span class="tok-n">SimpleDateFormat</span><span class="tok-w"> </span><span class="tok-n">sdf</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">SimpleDateFormat</span><span class="tok-p">(</span><span class="tok-s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">timeLog</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">sdf</span><span class="tok-p">.</span><span class="tok-na">format</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Date</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;\n[&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">timeLog</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;] 读卡器感应中...&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-p">(</span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 捕获业务异常</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【安全拦截】门禁逻辑错误：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 捕获其他意料之外的异常</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【致命故障】系统崩溃：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">finally</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 无论成功还是失败，都要重置读卡器状态</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;&gt;&gt; [状态流] 读卡器指示灯已重置为绿色闲置状态。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+<span class="tok-c1">// @clean code/testBasicSyntax/src/ArrayListExample/Card.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">ArrayListExample</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 类名：BaseDoorCardAbs (抽象类)</span>
+<span class="tok-cm"> * 演化点：使用了 abstract 关键字。</span>
+<span class="tok-cm"> * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。</span>
+<span class="tok-cm"> * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。</span>
+<span class="tok-cm"> * 3. validate() add throws</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 初始化后不可再变</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">BaseDoorCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">.</span><span class="tok-na">trim</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-c1">// -- new -- 增加卡号长度校验</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span>
+<span class="tok-w">                </span><span class="tok-s">&quot;【数据异常】警告：新创建的卡号 [&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;] 长度非8位！&quot;</span>
+<span class="tok-w">            </span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">ownerName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">getSerialNumber</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">getOwnerName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 通用逻辑：所有卡片都要进行的物理核验。</span>
+<span class="tok-cm">     * 抽象类可以拥有具体实现的方法。</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-c1">// -- New -- Added 自定义异常</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【系统日志】正在启动刷卡即时校验...&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 使用自定义异常代替通用异常</span>
+<span class="tok-w">            </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-p">(</span><span class="tok-s">&quot;校验失败：卡号 [&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;] 格式非法！&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;物理校验通过。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 抽象方法：强制规范。</span>
+<span class="tok-cm">     * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">abstract</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">showAccessScope</span><span class="tok-p">();</span>
+<span class="tok-p">}</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 学生卡：既是门禁卡，又能支付 (多重身份)</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">class</span> <span class="tok-nc">StudentCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-kd">implements</span><span class="tok-w"> </span><span class="tok-n">Payable</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">StudentCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 继承并调用父类构造器</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">pay</span><span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【食堂消费】学生 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">getOwnerName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 支付了 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 元。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// --new-- add 自定义异常</span>
+<span class="tok-w">        </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-n">isValid</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">super</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 这里可能会抛出异常，中断后续逻辑</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">isValid</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">showAccessScope</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 执行个性化权限展示</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">isValid</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">showAccessScope</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【权限范围】学生卡：确认 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">getOwnerName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 的图书馆/教学楼访问权限。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+<span class="tok-kd">class</span> <span class="tok-nc">AdminCard</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">AdminCard</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">serialNumber</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">ownerName</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// --new-- add 自定义异常</span>
+<span class="tok-w">        </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-n">isValid</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">super</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">isValid</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">showAccessScope</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">isValid</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">showAccessScope</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【权限范围】管理员卡：开启全校所有通道，含机房与档案室。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 支付接口：定义了“能够支付”的规范</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">interface</span> <span class="tok-nc">Payable</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">pay</span><span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 谁实现这个接口，谁就必须具备支付功能</span>
+<span class="tok-p">}</span>
+<span class="tok-c1">// @clean code/testBasicSyntax/src/ArrayListExample/Run.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">ArrayListExample</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Run</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-c1">// 1. 初始化管理系统</span>
 <span class="tok-w">        </span><span class="tok-n">AccessControlSystem</span><span class="tok-w"> </span><span class="tok-n">system</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">AccessControlSystem</span><span class="tok-p">();</span>
 
-<span class="tok-w">        </span><span class="tok-c1">// 2. 录入授权卡片（此时 main 不再直接操作 ArrayList）</span>
-<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">());</span>
-<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">AdminCard</span><span class="tok-p">());</span>
-<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-c1">// 1. 动态录入名单（ArrayList 的灵活性）</span>
+<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">(</span><span class="tok-s">&quot;S1234567&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;小明&quot;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// 正常卡</span>
+<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">(</span><span class="tok-s">&quot;BAD-99&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;非法者&quot;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// 长度非法触发异常</span>
+<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">AdminCard</span><span class="tok-p">(</span><span class="tok-s">&quot;A8888888&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;王老师&quot;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// 正常卡</span>
 
-<span class="tok-w">        </span><span class="tok-c1">// 3. 启动业务逻辑</span>
-<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">executeMorningCheck</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-c1">// 2. 启动批量校验，模拟批量刷卡操作</span>
+<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">executeBatchCheck</span><span class="tok-p">();</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -4635,7 +4758,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-09 11:12:25 +0800
+Last updated 2026-03-09 23:47:10 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
