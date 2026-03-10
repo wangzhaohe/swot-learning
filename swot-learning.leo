@@ -529,10 +529,11 @@
 <v t="swot.20260215212323.1"><vh>IO 流技术 (6学时)</vh>
 <v t="swot.20260216115239.1"><vh>为什么要学 IO？ —— “大脑”与“笔记本”</vh></v>
 <v t="swot.20260216115250.1"><vh>File 类 —— “文件管理员”</vh>
-<v t="swot.20260216123452.1"><vh>class FileDemo 代码举例</vh></v>
+<v t="swot.20260216123452.1"><vh>@clean code/testBasicSyntax/src/streamExample/FileDemo.java</vh></v>
+<v t="swot.20260311074341.1"><vh>@clean code/testBasicSyntax/cards.txt</vh></v>
 </v>
 <v t="swot.20260216115302.1"><vh>字符缓冲流 —— “高效搬运工”</vh>
-<v t="swot.20260216123721.1"><vh>class SaveUserDemo 代码举例（保存用户信息到 txt）</vh></v>
+<v t="swot.20260310220137.1"><vh>@clean code/testBasicSyntax/src/streamExample/SaveUserDemo.java</vh></v>
 <v t="swot.20260216133002.1"><vh>补充知识: Java I/O 核心组件解析：File, FileWriter 与 BufferedWriter</vh></v>
 </v>
 <v t="swot.20260216115311.1"><vh>序列化 —— “数据冷冻技术”</vh></v>
@@ -14845,28 +14846,45 @@ TIP: **选择理由**：如果只是想按顺序存储并遍历名单，使用 `
 知识点说明
 
 * **内存 (RAM)**：像人的大脑，程序运行极快，但一断电（关机）数据就全丢了。我们之前创建的 `ArrayList` 就在这里。
+
 * **硬盘 (Disk)**：像笔记本，速度虽慢，但写上去了就能永久保存。
+
 * **IO (Input|Output)**：就是把数据在大脑和笔记本之间搬运的过程。
+
 
 [NOTE]
 ====
-**Output (输出)**：把脑子里的名单**写**到纸上（保存文件）。 +
-**Input (输入)**：把纸上的名单**读**进脑子里（读取文件）。
-====
+* **Output (输出)**：把脑子里的名单**写**到纸上（保存文件）
 
+* **Input (输入)**：把纸上的名单**读**进脑子里（读取文件）
+====
 </t>
-<t tx="swot.20260216115250.1">@language asciidoc
-知识点说明
+<t tx="swot.20260216115250.1">知识点说明
 
 * 在操作文件内容之前，先要找到文件。
+
 * `File` 类不负责读写，它只负责查看文件是否存在、文件名叫什么、有多大。
 
+
+代码举例: 检查文件是否存在
+
+[source,java]
+----
+@others
+----
 </t>
-<t tx="swot.20260216115302.1">@language asciidoc
-知识点说明
+<t tx="swot.20260216115302.1">知识点说明
 
 * **FileWriter | FileReader**：像用小勺子挖水，一次只能搬一点，无缓冲区。
+
 * **BufferedWriter | BufferedReader**：像配了一个大水桶（缓冲区）。先把水倒满一桶，再一口气搬走，效率极高。
+
+
+.代码举例（保存用户信息到 txt）
+[source,java]
+----
+@others
+----
 </t>
 <t tx="swot.20260216115311.1">@language asciidoc
 **1. 知识点说明**
@@ -14929,16 +14947,17 @@ public void loadUsers() throws DoorSystemException {
 这就是为什么我们后面需要学习 **2.6 JDBC 数据库编程** 的原因——引入专业的“数据仓库”。
 ****
 </t>
-<t tx="swot.20260216123452.1">@language java
-[source,java]
-----
+<t tx="swot.20260216123452.1" _mod_time="4741da6c08c1bf46c32e">@language java
+// @clean code/testBasicSyntax/src/streamExample/FileDemo.java
+package streamExample;
+
 import java.io.File;
 
 public class FileDemo {
     public static void main(String[] args) {
         // 创建一个文件对象（注意：这只是建立了联系，不代表文件一定存在）
-        File file = new File("users.txt");
-        
+        File file = new File("cards.txt");
+
         if (file.exists()) {
             System.out.println("找到名单文件了！大小是：" + file.length() + " 字节");
         } else {
@@ -14946,28 +14965,6 @@ public class FileDemo {
         }
     }
 }
-----
-</t>
-<t tx="swot.20260216123721.1">@language java
-[source,java]
-----
-import java.io.*;
-
-public class SaveUserDemo {
-    public static void main(String[] args) {
-        // try-with-resources 语法：括号里的资源会自动关闭，省心省力
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
-            // 模拟存入一个用户信息
-            writer.write("001,张三,CARD_888");
-            writer.newLine(); // 换行，准备写下一条记录
-            System.out.println("保存成功！用户信息已写入硬盘。");
-        }
-        catch (IOException e) {
-            System.err.println("发生意外！文件写不进去了：" + e.getMessage());
-        }
-    }
-}
-----
 </t>
 <t tx="swot.20260216133002.1">@language asciidoc
 ****
@@ -22148,6 +22145,26 @@ package HashMapExample;
 &lt;1&gt; 定义 HashMap 变量 whitelistMap
 &lt;2&gt; 将新门禁卡存入 变量 whitelistMap
 &lt;3&gt; 利用 HashMap 快速检索是否存在某个卡 #(这是使用的重点代码！)#
+</t>
+<t tx="swot.20260310220137.1" _mod_time="4741da6c0915e4cc8b2e">@language java
+import java.io.*;
+
+public class SaveUserDemo {
+    public static void main(String[] args) {
+        // try-with-resources 语法：括号里的资源会自动关闭，省心省力
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
+            // 模拟存入一个用户信息
+            writer.write("001,张三,CARD_888");
+            writer.newLine(); // 换行，准备写下一条记录
+            System.out.println("保存成功！用户信息已写入硬盘。");
+        }
+        catch (IOException e) {
+            System.err.println("发生意外！文件写不进去了：" + e.getMessage());
+        }
+    }
+}
+</t>
+<t tx="swot.20260311074341.1" _mod_time="4741da6c2b716be04a2e">这是一个测试用的文本文件
 </t>
 </tnodes>
 </leo_file>
