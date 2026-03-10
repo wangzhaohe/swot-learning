@@ -1586,9 +1586,9 @@ public class Run {
 [upperalpha]
 . 知识点说明
 
-* **throw**：手动抛出一个异常。比如：我发现你余额不足，我手动报个错。
+* **throw**：手动抛出一个异常。比如：我发现卡有问题，手动报个错。
 
-* **throws**：写在方法头上，告诉调用者：“我这可能会出事，你自己看着办”。
+* **throws**：写在方法头上，告诉调用者：“我这可能会出事，你自己看着办，让调用者去处理产生的异常”。
 
 
 . 代码举例（模拟门禁权限检查）
@@ -1638,10 +1638,10 @@ abstract class BaseDoorCard {
      * 抽象类可以拥有具体实现的方法。
      */
     // -- New -- Added throws
-    public boolean validate() throws Exception {
+    public boolean validate() throws Exception {  // 给调用者抛出异常 <4>
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         if (this.serialNumber.length() != 8) {
-            throw new Exception(
+            throw new Exception(    // 主动抛出异常
                 "校验失败：卡号 [" + this.serialNumber + "] 格式非法，拒绝通行！"
             );
         }
@@ -1669,7 +1669,7 @@ class StudentCard extends BaseDoorCard implements Payable {
     }
 
     @Override
-    public boolean validate() throws Exception {  // --new-- add throws
+    public boolean validate() throws Exception {  // --new-- add throws <3> 
         boolean isValid = super.validate();  // 这里可能会抛出异常，中断后续逻辑
         if (isValid) {
             showAccessScope(); // 执行个性化权限展示
@@ -1713,11 +1713,11 @@ class CardReader {
         // 1. 【时间记录】记录刷卡的“那一瞬间”
         // yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String timeLog = sdf.format(new Date());
+        String timeLog = sdf.format(new Date());  // 2026-03-10 08:30:04
         System.out.println("\n[" + timeLog + "] 读卡器感应中...");
 
         try {
-            card.validate();
+            card.validate();  // 调用卡的验证逻辑，属于调用者 <2>
         } catch(Exception e) {
             // 捕获 validate() 抛出的异常
             System.out.println("【安全拦截】检测到异常：" + e.getMessage());
@@ -1739,14 +1739,14 @@ package ExceptionThrowsExample;
 
 public class Run {
     public static void main(String[] args) {
-        CardReader reader = new CardReader();
+        CardReader reader = new CardReader();  // 创建读卡器对象
 
         // 场景 A：正常卡片
         reader.readCard(new StudentCard("  S1234567  ", "小明"));
         System.out.println("------");
 
         // 场景 B：非法长度卡片
-        reader.readCard(new StudentCard("B99", "非法入侵者"));
+        reader.readCard(new StudentCard("B99", "非法卡号"));  // <1>
         System.out.println("------");
 
         // 场景 C：传入 null (模拟硬件未感应到对象)
@@ -1759,6 +1759,40 @@ public class Run {
 }
 ----
 ====
+
+汇总异常层层传递的过程：
+
+<1> readCard() 读取非法卡号，调用卡对象 validate()。
+<2> card.validate() 验证卡号，调用子类 validate()。
+<3> StudentCard.validate() 子类验证卡号，调用父类 validate()。
+<4> BaseDoorCard.validate() 父类验证卡号，抛出异常。
+
+
+.汇总异常层层传递的过程图：
+[mermaid, target=img/mermaid-2026-03-10-085836, format=svg]
+....
+sequenceDiagram
+    participant Caller as 调用者
+    participant Card as 卡对象
+    participant StudentCard as StudentCard子类
+    participant BaseDoorCard as BaseDoorCard父类
+
+    Note over Caller,BaseDoorCard: readCard()读取非法卡号流程
+
+    Caller->>Card: readCard() 读取非法卡号
+    Card->>StudentCard: card.validate() 验证卡号
+    StudentCard->>BaseDoorCard: StudentCard.validate()调用父类validate()
+    BaseDoorCard->>BaseDoorCard: BaseDoorCard.validate()验证卡号
+    BaseDoorCard-->>BaseDoorCard: 抛出异常
+    BaseDoorCard-->>StudentCard: 异常向上传递
+    StudentCard-->>Card: 异常向上传递
+    Card-->>Caller: 异常返回
+....
+
+
+TIP: 现在的 readCard() 参数是 BaseDoorCard，不太符合人的逻辑思维。
+人的正常思维应该是读卡器只接收字符串，这样才更合理。
+我们为了演示方便，才将 BaseDoorCard 放入读卡器的参数中。
 
 === 自定义异常 —— “定制报警器”
 为什么要学？
@@ -2183,61 +2217,43 @@ public class Run {
 
 TIP: **选择理由**：如果只是想按顺序存储并遍历名单，使用 `ArrayList` 是效率最高且最简单直观的选择 。
 
-=== HashMap —— “瞬间定位的电子名册”
+=== HashMap —— “瞬间定位的电子名册”  -> 结构大改进，真正符合人类思维的开发架构！
+// 越来越发现 AI 给不出人类想要的代码架构逻辑，逻辑很拧巴，需要多次更改、调试才行。
 [upperalpha]
 . 知识点说明
-* 键值对 (Key-Value)：`HashMap` 存储的是成对的信息。
-  ** **Key (键)**：卡号（唯一且不重复）。
-  ** **Value (值)**：对应的卡片对象（包含姓名、权限等）。
-* 检索效率：它不是按顺序找，而是通过哈希算法“瞬间抵达”。无论名单里有 10 个人还是 10 万个人，查找速度几乎是一样的。
+  * 键值对 (Key-Value)：`HashMap` 存储的是成对的信息。
+    ** **Key (键)**：卡号（唯一且不重复）。
+    ** **Value (值)**：对应的卡片对象（包含姓名、权限等）。
+  * 检索效率：它不是按顺序找，而是通过哈希算法“瞬间抵达”。无论名单里有 10 个人还是 10 万个人，查找速度几乎是一样的。
 
 
 . 代码重构：利用 HashMap 升级管理系统
 +
 [source,java]
 ----
-import java.util.HashMap;
+// @clean code/testBasicSyntax/src/HashMapExample/Run.java
+package HashMapExample;
 
-/**
- * 门禁管理系统（高性能版）
- */
-class AccessControlSystem {
-    // 使用 HashMap 存储，Key 是卡号(String)，Value 是卡片对象(AccessCard)
-    private HashMap<String, AccessCard> whitelistMap = new HashMap<>();
-    private DoorReader reader = new DoorReader();
-
-    // 录入新卡片：关联卡号与对象
-    public void registerCard(String cardId, AccessCard card) {
-        whitelistMap.put(cardId, card);
-        System.out.println("系统消息：卡号 [" + cardId + "] 授权成功。");
-    }
-
-    // 模拟真实刷卡：根据输入的卡号瞬间检索
-    public void onSwipe(String inputId) {
-        System.out.println("\n--- 读卡器感应中，卡号：" + inputId + " ---");
-        
-        // 瞬间判断卡号是否存在
-        if (whitelistMap.containsKey(inputId)) {
-            AccessCard card = whitelistMap.get(inputId); // 毫秒级提取
-            reader.readCard(card);
-        } else {
-            System.out.println("【警告】校验失败：此卡未在系统注册！");
-        }
-    }
-}
-// --- 运行测试 ---
-public class Main {
+public class Run {
     public static void main(String[] args) {
+        // 1. 软件系统初始化
         AccessControlSystem system = new AccessControlSystem();
+        system.registerCard(new StudentCard("S1234567", "小明")); // 正常卡
+        system.registerCard(new StudentCard("BAD-99", "异常者")); // 格式错误卡
 
-        // 1. 系统初始化（录入数据）
-        system.registerCard("CARD_001", new StudentCard());
-        system.registerCard("ADMIN_999", new AdminCard());
+        // 2. 硬件设备初始化 (它是独立的)
+        CardReader reader = new CardReader();
 
-        // 2. 模拟真实刷卡场景
-        system.onSwipe("CARD_001");   // 合法学生卡
-        system.onSwipe("ADMIN_999");  // 合法管理员卡
-        system.onSwipe("UNKNOWN_666");// 非法卡片
+        // 3. 模拟现实中的物理交互流
+        // 硬件读到信号 -> 得到 ID -> 交给系统处理
+        String idFromHardware = reader.readPhysicalSignal("S1234567");
+        system.processAccessRequest(idFromHardware);
+
+        String idFromBadCard = reader.readPhysicalSignal("BAD-99");
+        system.processAccessRequest(idFromBadCard);
+
+        String unknownId = reader.readPhysicalSignal("UNKNOWN-001");
+        system.processAccessRequest(unknownId);
     }
 }
 ----
@@ -2245,7 +2261,8 @@ public class Main {
 .架构思考：ArrayList 与 HashMap 的协同
 [TIP]
 ====
-在门禁系统中，我们通常会同时使用两者 ：
+在门禁系统中，我们通常会同时使用两者:
+
 * **ArrayList**：用于“批量展示”或“导出”所有名单 。
 * **HashMap**：用于“刷卡瞬间”的极速比对校验 。
 ====
