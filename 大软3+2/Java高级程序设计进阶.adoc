@@ -2607,6 +2607,9 @@ public class FileDemo {
 }
 ----
 
+您可以创建一个空的文本文件进行测试。如：
+code/testBasicSyntax/cards.txt
+
 === 字符缓冲流 —— “高效搬运工”
 知识点说明
 
@@ -2614,7 +2617,8 @@ public class FileDemo {
 
 * **BufferedWriter | BufferedReader**：像配了一个大水桶（缓冲区）。先把水倒满一桶，再一口气搬走，效率极高。
 
-==== class SaveUserDemo 代码举例（保存用户信息到 txt）
+
+.代码举例（保存用户信息到 txt）
 [source,java]
 ----
 import java.io.*;
@@ -2633,9 +2637,6 @@ public class SaveUserDemo {
         }
     }
 }
-----
-
-==== 补充知识: Java I/O 核心组件解析：File, FileWriter 与 BufferedWriter
 ****
 [upperalpha]
 1. 角色分工与类关系 (Decorator Pattern)
@@ -2672,11 +2673,11 @@ public class SaveUserDemo {
 // 所有的流创建都放在 try (...) 内部
 // 执行完毕后，Java 会自动调用 close()，即使中间出了异常也会关
 try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
-
+    
     writer.write("新用户：张三");
     writer.newLine(); // BufferedWriter 特有的换行方法，非常好用
     writer.write("新用户：李四");
-
+    
 } catch (IOException e) {
     // 捕获可能的文件读写异常
     e.printStackTrace();
@@ -2688,6 +2689,7 @@ try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true
 .. **便捷路径**：`new FileWriter("users.txt")` 这种写法会在底层自动为你创建一个 `new File("users.txt")`。
 .. **追加数据**：第二个参数 `true` 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。
 ****
+----
 
 === 序列化 —— “数据冷冻技术”
 **1. 知识点说明**

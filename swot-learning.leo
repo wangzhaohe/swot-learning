@@ -14872,6 +14872,9 @@ TIP: **选择理由**：如果只是想按顺序存储并遍历名单，使用 `
 ----
 @others
 ----
+
+您可以创建一个空的文本文件进行测试。如：
+code/testBasicSyntax/cards.txt
 </t>
 <t tx="swot.20260216115302.1">知识点说明
 
@@ -14947,7 +14950,7 @@ public void loadUsers() throws DoorSystemException {
 这就是为什么我们后面需要学习 **2.6 JDBC 数据库编程** 的原因——引入专业的“数据仓库”。
 ****
 </t>
-<t tx="swot.20260216123452.1" _mod_time="4741da6c08c1bf46c32e">@language java
+<t tx="swot.20260216123452.1" _mod_time="4741da6c2bb00058632e">@language java
 // @clean code/testBasicSyntax/src/streamExample/FileDemo.java
 package streamExample;
 
@@ -22164,7 +22167,6 @@ public class SaveUserDemo {
     }
 }
 </t>
-<t tx="swot.20260311074341.1" _mod_time="4741da6c2b716be04a2e">这是一个测试用的文本文件
-</t>
+<t tx="swot.20260311074341.1" _mod_time="4741da6c2bcb74c3cf2e"></t>
 </tnodes>
 </leo_file>
