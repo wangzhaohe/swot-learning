@@ -38,10 +38,10 @@ abstract class BaseDoorCard {
      * 抽象类可以拥有具体实现的方法。
      */
     // -- New -- Added throws
-    public boolean validate() throws Exception {
+    public boolean validate() throws Exception {  // 给调用者抛出异常 <4>
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         if (this.serialNumber.length() != 8) {
-            throw new Exception(
+            throw new Exception(    // 主动抛出异常
                 "校验失败：卡号 [" + this.serialNumber + "] 格式非法，拒绝通行！"
             );
         }
@@ -69,7 +69,7 @@ class StudentCard extends BaseDoorCard implements Payable {
     }
 
     @Override
-    public boolean validate() throws Exception {  // --new-- add throws
+    public boolean validate() throws Exception {  // --new-- add throws <3> 
         boolean isValid = super.validate();  // 这里可能会抛出异常，中断后续逻辑
         if (isValid) {
             showAccessScope(); // 执行个性化权限展示
@@ -113,11 +113,11 @@ class CardReader {
         // 1. 【时间记录】记录刷卡的“那一瞬间”
         // yyyy-MM-dd HH:mm:ss 是固定写法，将 Date 转换为人能看懂的文字
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String timeLog = sdf.format(new Date());
+        String timeLog = sdf.format(new Date());  // 2026-03-10 08:30:04
         System.out.println("\n[" + timeLog + "] 读卡器感应中...");
 
         try {
-            card.validate();
+            card.validate();  // 调用卡的验证逻辑，属于调用者 <2>
         } catch(Exception e) {
             // 捕获 validate() 抛出的异常
             System.out.println("【安全拦截】检测到异常：" + e.getMessage());
