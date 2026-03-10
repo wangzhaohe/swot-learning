@@ -37,7 +37,7 @@ abstract class BaseDoorCard {
      * 抽象类可以拥有具体实现的方法。
      */
     // -- New -- Added 自定义异常
-    public boolean validate() throws DoorException {
+    public boolean validate() throws DoorException {  // <3>
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         if (this.serialNumber.length() != 8) {
             // 使用自定义异常代替通用异常
@@ -67,7 +67,7 @@ class StudentCard extends BaseDoorCard implements Payable {
     }
 
     @Override
-    public boolean validate() throws DoorException {  // --new-- add 自定义异常
+    public boolean validate() throws DoorException {  // --new-- add 自定义异常 <2>
         boolean isValid = super.validate();  // 这里可能会抛出异常，中断后续逻辑
         if (isValid) {
             showAccessScope(); // 执行个性化权限展示
@@ -116,7 +116,7 @@ class CardReader {
 
         try {
             card.validate();
-        } catch(DoorException e) {
+        } catch(DoorException e) {  // <1>
             // 捕获业务异常
             System.out.println("【安全拦截】门禁逻辑错误：" + e.getMessage());
         } catch(Exception e) {
