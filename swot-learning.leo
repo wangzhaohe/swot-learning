@@ -506,7 +506,23 @@
 <v t="swot.20260309132855.1"><vh>@clean code/testBasicSyntax/src/ArrayListExample/Run.java</vh></v>
 </v>
 <v t="swot.20260303233729.1"><vh>HashMap —— “瞬间定位的电子名册”  -&gt; 结构大改进，真正符合人类思维的开发架构！</vh>
+<v t="swot.20260310204333.1"><vh>支持类 (从上面代码 clone 而来，无新功能)</vh>
+<v t="swot.20260310174115.1"><vh>@clean code/testBasicSyntax/src/HashMapExample/DoorException.java</vh></v>
+<v t="swot.20260310174233.1"><vh>@clean code/testBasicSyntax/src/HashMapExample/Card.java</vh>
+<v t="swot.20260308223507.1"></v>
+<v t="swot.20260308224416.1"></v>
+<v t="swot.20260308224546.1"></v>
+<v t="swot.20260304221446.1"></v>
+</v>
+<v t="swot.20260310172714.1"><vh>@clean code/testBasicSyntax/src/HashMapExample/CardReader.java</vh></v>
+</v>
+<v t="swot.20260310204346.1"><vh>新增类</vh>
 <v t="swot.20260310081615.1"><vh>@clean code/testBasicSyntax/src/HashMapExample/Run.java</vh></v>
+<v t="swot.20260310164932.1"><vh>@clean code/testBasicSyntax/src/HashMapExample/AccessControlSystem.java</vh>
+<v t="swot.20260310165817.1"><vh>registerCard(BaseDoorCard card)</vh></v>
+<v t="swot.20260310165903.1"><vh>processAccessRequest(String cardId)</vh></v>
+</v>
+</v>
 </v>
 <v t="swot.20260216103228.1"><vh>使用小结</vh></v>
 </v>
@@ -14753,7 +14769,7 @@ sequenceDiagram
     activate SC
     activate BC
 
-    Note over BC: &lt;3&gt; BaseDoorCard.validate() 抛出异常逻辑
+    Note over BC: (3) BaseDoorCard.validate() 抛出异常逻辑
     BC--&gt;&gt;DE: throw new DoorException(...)
     activate DE
    
@@ -14761,15 +14777,15 @@ sequenceDiagram
     deactivate BC
     deactivate DE
 
-    Note over SC: &lt;2&gt; StudentCard.validate() 异常向上抛出
+    Note over SC: (2) StudentCard.validate() 异常向上抛出
     SC--&gt;&gt;CR: 异常继续向上抛出
     deactivate SC
 
-    Note over CR: &lt;1&gt; CardReader.readCard() 捕获异常
+    Note over CR: (1) CardReader.readCard() 捕获异常
     CR-&gt;&gt;CR: catch (DoorException e) 处理异常
     deactivate CR
 
-    Note right of DE: &lt;4&gt; 自定义异常类 DoorException
+    Note right of DE: (4) 自定义异常类 DoorException
 ....
 endif::[]
 
@@ -17783,20 +17799,14 @@ IMPORTANT: 不是所有的项目必须要严格地进行拆包，避免过度设
 <t tx="swot.20260303233432.1"></t>
 <t tx="swot.20260303233729.1">@language asciidoc
 // 越来越发现 AI 给不出人类想要的代码架构逻辑，逻辑很拧巴，需要多次更改、调试才行。
-[upperalpha]
-. 知识点说明
-  * 键值对 (Key-Value)：`HashMap` 存储的是成对的信息。
-    ** **Key (键)**：卡号（唯一且不重复）。
-    ** **Value (值)**：对应的卡片对象（包含姓名、权限等）。
-  * 检索效率：它不是按顺序找，而是通过哈希算法“瞬间抵达”。无论名单里有 10 个人还是 10 万个人，查找速度几乎是一样的。
+知识点说明
 
+* 键值对 (Key-Value)：`HashMap` 存储的是成对的信息。
+  ** **Key (键)**：卡号（唯一且不重复）。
+  ** **Value (值)**：对应的卡片对象（包含姓名、权限等）。
 
-. 代码重构：利用 HashMap 升级管理系统
-+
-[source,java]
-----
-@others
-----
+* 检索效率：它不是按顺序找，而是通过哈希算法“瞬间抵达”。无论名单里有 10 个人还是 10 万个人，查找速度几乎是一样的。
+
 
 .架构思考：ArrayList 与 HashMap 的协同
 [TIP]
@@ -18298,6 +18308,7 @@ public class Run {
 interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
+
 </t>
 <t tx="swot.20260304221906.1">@language java
 /**
@@ -18609,7 +18620,7 @@ package abstractionExample; // 必须匹配文件夹的名字
 @others
 
 </t>
-<t tx="swot.20260306151932.1" _mod_time="4741da6b31a3757df02e">@language java
+<t tx="swot.20260306151932.1" _mod_time="4741da6c050aeb51ea2e">@language java
 // @clean code/testBasicSyntax/src/interfaceExample/Card.java
 // 通过声明包，解决类名冲突问题
 package interfaceExample; // 必须匹配文件夹的名字
@@ -18769,7 +18780,7 @@ public class Run {
     }
 }
 </t>
-<t tx="swot.20260307175925.1" _mod_time="4741da6b8e1523ce902e">@language java
+<t tx="swot.20260307175925.1" _mod_time="4741da6c050aec2cd32e">@language java
 // @clean code/testBasicSyntax/src/stringDateExample/Card.java
 package stringDateExample;
 
@@ -19009,7 +19020,7 @@ ls -li /path/to/file1 /path/to/file2
 +
 If the first column (inode) matches across all files, they are hard links to the same data.
 </t>
-<t tx="swot.20260308192252.1" _mod_time="4741da6b9b3b03f1eb2e">@language java
+<t tx="swot.20260308192252.1" _mod_time="4741da6c050aecf1252e">@language java
 // @clean code/testBasicSyntax/src/ExceptionExample/Card.java
 package ExceptionTryExample;
 
@@ -19058,7 +19069,7 @@ class CardReader {
     }
 }
 </t>
-<t tx="swot.20260308212431.1" _mod_time="4741da6bda69e5a97e2e">@language java
+<t tx="swot.20260308212431.1" _mod_time="4741da6c050aedb3712e">@language java
 // @clean code/testBasicSyntax/src/ExceptionThrowsExample/Card.java
 package ExceptionThrowsExample;
 
@@ -19223,7 +19234,7 @@ public class Run {
     }
 }
 </t>
-<t tx="swot.20260308221723.1" _mod_time="4741da6bef583258e62e">@language java
+<t tx="swot.20260308221723.1" _mod_time="4741da6c050aee76be2e">@language java
 // @clean code/testBasicSyntax/src/ExceptionSelfdefineExample/Card.java
 package ExceptionSelfdefineExample;
 
@@ -19310,7 +19321,9 @@ abstract class BaseDoorCard {
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         if (this.serialNumber.length() != 8) {
             // 使用自定义异常代替通用异常
-            throw new DoorException("校验失败：卡号 [" + this.serialNumber + "] 格式非法！");
+            throw new DoorException(
+                "校验失败：卡号 [" + this.serialNumber + "] 格式非法！"
+            );
         }
         System.out.println("物理校验通过。");
         return true;
@@ -19334,7 +19347,9 @@ class StudentCard extends BaseDoorCard implements Payable {
 
     @Override
     public void pay(double amount) {
-        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+        System.out.println(
+            "【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。"
+        );
     }
 
     @Override
@@ -19354,6 +19369,7 @@ class StudentCard extends BaseDoorCard implements Payable {
 </t>
 <t tx="swot.20260308224546.1">@language java
 class AdminCard extends BaseDoorCard {
+
     public AdminCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName);
     }
@@ -21989,7 +22005,7 @@ import java.util.ArrayList;
         }
     }
 }</t>
-<t tx="swot.20260309230936.1" _mod_time="4741da6bef583826582e">@language java
+<t tx="swot.20260309230936.1" _mod_time="4741da6c050aefcb512e">@language java
 // @clean code/testBasicSyntax/src/ArrayListExample/Card.java
 package ArrayListExample;
 
@@ -22293,6 +22309,114 @@ public class Run {
     }
 }
 
+</t>
+<t tx="swot.20260310164932.1" _mod_time="4741da6c0454142c9f2e">@language java
+// @clean code/testBasicSyntax/src/HashMapExample/AccessControlSystem.java
+package HashMapExample;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+class AccessControlSystem {
+
+    // ArrayList：用于名单的顺序维护和批量管理
+    private ArrayList&lt;BaseDoorCard&gt; whitelist = new ArrayList&lt;&gt;();
+
+    // HashMap：用于刷卡瞬间的 O(1) 极速检索 &lt;1&gt;
+    private HashMap&lt;String, BaseDoorCard&gt; whitelistMap = new HashMap&lt;&gt;();
+
+    @others
+}
+</t>
+<t tx="swot.20260310165817.1">public void registerCard(BaseDoorCard card) {
+
+    whitelist.add(card); // 添加到列表
+    whitelistMap.put(card.getSerialNumber(), card); // 建立键值映射 &lt;2&gt;
+
+    System.out.println("系统：已授权 " + card.getOwnerName() +
+                       " (ID: " + card.getSerialNumber() + ")"
+    );
+}
+</t>
+<t tx="swot.20260310165903.1">/**
+ * 核心校验逻辑：接收纯文本 ID，返回校验结果
+ */
+public void processAccessRequest(String cardId) {
+
+    System.out.println("\n[系统层] 接收到 ID: " + cardId + " 的通行请求...");
+
+    // 1. 利用 HashMap 快速检索是否存在
+    BaseDoorCard card = whitelistMap.get(cardId);  // &lt;3&gt;
+
+    if (card == null) {
+        System.out.println("【拒绝】此卡未在系统中登记。");
+        return;
+    }
+
+    try {
+        // 2. 触发多态校验逻辑
+        if (card.validate()) {
+            System.out.println("【准许】持卡人：" + card.getOwnerName());
+            card.showAccessScope(); // 个性化权限展示
+        }
+    } catch (DoorException e) {
+        System.out.println("【拦截】异常卡片：" + e.getMessage());
+    }
+}
+</t>
+<t tx="swot.20260310172714.1" _mod_time="4741da6bf9188092fe2e">@language java
+// @clean code/testBasicSyntax/src/HashMapExample/CardReader.java
+package HashMapExample;
+
+/**
+ * 硬件读卡器：仅模拟物理信号采集
+ * 不依赖任何业务系统
+ */
+class CardReader {
+    public String readPhysicalSignal(String simulatedInput) {
+        System.out.println("[硬件层] 传感器感应到物理信号...");
+        // 模拟磁条或芯片读取过程，返回原始 ID 字符串
+        return simulatedInput;
+    }
+}
+</t>
+<t tx="swot.20260310174115.1" _mod_time="4741da6bf9d83d7b9f2e">@language java
+// @clean code/testBasicSyntax/src/ExceptionSelfdefineExample/DoorException.java
+package HashMapExample;
+
+/**
+ * 自定义异常：专门处理门禁系统的异常情况
+ */
+public class DoorException extends Exception {
+    public DoorException(String message) {
+        super(message); // 把错误信息传给父类去处理
+    }
+}
+</t>
+<t tx="swot.20260310174233.1" _mod_time="4741da6c050af13e0c2e">@language java
+// @clean code/testBasicSyntax/src/HashMapExample/Card.java
+package HashMapExample;
+
+@others
+</t>
+<t tx="swot.20260310204333.1">.DoorException.java / Card.java / CardReader.java
+[%collapsible]
+====
+[source,java]
+----
+@others
+----
+====
+</t>
+<t tx="swot.20260310204346.1">.代码重构：利用 HashMap 升级管理系统
+[source,java]
+----
+@others
+----
+
+&lt;1&gt; 定义 HashMap 变量 whitelistMap
+&lt;2&gt; 将新门禁卡存入 变量 whitelistMap
+&lt;3&gt; 利用 HashMap 快速检索是否存在某个卡 #(这是使用的重点代码！)#
 </t>
 </tnodes>
 </leo_file>
