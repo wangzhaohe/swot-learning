@@ -41,7 +41,9 @@ abstract class BaseDoorCard {
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         if (this.serialNumber.length() != 8) {
             // 使用自定义异常代替通用异常
-            throw new DoorException("校验失败：卡号 [" + this.serialNumber + "] 格式非法！");
+            throw new DoorException(
+                "校验失败：卡号 [" + this.serialNumber + "] 格式非法！"
+            );
         }
         System.out.println("物理校验通过。");
         return true;
@@ -63,7 +65,9 @@ class StudentCard extends BaseDoorCard implements Payable {
 
     @Override
     public void pay(double amount) {
-        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+        System.out.println(
+            "【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。"
+        );
     }
 
     @Override
@@ -81,6 +85,7 @@ class StudentCard extends BaseDoorCard implements Payable {
     }
 }
 class AdminCard extends BaseDoorCard {
+
     public AdminCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName);
     }
@@ -134,4 +139,5 @@ class CardReader {
 interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
+
 

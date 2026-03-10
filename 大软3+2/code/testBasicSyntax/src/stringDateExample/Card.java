@@ -138,3 +138,4 @@ class CardReader {
 interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
+

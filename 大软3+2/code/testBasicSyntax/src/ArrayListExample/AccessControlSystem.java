@@ -41,7 +41,7 @@ class CardReader {
 
         try {
             card.validate();
-        } catch(DoorException e) {
+        } catch(DoorException e) {  // <1>
             // 捕获业务异常
             System.out.println("【安全拦截】门禁逻辑错误：" + e.getMessage());
         } catch(Exception e) {

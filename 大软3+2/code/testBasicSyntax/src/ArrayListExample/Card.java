@@ -34,11 +34,13 @@ abstract class BaseDoorCard {
      * 抽象类可以拥有具体实现的方法。
      */
     // -- New -- Added 自定义异常
-    public boolean validate() throws DoorException {
+    public boolean validate() throws DoorException {  // <3>
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         if (this.serialNumber.length() != 8) {
             // 使用自定义异常代替通用异常
-            throw new DoorException("校验失败：卡号 [" + this.serialNumber + "] 格式非法！");
+            throw new DoorException(
+                "校验失败：卡号 [" + this.serialNumber + "] 格式非法！"
+            );
         }
         System.out.println("物理校验通过。");
         return true;
@@ -60,11 +62,13 @@ class StudentCard extends BaseDoorCard implements Payable {
 
     @Override
     public void pay(double amount) {
-        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+        System.out.println(
+            "【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。"
+        );
     }
 
     @Override
-    public boolean validate() throws DoorException {  // --new-- add 自定义异常
+    public boolean validate() throws DoorException {  // --new-- add 自定义异常 <2>
         boolean isValid = super.validate();  // 这里可能会抛出异常，中断后续逻辑
         if (isValid) {
             showAccessScope(); // 执行个性化权限展示
@@ -78,6 +82,7 @@ class StudentCard extends BaseDoorCard implements Payable {
     }
 }
 class AdminCard extends BaseDoorCard {
+
     public AdminCard(String serialNumber, String ownerName) {
         super(serialNumber, ownerName);
     }
@@ -102,3 +107,4 @@ class AdminCard extends BaseDoorCard {
 interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
+
