@@ -1836,7 +1836,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 /**
- * 类名：BaseDoorCardAbs (抽象类)
+ * 类名：BaseDoorCard (抽象类)
  * 演化点：使用了 abstract 关键字。
  * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
  * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
@@ -2335,7 +2335,7 @@ public class DoorException extends Exception {
 package HashMapExample;
 
 /**
- * 类名：BaseDoorCardAbs (抽象类)
+ * 类名：BaseDoorCard (抽象类)
  * 演化点：使用了 abstract 关键字。
  * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
  * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
@@ -2609,7 +2609,7 @@ public class FileDemo {
         if (file.exists()) {
             System.out.println("找到名单文件了！大小是：" + file.length() + " 字节");
         } else {
-            System.out.println("找不到文件，系统稍后将自动新建。");
+            System.out.println("找不到文件。");
         }
     }
 }
@@ -2627,13 +2627,13 @@ code/testBasicSyntax/cards.txt
 |===
 | 类名 | 角色 | 核心职责
 
-| `File`
+| `File` 已学
 | **地址标签**
 | 仅代表磁盘上的路径或属性，不具备读写数据的能力。
 
 | `FileWriter / FileReader`
 | **基础搬运工**
-| 字符流写入器。负责建立连接并将字符一个个“敲”入硬盘。
+| 字符流写入器。负责建立连接并将字符一个个“敲”入硬盘。FileReader 同理。
 
 | `BufferedWriter / BufferedReader`
 | **集装箱/缓冲区**
@@ -2641,21 +2641,19 @@ code/testBasicSyntax/cards.txt
 |===
 
 
-. “小水桶”实验：为什么需要缓冲区？
+. “打水”实验：为什么需要缓冲区？
 * **直接写入 (`FileWriter`)**：
-  如同用 **勺子** 舀水，每舀一勺都要跑一趟院子（触发一次磁盘 I/O），效率极低。
+  如同用 **勺子** 舀水，每舀一勺都要跑一趟将水倒入水缸（触发一次磁盘 I/O），效率极低。
 * **缓冲写入 (`BufferedWriter`)**：
-  如同给勺子配了一个 **水桶**。先将数据存在内存里，等桶装满了再跑一趟院子，极大地减少了往返次数。
+  如同给勺子配了一个 **水桶**。先将数据存在内存里，等桶装满了再跑一趟将水倒入水缸，极大地减少了往返次数。
 
 
-. 核心要点
-.. **自动关闭**：只要写在 `try(...)` 里的资源，不需要手动写 `writer.close()`。
-.. **便捷路径**：`new FileWriter("cards03.txt")` 这种写法会在底层自动为你创建一个 `new File("cards03.txt")`。
+. 代码核心要点
+.. **自动关闭**：最好将 BufferedWriter 使用的资源写在 `try` 里，就不需要手动再写 `BufferedWriter.close()`。
+.. **便捷路径**：`new FileWriter("cards02.txt")` 这种写法会在底层自动为你创建一个 `new File("cards02.txt")`。
 .. **追加数据**：第二个参数 `true` 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。
 
-
-. 代码举例
-+
+==== BufferedWriter 代码举例
 [source,java]
 ----
 // @clean code/testBasicSyntax/src/streamExample/SaveCardDemo.java
@@ -2670,7 +2668,7 @@ public class SaveCardDemo {
                                      new FileWriter("cards02.txt", true))) {
             // 模拟存入一个用户信息
             writer.write("小明,S1234567");
-            writer.newLine(); // 换行，准备写下一条记录
+            writer.newLine(); // 支持跨平台自动加入相应的换行
             System.out.println("保存成功！用户信息已写入硬盘。");
         }
         catch (IOException e) {
@@ -2683,50 +2681,348 @@ public class SaveCardDemo {
 .自行扩展功能
 TIP: 可以在前面的 `AccessControlSystem.registerCard()` 中调用该例子的逻辑，把门禁卡信息写入本地文件中。
 
+==== BufferedReader 代码举例
+我们将之前学的 **DoorSystemException** 融入进来。如果读取文件失败，直接上报门禁系统异常。
+
+[source,java]
+----
+// @clean code/testBasicSyntax/src/streamExample/ReadCardDemo.java
+package streamExample;
+import java.io.*;
+
+public class ReadCardDemo {
+
+    public static void read() throws DoorException {
+        // Try-with-resources 语法在 JDK 17 中完全支持
+        try (BufferedReader reader = new BufferedReader(new FileReader("cards02.txt"))) {
+            String line = reader.readLine();
+            if (line == null) {
+                // 手动抛出你定义的自定义异常
+                throw new DoorException("读取失败：名单文件为空！");
+            }
+            System.out.println("成功读取到数据：" + line);
+        } catch (IOException e) {
+            // 将底层的 IOException 包装成业务层的 DoorException
+            throw new DoorException("读取异常：磁盘损坏或文件丢失");
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            read();
+        } catch (DoorException e) {
+            System.err.println("捕获到业务异常: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
+// @clean code/testBasicSyntax/src/ExceptionSelfdefineExample/DoorException.java
+package streamExample;
+
+/**
+ * 自定义异常：专门处理门禁系统的异常情况
+ */
+public class DoorException extends Exception {
+    public DoorException(String message) {
+        super(message); // 把错误信息传给父类去处理
+    }
+}
+----
+
 === 序列化 —— “数据冷冻技术”
 [upperalpha]
 . 知识点说明
 +
-如果想直接把一整个 `User` 对象（包含姓名、卡号、状态等）原封不动“冻结”并存进硬盘，就需要**序列化**。
+如果想直接把一整个 `StudentCard` 对象（包含姓名、卡号、状态等）原封不动“冻结”并存进硬盘，就需要**序列化**。
++
+序列化好处是允许将 Java 对象转换为字节序列，从而可以将其保存到磁盘或通过网络传输，并在以后恢复为完全相同的对象。
+
 
 . 核心步骤
-..  **盖章认证**：在 `User` 类后面加上 `implements Serializable`。这相当于告诉 Java：“这个类是安全的，可以转成二进制”。
+..  **盖章认证**：在 `StudentCard` 类后面加上 `implements Serializable`。这相当于告诉 Java：“这个类是安全的，可以转成二进制”。我们可以写在其基类 `BaseDoorCard` 上，这样可以应用于所有类型的卡。
 ..  **对象流**：使用 `ObjectOutputStream` 将对象写入文件。
+..  **对象流**：使用 `ObjectInputStream` 将对象从文件读出。
+
 
 . 代码例子
 
 [source,java]
 ----
+// @clean code/testBasicSyntax/src/streamExample/DoorException.java
+package streamExample;
+
+/**
+ * 自定义异常：专门处理门禁系统的异常情况
+ */
+public class DoorException extends Exception {
+    public DoorException(String message) {
+        super(message); // 把错误信息传给父类去处理
+    }
+}
+// @clean code/testBasicSyntax/src/streamExample/Card.java
+package streamExample;
+
 import java.io.Serializable;
 
-public class User implements Serializable {
-    // 即使这里不写任何代码，只要加了 implements Serializable 就能“冷冻保存”了
-    private String name;
-    private String cardId;
-    // ... 其他代码同实验二
-}
-----
+/**
+ * 类名：BaseDoorCard (抽象类)
+ * 演化点：使用了 abstract 关键字。
+ * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
+ * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
+ * 3. validate() add throws
+ * 4. 必须实现 Serializable 接口才能进行序列化
+ */
+abstract class BaseDoorCard implements Serializable {  // <1>
+    private final String serialNumber;  // 初始化后不可再变
+    private String ownerName;
 
-=== 实战演示：读取文件并抛出自定义异常
-我们将之前学的 **DoorSystemException** 融入进来。如果读取文件失败，直接上报门禁系统异常。
-
-[source,java]
-----
-public void loadUsers() throws DoorSystemException {
-    try (BufferedReader reader = new BufferedReader(new FileReader("users.txt"))) {
-        String line = reader.readLine();
-        if (line == null) {
-            // 如果文件是空的，手动抛出我们定义的门禁异常
-            throw new DoorSystemException("读取失败：名单文件为空！");
+    public BaseDoorCard(String serialNumber, String ownerName) {
+        this.ownerName = ownerName;
+        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";
+        // -- new -- 增加卡号长度校验
+        if (this.serialNumber.length() !=8) {
+            System.out.println(
+                "【数据异常】警告：新创建的卡号 [" + this.serialNumber + "] 长度非8位！"
+            );
         }
-        System.out.println("成功读取到数据：" + line);
     }
-    catch (IOException e) {
-        // 将 IO 异常包装成我们的门禁异常向上汇报
-        throw new DoorSystemException("读取异常：磁盘损坏或文件丢失");
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    /**
+     * 通用逻辑：所有卡片都要进行的物理核验。
+     * 抽象类可以拥有具体实现的方法。
+     */
+    // -- New -- Added 自定义异常
+    public boolean validate() throws DoorException {
+        System.out.println("【系统日志】正在启动刷卡即时校验...");
+        if (this.serialNumber.length() != 8) {
+            // 使用自定义异常代替通用异常
+            throw new DoorException(
+                "校验失败：卡号 [" + this.serialNumber + "] 格式非法！"
+            );
+        }
+        System.out.println("物理校验通过。");
+        return true;
+    }
+
+    /**
+     * 抽象方法：强制规范。
+     * 每一个具体的卡片子类，必须通过此方法明确自己的权限范围 。
+     */
+    public abstract void showAccessScope();
+
+    @Override
+    public String toString() {
+        return "门禁卡信息 { 卡号='" + serialNumber + "', 持卡人='" + ownerName + "' }";
+    }
+}
+/**
+ * 学生卡：既是门禁卡，又能支付 (多重身份)
+ */
+class StudentCard extends BaseDoorCard implements Payable {
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName); // 继承并调用父类构造器
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println(
+            "【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。"
+        );
+    }
+
+    @Override
+    public boolean validate() throws DoorException {
+        boolean isValid = super.validate();  // 这里可能会抛出异常，中断后续逻辑
+        if (isValid) {
+            showAccessScope(); // 执行个性化权限展示
+        }
+        return isValid;
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+    }
+}
+class AdminCard extends BaseDoorCard {
+
+    public AdminCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public boolean validate() throws DoorException {
+        boolean isValid = super.validate();
+        if (isValid) {
+            showAccessScope();
+        }
+        return isValid;
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
+    }
+}
+/**
+ * 支付接口：定义了“能够支付”的规范
+ */
+interface Payable {
+    void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
+}
+
+// @clean code/testBasicSyntax/src/streamExample/CardReader.java
+package streamExample;
+
+/**
+ * 硬件读卡器：仅模拟物理信号采集
+ * 不依赖任何业务系统
+ */
+class CardReader {
+    // 直接定义了一个读卡的方法
+    public String readPhysicalSignal(String simulatedInput) {
+        System.out.println("[硬件层] 传感器感应到物理信号...");
+        // 模拟磁条或芯片读取过程，返回原始 ID 字符串
+        return simulatedInput;
+    }
+}
+// @clean code/testBasicSyntax/src/streamExample/AccessControlSystem.java
+package streamExample;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.io.*;
+
+
+class AccessControlSystem {
+
+    // ArrayList：用于名单的顺序维护和批量管理
+    private ArrayList<BaseDoorCard> whitelist = new ArrayList<>();
+
+    // HashMap：变量用于刷卡瞬间的 O(1) 极速检索
+    private HashMap<String, BaseDoorCard> whitelistMap = new HashMap<>();
+
+    public void registerCard(BaseDoorCard card) {
+
+        whitelist.add(card); // 添加到列表
+        whitelistMap.put(card.getSerialNumber(), card);
+
+        System.out.println("系统：已授权 " + card.getOwnerName() +
+                           " (ID: " + card.getSerialNumber() + ")"
+        );
+    }
+    /**
+     * 核心校验逻辑：接收纯文本 ID，返回校验结果
+     */
+    public void processAccessRequest(String cardId) {
+
+        System.out.println("\n[系统层] 接收到 ID: " + cardId + " 的通行请求...");
+
+        // 1. 利用 HashMap 快速检索是否存在
+        BaseDoorCard card = whitelistMap.get(cardId);
+
+        if (card == null) {
+            System.out.println("【拒绝】此卡未在系统中登记。");
+            return;  // 直接退出当前执行的方法
+        }
+
+        try {
+            // 2. 触发多态校验逻辑
+            if (card.validate()) {
+                System.out.println("【准许】持卡人：" + card.getOwnerName());
+                card.showAccessScope(); // 个性化权限展示
+            }
+        } catch (DoorException e) {
+            System.out.println("【拦截】异常卡片：" + e.getMessage());
+        }
+    }
+    // 一次性保存所有卡片的方法
+    public void saveAllCards() {
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(
+                                      new FileOutputStream("cards.ser"))) {
+            oos.writeObject(whitelist); // 直接把整个 ArrayList 存进去  <2>
+            System.out.println("全部对象序列化成功，已保存至 cards.ser");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    // 修改：反序列化读取整个集合
+    @SuppressWarnings("unchecked")
+    public ArrayList<BaseDoorCard> restoreAllCards() throws DoorException {
+
+        try (ObjectInputStream ois = new ObjectInputStream(
+                                     new FileInputStream("cards.ser"))) {
+            // 反序列化出来的是 ArrayList 对象
+            return (ArrayList<BaseDoorCard>) ois.readObject();  // <3>
+        }
+        catch (Exception e) {
+            throw new DoorException("读取异常：文件损坏或类定义丢失");
+        }
+    }
+}
+// @clean code/testBasicSyntax/src/streamExample/Run.java
+package streamExample;
+
+import java.util.ArrayList;
+
+public class Run {
+    public static void main(String[] args) {
+        // 1. 软件系统初始化
+        AccessControlSystem acs = new AccessControlSystem();
+        acs.registerCard(new StudentCard("S1234567", "小明")); // 正常卡
+        acs.registerCard(new StudentCard("BAD-99", "异常者")); // 格式错误卡
+        acs.saveAllCards(); // <--- 统一保存
+
+        // 2. 硬件设备初始化 (它是独立的)
+        CardReader reader = new CardReader();
+
+        // 3. 模拟现实中的物理交互流
+        // 读卡器硬件读到信号 -> 得到 ID -> 交给系统处理
+        String idFromHardware = reader.readPhysicalSignal("S1234567");
+        acs.processAccessRequest(idFromHardware);
+
+        String idFromBadCard = reader.readPhysicalSignal("BAD-99");
+        acs.processAccessRequest(idFromBadCard);
+
+        String unknownId = reader.readPhysicalSignal("UNKNOWN-001");
+        acs.processAccessRequest(unknownId);
+        try {
+            ArrayList<BaseDoorCard> restoredCards = acs.restoreAllCards();  // <4>
+            System.out.println("成功复活 " + restoredCards.size() + " 个对象:");
+            
+            for (BaseDoorCard card : restoredCards) {
+                System.out.println(card); // 会自动调用 BaseDoorCard.toString()
+            }
+        }
+        catch (DoorException e) {
+            System.err.println("业务异常: " + e.getMessage());
+        }
     }
 }
 ----
+
+<1> 必须实现 Serializable 接口才能进行序列化
+<2> 将整个 ArrayList 对象“冷冻”并写入文件
+<3> 读取保存的整个 ArrayList 对象
+<4> 调用方法恢复 ArrayList 对象
+
+NOTE: 此时用编辑器打开 card.ser 文件，会发现是乱码。
+
+
+.查看注册的所有门禁卡
+....
+成功复活 2 个对象:
+门禁卡信息 { 卡号='S1234567', 持卡人='小明' }
+门禁卡信息 { 卡号='BAD-99', 持卡人='异常者' }
+....
 
 === 小结
 - **“小水桶”实验**： 

@@ -11,7 +11,7 @@ public class FileDemo {
         if (file.exists()) {
             System.out.println("找到名单文件了！大小是：" + file.length() + " 字节");
         } else {
-            System.out.println("找不到文件，系统稍后将自动新建。");
+            System.out.println("找不到文件。");
         }
     }
 }

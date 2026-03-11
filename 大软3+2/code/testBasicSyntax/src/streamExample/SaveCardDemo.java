@@ -10,7 +10,7 @@ public class SaveCardDemo {
                                      new FileWriter("cards02.txt", true))) {
             // 模拟存入一个用户信息
             writer.write("小明,S1234567");
-            writer.newLine(); // 换行，准备写下一条记录
+            writer.newLine(); // 支持跨平台自动加入相应的换行
             System.out.println("保存成功！用户信息已写入硬盘。");
         }
         catch (IOException e) {
