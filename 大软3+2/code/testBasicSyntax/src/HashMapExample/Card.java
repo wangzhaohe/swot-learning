@@ -2,7 +2,7 @@
 package HashMapExample;
 
 /**
- * 类名：BaseDoorCardAbs (抽象类)
+ * 类名：BaseDoorCard (抽象类)
  * 演化点：使用了 abstract 关键字。
  * 1. 约束：禁止通过 new BaseDoorCard() 直接创建对象。
  * 2. 规范：强制子类必须实现特定的权限说明逻辑，如方法 showAccessScope()。
