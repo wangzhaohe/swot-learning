@@ -2716,7 +2716,7 @@ public class ReadCardDemo {
         }
     }
 }
-// @clean code/testBasicSyntax/src/ExceptionSelfdefineExample/DoorException.java
+// @clean code/testBasicSyntax/src/streamExample/DoorException.java
 package streamExample;
 
 /**
@@ -3041,99 +3041,393 @@ NOTE: 此时用编辑器打开 card.ser 文件，会发现是乱码。
 
 == Java 数据库编程 (6学时)
 * *核心知识点*：JDBC 架构、Connection/Statement/ResultSet、预编译 SQL、事务处理。
+
 * *教学要求*：学会使用 Java 连接数据库，让门禁系统具备“海量数据”的管理能力。
 
-=== 为什么要用数据库？ —— “记事本”升级为“大仓库”
+=== 核心知识
+[upperalpha]
 . 知识点说明
-* **IO 文件 (2.5节)**：像是个人的小账本。数据多了不好找（比如在 10 万行里找一个卡号），且容易写乱。
+
+* **IO 文件**：像是个人的小账本。数据多了不好找（比如在 10 万行里找一个卡号），且容易写乱。
 * **数据库 (Database)**：专业的数字化仓库。自带索引，找人“瞬间即达”，且支持多个人同时读写。
 
+
 . 核心工具：JDBC
+
 * **JDBC** 全称 Java Database Connectivity。
+
 * **大白话**：它就是一套**“标准翻译协议”**。
-    ** 不管后台是 MySQL、Oracle 还是 SQL Server，Java 程序员只需要学一套 JDBC 的写法，就能跟所有数据库沟通。
+  ** 不管后台是 MySQL、Oracle 还是 SQL Server，Java 程序员只需要学一套 JDBC 的写法，就能跟所有数据库沟通。
 
-=== JDBC 操作的“四大步骤” —— “打电话订货”
-要把 Java 里的数据存进数据库，就像打电话给仓库订货：
+. **操作四大步骤**：准备电话线 (加载驱动) -> 拨通电话 (建立连接) -> 下订单 (执行 SQL) -> 挂断电话 (关闭资源)。
 
-1.  **准备电话线 (加载驱动)**：告诉 Java 你要连接哪种类型的仓库（MySQL 还是其他）。
-2.  **拨通电话 (建立连接)**：输入仓库地址、账号、密码。
-3.  **下订单 (执行 SQL)**：用 SQL 语言告诉仓库你要干什么（增删改查）。
-4.  **挂断电话 (关闭资源)**：干完活必须挂电话，否则仓库线路会被占满。
+. **防止 SQL 注入**：绝不能用字符串拼接 SQL，必须使用 `PreparedStatement`。它就像一份填空题模版，只能在空位填内容，确保了系统的安全底线。
 
-=== 代码实现：查询用户信息
-我们将之前定义的 `User` 对象和 `DoorSystemException` 结合进来。
+. **学习建议**：不要死记硬背冗长的 JDBC 代码，理解步骤最重要，具体代码完全可以依赖模版。在写代码前，可以先用图形化工具往表里填数据，再写 Java 去查，成就感会很强。
 
+=== Podman 启动 PostgreSQL 17 容器
+[source,console]
+----
+podman run -d \
+  --name door-postgres \
+  -e POSTGRES_PASSWORD=123456 \
+  -p 5432:5432 \
+  docker.m.daocloud.io/library/postgres:17
+----
+
+**参数解释：**
+
+- `-d`: 让容器在后台运行。
+
+- `--name door-postgres`: 给这个容器起个好记的名字。
+
+- `-e POSTGRES_PASSWORD=your_password`: 初始化超级管理员 `postgres` 的密码。**注意：这必须与你 Java 代码 `DBUtils.java` 中的密码保持一致！**
+
+- `-p 5432:5432`: 将本机的 5432 端口映射到容器内部的 5432 端口，这样 Java 才能通过 `localhost:5432` 连上它。
+
+小提示：容器启动后，你可以用 podman ps 检查它是否正在正常运行。
+
+=== 建表准备 (Podman)
+[source,console]
+----
+podman exec -it door-postgres psql -U postgres -c "
+CREATE TABLE IF NOT EXISTS cards (
+    serial_number VARCHAR(20) PRIMARY KEY,
+    owner_name VARCHAR(50) NOT NULL,
+    card_type VARCHAR(20) NOT NULL
+);"
+----
+
+=== 下载并配置 PostgreSQL JDBC 驱动
+Java 原生是不认识 PostgreSQL 的，必须请个“翻译官”，也就是 JDBC 驱动包（一个 .jar 文件）。
+
+[upperalpha]
+. 下载驱动包
++
+可以直接去 PostgreSQL JDBC 的官方网站下载最新版的驱动：
+
+- **下载地址**: [Download | pgJDBC](https://jdbc.postgresql.org/download/)
+- 找最新的版本（例如 `postgresql-42.7.3.jar`），点击下载。
+
+
+. 存放与使用
++
+下载完成后，在你的项目根目录下建一个名叫 `lib` 的文件夹，把这个 `.jar` 文件扔进去。
++
+.项目结构大概长这样：
+....
+你的项目目录/
+├── lib/
+│   └── postgresql-42.7.3.jar
+└── src/
+    └── jdbcExample/
+        ├── AccessControlSystem.java
+        ├── Card.java
+        ├── ... (其他 Java 文件)
+....
+
+
+. 编译与运行命令
++
+在没有使用 Maven 或 Gradle 等构建工具时，需要手动用命令行告诉 Java 编译器和虚拟机这个驱动包在哪。
++
+.编译代码 (在 src 目录下执行)
+[source,console]
+----
+# Windows
+javac -cp ".;../lib/postgresql-42.7.3.jar" jdbcExample/*.java
+
+# Linux/Mac
+javac -cp ".:../lib/postgresql-42.7.3.jar" jdbcExample/*.java
+----
++
+.运行代码 (在 src 目录下执行)
+[source,console]
+----
+# Windows
+java -cp ".;../lib/postgresql-42.7.3.jar" jdbcExample.Run
+
+# Linux/Mac
+java -cp ".:../lib/postgresql-42.7.3.jar" jdbcExample.Run
+----
+
+=== 代码实现：数据库版门禁系统
 [source,java]
 ----
-import java.sql.*;
+// @clean code/testBasicSyntax/src/jdbcExample/DoorException.java
+package jdbcExample;
 
-public class JDBCDemo {
-    // 数据库连接信息（假设是 MySQL）
-    private static final String URL = "jdbc:mysql://localhost:3306/door_db";
-    private static final String USER = "root";
-    private static final String PASS = "123456";
+/**
+ * 自定义异常：专门处理门禁系统的异常情况
+ */
+public class DoorException extends Exception {
+    public DoorException(String message) {
+        super(message);
+    }
+}
+// @clean code/testBasicSyntax/src/jdbcExample/Card.java
+package jdbcExample;
 
-    public void findUserByCard(String cardId) throws DoorSystemException {
-        // SQL 语句：去 users 表里找卡号对应的姓名
-        String sql = "SELECT name FROM users WHERE card_id = ?";
+/**
+ * 类名：BaseDoorCard (抽象类)
+ * 演化点：移除了 Serializable，因为数据将由数据库字段来承载。
+ */
+abstract class BaseDoorCard {
+    private final String serialNumber;
+    private String ownerName;
 
-        // 使用 try-with-resources，自动关闭连接，防止“占线”
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+    public BaseDoorCard(String serialNumber, String ownerName) {
+        this.ownerName = ownerName;
+        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";
+        if (this.serialNumber.length() != 8) {
+            System.out.println("【数据异常】警告：新创建的卡号 [" + this.serialNumber + "] 长度非8位！");
+        }
+    }
+    
+    public String getSerialNumber() { return serialNumber; }
+    public String getOwnerName() { return ownerName; }
+
+    public boolean validate() throws DoorException {
+        System.out.println("【系统日志】正在启动刷卡即时校验...");
+        if (this.serialNumber.length() != 8) {
+            throw new DoorException("校验失败：卡号 [" + this.serialNumber + "] 格式非法！");
+        }
+        System.out.println("物理校验通过。");
+        return true;
+    }
+
+    public abstract void showAccessScope();
+
+    @Override
+    public String toString() {
+        return "门禁卡信息 { 卡号='" + serialNumber + "', 持卡人='" + ownerName + "' }";
+    }
+}
+class StudentCard extends BaseDoorCard implements Payable {
+
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+    }
+
+    @Override
+    public boolean validate() throws DoorException {
+        boolean isValid = super.validate();
+        if (isValid) {
+            showAccessScope();
+        }
+        return isValid;
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+    }
+}
+class AdminCard extends BaseDoorCard {
+
+    public AdminCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public boolean validate() throws DoorException {
+        boolean isValid = super.validate();
+        if (isValid) {
+            showAccessScope();
+        }
+        return isValid;
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
+    }
+}
+interface Payable {
+    void pay(double amount);
+}
+
+// @clean code/testBasicSyntax/src/jdbcExample/DBUtils.java
+package jdbcExample;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ * 专门负责开/关数据库的工具类
+ */
+public class DBUtils {
+    // 根据实际 Podman 映射的端口和密码修改
+    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String USER = "postgres";
+    private static final String PWD = "123456";
+
+    public static Connection getConnection() throws SQLException {
+        // 步骤1&2：加载驱动并拨通电话
+        return DriverManager.getConnection(URL, USER, PWD);
+    }
+}
+// @clean code/testBasicSyntax/src/jdbcExample/CardReader.java
+package jdbcExample;
+
+class CardReader {
+    public String readPhysicalSignal(String simulatedInput) {
+        System.out.println("[硬件层] 传感器感应到物理信号...");
+        return simulatedInput;
+    }
+}
+// @clean code/testBasicSyntax/src/jdbcExample/AccessControlSystem.java
+package jdbcExample;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+
+class AccessControlSystem {
+    /**
+     * 将卡片信息持久化到 PostgreSQL 数据库
+     */
+    public void registerCard(BaseDoorCard card) {
+
+        String sql = "INSERT INTO cards (serial_number, owner_name, card_type) VALUES (?, ?, ?) ON CONFLICT (serial_number) DO NOTHING";
+
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) { // <1>
+
+            // 像填空题一样安全地设置参数，防止 SQL 注入
+            pstmt.setString(1, card.getSerialNumber());
+            pstmt.setString(2, card.getOwnerName());
+            pstmt.setString(3, card instanceof StudentCard ? "Student" : "Admin");
+
+            pstmt.executeUpdate(); // <2>
+            System.out.println("系统：已将授权人员 " + card.getOwnerName() + " 写入数据库。");
+        }
+        catch (SQLException e) {
+            System.err.println("数据库写入失败: " + e.getMessage());
+        }
+    }
+    /**
+     * 核心校验逻辑：接收纯文本 ID，从数据库中实时检索并验证
+     */
+    public void processAccessRequest(String cardId) {
+        System.out.println("\n[系统层] 接收到 ID: " + cardId + " 的通行请求...");
+
+        String sql = "SELECT * FROM cards WHERE serial_number = ?";
+
+        try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            // 设置参数
             pstmt.setString(1, cardId);
-
-            // 执行查询
-            ResultSet rs = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery(); // <3>
 
             if (rs.next()) {
-                String name = rs.getString("name");
-                System.out.println("数据库查询成功！该卡所属用户为：" + name);
+                String name = rs.getString("owner_name");
+                String type = rs.getString("card_type");
+
+                // 根据数据库中的类型动态复原对象
+                BaseDoorCard card = "Student".equals(type) ?
+                                    new StudentCard(cardId, name) :
+                                    new AdminCard(cardId, name);
+                try {
+                    if (card.validate()) {
+                        System.out.println("【准许】持卡人：" + card.getOwnerName());
+                    }
+                } catch (DoorException e) {
+                    System.out.println("【拦截】异常卡片：" + e.getMessage());
+                }
             } else {
-                // 找不到时，抛出我们统一定义的异常
-                throw new DoorSystemException("数据库中未找到卡号为 " + cardId + " 的用户");
+                System.out.println("【拒绝】此卡未在系统中登记。");
             }
         } catch (SQLException e) {
-            // 将底层的 SQL 错误包装成我们的门禁系统错误
-            throw new DoorSystemException("数据库连接失败：" + e.getMessage());
+            System.out.println("【系统异常】数据库连接中断！");
+        }
+    }
+    /**
+     * 代替反序列化：一次性从数据库中读取所有卡片记录
+     */
+    public ArrayList<BaseDoorCard> loadAllCards() throws DoorException {
+
+        ArrayList<BaseDoorCard> list = new ArrayList<>();
+        String sql = "SELECT * FROM cards";
+
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) { // <4>
+                String id = rs.getString("serial_number");
+                String name = rs.getString("owner_name");
+                String type = rs.getString("card_type");
+
+                if ("Student".equals(type)) {
+                    list.add(new StudentCard(id, name));
+                } else {
+                    list.add(new AdminCard(id, name));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DoorException("读取异常：无法连接至 PostgreSQL");
+        }
+        return list;
+    }
+}
+// @clean code/testBasicSyntax/src/jdbcExample/Run.java
+package jdbcExample;
+import java.util.ArrayList;
+
+public class Run {
+    public static void main(String[] args) {
+        // 1. 软件系统初始化
+        AccessControlSystem acs = new AccessControlSystem();
+
+        // --- 写入数据库阶段 ---
+        acs.registerCard(new StudentCard("S1234567", "小明"));
+        acs.registerCard(new StudentCard("BAD-99", "异常者"));
+        acs.registerCard(new AdminCard("A0000001", "王校长"));
+
+        // 2. 硬件设备初始化
+        CardReader reader = new CardReader();
+
+        // 3. 模拟现实中的物理交互流 (实时从数据库校验)
+        String idFromHardware = reader.readPhysicalSignal("S1234567");
+        acs.processAccessRequest(idFromHardware);
+
+        String idFromBadCard = reader.readPhysicalSignal("BAD-99");
+        acs.processAccessRequest(idFromBadCard);
+
+        String unknownId = reader.readPhysicalSignal("UNKNOWN-001");
+        acs.processAccessRequest(unknownId);
+
+        // 4. 批量加载演示 (替代原先的反序列化)
+        try {
+            System.out.println("\n--- 正在从数据库批量加载全校授权名单 ---");
+            ArrayList<BaseDoorCard> restoredCards = acs.loadAllCards();
+            System.out.println("成功加载 " + restoredCards.size() + " 条记录:");
+            for (BaseDoorCard card : restoredCards) {
+                System.out.println(card);
+            }
+        } catch (DoorException e) {
+            System.err.println("业务异常: " + e.getMessage());
         }
     }
 }
 ----
 
-=== 防止 SQL 注入 —— “拒绝陌生人的小纸条”
-. 知识点说明
-+
-初学者喜欢用字符串拼接 SQL，比如 `sql = "SELECT * FROM users WHERE name = '" + input + "'"`。
-* **危险**：坏人如果输入 `' OR '1'='1`，就能绕过密码。
-* **解决方案**：必须使用 **PreparedStatement**（预编译对象）。
+<1> 核心：使用 `PreparedStatement` 获取数据库执行对象，这是抵御 SQL 注入的安全底线。
+<2> `executeUpdate()` 用于执行插入、修改或删除操作。
+<3> `executeQuery()` 用于执行查询，返回代表查询结果的 `ResultSet` 游标。
+<4> 使用 `rs.next()` 逐行遍历数据库记录。
 
-. 形象比喻
-* **拼接字符串**：就像把客户的话直接印在合同里，别人改了话术，合同就变了。
-* **PreparedStatement**：就像一份填空题模版。你只能在空位填内容，不能修改题目的逻辑。**这是安全底线！**
-
-=== 实验预告：实验三 数据库驱动开发
-在接下来的实验中，我们将：
-
-.  在 MySQL 中创建 `user_table`。
-.  编写一个 `DBUtils` 工具类，专门负责开/关数据库。
-.  实现门禁系统的“刷卡记录”保存功能（把每次刷卡的时间、卡号存入数据库）。
-
-=== 小结
-.  **不要死记硬背**：
-    * JDBC 的代码很长，初学者容易记不住。**“Ctrl+C/Ctrl+V 是程序员的常态”**。
-    * 重点是理解那四个步骤，具体的代码可以查手册或复制模版。
-
-.  **环境避坑**：
-    * 基础弱的学生最容易卡在“找不到驱动包 (Jar包)”或者“数据库连接不上”。
-    * 用命令行链接
-        ** 编译：javac -cp ".;lib/mysql-connector-java.jar" MyTest.java
-        ** 运行：java -cp ".;lib/mysql-connector-java.jar" MyTest
-
-.  **可视化辅助**：
-    * 在写代码前，先用图形化工具（如 Navicat 或 IDEA 自带的 Database 窗口）手动往表里填数据。看到表里的数据，再写 Java 去查，成就感会很强。
+NOTE: 编译与运行前，请确保在命令行使用 `-cp ".;lib/postgresql-42.7.3.jar"` 参数引入 PostgreSQL 官方驱动包。
 
 == 多线程与反射 (4学时)
 * *核心知识点*：线程创建与生命周期、同步机制（synchronized）、反射 API、动态代理。
