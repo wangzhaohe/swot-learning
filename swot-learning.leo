@@ -14923,21 +14923,20 @@ code/testBasicSyntax/cards.txt
 @others
 ----
 </t>
-<t tx="swot.20260216115311.1">@language asciidoc
-**1. 知识点说明**
-
+<t tx="swot.20260216115311.1">[upperalpha]
+. 知识点说明
++
 如果想直接把一整个 `User` 对象（包含姓名、卡号、状态等）原封不动“冻结”并存进硬盘，就需要**序列化**。
 
-**2. 核心步骤**
+. 核心步骤
+..  **盖章认证**：在 `User` 类后面加上 `implements Serializable`。这相当于告诉 Java：“这个类是安全的，可以转成二进制”。
+..  **对象流**：使用 `ObjectOutputStream` 将对象写入文件。
 
-1.  **盖章认证**：在 `User` 类后面加上 `implements Serializable`。这相当于告诉 Java：“这个类是安全的，可以转成二进制”。
-2.  **对象流**：使用 `ObjectOutputStream` 将对象写入文件。
+. 代码例子
 
 [source,java]
 ----
-/**
- * 实验二补充：让 User 支持序列化
- */
+@language java
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -14974,14 +14973,14 @@ public void loadUsers() throws DoorSystemException {
     ** 用碗喝汤和用勺子喝汤的区别，可以立刻明白为什么 `BufferedWriter` 比 `FileWriter` 快。
 
 - **重点避坑：文件的位置**： 
-  **  `users.txt` 在哪。默认就在你 IntelliJ IDEA 项目的根文件夹里。
+  **  `carts.txt` 在哪。默认就在你 IntelliJ IDEA 项目的根文件夹里。
 
 - **IO 异常的必然性**：
   ** 即使代码写得再完美，硬盘也可能坏，U 盘也可能被拔掉。所以 IO 操作**强制要求**写 `try-catch`，这是为了让程序更坚强。
 
 ****
 虽然文件存取很方便，但如果我们要处理几万个用户，在一个 txt 文件里找人会非常慢且麻烦。
-这就是为什么我们后面需要学习 **2.6 JDBC 数据库编程** 的原因——引入专业的“数据仓库”。
+这就是为什么我们后面需要学习 **JDBC 数据库编程** 的原因——引入专业的“数据仓库”。
 ****
 </t>
 <t tx="swot.20260216123452.1" _mod_time="4741da6c2bb00058632e">@language java
