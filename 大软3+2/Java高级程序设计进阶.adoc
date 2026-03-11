@@ -2618,36 +2618,6 @@ public class FileDemo {
 code/testBasicSyntax/cards.txt
 
 === 字符缓冲流 —— “高效搬运工”
-知识点说明
-
-* **FileWriter | FileReader**：像用小勺子挖水，一次只能搬一点，无缓冲区。
-
-* **BufferedWriter | BufferedReader**：像配了一个大水桶（缓冲区）。先把水倒满一桶，再一口气搬走，效率极高。
-
-
-.代码举例（保存用户信息到 txt）
-[source,java]
-----
-import java.io.*;
-
-public class SaveUserDemo {
-    public static void main(String[] args) {
-        // try-with-resources 语法：括号里的资源会自动关闭，省心省力
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
-            // 模拟存入一个用户信息
-            writer.write("001,张三,CARD_888");
-            writer.newLine(); // 换行，准备写下一条记录
-            System.out.println("保存成功！用户信息已写入硬盘。");
-        }
-        catch (IOException e) {
-            System.err.println("发生意外！文件写不进去了：" + e.getMessage());
-        }
-    }
-}
-----
-
-=== 补充知识: Java I/O 核心组件解析：File, FileWriter 与 BufferedWriter
-****
 [upperalpha]
 . 角色分工与类关系 (Decorator Pattern)
 +
@@ -2660,14 +2630,15 @@ public class SaveUserDemo {
 | **地址标签**
 | 仅代表磁盘上的路径或属性，不具备读写数据的能力。
 
-| `FileWriter`
+| `FileWriter / FileReader`
 | **基础搬运工**
 | 字符流写入器。负责建立连接并将字符一个个“敲”入硬盘。
 
-| `BufferedWriter`
+| `BufferedWriter / BufferedReader`
 | **集装箱/缓冲区**
 | 包装类。在内存开辟 8KB 空间，攒满后再调用一次 `FileWriter` 批量写入硬盘。
 |===
+
 
 . “小水桶”实验：为什么需要缓冲区？
 * **直接写入 (`FileWriter`)**：
@@ -2675,31 +2646,38 @@ public class SaveUserDemo {
 * **缓冲写入 (`BufferedWriter`)**：
   如同给勺子配了一个 **水桶**。先将数据存在内存里，等桶装满了再跑一趟院子，极大地减少了往返次数。
 
-. try-with-resources 完整写法
-+
-这是目前 Java 开发中最推荐的写法。注意所有的“流对象”都在 `try` 的括号内创建：
+
+. 核心要点
+.. **自动关闭**：只要写在 `try(...)` 里的资源，不需要手动写 `writer.close()`。
+.. **便捷路径**：`new FileWriter("cards03.txt")` 这种写法会在底层自动为你创建一个 `new File("cards03.txt")`。
+.. **追加数据**：第二个参数 `true` 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。
+
+
+. 代码举例
 +
 [source,java]
 ----
-// 所有的流创建都放在 try (...) 内部
-// 执行完毕后，Java 会自动调用 close()，即使中间出了异常也会关闭
-try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
+// @clean code/testBasicSyntax/src/streamExample/SaveCardDemo.java
+package streamExample;
 
-    writer.write("新用户：张三");
-    writer.newLine(); // BufferedWriter 特有的换行方法，非常好用
-    writer.write("新用户：李四");
+import java.io.*;
 
-} catch (IOException e) {
-    // 捕获可能的文件读写异常
-    e.printStackTrace();
+public class SaveCardDemo {
+    public static void main(String[] args) {
+        // try-with-resources 语法：括号里的资源会自动关闭，省心省力
+        try (BufferedWriter writer = new BufferedWriter(
+                                     new FileWriter("cards02.txt", true))) {
+            // 模拟存入一个用户信息
+            writer.write("001,张三,CARD_888");
+            writer.newLine(); // 换行，准备写下一条记录
+            System.out.println("保存成功！用户信息已写入硬盘。");
+        }
+        catch (IOException e) {
+            System.err.println("发生意外！文件写不进去了：" + e.getMessage());
+        }
+    }
 }
 ----
-
-4. 核心要点
-.. **自动关闭**：只要写在 `try(...)` 里的资源，不需要手动写 `writer.close()`。
-.. **便捷路径**：`new FileWriter("users.txt")` 这种写法会在底层自动为你创建一个 `new File("users.txt")`。
-.. **追加数据**：第二个参数 `true` 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。
-****
 
 === 序列化 —— “数据冷冻技术”
 **1. 知识点说明**

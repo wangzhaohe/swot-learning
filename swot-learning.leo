@@ -533,9 +533,8 @@
 <v t="swot.20260311074341.1"><vh>@clean code/testBasicSyntax/cards.txt</vh></v>
 </v>
 <v t="swot.20260216115302.1"><vh>字符缓冲流 —— “高效搬运工”</vh>
-<v t="swot.20260310220137.1"><vh>@clean code/testBasicSyntax/src/streamExample/SaveUserDemo.java</vh></v>
+<v t="swot.20260310220137.1"><vh>@clean code/testBasicSyntax/src/streamExample/SaveCardDemo.java</vh></v>
 </v>
-<v t="swot.20260216133002.1"><vh>补充知识: Java I/O 核心组件解析：File, FileWriter 与 BufferedWriter</vh></v>
 <v t="swot.20260216115311.1"><vh>序列化 —— “数据冷冻技术”</vh></v>
 <v t="swot.20260216115314.1"><vh>实战演示：读取文件并抛出自定义异常</vh></v>
 <v t="swot.20260216115335.1"><vh>小结</vh></v>
@@ -14882,14 +14881,43 @@ TIP: **选择理由**：如果只是想按顺序存储并遍历名单，使用 `
 您可以创建一个空的文本文件进行测试。如：
 code/testBasicSyntax/cards.txt
 </t>
-<t tx="swot.20260216115302.1">知识点说明
+<t tx="swot.20260216115302.1">[upperalpha]
+. 角色分工与类关系 (Decorator Pattern)
++
+.这三个类之间不是 **继承** 关系，而是 **组合（包装）** 关系。
+[cols="1,1,2"]
+|===
+| 类名 | 角色 | 核心职责
 
-* **FileWriter | FileReader**：像用小勺子挖水，一次只能搬一点，无缓冲区。
+| `File`
+| **地址标签**
+| 仅代表磁盘上的路径或属性，不具备读写数据的能力。
 
-* **BufferedWriter | BufferedReader**：像配了一个大水桶（缓冲区）。先把水倒满一桶，再一口气搬走，效率极高。
+| `FileWriter / FileReader`
+| **基础搬运工**
+| 字符流写入器。负责建立连接并将字符一个个“敲”入硬盘。
+
+| `BufferedWriter / BufferedReader`
+| **集装箱/缓冲区**
+| 包装类。在内存开辟 8KB 空间，攒满后再调用一次 `FileWriter` 批量写入硬盘。
+|===
 
 
-.代码举例（保存用户信息到 txt）
+. “小水桶”实验：为什么需要缓冲区？
+* **直接写入 (`FileWriter`)**：
+  如同用 **勺子** 舀水，每舀一勺都要跑一趟院子（触发一次磁盘 I/O），效率极低。
+* **缓冲写入 (`BufferedWriter`)**：
+  如同给勺子配了一个 **水桶**。先将数据存在内存里，等桶装满了再跑一趟院子，极大地减少了往返次数。
+
+
+. 核心要点
+.. **自动关闭**：只要写在 `try(...)` 里的资源，不需要手动写 `writer.close()`。
+.. **便捷路径**：`new FileWriter("cards03.txt")` 这种写法会在底层自动为你创建一个 `new File("cards03.txt")`。
+.. **追加数据**：第二个参数 `true` 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。
+
+
+. 代码举例
++
 [source,java]
 ----
 @others
@@ -14974,61 +15002,6 @@ public class FileDemo {
         }
     }
 }
-</t>
-<t tx="swot.20260216133002.1">@language asciidoc
-****
-[upperalpha]
-. 角色分工与类关系 (Decorator Pattern)
-+
-.这三个类之间不是 **继承** 关系，而是 **组合（包装）** 关系。
-[cols="1,1,2"]
-|===
-| 类名 | 角色 | 核心职责
-
-| `File`
-| **地址标签**
-| 仅代表磁盘上的路径或属性，不具备读写数据的能力。
-
-| `FileWriter`
-| **基础搬运工**
-| 字符流写入器。负责建立连接并将字符一个个“敲”入硬盘。
-
-| `BufferedWriter`
-| **集装箱/缓冲区**
-| 包装类。在内存开辟 8KB 空间，攒满后再调用一次 `FileWriter` 批量写入硬盘。
-|===
-
-. “小水桶”实验：为什么需要缓冲区？
-* **直接写入 (`FileWriter`)**：
-  如同用 **勺子** 舀水，每舀一勺都要跑一趟院子（触发一次磁盘 I/O），效率极低。
-* **缓冲写入 (`BufferedWriter`)**：
-  如同给勺子配了一个 **水桶**。先将数据存在内存里，等桶装满了再跑一趟院子，极大地减少了往返次数。
-
-. try-with-resources 完整写法
-+
-这是目前 Java 开发中最推荐的写法。注意所有的“流对象”都在 `try` 的括号内创建：
-+
-[source,java]
-----
-// 所有的流创建都放在 try (...) 内部
-// 执行完毕后，Java 会自动调用 close()，即使中间出了异常也会关闭
-try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
-    
-    writer.write("新用户：张三");
-    writer.newLine(); // BufferedWriter 特有的换行方法，非常好用
-    writer.write("新用户：李四");
-    
-} catch (IOException e) {
-    // 捕获可能的文件读写异常
-    e.printStackTrace();
-}
-----
-
-4. 核心要点
-.. **自动关闭**：只要写在 `try(...)` 里的资源，不需要手动写 `writer.close()`。
-.. **便捷路径**：`new FileWriter("users.txt")` 这种写法会在底层自动为你创建一个 `new File("users.txt")`。
-.. **追加数据**：第二个参数 `true` 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。
-****
 </t>
 <t tx="swot.20260216182522.1"></t>
 <t tx="swot.20260216191659.1">@language asciidoc
@@ -22157,13 +22130,17 @@ package HashMapExample;
 &lt;2&gt; 将新门禁卡存入 变量 whitelistMap
 &lt;3&gt; 利用 HashMap 快速检索是否存在某个卡 #(这是使用的重点代码！)#
 </t>
-<t tx="swot.20260310220137.1" _mod_time="4741da6c0915e4cc8b2e">@language java
+<t tx="swot.20260310220137.1" _mod_time="4741da6c3277e544482e">@language java
+// @clean code/testBasicSyntax/src/streamExample/SaveCardDemo.java
+package streamExample;
+
 import java.io.*;
 
-public class SaveUserDemo {
+public class SaveCardDemo {
     public static void main(String[] args) {
         // try-with-resources 语法：括号里的资源会自动关闭，省心省力
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(
+                                     new FileWriter("cards02.txt", true))) {
             // 模拟存入一个用户信息
             writer.write("001,张三,CARD_888");
             writer.newLine(); // 换行，准备写下一条记录

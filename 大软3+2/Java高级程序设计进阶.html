@@ -633,7 +633,6 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_为什么要学_io_大脑与笔记本">为什么要学 IO？ —— “大脑”与“笔记本”</a></li>
 <li><a href="#_file_类_文件管理员">File 类 —— “文件管理员”</a></li>
 <li><a href="#_字符缓冲流_高效搬运工">字符缓冲流 —— “高效搬运工”</a></li>
-<li><a href="#_补充知识_java_io_核心组件解析file_filewriter_与_bufferedwriter">补充知识: Java I/O 核心组件解析：File, FileWriter 与 BufferedWriter</a></li>
 <li><a href="#_序列化_数据冷冻技术">序列化 —— “数据冷冻技术”</a></li>
 <li><a href="#_实战演示读取文件并抛出自定义异常">实战演示：读取文件并抛出自定义异常</a></li>
 <li><a href="#_小结">小结</a></li>
@@ -4370,45 +4369,6 @@ code/testBasicSyntax/cards.txt</p>
 </div>
 <div class="sect2">
 <h3 id="_字符缓冲流_高效搬运工">字符缓冲流 —— “高效搬运工”</h3>
-<div class="paragraph">
-<p>知识点说明</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>FileWriter | FileReader</strong>：像用小勺子挖水，一次只能搬一点，无缓冲区。</p>
-</li>
-<li>
-<p><strong>BufferedWriter | BufferedReader</strong>：像配了一个大水桶（缓冲区）。先把水倒满一桶，再一口气搬走，效率极高。</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="title">代码举例（保存用户信息到 txt）</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.*</span><span class="tok-p">;</span>
-
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">SaveUserDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-c1">// try-with-resources 语法：括号里的资源会自动关闭，省心省力</span>
-<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">BufferedWriter</span><span class="tok-w"> </span><span class="tok-n">writer</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">BufferedWriter</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">FileWriter</span><span class="tok-p">(</span><span class="tok-s">&quot;users.txt&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">)))</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-c1">// 模拟存入一个用户信息</span>
-<span class="tok-w">            </span><span class="tok-n">writer</span><span class="tok-p">.</span><span class="tok-na">write</span><span class="tok-p">(</span><span class="tok-s">&quot;001,张三,CARD_888&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-n">writer</span><span class="tok-p">.</span><span class="tok-na">newLine</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 换行，准备写下一条记录</span>
-<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;保存成功！用户信息已写入硬盘。&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-p">}</span>
-<span class="tok-w">        </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">err</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;发生意外！文件写不进去了：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
-<span class="tok-w">        </span><span class="tok-p">}</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_补充知识_java_io_核心组件解析file_filewriter_与_bufferedwriter">补充知识: Java I/O 核心组件解析：File, FileWriter 与 BufferedWriter</h3>
-<div class="sidebarblock">
-<div class="content">
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
@@ -4434,12 +4394,12 @@ code/testBasicSyntax/cards.txt</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">仅代表磁盘上的路径或属性，不具备读写数据的能力。</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FileWriter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FileWriter / FileReader</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>基础搬运工</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">字符流写入器。负责建立连接并将字符一个个“敲”入硬盘。</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BufferedWriter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BufferedWriter / BufferedReader</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>集装箱/缓冲区</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">包装类。在内存开辟 8KB 空间，攒满后再调用一次 <code>FileWriter</code> 批量写入硬盘。</p></td>
 </tr>
@@ -4462,29 +4422,6 @@ code/testBasicSyntax/cards.txt</p>
 </div>
 </li>
 <li>
-<p>try-with-resources 完整写法</p>
-<div class="paragraph">
-<p>这是目前 Java 开发中最推荐的写法。注意所有的“流对象”都在 <code>try</code> 的括号内创建：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 所有的流创建都放在 try (...) 内部</span>
-<span class="tok-c1">// 执行完毕后，Java 会自动调用 close()，即使中间出了异常也会关闭</span>
-<span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">BufferedWriter</span><span class="tok-w"> </span><span class="tok-n">writer</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">BufferedWriter</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">FileWriter</span><span class="tok-p">(</span><span class="tok-s">&quot;users.txt&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">)))</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
-<span class="tok-w">    </span><span class="tok-n">writer</span><span class="tok-p">.</span><span class="tok-na">write</span><span class="tok-p">(</span><span class="tok-s">&quot;新用户：张三&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-n">writer</span><span class="tok-p">.</span><span class="tok-na">newLine</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// BufferedWriter 特有的换行方法，非常好用</span>
-<span class="tok-w">    </span><span class="tok-n">writer</span><span class="tok-p">.</span><span class="tok-na">write</span><span class="tok-p">(</span><span class="tok-s">&quot;新用户：李四&quot;</span><span class="tok-p">);</span>
-
-<span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// 捕获可能的文件读写异常</span>
-<span class="tok-w">    </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">printStackTrace</span><span class="tok-p">();</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
 <p>核心要点</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -4492,7 +4429,7 @@ code/testBasicSyntax/cards.txt</p>
 <p><strong>自动关闭</strong>：只要写在 <code>try(&#8230;&#8203;)</code> 里的资源，不需要手动写 <code>writer.close()</code>。</p>
 </li>
 <li>
-<p><strong>便捷路径</strong>：<code>new FileWriter("users.txt")</code> 这种写法会在底层自动为你创建一个 <code>new File("users.txt")</code>。</p>
+<p><strong>便捷路径</strong>：<code>new FileWriter("cards03.txt")</code> 这种写法会在底层自动为你创建一个 <code>new File("cards03.txt")</code>。</p>
 </li>
 <li>
 <p><strong>追加数据</strong>：第二个参数 <code>true</code> 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。</p>
@@ -4500,12 +4437,34 @@ code/testBasicSyntax/cards.txt</p>
 </ol>
 </div>
 </li>
-</ol>
+<li>
+<p>代码举例</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/streamExample/SaveCardDemo.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">streamExample</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.*</span><span class="tok-p">;</span>
+
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">SaveCardDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// try-with-resources 语法：括号里的资源会自动关闭，省心省力</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">BufferedWriter</span><span class="tok-w"> </span><span class="tok-n">writer</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">BufferedWriter</span><span class="tok-p">(</span>
+<span class="tok-w">                                     </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">FileWriter</span><span class="tok-p">(</span><span class="tok-s">&quot;cards02.txt&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">)))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 模拟存入一个用户信息</span>
+<span class="tok-w">            </span><span class="tok-n">writer</span><span class="tok-p">.</span><span class="tok-na">write</span><span class="tok-p">(</span><span class="tok-s">&quot;001,张三,CARD_888&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-n">writer</span><span class="tok-p">.</span><span class="tok-na">newLine</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 换行，准备写下一条记录</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;保存成功！用户信息已写入硬盘。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">err</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;发生意外！文件写不进去了：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
 </div>
 </li>
 </ol>
-</div>
-</div>
 </div>
 </div>
 <div class="sect2">
@@ -5073,7 +5032,7 @@ code/testBasicSyntax/cards.txt</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-11 08:54:52 +0800
+Last updated 2026-03-11 09:48:17 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
