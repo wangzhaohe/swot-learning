@@ -12,7 +12,7 @@ public class Run {
         CardReader reader = new CardReader();
 
         // 3. 模拟现实中的物理交互流
-        // 硬件读到信号 -> 得到 ID -> 交给系统处理
+        // 读卡器硬件读到信号 -> 得到 ID -> 交给系统处理
         String idFromHardware = reader.readPhysicalSignal("S1234567");
         system.processAccessRequest(idFromHardware);
 

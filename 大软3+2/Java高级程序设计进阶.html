@@ -619,7 +619,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_集合框架4学时">集合框架（4学时）</a>
 <ul class="sectlevel2">
 <li><a href="#_arraylist_封装门禁卡名单">ArrayList —— 封装门禁卡名单</a></li>
-<li><a href="#_hashmap_瞬间定位的电子名册_结构大改进真正符合人类思维的开发架构">HashMap —— “瞬间定位的电子名册”  &#8594; 结构大改进，真正符合人类思维的开发架构！</a>
+<li><a href="#_hashmap_瞬间定位的电子名册_案例代码结构大改进真正符合人类思维的开发架构">HashMap —— “瞬间定位的电子名册”  &#8594; 案例代码结构大改进，真正符合人类思维的开发架构！</a>
 <ul class="sectlevel3">
 <li><a href="#_支持类_从上面代码_clone_而来无新功能">支持类 (从上面代码 clone 而来，无新功能)</a></li>
 <li><a href="#_新增类">新增类</a></li>
@@ -3924,7 +3924,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_hashmap_瞬间定位的电子名册_结构大改进真正符合人类思维的开发架构">HashMap —— “瞬间定位的电子名册”  &#8594; 结构大改进，真正符合人类思维的开发架构！</h3>
+<h3 id="_hashmap_瞬间定位的电子名册_案例代码结构大改进真正符合人类思维的开发架构">HashMap —— “瞬间定位的电子名册”  &#8594; 案例代码结构大改进，真正符合人类思维的开发架构！</h3>
 <div class="paragraph">
 <p>知识点说明</p>
 </div>
@@ -3962,7 +3962,7 @@ toggleButton.addEventListener('click', () => {
 <div class="ulist">
 <ul>
 <li>
-<p><strong>ArrayList</strong>：用于“批量展示”或“导出”所有名单 。</p>
+<p><strong>ArrayList</strong>：用于“批量展示”或“导出”所有门禁卡明细。</p>
 </li>
 <li>
 <p><strong>HashMap</strong>：用于“刷卡瞬间”的极速比对校验 。</p>
@@ -4099,21 +4099,6 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-cm"> */</span>
 <span class="tok-kd">interface</span> <span class="tok-nc">Payable</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">pay</span><span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 谁实现这个接口，谁就必须具备支付功能</span>
-<span class="tok-p">}</span>
-
-<span class="tok-c1">// @clean code/testBasicSyntax/src/HashMapExample/CardReader.java</span>
-<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">HashMapExample</span><span class="tok-p">;</span>
-
-<span class="tok-cm">/**</span>
-<span class="tok-cm"> * 硬件读卡器：仅模拟物理信号采集</span>
-<span class="tok-cm"> * 不依赖任何业务系统</span>
-<span class="tok-cm"> */</span>
-<span class="tok-kd">class</span> <span class="tok-nc">CardReader</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">readPhysicalSignal</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">simulatedInput</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;[硬件层] 传感器感应到物理信号...&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-c1">// 模拟磁条或芯片读取过程，返回原始 ID 字符串</span>
-<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">simulatedInput</span><span class="tok-p">;</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -4139,7 +4124,7 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">        </span><span class="tok-n">CardReader</span><span class="tok-w"> </span><span class="tok-n">reader</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CardReader</span><span class="tok-p">();</span>
 
 <span class="tok-w">        </span><span class="tok-c1">// 3. 模拟现实中的物理交互流</span>
-<span class="tok-w">        </span><span class="tok-c1">// 硬件读到信号 -&gt; 得到 ID -&gt; 交给系统处理</span>
+<span class="tok-w">        </span><span class="tok-c1">// 读卡器硬件读到信号 -&gt; 得到 ID -&gt; 交给系统处理</span>
 <span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">idFromHardware</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">reader</span><span class="tok-p">.</span><span class="tok-na">readPhysicalSignal</span><span class="tok-p">(</span><span class="tok-s">&quot;S1234567&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">processAccessRequest</span><span class="tok-p">(</span><span class="tok-n">idFromHardware</span><span class="tok-p">);</span>
 
@@ -4161,7 +4146,7 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-c1">// ArrayList：用于名单的顺序维护和批量管理</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">BaseDoorCard</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;&gt;</span><span class="tok-p">();</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// HashMap：用于刷卡瞬间的 O(1) 极速检索 </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">    </span><span class="tok-c1">// HashMap：变量用于刷卡瞬间的 O(1) 极速检索 </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">HashMap</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">BaseDoorCard</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">whitelistMap</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">HashMap</span><span class="tok-o">&lt;&gt;</span><span class="tok-p">();</span>
 
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">registerCard</span><span class="tok-p">(</span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -4185,7 +4170,7 @@ toggleButton.addEventListener('click', () => {
 
 <span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">card</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【拒绝】此卡未在系统中登记。&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 直接退出当前执行的方法</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 
 <span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -4197,6 +4182,21 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【拦截】异常卡片：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+<span class="tok-c1">// @clean code/testBasicSyntax/src/HashMapExample/CardReader.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">HashMapExample</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 硬件读卡器：仅模拟物理信号采集</span>
+<span class="tok-cm"> * 不依赖任何业务系统</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">class</span> <span class="tok-nc">CardReader</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 直接定义了一个读卡的方法</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-nf">readPhysicalSignal</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">simulatedInput</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;[硬件层] 传感器感应到物理信号...&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// 模拟磁条或芯片读取过程，返回原始 ID 字符串</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">simulatedInput</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -5032,7 +5032,7 @@ code/testBasicSyntax/cards.txt</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-11 09:48:17 +0800
+Last updated 2026-03-11 10:50:08 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

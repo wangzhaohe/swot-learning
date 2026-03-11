@@ -9,7 +9,7 @@ class AccessControlSystem {
     // ArrayList：用于名单的顺序维护和批量管理
     private ArrayList<BaseDoorCard> whitelist = new ArrayList<>();
 
-    // HashMap：用于刷卡瞬间的 O(1) 极速检索 <1>
+    // HashMap：变量用于刷卡瞬间的 O(1) 极速检索 <1>
     private HashMap<String, BaseDoorCard> whitelistMap = new HashMap<>();
 
     public void registerCard(BaseDoorCard card) {
@@ -33,7 +33,7 @@ class AccessControlSystem {
 
         if (card == null) {
             System.out.println("【拒绝】此卡未在系统中登记。");
-            return;
+            return;  // 直接退出当前执行的方法
         }
 
         try {

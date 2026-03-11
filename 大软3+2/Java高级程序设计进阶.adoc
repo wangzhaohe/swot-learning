@@ -2294,7 +2294,7 @@ interface Payable {
 
 TIP: **选择理由**：如果只是想按顺序存储并遍历名单，使用 `ArrayList` 是效率最高且最简单直观的选择 。
 
-=== HashMap —— “瞬间定位的电子名册”  -> 结构大改进，真正符合人类思维的开发架构！
+=== HashMap —— “瞬间定位的电子名册”  -> 案例代码结构大改进，真正符合人类思维的开发架构！
 // 越来越发现 AI 给不出人类想要的代码架构逻辑，逻辑很拧巴，需要多次更改、调试才行。
 知识点说明
 
@@ -2310,7 +2310,7 @@ TIP: **选择理由**：如果只是想按顺序存储并遍历名单，使用 `
 ====
 在门禁系统中，我们通常会同时使用两者:
 
-* **ArrayList**：用于“批量展示”或“导出”所有名单 。
+* **ArrayList**：用于“批量展示”或“导出”所有门禁卡明细。
 * **HashMap**：用于“刷卡瞬间”的极速比对校验 。
 ====
 
@@ -2441,20 +2441,6 @@ interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
 
-// @clean code/testBasicSyntax/src/HashMapExample/CardReader.java
-package HashMapExample;
-
-/**
- * 硬件读卡器：仅模拟物理信号采集
- * 不依赖任何业务系统
- */
-class CardReader {
-    public String readPhysicalSignal(String simulatedInput) {
-        System.out.println("[硬件层] 传感器感应到物理信号...");
-        // 模拟磁条或芯片读取过程，返回原始 ID 字符串
-        return simulatedInput;
-    }
-}
 ----
 ====
 
@@ -2476,7 +2462,7 @@ public class Run {
         CardReader reader = new CardReader();
 
         // 3. 模拟现实中的物理交互流
-        // 硬件读到信号 -> 得到 ID -> 交给系统处理
+        // 读卡器硬件读到信号 -> 得到 ID -> 交给系统处理
         String idFromHardware = reader.readPhysicalSignal("S1234567");
         system.processAccessRequest(idFromHardware);
 
@@ -2498,7 +2484,7 @@ class AccessControlSystem {
     // ArrayList：用于名单的顺序维护和批量管理
     private ArrayList<BaseDoorCard> whitelist = new ArrayList<>();
 
-    // HashMap：用于刷卡瞬间的 O(1) 极速检索 <1>
+    // HashMap：变量用于刷卡瞬间的 O(1) 极速检索 <1>
     private HashMap<String, BaseDoorCard> whitelistMap = new HashMap<>();
 
     public void registerCard(BaseDoorCard card) {
@@ -2522,7 +2508,7 @@ class AccessControlSystem {
 
         if (card == null) {
             System.out.println("【拒绝】此卡未在系统中登记。");
-            return;
+            return;  // 直接退出当前执行的方法
         }
 
         try {
@@ -2534,6 +2520,21 @@ class AccessControlSystem {
         } catch (DoorException e) {
             System.out.println("【拦截】异常卡片：" + e.getMessage());
         }
+    }
+}
+// @clean code/testBasicSyntax/src/HashMapExample/CardReader.java
+package HashMapExample;
+
+/**
+ * 硬件读卡器：仅模拟物理信号采集
+ * 不依赖任何业务系统
+ */
+class CardReader {
+    // 直接定义了一个读卡的方法
+    public String readPhysicalSignal(String simulatedInput) {
+        System.out.println("[硬件层] 传感器感应到物理信号...");
+        // 模拟磁条或芯片读取过程，返回原始 ID 字符串
+        return simulatedInput;
     }
 }
 ----

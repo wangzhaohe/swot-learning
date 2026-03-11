@@ -505,7 +505,7 @@
 <v t="swot.20260311084822.1"><vh>BB interface Payable 支付接口</vh></v>
 </v>
 </v>
-<v t="swot.20260303233729.1"><vh>HashMap —— “瞬间定位的电子名册”  -&gt; 结构大改进，真正符合人类思维的开发架构！</vh>
+<v t="swot.20260303233729.1"><vh>HashMap —— “瞬间定位的电子名册”  -&gt; 案例代码结构大改进，真正符合人类思维的开发架构！</vh>
 <v t="swot.20260310204333.1"><vh>支持类 (从上面代码 clone 而来，无新功能)</vh>
 <v t="swot.20260310174115.1"><vh>@clean code/testBasicSyntax/src/HashMapExample/DoorException.java</vh></v>
 <v t="swot.20260310174233.1"><vh>@clean code/testBasicSyntax/src/HashMapExample/Card.java</vh>
@@ -514,7 +514,6 @@
 <v t="swot.20260308224546.1"></v>
 <v t="swot.20260304221446.1"></v>
 </v>
-<v t="swot.20260310172714.1"><vh>@clean code/testBasicSyntax/src/HashMapExample/CardReader.java</vh></v>
 </v>
 <v t="swot.20260310204346.1"><vh>新增类</vh>
 <v t="swot.20260310081615.1"><vh>@clean code/testBasicSyntax/src/HashMapExample/Run.java</vh></v>
@@ -522,6 +521,7 @@
 <v t="swot.20260310165817.1"><vh>registerCard(BaseDoorCard card)</vh></v>
 <v t="swot.20260310165903.1"><vh>processAccessRequest(String cardId)</vh></v>
 </v>
+<v t="swot.20260310172714.1"><vh>@clean code/testBasicSyntax/src/HashMapExample/CardReader.java</vh></v>
 </v>
 </v>
 <v t="swot.20260216103228.1"><vh>使用小结</vh></v>
@@ -17781,7 +17781,7 @@ IMPORTANT: 不是所有的项目必须要严格地进行拆包，避免过度设
 ====
 在门禁系统中，我们通常会同时使用两者:
 
-* **ArrayList**：用于“批量展示”或“导出”所有名单 。
+* **ArrayList**：用于“批量展示”或“导出”所有门禁卡明细。
 * **HashMap**：用于“刷卡瞬间”的极速比对校验 。
 ====
 </t>
@@ -21994,7 +21994,7 @@ public class DoorException extends Exception {
 }
 
 </t>
-<t tx="swot.20260310081615.1" _mod_time="4741da6bd8edc0168b2e">@language java
+<t tx="swot.20260310081615.1" _mod_time="4741da6c34ff04c3282e">@language java
 // @clean code/testBasicSyntax/src/HashMapExample/Run.java
 package HashMapExample;
 
@@ -22009,7 +22009,7 @@ public class Run {
         CardReader reader = new CardReader();
 
         // 3. 模拟现实中的物理交互流
-        // 硬件读到信号 -&gt; 得到 ID -&gt; 交给系统处理
+        // 读卡器硬件读到信号 -&gt; 得到 ID -&gt; 交给系统处理
         String idFromHardware = reader.readPhysicalSignal("S1234567");
         system.processAccessRequest(idFromHardware);
 
@@ -22022,7 +22022,7 @@ public class Run {
 }
 </t>
 <t tx="swot.20260310142409.1"></t>
-<t tx="swot.20260310164932.1" _mod_time="4741da6c0454142c9f2e">@language java
+<t tx="swot.20260310164932.1" _mod_time="4741da6c3577a30d132e">@language java
 // @clean code/testBasicSyntax/src/HashMapExample/AccessControlSystem.java
 package HashMapExample;
 
@@ -22034,7 +22034,7 @@ class AccessControlSystem {
     // ArrayList：用于名单的顺序维护和批量管理
     private ArrayList&lt;BaseDoorCard&gt; whitelist = new ArrayList&lt;&gt;();
 
-    // HashMap：用于刷卡瞬间的 O(1) 极速检索 &lt;1&gt;
+    // HashMap：变量用于刷卡瞬间的 O(1) 极速检索 &lt;1&gt;
     private HashMap&lt;String, BaseDoorCard&gt; whitelistMap = new HashMap&lt;&gt;();
 
     @others
@@ -22062,7 +22062,7 @@ public void processAccessRequest(String cardId) {
 
     if (card == null) {
         System.out.println("【拒绝】此卡未在系统中登记。");
-        return;
+        return;  // 直接退出当前执行的方法
     }
 
     try {
@@ -22076,7 +22076,7 @@ public void processAccessRequest(String cardId) {
     }
 }
 </t>
-<t tx="swot.20260310172714.1" _mod_time="4741da6bf9188092fe2e">@language java
+<t tx="swot.20260310172714.1" _mod_time="4741da6c351243fb892e">@language java
 // @clean code/testBasicSyntax/src/HashMapExample/CardReader.java
 package HashMapExample;
 
@@ -22085,6 +22085,7 @@ package HashMapExample;
  * 不依赖任何业务系统
  */
 class CardReader {
+    // 直接定义了一个读卡的方法
     public String readPhysicalSignal(String simulatedInput) {
         System.out.println("[硬件层] 传感器感应到物理信号...");
         // 模拟磁条或芯片读取过程，返回原始 ID 字符串
