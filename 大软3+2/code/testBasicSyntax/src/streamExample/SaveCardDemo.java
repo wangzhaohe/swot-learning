@@ -9,7 +9,7 @@ public class SaveCardDemo {
         try (BufferedWriter writer = new BufferedWriter(
                                      new FileWriter("cards02.txt", true))) {
             // 模拟存入一个用户信息
-            writer.write("001,张三,CARD_888");
+            writer.write("小明,S1234567");
             writer.newLine(); // 换行，准备写下一条记录
             System.out.println("保存成功！用户信息已写入硬盘。");
         }

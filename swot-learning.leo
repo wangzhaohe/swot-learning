@@ -14922,6 +14922,9 @@ code/testBasicSyntax/cards.txt
 ----
 @others
 ----
+
+.自行扩展功能
+TIP: 可以在前面的 `AccessControlSystem.registerCard()` 中调用该例子的逻辑，把门禁卡信息写入本地文件中。
 </t>
 <t tx="swot.20260216115311.1">[upperalpha]
 . 知识点说明
@@ -22130,7 +22133,7 @@ package HashMapExample;
 &lt;2&gt; 将新门禁卡存入 变量 whitelistMap
 &lt;3&gt; 利用 HashMap 快速检索是否存在某个卡 #(这是使用的重点代码！)#
 </t>
-<t tx="swot.20260310220137.1" _mod_time="4741da6c3277e544482e">@language java
+<t tx="swot.20260310220137.1" _mod_time="4741da6c38a5e5ad072e">@language java
 // @clean code/testBasicSyntax/src/streamExample/SaveCardDemo.java
 package streamExample;
 
@@ -22142,7 +22145,7 @@ public class SaveCardDemo {
         try (BufferedWriter writer = new BufferedWriter(
                                      new FileWriter("cards02.txt", true))) {
             // 模拟存入一个用户信息
-            writer.write("001,张三,CARD_888");
+            writer.write("小明,S1234567");
             writer.newLine(); // 换行，准备写下一条记录
             System.out.println("保存成功！用户信息已写入硬盘。");
         }
