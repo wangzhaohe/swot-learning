@@ -2051,7 +2051,7 @@ endif::[]
 关于 Exception 体系结构：
 
 * 不需要背诵 Throwable 下面有多少个类。
-* 只需要告诉知道：Exception 是所有意外的总称，遇到搞不定的异常，直接 catch (Exception e) 就能兜底。
+* 只需要告诉知道：Exception 是所有意外的总称，遇到搞不定的异常，直接 catch (Exception e) 就能##兜底##。
 
 
 关于 finally 的必要性：
@@ -2066,31 +2066,35 @@ endif::[]
 == 集合框架（4学时）
 
 
-=== ArrayList —— 封装门禁名单
+=== ArrayList —— 封装门禁卡名单
 [upperalpha]
 . **知识点说明**
 
 * 传统的数组容量是固定的，开辟了 10 个位子就只能坐 10 个人。
 * `ArrayList`：像一个会变魔术的排队队伍。人多它就变长，人少它就缩短，非常适合存储不确定数量的门禁卡信息 。
-  ** 配合泛型 <BaseDoorCard> 使用，就像给盒子贴标签，告诉 Java 这个集合只能装"门禁卡"，装入其他类型编译器会直接报错。
+  ** 配合泛型语法 <BaseDoorCard> 使用，就像给盒子贴标签，告诉 Java 这个集合只能装"门禁卡"，装入其他类型编译器会直接报错。
 
 
 . 代码举例：模拟早高峰批量刷卡进校
 +
 [source,java]
 ----
-// @clean code/testBasicSyntax/src/ExceptionSelfdefineExample/DoorException.java
+// @clean code/testBasicSyntax/src/ArrayListExample/Run.java
 package ArrayListExample;
 
-/**
- * 自定义异常：专门处理门禁系统的异常情况
- */
-public class DoorException extends Exception {
-    public DoorException(String message) {
-        super(message); // 把错误信息传给父类去处理
+public class Run {
+    public static void main(String[] args) {
+        AccessControlSystem system = new AccessControlSystem();
+
+        // 1. 动态录入名单（ArrayList 的灵活性）
+        system.registerCard(new StudentCard("S1234567", "小明")); // 正常学生卡
+        system.registerCard(new StudentCard("BAD-99", "非法者")); // 长度非法触发异常
+        system.registerCard(new AdminCard("A8888888", "王老师")); // 正常管理员卡
+
+        // 2. 启动批量校验，模拟批量刷卡操作
+        system.executeBatchCheck();
     }
 }
-
 // @clean code/testBasicSyntax/src/ArrayListExample/AccessControlSystem.java
 package ArrayListExample;
 
@@ -2099,20 +2103,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 class AccessControlSystem {
+
     // 知识点：ArrayList 动态管理名单
-    private ArrayList<BaseDoorCard> whitelist = new ArrayList<>(); 
-    
+    private ArrayList<BaseDoorCard> whitelist = new ArrayList<>();  // <1>
+
     // 知识点：封装门禁硬件（读卡器）
     private CardReader reader = new CardReader();
 
     public void registerCard(BaseDoorCard card) {
-        whitelist.add(card); // add 操作 <1>
+        whitelist.add(card); // add 操作 <2>
         System.out.println("系统：已录入卡片 " + card.getOwnerName());
     }
 
     public void executeBatchCheck() {
-        System.out.println("\n--- 启动批量校验 (当前人数: " + whitelist.size() + ") ---");  // 取数量 <2>
-        for (BaseDoorCard card : whitelist) {  // 循环遍历 <3>
+        System.out.println("\n--- 启动批量校验 (当前待刷卡数量: " + whitelist.size() + ") ---");  // 打印数量 <3>
+        for (BaseDoorCard card : whitelist) {  // 循环遍历 <4>
             reader.readCard(card); // 调用读卡器处理单次刷卡
         }
     }
@@ -2134,7 +2139,7 @@ class CardReader {
 
         try {
             card.validate();
-        } catch(DoorException e) {  // <1>
+        } catch(DoorException e) {
             // 捕获业务异常
             System.out.println("【安全拦截】门禁逻辑错误：" + e.getMessage());
         } catch(Exception e) {
@@ -2146,6 +2151,18 @@ class CardReader {
         }
     }
 }
+// @clean code/testBasicSyntax/src/ExceptionSelfdefineExample/DoorException.java
+package ArrayListExample;
+
+/**
+ * 自定义异常：专门处理门禁系统的异常情况
+ */
+public class DoorException extends Exception {
+    public DoorException(String message) {
+        super(message); // 把错误信息传给父类去处理
+    }
+}
+
 // @clean code/testBasicSyntax/src/ArrayListExample/Card.java
 package ArrayListExample;
 
@@ -2182,7 +2199,7 @@ abstract class BaseDoorCard {
      * 抽象类可以拥有具体实现的方法。
      */
     // -- New -- Added 自定义异常
-    public boolean validate() throws DoorException {  // <3>
+    public boolean validate() throws DoorException {
         System.out.println("【系统日志】正在启动刷卡即时校验...");
         if (this.serialNumber.length() != 8) {
             // 使用自定义异常代替通用异常
@@ -2216,7 +2233,7 @@ class StudentCard extends BaseDoorCard implements Payable {
     }
 
     @Override
-    public boolean validate() throws DoorException {  // --new-- add 自定义异常 <2>
+    public boolean validate() throws DoorException {  // --new-- add 自定义异常
         boolean isValid = super.validate();  // 这里可能会抛出异常，中断后续逻辑
         if (isValid) {
             showAccessScope(); // 执行个性化权限展示
@@ -2256,23 +2273,13 @@ interface Payable {
     void pay(double amount); // 谁实现这个接口，谁就必须具备支付功能
 }
 
-// @clean code/testBasicSyntax/src/ArrayListExample/Run.java
-package ArrayListExample;
-
-public class Run {
-    public static void main(String[] args) {
-        AccessControlSystem system = new AccessControlSystem();
-
-        // 1. 动态录入名单（ArrayList 的灵活性）
-        system.registerCard(new StudentCard("S1234567", "小明")); // 正常卡
-        system.registerCard(new StudentCard("BAD-99", "非法者")); // 长度非法触发异常
-        system.registerCard(new AdminCard("A8888888", "王老师")); // 正常卡
-
-        // 2. 启动批量校验，模拟批量刷卡操作
-        system.executeBatchCheck();
-    }
-}
 ----
+
+<1> new 创建 whitelist 变量，配合泛型语法 <BaseDoorCard>，限制只能存储门禁卡数据。
+<2> .add() 注册门禁卡数据到 whitelist 列表中。
+<3> .size() 获取 whitelist 长度，即门禁卡张数。
+<4> 遍历  whitelist 对每张卡进行刷卡操作。
+
 
 .ArrayList 的核心操作小结
 [cols="1,3"]
@@ -2637,9 +2644,12 @@ public class SaveUserDemo {
         }
     }
 }
+----
+
+=== 补充知识: Java I/O 核心组件解析：File, FileWriter 与 BufferedWriter
 ****
 [upperalpha]
-1. 角色分工与类关系 (Decorator Pattern)
+. 角色分工与类关系 (Decorator Pattern)
 +
 .这三个类之间不是 **继承** 关系，而是 **组合（包装）** 关系。
 [cols="1,1,2"]
@@ -2656,28 +2666,29 @@ public class SaveUserDemo {
 
 | `BufferedWriter`
 | **集装箱/缓冲区**
-| 包装类。在内存开辟 8KB 空间，攒满后再调用一次 `FileWriter` 批量写入。
+| 包装类。在内存开辟 8KB 空间，攒满后再调用一次 `FileWriter` 批量写入硬盘。
 |===
 
-2. “小水桶”实验：为什么需要缓冲区？
+. “小水桶”实验：为什么需要缓冲区？
 * **直接写入 (`FileWriter`)**：
   如同用 **勺子** 舀水，每舀一勺都要跑一趟院子（触发一次磁盘 I/O），效率极低。
 * **缓冲写入 (`BufferedWriter`)**：
   如同给勺子配了一个 **水桶**。先将数据存在内存里，等桶装满了再跑一趟院子，极大地减少了往返次数。
 
-3. try-with-resources 完整写法
+. try-with-resources 完整写法
++
 这是目前 Java 开发中最推荐的写法。注意所有的“流对象”都在 `try` 的括号内创建：
 +
 [source,java]
 ----
 // 所有的流创建都放在 try (...) 内部
-// 执行完毕后，Java 会自动调用 close()，即使中间出了异常也会关
+// 执行完毕后，Java 会自动调用 close()，即使中间出了异常也会关闭
 try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
-    
+
     writer.write("新用户：张三");
     writer.newLine(); // BufferedWriter 特有的换行方法，非常好用
     writer.write("新用户：李四");
-    
+
 } catch (IOException e) {
     // 捕获可能的文件读写异常
     e.printStackTrace();
@@ -2689,7 +2700,6 @@ try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true
 .. **便捷路径**：`new FileWriter("users.txt")` 这种写法会在底层自动为你创建一个 `new File("users.txt")`。
 .. **追加数据**：第二个参数 `true` 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。
 ****
-----
 
 === 序列化 —— “数据冷冻技术”
 **1. 知识点说明**

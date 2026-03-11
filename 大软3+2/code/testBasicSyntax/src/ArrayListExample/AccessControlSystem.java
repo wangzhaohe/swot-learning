@@ -6,20 +6,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 class AccessControlSystem {
+
     // 知识点：ArrayList 动态管理名单
-    private ArrayList<BaseDoorCard> whitelist = new ArrayList<>(); 
-    
+    private ArrayList<BaseDoorCard> whitelist = new ArrayList<>();  // <1>
+
     // 知识点：封装门禁硬件（读卡器）
     private CardReader reader = new CardReader();
 
     public void registerCard(BaseDoorCard card) {
-        whitelist.add(card); // add 操作 <1>
+        whitelist.add(card); // add 操作 <2>
         System.out.println("系统：已录入卡片 " + card.getOwnerName());
     }
 
     public void executeBatchCheck() {
-        System.out.println("\n--- 启动批量校验 (当前人数: " + whitelist.size() + ") ---");  // 取数量 <2>
-        for (BaseDoorCard card : whitelist) {  // 循环遍历 <3>
+        System.out.println("\n--- 启动批量校验 (当前待刷卡数量: " + whitelist.size() + ") ---");  // 打印数量 <3>
+        for (BaseDoorCard card : whitelist) {  // 循环遍历 <4>
             reader.readCard(card); // 调用读卡器处理单次刷卡
         }
     }
@@ -41,7 +42,7 @@ class CardReader {
 
         try {
             card.validate();
-        } catch(DoorException e) {  // <1>
+        } catch(DoorException e) {
             // 捕获业务异常
             System.out.println("【安全拦截】门禁逻辑错误：" + e.getMessage());
         } catch(Exception e) {

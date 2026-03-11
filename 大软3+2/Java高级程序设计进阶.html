@@ -618,7 +618,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_集合框架4学时">集合框架（4学时）</a>
 <ul class="sectlevel2">
-<li><a href="#_arraylist_封装门禁名单">ArrayList —— 封装门禁名单</a></li>
+<li><a href="#_arraylist_封装门禁卡名单">ArrayList —— 封装门禁卡名单</a></li>
 <li><a href="#_hashmap_瞬间定位的电子名册_结构大改进真正符合人类思维的开发架构">HashMap —— “瞬间定位的电子名册”  &#8594; 结构大改进，真正符合人类思维的开发架构！</a>
 <ul class="sectlevel3">
 <li><a href="#_支持类_从上面代码_clone_而来无新功能">支持类 (从上面代码 clone 而来，无新功能)</a></li>
@@ -633,6 +633,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_为什么要学_io_大脑与笔记本">为什么要学 IO？ —— “大脑”与“笔记本”</a></li>
 <li><a href="#_file_类_文件管理员">File 类 —— “文件管理员”</a></li>
 <li><a href="#_字符缓冲流_高效搬运工">字符缓冲流 —— “高效搬运工”</a></li>
+<li><a href="#_补充知识_java_io_核心组件解析file_filewriter_与_bufferedwriter">补充知识: Java I/O 核心组件解析：File, FileWriter 与 BufferedWriter</a></li>
 <li><a href="#_序列化_数据冷冻技术">序列化 —— “数据冷冻技术”</a></li>
 <li><a href="#_实战演示读取文件并抛出自定义异常">实战演示：读取文件并抛出自定义异常</a></li>
 <li><a href="#_小结">小结</a></li>
@@ -3603,7 +3604,7 @@ toggleButton.addEventListener('click', () => {
 <p>不需要背诵 Throwable 下面有多少个类。</p>
 </li>
 <li>
-<p>只需要告诉知道：Exception 是所有意外的总称，遇到搞不定的异常，直接 catch (Exception e) 就能兜底。</p>
+<p>只需要告诉知道：Exception 是所有意外的总称，遇到搞不定的异常，直接 catch (Exception e) 就能<mark>兜底</mark>。</p>
 </li>
 </ul>
 </div>
@@ -3634,7 +3635,7 @@ toggleButton.addEventListener('click', () => {
 <h2 id="_集合框架4学时">集合框架（4学时）</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_arraylist_封装门禁名单">ArrayList —— 封装门禁名单</h3>
+<h3 id="_arraylist_封装门禁卡名单">ArrayList —— 封装门禁卡名单</h3>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
@@ -3649,7 +3650,7 @@ toggleButton.addEventListener('click', () => {
 <div class="ulist">
 <ul>
 <li>
-<p>配合泛型 &lt;BaseDoorCard&gt; 使用，就像给盒子贴标签，告诉 Java 这个集合只能装"门禁卡"，装入其他类型编译器会直接报错。</p>
+<p>配合泛型语法 &lt;BaseDoorCard&gt; 使用，就像给盒子贴标签，告诉 Java 这个集合只能装"门禁卡"，装入其他类型编译器会直接报错。</p>
 </li>
 </ul>
 </div>
@@ -3661,18 +3662,22 @@ toggleButton.addEventListener('click', () => {
 <p>代码举例：模拟早高峰批量刷卡进校</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/ExceptionSelfdefineExample/DoorException.java</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/ArrayListExample/Run.java</span>
 <span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">ArrayListExample</span><span class="tok-p">;</span>
 
-<span class="tok-cm">/**</span>
-<span class="tok-cm"> * 自定义异常：专门处理门禁系统的异常情况</span>
-<span class="tok-cm"> */</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DoorException</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">DoorException</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">message</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">message</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 把错误信息传给父类去处理</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Run</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-n">AccessControlSystem</span><span class="tok-w"> </span><span class="tok-n">system</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">AccessControlSystem</span><span class="tok-p">();</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 1. 动态录入名单（ArrayList 的灵活性）</span>
+<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">(</span><span class="tok-s">&quot;S1234567&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;小明&quot;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// 正常学生卡</span>
+<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">(</span><span class="tok-s">&quot;BAD-99&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;非法者&quot;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// 长度非法触发异常</span>
+<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">AdminCard</span><span class="tok-p">(</span><span class="tok-s">&quot;A8888888&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;王老师&quot;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// 正常管理员卡</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 2. 启动批量校验，模拟批量刷卡操作</span>
+<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">executeBatchCheck</span><span class="tok-p">();</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
-
 <span class="tok-c1">// @clean code/testBasicSyntax/src/ArrayListExample/AccessControlSystem.java</span>
 <span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">ArrayListExample</span><span class="tok-p">;</span>
 
@@ -3681,20 +3686,21 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.util.ArrayList</span><span class="tok-p">;</span>
 
 <span class="tok-kd">class</span> <span class="tok-nc">AccessControlSystem</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
 <span class="tok-w">    </span><span class="tok-c1">// 知识点：ArrayList 动态管理名单</span>
-<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">BaseDoorCard</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;&gt;</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">BaseDoorCard</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;&gt;</span><span class="tok-p">();</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 
 <span class="tok-w">    </span><span class="tok-c1">// 知识点：封装门禁硬件（读卡器）</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">CardReader</span><span class="tok-w"> </span><span class="tok-n">reader</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">CardReader</span><span class="tok-p">();</span>
 
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">registerCard</span><span class="tok-p">(</span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">whitelist</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-n">card</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// add 操作 </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">        </span><span class="tok-n">whitelist</span><span class="tok-p">.</span><span class="tok-na">add</span><span class="tok-p">(</span><span class="tok-n">card</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// add 操作 </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;系统：已录入卡片 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">getOwnerName</span><span class="tok-p">());</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">executeBatchCheck</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;\n--- 启动批量校验 (当前人数: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-p">.</span><span class="tok-na">size</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;) ---&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 取数量 </span><i class="conum" data-value="2"></i><b>(2)</b>
-<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 循环遍历 </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;\n--- 启动批量校验 (当前待刷卡数量: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-p">.</span><span class="tok-na">size</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;) ---&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 打印数量 </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">BaseDoorCard</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 循环遍历 </span><i class="conum" data-value="4"></i><b>(4)</b>
 <span class="tok-w">            </span><span class="tok-n">reader</span><span class="tok-p">.</span><span class="tok-na">readCard</span><span class="tok-p">(</span><span class="tok-n">card</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 调用读卡器处理单次刷卡</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
@@ -3716,7 +3722,7 @@ toggleButton.addEventListener('click', () => {
 
 <span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">();</span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-p">(</span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-p">(</span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-c1">// 捕获业务异常</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【安全拦截】门禁逻辑错误：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
 <span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-p">(</span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -3728,6 +3734,18 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
+<span class="tok-c1">// @clean code/testBasicSyntax/src/ExceptionSelfdefineExample/DoorException.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">ArrayListExample</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 自定义异常：专门处理门禁系统的异常情况</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DoorException</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-nf">DoorException</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">message</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">super</span><span class="tok-p">(</span><span class="tok-n">message</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 把错误信息传给父类去处理</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+
 <span class="tok-c1">// @clean code/testBasicSyntax/src/ArrayListExample/Card.java</span>
 <span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">ArrayListExample</span><span class="tok-p">;</span>
 
@@ -3764,7 +3782,7 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-cm">     * 抽象类可以拥有具体实现的方法。</span>
 <span class="tok-cm">     */</span>
 <span class="tok-w">    </span><span class="tok-c1">// -- New -- Added 自定义异常</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【系统日志】正在启动刷卡即时校验...&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-na">serialNumber</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-c1">// 使用自定义异常代替通用异常</span>
@@ -3798,7 +3816,7 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
 <span class="tok-w">    </span><span class="tok-nd">@Override</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// --new-- add 自定义异常 </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-nf">validate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// --new-- add 自定义异常</span>
 <span class="tok-w">        </span><span class="tok-kt">boolean</span><span class="tok-w"> </span><span class="tok-n">isValid</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">super</span><span class="tok-p">.</span><span class="tok-na">validate</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 这里可能会抛出异常，中断后续逻辑</span>
 <span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">isValid</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-n">showAccessScope</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 执行个性化权限展示</span>
@@ -3836,28 +3854,31 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-cm"> */</span>
 <span class="tok-kd">interface</span> <span class="tok-nc">Payable</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">pay</span><span class="tok-p">(</span><span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">amount</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 谁实现这个接口，谁就必须具备支付功能</span>
-<span class="tok-p">}</span>
-
-<span class="tok-c1">// @clean code/testBasicSyntax/src/ArrayListExample/Run.java</span>
-<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">ArrayListExample</span><span class="tok-p">;</span>
-
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Run</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">AccessControlSystem</span><span class="tok-w"> </span><span class="tok-n">system</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">AccessControlSystem</span><span class="tok-p">();</span>
-
-<span class="tok-w">        </span><span class="tok-c1">// 1. 动态录入名单（ArrayList 的灵活性）</span>
-<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">(</span><span class="tok-s">&quot;S1234567&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;小明&quot;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// 正常卡</span>
-<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-p">(</span><span class="tok-s">&quot;BAD-99&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;非法者&quot;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// 长度非法触发异常</span>
-<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">registerCard</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">AdminCard</span><span class="tok-p">(</span><span class="tok-s">&quot;A8888888&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;王老师&quot;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// 正常卡</span>
-
-<span class="tok-w">        </span><span class="tok-c1">// 2. 启动批量校验，模拟批量刷卡操作</span>
-<span class="tok-w">        </span><span class="tok-n">system</span><span class="tok-p">.</span><span class="tok-na">executeBatchCheck</span><span class="tok-p">();</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </li>
 </ol>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>new 创建 whitelist 变量，配合泛型语法 &lt;BaseDoorCard&gt;，限制只能存储门禁卡数据。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>.add() 注册门禁卡数据到 whitelist 列表中。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>.size() 获取 whitelist 长度，即门禁卡张数。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>遍历  whitelist 对每张卡进行刷卡操作。</td>
+</tr>
+</table>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 2. ArrayList 的核心操作小结</caption>
@@ -4380,64 +4401,110 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">err</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;发生意外！文件写不进去了：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">getMessage</span><span class="tok-p">());</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
-<span class="tok-p">}</span>
-<span class="tok-o">****</span>
-<span class="tok-o">[</span><span class="tok-n">upperalpha</span><span class="tok-o">]</span>
-<span class="tok-mf">1.</span><span class="tok-w"> </span><span class="tok-n">角色分工与类关系</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Decorator</span><span class="tok-w"> </span><span class="tok-n">Pattern</span><span class="tok-p">)</span>
-<span class="tok-o">+</span>
-<span class="tok-p">.</span><span class="tok-na">这三个类之间不是</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">继承</span><span class="tok-o">**</span><span class="tok-w"> </span><span class="tok-n">关系</span><span class="tok-err">，</span><span class="tok-n">而是</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">组合</span><span class="tok-err">（</span><span class="tok-n">包装</span><span class="tok-err">）</span><span class="tok-o">**</span><span class="tok-w"> </span><span class="tok-n">关系</span><span class="tok-err">。</span>
-<span class="tok-o">[</span><span class="tok-n">cols</span><span class="tok-o">=</span><span class="tok-s">&quot;1,1,2&quot;</span><span class="tok-o">]</span>
-<span class="tok-o">|===</span>
-<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">类名</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">角色</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">核心职责</span>
-
-<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-err">`</span><span class="tok-n">File</span><span class="tok-err">`</span>
-<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">地址标签</span><span class="tok-o">**</span>
-<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">仅代表磁盘上的路径或属性</span><span class="tok-err">，</span><span class="tok-n">不具备读写数据的能力</span><span class="tok-err">。</span>
-
-<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-err">`</span><span class="tok-n">FileWriter</span><span class="tok-err">`</span>
-<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">基础搬运工</span><span class="tok-o">**</span>
-<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">字符流写入器</span><span class="tok-err">。</span><span class="tok-n">负责建立连接并将字符一个个</span><span class="tok-err">“</span><span class="tok-n">敲</span><span class="tok-err">”</span><span class="tok-n">入硬盘</span><span class="tok-err">。</span>
-
-<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-err">`</span><span class="tok-n">BufferedWriter</span><span class="tok-err">`</span>
-<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">集装箱</span><span class="tok-o">/</span><span class="tok-n">缓冲区</span><span class="tok-o">**</span>
-<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">包装类</span><span class="tok-err">。</span><span class="tok-n">在内存开辟</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-n">KB</span><span class="tok-w"> </span><span class="tok-n">空间</span><span class="tok-err">，</span><span class="tok-n">攒满后再调用一次</span><span class="tok-w"> </span><span class="tok-err">`</span><span class="tok-n">FileWriter</span><span class="tok-err">`</span><span class="tok-w"> </span><span class="tok-n">批量写入</span><span class="tok-err">。</span>
-<span class="tok-o">|===</span>
-
-<span class="tok-mf">2.</span><span class="tok-w"> </span><span class="tok-err">“</span><span class="tok-n">小水桶</span><span class="tok-err">”</span><span class="tok-n">实验</span><span class="tok-err">：</span><span class="tok-n">为什么需要缓冲区</span><span class="tok-err">？</span>
-<span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">直接写入</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-err">`</span><span class="tok-n">FileWriter</span><span class="tok-err">`</span><span class="tok-p">)</span><span class="tok-o">**</span><span class="tok-err">：</span>
-<span class="tok-w">  </span><span class="tok-n">如同用</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">勺子</span><span class="tok-o">**</span><span class="tok-w"> </span><span class="tok-n">舀水</span><span class="tok-err">，</span><span class="tok-n">每舀一勺都要跑一趟院子</span><span class="tok-err">（</span><span class="tok-n">触发一次磁盘</span><span class="tok-w"> </span><span class="tok-n">I</span><span class="tok-o">/</span><span class="tok-n">O</span><span class="tok-err">），</span><span class="tok-n">效率极低</span><span class="tok-err">。</span>
-<span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">缓冲写入</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-err">`</span><span class="tok-n">BufferedWriter</span><span class="tok-err">`</span><span class="tok-p">)</span><span class="tok-o">**</span><span class="tok-err">：</span>
-<span class="tok-w">  </span><span class="tok-n">如同给勺子配了一个</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-n">水桶</span><span class="tok-o">**</span><span class="tok-err">。</span><span class="tok-n">先将数据存在内存里</span><span class="tok-err">，</span><span class="tok-n">等桶装满了再跑一趟院子</span><span class="tok-err">，</span><span class="tok-n">极大地减少了往返次数</span><span class="tok-err">。</span>
-
-<span class="tok-mf">3.</span><span class="tok-w"> </span><span class="tok-k">try</span><span class="tok-o">-</span><span class="tok-n">with</span><span class="tok-o">-</span><span class="tok-n">resources</span><span class="tok-w"> </span><span class="tok-n">完整写法</span>
-<span class="tok-n">这是目前</span><span class="tok-w"> </span><span class="tok-n">Java</span><span class="tok-w"> </span><span class="tok-n">开发中最推荐的写法</span><span class="tok-err">。</span><span class="tok-n">注意所有的</span><span class="tok-err">“</span><span class="tok-n">流对象</span><span class="tok-err">”</span><span class="tok-n">都在</span><span class="tok-w"> </span><span class="tok-err">`</span><span class="tok-k">try</span><span class="tok-err">`</span><span class="tok-w"> </span><span class="tok-n">的括号内创建</span><span class="tok-err">：</span>
-<span class="tok-o">+</span>
-<span class="tok-o">[</span><span class="tok-n">source</span><span class="tok-p">,</span><span class="tok-n">java</span><span class="tok-o">]</span></code></pre>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {</p>
 </div>
-<div class="literalblock">
+<div class="sect2">
+<h3 id="_补充知识_java_io_核心组件解析file_filewriter_与_bufferedwriter">补充知识: Java I/O 核心组件解析：File, FileWriter 与 BufferedWriter</h3>
+<div class="sidebarblock">
 <div class="content">
-<pre>writer.write("新用户：张三");
-writer.newLine(); // BufferedWriter 特有的换行方法，非常好用
-writer.write("新用户：李四");</pre>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>角色分工与类关系 (Decorator Pattern)</p>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. 这三个类之间不是 <strong>继承</strong> 关系，而是 <strong>组合（包装）</strong> 关系。</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">类名</th>
+<th class="tableblock halign-left valign-top">角色</th>
+<th class="tableblock halign-left valign-top">核心职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>File</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>地址标签</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">仅代表磁盘上的路径或属性，不具备读写数据的能力。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FileWriter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>基础搬运工</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">字符流写入器。负责建立连接并将字符一个个“敲”入硬盘。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BufferedWriter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>集装箱/缓冲区</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">包装类。在内存开辟 8KB 空间，攒满后再调用一次 <code>FileWriter</code> 批量写入硬盘。</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>“小水桶”实验：为什么需要缓冲区？</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>直接写入 (<code>FileWriter</code>)</strong>：
+如同用 <strong>勺子</strong> 舀水，每舀一勺都要跑一趟院子（触发一次磁盘 I/O），效率极低。</p>
+</li>
+<li>
+<p><strong>缓冲写入 (<code>BufferedWriter</code>)</strong>：
+如同给勺子配了一个 <strong>水桶</strong>。先将数据存在内存里，等桶装满了再跑一趟院子，极大地减少了往返次数。</p>
+</li>
+</ul>
 </div>
-</div>
+</li>
+<li>
+<p>try-with-resources 完整写法</p>
 <div class="paragraph">
-<p>} catch (IOException e) {
-    // 捕获可能的文件读写异常
-    e.printStackTrace();
-}</p>
+<p>这是目前 Java 开发中最推荐的写法。注意所有的“流对象”都在 <code>try</code> 的括号内创建：</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>4. 核心要点
-.. **自动关闭**：只要写在 `try(...)` 里的资源，不需要手动写 `writer.close()`。
-.. **便捷路径**：`new FileWriter("users.txt")` 这种写法会在底层自动为你创建一个 `new File("users.txt")`。
-.. **追加数据**：第二个参数 `true` 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。
-****</pre>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 所有的流创建都放在 try (...) 内部</span>
+<span class="tok-c1">// 执行完毕后，Java 会自动调用 close()，即使中间出了异常也会关闭</span>
+<span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">BufferedWriter</span><span class="tok-w"> </span><span class="tok-n">writer</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">BufferedWriter</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">FileWriter</span><span class="tok-p">(</span><span class="tok-s">&quot;users.txt&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">)))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-n">writer</span><span class="tok-p">.</span><span class="tok-na">write</span><span class="tok-p">(</span><span class="tok-s">&quot;新用户：张三&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-n">writer</span><span class="tok-p">.</span><span class="tok-na">newLine</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// BufferedWriter 特有的换行方法，非常好用</span>
+<span class="tok-w">    </span><span class="tok-n">writer</span><span class="tok-p">.</span><span class="tok-na">write</span><span class="tok-p">(</span><span class="tok-s">&quot;新用户：李四&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 捕获可能的文件读写异常</span>
+<span class="tok-w">    </span><span class="tok-n">e</span><span class="tok-p">.</span><span class="tok-na">printStackTrace</span><span class="tok-p">();</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>核心要点</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><strong>自动关闭</strong>：只要写在 <code>try(&#8230;&#8203;)</code> 里的资源，不需要手动写 <code>writer.close()</code>。</p>
+</li>
+<li>
+<p><strong>便捷路径</strong>：<code>new FileWriter("users.txt")</code> 这种写法会在底层自动为你创建一个 <code>new File("users.txt")</code>。</p>
+</li>
+<li>
+<p><strong>追加数据</strong>：第二个参数 <code>true</code> 确保你的数据是“接在后面”写，而不是覆盖掉整个文件。</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
 </div>
 </div>
 </div>
@@ -5006,7 +5073,7 @@ writer.write("新用户：李四");</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-11 07:56:56 +0800
+Last updated 2026-03-11 08:54:52 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
