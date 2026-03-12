@@ -4970,7 +4970,7 @@ code/testBasicSyntax/cards.txt</p>
 <div class="ulist">
 <ul>
 <li>
-<p>不管后台是 MySQL、Oracle 还是 SQL Server，Java 程序员只需要学一套 JDBC 的写法，就能跟所有数据库沟通。</p>
+<p>不管数据库是 MySQL、Oracle 还是 SQL Server，Java 程序员只需要学一套 JDBC 的写法，就能跟所有数据库沟通。</p>
 </li>
 </ul>
 </div>
@@ -4979,7 +4979,7 @@ code/testBasicSyntax/cards.txt</p>
 </div>
 </li>
 <li>
-<p><strong>操作四大步骤</strong>：准备电话线 (加载驱动) &#8594; 拨通电话 (建立连接) &#8594; 下订单 (执行 SQL) &#8594; 挂断电话 (关闭资源)。</p>
+<p><strong>操作四大步骤</strong>：准备电话线 (加载驱动) &#8594; 拨通电话 (建立连接) &#8594; 传达指令 / 沟通需求 (执行 SQL) &#8594; 挂断电话 (关闭资源)。</p>
 </li>
 <li>
 <p><strong>防止 SQL 注入</strong>：绝不能用字符串拼接 SQL，必须使用 <code>PreparedStatement</code>。它就像一份填空题模版，只能在空位填内容，确保了系统的安全底线。</p>
@@ -5021,12 +5021,13 @@ code/testBasicSyntax/cards.txt</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>小提示：容器启动后，你可以用 podman ps 检查它是否正在正常运行。</p>
+<p>小提示：容器启动后，你可以用 <code>podman ps</code> 检查它是否正在正常运行。</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_建表准备_podman">建表准备 (Podman)</h3>
 <div class="listingblock">
+<div class="title">创建表 cards</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">podman exec -it door-postgres psql -U postgres -c &quot;</span>
 <span class="tok-go">CREATE TABLE IF NOT EXISTS cards (</span>
@@ -5034,6 +5035,20 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-go">    owner_name VARCHAR(50) NOT NULL,</span>
 <span class="tok-go">    card_type VARCHAR(20) NOT NULL</span>
 <span class="tok-go">);&quot;</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">查看表 cards 结构</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">&gt; podman exec -it door-postgres psql -U postgres -c &quot;\d cards&quot;</span>
+<span class="tok-go">                          Table &quot;public.cards&quot;</span>
+<span class="tok-go">    Column     |         Type          | Collation | Nullable | Default</span>
+<span class="tok-go">---------------+-----------------------+-----------+----------+---------</span>
+<span class="tok-go"> serial_number | character varying(20) |           | not null |</span>
+<span class="tok-go"> owner_name    | character varying(50) |           | not null |</span>
+<span class="tok-go"> card_type     | character varying(20) |           | not null |</span>
+<span class="tok-go">Indexes:</span>
+<span class="tok-go">    &quot;cards_pkey&quot; PRIMARY KEY, btree (serial_number)</span></code></pre>
 </div>
 </div>
 </div>
@@ -5220,7 +5235,7 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-cm">/**</span>
 <span class="tok-cm"> * 专门负责开/关数据库的工具类</span>
 <span class="tok-cm"> */</span>
-<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DBUtils</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DBUtils</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 <span class="tok-w">    </span><span class="tok-c1">// 根据实际 Podman 映射的端口和密码修改</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">URL</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;jdbc:postgresql://localhost:5432/postgres&quot;</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kd">final</span><span class="tok-w"> </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">USER</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;postgres&quot;</span><span class="tok-p">;</span>
@@ -5259,14 +5274,14 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-w">        </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">sql</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;INSERT INTO cards (serial_number, owner_name, card_type) VALUES (?, ?, ?) ON CONFLICT (serial_number) DO NOTHING&quot;</span><span class="tok-p">;</span>
 
 <span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Connection</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">DBUtils</span><span class="tok-p">.</span><span class="tok-na">getConnection</span><span class="tok-p">();</span>
-<span class="tok-w">             </span><span class="tok-n">PreparedStatement</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-p">.</span><span class="tok-na">prepareStatement</span><span class="tok-p">(</span><span class="tok-n">sql</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">             </span><span class="tok-n">PreparedStatement</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-p">.</span><span class="tok-na">prepareStatement</span><span class="tok-p">(</span><span class="tok-n">sql</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><i class="conum" data-value="2"></i><b>(2)</b>
 
 <span class="tok-w">            </span><span class="tok-c1">// 像填空题一样安全地设置参数，防止 SQL 注入</span>
 <span class="tok-w">            </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">setString</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">getSerialNumber</span><span class="tok-p">());</span>
 <span class="tok-w">            </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">setString</span><span class="tok-p">(</span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">getOwnerName</span><span class="tok-p">());</span>
 <span class="tok-w">            </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">setString</span><span class="tok-p">(</span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-w"> </span><span class="tok-k">instanceof</span><span class="tok-w"> </span><span class="tok-n">StudentCard</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-s">&quot;Student&quot;</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s">&quot;Admin&quot;</span><span class="tok-p">);</span>
 
-<span class="tok-w">            </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">executeUpdate</span><span class="tok-p">();</span><span class="tok-w"> </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">            </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">executeUpdate</span><span class="tok-p">();</span><span class="tok-w"> </span><i class="conum" data-value="3"></i><b>(3)</b>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;系统：已将授权人员 &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">card</span><span class="tok-p">.</span><span class="tok-na">getOwnerName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; 写入数据库。&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">        </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">SQLException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -5284,8 +5299,8 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Connection</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">DBUtils</span><span class="tok-p">.</span><span class="tok-na">getConnection</span><span class="tok-p">();</span>
 <span class="tok-w">             </span><span class="tok-n">PreparedStatement</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-p">.</span><span class="tok-na">prepareStatement</span><span class="tok-p">(</span><span class="tok-n">sql</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
-<span class="tok-w">            </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">setString</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-n">ResultSet</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">executeQuery</span><span class="tok-p">();</span><span class="tok-w"> </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">            </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">setString</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">cardId</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 1 对应第一个问号</span>
+<span class="tok-w">            </span><span class="tok-n">ResultSet</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">executeQuery</span><span class="tok-p">();</span><span class="tok-w"> </span><i class="conum" data-value="4"></i><b>(4)</b>
 
 <span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">next</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">                </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">getString</span><span class="tok-p">(</span><span class="tok-s">&quot;owner_name&quot;</span><span class="tok-p">);</span>
@@ -5321,7 +5336,7 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-w">             </span><span class="tok-n">PreparedStatement</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">conn</span><span class="tok-p">.</span><span class="tok-na">prepareStatement</span><span class="tok-p">(</span><span class="tok-n">sql</span><span class="tok-p">);</span>
 <span class="tok-w">             </span><span class="tok-n">ResultSet</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">pstmt</span><span class="tok-p">.</span><span class="tok-na">executeQuery</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
-<span class="tok-w">            </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">next</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><i class="conum" data-value="4"></i><b>(4)</b>
+<span class="tok-w">            </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">next</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><i class="conum" data-value="5"></i><b>(5)</b>
 <span class="tok-w">                </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">id</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">getString</span><span class="tok-p">(</span><span class="tok-s">&quot;serial_number&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">                </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">getString</span><span class="tok-p">(</span><span class="tok-s">&quot;owner_name&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">                </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">type</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rs</span><span class="tok-p">.</span><span class="tok-na">getString</span><span class="tok-p">(</span><span class="tok-s">&quot;card_type&quot;</span><span class="tok-p">);</span>
@@ -5384,18 +5399,22 @@ code/testBasicSyntax/cards.txt</p>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>核心：使用 <code>PreparedStatement</code> 获取数据库执行对象，这是抵御 SQL 注入的安全底线。</td>
+<td>定义专门负责开/关数据库的工具类 DBUtils</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><code>executeUpdate()</code> 用于执行插入、修改或删除操作。</td>
+<td>核心：使用 <code>PreparedStatement</code> 获取数据库执行对象，这是抵御 SQL 注入的安全底线。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td><code>executeQuery()</code> 用于执行查询，返回代表查询结果的 <code>ResultSet</code> 游标。</td>
+<td><code>executeUpdate()</code> 用于执行插入(或修改或删除)操作。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>executeQuery()</code> 用于执行查询，返回代表查询结果的 <code>ResultSet</code> 游标。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td>使用 <code>rs.next()</code> 逐行遍历数据库记录。</td>
 </tr>
 </table>
@@ -5558,12 +5577,12 @@ code/testBasicSyntax/cards.txt</p>
 </ul>
 </div>
 <div class="listingblock">
-<div class="title">代码举例（看看 User 类里有什么）</div>
+<div class="title">代码举例（看看 StudentCard 类里有什么）</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ReflectionDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-c1">// 通过类名，直接“抓取”这个类的结构</span>
-<span class="tok-w">        </span><span class="tok-n">Class</span><span class="tok-w"> </span><span class="tok-n">clazz</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Class</span><span class="tok-p">.</span><span class="tok-na">forName</span><span class="tok-p">(</span><span class="tok-s">&quot;User&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">Class</span><span class="tok-w"> </span><span class="tok-n">clazz</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Class</span><span class="tok-p">.</span><span class="tok-na">forName</span><span class="tok-p">(</span><span class="tok-s">&quot;StudentCard&quot;</span><span class="tok-p">);</span>
 
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;类的名字是：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">clazz</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">());</span>
 
@@ -5705,7 +5724,7 @@ code/testBasicSyntax/cards.txt</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-12 09:46:52 +0800
+Last updated 2026-03-12 11:08:41 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

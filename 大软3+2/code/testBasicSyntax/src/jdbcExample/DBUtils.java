@@ -8,7 +8,7 @@ import java.sql.SQLException;
 /**
  * 专门负责开/关数据库的工具类
  */
-public class DBUtils {
+public class DBUtils {  // <1>
     // 根据实际 Podman 映射的端口和密码修改
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";

@@ -15093,14 +15093,14 @@ public class FileDemo {
 * **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
 
 
-.代码举例（看看 User 类里有什么）
+.代码举例（看看 StudentCard 类里有什么）
 [source,java]
 ----
 @language java
 public class ReflectionDemo {
     public static void main(String[] args) throws Exception {
         // 通过类名，直接“抓取”这个类的结构
-        Class clazz = Class.forName("User");
+        Class clazz = Class.forName("StudentCard");
 
         System.out.println("类的名字是：" + clazz.getName());
 
@@ -22580,10 +22580,11 @@ catch (DoorException e) {
 @others
 ----
 
-&lt;1&gt; 核心：使用 `PreparedStatement` 获取数据库执行对象，这是抵御 SQL 注入的安全底线。
-&lt;2&gt; `executeUpdate()` 用于执行插入、修改或删除操作。
-&lt;3&gt; `executeQuery()` 用于执行查询，返回代表查询结果的 `ResultSet` 游标。
-&lt;4&gt; 使用 `rs.next()` 逐行遍历数据库记录。
+&lt;1&gt; 定义专门负责开/关数据库的工具类 DBUtils
+&lt;2&gt; 核心：使用 `PreparedStatement` 获取数据库执行对象，这是抵御 SQL 注入的安全底线。
+&lt;3&gt; `executeUpdate()` 用于执行插入(或修改或删除)操作。
+&lt;4&gt; `executeQuery()` 用于执行查询，返回代表查询结果的 `ResultSet` 游标。
+&lt;5&gt; 使用 `rs.next()` 逐行遍历数据库记录。
 
 NOTE: 编译与运行前，请确保在命令行使用 `-cp ".;lib/postgresql-42.7.3.jar"` 参数引入 PostgreSQL 官方驱动包。
 </t>
@@ -22600,15 +22601,16 @@ NOTE: 编译与运行前，请确保在命令行使用 `-cp ".;lib/postgresql-42
 * **JDBC** 全称 Java Database Connectivity。
 
 * **大白话**：它就是一套**“标准翻译协议”**。
-  ** 不管后台是 MySQL、Oracle 还是 SQL Server，Java 程序员只需要学一套 JDBC 的写法，就能跟所有数据库沟通。
+  ** 不管数据库是 MySQL、Oracle 还是 SQL Server，Java 程序员只需要学一套 JDBC 的写法，就能跟所有数据库沟通。
 
-. **操作四大步骤**：准备电话线 (加载驱动) -&gt; 拨通电话 (建立连接) -&gt; 下订单 (执行 SQL) -&gt; 挂断电话 (关闭资源)。
+. **操作四大步骤**：准备电话线 (加载驱动) -&gt; 拨通电话 (建立连接) -&gt; 传达指令 / 沟通需求 (执行 SQL) -&gt; 挂断电话 (关闭资源)。
 
 . **防止 SQL 注入**：绝不能用字符串拼接 SQL，必须使用 `PreparedStatement`。它就像一份填空题模版，只能在空位填内容，确保了系统的安全底线。
 
 . **学习建议**：不要死记硬背冗长的 JDBC 代码，理解步骤最重要，具体代码完全可以依赖模版。在写代码前，可以先用图形化工具往表里填数据，再写 Java 去查，成就感会很强。
 </t>
-<t tx="swot.20260311201633.1">[source,console]
+<t tx="swot.20260311201633.1">.创建表 cards
+[source,console]
 ----
 podman exec -it door-postgres psql -U postgres -c "
 CREATE TABLE IF NOT EXISTS cards (
@@ -22617,6 +22619,22 @@ CREATE TABLE IF NOT EXISTS cards (
     card_type VARCHAR(20) NOT NULL
 );"
 ----
+
+
+.查看表 cards 结构
+[source,console]
+----
+&gt; podman exec -it door-postgres psql -U postgres -c "\d cards"
+                          Table "public.cards"
+    Column     |         Type          | Collation | Nullable | Default
+---------------+-----------------------+-----------+----------+---------
+ serial_number | character varying(20) |           | not null |
+ owner_name    | character varying(50) |           | not null |
+ card_type     | character varying(20) |           | not null |
+Indexes:
+    "cards_pkey" PRIMARY KEY, btree (serial_number)
+----
+
 </t>
 <t tx="swot.20260311201944.1" _mod_time="4741da6c57883cd0e52e">@language java
 // @clean code/testBasicSyntax/src/jdbcExample/DoorException.java
@@ -22638,7 +22656,7 @@ package jdbcExample;
 @others
 
 </t>
-<t tx="swot.20260311204034.1" _mod_time="4741da6c5b7bbdbac52e">@language java
+<t tx="swot.20260311204034.1" _mod_time="4741da6c8af9f1253e2e">@language java
 // @clean code/testBasicSyntax/src/jdbcExample/DBUtils.java
 package jdbcExample;
 
@@ -22649,7 +22667,7 @@ import java.sql.SQLException;
 /**
  * 专门负责开/关数据库的工具类
  */
-public class DBUtils {
+public class DBUtils {  // &lt;1&gt;
     // 根据实际 Podman 映射的端口和密码修改
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";
@@ -22672,7 +22690,7 @@ class CardReader {
     }
 }
 </t>
-<t tx="swot.20260311204301.1" _mod_time="4741da6c5f501fd8752e">@language java
+<t tx="swot.20260311204301.1" _mod_time="4741da6c8b436ca2202e">@language java
 // @clean code/testBasicSyntax/src/jdbcExample/AccessControlSystem.java
 package jdbcExample;
 
@@ -22748,7 +22766,7 @@ podman run -d \
 
 - `-p 5432:5432`: 将本机的 5432 端口映射到容器内部的 5432 端口，这样 Java 才能通过 `localhost:5432` 连上它。
 
-小提示：容器启动后，你可以用 podman ps 检查它是否正在正常运行。
+小提示：容器启动后，你可以用 `podman ps` 检查它是否正在正常运行。
 </t>
 <t tx="swot.20260311213008.1">Java 原生是不认识 PostgreSQL 的，必须请个“翻译官”，也就是 JDBC 驱动包（一个 .jar 文件）。
 
@@ -22897,14 +22915,14 @@ public void registerCard(BaseDoorCard card) {
     String sql = "INSERT INTO cards (serial_number, owner_name, card_type) VALUES (?, ?, ?) ON CONFLICT (serial_number) DO NOTHING";
 
     try (Connection conn = DBUtils.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) { // &lt;1&gt;
+         PreparedStatement pstmt = conn.prepareStatement(sql)) { // &lt;2&gt;
 
         // 像填空题一样安全地设置参数，防止 SQL 注入
         pstmt.setString(1, card.getSerialNumber());
         pstmt.setString(2, card.getOwnerName());
         pstmt.setString(3, card instanceof StudentCard ? "Student" : "Admin");
 
-        pstmt.executeUpdate(); // &lt;2&gt;
+        pstmt.executeUpdate(); // &lt;3&gt;
         System.out.println("系统：已将授权人员 " + card.getOwnerName() + " 写入数据库。");
     }
     catch (SQLException e) {
@@ -22923,8 +22941,8 @@ public void processAccessRequest(String cardId) {
     try (Connection conn = DBUtils.getConnection();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-        pstmt.setString(1, cardId);
-        ResultSet rs = pstmt.executeQuery(); // &lt;3&gt;
+        pstmt.setString(1, cardId);  // 1 对应第一个问号
+        ResultSet rs = pstmt.executeQuery(); // &lt;4&gt;
 
         if (rs.next()) {
             String name = rs.getString("owner_name");
@@ -22961,7 +22979,7 @@ public ArrayList&lt;BaseDoorCard&gt; loadAllCards() throws DoorException {
          PreparedStatement pstmt = conn.prepareStatement(sql);
          ResultSet rs = pstmt.executeQuery()) {
 
-        while (rs.next()) { // &lt;4&gt;
+        while (rs.next()) { // &lt;5&gt;
             String id = rs.getString("serial_number");
             String name = rs.getString("owner_name");
             String type = rs.getString("card_type");

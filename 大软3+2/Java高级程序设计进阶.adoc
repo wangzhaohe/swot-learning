@@ -3061,9 +3061,9 @@ NOTE: 此时用编辑器打开 card.ser 文件，会发现是乱码。
 * **JDBC** 全称 Java Database Connectivity。
 
 * **大白话**：它就是一套**“标准翻译协议”**。
-  ** 不管后台是 MySQL、Oracle 还是 SQL Server，Java 程序员只需要学一套 JDBC 的写法，就能跟所有数据库沟通。
+  ** 不管数据库是 MySQL、Oracle 还是 SQL Server，Java 程序员只需要学一套 JDBC 的写法，就能跟所有数据库沟通。
 
-. **操作四大步骤**：准备电话线 (加载驱动) -> 拨通电话 (建立连接) -> 下订单 (执行 SQL) -> 挂断电话 (关闭资源)。
+. **操作四大步骤**：准备电话线 (加载驱动) -> 拨通电话 (建立连接) -> 传达指令 / 沟通需求 (执行 SQL) -> 挂断电话 (关闭资源)。
 
 . **防止 SQL 注入**：绝不能用字符串拼接 SQL，必须使用 `PreparedStatement`。它就像一份填空题模版，只能在空位填内容，确保了系统的安全底线。
 
@@ -3089,9 +3089,10 @@ podman run -d \
 
 - `-p 5432:5432`: 将本机的 5432 端口映射到容器内部的 5432 端口，这样 Java 才能通过 `localhost:5432` 连上它。
 
-小提示：容器启动后，你可以用 podman ps 检查它是否正在正常运行。
+小提示：容器启动后，你可以用 `podman ps` 检查它是否正在正常运行。
 
 === 建表准备 (Podman)
+.创建表 cards
 [source,console]
 ----
 podman exec -it door-postgres psql -U postgres -c "
@@ -3100,6 +3101,21 @@ CREATE TABLE IF NOT EXISTS cards (
     owner_name VARCHAR(50) NOT NULL,
     card_type VARCHAR(20) NOT NULL
 );"
+----
+
+
+.查看表 cards 结构
+[source,console]
+----
+> podman exec -it door-postgres psql -U postgres -c "\d cards"
+                          Table "public.cards"
+    Column     |         Type          | Collation | Nullable | Default
+---------------+-----------------------+-----------+----------+---------
+ serial_number | character varying(20) |           | not null |
+ owner_name    | character varying(50) |           | not null |
+ card_type     | character varying(20) |           | not null |
+Indexes:
+    "cards_pkey" PRIMARY KEY, btree (serial_number)
 ----
 
 === 下载并配置 PostgreSQL JDBC 驱动
@@ -3266,7 +3282,7 @@ import java.sql.SQLException;
 /**
  * 专门负责开/关数据库的工具类
  */
-public class DBUtils {
+public class DBUtils {  // <1>
     // 根据实际 Podman 映射的端口和密码修改
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";
@@ -3305,14 +3321,14 @@ class AccessControlSystem {
         String sql = "INSERT INTO cards (serial_number, owner_name, card_type) VALUES (?, ?, ?) ON CONFLICT (serial_number) DO NOTHING";
 
         try (Connection conn = DBUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) { // <1>
+             PreparedStatement pstmt = conn.prepareStatement(sql)) { // <2>
 
             // 像填空题一样安全地设置参数，防止 SQL 注入
             pstmt.setString(1, card.getSerialNumber());
             pstmt.setString(2, card.getOwnerName());
             pstmt.setString(3, card instanceof StudentCard ? "Student" : "Admin");
 
-            pstmt.executeUpdate(); // <2>
+            pstmt.executeUpdate(); // <3>
             System.out.println("系统：已将授权人员 " + card.getOwnerName() + " 写入数据库。");
         }
         catch (SQLException e) {
@@ -3330,8 +3346,8 @@ class AccessControlSystem {
         try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, cardId);
-            ResultSet rs = pstmt.executeQuery(); // <3>
+            pstmt.setString(1, cardId);  // 1 对应第一个问号
+            ResultSet rs = pstmt.executeQuery(); // <4>
 
             if (rs.next()) {
                 String name = rs.getString("owner_name");
@@ -3367,7 +3383,7 @@ class AccessControlSystem {
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
-            while (rs.next()) { // <4>
+            while (rs.next()) { // <5>
                 String id = rs.getString("serial_number");
                 String name = rs.getString("owner_name");
                 String type = rs.getString("card_type");
@@ -3426,10 +3442,11 @@ public class Run {
 }
 ----
 
-<1> 核心：使用 `PreparedStatement` 获取数据库执行对象，这是抵御 SQL 注入的安全底线。
-<2> `executeUpdate()` 用于执行插入、修改或删除操作。
-<3> `executeQuery()` 用于执行查询，返回代表查询结果的 `ResultSet` 游标。
-<4> 使用 `rs.next()` 逐行遍历数据库记录。
+<1> 定义专门负责开/关数据库的工具类 DBUtils
+<2> 核心：使用 `PreparedStatement` 获取数据库执行对象，这是抵御 SQL 注入的安全底线。
+<3> `executeUpdate()` 用于执行插入(或修改或删除)操作。
+<4> `executeQuery()` 用于执行查询，返回代表查询结果的 `ResultSet` 游标。
+<5> 使用 `rs.next()` 逐行遍历数据库记录。
 
 NOTE: 编译与运行前，请确保在命令行使用 `-cp ".;lib/postgresql-42.7.3.jar"` 参数引入 PostgreSQL 官方驱动包。
 
@@ -3527,13 +3544,13 @@ class HealthCheckThread extends Thread {
 * **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
 
 
-.代码举例（看看 User 类里有什么）
+.代码举例（看看 StudentCard 类里有什么）
 [source,java]
 ----
 public class ReflectionDemo {
     public static void main(String[] args) throws Exception {
         // 通过类名，直接“抓取”这个类的结构
-        Class clazz = Class.forName("User");
+        Class clazz = Class.forName("StudentCard");
 
         System.out.println("类的名字是：" + clazz.getName());
 

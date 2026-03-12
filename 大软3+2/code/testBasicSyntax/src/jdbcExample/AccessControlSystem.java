@@ -17,14 +17,14 @@ class AccessControlSystem {
         String sql = "INSERT INTO cards (serial_number, owner_name, card_type) VALUES (?, ?, ?) ON CONFLICT (serial_number) DO NOTHING";
 
         try (Connection conn = DBUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) { // <1>
+             PreparedStatement pstmt = conn.prepareStatement(sql)) { // <2>
 
             // 像填空题一样安全地设置参数，防止 SQL 注入
             pstmt.setString(1, card.getSerialNumber());
             pstmt.setString(2, card.getOwnerName());
             pstmt.setString(3, card instanceof StudentCard ? "Student" : "Admin");
 
-            pstmt.executeUpdate(); // <2>
+            pstmt.executeUpdate(); // <3>
             System.out.println("系统：已将授权人员 " + card.getOwnerName() + " 写入数据库。");
         }
         catch (SQLException e) {
@@ -42,8 +42,8 @@ class AccessControlSystem {
         try (Connection conn = DBUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, cardId);
-            ResultSet rs = pstmt.executeQuery(); // <3>
+            pstmt.setString(1, cardId);  // 1 对应第一个问号
+            ResultSet rs = pstmt.executeQuery(); // <4>
 
             if (rs.next()) {
                 String name = rs.getString("owner_name");
@@ -79,7 +79,7 @@ class AccessControlSystem {
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
-            while (rs.next()) { // <4>
+            while (rs.next()) { // <5>
                 String id = rs.getString("serial_number");
                 String name = rs.getString("owner_name");
                 String type = rs.getString("card_type");
