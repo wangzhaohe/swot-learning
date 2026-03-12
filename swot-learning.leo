@@ -586,7 +586,9 @@
 </v>
 </v>
 <v t="swot.20260215212309.1"><vh>多线程与反射 (4学时)</vh>
-<v t="swot.20260216213100.1"><vh>多线程 —— “程序的分身术”</vh></v>
+<v t="swot.20260216213100.1"><vh>多线程 —— “程序的分身术”</vh>
+<v t="swot.20260312080445.1"><vh>@clean code/testBasicSyntax/src/threadExample/MultiThreadDemo.java</vh></v>
+</v>
 <v t="swot.20260216213110.1"><vh>反射机制 —— “程序的 X 光机”</vh></v>
 <v t="swot.20260217014753.1"><vh>小结</vh></v>
 </v>
@@ -14388,7 +14390,9 @@ toggleButton.addEventListener('click', () =&gt; {
 </t>
 <t tx="swot.20260215212309.1">@language asciidoc
 * *核心知识点*：线程创建与生命周期、同步机制（synchronized）、反射 API、动态代理。
+
 * *教学要求*：理解并发编程基础及 Java 语言的动态特性。
+
 * *本节要求*：理解“分身术”的原理，让程序能同时干多件事；了解反射这一“透视眼”技术。
 </t>
 <t tx="swot.20260215212313.1">* *核心知识点*：JDBC 架构、Connection/Statement/ResultSet、预编译 SQL、事务处理。
@@ -14957,13 +14961,13 @@ code/testBasicSyntax/cards.txt
 <t tx="swot.20260216115311.1">[upperalpha]
 . 知识点说明
 +
-如果想直接把一整个 `StudentCard` 对象（包含姓名、卡号、状态等）原封不动“冻结”并存进硬盘，就需要**序列化**。
+如果想把整个 `StudentCard` 对象（包含姓名、卡号、状态等）原封不动“冻结”并存进硬盘，就需要**序列化**。
 +
-序列化好处是允许将 Java 对象转换为字节序列，从而可以将其保存到磁盘或通过网络传输，并在以后恢复为完全相同的对象。
+序列化好处是允许将 Java 对象转换为字节序列，从而可以将其保存到磁盘或通过网络传输，并在以后可以恢复为完全相同的对象。
 
 
 . 核心步骤
-..  **盖章认证**：在 `StudentCard` 类后面加上 `implements Serializable`。这相当于告诉 Java：“这个类是安全的，可以转成二进制”。我们可以写在其基类 `BaseDoorCard` 上，这样可以应用于所有类型的卡。
+..  **盖章认证**：在 `BaseDoorCard` 类后面加上 `implements Serializable`。这相当于告诉 Java：“这个类是安全的，可以转成二进制”。这样可以应用于所有类型的卡，如 StudentCard / AdminCard。
 ..  **对象流**：使用 `ObjectOutputStream` 将对象写入文件。
 ..  **对象流**：使用 `ObjectInputStream` 将对象从文件读出。
 
@@ -14983,14 +14987,17 @@ code/testBasicSyntax/cards.txt
 NOTE: 此时用编辑器打开 card.ser 文件，会发现是乱码。
 
 
+. 程序运行打印结果
++
 .查看注册的所有门禁卡
 ....
+…… 忽略其它打印内容 ……
 成功复活 2 个对象:
 门禁卡信息 { 卡号='S1234567', 持卡人='小明' }
 门禁卡信息 { 卡号='BAD-99', 持卡人='异常者' }
 ....
 </t>
-<t tx="swot.20260216115314.1">我们将之前学的 **DoorSystemException** 融入进来。如果读取文件失败，直接上报门禁系统异常。
+<t tx="swot.20260216115314.1">我们将之前学的 **DoorException** 融入进来。如果读取文件失败，直接上报门禁系统异常。
 
 [source,java]
 ----
@@ -14998,8 +15005,8 @@ NOTE: 此时用编辑器打开 card.ser 文件，会发现是乱码。
 ----
 </t>
 <t tx="swot.20260216115335.1">@language asciidoc
-- **“小水桶”实验**： 
-    ** 用碗喝汤和用勺子喝汤的区别，可以立刻明白为什么 `BufferedWriter` 比 `FileWriter` 快。
+- **“打水”实验**： 
+    ** 用勺子舀水和用水桶打水的区别，可以立刻明白为什么 `BufferedWriter` 比 `FileWriter` 快。
 
 - **重点避坑：文件的位置**： 
   **  `carts.txt` 在哪。默认就在你 IntelliJ IDEA 项目的根文件夹里。
@@ -15055,27 +15062,7 @@ public class FileDemo {
 +
 [source,java]
 ----
-@language java
-// 1. 定义一个自检任务
-class HealthCheckThread extends Thread {
-    public void run() {
-        while (true) {
-            System.out.println("系统自检中：硬件状态正常...");
-            try { Thread.sleep(5000); } catch (InterruptedException e) {}
-        }
-    }
-}
-
-public class MultiThreadDemo {
-    public static void main(String[] args) {
-        // 2. 启动自检“分身”
-        HealthCheckThread check = new HealthCheckThread();
-        check.start(); 
-
-        // 3. 主线程继续处理刷卡
-        System.out.println("主系统：准备就绪，请刷卡...");
-    }
-}
+@others
 ----
 </t>
 <t tx="swot.20260216213110.1">知识点说明
@@ -22244,23 +22231,24 @@ interface Payable {
 .自行扩展功能
 TIP: 可以在前面的 `AccessControlSystem.registerCard()` 中调用该例子的逻辑，把门禁卡信息写入本地文件中。
 </t>
-<t tx="swot.20260311114229.1" _mod_time="4741da6c3a7d1133922e">@language java
+<t tx="swot.20260311114229.1" _mod_time="4741da6c8243a7a89a2e">@language java
 // @clean code/testBasicSyntax/src/streamExample/ReadCardDemo.java
 package streamExample;
+
 import java.io.*;
 
+// 使用了静态方法 static，这样可以让 main 直接调用，而不用实例化。
 public class ReadCardDemo {
-
     public static void read() throws DoorException {
-        // Try-with-resources 语法在 JDK 17 中完全支持
         try (BufferedReader reader = new BufferedReader(new FileReader("cards02.txt"))) {
             String line = reader.readLine();
             if (line == null) {
                 // 手动抛出你定义的自定义异常
-                throw new DoorException("读取失败：名单文件为空！");
+                throw new DoorException("读取失败：门禁卡文件为空！");
             }
             System.out.println("成功读取到数据：" + line);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             // 将底层的 IOException 包装成业务层的 DoorException
             throw new DoorException("读取异常：磁盘损坏或文件丢失");
         }
@@ -22439,7 +22427,7 @@ class CardReader {
     }
 }
 </t>
-<t tx="swot.20260311151605.1" _mod_time="4741da6c4a14c0bb162e">@language java
+<t tx="swot.20260311151605.1" _mod_time="4741da6c833d7d78472e">@language java
 // @clean code/testBasicSyntax/src/streamExample/AccessControlSystem.java
 package streamExample;
 
@@ -22450,7 +22438,7 @@ import java.io.*;
 
 class AccessControlSystem {
 
-    // ArrayList：用于名单的顺序维护和批量管理
+    // ArrayList：用于门禁卡名单的顺序维护和批量管理
     private ArrayList&lt;BaseDoorCard&gt; whitelist = new ArrayList&lt;&gt;();
 
     // HashMap：变量用于刷卡瞬间的 O(1) 极速检索
@@ -22966,6 +22954,33 @@ public ArrayList&lt;BaseDoorCard&gt; loadAllCards() throws DoorException {
         throw new DoorException("读取异常：无法连接至 PostgreSQL");
     }
     return list;
+}
+</t>
+<t tx="swot.20260312080445.1" _mod_time="4741da6c81699d508c2e">@language java
+package threadExample;
+// 1. 定义一个自检任务
+class HealthCheckThread extends Thread {
+    public void run() {
+        while (true) {
+            System.out.println("系统自检中：硬件状态正常...");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {}
+        }
+    }
+}
+
+public class MultiThreadDemo {
+    public static void main(String[] args) {
+        // 2. 启动自检“分身”
+        HealthCheckThread check = new HealthCheckThread();
+        // 在这个例子中因为主线程马上就结束了，所以打开下面一行注释，无法正常展示子线程运行情况。
+        // check.setDaemon(true);  // 主线程一旦结束，自检也立刻停止
+        check.start(); 
+
+        // 3. 主线程继续处理刷卡
+        System.out.println("主系统：准备就绪，请刷卡...");
+    }
 }
 </t>
 </tnodes>

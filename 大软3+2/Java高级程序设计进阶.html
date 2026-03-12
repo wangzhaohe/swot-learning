@@ -4485,26 +4485,27 @@ code/testBasicSyntax/cards.txt</p>
 <div class="sect3">
 <h4 id="_bufferedreader_代码举例">BufferedReader 代码举例</h4>
 <div class="paragraph">
-<p>我们将之前学的 <strong>DoorSystemException</strong> 融入进来。如果读取文件失败，直接上报门禁系统异常。</p>
+<p>我们将之前学的 <strong>DoorException</strong> 融入进来。如果读取文件失败，直接上报门禁系统异常。</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/streamExample/ReadCardDemo.java</span>
 <span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">streamExample</span><span class="tok-p">;</span>
+
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.*</span><span class="tok-p">;</span>
 
+<span class="tok-c1">// 使用了静态方法 static，这样可以让 main 直接调用，而不用实例化。</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">ReadCardDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
-
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">read</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-c1">// Try-with-resources 语法在 JDK 17 中完全支持</span>
 <span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">BufferedReader</span><span class="tok-w"> </span><span class="tok-n">reader</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">BufferedReader</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">FileReader</span><span class="tok-p">(</span><span class="tok-s">&quot;cards02.txt&quot;</span><span class="tok-p">)))</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">reader</span><span class="tok-p">.</span><span class="tok-na">readLine</span><span class="tok-p">();</span>
 <span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">                </span><span class="tok-c1">// 手动抛出你定义的自定义异常</span>
-<span class="tok-w">                </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-p">(</span><span class="tok-s">&quot;读取失败：名单文件为空！&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-p">(</span><span class="tok-s">&quot;读取失败：门禁卡文件为空！&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">            </span><span class="tok-p">}</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;成功读取到数据：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-c1">// 将底层的 IOException 包装成业务层的 DoorException</span>
 <span class="tok-w">            </span><span class="tok-k">throw</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">DoorException</span><span class="tok-p">(</span><span class="tok-s">&quot;读取异常：磁盘损坏或文件丢失&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
@@ -4541,10 +4542,10 @@ code/testBasicSyntax/cards.txt</p>
 <li>
 <p>知识点说明</p>
 <div class="paragraph">
-<p>如果想直接把一整个 <code>StudentCard</code> 对象（包含姓名、卡号、状态等）原封不动“冻结”并存进硬盘，就需要<strong>序列化</strong>。</p>
+<p>如果想把整个 <code>StudentCard</code> 对象（包含姓名、卡号、状态等）原封不动“冻结”并存进硬盘，就需要<strong>序列化</strong>。</p>
 </div>
 <div class="paragraph">
-<p>序列化好处是允许将 Java 对象转换为字节序列，从而可以将其保存到磁盘或通过网络传输，并在以后恢复为完全相同的对象。</p>
+<p>序列化好处是允许将 Java 对象转换为字节序列，从而可以将其保存到磁盘或通过网络传输，并在以后可以恢复为完全相同的对象。</p>
 </div>
 </li>
 <li>
@@ -4552,7 +4553,7 @@ code/testBasicSyntax/cards.txt</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p><strong>盖章认证</strong>：在 <code>StudentCard</code> 类后面加上 <code>implements Serializable</code>。这相当于告诉 Java：“这个类是安全的，可以转成二进制”。我们可以写在其基类 <code>BaseDoorCard</code> 上，这样可以应用于所有类型的卡。</p>
+<p><strong>盖章认证</strong>：在 <code>BaseDoorCard</code> 类后面加上 <code>implements Serializable</code>。这相当于告诉 Java：“这个类是安全的，可以转成二进制”。这样可以应用于所有类型的卡，如 StudentCard / AdminCard。</p>
 </li>
 <li>
 <p><strong>对象流</strong>：使用 <code>ObjectOutputStream</code> 将对象写入文件。</p>
@@ -4724,7 +4725,7 @@ code/testBasicSyntax/cards.txt</p>
 
 <span class="tok-kd">class</span> <span class="tok-nc">AccessControlSystem</span><span class="tok-w"> </span><span class="tok-p">{</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// ArrayList：用于名单的顺序维护和批量管理</span>
+<span class="tok-w">    </span><span class="tok-c1">// ArrayList：用于门禁卡名单的顺序维护和批量管理</span>
 <span class="tok-w">    </span><span class="tok-kd">private</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;</span><span class="tok-n">BaseDoorCard</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">whitelist</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ArrayList</span><span class="tok-o">&lt;&gt;</span><span class="tok-p">();</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// HashMap：变量用于刷卡瞬间的 O(1) 极速检索</span>
@@ -4863,13 +4864,21 @@ code/testBasicSyntax/cards.txt</p>
 </tr>
 </table>
 </div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>程序运行打印结果</p>
 <div class="literalblock">
 <div class="title">查看注册的所有门禁卡</div>
 <div class="content">
-<pre>成功复活 2 个对象:
+<pre>…… 忽略其它打印内容 ……
+成功复活 2 个对象:
 门禁卡信息 { 卡号='S1234567', 持卡人='小明' }
 门禁卡信息 { 卡号='BAD-99', 持卡人='异常者' }</pre>
 </div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect2">
@@ -4877,11 +4886,11 @@ code/testBasicSyntax/cards.txt</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>“小水桶”实验</strong>：</p>
+<p><strong>“打水”实验</strong>：</p>
 <div class="ulist">
 <ul>
 <li>
-<p>用碗喝汤和用勺子喝汤的区别，可以立刻明白为什么 <code>BufferedWriter</code> 比 <code>FileWriter</code> 快。</p>
+<p>用勺子舀水和用水桶打水的区别，可以立刻明白为什么 <code>BufferedWriter</code> 比 <code>FileWriter</code> 快。</p>
 </li>
 </ul>
 </div>
@@ -5452,12 +5461,15 @@ code/testBasicSyntax/cards.txt</p>
 <p>代码实现：模拟门禁自检与刷卡同时进行</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// 1. 定义一个自检任务</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">threadExample</span><span class="tok-p">;</span>
+<span class="tok-c1">// 1. 定义一个自检任务</span>
 <span class="tok-kd">class</span> <span class="tok-nc">HealthCheckThread</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">Thread</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">run</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;系统自检中：硬件状态正常...&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">Thread</span><span class="tok-p">.</span><span class="tok-na">sleep</span><span class="tok-p">(</span><span class="tok-mi">5000</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">InterruptedException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{}</span>
+<span class="tok-w">            </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-n">Thread</span><span class="tok-p">.</span><span class="tok-na">sleep</span><span class="tok-p">(</span><span class="tok-mi">5000</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">InterruptedException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{}</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
@@ -5466,6 +5478,8 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-c1">// 2. 启动自检“分身”</span>
 <span class="tok-w">        </span><span class="tok-n">HealthCheckThread</span><span class="tok-w"> </span><span class="tok-n">check</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">HealthCheckThread</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-c1">// 在这个例子中因为主线程马上就结束了，所以打开下面一行注释，无法正常展示子线程运行情况。</span>
+<span class="tok-w">        </span><span class="tok-c1">// check.setDaemon(true);  // 主线程一旦结束，自检也立刻停止</span>
 <span class="tok-w">        </span><span class="tok-n">check</span><span class="tok-p">.</span><span class="tok-na">start</span><span class="tok-p">();</span>
 
 <span class="tok-w">        </span><span class="tok-c1">// 3. 主线程继续处理刷卡</span>
@@ -5641,7 +5655,7 @@ code/testBasicSyntax/cards.txt</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-11 22:48:06 +0800
+Last updated 2026-03-12 09:02:51 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -8,7 +8,7 @@ import java.io.*;
 
 class AccessControlSystem {
 
-    // ArrayList：用于名单的顺序维护和批量管理
+    // ArrayList：用于门禁卡名单的顺序维护和批量管理
     private ArrayList<BaseDoorCard> whitelist = new ArrayList<>();
 
     // HashMap：变量用于刷卡瞬间的 O(1) 极速检索
