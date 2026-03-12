@@ -592,7 +592,21 @@
 <v t="swot.20260312093713.1"><vh>HealthCheckThread</vh></v>
 </v>
 </v>
-<v t="swot.20260216213110.1"><vh>反射机制 —— “程序的 X 光机”</vh></v>
+<v t="swot.20260216213110.1"><vh>反射机制 —— “程序的 X 光机”</vh>
+<v t="swot.20260312115524.1"><vh>@clean code/testBasicSyntax/src/ReflectionDemo/DoorException.java</vh></v>
+<v t="swot.20260312114518.1"><vh>@clean code/testBasicSyntax/src/ReflectionDemo/Card.java</vh>
+<v t="swot.20260312114518.2"><vh>abstract class BaseDoorCard</vh></v>
+<v t="swot.20260312114518.3"><vh>class StudentCard</vh></v>
+<v t="swot.20260312114518.4"><vh>class AdminCard</vh></v>
+<v t="swot.20260312114518.5"><vh>interface Payable</vh></v>
+</v>
+<v t="swot.20260312114727.1"><vh>@clean code/testBasicSyntax/src/ReflectionDemo/Run.java</vh>
+<v t="swot.20260312115315.1"><vh>1. 通过全限定类名（包名+类名）抓取结构</vh></v>
+<v t="swot.20260312115321.1"><vh>2. 查看它的继承体系（父类和实现的接口）</vh></v>
+<v t="swot.20260312115328.1"><vh>3. 抓取属性（剖析原代码为什么抓不到）</vh></v>
+<v t="swot.20260312115342.1"><vh>4. 抓取方法</vh></v>
+</v>
+</v>
 <v t="swot.20260217014753.1"><vh>小结</vh></v>
 </v>
 <v t="swot.20260215212257.1"><vh>网络编程 (4学时)</vh>
@@ -15090,28 +15104,37 @@ public class FileDemo {
 <t tx="swot.20260216213110.1">知识点说明
 
 * **反射 (Reflection)**：平时我们用类，是先看到图纸再造房子。反射则是房子已经在那了，我们拿个“X光机”去扫，看看它里面有什么属性和方法。
+
 * **核心价值**：它是很多框架（如 Spring）的灵魂，让程序在运行时动态地加载类。
 
 
 .代码举例（看看 StudentCard 类里有什么）
 [source,java]
 ----
-@language java
-public class ReflectionDemo {
-    public static void main(String[] args) throws Exception {
-        // 通过类名，直接“抓取”这个类的结构
-        Class clazz = Class.forName("StudentCard");
-
-        System.out.println("类的名字是：" + clazz.getName());
-
-        // 获取所有定义的属性名字
-        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
-        for (var f : fields) {
-            System.out.println("发现属性：" + f.getName());
-        }
-    }
-}
+@others
 ----
+
+
+.运行结果
+....
+--- 类的基本信息 ---
+全限定类名: ReflectionDemo.StudentCard
+简单类名: StudentCard
+
+--- 继承与接口 ---
+它的父类是: BaseDoorCard
+它实现的接口是: Payable
+
+--- 属性探测 ---
+StudentCard 自己声明的属性数量: 0
+在父类中发现属性: serialNumber (类型: String)
+在父类中发现属性: ownerName (类型: String)
+
+--- 方法探测 ---
+发现方法: pay
+发现方法: showAccessScope
+发现方法: validate
+....
 </t>
 <t tx="swot.20260216213241.1"></t>
 <t tx="swot.20260216221239.1">**网络编程的演示**：
@@ -22636,7 +22659,7 @@ Indexes:
 ----
 
 </t>
-<t tx="swot.20260311201944.1" _mod_time="4741da6c57883cd0e52e">@language java
+<t tx="swot.20260311201944.1" _mod_time="4741da6c8ea5edf59f2e">@language java
 // @clean code/testBasicSyntax/src/jdbcExample/DoorException.java
 package jdbcExample;
 
@@ -22648,6 +22671,7 @@ public class DoorException extends Exception {
         super(message);
     }
 }
+
 </t>
 <t tx="swot.20260311203833.1" _mod_time="4741da6c5e25e4d6592e">@language java
 // @clean code/testBasicSyntax/src/jdbcExample/Card.java
@@ -23042,6 +23066,166 @@ package threadExample;
         System.out.println("【主线程】所有任务已结束，程序退出。");
     }
 }
+</t>
+<t tx="swot.20260312114518.1" _mod_time="4741da6c8dc97a15dd2e">@language java
+// @clean code/testBasicSyntax/src/ReflectionDemo/Card.java
+package ReflectionDemo;
+
+@others
+
+</t>
+<t tx="swot.20260312114518.2">/**
+ * 类名：BaseDoorCard (抽象类)
+ * 演化点：移除了 Serializable，因为数据将由数据库字段来承载。
+ */
+abstract class BaseDoorCard {
+    private final String serialNumber;
+    private String ownerName;
+
+    public BaseDoorCard(String serialNumber, String ownerName) {
+        this.ownerName = ownerName;
+        this.serialNumber = (serialNumber != null) ? serialNumber.trim() : "";
+        if (this.serialNumber.length() != 8) {
+            System.out.println("【数据异常】警告：新创建的卡号 [" + this.serialNumber + "] 长度非8位！");
+        }
+    }
+    
+    public String getSerialNumber() { return serialNumber; }
+    public String getOwnerName() { return ownerName; }
+
+    public boolean validate() throws DoorException {
+        System.out.println("【系统日志】正在启动刷卡即时校验...");
+        if (this.serialNumber.length() != 8) {
+            throw new DoorException("校验失败：卡号 [" + this.serialNumber + "] 格式非法！");
+        }
+        System.out.println("物理校验通过。");
+        return true;
+    }
+
+    public abstract void showAccessScope();
+
+    @Override
+    public String toString() {
+        return "门禁卡信息 { 卡号='" + serialNumber + "', 持卡人='" + ownerName + "' }";
+    }
+}
+</t>
+<t tx="swot.20260312114518.3">class StudentCard extends BaseDoorCard implements Payable {
+
+    public StudentCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("【食堂消费】学生 " + getOwnerName() + " 支付了 " + amount + " 元。");
+    }
+
+    @Override
+    public boolean validate() throws DoorException {
+        boolean isValid = super.validate();
+        if (isValid) {
+            showAccessScope();
+        }
+        return isValid;
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】学生卡：确认 " + getOwnerName() + " 的图书馆/教学楼访问权限。");
+    }
+}
+</t>
+<t tx="swot.20260312114518.4">class AdminCard extends BaseDoorCard {
+
+    public AdminCard(String serialNumber, String ownerName) {
+        super(serialNumber, ownerName);
+    }
+
+    @Override
+    public boolean validate() throws DoorException {
+        boolean isValid = super.validate();
+        if (isValid) {
+            showAccessScope();
+        }
+        return isValid;
+    }
+
+    @Override
+    public void showAccessScope() {
+        System.out.println("【权限范围】管理员卡：开启全校所有通道，含机房与档案室。");
+    }
+}
+</t>
+<t tx="swot.20260312114518.5">interface Payable {
+    void pay(double amount);
+}
+</t>
+<t tx="swot.20260312114727.1" _mod_time="4741da6c8f8e1451092e">@language java
+// @clean code/testBasicSyntax/src/ReflectionDemo/Run.java
+package ReflectionDemo;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+public class Run {
+    public static void main(String[] args) {
+        try {
+            @others
+        }
+        catch (ClassNotFoundException e) {
+            System.out.println("找不到类，请检查包名和类名是否正确！");
+            e.printStackTrace();
+        }
+    }
+}
+</t>
+<t tx="swot.20260312115315.1">// ? 告诉编译器：“我要接收一个类，但我现在还不知道具体是什么类。”
+Class&lt;?&gt; clazz = Class.forName("ReflectionDemo.StudentCard");
+
+System.out.println("--- 类的基本信息 ---");
+System.out.println("全限定类名: " + clazz.getName());
+System.out.println("简单类名: " + clazz.getSimpleName());
+</t>
+<t tx="swot.20260312115321.1">System.out.println("\n--- 继承与接口 ---");
+System.out.println("它的父类是: " + clazz.getSuperclass().getSimpleName());
+
+Class&lt;?&gt;[] interfaces = clazz.getInterfaces();
+
+for (Class&lt;?&gt; i : interfaces) {
+    System.out.println("它实现的接口是: " + i.getSimpleName());
+}
+</t>
+<t tx="swot.20260312115328.1">System.out.println("\n--- 属性探测 ---");
+Field[] selfFields = clazz.getDeclaredFields();
+System.out.println("StudentCard 自己声明的属性数量: " + selfFields.length); // 结果为0
+
+// 真正要看属性，得去扫描它的父类 BaseDoorCard
+Field[] superFields = clazz.getSuperclass().getDeclaredFields();
+for (Field f : superFields) {
+    System.out.println("在父类中发现属性: " + f.getName() + " (类型: " + f.getType().getSimpleName() + ")");
+}
+</t>
+<t tx="swot.20260312115342.1">System.out.println("\n--- 方法探测 ---");
+Method[] methods = clazz.getDeclaredMethods();
+
+for (Method m : methods) {
+    System.out.println("发现方法: " + m.getName());
+}
+</t>
+<t tx="swot.20260312115524.1" _mod_time="4741da6c8ea842183a2e">@language java
+// @clean code/testBasicSyntax/src/ReflectionDemo/DoorException.java
+package ReflectionDemo;
+
+/**
+ * 自定义异常：专门处理门禁系统的异常情况
+ */
+public class DoorException extends Exception {
+    public DoorException(String message) {
+        super(message);
+    }
+}
+
 </t>
 </tnodes>
 </leo_file>

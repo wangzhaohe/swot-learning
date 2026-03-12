@@ -1,5 +1,5 @@
-// @clean code/testBasicSyntax/src/jdbcExample/DoorException.java
-package jdbcExample;
+// @clean code/testBasicSyntax/src/ReflectionDemo/DoorException.java
+package ReflectionDemo;
 
 /**
  * 自定义异常：专门处理门禁系统的异常情况
