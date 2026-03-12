@@ -587,7 +587,10 @@
 </v>
 <v t="swot.20260215212309.1"><vh>多线程与反射 (4学时)</vh>
 <v t="swot.20260216213100.1"><vh>多线程 —— “程序的分身术”</vh>
-<v t="swot.20260312080445.1"><vh>@clean code/testBasicSyntax/src/threadExample/MultiThreadDemo.java</vh></v>
+<v t="swot.20260312080445.1"><vh>@clean code/testBasicSyntax/src/threadExample/MultiThreadDemo.java</vh>
+<v t="swot.20260312093746.1"><vh>public class MultiThreadDemo</vh></v>
+<v t="swot.20260312093713.1"><vh>HealthCheckThread</vh></v>
+</v>
 </v>
 <v t="swot.20260216213110.1"><vh>反射机制 —— “程序的 X 光机”</vh></v>
 <v t="swot.20260217014753.1"><vh>小结</vh></v>
@@ -15064,6 +15067,25 @@ public class FileDemo {
 ----
 @others
 ----
+
+. 关键点解析
+1. **`check.interrupt()`**：这就像是主线程过去拍了拍子线程的肩膀说：“嘿，别干了，准备下班。”
+2. **`InterruptedException`**：如果子线程当时正在 `sleep`，它会立刻“惊醒”并跳到 `catch` 块里。这是 Kill 掉正在休眠线程的唯一优雅方式。
+3. **`isInterrupted()`**：如果子线程当时正在忙着算账（没在睡觉），它会在下一次 `while` 循环开始前检查这个状态，发现是 `true` 就退出。
+4. **`check.join()`**：这是一行好习惯代码。它让主线程等一等，直到子线程完全把活干完、把门锁好（执行完 `run` 方法），主线程才彻底消失。
+
+
+. 运行结果
++
+....
+系统自检中：硬件状态正常...
+系统自检中：硬件状态正常...
+系统自检中：硬件状态正常...
+【主线程】检测到程序即将关闭，发送中断信号给子线程...
+【子线程】在睡眠中收到中断信号，准备清理现场并退出...
+【子线程】已安全关闭。
+【主线程】所有任务已结束，程序退出。
+....
 </t>
 <t tx="swot.20260216213110.1">知识点说明
 
@@ -22956,30 +22978,50 @@ public ArrayList&lt;BaseDoorCard&gt; loadAllCards() throws DoorException {
     return list;
 }
 </t>
-<t tx="swot.20260312080445.1" _mod_time="4741da6c81699d508c2e">@language java
+<t tx="swot.20260312080445.1" _mod_time="4741da6c865df7e4e52e">@language java
+// @clean code/testBasicSyntax/src/threadExample/MultiThreadDemo.java
 package threadExample;
-// 1. 定义一个自检任务
-class HealthCheckThread extends Thread {
+
+@others
+</t>
+<t tx="swot.20260312093713.1">class HealthCheckThread extends Thread {
+    @Override
     public void run() {
-        while (true) {
-            System.out.println("系统自检中：硬件状态正常...");
+        // 核心逻辑：检查当前线程是否被下达了“中断”指令
+        while (!Thread.currentThread().isInterrupted()) {
             try {
+                System.out.println("系统自检中：硬件状态正常...");
+                // 模拟耗时操作
                 Thread.sleep(5000);
-            } catch (InterruptedException e) {}
+            }
+            catch (InterruptedException e) {
+                // 重要：当线程在 sleep 时被 interrupt()，会抛出此异常
+                System.out.println("【子线程】在睡眠中收到中断信号，准备清理现场并退出...");
+                // 抛出异常后中断位会被重置，通常需要跳出循环
+                break;
+            }
         }
+        System.out.println("【子线程】已安全关闭。");
     }
 }
-
-public class MultiThreadDemo {
-    public static void main(String[] args) {
-        // 2. 启动自检“分身”
+</t>
+<t tx="swot.20260312093746.1">public class MultiThreadDemo {
+    public static void main(String[] args) throws InterruptedException {
         HealthCheckThread check = new HealthCheckThread();
-        // 在这个例子中因为主线程马上就结束了，所以打开下面一行注释，无法正常展示子线程运行情况。
-        // check.setDaemon(true);  // 主线程一旦结束，自检也立刻停止
-        check.start(); 
+        check.start();
 
-        // 3. 主线程继续处理刷卡
-        System.out.println("主系统：准备就绪，请刷卡...");
+        // 让主线程运行 12 秒，确保子线程跑了几次循环
+        Thread.sleep(12000);
+
+        System.out.println("【主线程】检测到程序即将关闭，发送中断信号给子线程...");
+
+        // 发送中断信号，而不是暴力杀掉
+        check.interrupt();
+
+        // 等待子线程彻底结束后，主线程再退出
+        check.join();
+
+        System.out.println("【主线程】所有任务已结束，程序退出。");
     }
 }
 </t>

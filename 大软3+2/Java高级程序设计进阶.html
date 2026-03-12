@@ -5461,31 +5461,81 @@ code/testBasicSyntax/cards.txt</p>
 <p>代码实现：模拟门禁自检与刷卡同时进行</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">threadExample</span><span class="tok-p">;</span>
-<span class="tok-c1">// 1. 定义一个自检任务</span>
-<span class="tok-kd">class</span> <span class="tok-nc">HealthCheckThread</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">Thread</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">run</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;系统自检中：硬件状态正常...&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">                </span><span class="tok-n">Thread</span><span class="tok-p">.</span><span class="tok-na">sleep</span><span class="tok-p">(</span><span class="tok-mi">5000</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">InterruptedException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{}</span>
-<span class="tok-w">        </span><span class="tok-p">}</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
-<span class="tok-p">}</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/threadExample/MultiThreadDemo.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">threadExample</span><span class="tok-p">;</span>
 
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">MultiThreadDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-c1">// 2. 启动自检“分身”</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">InterruptedException</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-n">HealthCheckThread</span><span class="tok-w"> </span><span class="tok-n">check</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">HealthCheckThread</span><span class="tok-p">();</span>
-<span class="tok-w">        </span><span class="tok-c1">// 在这个例子中因为主线程马上就结束了，所以打开下面一行注释，无法正常展示子线程运行情况。</span>
-<span class="tok-w">        </span><span class="tok-c1">// check.setDaemon(true);  // 主线程一旦结束，自检也立刻停止</span>
 <span class="tok-w">        </span><span class="tok-n">check</span><span class="tok-p">.</span><span class="tok-na">start</span><span class="tok-p">();</span>
 
-<span class="tok-w">        </span><span class="tok-c1">// 3. 主线程继续处理刷卡</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;主系统：准备就绪，请刷卡...&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// 让主线程运行 12 秒，确保子线程跑了几次循环</span>
+<span class="tok-w">        </span><span class="tok-n">Thread</span><span class="tok-p">.</span><span class="tok-na">sleep</span><span class="tok-p">(</span><span class="tok-mi">12000</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【主线程】检测到程序即将关闭，发送中断信号给子线程...&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 发送中断信号，而不是暴力杀掉</span>
+<span class="tok-w">        </span><span class="tok-n">check</span><span class="tok-p">.</span><span class="tok-na">interrupt</span><span class="tok-p">();</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 等待子线程彻底结束后，主线程再退出</span>
+<span class="tok-w">        </span><span class="tok-n">check</span><span class="tok-p">.</span><span class="tok-na">join</span><span class="tok-p">();</span>
+
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【主线程】所有任务已结束，程序退出。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+<span class="tok-kd">class</span> <span class="tok-nc">HealthCheckThread</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">Thread</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nd">@Override</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">run</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 核心逻辑：检查当前线程是否被下达了“中断”指令</span>
+<span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-n">Thread</span><span class="tok-p">.</span><span class="tok-na">currentThread</span><span class="tok-p">().</span><span class="tok-na">isInterrupted</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;系统自检中：硬件状态正常...&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-c1">// 模拟耗时操作</span>
+<span class="tok-w">                </span><span class="tok-n">Thread</span><span class="tok-p">.</span><span class="tok-na">sleep</span><span class="tok-p">(</span><span class="tok-mi">5000</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">InterruptedException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-c1">// 重要：当线程在 sleep 时被 interrupt()，会抛出此异常</span>
+<span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【子线程】在睡眠中收到中断信号，准备清理现场并退出...&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-c1">// 抛出异常后中断位会被重置，通常需要跳出循环</span>
+<span class="tok-w">                </span><span class="tok-k">break</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【子线程】已安全关闭。&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>关键点解析</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong><code>check.interrupt()</code></strong>：这就像是主线程过去拍了拍子线程的肩膀说：“嘿，别干了，准备下班。”</p>
+</li>
+<li>
+<p><strong><code>InterruptedException</code></strong>：如果子线程当时正在 <code>sleep</code>，它会立刻“惊醒”并跳到 <code>catch</code> 块里。这是 Kill 掉正在休眠线程的唯一优雅方式。</p>
+</li>
+<li>
+<p><strong><code>isInterrupted()</code></strong>：如果子线程当时正在忙着算账（没在睡觉），它会在下一次 <code>while</code> 循环开始前检查这个状态，发现是 <code>true</code> 就退出。</p>
+</li>
+<li>
+<p><strong><code>check.join()</code></strong>：这是一行好习惯代码。它让主线程等一等，直到子线程完全把活干完、把门锁好（执行完 <code>run</code> 方法），主线程才彻底消失。</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>运行结果</p>
+<div class="literalblock">
+<div class="content">
+<pre>系统自检中：硬件状态正常...
+系统自检中：硬件状态正常...
+系统自检中：硬件状态正常...
+【主线程】检测到程序即将关闭，发送中断信号给子线程...
+【子线程】在睡眠中收到中断信号，准备清理现场并退出...
+【子线程】已安全关闭。
+【主线程】所有任务已结束，程序退出。</pre>
 </div>
 </div>
 </li>
@@ -5655,7 +5705,7 @@ code/testBasicSyntax/cards.txt</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-12 09:02:51 +0800
+Last updated 2026-03-12 09:46:52 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
