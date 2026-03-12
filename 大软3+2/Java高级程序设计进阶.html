@@ -661,12 +661,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_网络编程_4学时">网络编程 (4学时)</a>
 <ul class="sectlevel2">
 <li><a href="#_网络基础_寄快递">网络基础 —— “寄快递”</a></li>
-<li><a href="#_socket_编程_打通电话">Socket 编程 —— “打通电话”</a>
-<ul class="sectlevel3">
-<li><a href="#_代码举例门禁终端客户端发送刷卡请求">代码举例：门禁终端（客户端）发送刷卡请求</a></li>
-<li><a href="#_代码举例中央服务器服务端接收请求">代码举例：中央服务器（服务端）接收请求</a></li>
-</ul>
-</li>
+<li><a href="#_socket_编程_上传刷卡数据">Socket 编程 —— “上传刷卡数据”</a></li>
 <li><a href="#_小结_3">小结</a></li>
 </ul>
 </li>
@@ -5814,48 +5809,141 @@ StudentCard 自己声明的属性数量: 0
 </div>
 </div>
 <div class="sect2">
-<h3 id="_socket_编程_打通电话">Socket 编程 —— “打通电话”</h3>
-<div class="sect3">
-<h4 id="_代码举例门禁终端客户端发送刷卡请求">代码举例：门禁终端（客户端）发送刷卡请求</h4>
+<h3 id="_socket_编程_上传刷卡数据">Socket 编程 —— “上传刷卡数据”</h3>
+<div class="paragraph">
+<p>服务端像是一个<strong>“全天候值守的收发室”</strong>，负责监听连接并读取终端传来的数据。</p>
+</div>
+<div class="paragraph">
+<p>客户端像是一个<strong>“寄信人”</strong>，它主动发起连接，并将信息推送到服务器。</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.*</span><span class="tok-p">;</span>
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// @clean code/testBasicSyntax/src/socketExample/CentralServer.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">socketExample</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.*</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.net.*</span><span class="tok-p">;</span>
 
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 中央服务器类：模拟门禁系统的后端管理中心</span>
+<span class="tok-cm"> * 功能：监听 8888 端口，接收门禁终端上报的卡号，并下发开门指令</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">CentralServer</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 1. 启动服务：在本地 8888 端口创建一个监听“热线”</span>
+<span class="tok-w">        </span><span class="tok-c1">// 这个对象负责监听是否有客户端（门禁终端）发来连接请求</span>
+<span class="tok-w">        </span><span class="tok-n">ServerSocket</span><span class="tok-w"> </span><span class="tok-n">server</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ServerSocket</span><span class="tok-p">(</span><span class="tok-mi">8888</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;服务器已启动，正在 8888 端口等待门禁终端连接...&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 服务器通常需要 24/7 不间断运行，所以使用死循环</span>
+<span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 2. 阻塞等待：程序运行到这里会“停住”，直到有客户端连进来</span>
+<span class="tok-w">            </span><span class="tok-c1">// 一旦连接成功，accept() 会返回一个 Socket 对象，它代表了服务器与该客户端之间的专属“双向通话通道”</span>
+<span class="tok-w">            </span><span class="tok-n">Socket</span><span class="tok-w"> </span><span class="tok-n">client</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">server</span><span class="tok-p">.</span><span class="tok-na">accept</span><span class="tok-p">();</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;检测到终端接入，来源地址：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">client</span><span class="tok-p">.</span><span class="tok-na">getInetAddress</span><span class="tok-p">());</span>
+
+<span class="tok-w">            </span><span class="tok-cm">/* --- 输入流部分：读取终端发来的数据 --- */</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// getInputStream(): 获取底层的字节流</span>
+<span class="tok-w">            </span><span class="tok-c1">// InputStreamReader: 将字节流(Byte)转为字符流(Char)，解决中文乱码等编码问题</span>
+<span class="tok-w">            </span><span class="tok-c1">// BufferedReader: 包装成带缓冲的流，提供 readLine() 方法，能整行读取字符串，效率更高</span>
+<span class="tok-w">            </span><span class="tok-n">BufferedReader</span><span class="tok-w"> </span><span class="tok-n">in</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">BufferedReader</span><span class="tok-p">(</span>
+<span class="tok-w">                </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">InputStreamReader</span><span class="tok-p">(</span><span class="tok-n">client</span><span class="tok-p">.</span><span class="tok-na">getInputStream</span><span class="tok-p">())</span>
+<span class="tok-w">            </span><span class="tok-p">);</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 读取客户端发送的第一行文本数据（例如：“卡号:A1234567”）</span>
+<span class="tok-w">            </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">in</span><span class="tok-p">.</span><span class="tok-na">readLine</span><span class="tok-p">();</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【数据上报】收到终端内容：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">);</span>
+
+<span class="tok-w">            </span><span class="tok-cm">/* --- 输出流部分：回传指令给终端 --- */</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// getOutputStream(): 获取指向客户端的输出字节流</span>
+<span class="tok-w">            </span><span class="tok-c1">// PrintWriter: 字符打印流，方便直接输出字符串。</span>
+<span class="tok-w">            </span><span class="tok-c1">// 第二个参数 true 表示“自动刷新(autoFlush)”，即调用 println 会立即将数据发送出去，无需手动 flush()</span>
+<span class="tok-w">            </span><span class="tok-n">PrintWriter</span><span class="tok-w"> </span><span class="tok-n">out</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">PrintWriter</span><span class="tok-p">(</span><span class="tok-n">client</span><span class="tok-p">.</span><span class="tok-na">getOutputStream</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">);</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 3. 业务逻辑判断</span>
+<span class="tok-w">            </span><span class="tok-c1">// 模拟数据库校验过程：只有特定卡号才允许进入</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">request</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-n">request</span><span class="tok-p">.</span><span class="tok-na">contains</span><span class="tok-p">(</span><span class="tok-s">&quot;A1234567&quot;</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-c1">// 发送开门指令</span>
+<span class="tok-w">                </span><span class="tok-n">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;卡有效，请开门 (Status: OK)&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【决策结果】验证通过，已下发开门指令。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-c1">// 发送拒绝指令</span>
+<span class="tok-w">                </span><span class="tok-n">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;非法卡片，拒绝进入 (Status: Denied)&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【决策结果】验证失败，已拦截非法请求。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 4. 短连接处理：任务完成后关闭当前会话</span>
+<span class="tok-w">            </span><span class="tok-c1">// 注意：关闭 client 会同时关闭与之关联的输入/输出流</span>
+<span class="tok-w">            </span><span class="tok-n">client</span><span class="tok-p">.</span><span class="tok-na">close</span><span class="tok-p">();</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;当前事务处理完毕，已断开连接。\n--------------------------&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+<span class="tok-c1">// @clean code/testBasicSyntax/src/socketExample/DoorClient.java</span>
+<span class="tok-kn">package</span><span class="tok-w"> </span><span class="tok-nn">socketExample</span><span class="tok-p">;</span>
+
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.io.*</span><span class="tok-p">;</span>
+<span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.net.*</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 门禁终端客户端类：模拟安装在门口的刷卡机</span>
+<span class="tok-cm"> * 功能：主动连接服务器，发送卡号并接收服务器的开门/拒绝指令</span>
+<span class="tok-cm"> */</span>
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">DoorClient</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Socket</span><span class="tok-w"> </span><span class="tok-n">socket</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Socket</span><span class="tok-p">(</span><span class="tok-s">&quot;127.0.0.1&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">8888</span><span class="tok-p">);</span>
-<span class="tok-w">             </span><span class="tok-n">PrintWriter</span><span class="tok-w"> </span><span class="tok-n">out</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">PrintWriter</span><span class="tok-p">(</span><span class="tok-n">socket</span><span class="tok-p">.</span><span class="tok-na">getOutputStream</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// try-with-resources 语法：在括号内声明资源，代码块结束后会自动关闭 socket 和流</span>
+<span class="tok-w">        </span><span class="tok-c1">// 这样可以避免因忘记写 .close() 导致的端口占用或内存泄漏</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-c1">// 1. 尝试连接：向 IP 地址为 127.0.0.1 (本机) 的 8888 端口发起连接请求</span>
+<span class="tok-w">            </span><span class="tok-c1">// 如果服务器没启动，这里会直接抛出 IOException 进入 catch 块</span>
+<span class="tok-w">            </span><span class="tok-n">Socket</span><span class="tok-w"> </span><span class="tok-n">socket</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">Socket</span><span class="tok-p">(</span><span class="tok-s">&quot;127.0.0.1&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">8888</span><span class="tok-p">);</span>
 
-<span class="tok-w">            </span><span class="tok-c1">// 模拟发送刷卡数据给服务器</span>
-<span class="tok-w">            </span><span class="tok-n">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;CARD_ID:A1234567;ACTION:OPEN&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;已将刷卡数据传回中央服务器。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-c1">// 2. 建立输出流：用于向服务器“说话”</span>
+<span class="tok-w">            </span><span class="tok-c1">// PrintWriter 方便发送字符串，true 表示自动刷新缓冲区(autoFlush)</span>
+<span class="tok-w">            </span><span class="tok-n">PrintWriter</span><span class="tok-w"> </span><span class="tok-n">out</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">PrintWriter</span><span class="tok-p">(</span><span class="tok-n">socket</span><span class="tok-p">.</span><span class="tok-na">getOutputStream</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">);</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 3. 建立输入流：用于听取服务器“回话”</span>
+<span class="tok-w">            </span><span class="tok-c1">// 将字节流包装成字符流，再包装成缓冲流，以便调用 readLine() 按行读取文本</span>
+<span class="tok-w">            </span><span class="tok-n">BufferedReader</span><span class="tok-w"> </span><span class="tok-n">in</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">BufferedReader</span><span class="tok-p">(</span>
+<span class="tok-w">                </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">InputStreamReader</span><span class="tok-p">(</span><span class="tok-n">socket</span><span class="tok-p">.</span><span class="tok-na">getInputStream</span><span class="tok-p">())</span>
+<span class="tok-w">            </span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// --- 步骤 1：发送刷卡数据 ---</span>
+<span class="tok-w">            </span><span class="tok-c1">// 构造协议格式字符串，模拟刷卡操作</span>
+<span class="tok-w">            </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">cardData</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;CARD_ID:A1234567;ACTION:OPEN&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-n">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-n">cardData</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【客户端】已将刷卡数据传回中央服务器：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">cardData</span><span class="tok-p">);</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// --- 步骤 2：读取服务器的回传信息 ---</span>
+<span class="tok-w">            </span><span class="tok-c1">// readLine() 是“阻塞式”的：如果服务器还没回话，程序会停在这里等</span>
+<span class="tok-w">            </span><span class="tok-c1">// 只有当服务器发送了内容并带有换行符（\n），或者连接关闭时，它才会继续</span>
+<span class="tok-w">            </span><span class="tok-n">String</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">in</span><span class="tok-p">.</span><span class="tok-na">readLine</span><span class="tok-p">();</span>
+
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">response</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【终端显示】服务器反馈结果：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">response</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【终端警告】服务器异常断开，未返回明确指令。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
 
 <span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">IOException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;网络连接失败，门禁进入离线模式。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-c1">// 网络异常处理：例如服务器未开启、网络闪断、防火墙拦截等</span>
+<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【系统告警】网络连接失败，门禁自动进入“离线应急模式”。&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-c1">// e.printStackTrace(); // 调试时可以取消注释查看具体报错原因</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-c1">// 代码执行到此处，try 括号里的资源（socket, out, in）会被自动关闭</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_代码举例中央服务器服务端接收请求">代码举例：中央服务器（服务端）接收请求</h4>
-<div class="listingblock">
+<div class="literalblock">
+<div class="title">运行结果</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">CentralServer</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">Exception</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-n">ServerSocket</span><span class="tok-w"> </span><span class="tok-n">server</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">ServerSocket</span><span class="tok-p">(</span><span class="tok-mi">8888</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;服务器已启动，等待门禁终端连接...&quot;</span><span class="tok-p">);</span>
+<pre>已将刷卡数据传回中央服务器。
 
-<span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-n">Socket</span><span class="tok-w"> </span><span class="tok-n">client</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">server</span><span class="tok-p">.</span><span class="tok-na">accept</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 等待连接</span>
-<span class="tok-w">            </span><span class="tok-n">BufferedReader</span><span class="tok-w"> </span><span class="tok-n">in</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">BufferedReader</span><span class="tok-p">(</span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">InputStreamReader</span><span class="tok-p">(</span><span class="tok-n">client</span><span class="tok-p">.</span><span class="tok-na">getInputStream</span><span class="tok-p">()));</span>
-<span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;收到终端上报：&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">in</span><span class="tok-p">.</span><span class="tok-na">readLine</span><span class="tok-p">());</span>
-<span class="tok-w">        </span><span class="tok-p">}</span>
-<span class="tok-w">    </span><span class="tok-p">}</span>
-<span class="tok-p">}</span></code></pre>
-</div>
+服务器已启动，等待门禁终端连接...
+收到终端上报：CARD_ID:A1234567;ACTION:OPEN</pre>
 </div>
 </div>
 </div>
@@ -5877,7 +5965,7 @@ StudentCard 自己声明的属性数量: 0
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-12 12:17:10 +0800
+Last updated 2026-03-12 14:31:17 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -611,9 +611,9 @@
 </v>
 <v t="swot.20260215212257.1"><vh>网络编程 (4学时)</vh>
 <v t="swot.20260216212750.1"><vh>网络基础 —— “寄快递”</vh></v>
-<v t="swot.20260216213241.1"><vh>Socket 编程 —— “打通电话”</vh>
-<v t="swot.20260217014602.1"><vh>代码举例：门禁终端（客户端）发送刷卡请求</vh></v>
-<v t="swot.20260217014610.1"><vh>代码举例：中央服务器（服务端）接收请求</vh></v>
+<v t="swot.20260216213241.1"><vh>Socket 编程 —— “上传刷卡数据”</vh>
+<v t="swot.20260217014610.1"><vh>@clean code/testBasicSyntax/src/socketExample/CentralServer.java</vh></v>
+<v t="swot.20260217014602.1"><vh>@clean code/testBasicSyntax/src/socketExample/DoorClient.java</vh></v>
 </v>
 <v t="swot.20260216221239.1"><vh>小结</vh></v>
 </v>
@@ -14402,7 +14402,9 @@ toggleButton.addEventListener('click', () =&gt; {
 ====
 </t>
 <t tx="swot.20260215212257.1">* *核心知识点*：TCP/UDP 协议、Socket 编程、URL 处理。
+
 * *教学要求*：能够实现简单的 C/S 架构通信。
+
 * *本节要求*：理解 TCP 通信流程，实现门禁终端与服务器的“跨空间对话”。
 </t>
 <t tx="swot.20260215212309.1">@language asciidoc
@@ -15060,7 +15062,9 @@ public class FileDemo {
 知识点说明
 
 * **IP 地址**：收件人的地址（哪台电脑）。
+
 * **端口号 (Port)**：收件人的姓名/房间号（电脑里的哪个程序）。
+
 * **TCP 协议**：像发快递，必须收件人签收了，寄件人才放心（可靠连接）。
 </t>
 <t tx="swot.20260216213100.1">[upperalpha]
@@ -15136,51 +15140,148 @@ StudentCard 自己声明的属性数量: 0
 发现方法: validate
 ....
 </t>
-<t tx="swot.20260216213241.1"></t>
+<t tx="swot.20260216213241.1">服务端像是一个**“全天候值守的收发室”**，负责监听连接并读取终端传来的数据。
+
+客户端像是一个**“寄信人”**，它主动发起连接，并将信息推送到服务器。
+
+[source,java]
+----
+@others
+----
+
+
+.运行结果
+....
+已将刷卡数据传回中央服务器。
+
+服务器已启动，等待门禁终端连接...
+收到终端上报：CARD_ID:A1234567;ACTION:OPEN
+....
+</t>
 <t tx="swot.20260216221239.1">**网络编程的演示**：
 
    * 演示这一课时，最好**开两个命令行窗口**。一个跑服务器，一个跑客户端，可以看到一台电脑里的两个程序在“聊天”，这种直观感非常重要。
 
 </t>
-<t tx="swot.20260217014602.1">@language java
-[source,java]
-----
+<t tx="swot.20260217014602.1" _mod_time="4741da6c97689c27362e">@language java
+// @clean code/testBasicSyntax/src/socketExample/DoorClient.java
+package socketExample;
+
 import java.io.*;
 import java.net.*;
 
+/**
+ * 门禁终端客户端类：模拟安装在门口的刷卡机
+ * 功能：主动连接服务器，发送卡号并接收服务器的开门/拒绝指令
+ */
 public class DoorClient {
     public static void main(String[] args) {
-        try (Socket socket = new Socket("127.0.0.1", 8888);
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+        // try-with-resources 语法：在括号内声明资源，代码块结束后会自动关闭 socket 和流
+        // 这样可以避免因忘记写 .close() 导致的端口占用或内存泄漏
+        try (
+            // 1. 尝试连接：向 IP 地址为 127.0.0.1 (本机) 的 8888 端口发起连接请求
+            // 如果服务器没启动，这里会直接抛出 IOException 进入 catch 块
+            Socket socket = new Socket("127.0.0.1", 8888);
 
-            // 模拟发送刷卡数据给服务器
-            out.println("CARD_ID:A1234567;ACTION:OPEN");
-            System.out.println("已将刷卡数据传回中央服务器。");
+            // 2. 建立输出流：用于向服务器“说话”
+            // PrintWriter 方便发送字符串，true 表示自动刷新缓冲区(autoFlush)
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+            // 3. 建立输入流：用于听取服务器“回话”
+            // 将字节流包装成字符流，再包装成缓冲流，以便调用 readLine() 按行读取文本
+            BufferedReader in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream())
+            )
+        ) {
+            // --- 步骤 1：发送刷卡数据 ---
+            // 构造协议格式字符串，模拟刷卡操作
+            String cardData = "CARD_ID:A1234567;ACTION:OPEN";
+            out.println(cardData); 
+            System.out.println("【客户端】已将刷卡数据传回中央服务器：" + cardData);
+
+            // --- 步骤 2：读取服务器的回传信息 ---
+            // readLine() 是“阻塞式”的：如果服务器还没回话，程序会停在这里等
+            // 只有当服务器发送了内容并带有换行符（\n），或者连接关闭时，它才会继续
+            String response = in.readLine();
+            
+            if (response != null) {
+                System.out.println("【终端显示】服务器反馈结果：" + response);
+            } else {
+                System.out.println("【终端警告】服务器异常断开，未返回明确指令。");
+            }
 
         } catch (IOException e) {
-            System.out.println("网络连接失败，门禁进入离线模式。");
+            // 网络异常处理：例如服务器未开启、网络闪断、防火墙拦截等
+            System.out.println("【系统告警】网络连接失败，门禁自动进入“离线应急模式”。");
+            // e.printStackTrace(); // 调试时可以取消注释查看具体报错原因
         }
+        // 代码执行到此处，try 括号里的资源（socket, out, in）会被自动关闭
     }
-}
-----
-</t>
-<t tx="swot.20260217014610.1">@language java
-[source,java]
-----
+}</t>
+<t tx="swot.20260217014610.1" _mod_time="4741da6c97134ce3c82e">@language java
+// @clean code/testBasicSyntax/src/socketExample/CentralServer.java
+package socketExample;
+
+import java.io.*;
+import java.net.*;
+
+/**
+ * 中央服务器类：模拟门禁系统的后端管理中心
+ * 功能：监听 8888 端口，接收门禁终端上报的卡号，并下发开门指令
+ */
 public class CentralServer {
     public static void main(String[] args) throws Exception {
+        // 1. 启动服务：在本地 8888 端口创建一个监听“热线”
+        // 这个对象负责监听是否有客户端（门禁终端）发来连接请求
         ServerSocket server = new ServerSocket(8888);
-        System.out.println("服务器已启动，等待门禁终端连接...");
+        System.out.println("服务器已启动，正在 8888 端口等待门禁终端连接...");
 
+        // 服务器通常需要 24/7 不间断运行，所以使用死循环
         while (true) {
-            Socket client = server.accept(); // 等待连接
-            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            System.out.println("收到终端上报：" + in.readLine());
+            // 2. 阻塞等待：程序运行到这里会“停住”，直到有客户端连进来
+            // 一旦连接成功，accept() 会返回一个 Socket 对象，它代表了服务器与该客户端之间的专属“双向通话通道”
+            Socket client = server.accept();
+            System.out.println("检测到终端接入，来源地址：" + client.getInetAddress());
+
+            /* --- 输入流部分：读取终端发来的数据 --- */
+            
+            // getInputStream(): 获取底层的字节流
+            // InputStreamReader: 将字节流(Byte)转为字符流(Char)，解决中文乱码等编码问题
+            // BufferedReader: 包装成带缓冲的流，提供 readLine() 方法，能整行读取字符串，效率更高
+            BufferedReader in = new BufferedReader(
+                new InputStreamReader(client.getInputStream())
+            );
+
+            // 读取客户端发送的第一行文本数据（例如：“卡号:A1234567”）
+            String request = in.readLine();
+            System.out.println("【数据上报】收到终端内容：" + request);
+
+            /* --- 输出流部分：回传指令给终端 --- */
+
+            // getOutputStream(): 获取指向客户端的输出字节流
+            // PrintWriter: 字符打印流，方便直接输出字符串。
+            // 第二个参数 true 表示“自动刷新(autoFlush)”，即调用 println 会立即将数据发送出去，无需手动 flush()
+            PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+
+            // 3. 业务逻辑判断
+            // 模拟数据库校验过程：只有特定卡号才允许进入
+            if (request != null &amp;&amp; request.contains("A1234567")) {
+                // 发送开门指令
+                out.println("卡有效，请开门 (Status: OK)");
+                System.out.println("【决策结果】验证通过，已下发开门指令。");
+            } else {
+                // 发送拒绝指令
+                out.println("非法卡片，拒绝进入 (Status: Denied)");
+                System.out.println("【决策结果】验证失败，已拦截非法请求。");
+            }
+
+            // 4. 短连接处理：任务完成后关闭当前会话
+            // 注意：关闭 client 会同时关闭与之关联的输入/输出流
+            client.close();
+            System.out.println("当前事务处理完毕，已断开连接。\n--------------------------");
         }
     }
-}
-----
-</t>
+}</t>
 <t tx="swot.20260217014753.1">[upperalpha]
 . **多线程的坑**：
    * 多线程虽然好用，但不要乱用。两个工人都去抢一个笔记本（共享资源）会打架（死锁/线程安全）。
