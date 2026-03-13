@@ -588,8 +588,8 @@
 <v t="swot.20260215212309.1"><vh>多线程与反射 (4学时)</vh>
 <v t="swot.20260216213100.1"><vh>多线程 —— “程序的分身术”</vh>
 <v t="swot.20260312080445.1"><vh>@clean code/testBasicSyntax/src/threadExample/MultiThreadDemo.java</vh>
-<v t="swot.20260312093746.1"><vh>public class MultiThreadDemo</vh></v>
-<v t="swot.20260312093713.1"><vh>HealthCheckThread</vh></v>
+<v t="swot.20260312093746.1"><vh>public class MultiThreadDemo 主线程</vh></v>
+<v t="swot.20260312093713.1"><vh>HealthCheckThread 子线程</vh></v>
 </v>
 </v>
 <v t="swot.20260216213110.1"><vh>反射机制 —— “程序的 X 光机”</vh>
@@ -646,7 +646,10 @@
 <v t="swot.20260302161253.1"><vh>7. 深度思考：为什么坚持在容器中运行 Java？</vh></v>
 </v>
 </v>
-<v t="swot.20260302215851.1"><vh>@adoc Java高级程序设计进阶实验.adoc -- 看看能不能以后再参考参考</vh>
+<v t="swot.20260304165602.1"><vh>@adoc 给AI分析的资源.adoc</vh>
+<v t="swot.20260304165736.1"><vh>给AI分析的资源</vh></v>
+</v>
+<v t="swot.20260302215851.1"><vh>@adoc Java高级程序设计进阶实验.adoc -- 里面的条目留在以后再参考</vh>
 <v t="swot.20260302215945.1"><vh>Java高级程序设计进阶实验--JavaSE 门禁系统实训（共 36 学时）</vh>
 <v t="swot.20260215212523.1"><vh>实验二：数据模型与实体类开发 (4学时)</vh></v>
 <v t="swot.20260215212522.1"><vh>实验三：系统逻辑接口设计 (6学时)</vh></v>
@@ -655,9 +658,6 @@
 <v t="swot.20260215212516.1"><vh>实验六：持久化层升级 (6学时)</vh></v>
 <v t="swot.20260215212514.1"><vh>实验七：系统集成与发布 (6学时)</vh></v>
 </v>
-</v>
-<v t="swot.20260304165602.1"><vh>@adoc 给AI分析的资源.adoc</vh>
-<v t="swot.20260304165736.1"><vh>给AI分析的资源</vh></v>
 </v>
 </v>
 <v t="swot.20251210103828.1"><vh>@path js</vh>
@@ -23035,7 +23035,7 @@ public ArrayList&lt;BaseDoorCard&gt; loadAllCards() throws DoorException {
     return list;
 }
 </t>
-<t tx="swot.20260312080445.1" _mod_time="4741da6c865df7e4e52e">@language java
+<t tx="swot.20260312080445.1" _mod_time="4741da6cd89b5bff952e">@language java
 // @clean code/testBasicSyntax/src/threadExample/MultiThreadDemo.java
 package threadExample;
 
@@ -23044,7 +23044,7 @@ package threadExample;
 <t tx="swot.20260312093713.1">class HealthCheckThread extends Thread {
     @Override
     public void run() {
-        // 核心逻辑：检查当前线程是否被下达了“中断”指令
+        // 核心业务逻辑：检查当前线程是否被下达了“中断”指令
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 System.out.println("系统自检中：硬件状态正常...");
@@ -23053,8 +23053,9 @@ package threadExample;
             }
             catch (InterruptedException e) {
                 // 重要：当线程在 sleep 时被 interrupt()，会抛出此异常
+                // catch 块是在子线程“睡觉”被吵醒的那一瞬间执行的
                 System.out.println("【子线程】在睡眠中收到中断信号，准备清理现场并退出...");
-                // 抛出异常后中断位会被重置，通常需要跳出循环
+                // 抛出异常后中断标志位（Interrupted Status）会被重置，通常需要跳出循环
                 break;
             }
         }
@@ -23064,11 +23065,15 @@ package threadExample;
 </t>
 <t tx="swot.20260312093746.1">public class MultiThreadDemo {
     public static void main(String[] args) throws InterruptedException {
+
+        // 启动检查系统状态子线程
         HealthCheckThread check = new HealthCheckThread();
         check.start();
 
-        // 让主线程运行 12 秒，确保子线程跑了几次循环
-        Thread.sleep(12000);
+        // 让主线程运行 12 秒，确保子线程跑了几次循环，能打印一些信息出来。
+        Thread.sleep(12000);  // 主线程为什么叫 Thread？
+        // Thread 是 JVM 分配给 main 方法的逻辑执行流，调用 sleep 会让当前执行流进入计时等待状态。
+        // --------- 到上面就停，12秒后继续执行 ------------
 
         System.out.println("【主线程】检测到程序即将关闭，发送中断信号给子线程...");
 
@@ -23176,12 +23181,13 @@ abstract class BaseDoorCard {
     void pay(double amount);
 }
 </t>
-<t tx="swot.20260312114727.1" _mod_time="4741da6c8f8e1451092e">@language java
+<t tx="swot.20260312114727.1" _mod_time="4741da6cd9591c17a72e">@language java
 // @clean code/testBasicSyntax/src/ReflectionDemo/Run.java
 package ReflectionDemo;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
 
 public class Run {
     public static void main(String[] args) {
@@ -23212,16 +23218,19 @@ for (Class&lt;?&gt; i : interfaces) {
 }
 </t>
 <t tx="swot.20260312115328.1">System.out.println("\n--- 属性探测 ---");
+
 Field[] selfFields = clazz.getDeclaredFields();
 System.out.println("StudentCard 自己声明的属性数量: " + selfFields.length); // 结果为0
 
 // 真正要看属性，得去扫描它的父类 BaseDoorCard
 Field[] superFields = clazz.getSuperclass().getDeclaredFields();
+
 for (Field f : superFields) {
     System.out.println("在父类中发现属性: " + f.getName() + " (类型: " + f.getType().getSimpleName() + ")");
 }
 </t>
 <t tx="swot.20260312115342.1">System.out.println("\n--- 方法探测 ---");
+
 Method[] methods = clazz.getDeclaredMethods();
 
 for (Method m : methods) {

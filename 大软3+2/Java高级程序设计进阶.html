@@ -5481,11 +5481,15 @@ code/testBasicSyntax/cards.txt</p>
 
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">MultiThreadDemo</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kd">throws</span><span class="tok-w"> </span><span class="tok-n">InterruptedException</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 启动检查系统状态子线程</span>
 <span class="tok-w">        </span><span class="tok-n">HealthCheckThread</span><span class="tok-w"> </span><span class="tok-n">check</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">new</span><span class="tok-w"> </span><span class="tok-n">HealthCheckThread</span><span class="tok-p">();</span>
 <span class="tok-w">        </span><span class="tok-n">check</span><span class="tok-p">.</span><span class="tok-na">start</span><span class="tok-p">();</span>
 
-<span class="tok-w">        </span><span class="tok-c1">// 让主线程运行 12 秒，确保子线程跑了几次循环</span>
-<span class="tok-w">        </span><span class="tok-n">Thread</span><span class="tok-p">.</span><span class="tok-na">sleep</span><span class="tok-p">(</span><span class="tok-mi">12000</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// 让主线程运行 12 秒，确保子线程跑了几次循环，能打印一些信息出来。</span>
+<span class="tok-w">        </span><span class="tok-n">Thread</span><span class="tok-p">.</span><span class="tok-na">sleep</span><span class="tok-p">(</span><span class="tok-mi">12000</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 主线程为什么叫 Thread？</span>
+<span class="tok-w">        </span><span class="tok-c1">// Thread 是 JVM 分配给 main 方法的逻辑执行流，调用 sleep 会让当前执行流进入计时等待状态。</span>
+<span class="tok-w">        </span><span class="tok-c1">// --------- 到上面就停，12秒后继续执行 ------------</span>
 
 <span class="tok-w">        </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【主线程】检测到程序即将关闭，发送中断信号给子线程...&quot;</span><span class="tok-p">);</span>
 
@@ -5501,7 +5505,7 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-kd">class</span> <span class="tok-nc">HealthCheckThread</span><span class="tok-w"> </span><span class="tok-kd">extends</span><span class="tok-w"> </span><span class="tok-n">Thread</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-nd">@Override</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">run</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-c1">// 核心逻辑：检查当前线程是否被下达了“中断”指令</span>
+<span class="tok-w">        </span><span class="tok-c1">// 核心业务逻辑：检查当前线程是否被下达了“中断”指令</span>
 <span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-n">Thread</span><span class="tok-p">.</span><span class="tok-na">currentThread</span><span class="tok-p">().</span><span class="tok-na">isInterrupted</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;系统自检中：硬件状态正常...&quot;</span><span class="tok-p">);</span>
@@ -5510,8 +5514,9 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-w">            </span><span class="tok-p">}</span>
 <span class="tok-w">            </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">InterruptedException</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">                </span><span class="tok-c1">// 重要：当线程在 sleep 时被 interrupt()，会抛出此异常</span>
+<span class="tok-w">                </span><span class="tok-c1">// catch 块是在子线程“睡觉”被吵醒的那一瞬间执行的</span>
 <span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;【子线程】在睡眠中收到中断信号，准备清理现场并退出...&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">                </span><span class="tok-c1">// 抛出异常后中断位会被重置，通常需要跳出循环</span>
+<span class="tok-w">                </span><span class="tok-c1">// 抛出异常后中断标志位（Interrupted Status）会被重置，通常需要跳出循环</span>
 <span class="tok-w">                </span><span class="tok-k">break</span><span class="tok-p">;</span>
 <span class="tok-w">            </span><span class="tok-p">}</span>
 <span class="tok-w">        </span><span class="tok-p">}</span>
@@ -5680,6 +5685,7 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.lang.reflect.Field</span><span class="tok-p">;</span>
 <span class="tok-kn">import</span><span class="tok-w"> </span><span class="tok-nn">java.lang.reflect.Method</span><span class="tok-p">;</span>
 
+
 <span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">class</span> <span class="tok-nc">Run</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-kd">public</span><span class="tok-w"> </span><span class="tok-kd">static</span><span class="tok-w"> </span><span class="tok-kt">void</span><span class="tok-w"> </span><span class="tok-nf">main</span><span class="tok-p">(</span><span class="tok-n">String</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">args</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -5698,15 +5704,18 @@ code/testBasicSyntax/cards.txt</p>
 <span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;它实现的接口是: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">i</span><span class="tok-p">.</span><span class="tok-na">getSimpleName</span><span class="tok-p">());</span>
 <span class="tok-w">            </span><span class="tok-p">}</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;\n--- 属性探测 ---&quot;</span><span class="tok-p">);</span>
+
 <span class="tok-w">            </span><span class="tok-n">Field</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">selfFields</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">clazz</span><span class="tok-p">.</span><span class="tok-na">getDeclaredFields</span><span class="tok-p">();</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;StudentCard 自己声明的属性数量: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">selfFields</span><span class="tok-p">.</span><span class="tok-na">length</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 结果为0</span>
 
 <span class="tok-w">            </span><span class="tok-c1">// 真正要看属性，得去扫描它的父类 BaseDoorCard</span>
 <span class="tok-w">            </span><span class="tok-n">Field</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">superFields</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">clazz</span><span class="tok-p">.</span><span class="tok-na">getSuperclass</span><span class="tok-p">().</span><span class="tok-na">getDeclaredFields</span><span class="tok-p">();</span>
+
 <span class="tok-w">            </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Field</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">superFields</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">                </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;在父类中发现属性: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-p">.</span><span class="tok-na">getName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot; (类型: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-p">.</span><span class="tok-na">getType</span><span class="tok-p">().</span><span class="tok-na">getSimpleName</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s">&quot;)&quot;</span><span class="tok-p">);</span>
 <span class="tok-w">            </span><span class="tok-p">}</span>
 <span class="tok-w">            </span><span class="tok-n">System</span><span class="tok-p">.</span><span class="tok-na">out</span><span class="tok-p">.</span><span class="tok-na">println</span><span class="tok-p">(</span><span class="tok-s">&quot;\n--- 方法探测 ---&quot;</span><span class="tok-p">);</span>
+
 <span class="tok-w">            </span><span class="tok-n">Method</span><span class="tok-o">[]</span><span class="tok-w"> </span><span class="tok-n">methods</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">clazz</span><span class="tok-p">.</span><span class="tok-na">getDeclaredMethods</span><span class="tok-p">();</span>
 
 <span class="tok-w">            </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Method</span><span class="tok-w"> </span><span class="tok-n">m</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">methods</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -5965,7 +5974,7 @@ StudentCard 自己声明的属性数量: 0
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-12 20:35:42 +0800
+Last updated 2026-03-13 09:18:16 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
