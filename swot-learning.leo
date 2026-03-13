@@ -662,7 +662,8 @@
 </v>
 </v>
 <v t="swot.20260313114252.1"><vh>@path JavaScript高级程序设计</vh>
-<v t="swot.20260313114356.1"><vh>JavaScript高级程序设计</vh>
+<v t="swot.20260313114356.1"><vh>@adoc JavaScript高级程序设计.adoc</vh>
+<v t="swot.20260313152128.1"><vh>JavaScript高级程序设计</vh>
 <v t="swot.20260313114540.2"><vh>Ch 1：初识 JavaScript 与变量世界</vh>
 <v t="swot.20260313114540.3"><vh>S1：核心精讲（4课时）</vh>
 <v t="swot.20260313114540.4"><vh>一：Hello World 与 开发环境</vh>
@@ -692,7 +693,14 @@
 <v t="swot.20260313130445.1"><vh>&lt;&lt; 交换变量值-数组解构法 &gt;&gt;</vh></v>
 </v>
 </v>
-<v t="swot.20260313114540.22"><vh>二：贯穿项目推进——《易校园》初始化</vh></v>
+<v t="swot.20260313114540.22"><vh>二：贯穿项目推进——《易校园》初始化</vh>
+<v t="swot.20260313174214.1"><vh>&lt;&lt; main.js &gt;&gt;</vh>
+<v t="swot.20260313172511.1"><vh>@clean code/easy-campus/main.js</vh></v>
+</v>
+<v t="swot.20260313172605.1"><vh>&lt;&lt; html &gt;&gt;</vh>
+<v t="swot.20260313174340.1"><vh>@clean code/easy-campus/index.html</vh></v>
+</v>
+</v>
 <v t="swot.20260313114540.23"><vh>作业</vh></v>
 </v>
 </v>
@@ -1113,6 +1121,7 @@
 </v>
 <v t="swot.20260313114540.329"><vh>二：贯穿项目推进——《易校园》后台管理页</vh></v>
 <v t="swot.20260313114540.330"><vh>📝 今日作业（晚自习）</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -15535,7 +15544,7 @@ StudentCard 自己声明的属性数量: 0
    * 演示这一课时，最好**开两个命令行窗口**。一个跑服务器，一个跑客户端，可以看到一台电脑里的两个程序在“聊天”，这种直观感非常重要。
 
 </t>
-<t tx="swot.20260217014602.1" _mod_time="4741da6ced9a8ffdde2e">@language java
+<t tx="swot.20260217014602.1" _mod_time="4741da6cededcf10682e">@language java
 // @clean code/testBasicSyntax/src/socketExample/DoorClient.java
 package socketExample;
 
@@ -23784,7 +23793,23 @@ toggleButton.addEventListener('click', () =&gt; {
 </t>
 <t tx="swot.20260313102210.1"></t>
 <t tx="swot.20260313114252.1"></t>
-<t tx="swot.20260313114356.1"></t>
+<t tx="swot.20260313114356.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+</t>
 <t tx="swot.20260313114540.10">**旧时代（不推荐）**：`var`
 **新时代（ES6标准，必须遵守）**：`let`（可变），`const`（不可变）。
 
@@ -25986,8 +26011,7 @@ window.onscroll = function() {
 
 **步骤 1：创建项目结构**
 
-在电脑新建文件夹 `easy-campus`，内部结构如下：
-
+.在电脑新建文件夹 `easy-campus`，内部结构如下：
 ....
 easy-campus/
 ├── index.html
@@ -25997,69 +26021,22 @@ easy-campus/
     └── main.js (我们今天的战场)
 ....
 
+
 **步骤 2：编写 `main.js`**
 
-在这个文件中，我们将定义平台的全局配置。
-
+.在这个文件中，我们将定义平台的全局配置
 [source,javascript]
 ----
-@language javascript
-/**
- * 文件名：main.js
- * 描述：易校园项目核心逻辑入口
- * 作者：[你的名字]
- * 日期：2023-XX-XX
- */
-
-// 1. 平台基础配置
-// 这些值通常不会变，用 const
-const PLATFORM_NAME = "易校园";
-const VERSION = "1.0.0";
-const AUTHOR = "JavaScript训练营学员";
-
-// 2. 当前登录用户信息（模拟）
-// 这些值后续可能会变，用 let
-let currentUser = "游客"; 
-let currentMoney = 0;
-
-// 3. 控制台输出欢迎信息
-console.log(`======================`);
-console.log(`欢迎进入【${PLATFORM_NAME}】二手交易平台`);
-console.log(`当前版本：v${VERSION}`);
-console.log(`开发者：${AUTHOR}`);
-console.log(`当前用户：${currentUser}`);
-console.log(`钱包余额：${currentMoney} 元`);
-console.log(`======================`);
-
-// 4. 模拟用户充值
-console.log("正在充值 100 元...");
-// 这里演示算术运算符
-currentMoney = currentMoney + 100; 
-
-// 5. 再次输出信息
-console.log(`充值成功！当前余额：${currentMoney} 元`);
+&lt;&lt; main.js &gt;&gt;
 ----
 
 
 **步骤 3：引入 HTML**
 
-在 `index.html` 中引入这个脚本。
-
+.在 `index.html` 中引入这个脚本。
 [source,html]
 ----
-@language html
-&lt;!DOCTYPE html&gt;
-&lt;html lang="zh-CN"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;title&gt;易校园 - 校园二手交易平台&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;易校园正在加载中...&lt;/h1&gt;
-    &lt;!-- 引入JS文件，注意放在 body 结束标签前 --&gt;
-    &lt;script src="./js/main.js"&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+&lt;&lt; html &gt;&gt;
 ----
 
 
@@ -26067,7 +26044,7 @@ console.log(`充值成功！当前余额：${currentMoney} 元`);
 
 1.  使用 Live Server 打开。
 2.  打开控制台，查看输出是否符合预期。
-3.  **尝试错误**：让学生故意修改 `const PLATFORM_NAME = "新名字"`，看看报错效果，加深对常量的理解。
+3.  **尝试错误**：故意修改 `const PLATFORM_NAME = "新名字"`，看看报错效果，加深对常量的理解。
 </t>
 <t tx="swot.20260313114540.220">
 **场景**：今天要给平台加上最吸睛的特效——**轮播图**。
@@ -26201,7 +26178,7 @@ Ch 11 的轮播图是前端面试的“保留节目”，务必让学生理解**
 <t tx="swot.20260313114540.23">1. **概念题**：`let` 和 `const` 的最大区别是什么？什么情况下用 `const`？
 
 2. **代码题**：定义三个变量分别存储圆的半径、圆周率，计算圆的周长和面积，并在控制台输出结果（保留两位小数）。
-   **   提示：周长 = 2 * π * r，面积 = π * r * r。
+   ** 提示：周长 = 2 * π * r，面积 = π * r * r。
 
 3. **项目扩展**：在 `main.js` 中添加一个新的变量 `isShopOpen`（布尔值），判断店铺是否营业。
    ** 如果是 `true`，在控制台输出“店铺营业中”；
@@ -29274,12 +29251,122 @@ a = b;    // 把 b 的水倒入 a (a=20, b空了)
 b = temp; // 把 temp 的水倒入 b (b=10)
 
 console.log(`a 现在是: ${a}, b 现在是: ${b}`);
+console.log('haha:');
 </t>
-<t tx="swot.20260313130445.1">let a = 10;
+<t tx="swot.20260313130445.1">@language javascript
+let a = 10;
 let b = 20;
 [a, b] = [b, a]; // 一行代码搞定交换
 
 console.log(`现代写法 -&gt; a: ${a}, b: ${b}`);
+</t>
+<t tx="swot.20260313152128.1">
+++++
+&lt;style&gt;
+/* 1. 默认状态：顺应你原本的展开状态 */
+#toc {
+    min-width: 0 !important;
+    max-height: 100vh;
+    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
+
+    white-space: nowrap !important;
+    max-width: 530px;
+    opacity: 1;
+
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+#toc.collapsed {
+    max-width: 0 !important; /* 宽度强制缩到 0 */
+    opacity: 0 !important; /* 透明度消失 */
+
+    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 3. 修复行间距（保留你需要的紧凑排版） */
+#toc ul, #toc li {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+// 默认没有任何类名，所以默认是自然展开的。
+toggleButton.addEventListener('click', () =&gt; {
+    contentDiv.classList.toggle('collapsed');
+});
+&lt;/script&gt;
+++++
+</t>
+<t tx="swot.20260313172511.1" _mod_time="4741da6d096dfb4f3c2e">@language javascript
+/**
+ * 文件名：main.js
+ * 描述：易校园项目核心逻辑入口
+ * 作者：[你的名字]
+ * 日期：2023-XX-XX
+ */
+
+// 1. 平台基础配置
+// 这些值通常不会变，用 const
+const PLATFORM_NAME = "易校园";
+const VERSION = "1.0.0";
+const AUTHOR = "JavaScript训练营学员";
+
+// 2. 当前登录用户信息（模拟）
+// 这些值后续可能会变，用 let
+let currentUser = "游客";
+let currentMoney = 0;
+
+// 3. 控制台输出欢迎信息
+console.log(`======================`);
+console.log(`欢迎进入【${PLATFORM_NAME}】二手交易平台`);
+console.log(`当前版本：v${VERSION}`);
+console.log(`开发者：${AUTHOR}`);
+console.log(`当前用户：${currentUser}`);
+console.log(`钱包余额：${currentMoney} 元`);
+console.log(`======================`);
+
+// 4. 模拟用户充值
+console.log("正在充值 100 元...");
+// 这里演示算术运算符
+currentMoney = currentMoney + 100; 
+
+// 5. 再次输出信息
+console.log(`充值成功！当前余额：${currentMoney} 元`);
+</t>
+<t tx="swot.20260313172605.1">@others</t>
+<t tx="swot.20260313174214.1">@others</t>
+<t tx="swot.20260313174340.1" _mod_time="4741da6d0a0a61867b2e">@language html
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;易校园 - 校园二手交易平台&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;易校园正在加载中...&lt;/h1&gt;
+        &lt;!-- 引入JS文件，注意放在 body 结束标签前 --&gt;
+        &lt;script src="./main.js"&gt;&lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
 </t>
 </tnodes>
 </leo_file>
