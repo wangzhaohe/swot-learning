@@ -107,6 +107,9 @@
 <v t="swot.20221230160721.1"><vh>@bool vr3-asciidoctor-diagram=True</vh></v>
 </v>
 <v t="swot.20181207204040.1"><vh>@commands</vh>
+<v t="swot.20260313141102.1"><vh>@command open-with-nodejs @key=Alt+Shift+J</vh></v>
+<v t="swot.20260313164643.1"><vh>@@command open-with-nodejs @key=Alt+Shift+J</vh></v>
+<v t="swot.20260313161213.1"><vh>@@command open-with-nodejs @key=Alt+Shift+J</vh></v>
 <v t="swot.20260219100306.1"><vh>@command reload-body-style</vh></v>
 <v t="swot.20260218013134.1"><vh>@command adoc-live</vh></v>
 <v t="swot.20230201133436.1"><vh>@command insert-subheads-sn</vh></v>
@@ -125,7 +128,7 @@
 <v t="swot.20210123215352.1"><vh>@openwith nvim = Alt+Shift+N</vh></v>
 <v t="swot.20200928054105.1"><vh>@openwith typora = Alt+Shift+T</vh></v>
 <v t="swot.20201221092830.1"><vh>@openwith vscode = Alt+Shift+V</vh></v>
-<v t="swot.20220211080234.1"><vh>@openwith nodejs = Alt+Shift+J</vh></v>
+<v t="swot.20220211080234.1"><vh>@@openwith nodejs = Alt+Shift+J</vh></v>
 </v>
 <v t="swot.20200226234553.1"><vh>Vim mode borders/colors</vh>
 <v t="swot.20200226234553.2"><vh>@string vim-mode-normal-border = border: 2px solid #DFCA88</vh></v>
@@ -482,10 +485,10 @@ lc;;=@language cplusplus
 lm;;=@language md
 \:
 
-lj;;=@language java
-\:
+# lj;;=@language java
+# \:
 
-ljs;;=@language javascript
+lj;;=@language javascript
 \:
 
 lh;;=@language html
@@ -1133,8 +1136,8 @@ for node in p.children():
 <t tx="swot.20211205195518.1">"URL for MD stylesheet</t>
 <t tx="swot.20220114092932.1"></t>
 <t tx="swot.20220211080234.1">ext:
-kind:   subprocess.Popen
-arg:     "/usr/local/bin/node"
+kind: subprocess.Popen
+arg: "/Users/swot/.nvm/versions/node/v22.21.1/bin/node"
 </t>
 <t tx="swot.20220211081841.1">co;;=const 
 cl;;=console.log('&lt;||&gt;:', &lt;||&gt;);
@@ -1711,7 +1714,7 @@ W;;=WARNING
 i2;;=image::img/&lt;||&gt;.png[]
 </t>
 <t tx="swot.20221226132428.1"># src;;=[source,java,&lt;|linenums|&gt;]
-src;;=[source,console]
+src;;=[source,javascript]
 \:----
 \:&lt;||&gt;
 \:----
@@ -2550,5 +2553,213 @@ add a space with comment:
 </t>
 <t tx="swot.20260227090439.1">c.k.simulateCommand('find-quick-selected')</t>
 <t tx="swot.20260305080526.1"></t>
+<t tx="swot.20260313141102.1">import subprocess
+import tempfile
+import os
+import re
+
+# 1. 核心大逆转：开启 useSentinels=True！
+# 让 Leo 在代码里埋下隐藏的 "// @+node:xxx" 标记，供我们事后寻路
+raw_script = g.getScript(c, p, useSentinels=True, forcePythonSentinels=False)
+
+# 2. 保护 @language 等指令（将其变成注释，防 Node 报错，但占住行号）
+lines = raw_script.splitlines()
+clean_lines = []
+for line in lines:
+    if line.startswith(('@language', '@tabwidth', '@pagewidth')):
+        clean_lines.append("// " + line)
+    else:
+        clean_lines.append(line)
+script_text = '\n'.join(clean_lines)
+
+# 3. 创建临时文件并运行 Node
+fd, path = tempfile.mkstemp(suffix='.js', prefix='leo_node_')
+try:
+    with os.fdopen(fd, 'w', encoding='utf-8') as f:
+        f.write(script_text)
+    
+    node_bin = "/Users/swot/.nvm/versions/node/v22.21.1/bin/node"
+    g.es(f"⚡️ Running: {p.h}", color='orange')
+    result = subprocess.run([node_bin, path], capture_output=True, text=True, encoding='utf-8')
+    
+    # 4. 正常输出
+    if result.stdout:
+        g.es(result.stdout)
+        g.es("")
+        
+    # 5. 错误解析与【跨节点精准定位】
+    if result.stderr:
+        g.es("❌ Node.js Error:", color='red')
+        g.es(result.stderr)
+        
+        # 抓取临时文件中的绝对行号
+        match = re.search(r'\.js:(\d+)(?::\d+)?', result.stderr)
+        if match:
+            err_line_num = int(match.group(1))
+            g.es(f"🔍 正在解析树状结构，寻找真实错误节点...", color='blue')
+            
+            # --- 核心寻路逻辑：通过哨兵标记反推节点 ---
+            target_idx = err_line_num - 1
+            stack = [] # 记录当前深入到了哪一层节点
+            node_line_counts = {} # 记录每个节点内部真实的行数
+            
+            # 从头往下读，重演 Leo 的拼装过程，直到报错那一行
+            for i in range(min(target_idx, len(clean_lines))):
+                line = clean_lines[i]
+                # 检测到 Leo 的哨兵标记
+                if re.search(r'@[\+\-](node|others|leo|all)', line):
+                    if '@+node:' in line:
+                        m = re.search(r'@\+node:([^:]+):', line)
+                        if m: stack.append(m.group(1))
+                    elif '@-node:' in line and stack:
+                        stack.pop()
+                else:
+                    # 这是一行真实的代码！把它记在当前活跃的节点名下
+                    curr_gnx = stack[-1] if stack else p.gnx
+                    node_line_counts[curr_gnx] = node_line_counts.get(curr_gnx, 0) + 1
+            
+            # 锁定真凶：报错行所属的节点 GNX ID 和局部行号
+            active_gnx = stack[-1] if stack else p.gnx
+            local_line_idx = node_line_counts.get(active_gnx, 0)
+            
+            # 在 Leo 的大树中找出这个节点
+            target_p = None
+            for p_search in c.all_unique_positions():
+                if p_search.gnx == active_gnx:
+                    target_p = p_search.copy()
+                    break
+            
+            if target_p:
+                # 1. 切换到该节点
+                c.selectPosition(target_p)
+                c.redraw()
+                
+                # 2. 高亮错误行
+                w = c.frame.body.wrapper
+                node_lines = target_p.b.split('\n')
+                if 0 &lt;= local_line_idx &lt; len(node_lines):
+                    start_char = sum(len(l) + 1 for l in node_lines[:local_line_idx])
+                    end_char = start_char + len(node_lines[local_line_idx])
+                    w.setSelectionRange(start_char, end_char)
+                    w.seeInsertPoint()
+                
+                c.bodyWantsFocus()
+                g.es(f"🎯 已定位到节点: {target_p.h} 的对应行！", color='green')
+            else:
+                g.es("⚠️ 未能找到对应的子节点", color='brown')
+        g.es("")
+        
+finally:
+    if os.path.exists(path):
+        os.remove(path)</t>
+<t tx="swot.20260313161213.1">import subprocess
+import tempfile
+import os
+
+# 1. 核心改进：g.getScript 的参数配置
+# useSelectedText=False 是否只使用选中的文本。
+# useSentinels=False: 移除 Leo 的标记行（如 @+node）
+# forcePythonSentinels=False: 确保不会强加 Python 注释风格的标记，如 #
+# 关键：g.getScript 默认会递归处理 @others 和 &lt;&lt; section &gt;&gt;
+script_text = g.getScript(c, p,
+    useSelectedText=True,
+    useSentinels=False,
+    forcePythonSentinels=False)
+
+# 2. 移除所有以 @ 符号开头的 Leo 指令行
+clean_lines = [line for line in script_text.splitlines() 
+               if not line.strip().startswith(('@language',
+                                               '@tabwidth',
+                                               '@pagewidth'))]
+script_text = '\n'.join(clean_lines)
+
+
+# 3. 创建并写入临时文件
+fd, path = tempfile.mkstemp(suffix='.js', prefix='leo_node_')
+try:
+    with os.fdopen(fd, 'w', encoding='utf-8') as f:
+        f.write(script_text)
+
+    node_bin = "/Users/swot/.nvm/versions/node/v22.21.1/bin/node"
+
+    # 4. 执行并捕获输出
+    g.es(f"⚡️ Running: {p.h}", color='orange')
+    result = subprocess.run([node_bin, path], capture_output=True, text=True, encoding='utf-8')
+
+    # 5. 格式化输出
+    if result.stdout:
+        g.es(result.stdout)
+        g.es("") # 你要求的空行
+
+    if result.stderr:
+        g.es("❌ Node.js Error:", color='red')
+        g.es(result.stderr)
+        g.es("")
+
+finally:
+    # 6. 自动清理现场
+    if os.path.exists(path):
+        os.remove(path)
+</t>
+<t tx="swot.20260313164643.1">import subprocess
+import tempfile
+import os
+import re
+
+# 1. 核心：获取展开后的代码
+script_text = g.getScript(c, p,
+    useSelectedText=False,
+    useSentinels=False,
+    forcePythonSentinels=False)
+
+# 过滤 Leo 指令
+# 更加严谨的行号保持逻辑
+lines = script_text.splitlines()
+clean_lines = []
+for line in lines:
+    if line.strip().startswith(('@language', '@tabwidth', '@others')):
+        clean_lines.append("") # 替换为空行，保持行号不变
+    else:
+        clean_lines.append(line)
+script_text = '\n'.join(clean_lines)
+
+# 2. 创建临时文件
+fd, path = tempfile.mkstemp(suffix='.js', prefix='leo_node_')
+try:
+    with os.fdopen(fd, 'w', encoding='utf-8') as f:
+        f.write(script_text)
+
+    node_bin = "/Users/swot/.nvm/versions/node/v22.21.1/bin/node"
+
+    # 3. 运行并捕获输出
+    g.es(f"⚡️ Running: {p.h}", color='orange')
+    result = subprocess.run([node_bin, path], capture_output=True, text=True, encoding='utf-8')
+
+    # 4. 正常输出
+    if result.stdout:
+        g.es(result.stdout)
+        g.es("")
+
+    # 5. 错误处理与自动定位
+    if result.stderr:
+        g.es("❌ Node.js Error:", color='red')
+        g.es(result.stderr)
+
+        # # 尝试从堆栈信息中提取行号，例如: "at Object.&lt;anonymous&gt; (/path/to/file.js:5:10)"
+        # 匹配 :9 (行首格式) 或 .js:9:10 (堆栈格式)
+        match = re.search(r'\.js:(\d+)(?::\d+)?', result.stderr)
+        if match:
+            line_number = int(match.group(1))
+            g.es(f"🔍 尝试定位到第 {line_number} 行...", color='blue')
+
+            # 使用 Leo 内置的行跳转逻辑
+            # 注意：因为我们过滤了指令，行号可能略有偏移，但基本能准确定位
+            c.gotoCommands.findLine(line_number, p)
+        g.es("")
+
+finally:
+    # 6. 清理
+    if os.path.exists(path):
+        os.remove(path)</t>
 </tnodes>
 </leo_file>
