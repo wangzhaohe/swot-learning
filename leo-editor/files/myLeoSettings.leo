@@ -85,7 +85,7 @@
 <v t="swot.20200908084141.65"><vh>@string status-font-style = @font-style</vh></v>
 </v>
 </v>
-<v t="swot.20181202012654.205" descendentVnodeUnknownAttributes="7d7100580a000000302e32372e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@settings</vh>
+<v t="swot.20181202012654.205" descendentVnodeUnknownAttributes="7d7100580a000000302e32382e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@settings</vh>
 <v t="swot.20200916152454.1"><vh>@enabled-plugins</vh></v>
 <v t="swot.20210129110804.1"><vh>@string headline-time-format-string = %Y-%m-%d</vh></v>
 <v t="swot.20210129110742.1"><vh>@string body-time-format-string = %Y-%m-%d %H:%M:%S</vh></v>
@@ -106,12 +106,16 @@
 <v t="swot.20221206220343.1"><vh>@@string vr3-asciidoctor-imagesdir=img</vh></v>
 <v t="swot.20221230160721.1"><vh>@bool vr3-asciidoctor-diagram=True</vh></v>
 </v>
+<v t="swot.20260313193128.1"><vh>@buttons</vh>
+<v t="swot.20260218013134.1"><vh>@button ascii @key=Ctrl-/</vh></v>
+<v t="swot.20260313141102.1"><vh>@button node @key=Alt+Shift+J</vh></v>
+<v t="swot.20260313211116.1"><vh>@button html @key=Alt+Shift+H</vh></v>
+<v t="swot.20260313220645.1"><vh>@button kill-live</vh></v>
+</v>
 <v t="swot.20181207204040.1"><vh>@commands</vh>
-<v t="swot.20260313141102.1"><vh>@command open-with-nodejs @key=Alt+Shift+J</vh></v>
 <v t="swot.20260313164643.1"><vh>@@command open-with-nodejs @key=Alt+Shift+J</vh></v>
 <v t="swot.20260313161213.1"><vh>@@command open-with-nodejs @key=Alt+Shift+J</vh></v>
 <v t="swot.20260219100306.1"><vh>@command reload-body-style</vh></v>
-<v t="swot.20260218013134.1"><vh>@command adoc-live</vh></v>
 <v t="swot.20230201133436.1"><vh>@command insert-subheads-sn</vh></v>
 <v t="swot.20230201133444.1"><vh>@command insert-all-subheads-sn</vh></v>
 <v t="swot.20230201133422.1"><vh>@command uninsert-all-subheads-sn</vh></v>
@@ -147,7 +151,7 @@
 <v t="swot.20181207204218.1"><vh>@bool vim-mode = False</vh></v>
 <v t="swot.20181207204102.1"><vh>@bool log_show_save_time = False</vh></v>
 <v t="swot.20181207203834.1"><vh>@bool report_unchanged_files = False</vh></v>
-<v t="swot.20181207204117.1"><vh>@bool show_iconbar = False</vh></v>
+<v t="swot.20181207204117.1"><vh>@bool show_iconbar = True</vh></v>
 <v t="swot.20181219183905.1"><vh>@bool outline_tabs_show_close = False</vh></v>
 <v t="swot.20211014175000.1"><vh>@bool show-tips = False</vh></v>
 <v t="swot.20260305080526.1"><vh>@string qt-layout-name = layout-vertical-thirds</vh></v>
@@ -439,7 +443,7 @@ select-to-matching-bracket = Ctrl-Shift-M
 toggle-angle-brackets = Ctrl-Shift-T
 show-file-line = Ctrl-Shift-L
 # vr3-update = Ctrl-R
-adoc-live = Ctrl-/
+# adoc-live = Ctrl-/
 
 z-open-freewin = Ctrl-\
 
@@ -2456,22 +2460,22 @@ if target_node:
     server_key = (target_dir, html_filename)
 
     # --- 3. Initialize global registry ---
-    if not hasattr(g, "live_servers_active"):
-        g.live_servers_active = {}
+    if not hasattr(g, "live_servers_adoc"):
+        g.live_servers_adoc = {}
 
         # kill live server when leo-editor quit
         def cleanup_servers():
-            for _, proc in g.live_servers_active.items():
+            for _, proc in g.live_servers_adoc.items():
                 if proc.poll() is None:
                     proc.terminate()
-            g.live_servers_active.clear()
+            g.live_servers_adoc.clear()
         atexit.register(cleanup_servers)
 
     # --- 4. Execute AsciiDoc conversion ---
     c.executeMinibufferCommand("adoc")
 
     # --- 5. Smart Logic: Start or Update ---
-    if server_key not in g.live_servers_active:
+    if server_key not in g.live_servers_adoc:
         # Scenario A: First start.
         g.es(f"Starting Live Server: {html_filename}", color="blue")
 
@@ -2485,18 +2489,18 @@ if target_node:
         ]
         try:
             process = subprocess.Popen(cmd, cwd=target_dir)
-            g.live_servers_active[server_key] = process
+            g.live_servers_adoc[server_key] = process
         except Exception as e:
             g.es(f"Server error: {e}", color="red")
     else:
         # Scenario B: Update only.
-        process = g.live_servers_active[server_key]
+        process = g.live_servers_adoc[server_key]
         # Check the live server running now?
         if process.poll() is None:
             g.es(f"Updated: {html_filename}", color="green")
             g.es("Browser should auto-reload.", color="grey")
         else:
-            del g.live_servers_active[server_key]
+            del g.live_servers_adoc[server_key]
             g.es(
                 f"Server for {html_filename} has stopped. Run again to restart.",
                 color="red",
@@ -2579,7 +2583,7 @@ try:
         f.write(script_text)
     
     node_bin = "/Users/swot/.nvm/versions/node/v22.21.1/bin/node"
-    g.es(f"⚡️ Running: {p.h}", color='orange')
+    g.es(f"Running: {p.h}", color='orange')
     result = subprocess.run([node_bin, path], capture_output=True, text=True, encoding='utf-8')
     
     # 4. 正常输出
@@ -2589,14 +2593,14 @@ try:
         
     # 5. 错误解析与【跨节点精准定位】
     if result.stderr:
-        g.es("❌ Node.js Error:", color='red')
+        g.es("Node.js Error:", color='red')
         g.es(result.stderr)
         
         # 抓取临时文件中的绝对行号
         match = re.search(r'\.js:(\d+)(?::\d+)?', result.stderr)
         if match:
             err_line_num = int(match.group(1))
-            g.es(f"🔍 正在解析树状结构，寻找真实错误节点...", color='blue')
+            g.es(f"正在解析树状结构，寻找真实错误节点...", color='blue')
             
             # --- 核心寻路逻辑：通过哨兵标记反推节点 ---
             target_idx = err_line_num - 1
@@ -2644,9 +2648,9 @@ try:
                     w.seeInsertPoint()
                 
                 c.bodyWantsFocus()
-                g.es(f"🎯 已定位到节点: {target_p.h} 的对应行！", color='green')
+                g.es(f"已定位到节点: {target_p.h} 的对应行！", color='green')
             else:
-                g.es("⚠️ 未能找到对应的子节点", color='brown')
+                g.es("未能找到对应的子节点", color='brown')
         g.es("")
         
 finally:
@@ -2761,5 +2765,108 @@ finally:
     # 6. 清理
     if os.path.exists(path):
         os.remove(path)</t>
+<t tx="swot.20260313193128.1"></t>
+<t tx="swot.20260313211116.1">import subprocess
+import os
+import atexit
+
+# --- 0. 自动保存更改 ---
+if c.isChanged():
+    c.save()
+    g.es("检测到修改，已自动保存", color='green')
+
+# --- 1. 向上查找最近的外部 HTML 文件节点 ---
+target_p = None
+for curr in p.self_and_parents():
+    if curr.isAnyAtFileNode() and curr.h.lower().endswith('.html'):
+        target_p = curr.copy()
+        break
+
+if not target_p:
+    # 巧妙的体验优化：如果我们当前不在 html 节点上（比如正在写 JS），
+    # 但只要执行了保存，就静默退出，不报红错，因为 Server 可能已经在后台跑着了。
+    g.es("代码已保存。如需启动预览，请回到 .html 节点点击此按钮。", color='blue')
+else:
+    # --- 2. 路径解析 ---
+    file_rel_path = target_p.anyAtFileNodeName() # 例: code/easy-campus/index.html
+    project_root = c.getNodePath(target_p)       # 例: /Users/.../JavaScript高级程序设计
+    
+    # 【核心修复】提取相对路径的目录，传给 watch，live-server 才能正确识别！
+    watch_rel_dir = os.path.dirname(file_rel_path) # 例: code/easy-campus
+
+    g.es(f"打开文件: {file_rel_path}", color='blue')
+    g.es(f"监听范围: {watch_rel_dir} (及子文件)", color='gray')
+
+    # --- 3. 单例进程管理与自动清理 ---
+    if not hasattr(g, 'live_servers_html'):
+        g.live_servers_html = {}
+        
+        # 注册退出清理函数：当 leo-editor 退出时，终止所有关联的 live-server 进程
+        def cleanup_html_servers():
+            for _, proc in g.live_servers_html.items():
+                if proc.poll() is None:
+                    proc.terminate()
+            g.live_servers_html.clear()
+        atexit.register(cleanup_html_servers)
+        
+    server_key = os.path.join(project_root, file_rel_path)
+    
+    is_running = False
+    if server_key in g.live_servers_html:
+        proc = g.live_servers_html[server_key]
+        if proc.poll() is None:
+            is_running = True
+            
+    if is_running:
+        g.es("该项目的 Live-Server 已在运行！", color='orange')
+    else:
+        # --- 4. 启动 Live-Server ---
+        # npx_bin = "/Users/swot/.nvm/versions/node/v22.21.1/bin/npx"
+        
+        cmd = [
+            "npx",
+            "live-server",
+            project_root,                
+            f"--open={file_rel_path}",   
+            f"--watch={watch_rel_dir}",   # 必须传入相对路径
+            "--port=0"  # 关键：支持多开
+        ]
+
+        try:
+            # 这里的 cwd 保持为 project_root 没问题
+            proc = subprocess.Popen(
+                cmd, 
+                cwd=project_root,
+                stdout=subprocess.DEVNULL, 
+                stderr=subprocess.DEVNULL
+            )
+            g.live_servers_html[server_key] = proc
+            g.es(f"成功为 {file_rel_path} 启动独立预览！", color='green')
+        except Exception as e:
+            g.es(f"启动失败: {e}", color='red')</t>
+<t tx="swot.20260313220645.1">@language javascript
+# --- 优雅清理 Leo 启动的 Live-Server 进程 ---
+
+if hasattr(g, 'live_servers_html') and g.live_servers_html:
+    killed_count = 0
+
+    # 遍历我们记录在案的所有进程
+    for dir_path, proc in list(g.live_servers_html.items()):
+        # poll() 为 None 说明进程还在喘气
+        if proc.poll() is None:
+            proc.terminate()  # 发送优雅关闭信号
+            killed_count += 1
+            g.es(f"已关闭: {dir_path}", color='gray')
+
+    # 清空记录字典
+    g.live_servers_html.clear()
+
+    if killed_count &gt; 0:
+        g.es(f"清理完毕！共安全关闭了 {killed_count} 个由 Leo 启动的后台服务。", color='green')
+    else:
+        g.es("记录中的服务均已自动退出，无需清理。", color='blue')
+
+else:
+    g.es("当前没有由 Leo 启动的 Live-Server 进程在运行。", color='blue')</t>
 </tnodes>
 </leo_file>
