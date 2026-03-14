@@ -110,7 +110,8 @@
 <v t="swot.20260218013134.1"><vh>@button ascii @key=Ctrl-/</vh></v>
 <v t="swot.20260313141102.1"><vh>@button node @key=Alt+Shift+J</vh></v>
 <v t="swot.20260313211116.1"><vh>@button html @key=Alt+Shift+H</vh></v>
-<v t="swot.20260313220645.1"><vh>@button kill-live</vh></v>
+<v t="swot.20260313220645.1"><vh>@button kLive</vh></v>
+<v t="swot.20260314203832.1"><vh>@button sumSub</vh></v>
 </v>
 <v t="swot.20181207204040.1"><vh>@commands</vh>
 <v t="swot.20260313164643.1"><vh>@@command open-with-nodejs @key=Alt+Shift+J</vh></v>
@@ -2868,5 +2869,33 @@ if hasattr(g, 'live_servers_html') and g.live_servers_html:
 
 else:
     g.es("当前没有由 Leo 启动的 Live-Server 进程在运行。", color='blue')</t>
+<t tx="swot.20260314203832.1">@language python
+'''
+将所有子节点（subtree）的内容汇总到当前节点。
+'''
+
+target = p
+results = []
+
+# 如果你想保留父节点原有的开头文字，取消下面这行的注释：
+results.append(target.b.split("--- 子节点汇总 ---")[0])
+
+results.append("--- 子节点汇总 ---\n")
+
+# 使用 p.subtree() 遍历所有后代节点
+for child in target.subtree():
+    # 格式化：标题 + 内容
+    separator = f"\n{'='*20}\nNode: {child.h}\n{'='*20}\n"
+    results.append(separator)
+    results.append(child.b)
+
+# 更新当前节点内容
+target.b = "".join(results)
+
+# 告诉 Leo 内容已更改并刷新 UI
+c.setChanged()
+c.redraw()
+g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
+</t>
 </tnodes>
 </leo_file>
