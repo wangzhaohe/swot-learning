@@ -839,7 +839,7 @@
 <v t="swot.20260313114540.84"><vh>二：贯穿项目推进——《易校园》重构升级</vh>
 <v t="swot.20260314165234.1"><vh>重构“商品折扣计算” calculatePrice()</vh></v>
 <v t="swot.20260314165417.1"><vh>重构“日期格式化” getFormatDate()</vh></v>
-<v t="swot.20260314165448.1"><vh>重构“数据生成器” generateGoods()</vh>
+<v t="swot.20260314165448.1"><vh>重构“批量数据生成器” generateGoods()</vh>
 <v t="swot.20260314165234.1"></v>
 <v t="swot.20260314165417.1"></v>
 </v>
@@ -858,15 +858,26 @@
 <v t="swot.20260314202322.1"><vh>2. 开头操作（队列方法）</vh></v>
 </v>
 <v t="swot.20260313114540.94"><vh>三：核心神器——splice</vh></v>
-<v t="swot.20260313114540.98"><vh>四：案例演示——删除指定元素</vh></v>
+<v t="swot.20260314214949.1"><vh>四：案例演示——删除指定元素</vh></v>
 </v>
 <v t="swot.20260313114540.99"><vh>S2：实战演练与项目推进（4课时）</vh>
 <v t="swot.20260313114540.100"><vh>第一、二课时：随堂实战案例</vh>
-<v t="swot.20260313114540.101"><vh>案例：学员名单管理系统</vh></v>
-<v t="swot.20260313114540.102"><vh>案例：数组去重算法</vh></v>
+<v t="swot.20260314215957.1"><vh>案例：学员名单管理系统</vh>
+<v t="swot.20260314221249.1"><vh>@clean code/examples/students-manage.html</vh>
+<v t="swot.20260314221337.1"><vh>学员名单管理系统</vh></v>
 </v>
-<v t="swot.20260313114540.103"><vh>第三、四课时：贯穿项目推进——《易校园》数据仓库</vh></v>
-<v t="swot.20260313114540.104"><vh>📝 作业</vh></v>
+</v>
+<v t="swot.20260314222612.1"><vh>案例：数组去重算法</vh></v>
+</v>
+<v t="swot.20260314222935.1"><vh>第三、四课时：贯穿项目推进——《易校园》数据仓库</vh>
+<v t="swot.20260314232813.1"><vh>专门管理商品的对象 GoodsDB = {}</vh>
+<v t="swot.20260314233406.1"><vh>1. 添加商品 add</vh></v>
+<v t="swot.20260314233347.1"><vh>2. 删除商品 deleteById</vh></v>
+<v t="swot.20260314233318.1"><vh>3. 打印列表 show</vh></v>
+</v>
+<v t="swot.20260314234349.1"><vh>测试 GoodsDB 操作数据</vh></v>
+</v>
+<v t="swot.20260314215818.1"><vh>作业</vh></v>
 </v>
 </v>
 </v>
@@ -23901,125 +23912,6 @@ console.log("我的名字是：", MY_NAME);
 </t>
 <t tx="swot.20260313114540.100">
 </t>
-<t tx="swot.20260313114540.101">**需求**：使用 `prompt` 和数组方法，实现学员名单的动态管理。
-
-```javascript
-let students = ['张三', '李四'];
-
-while (true) {
-    let action = prompt("请选择操作：\n1. 查看名单\n2. 添加学员(末尾)\n3. 删除学员(姓名)\n4. 退出");
-    
-    if (action === '1') {
-        alert("当前学员：" + students.join('、'));
-    } else if (action === '2') {
-        let name = prompt("请输入新学员姓名：");
-        students.push(name);
-        alert("添加成功！");
-    } else if (action === '3') {
-        let name = prompt("请输入要删除的学员：");
-        let index = students.indexOf(name); // 查找索引
-        if (index !== -1) {
-            students.splice(index, 1);
-            alert("删除成功！");
-        } else {
-            alert("查无此人！");
-        }
-    } else if (action === '4') {
-        break;
-    }
-}
-```
-
-</t>
-<t tx="swot.20260313114540.102">**需求**：`['a', 'b', 'a', 'c', 'b']` -&gt; `['a', 'b', 'c']`。
-**方法**：遍历旧数组，如果新数组里没有这个元素，就放进去。
-
-```javascript
-let oldArr = ['a', 'b', 'a', 'c', 'b'];
-let newArr = [];
-
-for (let i = 0; i &lt; oldArr.length; i++) {
-    if (newArr.indexOf(oldArr[i]) === -1) {
-        newArr.push(oldArr[i]);
-    }
-}
-console.log(newArr);
-```
-
----
-
-</t>
-<t tx="swot.20260313114540.103">
-**场景**：今天我们暂时不写网页界面，而是专注于底层的数据逻辑。我们要构建一个“商品数据仓库”。
-
-**步骤 1：定义数据仓库**
-```javascript
-// 全局变量，存储所有商品
-let goodsList = [
-    { id: 1, name: "高等数学", price: 15 },
-    { id: 2, name: "二手单车", price: 100 }
-];
-```
-
-**步骤 2：封装功能函数**
-编写一个专门管理商品的对象。
-
-```javascript
-const GoodsDB = {
-    // 1. 添加商品
-    add: function(name, price) {
-        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
-        let id = goodsList.length &gt; 0 ? goodsList[goodsList.length - 1].id + 1 : 1;
-        let newGoods = { id: id, name: name, price: price };
-        goodsList.push(newGoods);
-        console.log(`商品【${name}】添加成功！`);
-    },
-
-    // 2. 删除商品
-    deleteById: function(id) {
-        // 遍历查找索引
-        let index = -1;
-        for (let i = 0; i &lt; goodsList.length; i++) {
-            if (goodsList[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-        // 也可以用 findIndex 方法（明天的内容）
-        
-        if (index !== -1) {
-            let delName = goodsList[index].name;
-            goodsList.splice(index, 1);
-            console.log(`商品【${delName}】已删除！`);
-        } else {
-            console.log("未找到该ID的商品！");
-        }
-    },
-
-    // 3. 打印列表
-    show: function() {
-        console.table(goodsList); // console.table 可以用表格形式展示数组对象，非常直观
-    }
-};
-
-// 测试功能
-GoodsDB.show();
-GoodsDB.add("大学英语", 10);
-GoodsDB.deleteById(1);
-GoodsDB.show();
-```
-
----
-
-</t>
-<t tx="swot.20260313114540.104">
-1.  **概念题**：`splice(1, 1)` 和 `splice(1, 0, 'x')` 分别代表什么操作？
-2.  **代码题**：编写一个函数 `clearZeros(arr)`，删除数组中所有的 `0`。
-3.  **项目扩展**：在 `GoodsDB` 中增加一个 `updateById` 方法，传入id和新的价格，修改商品的价格。
-
----
-
-</t>
 <t tx="swot.20260313114540.105">
 **今日目标**：
 1.  掌握 `forEach`、`filter`、`map`、`some` 等高阶函数。
@@ -25319,8 +25211,6 @@ form.onsubmit = function(e) {
 
 [source,javascript]
 ----
-@others
-@clean 
 @language javascript
 // 1. 定义变量
 const NAME = "李小明";
@@ -28400,27 +28290,6 @@ arr.splice(1, 1, '孙八'); // 从索引1开始，删1个，插入'孙八'
 console.log(arr);
 ----
 </t>
-<t tx="swot.20260313114540.98">
-**需求**：数组中存储 `[10, 20, 30, 20, 50]`，要求删除里面所有的 `20`。
-
-**思路**：遍历数组，如果发现元素等于20，就 `splice` 删除它。注意：删除后索引要回退一步。
-
-**代码演示**：
-```javascript
-let nums = [10, 20, 30, 20, 50];
-
-for (let i = 0; i &lt; nums.length; i++) {
-    if (nums[i] === 20) {
-        nums.splice(i, 1);
-        i--; // 重点：删除后，后面的元素前移了，索引i也要减1，否则会漏掉紧挨着的20
-    }
-}
-console.log(nums);
-```
-
----
-
-</t>
 <t tx="swot.20260313114540.99">
 </t>
 <t tx="swot.20260313130038.1">@language javascript
@@ -29520,17 +29389,17 @@ console.log(isLeapYear(2028)); // true
 @others
 ----
 </t>
-<t tx="swot.20260314161238.1" _mod_time="4741da6d4677023b402e">@language html
+<t tx="swot.20260314161238.1" _mod_time="4741da6d61124fa3d02e">@language html
 &lt;!DOCTYPE html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
     &lt;title&gt;获取随机颜色&lt;/title&gt;
 &lt;body&gt;
-&lt;/body&gt;
     &lt;script&gt;
         @others
     &lt;/script&gt;
+&lt;/body&gt;
 &lt;/head&gt;
 &lt;/html&gt;
 </t>
@@ -29679,5 +29548,173 @@ console.log(nums); // [20, 30, 40]
 ----
 </t>
 <t tx="swot.20260314212831.1"></t>
+<t tx="swot.20260314214949.1">*需求*：数组中存储 `[10, 20, 20, 30, 20, 50]`，要求删除里面所有的 `20`。
+
+*思路*：遍历数组，如果发现元素等于20，就 `splice` 删除它。 +
+* 注意：删除后索引要回退一步。
+
+
+.代码演示
+[source,javascript]
+----
+@language javascript
+let nums = [10, 20, 20, 30, 20, 50];
+
+for (let i = 0; i &lt; nums.length; i++) {
+    if (nums[i] === 20) {
+        nums.splice(i, 1);
+        i--; // 重点：删除后，后面的元素前移了，索引i也要减1，否则会漏掉紧挨着的20
+    }
+}
+console.log(nums);
+----
+</t>
+<t tx="swot.20260314215818.1">[arabic]
+. *概念题*：`splice(1, 1)` 和 `splice(1, 0, 'x')` 分别代表什么操作？
+
+. *代码题*：编写一个函数 `clearZeros(arr)`，删除数组中所有的 `0`。
+
+. *项目扩展*：在 `GoodsDB` 中增加一个 `updateById` 方法，传入 id 和新的价格，修改商品的价格。
+</t>
+<t tx="swot.20260314215957.1">*需求*：使用 `prompt` 和数组方法，实现学员名单的动态管理。
+
+.@clean code/examples/students-manage.html
+[source,html]
+----
+@others
+----
+</t>
+<t tx="swot.20260314221249.1" _mod_time="4741da6d61088ab2012e">@language html
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;学员名单管理系统&lt;/title&gt;
+&lt;body&gt;
+    &lt;script&gt;
+        @others
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/head&gt;
+&lt;/html&gt;
+</t>
+<t tx="swot.20260314221337.1">@language javascript
+let students = ['张三', '李四'];
+
+while (true) {
+    // prompt 是浏览器的函数，需要在浏览器环境中执行
+    let action = prompt(
+        `请选择操作：
+        1. 查看名单
+        2. 添加学员(末尾)
+        3. 删除学员(姓名)
+        4. 退出`
+    );
+    if (action === '1') {
+        alert("当前学员：" + students.join('、'));
+    } else if (action === '2') {
+        let name = prompt("请输入新学员姓名：");
+        students.push(name);
+        alert("添加成功！");
+    } else if (action === '3') {
+        let name = prompt("请输入要删除的学员：");
+        let index = students.indexOf(name); // 查找索引
+        if (index !== -1) {
+            students.splice(index, 1);
+            alert("删除成功！");
+        } else {
+            alert("查无此人！");
+        }
+    } else if (action === '4') {
+        break;
+    }
+}
+</t>
+<t tx="swot.20260314222612.1">**需求**：`['a', 'b', 'a', 'c', 'b']` -&gt; `['a', 'b', 'c']`。
+
+**方法**：遍历旧数组，如果新数组里没有这个元素，就放进去。
+
+
+[source,javascript]
+----
+@language javascript
+let oldArr = ['a', 'b', 'a', 'c', 'b'];
+let newArr = [];
+
+for (let i = 0; i &lt; oldArr.length; i++) {
+    if (newArr.indexOf(oldArr[i]) === -1) {
+        newArr.push(oldArr[i]);
+    }
+}
+console.log(newArr);
+----
+</t>
+<t tx="swot.20260314222935.1">*场景*：今天我们暂时不写网页界面，而是专注于底层的数据逻辑。我们要构建一个“商品数据仓库”。
+
+编写一个专门管理商品的对象，里面的 key 封装对应的功能函数。
+
+[source,javascript]
+----
+@language javascript
+// 全局变量，存储所有商品
+let goodsList = [
+    { id: 1, name: "高等数学", price: 15 },
+    { id: 2, name: "二手单车", price: 100 }
+];
+
+@others
+----
+</t>
+<t tx="swot.20260314232813.1">@language javascript
+const GoodsDB = {
+    @others
+};
+</t>
+<t tx="swot.20260314233318.1">@language javascript
+show: function() {
+    // console.table 可以用表格形式展示数组对象，非常直观
+    console.table(goodsList);
+}
+</t>
+<t tx="swot.20260314233347.1">@language javascript
+deleteById: function(id) {
+    // 遍历查找索引
+    let index = -1;
+
+    for (let i = 0; i &lt; goodsList.length; i++) {
+        if (goodsList[i].id === id) {
+            index = i;
+            break;
+        }
+    }
+    // 也可以用 findIndex 方法（明天的内容）
+
+    if (index !== -1) {
+        let delName = goodsList[index].name;
+        goodsList.splice(index, 1);
+        console.log(`商品【${delName}】已删除！`);
+    }
+    else {
+        console.log("未找到该ID的商品！");
+    }
+},
+</t>
+<t tx="swot.20260314233406.1">@language javascript
+add: function(name, price) {
+    // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
+    let id = goodsList.length &gt; 0 ? goodsList[goodsList.length - 1].id + 1 : 1;
+
+    let newGoods = { id: id, name: name, price: price };
+
+    goodsList.push(newGoods);
+
+    console.log(`商品【${name}】添加成功！`);
+},
+</t>
+<t tx="swot.20260314234349.1">GoodsDB.show();
+GoodsDB.add("大学英语", 10);
+GoodsDB.deleteById(1);
+GoodsDB.show();
+</t>
 </tnodes>
 </leo_file>

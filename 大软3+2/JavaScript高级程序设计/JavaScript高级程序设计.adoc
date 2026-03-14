@@ -264,7 +264,6 @@ console.log(intro);
 
 [source,javascript]
 ----
-@clean 
 // 1. 定义变量
 const NAME = "李小明";
 const GENDER = "男";
@@ -1473,7 +1472,6 @@ console.log(isLeapYear(2028)); // true
     <meta charset="UTF-8">
     <title>获取随机颜色</title>
 <body>
-</body>
     <script>
         function getRandomColor() {
             let r = Math.floor(Math.random() * 256); // 0-255
@@ -1486,6 +1484,7 @@ console.log(isLeapYear(2028)); // true
         document.body.style.backgroundColor = getRandomColor();
         console.log(getRandomColor());
     </script>
+</body>
 </head>
 </html>
 ----
@@ -1653,4 +1652,264 @@ generateGoods(10);
 强调：**项目越大，函数越重要**。
 想象一下如果淘宝的代码都写在一个大文件里，没有函数分块，那是灾难。
 ====
+
+== Ch 5：数组与常用API（上）——数据的“仓库管理”
+**今日目标**：
+
+1.  理解数组作为“有序数据集合”的概念。
+
+2.  掌握数组的遍历方法。
+
+3.  精通 `push`、`pop`、`shift`、`unshift` 及核心方法 `splice`。
+
+4.  在项目中构建商品数据仓库，实现基础增删。
+
+=== S1：核心精讲（4课时）
+
+
+==== 一：数组创建与遍历
+
+
+===== 1. 数组是什么？
+* *概念*：一个按顺序存放数据的“大柜子”，每个格子都有编号（索引），从 0 开始。
+
+* *创建方式*：
+
+** `let arr = new Array();`（构造函数，较少用）。
+
+** `let arr = [1, 2, 3];`（字面量，*推荐*）。
+
+===== 2. 遍历数组
+* *length属性*：数组的长度。
+* *for循环遍历*：最经典的方式。
+
+*代码演示*：
+
+[source,javascript]
+----
+let arr = ['苹果', '香蕉', '橘子'];
+
+// 访问：数组名[索引]
+console.log(arr[0]); // 苹果
+
+// 遍历
+for (let i = 0; i < arr.length; i++) {
+    console.log(`第${i+1}个水果是：${arr[i]}`);
+}
+----
+
+==== 二：栈与队列操作
+
+
+===== 1. 末尾操作（栈方法）
+* `push(元素)`：在末尾添加，返回新长度。
+
+* `pop()`：删除末尾最后一个，返回删除的元素。
+
+===== 2. 开头操作（队列方法）
+* `unshift(元素)`：在开头添加。
+
+* `shift()`：删除第一个元素。
+
+
+*代码演示*：
+
+[source,javascript]
+----
+let nums = [10, 20, 30];
+
+// 末尾加一个 40
+nums.push(40); 
+console.log(nums); // [10, 20, 30, 40]
+
+// 删除开头的一个
+nums.shift();
+console.log(nums); // [20, 30, 40]
+----
+
+==== 三：核心神器——splice
+`splice` 是数组中最强大的方法，可以实现在任意位置增、删、改。
+
+**语法**：`arr.splice(开始索引, 删除个数, 新增元素...)`
+
+[source,javascript]
+----
+// 1. 删除元素
+let arr = ['张三', '李四', '王五', '赵六'];
+
+// 需求：删除 '李四' (索引为1)
+arr.splice(1, 1); // 从索引1开始，删1个
+console.log(arr); // ['张三', '王五', '赵六']
+
+
+// 2. 插入元素
+// 需求：在 '王五' 前面插入 '钱七'
+arr.splice(1, 0, '钱七'); // 从索引1开始，删0个，插入'钱七'
+console.log(arr); // ['张三', '钱七', '王五', '赵六']
+
+
+// 3. 替换元素
+// 需求：把 '钱七' 替换成 '孙八'
+arr.splice(1, 1, '孙八'); // 从索引1开始，删1个，插入'孙八'
+console.log(arr);
+----
+
+==== 四：案例演示——删除指定元素
+*需求*：数组中存储 `[10, 20, 20, 30, 20, 50]`，要求删除里面所有的 `20`。
+
+*思路*：遍历数组，如果发现元素等于20，就 `splice` 删除它。 +
+* 注意：删除后索引要回退一步。
+
+
+.代码演示
+[source,javascript]
+----
+let nums = [10, 20, 20, 30, 20, 50];
+
+for (let i = 0; i < nums.length; i++) {
+    if (nums[i] === 20) {
+        nums.splice(i, 1);
+        i--; // 重点：删除后，后面的元素前移了，索引i也要减1，否则会漏掉紧挨着的20
+    }
+}
+console.log(nums);
+----
+
+=== S2：实战演练与项目推进（4课时）
+
+
+==== 第一、二课时：随堂实战案例
+
+
+===== 案例：学员名单管理系统
+*需求*：使用 `prompt` 和数组方法，实现学员名单的动态管理。
+
+.@clean code/examples/students-manage.html
+[source,html]
+----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>学员名单管理系统</title>
+<body>
+    <script>
+        let students = ['张三', '李四'];
+
+        while (true) {
+            // prompt 是浏览器的函数，需要在浏览器环境中执行
+            let action = prompt(
+                `请选择操作：
+                1. 查看名单
+                2. 添加学员(末尾)
+                3. 删除学员(姓名)
+                4. 退出`
+            );
+            if (action === '1') {
+                alert("当前学员：" + students.join('、'));
+            } else if (action === '2') {
+                let name = prompt("请输入新学员姓名：");
+                students.push(name);
+                alert("添加成功！");
+            } else if (action === '3') {
+                let name = prompt("请输入要删除的学员：");
+                let index = students.indexOf(name); // 查找索引
+                if (index !== -1) {
+                    students.splice(index, 1);
+                    alert("删除成功！");
+                } else {
+                    alert("查无此人！");
+                }
+            } else if (action === '4') {
+                break;
+            }
+        }
+    </script>
+</body>
+</head>
+</html>
+----
+
+===== 案例：数组去重算法
+**需求**：`['a', 'b', 'a', 'c', 'b']` -> `['a', 'b', 'c']`。
+
+**方法**：遍历旧数组，如果新数组里没有这个元素，就放进去。
+
+
+[source,javascript]
+----
+let oldArr = ['a', 'b', 'a', 'c', 'b'];
+let newArr = [];
+
+for (let i = 0; i < oldArr.length; i++) {
+    if (newArr.indexOf(oldArr[i]) === -1) {
+        newArr.push(oldArr[i]);
+    }
+}
+console.log(newArr);
+----
+
+==== 第三、四课时：贯穿项目推进——《易校园》数据仓库
+*场景*：今天我们暂时不写网页界面，而是专注于底层的数据逻辑。我们要构建一个“商品数据仓库”。
+
+编写一个专门管理商品的对象，里面的 key 封装对应的功能函数。
+
+[source,javascript]
+----
+// 全局变量，存储所有商品
+let goodsList = [
+    { id: 1, name: "高等数学", price: 15 },
+    { id: 2, name: "二手单车", price: 100 }
+];
+
+const GoodsDB = {
+    add: function(name, price) {
+        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
+        let id = goodsList.length > 0 ? goodsList[goodsList.length - 1].id + 1 : 1;
+
+        let newGoods = { id: id, name: name, price: price };
+
+        goodsList.push(newGoods);
+
+        console.log(`商品【${name}】添加成功！`);
+    },
+    deleteById: function(id) {
+        // 遍历查找索引
+        let index = -1;
+
+        for (let i = 0; i < goodsList.length; i++) {
+            if (goodsList[i].id === id) {
+                index = i;
+                break;
+            }
+        }
+        // 也可以用 findIndex 方法（明天的内容）
+
+        if (index !== -1) {
+            let delName = goodsList[index].name;
+            goodsList.splice(index, 1);
+            console.log(`商品【${delName}】已删除！`);
+        }
+        else {
+            console.log("未找到该ID的商品！");
+        }
+    },
+    show: function() {
+        // console.table 可以用表格形式展示数组对象，非常直观
+        console.table(goodsList);
+    }
+};
+GoodsDB.show();
+GoodsDB.add("大学英语", 10);
+GoodsDB.deleteById(1);
+GoodsDB.show();
+----
+
+==== 作业
+[arabic]
+. *概念题*：`splice(1, 1)` 和 `splice(1, 0, 'x')` 分别代表什么操作？
+
+. *代码题*：编写一个函数 `clearZeros(arr)`，删除数组中所有的 `0`。
+
+. *项目扩展*：在 `GoodsDB` 中增加一个 `updateById` 方法，传入 id 和新的价格，修改商品的价格。
 
