@@ -2,7 +2,7 @@
 //@+node:swot.20260313172511.1: * @file code/easy-campus/main.js
 //@@language javascript
 //@+others
-//@+node:swot.20260314145416.1: ** 第 1 次更新: 初始化 2026-03-12
+//@+node:swot.20260314145416.1: ** Ch 1 更新: 初始化 2026-03-12
 //@+node:swot.20260314094048.1: *3* BB JSDoc
 /**
  * 文件名：main.js
@@ -38,7 +38,7 @@ currentMoney = currentMoney + 100;
 
 //@+node:swot.20260314094123.1: *3* BB 再次输出信息
 console.log(`充值成功！当前余额：${currentMoney} 元`);
-//@+node:swot.20260314144707.1: ** 第 2 次更新: 业务逻辑 2026-03-13
+//@+node:swot.20260314144707.1: ** Ch 2 更新: 业务逻辑 2026-03-13
 //@+node:swot.20260314142703.1: *3* BB 增加用户级别
 //@@language javascript
 let isVIP = true;      // 是否是VIP会员
@@ -53,7 +53,7 @@ if (isVIP && currentMoney > 0) {
 else {
     console.log("您不是会员或余额不足，无法访问该板块！");
 }
-//@+node:swot.20260314145454.1: ** 第 3 次更新: 数据模拟 2026-03-14
+//@+node:swot.20260314145454.1: ** Ch 3 更新: 数据模拟 2026-03-14
 //@+node:swot.20260314150831.1: *3* BB 定义商品仓库
 //@@language javascript
 let goodsList = [];  // 定义商品仓库
@@ -74,8 +74,8 @@ for (let i = 0; i < goodsList.length; i++) {
     // 打印简略信息
     console.log(`ID: ${item.id} | 名称: ${item.name} | 价格: ${item.price}元`);
 }
-//@+node:swot.20260314165739.1: ** 第 4 次更新: 重构升级 2026-03-14
-//@+node:swot.20260314165448.1: *3* 重构“数据生成器” generateGoods()
+//@+node:swot.20260314165739.1: ** Ch 4 更新: 重构升级 2026-03-14
+//@+node:swot.20260314165448.1: *3* 重构“批量数据生成器” generateGoods()
 //@@language javascript
 /**
  * 生成商品数据（升级版）
@@ -155,5 +155,58 @@ function getFormatDate() {
     return `${y}-${m}-${d} ${h}:${min}:${s}`;
 }
 
+//@+node:swot.20260314234531.1: ** Ch 5 更新: 数据仓库 2026-03-14
+//@+node:swot.20260314232813.1: *3* 专门管理商品的对象 GoodsDB = {}
+//@@language javascript
+const GoodsDB = {
+    //@+others
+    //@+node:swot.20260314233406.1: *4* 1. 添加商品 add
+    //@@language javascript
+    add: function(name, price) {
+        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
+        let id = goodsList.length > 0 ? goodsList[goodsList.length - 1].id + 1 : 1;
+
+        let newGoods = { id: id, name: name, price: price };
+
+        goodsList.push(newGoods);
+
+        console.log(`商品【${name}】添加成功！`);
+    },
+    //@+node:swot.20260314233347.1: *4* 2. 删除商品 deleteById
+    //@@language javascript
+    deleteById: function(id) {
+        // 遍历查找索引
+        let index = -1;
+
+        for (let i = 0; i < goodsList.length; i++) {
+            if (goodsList[i].id === id) {
+                index = i;
+                break;
+            }
+        }
+        // 也可以用 findIndex 方法（明天的内容）
+
+        if (index !== -1) {
+            let delName = goodsList[index].name;
+            goodsList.splice(index, 1);
+            console.log(`商品【${delName}】已删除！`);
+        }
+        else {
+            console.log("未找到该ID的商品！");
+        }
+    },
+    //@+node:swot.20260314233318.1: *4* 3. 打印列表 show
+    //@@language javascript
+    show: function() {
+        // console.table 可以用表格形式展示数组对象，非常直观
+        console.table(goodsList);
+    }
+    //@-others
+};
+//@+node:swot.20260314234349.1: *3* 测试 GoodsDB 操作数据
+GoodsDB.show();
+GoodsDB.add("大学英语", 10);
+GoodsDB.deleteById(1);
+GoodsDB.show();
 //@-others
 //@-leo
