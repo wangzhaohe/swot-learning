@@ -1,22 +1,28 @@
+//@+leo-ver=5-thin
+//@+node:swot.20260313172511.1: * @file code/easy-campus/main.js
+//@@language javascript
+//@+others
+//@+node:swot.20260314145416.1: ** 第 1 次更新: 初始化 2026-03-12
+//@+node:swot.20260314094048.1: *3* BB JSDoc
 /**
  * 文件名：main.js
  * 描述：易校园项目核心逻辑入口
- * 作者：[你的名字]
- * 日期：2023-XX-XX
+ * 作者：[Swot]
+ * 日期：2026-03-14 07:53:17
  */
 
-// 1. 平台基础配置
+//@+node:swot.20260314094057.1: *3* BB 平台基础配置
 // 这些值通常不会变，用 const
 const PLATFORM_NAME = "易校园";
 const VERSION = "1.0.0";
 const AUTHOR = "JavaScript训练营学员";
 
-// 2. 当前登录用户信息（模拟）
+//@+node:swot.20260314094109.1: *3* BB 当前登录用户信息（模拟）
 // 这些值后续可能会变，用 let
 let currentUser = "游客";
 let currentMoney = 0;
 
-// 3. 控制台输出欢迎信息
+//@+node:swot.20260314094114.1: *3* BB 控制台输出欢迎信息
 console.log(`======================`);
 console.log(`欢迎进入【${PLATFORM_NAME}】二手交易平台`);
 console.log(`当前版本：v${VERSION}`);
@@ -25,10 +31,129 @@ console.log(`当前用户：${currentUser}`);
 console.log(`钱包余额：${currentMoney} 元`);
 console.log(`======================`);
 
-// 4. 模拟用户充值
+//@+node:swot.20260314094119.1: *3* BB 模拟用户充值
 console.log("正在充值 100 元...");
 // 这里演示算术运算符
 currentMoney = currentMoney + 100; 
 
-// 5. 再次输出信息
+//@+node:swot.20260314094123.1: *3* BB 再次输出信息
 console.log(`充值成功！当前余额：${currentMoney} 元`);
+//@+node:swot.20260314144707.1: ** 第 2 次更新: 业务逻辑 2026-03-13
+//@+node:swot.20260314142703.1: *3* BB 增加用户级别
+//@@language javascript
+let isVIP = true;      // 是否是VIP会员
+let vipLevel = 1;      // VIP等级 1:普通会员 2:超级会员
+//@+node:swot.20260314143438.1: *3* BB 登录身份验证
+//@@language javascript
+// 利用逻辑运算符 &&
+if (isVIP && currentMoney > 0) {
+    console.log("验证通过！欢迎进入会员专属二手区！");
+    // 这里后续会跳转页面，现在只打印日志
+}
+else {
+    console.log("您不是会员或余额不足，无法访问该板块！");
+}
+//@+node:swot.20260314145454.1: ** 第 3 次更新: 数据模拟 2026-03-14
+//@+node:swot.20260314150831.1: *3* BB 定义商品仓库
+//@@language javascript
+let goodsList = [];  // 定义商品仓库
+//@+node:swot.20260314151757.1: *3* BB 调用函数存入端口仓库
+//@@language javascript
+// 调用函数，生成20个商品
+generateGoods(20);
+
+// 在控制台打印查看
+console.log(goodsList);
+//@+node:swot.20260314151902.1: *3* BB 循环打印商品清单预览
+//@@language javascript
+console.log("========== 商品清单预览 ==========");
+
+for (let i = 0; i < goodsList.length; i++) {
+    // 取出第 i 个商品
+    let item = goodsList[i];
+    // 打印简略信息
+    console.log(`ID: ${item.id} | 名称: ${item.name} | 价格: ${item.price}元`);
+}
+//@+node:swot.20260314165739.1: ** 第 4 次更新: 重构升级 2026-03-14
+//@+node:swot.20260314165448.1: *3* 重构“数据生成器” generateGoods()
+//@@language javascript
+/**
+ * 生成商品数据（升级版）
+ * @param {number} count
+ */
+function generateGoods(count) {
+    goodsList = []; // 清空原数组
+    const names = ["高等数学", "大学英语", "计算机网络", "二手自行车", "台灯"];
+
+    for (let i = 1; i <= count; i++) {
+        // 1. 生成随机原价
+        let originalPrice = Math.floor(Math.random() * 100) + 10;
+
+        // 2. 随机会员等级 (0, 1, 2)
+        let randomLevel = Math.floor(Math.random() * 3);
+
+        // 3. 调用计算折扣函数
+        let finalPrice = calculatePrice(originalPrice, randomLevel);
+
+        let goods = {
+            id: i,
+            name: names[Math.floor(Math.random() * names.length)] + "-" + i,
+            originalPrice: originalPrice,
+            finalPrice: finalPrice,
+            createTime: getFormatDate() // 调用时间函数
+        };
+
+        goodsList.push(goods);
+    }
+    console.log("商品数据生成完毕：", goodsList);
+}
+
+//@+node:swot.20260314165234.1: *4* 重构“商品折扣计算” calculatePrice()
+//@@language javascript
+/**
+ * 功能：计算折扣价格
+ * @param {number} originalPrice - 原价
+ * @param {number} level - 会员等级 (1 or 2)
+ * @returns {number} - 最终价格
+ */
+function calculatePrice (originalPrice, level) {
+    if (level === 2) {
+        return originalPrice * 0.8;
+    }
+    else if (level === 1) {
+        return originalPrice * 0.9;
+    }
+    else {
+        return originalPrice;
+    }
+};
+
+//@+node:swot.20260314165417.1: *4* 重构“日期格式化” getFormatDate()
+//@@language javascript
+/**
+ * 功能：获取当前格式化时间
+ * @returns {string} - 如 "2023-10-25 14:30:00"
+ */
+function getFormatDate() {
+
+    const date = new Date();
+
+    let y = date.getFullYear();
+    let m = date.getMonth() + 1; // 月份要+1
+    let d = date.getDate();
+    let h = date.getHours();
+    let min = date.getMinutes();
+    let s = date.getSeconds();
+
+    // 补零操作：如果是个位数，前面加0。使用三元运算符
+    m = m < 10 ? "0" + m : m;
+    d = d < 10 ? "0" + d : d;
+    h = h < 10 ? "0" + h : h;
+    min = min < 10 ? "0" + min : min;
+    s = s < 10 ? "0" + s : s;
+
+    return `${y}-${m}-${d} ${h}:${min}:${s}`;
+}
+
+//@-others
+//@-leo
