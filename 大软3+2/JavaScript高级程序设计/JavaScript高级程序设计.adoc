@@ -1578,49 +1578,6 @@ function generateGoods(count) {
     console.log("商品数据生成完毕：", goodsList);
 }
 
-/**
- * 功能：计算折扣价格
- * @param {number} originalPrice - 原价
- * @param {number} level - 会员等级 (1 or 2)
- * @returns {number} - 最终价格
- */
-function calculatePrice (originalPrice, level) {
-    if (level === 2) {
-        return originalPrice * 0.8;
-    }
-    else if (level === 1) {
-        return originalPrice * 0.9;
-    }
-    else {
-        return originalPrice;
-    }
-};
-
-/**
- * 功能：获取当前格式化时间
- * @returns {string} - 如 "2023-10-25 14:30:00"
- */
-function getFormatDate() {
-
-    const date = new Date();
-
-    let y = date.getFullYear();
-    let m = date.getMonth() + 1; // 月份要+1
-    let d = date.getDate();
-    let h = date.getHours();
-    let min = date.getMinutes();
-    let s = date.getSeconds();
-
-    // 补零操作：如果是个位数，前面加0。使用三元运算符
-    m = m < 10 ? "0" + m : m;
-    d = d < 10 ? "0" + d : d;
-    h = h < 10 ? "0" + h : h;
-    min = min < 10 ? "0" + min : min;
-    s = s < 10 ? "0" + s : s;
-
-    return `${y}-${m}-${d} ${h}:${min}:${s}`;
-}
-
 
 console.log("测试价格计算：", calculatePrice(100, 2)); // 80
 console.log("测试当前时间格式：", getFormatDate());
@@ -2243,4 +2200,328 @@ console.log(formatTime(testTime)); // 根据 now 输出不同结果
 
 . *项目扩展*：实现一个 `search(keyword)` 函数，输入关键字，在 `goodsList` 中查找名称包含该关键字的商品。
   ** 提示：使用字符串的 `indexOf` 或 `includes` 方法配合 `filter`
+
+== Ch 7：综合数据练习与面向对象——构建代码的“骨架”
+**今日目标**：
+
+1.  理解对象数组这一前端最核心的数据结构。
+2.  掌握 ES6 `class` 类语法，实现面向对象编程。
+3.  完成“斗地主发牌”综合案例。
+4.  使用类重构项目数据结构。
+
+=== 一：复杂数据结构——对象数组
+
+
+==== 1. 为什么需要对象数组？
+真实世界的数据往往是复杂的。比如“学生名单”，不仅要有名字，还要有年龄、分数。
+
+* 数组：有序列表。
+* 对象：属性描述。
+* 对象数组：把对象放进数组里，既有顺序，又有详细属性。
+
+*代码演示*：
+
+[source,javascript]
+----
+let students = [
+    { name: "张三", age: 18, score: 90 },
+    { name: "李四", age: 19, score: 80 },
+    { name: "王五", age: 18, score: 95 }
+];
+
+// 访问李四的分数
+console.log(students[1].score); // 80
+
+// 遍历
+students.forEach(item => {
+    console.log(`${item.name} 的分数是 ${item.score}`);
+});
+----
+
+=== 二：ES6 面向对象——Class
+
+
+==== 1. 面向过程 vs 面向对象
+* **面向过程**：关注“怎么一步步做”（之前的代码）。
+
+* **面向对象**：关注“谁来做”。把功能封装成“类”，生成“对象”去干活。
+
+==== 2. Class 类的语法
+类是制造对象的“模具”。
+
+.代码演示
+[source,javascript]
+----
+class Person {
+    // 提前声明私有属性（在 JS 中，私有属性必须提前声明）
+    #name;
+    #age;
+
+    // 构造函数：new 的时候自动执行，用来初始化属性
+    constructor(name, age) {
+        this.#name = name;
+        this.#age = age;  // 直接赋值，不会通过 setter 进行校验
+        // this.age = age;  // 会通过 setter 进行校验
+    }
+
+    // 公有方法：作为访问私有属性的接口，不需要写 function
+    sayHello() {
+        console.log(`大家好，我是${this.#name}，今年${this.#age}岁`);
+    }
+
+    // --- Getter/Setter 像 Java 一样控制访问逻辑 ---
+    get name() { return this.#name }
+    get age() { return this.#age; }
+
+    set age(value) {
+        if (value < 0) {
+            console.error("年龄不能为负数!");
+            return;
+        }
+        this.#age = value;
+    }
+}
+
+
+// 使用类创建对象
+let p1 = new Person("张三", 20);
+let p2 = new Person("李四", 49);
+
+p1.sayHello();
+p2.sayHello();
+
+console.log('p1.age:', p1.age);
+p1.age = 51;
+console.log('p1.age:', p1.age);
+----
+
+=== 三：继承 extends 关键字
+子类可以继承父类的属性和方法，并扩展自己的。
+
+*代码演示*：
+
+[source,javascript]
+----
+class Person {
+    // 提前声明私有属性（在 JS 中，私有属性必须提前声明）
+    #name;
+    #age;
+
+    // 构造函数：new 的时候自动执行，用来初始化属性
+    constructor(name, age) {
+        this.#name = name;
+        this.#age = age;  // 直接赋值，不会通过 setter 进行校验
+        // this.age = age;  // 会通过 setter 进行校验
+    }
+
+    // 公有方法：作为访问私有属性的接口，不需要写 function
+    sayHello() {
+        console.log(`大家好，我是${this.#name}，今年${this.#age}岁`);
+    }
+
+    // --- Getter/Setter 像 Java 一样控制访问逻辑 ---
+    get name() { return this.#name }
+    get age() { return this.#age; }
+
+    set age(value) {
+        if (value < 0) {
+            console.error("年龄不能为负数!");
+            return;
+        }
+        this.#age = value;
+    }
+}
+
+// 学生类继承人类
+class Student extends Person {
+    constructor(name, age, score) {
+        super(name, age); // 必须先调用父类的构造函数
+        this.score = score; // 扩展自己的属性
+    }
+
+    // 扩展自己的方法
+    study() {
+        console.log(`${this.name} 正在学习，考了 ${this.score} 分`);
+    }
+}
+
+let s1 = new Student("小明", 18, 100);
+s1.sayHello(); // 继承来的方法
+s1.study();    // 自己的方法
+----
+
+=== 四：面向对象思想总结
+用“造车”的例子总结。
+
+*  Class：图纸。
+*  Constructor：造车时的初始化（颜色、品牌）。
+*  new：工厂生产线，造出一辆车。
+*  Method：车的功能（跑、停）。
+
+=== 实战演练与项目推进（4课时）
+
+
+==== 第一、二课时：随堂实战案例
+
+
+===== 案例 1：小球类
+*需求*：定义一个小球类，有颜色、大小属性，有移动的方法。
+
+[source,javascript]
+----
+class Ball {
+    constructor(color, size) {
+        this.color = color;
+        this.size = size;
+        this.x = 0;
+        this.y = 0;
+    }
+
+    move(newX, newY) {
+        this.x = newX;
+        this.y = newY;
+        console.log(`颜色为 ${this.color} 的球移动到了 (${this.x}, ${this.y})`);
+    }
+
+    changeColor(newColor) {
+        this.color = newColor;
+        console.log(`颜色变为了：${this.color}`);
+    }
+}
+
+let ball1 = new Ball("red", 10);
+ball1.move(100, 200);
+ball1.changeColor("blue");
+----
+
+===== 案例 2：斗地主发牌逻辑（综合练习）
+*需求*：
+
+[arabic]
+. 生成54张牌。
+. 洗牌（乱序）。
+. 发牌（3个玩家，留3张底牌）。
+
+
+*核心逻辑*：
+
+[source,javascript]
+----
+// 1. 定义牌组
+let cards = [];
+let colors = ['♠', '♥', '♣', '♦'];
+let nums = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+// 生成一副牌
+for (let i = 0; i < colors.length; i++) {
+    for (let j = 0; j < nums.length; j++) {
+        cards.push(colors[i] + nums[j]);
+    }
+}
+cards.push('大王', '小王');
+
+// 2. 洗牌
+// 原理：遍历数组，随机抽取一张牌与当前位置交换
+for (let i = 0; i < cards.length; i++) {
+    let randomIndex = Math.floor(Math.random() * cards.length);
+    // 交换：通过数组解构赋值（Array Destructuring）
+    [cards[i], cards[randomIndex]] = [cards[randomIndex], cards[i]];
+}
+
+// 3. 发牌
+let player1 = cards.slice(0, 17);
+let player2 = cards.slice(17, 34);
+let player3 = cards.slice(34, 51);
+let dipai = cards.slice(51);
+
+console.log("玩家1：", player1);
+console.log("玩家2：", player2);
+console.log("玩家3：", player3);
+console.log("底牌：", dipai);
+----
+
+==== 第三、四课时：贯穿项目推进——《易校园》用类重构
+*场景*：使用面向对象思想，使项目代码规范化。不再是零散的函数，而是“类”和“对象”。
+
+[source,javascript]
+----
+class Product {
+    constructor(id, name, price, category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.category = category;
+        this.pubTime = new Date();
+    }
+
+    // 方法：获取详情描述
+    getInfo() {
+        return `[${this.category}] ${this.name} - ￥${this.price}`;
+    }
+
+    // 方法：打折
+    discount(rate) {
+        this.price = this.price * rate;
+        console.log(`${this.name} 打折后价格：${this.price}`);
+    }
+}
+
+class User {
+    constructor(username, password) {
+        this.username = username;
+        this.password = password;
+        this.cart = []; // 购物车，初始为空
+    }
+
+    // 添加商品到购物车
+    addToCart(product) {
+        this.cart.push(product);
+        console.log(`${this.username} 将 ${product.name} 加入了购物车`);
+    }
+
+    // 查看购物车总额
+    getTotal() {
+        let sum = 0;
+        this.cart.forEach(item => sum += item.price);
+        return sum;
+    }
+}
+
+
+// 创建用户
+let u1 = new User("zhangsan", "123456");
+
+// 创建商品
+let p1 = new Product(1, "高等数学", 15, "书籍");
+let p2 = new Product(2, "二手吉他", 200, "乐器");
+
+console.log(p1.getInfo());
+console.log(p2.getInfo());
+
+// 用户操作
+u1.addToCart(p1);
+u1.addToCart(p2);
+
+// console.log('u1.cart:', u1.cart);
+console.log(`购物车总额：${u1.getTotal()} 元`);
+----
+
+==== 作业
+[upperalpha]
+. **概念题**：构造函数 `constructor` 是做什么用的？`this` 在类里面指向谁？
+
+.  **代码题**：编写一个“矩形”类 `Rectangle`。
+   * 属性：宽、高。
+   * 方法：计算面积 `getArea()`，计算周长 `getPerimeter()`。
+
+.  **项目扩展**：给 `User` 类增加一个 `buy()` 方法，模拟购买流程（扣除余额，清空购物车）。 +
+   思考：如果余额不足怎么办？（用 `if` 判断）。
+
+
+[TIP]
+====
+* 面向对象对于初学者来说思维跨度较大。
+* “斗地主发牌”案例非常有趣且综合性强，重点在于理解数组的操作。
+* “以后工作写 Vue 或 React，本质上就是在定义各种各样的组件，其实就是现在的类。”
+====
 
