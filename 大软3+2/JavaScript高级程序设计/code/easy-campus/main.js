@@ -57,10 +57,10 @@ else {
 //@+node:swot.20260314150831.1: *3* BB 定义商品仓库
 //@@language javascript
 let goodsList = [];  // 定义商品仓库
-//@+node:swot.20260314151757.1: *3* BB 调用函数存入端口仓库
+//@+node:swot.20260314151757.1: *3* BB 调用函数存入端口仓库 call generateGoods()
 //@@language javascript
-// 调用函数，生成20个商品
-generateGoods(20);
+// 调用函数，生成10个商品
+generateGoods(10);
 
 // 在控制台打印查看
 console.log(goodsList);
@@ -108,7 +108,7 @@ function generateGoods(count) {
     console.log("商品数据生成完毕：", goodsList);
 }
 
-//@+node:swot.20260314165234.1: *4* 重构“商品折扣计算” calculatePrice()
+//@+node:swot.20260314165234.1: *3* 重构“商品折扣计算” calculatePrice()
 //@@language javascript
 /**
  * 功能：计算折扣价格
@@ -128,7 +128,7 @@ function calculatePrice (originalPrice, level) {
     }
 };
 
-//@+node:swot.20260314165417.1: *4* 重构“日期格式化” getFormatDate()
+//@+node:swot.20260314165417.1: *3* 重构“日期格式化” getFormatDate()
 //@@language javascript
 /**
  * 功能：获取当前格式化时间
@@ -259,5 +259,52 @@ books.forEach((book, index) => {
         `索引：${index} 值：${book.name} ${formatTime(book.pubTime)}`
     );
 });
+//@+node:swot.20260315175535.1: ** Ch 7 更新: 用类重构 2026-03-15
+//@+node:swot.20260315172926.1: *3* BB 定义商品类 class Product
+//@@language javascript
+class Product {
+    constructor(id, name, price, category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.category = category;
+        this.pubTime = new Date();
+    }
+
+    // 方法：获取详情描述
+    getInfo() {
+        return `[${this.category}] ${this.name} - ￥${this.price}`;
+    }
+
+    // 方法：打折
+    discount(rate) {
+        this.price = this.price * rate;
+        console.log(`${this.name} 打折后价格：${this.price}`);
+    }
+}
+
+//@+node:swot.20260315173009.1: *3* BB 定义用户类 class User
+//@@language javascript
+class User {
+    constructor(username, password) {
+        this.username = username;
+        this.password = password;
+        this.cart = []; // 购物车，初始为空
+    }
+
+    // 添加商品到购物车
+    addToCart(product) {
+        this.cart.push(product);
+        console.log(`${this.username} 将 ${product.name} 加入了购物车`);
+    }
+
+    // 查看购物车总额
+    getTotal() {
+        let sum = 0;
+        this.cart.forEach(item => sum += item.price);
+        return sum;
+    }
+}
+
 //@-others
 //@-leo

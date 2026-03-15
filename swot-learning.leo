@@ -28754,8 +28754,8 @@ function generateGoods(count) {
 }
 </t>
 <t tx="swot.20260314151757.1">@language javascript
-// 调用函数，生成20个商品
-generateGoods(20);
+// 调用函数，生成10个商品
+generateGoods(10);
 
 // 在控制台打印查看
 console.log(goodsList);
