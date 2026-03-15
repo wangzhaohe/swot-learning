@@ -2,6 +2,144 @@
 //@+node:swot.20260313172511.1: * @file code/easy-campus/main.js
 //@@language javascript
 //@+others
+//@+node:swot.20260315175535.1: ** Ch 7 更新: 用类重构 2026-03-15
+//@+node:swot.20260315172926.1: *3* BB 定义商品类 class Product
+//@@language javascript
+class Product {
+    constructor(id, name, originalPrice, finalPrice, category) {
+        this.id = id;
+        this.name = name;
+        this.originalPrice = originalPrice;
+        this.finalPrice = finalPrice;
+        this.category = category;
+        this.pubTime = getFormatDate();
+    }
+
+    // 方法：获取详情描述
+    getInfo() {
+        return `[${this.category}] ${this.name} - ￥${this.finalPrice}`;
+    }
+
+    // 方法：打折
+    discount(randomLevel) {
+        this.finalPrice = calculatePrice(this.originalPrice, randomLevel);
+        console.log(`${this.name} 打折后价格：${this.finalPrice}`);
+    }
+}
+
+//@+node:swot.20260315173009.1: *3* BB 定义用户类 class User
+//@@language javascript
+class User {
+    constructor(username, password) {
+        this.username = username;
+        this.password = password;
+        this.cart = []; // 购物车，初始为空
+    }
+
+    // 添加商品到购物车
+    addToCart(product) {
+        this.cart.push(product);
+        console.log(`${this.username} 将 ${product.name} 加入了购物车`);
+    }
+
+    // 查看购物车总额
+    getTotal() {
+        let sum = 0;
+        this.cart.forEach(item => sum += item.finalPrice || 0);
+        return sum;
+    }
+}
+
+//@+node:swot.20260315182652.1: *3* BB 重构“批量数据生成器” generateGoods() with Product
+//@@language javascript
+/**
+ * 生成商品数据（Product类版本）
+ * @param {number} count
+ */
+function generateGoods(count) {
+    goodsList = []; // 清空原数组
+    const names = ["高等数学", "大学英语", "计算机网络", "二手自行车", "台灯"];
+    const categories = ["分类一", "分类二", "分类三"];
+
+    for (let i = 1; i <= count; i++) {
+        // 1. 生成随机原价
+        let originalPrice = Math.floor(Math.random() * 100) + 10;
+
+        // 2. 随机会员等级 (0, 1, 2)
+        let randomLevel = Math.floor(Math.random() * 3);
+
+        // 3. 调用计算折扣函数
+        let finalPrice = calculatePrice(originalPrice, randomLevel);
+
+        // -- new 使用 Product 重构了 --
+        let product = new Product(
+            i,  // id
+            names[Math.floor(Math.random() * names.length)] + "-" + i,
+            originalPrice,
+            finalPrice,
+            categories[Math.floor(Math.random() * categories.length)]
+        );
+
+        goodsList.push(product);
+    }
+    console.log("商品数据生成完毕：", goodsList);
+}
+
+//@+node:swot.20260315193508.1: *3* BB 重构管理商品的对象 GoodsDB = {} -> change add to use Product
+//@@language javascript
+const GoodsDB = {
+    //@+others
+    //@+node:swot.20260315193508.2: *4* 1. 添加商品 add -> new 使用 Product 重构了
+    //@@language javascript
+    add: function(name, price, category) {
+        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
+        let id = goodsList.length > 0 
+            ? goodsList[goodsList.length - 1].id + 1
+            : 1;
+
+        let product = new Product(
+            id,
+            name,
+            price,
+            price * 0.8,  // 默认打 8 折，想改再调用 Product.discount()
+            category
+        );
+
+        goodsList.push(product);
+
+        console.log(`商品【${name}】添加成功！`);
+    },
+    //@+node:swot.20260315193508.3: *4* 2. 删除商品 deleteById
+    //@@language javascript
+    deleteById: function(id) {
+        // 遍历查找索引
+        let index = -1;
+
+        for (let i = 0; i < goodsList.length; i++) {
+            if (goodsList[i].id === id) {
+                index = i;
+                break;
+            }
+        }
+        // 也可以用 findIndex 方法（明天的内容）
+
+        if (index !== -1) {
+            let delName = goodsList[index].name;
+            goodsList.splice(index, 1);
+            console.log(`商品【${delName}】已删除！`);
+        }
+        else {
+            console.log("未找到该ID的商品！");
+        }
+    },
+    //@+node:swot.20260315193508.4: *4* 3. 打印列表 show
+    //@@language javascript
+    show: function() {
+        // console.table 可以用表格形式展示数组对象，非常直观
+        console.table(goodsList);
+    }
+    //@-others
+};
 //@+node:swot.20260314145416.1: ** Ch 1 更新: 初始化 2026-03-12
 //@+node:swot.20260314094048.1: *3* BB JSDoc
 /**
@@ -72,42 +210,9 @@ for (let i = 0; i < goodsList.length; i++) {
     // 取出第 i 个商品
     let item = goodsList[i];
     // 打印简略信息
-    console.log(`ID: ${item.id} | 名称: ${item.name} | 价格: ${item.price}元`);
+    console.log(`ID: ${item.id} | 名称: ${item.name} | 价格: ${item.finalPrice}元`);
 }
 //@+node:swot.20260314165739.1: ** Ch 4 更新: 重构升级 2026-03-14
-//@+node:swot.20260314165448.1: *3* 重构“批量数据生成器” generateGoods()
-//@@language javascript
-/**
- * 生成商品数据（升级版）
- * @param {number} count
- */
-function generateGoods(count) {
-    goodsList = []; // 清空原数组
-    const names = ["高等数学", "大学英语", "计算机网络", "二手自行车", "台灯"];
-
-    for (let i = 1; i <= count; i++) {
-        // 1. 生成随机原价
-        let originalPrice = Math.floor(Math.random() * 100) + 10;
-
-        // 2. 随机会员等级 (0, 1, 2)
-        let randomLevel = Math.floor(Math.random() * 3);
-
-        // 3. 调用计算折扣函数
-        let finalPrice = calculatePrice(originalPrice, randomLevel);
-
-        let goods = {
-            id: i,
-            name: names[Math.floor(Math.random() * names.length)] + "-" + i,
-            originalPrice: originalPrice,
-            finalPrice: finalPrice,
-            createTime: getFormatDate() // 调用时间函数
-        };
-
-        goodsList.push(goods);
-    }
-    console.log("商品数据生成完毕：", goodsList);
-}
-
 //@+node:swot.20260314165234.1: *3* 重构“商品折扣计算” calculatePrice()
 //@@language javascript
 /**
@@ -156,61 +261,6 @@ function getFormatDate() {
 }
 
 //@+node:swot.20260314234531.1: ** Ch 5 更新: 数据仓库 2026-03-14
-//@+node:swot.20260314232813.1: *3* BB 专门管理商品的对象 GoodsDB = {}
-//@@language javascript
-const GoodsDB = {
-    //@+others
-    //@+node:swot.20260314233406.1: *4* 1. 添加商品 add
-    //@@language javascript
-    add: function(name, price, category) {
-        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
-        let id = goodsList.length > 0 
-            ? goodsList[goodsList.length - 1].id + 1
-            : 1;
-
-        let newGoods = {
-            id: id,
-            name: name,
-            price: price,
-            category: category,
-            pubTime: "2026-03-15 10:16:40",
-        };
-
-        goodsList.push(newGoods);
-
-        console.log(`商品【${name}】添加成功！`);
-    },
-    //@+node:swot.20260314233347.1: *4* 2. 删除商品 deleteById
-    //@@language javascript
-    deleteById: function(id) {
-        // 遍历查找索引
-        let index = -1;
-
-        for (let i = 0; i < goodsList.length; i++) {
-            if (goodsList[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-        // 也可以用 findIndex 方法（明天的内容）
-
-        if (index !== -1) {
-            let delName = goodsList[index].name;
-            goodsList.splice(index, 1);
-            console.log(`商品【${delName}】已删除！`);
-        }
-        else {
-            console.log("未找到该ID的商品！");
-        }
-    },
-    //@+node:swot.20260314233318.1: *4* 3. 打印列表 show
-    //@@language javascript
-    show: function() {
-        // console.table 可以用表格形式展示数组对象，非常直观
-        console.table(goodsList);
-    }
-    //@-others
-};
 //@+node:swot.20260314234349.1: *3* 测试 GoodsDB 操作数据
 GoodsDB.show();
 GoodsDB.add("大学英语", 10, "书籍");
@@ -259,52 +309,5 @@ books.forEach((book, index) => {
         `索引：${index} 值：${book.name} ${formatTime(book.pubTime)}`
     );
 });
-//@+node:swot.20260315175535.1: ** Ch 7 更新: 用类重构 2026-03-15
-//@+node:swot.20260315172926.1: *3* BB 定义商品类 class Product
-//@@language javascript
-class Product {
-    constructor(id, name, price, category) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.category = category;
-        this.pubTime = new Date();
-    }
-
-    // 方法：获取详情描述
-    getInfo() {
-        return `[${this.category}] ${this.name} - ￥${this.price}`;
-    }
-
-    // 方法：打折
-    discount(rate) {
-        this.price = this.price * rate;
-        console.log(`${this.name} 打折后价格：${this.price}`);
-    }
-}
-
-//@+node:swot.20260315173009.1: *3* BB 定义用户类 class User
-//@@language javascript
-class User {
-    constructor(username, password) {
-        this.username = username;
-        this.password = password;
-        this.cart = []; // 购物车，初始为空
-    }
-
-    // 添加商品到购物车
-    addToCart(product) {
-        this.cart.push(product);
-        console.log(`${this.username} 将 ${product.name} 加入了购物车`);
-    }
-
-    // 查看购物车总额
-    getTotal() {
-        let sum = 0;
-        this.cart.forEach(item => sum += item.price);
-        return sum;
-    }
-}
-
 //@-others
 //@-leo

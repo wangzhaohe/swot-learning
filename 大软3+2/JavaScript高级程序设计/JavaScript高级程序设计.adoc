@@ -1171,7 +1171,7 @@ function generateGoods(count) {
         let goods = {
             id: i,
             name: names[Math.floor(Math.random() * names.length)] + " (第" + i + "件)",
-            price: Math.floor(Math.random() * 100) + 10, // 10-110之间的随机价格
+            finalPrice: Math.floor(Math.random() * 100) + 10, // 10-110之间的随机价格
             date: "2026-10-" + (Math.floor(Math.random() * 28) + 1), // 随机日期
             isSold: Math.random() > 0.8 // 随机生成是否已售出 (80%未售，20%已售)
         };
@@ -1191,8 +1191,8 @@ function generateGoods(count) {
 ===== 步骤 3：调用函数并查看数据
 [source,javascript]
 ----
-// 调用函数，生成20个商品
-generateGoods(20);
+// 调用函数，生成10个商品
+generateGoods(10);
 
 // 在控制台打印查看
 console.log(goodsList);
@@ -1209,7 +1209,7 @@ for (let i = 0; i < goodsList.length; i++) {
     // 取出第 i 个商品
     let item = goodsList[i];
     // 打印简略信息
-    console.log(`ID: ${item.id} | 名称: ${item.name} | 价格: ${item.price}元`);
+    console.log(`ID: ${item.id} | 名称: ${item.name} | 价格: ${item.finalPrice}元`);
 }
 ----
 
@@ -2446,23 +2446,24 @@ console.log("底牌：", dipai);
 [source,javascript]
 ----
 class Product {
-    constructor(id, name, price, category) {
+    constructor(id, name, originalPrice, finalPrice, category) {
         this.id = id;
         this.name = name;
-        this.price = price;
+        this.originalPrice = originalPrice;
+        this.finalPrice = finalPrice;
         this.category = category;
-        this.pubTime = new Date();
+        this.pubTime = getFormatDate();
     }
 
     // 方法：获取详情描述
     getInfo() {
-        return `[${this.category}] ${this.name} - ￥${this.price}`;
+        return `[${this.category}] ${this.name} - ￥${this.finalPrice}`;
     }
 
     // 方法：打折
-    discount(rate) {
-        this.price = this.price * rate;
-        console.log(`${this.name} 打折后价格：${this.price}`);
+    discount(randomLevel) {
+        this.finalPrice = calculatePrice(this.originalPrice, randomLevel);
+        console.log(`${this.name} 打折后价格：${this.finalPrice}`);
     }
 }
 
@@ -2482,11 +2483,89 @@ class User {
     // 查看购物车总额
     getTotal() {
         let sum = 0;
-        this.cart.forEach(item => sum += item.price);
+        this.cart.forEach(item => sum += item.finalPrice || 0);
         return sum;
     }
 }
 
+/**
+ * 生成商品数据（Product类版本）
+ * @param {number} count
+ */
+function generateGoods(count) {
+    goodsList = []; // 清空原数组
+    const names = ["高等数学", "大学英语", "计算机网络", "二手自行车", "台灯"];
+    const categories = ["分类一", "分类二", "分类三"];
+
+    for (let i = 1; i <= count; i++) {
+        // 1. 生成随机原价
+        let originalPrice = Math.floor(Math.random() * 100) + 10;
+
+        // 2. 随机会员等级 (0, 1, 2)
+        let randomLevel = Math.floor(Math.random() * 3);
+
+        // 3. 调用计算折扣函数
+        let finalPrice = calculatePrice(originalPrice, randomLevel);
+
+        // -- new 使用 Product 重构了 --
+        let product = new Product(
+            i,  // id
+            names[Math.floor(Math.random() * names.length)] + "-" + i,
+            originalPrice,
+            finalPrice,
+            categories[Math.floor(Math.random() * categories.length)]
+        );
+
+        goodsList.push(product);
+    }
+    console.log("商品数据生成完毕：", goodsList);
+}
+
+const GoodsDB = {
+    add: function(name, price, category) {
+        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
+        let id = goodsList.length > 0 
+            ? goodsList[goodsList.length - 1].id + 1
+            : 1;
+
+        let product = new Product(
+            id,
+            name,
+            price,
+            price * 0.8,  // 默认打 8 折，想改再调用 Product.discount()
+            category
+        );
+
+        goodsList.push(product);
+
+        console.log(`商品【${name}】添加成功！`);
+    },
+    deleteById: function(id) {
+        // 遍历查找索引
+        let index = -1;
+
+        for (let i = 0; i < goodsList.length; i++) {
+            if (goodsList[i].id === id) {
+                index = i;
+                break;
+            }
+        }
+        // 也可以用 findIndex 方法（明天的内容）
+
+        if (index !== -1) {
+            let delName = goodsList[index].name;
+            goodsList.splice(index, 1);
+            console.log(`商品【${delName}】已删除！`);
+        }
+        else {
+            console.log("未找到该ID的商品！");
+        }
+    },
+    show: function() {
+        // console.table 可以用表格形式展示数组对象，非常直观
+        console.table(goodsList);
+    }
+};
 
 // 创建用户
 let u1 = new User("zhangsan", "123456");
