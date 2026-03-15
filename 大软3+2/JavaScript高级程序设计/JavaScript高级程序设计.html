@@ -640,6 +640,25 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
+<li><a href="#_ch_6数组高阶api与对象基础数据处理的利器">Ch 6：数组高阶API与对象基础——数据处理的利器</a>
+<ul class="sectlevel2">
+<li><a href="#_s1核心精讲4课时_6">S1：核心精讲（4课时）</a>
+<ul class="sectlevel3">
+<li><a href="#_一数组高阶方法告别_for_循环">一：数组高阶方法——告别 for 循环</a></li>
+<li><a href="#_二map_与_some">二：map 与 some</a></li>
+<li><a href="#_三对象基础与_this">三：对象基础与 this</a></li>
+<li><a href="#_四内置对象_math_与_date">四：内置对象 Math 与 Date</a></li>
+</ul>
+</li>
+<li><a href="#_s2实战演练与项目推进4课时_6">S2：实战演练与项目推进（4课时）</a>
+<ul class="sectlevel3">
+<li><a href="#_一随堂实战案例_5">一：随堂实战案例</a></li>
+<li><a href="#_二贯穿项目推进易校园筛选与时间">二：贯穿项目推进——《易校园》筛选与时间</a></li>
+<li><a href="#_作业_6">作业</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1126,7 +1145,8 @@ toggleButton.addEventListener('click', () => {
 <div class="listingblock">
 <div class="title">在 <code>index.html</code> 中引入这个脚本。</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="html"></code></pre>
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-cm">&lt;!-- 引入JS文件，注意放在 body 结束标签前 --&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">src</span><span class="tok-o">=</span><span class="tok-s">&quot;./main.js&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -2100,7 +2120,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="paragraph">
-<p>在配合图表讲课时，你可以按照这个逻辑引导学生：</p>
+<p>在配合图表讲课时，按照这个逻辑来理解：</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -3226,19 +3246,21 @@ toggleButton.addEventListener('click', () => {
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 全局变量，存储所有商品</span>
 <span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">goodsList</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span>
-<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;高等数学&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">15</span><span class="tok-w"> </span><span class="tok-p">},</span>
-<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;二手单车&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">100</span><span class="tok-w"> </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;高等数学&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">15</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">catetory</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;书籍&quot;</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;二手单车&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">100</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">catetory</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;运动&quot;</span><span class="tok-w"> </span><span class="tok-p">},</span>
 <span class="tok-p">];</span>
 
 <span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">GoodsDB</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-nx">add</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">add</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">category</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-c1">// 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始</span>
 <span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">goodsList</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-nx">goodsList</span><span class="tok-p">[</span><span class="tok-nx">goodsList</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">].</span><span class="tok-nx">id</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">;</span>
-
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">newGoods</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-w"> </span><span class="tok-p">};</span>
-
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">newGoods</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">category</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">category</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
 <span class="tok-w">        </span><span class="tok-nx">goodsList</span><span class="tok-p">.</span><span class="tok-nx">push</span><span class="tok-p">(</span><span class="tok-nx">newGoods</span><span class="tok-p">);</span>
-
 <span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`商品【</span><span class="tok-si">${</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb">】添加成功！`</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">},</span>
 <span class="tok-w">    </span><span class="tok-nx">deleteById</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -3268,7 +3290,7 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">};</span>
 <span class="tok-nx">GoodsDB</span><span class="tok-p">.</span><span class="tok-nx">show</span><span class="tok-p">();</span>
-<span class="tok-nx">GoodsDB</span><span class="tok-p">.</span><span class="tok-nx">add</span><span class="tok-p">(</span><span class="tok-s2">&quot;大学英语&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">);</span>
+<span class="tok-nx">GoodsDB</span><span class="tok-p">.</span><span class="tok-nx">add</span><span class="tok-p">(</span><span class="tok-s2">&quot;大学英语&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;书籍&quot;</span><span class="tok-p">);</span>
 <span class="tok-nx">GoodsDB</span><span class="tok-p">.</span><span class="tok-nx">deleteById</span><span class="tok-p">(</span><span class="tok-mf">1</span><span class="tok-p">);</span>
 <span class="tok-nx">GoodsDB</span><span class="tok-p">.</span><span class="tok-nx">show</span><span class="tok-p">();</span></code></pre>
 </div>
@@ -3293,10 +3315,485 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_ch_6数组高阶api与对象基础数据处理的利器">Ch 6：数组高阶API与对象基础——数据处理的利器</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>今日目标</strong>：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>掌握 <code>forEach</code>、<code>filter</code>、<code>map</code>、<code>some</code> 等高阶函数。</p>
+</li>
+<li>
+<p>理解对象与 <code>this</code> 的基本概念。</p>
+</li>
+<li>
+<p>使用 <code>Math</code> 和 <code>Date</code> 处理随机数与时间。</p>
+</li>
+<li>
+<p>实现商品筛选与时间格式化。</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_s1核心精讲4课时_6">S1：核心精讲（4课时）</h3>
+<div class="sect3">
+<h4 id="_一数组高阶方法告别_for_循环">一：数组高阶方法——告别 for 循环</h4>
+<div class="sect4">
+<h5 id="_1_foreach_迭代">1. forEach 迭代</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>作用：遍历数组，没有返回值。</p>
+</li>
+<li>
+<p>语法：<code>arr.forEach((item, index) &#8658; {&#8230;&#8203;})</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>代码演示</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">arr</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span><span class="tok-mf">10</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">20</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">30</span><span class="tok-p">];</span>
+
+<span class="tok-nx">arr</span><span class="tok-p">.</span><span class="tok-nx">forEach</span><span class="tok-p">((</span><span class="tok-nx">item</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">index</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`索引：</span><span class="tok-si">${</span><span class="tok-nx">index</span><span class="tok-si">}</span><span class="tok-sb">，值：</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_2_filter_过滤非常常用">2. filter 过滤（非常常用）</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>作用：筛选符合条件的元素，<strong>返回新数组</strong>。</p>
+</li>
+<li>
+<p>语法：<code>return 条件</code>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>代码演示</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">scores</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span><span class="tok-mf">45</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">88</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">92</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">30</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">60</span><span class="tok-p">];</span>
+
+<span class="tok-c1">// 筛选出及格的分数</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">passScores</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">scores</span><span class="tok-p">.</span><span class="tok-nx">filter</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-o">&gt;=</span><span class="tok-w"> </span><span class="tok-mf">60</span><span class="tok-p">);</span>
+
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">passScores</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// [88, 92, 60]</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_二map_与_some">二：map 与 some</h4>
+<div class="sect4">
+<h5 id="_1_map_映射">1. map 映射</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>作用：对数组每个元素进行处理，<strong>返回新数组</strong>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>代码演示</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">prices</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span><span class="tok-mf">10</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">20</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">30</span><span class="tok-p">];</span>
+
+<span class="tok-c1">// 所有价格打8折</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">newPrices</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">prices</span><span class="tok-p">.</span><span class="tok-nx">map</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mf">0.8</span><span class="tok-p">);</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">newPrices</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// [8, 16, 24]</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_2_some_查找">2. some 查找</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>作用：查找数组中是否存在满足条件的元素，返回 <code>true</code> 或 <code>false</code>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>代码演示</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">nums</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span><span class="tok-mf">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">5</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">7</span><span class="tok-p">];</span>
+
+<span class="tok-c1">// 判断是否有偶数</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">hasEven</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">nums</span><span class="tok-p">.</span><span class="tok-nx">some</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-o">%</span><span class="tok-w"> </span><span class="tok-mf">2</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span>
+
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">hasEven</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// false</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_三对象基础与_this">三：对象基础与 this</h4>
+<div class="sect4">
+<h5 id="_1_对象方法">1. 对象方法</h5>
+<div class="paragraph">
+<p>对象里不仅可以存数据，还可以存函数。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">student</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;张三&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-c1">// 方法</span>
+<span class="tok-w">    </span><span class="tok-nx">study</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">book</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb"> 正在学习 </span><span class="tok-si">${</span><span class="tok-nx">book</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">};</span>
+
+<span class="tok-nx">student</span><span class="tok-p">.</span><span class="tok-nx">study</span><span class="tok-p">(</span><span class="tok-s2">&quot;JavaScript&quot;</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// this 指向 student 对象</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_2_this_的指向初步">2. this 的指向（初步）</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>谁调用这个函数，<code>this</code> 就指向谁。</p>
+</li>
+<li>
+<p>这里的 <code>student.study()</code> 是 <code>student</code> 调用的，所以 <code>this</code> 是 <code>student</code>。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_四内置对象_math_与_date">四：内置对象 Math 与 Date</h4>
+<div class="sect4">
+<h5 id="_1_math_对象">1. Math 对象</h5>
+<div class="paragraph">
+<p>JavaScript 随机整数生成指南</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Math.random()</code>：[0, 1) 随机数。</p>
+</li>
+<li>
+<p><code>Math.floor()</code>：向下取整。</p>
+</li>
+<li>
+<p><strong>公式</strong>：生成 <code>[min, max]</code> 随机整数。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Math.floor(Math.random() * (max - min + 1)) + min</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>公式分解说明</p>
+<div class="paragraph">
+<p>这个公式的逻辑可以分为三个核心步骤，本质是一个<strong>“缩放 + 平移”</strong>的过程：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>确定长度 <code>(max - min + 1)</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Math.random()</code> 默认生成 <code>[0, 1)</code> 之间的浮点数。乘以这个长度，可以将范围扩展为 <code>[0, max - min + 1)</code>。</p>
+</li>
+<li>
+<p>例如，想生成 5 到 10 之间的数，长度就是 <code>10 - 5 + 1 = 6</code>。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>向下取整 <code>Math.floor()</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>将产生的随机浮点数转换成整数。</p>
+</li>
+<li>
+<p>由于 <code>Math.random()</code> 永远拿不到 1，所以 <code>Math.floor</code> 后的结果最大只会是 <code>max - min</code>。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>平移起点 <code>+ min</code>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>将原本从 0 开始的范围整体向右移动到 <code>min</code>。</p>
+</li>
+<li>
+<p>这样原本的 0 变成了 <code>min</code>，原本的 <code>max - min</code> 变成了 <code>max</code>。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>实战示例：模拟掷骰子</p>
+<div class="paragraph">
+<p>假设我们需要模拟一个 6 面骰子的投掷（即生成 <code>[1, 6]</code> 之间的随机整数）。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 获取 [min, max] 范围内的随机整数</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">getRandomInt</span><span class="tok-p">(</span><span class="tok-nx">min</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">max</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">floor</span><span class="tok-p">(</span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">random</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">max</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-nx">min</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nx">min</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c1">// 示例：掷骰子</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">min</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">;</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">max</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">6</span><span class="tok-p">;</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">result</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">getRandomInt</span><span class="tok-p">(</span><span class="tok-nx">min</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">max</span><span class="tok-p">);</span>
+
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`你掷出的点数是: </span><span class="tok-si">${</span><span class="tok-nx">result</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+该公式包含最小值和最大值（即闭区间）。如果你只需要不包含最大值的半开区间，公式可以简化为:<br>
+<code>Math.floor(Math.random() * (max - min)) + min</code>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_2_date_对象">2. Date 对象</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><code>new Date()</code>：获取当前时间。</p>
+</li>
+<li>
+<p><code>getFullYear()</code>, <code>getMonth()</code> (0-11), <code>getDate()</code>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>案例：格式化时间</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">getNowTime</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">date</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">date</span><span class="tok-p">.</span><span class="tok-nx">getFullYear</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">m</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">date</span><span class="tok-p">.</span><span class="tok-nx">getMonth</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 记得+1</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">d</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">date</span><span class="tok-p">.</span><span class="tok-nx">getDate</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">y</span><span class="tok-si">}</span><span class="tok-sb">年</span><span class="tok-si">${</span><span class="tok-nx">m</span><span class="tok-si">}</span><span class="tok-sb">月</span><span class="tok-si">${</span><span class="tok-nx">d</span><span class="tok-si">}</span><span class="tok-sb">日`</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">getNowTime</span><span class="tok-p">());</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_s2实战演练与项目推进4课时_6">S2：实战演练与项目推进（4课时）</h3>
+<div class="sect3">
+<h4 id="_一随堂实战案例_5">一：随堂实战案例</h4>
+<div class="sect4">
+<h5 id="_案例随机点名器">案例：随机点名器</h5>
+<div class="paragraph">
+<p><strong>需求</strong>：有一个学生数组，随机抽取一名学生。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">students</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span><span class="tok-s2">&quot;张三&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;李四&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;王五&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;赵六&quot;</span><span class="tok-p">];</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">index</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">floor</span><span class="tok-p">(</span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">random</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-nx">students</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-p">);</span>
+
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`幸运儿是：</span><span class="tok-si">${</span><span class="tok-nx">students</span><span class="tok-p">[</span><span class="tok-nx">index</span><span class="tok-p">]</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_案例商品价格筛选">案例：商品价格筛选</h5>
+<div class="paragraph">
+<p><strong>需求</strong>：筛选出价格大于100的商品。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">goods</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;手机&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">2000</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;耳机&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">99</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;充电宝&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">150</span><span class="tok-w"> </span><span class="tok-p">}</span>
+<span class="tok-p">];</span>
+
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">expensive</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">goods</span><span class="tok-p">.</span><span class="tok-nx">filter</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">price</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-mf">100</span><span class="tok-p">);</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;昂贵商品：&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">expensive</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_二贯穿项目推进易校园筛选与时间">二：贯穿项目推进——《易校园》筛选与时间</h4>
+<div class="paragraph">
+<p><strong>场景</strong>：完善项目的数据处理功能，使其具备“搜索”和“人性化时间显示”能力。</p>
+</div>
+<div class="sect4">
+<h5 id="_步骤_1实现商品筛选功能">步骤 1：实现商品筛选功能</h5>
+<div class="paragraph">
+<p>在数据层面编写筛选逻辑。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 测试代码</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">goodsList</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[];</span>
+<span class="tok-nx">GoodsDB</span><span class="tok-p">.</span><span class="tok-nx">add</span><span class="tok-p">(</span><span class="tok-s2">&quot;高等数学&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">15</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;书籍&quot;</span><span class="tok-p">);</span>
+<span class="tok-nx">GoodsDB</span><span class="tok-p">.</span><span class="tok-nx">add</span><span class="tok-p">(</span><span class="tok-s2">&quot;台灯&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">30</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;生活&quot;</span><span class="tok-p">);</span>
+<span class="tok-nx">GoodsDB</span><span class="tok-p">.</span><span class="tok-nx">add</span><span class="tok-p">(</span><span class="tok-s2">&quot;线性代数&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;书籍&quot;</span><span class="tok-p">);</span>
+<span class="tok-c1">// 筛选特定类别的商品</span>
+<span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">filterByCategory</span><span class="tok-p">(</span><span class="tok-nx">category</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">category</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s2">&quot;全部&quot;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">goodsList</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// 使用 filter</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">goodsList</span><span class="tok-p">.</span><span class="tok-nx">filter</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">category</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-nx">category</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">GoodsDB</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">add</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">category</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始</span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">goodsList</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-nx">goodsList</span><span class="tok-p">[</span><span class="tok-nx">goodsList</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">].</span><span class="tok-nx">id</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">newGoods</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">category</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">category</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
+<span class="tok-w">        </span><span class="tok-nx">goodsList</span><span class="tok-p">.</span><span class="tok-nx">push</span><span class="tok-p">(</span><span class="tok-nx">newGoods</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`商品【</span><span class="tok-si">${</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb">】添加成功！`</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-nx">deleteById</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 遍历查找索引</span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">index</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-mf">1</span><span class="tok-p">;</span>
+
+<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-nx">goodsList</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-o">++</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">goodsList</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-p">].</span><span class="tok-nx">id</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">index</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-p">;</span>
+<span class="tok-w">                </span><span class="tok-k">break</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-c1">// 也可以用 findIndex 方法（明天的内容）</span>
+
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">index</span><span class="tok-w"> </span><span class="tok-o">!==</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-mf">1</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">delName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">goodsList</span><span class="tok-p">[</span><span class="tok-nx">index</span><span class="tok-p">].</span><span class="tok-nx">name</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-nx">goodsList</span><span class="tok-p">.</span><span class="tok-nx">splice</span><span class="tok-p">(</span><span class="tok-nx">index</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`商品【</span><span class="tok-si">${</span><span class="tok-nx">delName</span><span class="tok-si">}</span><span class="tok-sb">】已删除！`</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;未找到该ID的商品！&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-nx">show</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// console.table 可以用表格形式展示数组对象，非常直观</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">table</span><span class="tok-p">(</span><span class="tok-nx">goodsList</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">};</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">books</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">filterByCategory</span><span class="tok-p">(</span><span class="tok-s2">&quot;书籍&quot;</span><span class="tok-p">);</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;所有书籍类商品：&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">books</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_步骤_2格式化商品发布时间">步骤 2：格式化商品发布时间</h5>
+<div class="paragraph">
+<p><strong>需求</strong>：显示“刚刚”、“3分钟前”、“2023-10-01” 这种格式。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">formatTime</span><span class="tok-p">(</span><span class="tok-nx">dateStr</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 假设传入的发布时间是时间戳或日期字符串，这里模拟一个时间戳</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">pubTime</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">(</span><span class="tok-nx">dateStr</span><span class="tok-p">).</span><span class="tok-nx">getTime</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 发布时间的毫秒数</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">now</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 当前时间的毫秒数</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">diff</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">now</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-nx">pubTime</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-mf">1000</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 转换成秒差值</span>
+
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">diff</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-mf">60</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s2">&quot;刚刚&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">diff</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-mf">3600</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">floor</span><span class="tok-p">(</span><span class="tok-nx">diff</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-mf">60</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s2">&quot;分钟前&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">diff</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-mf">3600</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mf">24</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">floor</span><span class="tok-p">(</span><span class="tok-nx">diff</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-mf">3600</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s2">&quot;小时前&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 超过1天，显示具体日期</span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">d</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">(</span><span class="tok-nx">dateStr</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">d</span><span class="tok-p">.</span><span class="tok-nx">getFullYear</span><span class="tok-p">()</span><span class="tok-si">}</span><span class="tok-sb">-</span><span class="tok-si">${</span><span class="tok-nx">d</span><span class="tok-p">.</span><span class="tok-nx">getMonth</span><span class="tok-p">()</span><span class="tok-o">+</span><span class="tok-mf">1</span><span class="tok-si">}</span><span class="tok-sb">-</span><span class="tok-si">${</span><span class="tok-nx">d</span><span class="tok-p">.</span><span class="tok-nx">getDate</span><span class="tok-p">()</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c1">// 传入发布时间模拟测试</span>
+<span class="tok-c1">// let testTime = new Date(&quot;2023-10-20 10:00:00&quot;);</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">testTime</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">(</span><span class="tok-s2">&quot;2026-03-15 10:16:40&quot;</span><span class="tok-p">);</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">formatTime</span><span class="tok-p">(</span><span class="tok-nx">testTime</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// 根据 now 输出不同结果</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_作业_6">作业</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>概念题</strong>：<code>filter</code> 和 <code>forEach</code> 的区别是什么？ <code>filter</code> 会改变原数组吗？</p>
+</li>
+<li>
+<p><strong>代码题</strong>：有一个数组 <code>[10, 20, 30, 40, 50]</code>，使用 <code>map</code> 将其转换成 <code>['价格10元', '价格20元', &#8230;&#8203;]</code> 的字符串数组。</p>
+</li>
+<li>
+<p><strong>项目扩展</strong>：实现一个 <code>search(keyword)</code> 函数，输入关键字，在 <code>goodsList</code> 中查找名称包含该关键字的商品。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>提示：使用字符串的 <code>indexOf</code> 或 <code>includes</code> 方法配合 <code>filter</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-14 23:56:53 +0800
+Last updated 2026-03-15 11:28:48 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

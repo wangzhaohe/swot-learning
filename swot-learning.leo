@@ -710,7 +710,7 @@
 <v t="swot.20260314094123.1"><vh>BB 再次输出信息</vh></v>
 </v>
 <v t="swot.20260314102453.1"><vh>步骤 3：HTML 引入 main.js</vh>
-<v t="swot.20260314093438.1"><vh>&lt;&lt; import main.js &gt;&gt;</vh></v>
+<v t="swot.20260314093438.1"><vh>import main.js</vh></v>
 </v>
 <v t="swot.20260314102601.1"><vh>步骤 4：运行与调试</vh></v>
 </v>
@@ -870,7 +870,7 @@
 <v t="swot.20260314222612.1"><vh>案例：数组去重算法</vh></v>
 </v>
 <v t="swot.20260314222935.1"><vh>第三、四课时：贯穿项目推进——《易校园》数据仓库</vh>
-<v t="swot.20260314232813.1"><vh>专门管理商品的对象 GoodsDB = {}</vh>
+<v t="swot.20260314232813.1"><vh>BB 专门管理商品的对象 GoodsDB = {}</vh>
 <v t="swot.20260314233406.1"><vh>1. 添加商品 add</vh></v>
 <v t="swot.20260314233347.1"><vh>2. 删除商品 deleteById</vh></v>
 <v t="swot.20260314233318.1"><vh>3. 打印列表 show</vh></v>
@@ -880,37 +880,46 @@
 <v t="swot.20260314215818.1"><vh>作业</vh></v>
 </v>
 </v>
-</v>
-</v>
-<v t="swot.20260314165640.1"><vh>waiting for arrange</vh>
 <v t="swot.20260313114540.105"><vh>Ch 6：数组高阶API与对象基础——数据处理的利器</vh>
 <v t="swot.20260313114540.106"><vh>S1：核心精讲（4课时）</vh>
 <v t="swot.20260313114540.107"><vh>一：数组高阶方法——告别 for 循环</vh>
-<v t="swot.20260313114540.108"><vh>1. forEach 迭代</vh></v>
-<v t="swot.20260313114540.109"><vh>2. filter 过滤（非常常用）</vh></v>
+<v t="swot.20260315000515.1"><vh>1. forEach 迭代</vh></v>
+<v t="swot.20260315000705.1"><vh>2. filter 过滤（非常常用）</vh></v>
 </v>
 <v t="swot.20260313114540.110"><vh>二：map 与 some</vh>
-<v t="swot.20260313114540.111"><vh>1. map 映射</vh></v>
-<v t="swot.20260313114540.112"><vh>2. some 查找</vh></v>
+<v t="swot.20260315071312.1"><vh>1. map 映射</vh></v>
+<v t="swot.20260315074831.1"><vh>2. some 查找</vh></v>
 </v>
 <v t="swot.20260313114540.113"><vh>三：对象基础与 this</vh>
-<v t="swot.20260313114540.114"><vh>1. 对象方法</vh></v>
-<v t="swot.20260313114540.115"><vh>2. this 的指向（初步）</vh></v>
+<v t="swot.20260315075251.1"><vh>1. 对象方法</vh></v>
+<v t="swot.20260315075441.1"><vh>2. this 的指向（初步）</vh></v>
 </v>
 <v t="swot.20260313114540.116"><vh>四：内置对象 Math 与 Date</vh>
-<v t="swot.20260313114540.117"><vh>1. Math 对象</vh></v>
-<v t="swot.20260313114540.118"><vh>2. Date 对象</vh></v>
+<v t="swot.20260315075649.1"><vh>1. Math 对象</vh></v>
+<v t="swot.20260315082235.1"><vh>2. Date 对象</vh></v>
 </v>
 </v>
 <v t="swot.20260313114540.119"><vh>S2：实战演练与项目推进（4课时）</vh>
 <v t="swot.20260313114540.120"><vh>一：随堂实战案例</vh>
-<v t="swot.20260313114540.121"><vh>案例：随机点名器</vh></v>
-<v t="swot.20260313114540.122"><vh>案例：商品价格筛选</vh></v>
+<v t="swot.20260315083223.1"><vh>案例：随机点名器</vh></v>
+<v t="swot.20260315083553.1"><vh>案例：商品价格筛选</vh></v>
 </v>
-<v t="swot.20260313114540.123"><vh>二：贯穿项目推进——《易校园》筛选与时间</vh></v>
-<v t="swot.20260313114540.124"><vh>📝 作业</vh></v>
+<v t="swot.20260315083830.1"><vh>二：贯穿项目推进——《易校园》筛选与时间</vh>
+<v t="swot.20260315085052.1"><vh>步骤 1：实现商品筛选功能</vh>
+<v t="swot.20260315085646.1"><vh>BB 筛选商品 filterByCategory(category)</vh></v>
+<v t="swot.20260314232813.1"></v>
+<v t="swot.20260315104339.1"><vh>测试筛选商品</vh></v>
+</v>
+<v t="swot.20260315085112.1"><vh>步骤 2：格式化商品发布时间</vh>
+<v t="swot.20260315101941.1"><vh>BB 格式化商品发布时间 formatTime()</vh></v>
 </v>
 </v>
+<v t="swot.20260315082740.1"><vh>作业</vh></v>
+</v>
+</v>
+</v>
+</v>
+<v t="swot.20260314165640.1"><vh>waiting for arrange</vh>
 <v t="swot.20260313114540.125"><vh>Ch 7：综合数据练习与面向对象——构建代码的“骨架”</vh>
 <v t="swot.20260313114540.126"><vh>S1：核心精讲（4课时）</vh>
 <v t="swot.20260313114540.127"><vh>一：复杂数据结构——对象数组</vh>
@@ -23912,123 +23921,28 @@ console.log("我的名字是：", MY_NAME);
 </t>
 <t tx="swot.20260313114540.100">
 </t>
-<t tx="swot.20260313114540.105">
-**今日目标**：
-1.  掌握 `forEach`、`filter`、`map`、`some` 等高阶函数。
-2.  理解对象与 `this` 的基本概念。
-3.  使用 `Math` 和 `Date` 处理随机数与时间。
-4.  实现商品筛选与时间格式化。
+<t tx="swot.20260313114540.105">**今日目标**：
 
----
+1. 掌握 `forEach`、`filter`、`map`、`some` 等高阶函数。
 
+2. 理解对象与 `this` 的基本概念。
+
+3. 使用 `Math` 和 `Date` 处理随机数与时间。
+
+4. 实现商品筛选与时间格式化。
 </t>
 <t tx="swot.20260313114540.106">
 </t>
 <t tx="swot.20260313114540.107">
-</t>
-<t tx="swot.20260313114540.108">*   作用：遍历数组，没有返回值。
-*   语法：`arr.forEach((item, index) =&gt; { ... })`。
-
-**代码演示**：
-```javascript
-let arr = [10, 20, 30];
-arr.forEach((item, index) =&gt; {
-    console.log(`索引：${index}，值：${item}`);
-});
-```
-
-</t>
-<t tx="swot.20260313114540.109">*   作用：筛选符合条件的元素，**返回新数组**。
-*   语法：`return 条件`。
-
-**代码演示**：
-```javascript
-let scores = [45, 88, 92, 30, 60];
-// 筛选出及格的分数
-let passScores = scores.filter(item =&gt; item &gt;= 60);
-console.log(passScores); // [88, 92, 60]
-```
-
----
-
 </t>
 <t tx="swot.20260313114540.11">JavaScript 是弱类型语言，变量没有类型，**值**才有类型。
 
 </t>
 <t tx="swot.20260313114540.110">
 </t>
-<t tx="swot.20260313114540.111">*   作用：对数组每个元素进行处理，**返回新数组**。
-
-**代码演示**：
-```javascript
-let prices = [10, 20, 30];
-// 所有价格打8折
-let newPrices = prices.map(item =&gt; item * 0.8);
-console.log(newPrices); // [8, 16, 24]
-```
-
-</t>
-<t tx="swot.20260313114540.112">*   作用：查找数组中是否存在满足条件的元素，返回 `true` 或 `false`。
-
-**代码演示**：
-```javascript
-let nums = [1, 3, 5, 7];
-// 判断是否有偶数
-let hasEven = nums.some(item =&gt; item % 2 === 0);
-console.log(hasEven); // false
-```
-
----
-
-</t>
 <t tx="swot.20260313114540.113">
 </t>
-<t tx="swot.20260313114540.114">对象里不仅可以存数据，还可以存函数。
-
-```javascript
-let student = {
-    name: "张三",
-    // 方法
-    study: function(book) {
-        console.log(`${this.name} 正在学习 ${book}`);
-    }
-};
-
-student.study("JavaScript"); // this 指向 student 对象
-```
-
-</t>
-<t tx="swot.20260313114540.115">*   谁调用这个函数，`this` 就指向谁。
-*   这里的 `student.study()` 是 `student` 调用的，所以 `this` 是 `student`。
-
----
-
-</t>
 <t tx="swot.20260313114540.116">
-</t>
-<t tx="swot.20260313114540.117">*   `Math.random()`：[0, 1) 随机数。
-*   `Math.floor()`：向下取整。
-*   **公式**：生成 `[min, max]` 随机整数。
-    `Math.floor(Math.random() * (max - min + 1)) + min`
-
-</t>
-<t tx="swot.20260313114540.118">*   `new Date()`：获取当前时间。
-*   `getFullYear()`, `getMonth()` (0-11), `getDate()`。
-
-**案例：格式化时间**
-```javascript
-function getNowTime() {
-    let d = new Date();
-    let y = d.getFullYear();
-    let m = d.getMonth() + 1; // 记得+1
-    let Ch = d.getDate();
-    return `${y}年${m}月${day}日`;
-}
-console.log(getNowTime());
-```
-
----
-
 </t>
 <t tx="swot.20260313114540.119">
 </t>
@@ -24040,95 +23954,6 @@ console.log(getNowTime());
 
 </t>
 <t tx="swot.20260313114540.120">
-</t>
-<t tx="swot.20260313114540.121">**需求**：有一个学生数组，随机抽取一名学生。
-
-```javascript
-let students = ["张三", "李四", "王五", "赵六"];
-let index = Math.floor(Math.random() * students.length);
-console.log(`幸运儿是：${students[index]}`);
-```
-
-</t>
-<t tx="swot.20260313114540.122">**需求**：筛选出价格大于100的商品。
-
-```javascript
-let goods = [
-    { name: "手机", price: 2000 },
-    { name: "耳机", price: 99 },
-    { name: "充电宝", price: 150 }
-];
-
-let expensive = goods.filter(item =&gt; item.price &gt; 100);
-console.log("昂贵商品：", expensive);
-```
-
----
-
-</t>
-<t tx="swot.20260313114540.123">
-**场景**：完善项目的数据处理功能，使其具备“搜索”和“人性化时间显示”能力。
-
-**步骤 1：实现商品筛选功能**
-在数据层面编写筛选逻辑。
-
-```javascript
-// 筛选特定类别的商品
-function filterByCategory(category) {
-    if (category === "全部") {
-        return goodsList;
-    }
-    // 使用 filter
-    return goodsList.filter(item =&gt; item.category === category);
-}
-
-// 测试
-GoodsDB.add("高等数学", 15, "书籍");
-GoodsDB.add("台灯", 30, "生活");
-GoodsDB.add("线性代数", 10, "书籍");
-
-let books = filterByCategory("书籍");
-console.log("所有书籍类商品：", books);
-```
-
-**步骤 2：格式化商品发布时间**
-**需求**：显示“刚刚”、“3分钟前”、“2023-10-01” 这种格式。
-
-```javascript
-function formatTime(dateStr) {
-    // 假设传入的是时间戳或日期字符串，这里模拟一个时间戳
-    let pubTime = new Date(dateStr).getTime(); // 发布时间的毫秒数
-    let now = Date.now(); // 当前时间的毫秒数
-    let diff = (now - pubTime) / 1000; // 转换成秒
-
-    if (diff &lt; 60) {
-        return "刚刚";
-    } else if (diff &lt; 3600) {
-        return Math.floor(diff / 60) + "分钟前";
-    } else if (diff &lt; 3600 * 24) {
-        return Math.floor(diff / 3600) + "小时前";
-    } else {
-        // 超过1天，显示具体日期
-        let d = new Date(dateStr);
-        return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
-    }
-}
-
-// 模拟测试
-let testTime = new Date("2023-10-20 10:00:00");
-console.log(formatTime(testTime)); // 根据 now 输出不同结果
-```
-
----
-
-</t>
-<t tx="swot.20260313114540.124">
-1.  **概念题**：`filter` 和 `forEach` 的区别是什么？`filter` 会改变原数组吗？
-2.  **代码题**：有一个数组 `[10, 20, 30, 40, 50]`，使用 `map` 将其转换成 `['价格10元', '价格20元', ...]` 的字符串数组。
-3.  **项目扩展**：实现一个 `search(keyword)` 函数，输入关键字，在 `goodsList` 中查找名称包含该关键字的商品（提示：使用字符串的 `indexOf` 或 `includes` 方法配合 `filter`）。
-
----
-
 </t>
 <t tx="swot.20260313114540.125">
 **今日目标**：
@@ -28942,7 +28767,7 @@ flowchart LR
     style i_ellipsis fill:#f9f9f9,stroke:#ccc,stroke-dasharray: 5 5
 ....
 
-在配合图表讲课时，你可以按照这个逻辑引导学生：
+在配合图表讲课时，按照这个逻辑来理解：
 
 1. **引出时针分针**：“大家回想一下手表，时针（大圈）走 1 个小时，分针（小圈）是不是要转满 60 下？我们的代码也是一样的。”
 2. **对应外层 `i`**：“代码里的 `i` 就是**时针**，它走得很慢，只负责控制现在是第几行。它从 1 走到 9。”
@@ -29658,8 +29483,8 @@ console.log(newArr);
 @language javascript
 // 全局变量，存储所有商品
 let goodsList = [
-    { id: 1, name: "高等数学", price: 15 },
-    { id: 2, name: "二手单车", price: 100 }
+    { id: 1, name: "高等数学", price: 15, catetory: "书籍" },
+    { id: 2, name: "二手单车", price: 100, catetory: "运动" },
 ];
 
 @others
@@ -29700,21 +29525,272 @@ deleteById: function(id) {
 },
 </t>
 <t tx="swot.20260314233406.1">@language javascript
-add: function(name, price) {
+add: function(name, price, category) {
     // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
     let id = goodsList.length &gt; 0 ? goodsList[goodsList.length - 1].id + 1 : 1;
-
-    let newGoods = { id: id, name: name, price: price };
-
+    let newGoods = {
+        id: id,
+        name: name,
+        price: price,
+        category: category,
+    };
     goodsList.push(newGoods);
-
     console.log(`商品【${name}】添加成功！`);
 },
 </t>
 <t tx="swot.20260314234349.1">GoodsDB.show();
-GoodsDB.add("大学英语", 10);
+GoodsDB.add("大学英语", 10, "书籍");
 GoodsDB.deleteById(1);
 GoodsDB.show();
+</t>
+<t tx="swot.20260315000515.1">* 作用：遍历数组，没有返回值。
+* 语法：`arr.forEach((item, index) =&gt; {...})`
+
+
+*代码演示*：
+
+[source,javascript]
+----
+@language javascript
+let arr = [10, 20, 30];
+
+arr.forEach((item, index) =&gt; {
+    console.log(`索引：${index}，值：${item}`);
+});
+----
+</t>
+<t tx="swot.20260315000705.1">* 作用：筛选符合条件的元素，*返回新数组*。
+* 语法：`return 条件`。
+
+*代码演示*：
+
+[source,javascript]
+----
+@language javascript
+let scores = [45, 88, 92, 30, 60];
+
+// 筛选出及格的分数
+let passScores = scores.filter(item =&gt; item &gt;= 60);
+
+console.log(passScores); // [88, 92, 60]
+----
+</t>
+<t tx="swot.20260315071312.1">* 作用：对数组每个元素进行处理，*返回新数组*。
+
+*代码演示*：
+
+[source,javascript]
+----
+@language javascript
+let prices = [10, 20, 30];
+
+// 所有价格打8折
+let newPrices = prices.map(item =&gt; item * 0.8);
+console.log(newPrices); // [8, 16, 24]
+----
+</t>
+<t tx="swot.20260315074831.1">* 作用：查找数组中是否存在满足条件的元素，返回 `true` 或 `false`。
+
+*代码演示*：
+
+[source,javascript]
+----
+@language javascript
+let nums = [1, 3, 5, 7];
+
+// 判断是否有偶数
+let hasEven = nums.some(item =&gt; item % 2 === 0);
+
+console.log(hasEven); // false
+----
+</t>
+<t tx="swot.20260315075251.1">对象里不仅可以存数据，还可以存函数。
+
+[source,javascript]
+----
+@language javascript
+let student = {
+    name: "张三",
+    // 方法
+    study: function(book) {
+        console.log(`${this.name} 正在学习 ${book}`);
+    }
+};
+
+student.study("JavaScript"); // this 指向 student 对象
+----
+</t>
+<t tx="swot.20260315075441.1">* 谁调用这个函数，`this` 就指向谁。
+
+* 这里的 `student.study()` 是 `student` 调用的，所以 `this` 是 `student`。
+</t>
+<t tx="swot.20260315075649.1">JavaScript 随机整数生成指南
+
+* `Math.random()`：[0, 1) 随机数。
+
+* `Math.floor()`：向下取整。
+
+* *公式*：生成 `[min, max]` 随机整数。
+  ** `Math.floor(Math.random() * (max - min + 1)) + min`
+
+[upperalpha]
+. 公式分解说明
++
+这个公式的逻辑可以分为三个核心步骤，本质是一个**“缩放 + 平移”**的过程：
+
+* 确定长度 `(max - min + 1)`：
+  ** `Math.random()` 默认生成 `[0, 1)` 之间的浮点数。乘以这个长度，可以将范围扩展为 `[0, max - min + 1)`。
+  ** 例如，想生成 5 到 10 之间的数，长度就是 `10 - 5 + 1 = 6`。
+
+* 向下取整 `Math.floor()`：
+  ** 将产生的随机浮点数转换成整数。
+  ** 由于 `Math.random()` 永远拿不到 1，所以 `Math.floor` 后的结果最大只会是 `max - min`。
+
+* 平移起点 `+ min`：
+  ** 将原本从 0 开始的范围整体向右移动到 `min`。
+  ** 这样原本的 0 变成了 `min`，原本的 `max - min` 变成了 `max`。
+
+
+. 实战示例：模拟掷骰子
++
+假设我们需要模拟一个 6 面骰子的投掷（即生成 `[1, 6]` 之间的随机整数）。
++
+[source,javascript]
+----
+@language javascript
+/**
+ * 获取 [min, max] 范围内的随机整数
+ */
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// 示例：掷骰子
+const min = 1;
+const max = 6;
+const result = getRandomInt(min, max);
+
+console.log(`你掷出的点数是: ${result}`);
+----
+
+NOTE: 该公式包含最小值和最大值（即闭区间）。如果你只需要不包含最大值的半开区间，公式可以简化为: +
+`Math.floor(Math.random() * (max - min)) + min`
+</t>
+<t tx="swot.20260315082235.1">* `new Date()`：获取当前时间。
+
+* `getFullYear()`, `getMonth()` (0-11), `getDate()`。
+
+*案例：格式化时间*
+
+[source,javascript]
+----
+@language javascript
+function getNowTime() {
+    let date = new Date();
+    let y = date.getFullYear();
+    let m = date.getMonth() + 1; // 记得+1
+    let d = date.getDate();
+    return `${y}年${m}月${d}日`;
+}
+console.log(getNowTime());
+----
+</t>
+<t tx="swot.20260315082740.1">[arabic]
+. *概念题*：`filter` 和 `forEach` 的区别是什么？ `filter` 会改变原数组吗？
+
+. *代码题*：有一个数组 `[10, 20, 30, 40, 50]`，使用 `map` 将其转换成 `['价格10元', '价格20元', ...]` 的字符串数组。
+
+. *项目扩展*：实现一个 `search(keyword)` 函数，输入关键字，在 `goodsList` 中查找名称包含该关键字的商品。
+  ** 提示：使用字符串的 `indexOf` 或 `includes` 方法配合 `filter`
+</t>
+<t tx="swot.20260315083223.1">*需求*：有一个学生数组，随机抽取一名学生。
+
+[source,javascript]
+----
+@language javascript
+let students = ["张三", "李四", "王五", "赵六"];
+let index = Math.floor(Math.random() * students.length);
+
+console.log(`幸运儿是：${students[index]}`);
+----
+</t>
+<t tx="swot.20260315083553.1">*需求*：筛选出价格大于100的商品。
+
+[source,javascript]
+----
+let goods = [
+    { name: "手机", price: 2000 },
+    { name: "耳机", price: 99 },
+    { name: "充电宝", price: 150 }
+];
+
+let expensive = goods.filter(item =&gt; item.price &gt; 100);
+console.log("昂贵商品：", expensive);
+----
+</t>
+<t tx="swot.20260315083830.1">*场景*：完善项目的数据处理功能，使其具备“搜索”和“人性化时间显示”能力。
+
+</t>
+<t tx="swot.20260315085052.1">在数据层面编写筛选逻辑。
+
+[source,javascript]
+----
+@language javascript
+// 测试代码
+let goodsList = [];
+GoodsDB.add("高等数学", 15, "书籍");
+GoodsDB.add("台灯", 30, "生活");
+GoodsDB.add("线性代数", 10, "书籍");
+@others
+----
+</t>
+<t tx="swot.20260315085112.1">*需求*：显示“刚刚”、“3分钟前”、“2023-10-01” 这种格式。
+
+[source,javascript]
+----
+@language javascript
+@others
+
+// 传入发布时间模拟测试
+// let testTime = new Date("2023-10-20 10:00:00");
+let testTime = new Date("2026-03-15 10:16:40");
+console.log(formatTime(testTime)); // 根据 now 输出不同结果
+----
+</t>
+<t tx="swot.20260315085646.1">@language javascript
+// 筛选特定类别的商品
+function filterByCategory(category) {
+    if (category === "全部") {
+        return goodsList;
+    }
+    // 使用 filter
+    return goodsList.filter(item =&gt; item.category === category);
+}
+
+</t>
+<t tx="swot.20260315101941.1">@language javascript
+function formatTime(dateStr) {
+    // 假设传入的发布时间是时间戳或日期字符串，这里模拟一个时间戳
+    let pubTime = new Date(dateStr).getTime(); // 发布时间的毫秒数
+    let now = Date.now(); // 当前时间的毫秒数
+    let diff = (now - pubTime) / 1000; // 转换成秒差值
+
+    if (diff &lt; 60) {
+        return "刚刚";
+    } else if (diff &lt; 3600) {
+        return Math.floor(diff / 60) + "分钟前";
+    } else if (diff &lt; 3600 * 24) {
+        return Math.floor(diff / 3600) + "小时前";
+    } else {
+        // 超过1天，显示具体日期
+        let d = new Date(dateStr);
+        return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    }
+}
+</t>
+<t tx="swot.20260315104339.1">@language javascript
+let books = filterByCategory("书籍");
+console.log("所有书籍类商品：", books);
 </t>
 </tnodes>
 </leo_file>

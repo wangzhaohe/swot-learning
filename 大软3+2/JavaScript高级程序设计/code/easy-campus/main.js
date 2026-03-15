@@ -156,20 +156,22 @@ function getFormatDate() {
 }
 
 //@+node:swot.20260314234531.1: ** Ch 5 更新: 数据仓库 2026-03-14
-//@+node:swot.20260314232813.1: *3* 专门管理商品的对象 GoodsDB = {}
+//@+node:swot.20260314232813.1: *3* BB 专门管理商品的对象 GoodsDB = {}
 //@@language javascript
 const GoodsDB = {
     //@+others
     //@+node:swot.20260314233406.1: *4* 1. 添加商品 add
     //@@language javascript
-    add: function(name, price) {
+    add: function(name, price, category) {
         // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
         let id = goodsList.length > 0 ? goodsList[goodsList.length - 1].id + 1 : 1;
-
-        let newGoods = { id: id, name: name, price: price };
-
+        let newGoods = {
+            id: id,
+            name: name,
+            price: price,
+            category: category,
+        };
         goodsList.push(newGoods);
-
         console.log(`商品【${name}】添加成功！`);
     },
     //@+node:swot.20260314233347.1: *4* 2. 删除商品 deleteById
@@ -205,8 +207,44 @@ const GoodsDB = {
 };
 //@+node:swot.20260314234349.1: *3* 测试 GoodsDB 操作数据
 GoodsDB.show();
-GoodsDB.add("大学英语", 10);
+GoodsDB.add("大学英语", 10, "书籍");
 GoodsDB.deleteById(1);
 GoodsDB.show();
+//@+node:swot.20260315104045.1: ** Ch 6 更新: 筛选与时间 2026-03-15
+//@+node:swot.20260315085646.1: *3* BB 筛选商品 filterByCategory(category)
+//@@language javascript
+// 筛选特定类别的商品
+function filterByCategory(category) {
+    if (category === "全部") {
+        return goodsList;
+    }
+    // 使用 filter
+    return goodsList.filter(item => item.category === category);
+}
+
+//@+node:swot.20260315104339.1: *3* 测试筛选商品
+//@@language javascript
+let books = filterByCategory("书籍");
+console.log("所有书籍类商品：", books);
+//@+node:swot.20260315101941.1: *3* BB 格式化商品发布时间 formatTime()
+//@@language javascript
+function formatTime(dateStr) {
+    // 假设传入的发布时间是时间戳或日期字符串，这里模拟一个时间戳
+    let pubTime = new Date(dateStr).getTime(); // 发布时间的毫秒数
+    let now = Date.now(); // 当前时间的毫秒数
+    let diff = (now - pubTime) / 1000; // 转换成秒差值
+
+    if (diff < 60) {
+        return "刚刚";
+    } else if (diff < 3600) {
+        return Math.floor(diff / 60) + "分钟前";
+    } else if (diff < 3600 * 24) {
+        return Math.floor(diff / 3600) + "小时前";
+    } else {
+        // 超过1天，显示具体日期
+        let d = new Date(dateStr);
+        return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    }
+}
 //@-others
 //@-leo
