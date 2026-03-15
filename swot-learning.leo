@@ -29527,14 +29527,20 @@ deleteById: function(id) {
 <t tx="swot.20260314233406.1">@language javascript
 add: function(name, price, category) {
     // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
-    let id = goodsList.length &gt; 0 ? goodsList[goodsList.length - 1].id + 1 : 1;
+    let id = goodsList.length &gt; 0 
+        ? goodsList[goodsList.length - 1].id + 1
+        : 1;
+
     let newGoods = {
         id: id,
         name: name,
         price: price,
         category: category,
+        pubTime: "2026-03-15 10:16:40",
     };
+
     goodsList.push(newGoods);
+
     console.log(`商品【${name}】添加成功！`);
 },
 </t>
@@ -29718,6 +29724,7 @@ console.log(`幸运儿是：${students[index]}`);
 
 [source,javascript]
 ----
+@language javascript
 let goods = [
     { name: "手机", price: 2000 },
     { name: "耳机", price: 99 },

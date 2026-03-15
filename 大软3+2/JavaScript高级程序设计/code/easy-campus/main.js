@@ -164,14 +164,20 @@ const GoodsDB = {
     //@@language javascript
     add: function(name, price, category) {
         // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
-        let id = goodsList.length > 0 ? goodsList[goodsList.length - 1].id + 1 : 1;
+        let id = goodsList.length > 0 
+            ? goodsList[goodsList.length - 1].id + 1
+            : 1;
+
         let newGoods = {
             id: id,
             name: name,
             price: price,
             category: category,
+            pubTime: "2026-03-15 10:16:40",
         };
+
         goodsList.push(newGoods);
+
         console.log(`商品【${name}】添加成功！`);
     },
     //@+node:swot.20260314233347.1: *4* 2. 删除商品 deleteById
@@ -246,5 +252,12 @@ function formatTime(dateStr) {
         return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
     }
 }
+//@+node:swot.20260315114128.1: *3* 展示筛选商品 -> 主要看发布时间
+//@@language javascript
+books.forEach((book, index) => {
+    console.log(
+        `索引：${index} 值：${book.name} ${formatTime(book.pubTime)}`
+    );
+});
 //@-others
 //@-leo
