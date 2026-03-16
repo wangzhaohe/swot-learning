@@ -683,6 +683,38 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
+<li><a href="#_ch_8dom_基础与样式操作让网页动起来">Ch 8：DOM 基础与样式操作——让网页“动”起来</a>
+<ul class="sectlevel2">
+<li><a href="#_一dom_树与节点关系">一：DOM 树与节点关系</a>
+<ul class="sectlevel3">
+<li><a href="#_1_什么是_dom">1. 什么是 DOM ？</a></li>
+<li><a href="#_2_节点关系">2. 节点关系</a></li>
+</ul>
+</li>
+<li><a href="#_二获取元素queryselector_全家桶">二：获取元素——querySelector 全家桶</a>
+<ul class="sectlevel3">
+<li><a href="#_1_获取单个元素">1. 获取单个元素</a></li>
+<li><a href="#_2_获取所有元素">2. 获取所有元素</a></li>
+</ul>
+</li>
+<li><a href="#_三操作元素内容">三：操作元素内容</a></li>
+<li><a href="#_三操作元素内容_2">三：操作元素内容</a></li>
+<li><a href="#_四操作元素样式">四：操作元素样式</a>
+<ul class="sectlevel3">
+<li><a href="#_1_style_属性行内样式">1. style 属性（行内样式）</a></li>
+<li><a href="#_2_classname_类名操作">2. className 类名操作</a></li>
+<li><a href="#_3_classlist_类名列表推荐">3. classList 类名列表（推荐）</a></li>
+</ul>
+</li>
+<li><a href="#_s2实战演练与项目推进4课时_7">S2：实战演练与项目推进（4课时）</a>
+<ul class="sectlevel3">
+<li><a href="#_第一二课时随堂实战案例_3">第一、二课时：随堂实战案例</a></li>
+<li><a href="#_第三四课时贯穿项目推进易校园卡片样式">第三、四课时：贯穿项目推进——《易校园》卡片样式</a></li>
+<li><a href="#_作业_8">作业</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -690,55 +722,51 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="preamble">
 <div class="sectionbody">
 <style>
-/* 1. 默认状态：顺应你原本的展开状态 */
+/* 1. 默认状态：初始就是隐藏的 */
 #toc {
-    min-width: 0 !important;
-    max-height: 100vh;
-    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
-    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
-    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
-
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
     white-space: nowrap !important;
-    max-width: 530px;
-    opacity: 1;
 
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
     transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 opacity 0.3s ease;
 }
 
-/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
-#toc.collapsed {
-    max-width: 0 !important; /* 宽度强制缩到 0 */
-    opacity: 0 !important; /* 透明度消失 */
-
-    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    border-left: none !important;
-    border-right: none !important;
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
 }
 
-/* 3. 修复行间距（保留你需要的紧凑排版） */
+/* 3. 列表样式保持不变 */
 #toc ul, #toc li {
-    margin-top: 0 !important;
     margin-bottom: 8px !important;
     line-height: 1.4 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
 }
 </style>
 
-<button id="toggleButton">目录开关</button>
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
 
 <script>
 const toggleButton = document.getElementById('toggleButton');
 const contentDiv = document.getElementById('toc');
 
-// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
-// 默认没有任何类名，所以默认是自然展开的。
 toggleButton.addEventListener('click', () => {
-    contentDiv.classList.toggle('collapsed');
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
 });
 </script>
 </div>
@@ -753,6 +781,16 @@ toggleButton.addEventListener('click', () => {
 <ol class="arabic">
 <li>
 <p>搭建开发环境，消除对代码的恐惧。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>安装 vscode 编辑器</p>
+</li>
+<li>
+<p>直接在浏览器写 js 代码并运行</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p>掌握变量的本质，理解“存储数据”的概念。</p>
@@ -802,7 +840,7 @@ toggleButton.addEventListener('click', () => {
 <p><strong>插件</strong>：安装 "Chinese Language Pack"（汉化）和 "Live Server"（必须安装，用于实时刷新网页）。</p>
 </li>
 <li>
-<p><strong>浏览器</strong>：Chrome 浏览器、Firfox 浏览器。</p>
+<p><strong>浏览器</strong>：推荐 Chrome 浏览器、Firfox 浏览器。</p>
 </li>
 </ul>
 </div>
@@ -810,27 +848,28 @@ toggleButton.addEventListener('click', () => {
 <div class="sect4">
 <h5 id="_3_你的第一行代码">3. 你的第一行代码</h5>
 <div class="paragraph">
-<p>我们在 VS Code 中新建一个 <code>index.html</code>，快捷键 <code>! + Tab</code> 生成骨架。</p>
+<p>我们在 VS Code 中新建一个 <code>hello-world.html</code>，快捷键 <code>! + Tab</code> 生成骨架。</p>
 </div>
 <div class="listingblock">
+<div class="title">code/exampls/hello-world.html</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-cp">&lt;!DOCTYPE html&gt;</span>
 <span class="tok-p">&lt;</span><span class="tok-nt">html</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;en&quot;</span><span class="tok-p">&gt;</span>
 <span class="tok-p">&lt;</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">meta</span> <span class="tok-na">charset</span><span class="tok-o">=</span><span class="tok-s">&quot;UTF-8&quot;</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>我的第一个网页<span class="tok-p">&lt;/</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>
-    <span class="tok-cm">&lt;!-- 内部脚本方式 --&gt;</span>
-    <span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
-<span class="tok-w">        </span><span class="tok-c1">// 1. 控制台输出：这是程序员最爱用的调试方式</span>
-<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;Hello World!&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;欢迎来到JavaScript世界，我是你们的导师&quot;</span><span class="tok-p">);</span>
-
-<span class="tok-w">        </span><span class="tok-c1">// 2. 弹窗输出：这是给用户看的（慎用，很烦人）</span>
-<span class="tok-w">        </span><span class="tok-nx">alert</span><span class="tok-p">(</span><span class="tok-s2">&quot;程序启动！&quot;</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
 <span class="tok-p">&lt;/</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
 <span class="tok-p">&lt;</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+<span class="tok-cm">&lt;!-- 内部脚本方式 --&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-c1">// 1. 控制台输出：这是程序员最爱用的调试方式</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;Hello World!&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;欢迎来到JavaScript世界，我是你们的导师&quot;</span><span class="tok-p">);</span>
 
+
+<span class="tok-w">    </span><span class="tok-c1">// 2. 弹窗输出：这是给用户看的（慎用，很烦人）</span>
+<span class="tok-w">    </span><span class="tok-nx">alert</span><span class="tok-p">(</span><span class="tok-s2">&quot;程序启动！&quot;</span><span class="tok-p">);</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
 <span class="tok-p">&lt;/</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
 <span class="tok-p">&lt;/</span><span class="tok-nt">html</span><span class="tok-p">&gt;</span></code></pre>
 </div>
@@ -841,15 +880,27 @@ toggleButton.addEventListener('click', () => {
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>右键 <code>index.html</code> &#8594; "Open with Live Server"。</p>
+<p>右键 <code>hello-world.html</code> &#8594; "Open with Live Server"。</p>
 </li>
 <li>
 <p>按 <code>F12</code> 打开开发者工具，点击 "Console"（控制台）面板。</p>
 </li>
 <li>
-<p><strong>重点</strong>：学会看控制台，这是JS开发者的“眼睛”。以后代码写错了，不要瞎猜，先看控制台报什么红字。</p>
+<p><strong>重点</strong>：学会看控制台，这是 JS 开发者的“眼睛”。以后代码写错了，不要瞎猜，先看控制台报什么红字。</p>
 </li>
 </ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+如果是使用内联方式写 js，建议将 &lt;script&gt; 放在 &lt;/body&gt; 的上面，这样可以避免网页 DOM 未加载而产生 js 报错问题。
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -896,7 +947,7 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;我的名字是：&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">MY_NAME</span><span class="tok-p">);</span>
 
 <span class="tok-c1">// 错误演示：尝试修改常量（打开注释会报错）</span>
-<span class="tok-c1">// MY_NAME = &quot;李四&quot;; // 报错：Assignment to constant variable.</span></code></pre>
+<span class="tok-nx">MY_NAME</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;李四&quot;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 报错：Assignment to constant variable.</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -979,9 +1030,22 @@ toggleButton.addEventListener('click', () => {
 <ul>
 <li>
 <p><code>Undefined</code>：变量声明了但没赋值（盒子是空的，连空气都没有）。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">;</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-ow">typeof</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 输出: undefined</span></code></pre>
+</div>
+</div>
 </li>
 <li>
 <p><code>Null</code>：变量赋值为空（盒子是空的，但是人为清空的）。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">;</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-ow">typeof</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 输出类型: object</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;name:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// null</span></code></pre>
+</div>
+</div>
 </li>
 </ul>
 </div>
@@ -1019,8 +1083,8 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">skill</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;JavaScript&quot;</span><span class="tok-p">;</span>
 
 <span class="tok-c1">// 模板字符串：保留格式，变量直接嵌入</span>
-<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">intro</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sb">`大家好，我是</span><span class="tok-si">${</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb">。</span>
-<span class="tok-sb">我正在学习</span><span class="tok-si">${</span><span class="tok-nx">skill</span><span class="tok-si">}</span><span class="tok-sb">。</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">intro</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sb">`大家好，我是 </span><span class="tok-si">${</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb">。</span>
+<span class="tok-sb">我正在学习 </span><span class="tok-si">${</span><span class="tok-nx">skill</span><span class="tok-si">}</span><span class="tok-sb">。</span>
 <span class="tok-sb">这节课真的&quot;太充实了&quot;！`</span><span class="tok-p">;</span>
 
 <span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">intro</span><span class="tok-p">);</span></code></pre>
@@ -1084,14 +1148,15 @@ toggleButton.addEventListener('click', () => {
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">a</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">;</span>
 <span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">b</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">20</span><span class="tok-p">;</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`a 现在是: </span><span class="tok-si">${</span><span class="tok-nx">a</span><span class="tok-si">}</span><span class="tok-sb">, b 现在是: </span><span class="tok-si">${</span><span class="tok-nx">b</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span>
+
 <span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">temp</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 临时空杯子</span>
 
 <span class="tok-nx">temp</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">a</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 把 a 的水倒入 temp (temp=10, a空了)</span>
 <span class="tok-nx">a</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">b</span><span class="tok-p">;</span><span class="tok-w">    </span><span class="tok-c1">// 把 b 的水倒入 a (a=20, b空了)</span>
 <span class="tok-nx">b</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">temp</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 把 temp 的水倒入 b (b=10)</span>
 
-<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`a 现在是: </span><span class="tok-si">${</span><span class="tok-nx">a</span><span class="tok-si">}</span><span class="tok-sb">, b 现在是: </span><span class="tok-si">${</span><span class="tok-nx">b</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span>
-<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;haha:&#39;</span><span class="tok-p">);</span></code></pre>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`a 现在是: </span><span class="tok-si">${</span><span class="tok-nx">a</span><span class="tok-si">}</span><span class="tok-sb">, b 现在是: </span><span class="tok-si">${</span><span class="tok-nx">b</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1101,8 +1166,9 @@ toggleButton.addEventListener('click', () => {
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">a</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">;</span>
 <span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">b</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">20</span><span class="tok-p">;</span>
-<span class="tok-p">[</span><span class="tok-nx">a</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">b</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span><span class="tok-nx">b</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">a</span><span class="tok-p">];</span><span class="tok-w"> </span><span class="tok-c1">// 一行代码搞定交换</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`现代写法 -&gt; a: </span><span class="tok-si">${</span><span class="tok-nx">a</span><span class="tok-si">}</span><span class="tok-sb">, b: </span><span class="tok-si">${</span><span class="tok-nx">b</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span>
 
+<span class="tok-p">[</span><span class="tok-nx">a</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">b</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span><span class="tok-nx">b</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">a</span><span class="tok-p">];</span><span class="tok-w"> </span><span class="tok-c1">// 一行代码搞定交换</span>
 <span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`现代写法 -&gt; a: </span><span class="tok-si">${</span><span class="tok-nx">a</span><span class="tok-si">}</span><span class="tok-sb">, b: </span><span class="tok-si">${</span><span class="tok-nx">b</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span></code></pre>
 </div>
 </div>
@@ -1141,9 +1207,8 @@ toggleButton.addEventListener('click', () => {
 
 <span class="tok-c1">// 这些值通常不会变，用 const</span>
 <span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">PLATFORM_NAME</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;易校园&quot;</span><span class="tok-p">;</span>
-<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">VERSION</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;1.0.0&quot;</span><span class="tok-p">;</span>
-<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">AUTHOR</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;JavaScript训练营学员&quot;</span><span class="tok-p">;</span>
-
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">VERSION</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;0.0.1&quot;</span><span class="tok-p">;</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">AUTHOR</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;JavaScript 训练营学员&quot;</span><span class="tok-p">;</span>
 <span class="tok-c1">// 这些值后续可能会变，用 let</span>
 <span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">currentUser</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;游客&quot;</span><span class="tok-p">;</span>
 <span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">currentMoney</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">;</span>
@@ -1170,7 +1235,7 @@ toggleButton.addEventListener('click', () => {
 <div class="title">在 <code>index.html</code> 中引入这个脚本。</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-cm">&lt;!-- 引入JS文件，注意放在 body 结束标签前 --&gt;</span>
-<span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">src</span><span class="tok-o">=</span><span class="tok-s">&quot;./main.js&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">src</span><span class="tok-o">=</span><span class="tok-s">&quot;./js/main.js&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -1199,7 +1264,7 @@ toggleButton.addEventListener('click', () => {
 <p><strong>概念题</strong>：<code>let</code> 和 <code>const</code> 的最大区别是什么？什么情况下用 <code>const</code>？</p>
 </li>
 <li>
-<p><strong>代码题</strong>：定义三个变量分别存储圆的半径、圆周率，计算圆的周长和面积，并在控制台输出结果（保留两位小数）。</p>
+<p><strong>代码题</strong>：定义变量分别存储圆的半径、圆周率，计算圆的周长和面积，并在控制台输出结果（保留两位小数）。</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1223,9 +1288,18 @@ toggleButton.addEventListener('click', () => {
 </li>
 </ol>
 </div>
-<div class="paragraph">
-<p>TIP:可能会遇到文件路径错误（<code>src="./js/main.js"</code> 写错）、中英文符号切换（特别是分号 <code>;</code> 和引号 <code>"</code>）、控制台找不到位置等问题。
-<strong>解决这些细小的报错，是建立学习信心的关键</strong>。</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+可能会遇到文件路径错误（<code>src="./js/main.js"</code> 写错）、中英文符号切换（特别是分号 <code>;</code> 和引号 <code>"</code>）、控制台找不到位置等问题。
+<strong>解决这些细小的报错，是建立学习信心的关键</strong>。
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -2127,9 +2201,30 @@ toggleButton.addEventListener('click', () => {
 <div class="paragraph">
 <p>这张图通过颜色区分了外层循环（暖色系）和内层循环（冷色系），清晰展示了代码是一步步如何运转的。</p>
 </div>
-<div class="imageblock">
+<div class="literalblock">
 <div class="content">
-<img src="img/mermaid-2026-03-14-111035.svg" alt="mermaid 2026 03 14 111035" width="600" height="1119">
+<pre>flowchart TD
+    classDef outer fill:#ffe4e1,stroke:#cd5c5c,stroke-width:2px;
+    classDef inner fill:#e0ffff,stroke:#4682b4,stroke-width:2px;
+    classDef action fill:#f5f5f5,stroke:#333,stroke-width:1px;
+
+    Start([开始执行]) --&gt; OuterInit["外层（时针）: let i = 1"]:::outer
+
+    OuterInit --&gt; OuterCond{"外层条件判定&lt;br&gt; i &lt;= 9 ?"}:::outer
+    OuterCond -- "否 (结束打印)" --&gt; End([程序结束])
+
+    OuterCond -- "是 (进入第 i 行)" --&gt; RowInit["准备新的一行容器&lt;br&gt;let rowStr = ''"]:::action
+    RowInit --&gt; InnerInit["内层（分针）: let j = 1"]:::inner
+
+    InnerInit --&gt; InnerCond{"内层条件判定&lt;br&gt;j &lt;= i ?"}:::inner
+
+    InnerCond -- "是 (拼接当前列)" --&gt; AppendStr["公式拼装: &lt;br&gt;rowStr += 'j x i = ...'"]:::inner
+    AppendStr --&gt; InnerInc["内层步进: j++"]:::inner
+    InnerInc --&gt; InnerCond
+
+    InnerCond -- "否 (本行拼完)" --&gt; PrintRow["打印整行结果: &lt;br&gt;console.log(rowStr)"]:::action
+    PrintRow --&gt; OuterInc["外层步进: i++"]:::outer
+    OuterInc --&gt; OuterCond</pre>
 </div>
 </div>
 </div>
@@ -2138,9 +2233,35 @@ toggleButton.addEventListener('click', () => {
 <div class="paragraph">
 <p>这张图直观地展示了随着外层 i（时针）的变化，内层 j（分针）是如何“转圈”的。</p>
 </div>
-<div class="imageblock">
+<div class="literalblock">
 <div class="content">
-<img src="img/mermaid-2026-03-14-113311.svg" alt="mermaid 2026 03 14 113311" width="760" height="382">
+<pre>flowchart LR
+    subgraph i_1 ["第 1 行 (i = 1)"]
+        direction TB
+        j1_1(("j = 1"))
+    end
+
+    subgraph i_2 ["第 2 行 (i = 2)"]
+        direction TB
+        j2_1(("j = 1")) --&gt; j2_2(("j = 2"))
+    end
+
+    subgraph i_3 ["第 3 行 (i = 3)"]
+        direction TB
+        j3_1(("j = 1")) --&gt; j3_2(("j = 2")) --&gt; j3_3(("j = 3"))
+    end
+
+    subgraph i_ellipsis ["......"]
+        direction TB
+        dots("规律：外层 i 是几，&lt;br&gt;内层 j 就循环几次")
+    end
+
+    i_1 --&gt; i_2 --&gt; i_3 --&gt; i_ellipsis
+
+    style i_1 fill:#fff5e6,stroke:#ffb347
+    style i_2 fill:#fff5e6,stroke:#ffb347
+    style i_3 fill:#fff5e6,stroke:#ffb347
+    style i_ellipsis fill:#f9f9f9,stroke:#ccc,stroke-dasharray: 5 5</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2175,9 +2296,66 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div class="sect5">
 <h6 id="_序列图sequence_diagram展示内外层循环">序列图（Sequence Diagram）展示内外层循环</h6>
-<div class="imageblock">
+<div class="literalblock">
 <div class="content">
-<img src="img/diagram-name.svg" alt="diagram name" width="552" height="1208">
+<pre>@startuml
+skinparam maxMessageSize 0
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+actor "程序开始" as Start
+participant "外层循环\n(时针 i : 1 到 9)" as Outer #ffe4e1
+participant "内层循环\n(分针 j : 1 到 i)" as Inner #e0ffff
+participant "控制台\n(屏幕输出)" as Console #f5f5f5
+
+Start -&gt; Outer: 开始执行 (i = 1)
+activate Outer
+
+== 第 1 行 (i = 1) ==
+Outer -&gt; Inner: 启动内层 (j = 1 to 1)
+activate Inner
+Inner --&gt; Outer: 拼接公式: "1 x 1 = 1\\t"
+deactivate Inner
+Outer -&gt; Console: 打印第 1 行\nconsole.log()
+
+== 第 2 行 (i = 2) ==
+Outer -&gt; Outer: i 步进 (i = 2)
+Outer -&gt; Inner: 启动内层 (j = 1 to 2)
+activate Inner
+Inner --&gt; Outer: 拼接公式: "1 x 2 = 2\\t"
+Inner --&gt; Outer: 拼接公式: "2 x 2 = 4\\t"
+deactivate Inner
+Outer -&gt; Console: 打印第 2 行\nconsole.log()
+
+== 第 3 行 (i = 3) ==
+Outer -&gt; Outer: i 步进 (i = 3)
+Outer -&gt; Inner: 启动内层 (j = 1 to 3)
+activate Inner
+Inner --&gt; Outer: 拼接公式: "1 x 3 = 3\\t"
+Inner --&gt; Outer: 拼接公式: "2 x 3 = 6\\t"
+Inner --&gt; Outer: 拼接公式: "3 x 3 = 9\\t"
+deactivate Inner
+Outer -&gt; Console: 打印第 3 行\nconsole.log()
+
+== 规律省略... ==
+note over Outer, Inner
+  注意观察：外层 i 每增加 1，
+  内层 j 返回公式的次数就会多 1 次。
+  这就是“外层走一格，内层转一圈”的体现。
+end note
+
+== 第 9 行 (i = 9) ==
+Outer -&gt; Outer: i 步进 (i = 9)
+Outer -&gt; Inner: 启动内层 (j = 1 to 9)
+activate Inner
+note right of Inner: 疯狂运转 9 次\n拼接 9 个乘法公式
+Inner --&gt; Outer: 返回拼接好的长字符串
+deactivate Inner
+Outer -&gt; Console: 打印最后一行\nconsole.log()
+
+deactivate Outer
+note over Start, Console: 九九乘法表打印结束
+@enduml</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4293,10 +4471,559 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_ch_8dom_基础与样式操作让网页动起来">Ch 8：DOM 基础与样式操作——让网页“动”起来</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>今日目标</strong>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>理解 DOM 树结构，搞清楚谁是爹、谁是儿子。</p>
+</li>
+<li>
+<p>学会使用 <code>querySelector</code> 精准捕捉页面元素。</p>
+</li>
+<li>
+<p>掌握修改文字内容和样式的三种方式。</p>
+</li>
+<li>
+<p>在项目中实现商品卡片的动态样式变化。</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_一dom_树与节点关系">一：DOM 树与节点关系</h3>
+<div class="sect3">
+<h4 id="_1_什么是_dom">1. 什么是 DOM ？</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Document Object Model（文档对象模型）。</p>
+</li>
+<li>
+<p>大白话解释：浏览器加载 HTML 时，会把 HTML 里的标签、文字、图片都变成一个个的“对象”，这些对象像树杈一样连在一起，这就叫 DOM 树。</p>
+</li>
+<li>
+<p>为什么学它？：JS 想要操作网页（改文字、改颜色），必须先在树里找到这个“对象”。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_节点关系">2. 节点关系</h4>
+<div class="paragraph">
+<p>把 DOM 树想象成家谱：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>父节点</strong>：直接包裹你的元素。</p>
+</li>
+<li>
+<p><strong>子节点</strong>：你直接包裹的元素。</p>
+</li>
+<li>
+<p><strong>兄弟节点</strong>：和你同级、同一个父元素的元素。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>代码演示</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;father&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;son&quot;</span><span class="tok-p">&gt;</span>儿子<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;daughter&quot;</span><span class="tok-p">&gt;</span>女儿<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">son</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;.son&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 找爸爸</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">son</span><span class="tok-p">.</span><span class="tok-nx">parentNode</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// &lt;div class=&quot;father&quot;&gt;...</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 找兄弟 (nextElementSibling 下一个兄弟)</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">son</span><span class="tok-p">.</span><span class="tok-nx">nextElementSibling</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// &lt;div class=&quot;daughter&quot;&gt;...</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_二获取元素queryselector_全家桶">二：获取元素——querySelector 全家桶</h3>
+<div class="paragraph">
+<p>以前我们用 <code>document.getElementById('id')</code>，太长了，而且只能用 ID。</p>
+</div>
+<div class="paragraph">
+<p>现在我们学现代方法，<strong>就像写 CSS 一样</strong>来选元素。</p>
+</div>
+<div class="sect3">
+<h4 id="_1_获取单个元素">1. 获取单个元素</h4>
+<div class="paragraph">
+<p>语法：<code>document.querySelector('选择器')</code>。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>返回：第一个匹配的元素。如果没有，返回 <code>null</code>。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">代码实例</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-cp">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">html</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;zh-CN&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">meta</span> <span class="tok-na">charset</span><span class="tok-o">=</span><span class="tok-s">&quot;UTF-8&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>querySelector 示例<span class="tok-p">&lt;/</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">highlight</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">red</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">font-weight</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">bold</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">nav</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;nav&quot;</span><span class="tok-p">&gt;</span>欢迎来到我的网页<span class="tok-p">&lt;/</span><span class="tok-nt">nav</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">ul</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;list&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">li</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;item&quot;</span><span class="tok-p">&gt;</span>HTML 基础<span class="tok-p">&lt;/</span><span class="tok-nt">li</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">li</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;item&quot;</span><span class="tok-p">&gt;</span>CSS 样式<span class="tok-p">&lt;/</span><span class="tok-nt">li</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">li</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;item&quot;</span><span class="tok-p">&gt;</span>JavaScript 逻辑<span class="tok-p">&lt;/</span><span class="tok-nt">li</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">ul</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-c1">// 1. 选 ID (#nav)</span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">nav</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#nav&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">nav</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">color</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;blue&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 2. 选类名 (.item) -&gt; 注意：只会选中第一个（HTML 基础）</span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">firstItem</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;.item&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">firstItem</span><span class="tok-p">.</span><span class="tok-nx">className</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;highlight&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 3. 选标签 (li) -&gt; 同样只会选中第一个</span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">firstLi</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;li&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;选中的标签内容是：&#39;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nx">firstLi</span><span class="tok-p">.</span><span class="tok-nx">textContent</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">html</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_获取所有元素">2. 获取所有元素</h4>
+<div class="paragraph">
+<p>语法：<code>document.querySelectorAll('选择器')</code>。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>返回：一个伪数组。即使只有一个元素，也是数组。要想操作每一个，必须遍历！</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">代码实例</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-cp">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">html</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;zh-CN&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">meta</span> <span class="tok-na">charset</span><span class="tok-o">=</span><span class="tok-s">&quot;UTF-8&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>querySelector 示例<span class="tok-p">&lt;/</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">highlight</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">red</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">font-weight</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">bold</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">nav</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;nav&quot;</span><span class="tok-p">&gt;</span>欢迎来到我的网页<span class="tok-p">&lt;/</span><span class="tok-nt">nav</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">ul</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;list&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">li</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;item&quot;</span><span class="tok-p">&gt;</span>HTML 基础<span class="tok-p">&lt;/</span><span class="tok-nt">li</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">li</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;item&quot;</span><span class="tok-p">&gt;</span>CSS 样式<span class="tok-p">&lt;/</span><span class="tok-nt">li</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">li</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;item&quot;</span><span class="tok-p">&gt;</span>JavaScript 逻辑<span class="tok-p">&lt;/</span><span class="tok-nt">li</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">ul</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">allLis</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelectorAll</span><span class="tok-p">(</span><span class="tok-s1">&#39;li&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// 这是一个伪数组，不能直接 allLis.style.color = &#39;red&#39; (报错！)</span>
+
+<span class="tok-w">        </span><span class="tok-nx">allLis</span><span class="tok-p">.</span><span class="tok-nx">forEach</span><span class="tok-p">(</span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">li</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">li</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">color</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;red&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 遍历后逐个修改</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">html</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_三操作元素内容">三：操作元素内容</h3>
+<div class="paragraph">
+<p>innerText</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>获取或设置标签里面的<strong>纯文本</strong>。</p>
+</li>
+<li>
+<p>特点：不识别 HTML 标签，读取时会去掉换行和空格。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>innerHTML</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>获取或设置标签里面的<strong>HTML代码</strong>。</p>
+</li>
+<li>
+<p>特点：识别标签，保留格式。<strong>开发中最常用</strong>。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">代码演示</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;box&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>你好<span class="tok-p">&lt;/</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">box</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#box&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">innerText</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 输出: 你好 (强标签没了)</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">innerHTML</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 输出: &lt;strong&gt;你好&lt;/strong&gt;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 修改内容</span>
+<span class="tok-w">    </span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">innerText</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;&lt;em&gt;新的内容&lt;/em&gt;&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 页面显示: &lt;em&gt;新的内容&lt;/em&gt; (原样输出)</span>
+<span class="tok-w">    </span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">innerHTML</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;&lt;em&gt;新的内容&lt;/em&gt;&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 页面显示: 新的内容 (斜体，em生效了)</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_三操作元素内容_2">三：操作元素内容</h3>
+<div class="paragraph">
+<p>下表总结了操作 DOM 元素内容时最常用的两个属性：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 33.3333%;">
+<col style="width: 50.0001%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">属性</th>
+<th class="tableblock halign-left valign-top">功能描述</th>
+<th class="tableblock halign-left valign-top">特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>innerText</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">获取或设置标签内的 <strong>纯文本</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">不识别 HTML 标签，读取时会触发重排（Reflow），自动过滤隐藏元素的文本。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>innerHTML</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">获取或设置标签内的 <strong>HTML 代码</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">识别并解析标签，保留原始格式。<strong>开发中最常用，但需注意安全</strong>。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">代码演示与对比</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-cp">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">html</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;zh-CN&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">meta</span> <span class="tok-na">charset</span><span class="tok-o">=</span><span class="tok-s">&quot;UTF-8&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>querySelector 示例<span class="tok-p">&lt;/</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;box&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>你好<span class="tok-p">&lt;/</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">span</span> <span class="tok-na">style</span><span class="tok-o">=</span><span class="tok-s">&quot;display:none&quot;</span><span class="tok-p">&gt;</span>看不见我<span class="tok-p">&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">box</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#box&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 1. 读取测试</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;innerText:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">innerText</span><span class="tok-p">);</span><span class="tok-w">   </span><span class="tok-c1">// 输出: &quot;你好&quot; (粗体没了，隐藏内容也没了)</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;innerHTML:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">innerHTML</span><span class="tok-p">);</span><span class="tok-w">   </span><span class="tok-c1">// 输出: &quot;&lt;strong&gt;你好&lt;/strong&gt; &lt;span style=&#39;...&#39;&gt;...&lt;/span&gt;&quot;</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 2. 写入测试 (innerText)</span>
+<span class="tok-w">        </span><span class="tok-c1">// 页面显示: &lt;em&gt;新的内容&lt;/em&gt; (标签被转义为纯字符串)</span>
+<span class="tok-w">        </span><span class="tok-c1">// box.innerText = &#39;&lt;em&gt;新的内容&lt;/em&gt;&#39;;</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 3. 写入测试 (innerHTML)</span>
+<span class="tok-w">        </span><span class="tok-c1">// 页面显示: 新的内容 (斜体效果生效)</span>
+<span class="tok-w">        </span><span class="tok-c1">// box.innerHTML = &#39;&lt;em&gt;新的内容&lt;/em&gt;&#39;;</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 4. 安全风险演示 (XSS)</span>
+<span class="tok-w">        </span><span class="tok-c1">// 如果恶意脚本通过 innerHTML 注入，浏览器会执行它</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">peach</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;&lt;img src=&#39;x&#39; onerror=&#39;alert(\&quot;XSS攻击!\&quot;)&#39;&gt;&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">innerHTML</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">peach</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">html</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="⚠️"></i>
+</td>
+<td class="content">
+<div class="title"><strong>安全提示：</strong></div>
+<div class="ulist">
+<ul>
+<li>
+<p>永远不要将未经脱敏的用户输入直接赋值给 <code>innerHTML</code>，这会导致跨站脚本攻击（XSS）。</p>
+</li>
+<li>
+<p>对于纯文本展示，建议优先使用 <code>textContent</code> 或 <code>innerText</code>。</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_四操作元素样式">四：操作元素样式</h3>
+<div class="sect3">
+<h4 id="_1_style_属性行内样式">1. style 属性（行内样式）</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>语法：<code>元素.style.属性名 = '值'</code>。</p>
+</li>
+<li>
+<p><strong>注意</strong>：JS 里的属性名要用驼峰命名法。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>CSS: <code>background-color</code> &#8594; JS: <code>backgroundColor</code></p>
+</li>
+<li>
+<p>CSS: <code>font-size</code> &#8594; JS: <code>fontSize</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_classname_类名操作">2. className 类名操作</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>语法：<code>元素.className = '类名'</code>。</p>
+</li>
+<li>
+<p><strong>雷区</strong>：这会覆盖掉原来的类名。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_3_classlist_类名列表推荐">3. classList 类名列表（推荐）</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>元素.classList.add('类名')</code>：添加类。</p>
+</li>
+<li>
+<p><code>元素.classList.remove('类名')</code>：移除类。</p>
+</li>
+<li>
+<p><code>元素.classList.toggle('类名')</code>：切换类（有则删，无则加）。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>代码演示</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">box</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#box&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// 1. 行内样式修改</span>
+<span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">backgroundColor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;pink&#39;</span><span class="tok-p">;</span>
+<span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">width</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;200px&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 2. 类名修改</span>
+<span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">classList</span><span class="tok-p">.</span><span class="tok-nx">add</span><span class="tok-p">(</span><span class="tok-s1">&#39;active&#39;</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 添加 active 类</span>
+<span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">classList</span><span class="tok-p">.</span><span class="tok-nx">toggle</span><span class="tok-p">(</span><span class="tok-s1">&#39;hide&#39;</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 切换 hide 类</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_s2实战演练与项目推进4课时_7">S2：实战演练与项目推进（4课时）</h3>
+<div class="sect3">
+<h4 id="_第一二课时随堂实战案例_3">第一、二课时：随堂实战案例</h4>
+<div class="sect4">
+<h5 id="_案例_1密码框明文密文切换">案例 1：密码框明文/密文切换</h5>
+<div class="paragraph">
+<p><strong>需求</strong>：点击按钮，密码框在“黑点点”和“明文”之间切换。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;password&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;pwd&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;btn&quot;</span><span class="tok-p">&gt;</span>显示密码<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">pwd</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#pwd&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">btn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#btn&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">flag</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// true表示当前是密码状态</span>
+
+<span class="tok-w">    </span><span class="tok-nx">btn</span><span class="tok-p">.</span><span class="tok-nx">onclick</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">flag</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">pwd</span><span class="tok-p">.</span><span class="tok-nx">type</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;text&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 变成文本</span>
+<span class="tok-w">            </span><span class="tok-nx">btn</span><span class="tok-p">.</span><span class="tok-nx">innerText</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;隐藏密码&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">pwd</span><span class="tok-p">.</span><span class="tok-nx">type</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;password&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 变回密码</span>
+<span class="tok-w">            </span><span class="tok-nx">btn</span><span class="tok-p">.</span><span class="tok-nx">innerText</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;显示密码&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-nx">flag</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">!</span><span class="tok-nx">flag</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 状态取反</span>
+<span class="tok-w">    </span><span class="tok-p">};</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_案例_2列表隔行变色">案例 2：列表隔行变色</h5>
+<div class="paragraph">
+<p><strong>需求</strong>：表格或列表，奇数行白色，偶数行灰色，鼠标放上去变高亮。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">trs</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelectorAll</span><span class="tok-p">(</span><span class="tok-s1">&#39;tr&#39;</span><span class="tok-p">);</span>
+<span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-nx">trs</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-o">++</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 隔行变色：索引为奇数时变色</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-o">%</span><span class="tok-w"> </span><span class="tok-mf">2</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">trs</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-p">].</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">backgroundColor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;#f5f5f5&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 鼠标经过高亮</span>
+<span class="tok-w">    </span><span class="tok-nx">trs</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-p">].</span><span class="tok-nx">onmouseover</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">backgroundColor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;yellow&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">};</span>
+<span class="tok-w">    </span><span class="tok-nx">trs</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-p">].</span><span class="tok-nx">onmouseout</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 移开要恢复原色，这里需要逻辑判断，或者用class做</span>
+<span class="tok-w">        </span><span class="tok-c1">// 简单做法：恢复默认或隔行逻辑</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">backgroundColor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">};</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_第三四课时贯穿项目推进易校园卡片样式">第三、四课时：贯穿项目推进——《易校园》卡片样式</h4>
+<div class="paragraph">
+<p><strong>场景</strong>：今天我们要为项目编写静态的商品卡片结构，并用JS控制它的样式（比如卖出去的商品变灰）。</p>
+</div>
+<div class="paragraph">
+<p><strong>步骤 1：编写 HTML 结构</strong>
+在 <code>index.html</code> 中：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;goods-card&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;card1&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">img</span> <span class="tok-na">src</span><span class="tok-o">=</span><span class="tok-s">&quot;images/book.jpg&quot;</span> <span class="tok-na">alt</span><span class="tok-o">=</span><span class="tok-s">&quot;&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">h4</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;title&quot;</span><span class="tok-p">&gt;</span>高等数学<span class="tok-p">&lt;/</span><span class="tok-nt">h4</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;price&quot;</span><span class="tok-p">&gt;</span>￥15.00<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">span</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;status&quot;</span><span class="tok-p">&gt;</span>在售<span class="tok-p">&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>步骤 2：编写 CSS 样式</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="css"><span></span><span class="tok-p">.</span><span class="tok-nc">goods-card</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">width</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">200</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">border</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">solid</span><span class="tok-w"> </span><span class="tok-mh">#ccc</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+<span class="tok-p">.</span><span class="tok-nc">sold-out</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">opacity</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mf">0.5</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c">/* 半透明 */</span>
+<span class="tok-w">    </span><span class="tok-k">filter</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nb">grayscale</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-kt">%</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c">/* 变成黑白 */</span>
+<span class="tok-w">    </span><span class="tok-k">position</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">relative</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+<span class="tok-p">.</span><span class="tok-nc">sold-out</span><span class="tok-w"> </span><span class="tok-p">.</span><span class="tok-nc">status</span><span class="tok-p">::</span><span class="tok-nd">after</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">content</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;已售罄&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">position</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">absolute</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">top</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">left</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">right</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">bottom</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nb">rgba</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mf">0.3</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-k">color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">white</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">text-align</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">center</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">line-height</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">200</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>步骤 3：JS 动态控制样式</strong>
+模拟后台数据，如果 <code>isSold</code> 为 true，就给卡片加上 <code>sold-out</code> 类。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 模拟商品数据</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">goodsData</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;高等数学&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">15</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">isSold</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-w"> </span><span class="tok-c1">// 假设已经卖掉了</span>
+<span class="tok-p">};</span>
+
+<span class="tok-c1">// 获取卡片元素</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">card</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#card1&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// 逻辑判断</span>
+<span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">goodsData</span><span class="tok-p">.</span><span class="tok-nx">isSold</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 添加 sold-out 类，卡片变灰</span>
+<span class="tok-w">    </span><span class="tok-nx">card</span><span class="tok-p">.</span><span class="tok-nx">classList</span><span class="tok-p">.</span><span class="tok-nx">add</span><span class="tok-p">(</span><span class="tok-s1">&#39;sold-out&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 移除</span>
+<span class="tok-w">    </span><span class="tok-nx">card</span><span class="tok-p">.</span><span class="tok-nx">classList</span><span class="tok-p">.</span><span class="tok-nx">remove</span><span class="tok-p">(</span><span class="tok-s1">&#39;sold-out&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<hr>
+</div>
+<div class="sect3">
+<h4 id="_作业_8">作业</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>概念题</strong>：<code>innerText</code> 和 <code>innerHTML</code> 有什么区别？<code>className</code> 和 <code>classList.add</code> 有什么区别？</p>
+</li>
+<li>
+<p><strong>代码题</strong>：做一个“开关灯”效果。页面有一个按钮和一个div，点击按钮，div背景在红色和蓝色之间切换。</p>
+</li>
+<li>
+<p><strong>项目扩展</strong>：修改商品卡片，如果价格小于 20 元，价格字体显示为绿色；否则显示为红色。</p>
+</li>
+</ol>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-15 20:57:00 +0800
+Last updated 2026-03-16 22:35:50 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

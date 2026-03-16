@@ -18,55 +18,51 @@
 
 ++++
 <style>
-/* 1. 默认状态：顺应你原本的展开状态 */
+/* 1. 默认状态：初始就是隐藏的 */
 #toc {
-    min-width: 0 !important;
-    max-height: 100vh;
-    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
-    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
-    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
-
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
     white-space: nowrap !important;
-    max-width: 530px;
-    opacity: 1;
 
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
     transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 opacity 0.3s ease;
 }
 
-/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
-#toc.collapsed {
-    max-width: 0 !important; /* 宽度强制缩到 0 */
-    opacity: 0 !important; /* 透明度消失 */
-
-    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    border-left: none !important;
-    border-right: none !important;
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
 }
 
-/* 3. 修复行间距（保留你需要的紧凑排版） */
+/* 3. 列表样式保持不变 */
 #toc ul, #toc li {
-    margin-top: 0 !important;
     margin-bottom: 8px !important;
     line-height: 1.4 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
 }
 </style>
 
-<button id="toggleButton">目录开关</button>
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
 
 <script>
 const toggleButton = document.getElementById('toggleButton');
 const contentDiv = document.getElementById('toc');
 
-// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
-// 默认没有任何类名，所以默认是自然展开的。
 toggleButton.addEventListener('click', () => {
-    contentDiv.classList.toggle('collapsed');
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
 });
 </script>
 ++++
@@ -75,8 +71,13 @@ toggleButton.addEventListener('click', () => {
 **今日目标**：
 
 1.  搭建开发环境，消除对代码的恐惧。
+    ** 安装 vscode 编辑器
+    ** 直接在浏览器写 js 代码并运行
+
 2.  掌握变量的本质，理解“存储数据”的概念。
+
 3.  弄懂基本数据类型，特别是字符串与数字的区别。
+
 4.  完成项目初始化，输出第一行项目信息。
 
 === S1：核心精讲（4课时）
@@ -89,21 +90,24 @@ toggleButton.addEventListener('click', () => {
 同学们，如果把网页比作一个人：
 
 *   **HTML** 是人的骨架（身体结构）。
+
 *   **CSS** 是人的皮肤和衣服（外观打扮）。
+
 *   **JavaScript** 是人的灵魂和肌肉（动作、逻辑、交互）。
 
 *   *例子*：你点击一个按钮，弹出一个窗口，这就是 JavaScript 在工作。
 
 ===== 2. 开发环境搭建
-*   **工具**：安装 VS Code（主流前端编辑器）。
+* **工具**：安装 VS Code（主流前端编辑器）。
 
-*   **插件**：安装 "Chinese Language Pack"（汉化）和 "Live Server"（必须安装，用于实时刷新网页）。
+* **插件**：安装 "Chinese Language Pack"（汉化）和 "Live Server"（必须安装，用于实时刷新网页）。
 
-*   **浏览器**：Chrome 浏览器、Firfox 浏览器。
+* **浏览器**：推荐 Chrome 浏览器、Firfox 浏览器。
 
 ===== 3. 你的第一行代码
-我们在 VS Code 中新建一个 `index.html`，快捷键 `! + Tab` 生成骨架。
+我们在 VS Code 中新建一个 `hello-world.html`，快捷键 `! + Tab` 生成骨架。
 
+.code/exampls/hello-world.html
 [source,html]
 ----
 <!DOCTYPE html>
@@ -111,27 +115,29 @@ toggleButton.addEventListener('click', () => {
 <head>
     <meta charset="UTF-8">
     <title>我的第一个网页</title>
-    <!-- 内部脚本方式 -->
-    <script>
-        // 1. 控制台输出：这是程序员最爱用的调试方式
-        console.log("Hello World!");
-        console.log("欢迎来到JavaScript世界，我是你们的导师");
-
-        // 2. 弹窗输出：这是给用户看的（慎用，很烦人）
-        alert("程序启动！");
-    </script>
 </head>
 <body>
+<!-- 内部脚本方式 -->
+<script>
+    // 1. 控制台输出：这是程序员最爱用的调试方式
+    console.log("Hello World!");
+    console.log("欢迎来到JavaScript世界，我是你们的导师");
 
+
+    // 2. 弹窗输出：这是给用户看的（慎用，很烦人）
+    alert("程序启动！");
+</script>
 </body>
 </html>
 ----
 
 **实操演示**：
 
-1.  右键 `index.html` -> "Open with Live Server"。
+1.  右键 `hello-world.html` -> "Open with Live Server"。
 2.  按 `F12` 打开开发者工具，点击 "Console"（控制台）面板。
-3.  **重点**：学会看控制台，这是JS开发者的“眼睛”。以后代码写错了，不要瞎猜，先看控制台报什么红字。
+3.  **重点**：学会看控制台，这是 JS 开发者的“眼睛”。以后代码写错了，不要瞎猜，先看控制台报什么红字。
+
+TIP: 如果是使用内联方式写 js，建议将 <script> 放在 </body> 的上面，这样可以避免网页 DOM 未加载而产生 js 报错问题。
 
 ==== 二：变量——数据的“盒子”
 
@@ -153,7 +159,7 @@ toggleButton.addEventListener('click', () => {
 ----
 // 场景：存钱罐
 // let 声明的变量，以后可以改
-let money = 100; 
+let money = 100;
 console.log("现在的存款是：", money); // 100
 
 // 我花了20块买奶茶
@@ -165,7 +171,7 @@ const MY_NAME = "张三";
 console.log("我的名字是：", MY_NAME);
 
 // 错误演示：尝试修改常量（打开注释会报错）
-// MY_NAME = "李四"; // 报错：Assignment to constant variable.
+MY_NAME = "李四"; // 报错：Assignment to constant variable.
 ----
 
 **教学重点**：
@@ -211,9 +217,23 @@ console.log(typeof isLogin); // 输出: boolean
 ----
 
 ===== 3. Undefined 与 Null
-*   `Undefined`：变量声明了但没赋值（盒子是空的，连空气都没有）。
+* `Undefined`：变量声明了但没赋值（盒子是空的，连空气都没有）。
++
+[source,javascript]
+----
+let name;
+console.log(typeof name); // 输出: undefined
+----
 
-*   `Null`：变量赋值为空（盒子是空的，但是人为清空的）。
+
+* `Null`：变量赋值为空（盒子是空的，但是人为清空的）。
++
+[source,javascript]
+----
+let name = null;
+console.log(typeof name); // 输出类型: object
+console.log('name:', name);  // null
+----
 
 ==== 四：字符串详解与模板字符串
 
@@ -242,8 +262,8 @@ let name = "赵六";
 let skill = "JavaScript";
 
 // 模板字符串：保留格式，变量直接嵌入
-let intro = `大家好，我是${name}。
-我正在学习${skill}。
+let intro = `大家好，我是 ${name}。
+我正在学习 ${skill}。
 这节课真的"太充实了"！`;
 
 console.log(intro);
@@ -298,6 +318,8 @@ console.log(CARD);
 ----
 let a = 10;
 let b = 20;
+console.log(`a 现在是: ${a}, b 现在是: ${b}`);
+
 let temp; // 临时空杯子
 
 temp = a; // 把 a 的水倒入 temp (temp=10, a空了)
@@ -305,7 +327,6 @@ a = b;    // 把 b 的水倒入 a (a=20, b空了)
 b = temp; // 把 temp 的水倒入 b (b=10)
 
 console.log(`a 现在是: ${a}, b 现在是: ${b}`);
-console.log('haha:');
 ----
 
 
@@ -315,8 +336,9 @@ console.log('haha:');
 ----
 let a = 10;
 let b = 20;
-[a, b] = [b, a]; // 一行代码搞定交换
+console.log(`现代写法 -> a: ${a}, b: ${b}`);
 
+[a, b] = [b, a]; // 一行代码搞定交换
 console.log(`现代写法 -> a: ${a}, b: ${b}`);
 ----
 
@@ -347,9 +369,8 @@ easy-campus/
 
 // 这些值通常不会变，用 const
 const PLATFORM_NAME = "易校园";
-const VERSION = "1.0.0";
-const AUTHOR = "JavaScript训练营学员";
-
+const VERSION = "0.0.1";
+const AUTHOR = "JavaScript 训练营学员";
 // 这些值后续可能会变，用 let
 let currentUser = "游客";
 let currentMoney = 0;
@@ -374,7 +395,7 @@ console.log(`充值成功！当前余额：${currentMoney} 元`);
 [source,html]
 ----
 <!-- 引入JS文件，注意放在 body 结束标签前 -->
-<script src="./main.js"></script>
+<script src="./js/main.js"></script>
 ----
 
 ===== 步骤 4：运行与调试
@@ -387,7 +408,7 @@ console.log(`充值成功！当前余额：${currentMoney} 元`);
 ==== 作业
 1. **概念题**：`let` 和 `const` 的最大区别是什么？什么情况下用 `const`？
 
-2. **代码题**：定义三个变量分别存储圆的半径、圆周率，计算圆的周长和面积，并在控制台输出结果（保留两位小数）。
+2. **代码题**：定义变量分别存储圆的半径、圆周率，计算圆的周长和面积，并在控制台输出结果（保留两位小数）。
    ** 提示：周长 = 2 * π * r，面积 = π * r * r。
 
 3. **项目扩展**：在 `main.js` 中添加一个新的变量 `isShopOpen`（布尔值），判断店铺是否营业。
@@ -395,15 +416,18 @@ console.log(`充值成功！当前余额：${currentMoney} 元`);
    ** 如果是 `false`，输出“店铺打烊了”。
 
 
-TIP:可能会遇到文件路径错误（`src="./js/main.js"` 写错）、中英文符号切换（特别是分号 `;` 和引号 `"`）、控制台找不到位置等问题。
+TIP: 可能会遇到文件路径错误（`src="./js/main.js"` 写错）、中英文符号切换（特别是分号 `;` 和引号 `"`）、控制台找不到位置等问题。
 **解决这些细小的报错，是建立学习信心的关键**。
 
 == Ch 2：运算符与流程控制——让程序学会判断
 **今日目标**：
 
 1.  掌握运算符，特别是“赋值”与“比较”的区别。
+
 2.  理解逻辑运算符中的“短路”现象。
+
 3.  彻底掌握 `if-else` 分支结构，写出有逻辑的代码。
+
 4.  在项目中实现“会员折扣计算”和“用户身份验证”功能。
 
 === S1：核心精讲（4课时）
@@ -2603,4 +2627,384 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
 * “斗地主发牌”案例非常有趣且综合性强，重点在于理解数组的操作。
 * “以后工作写 Vue 或 React，本质上就是在定义各种各样的组件，其实就是现在的类。”
 ====
+
+== Ch 8：DOM 基础与样式操作——让网页“动”起来
+**今日目标**：
+
+* 理解 DOM 树结构，搞清楚谁是爹、谁是儿子。
+* 学会使用 `querySelector` 精准捕捉页面元素。
+* 掌握修改文字内容和样式的三种方式。
+* 在项目中实现商品卡片的动态样式变化。
+
+=== 一：DOM 树与节点关系
+
+
+==== 1. 什么是 DOM ？
+* Document Object Model（文档对象模型）。
+
+* 大白话解释：浏览器加载 HTML 时，会把 HTML 里的标签、文字、图片都变成一个个的“对象”，这些对象像树杈一样连在一起，这就叫 DOM 树。
+
+* 为什么学它？：JS 想要操作网页（改文字、改颜色），必须先在树里找到这个“对象”。
+
+==== 2. 节点关系
+把 DOM 树想象成家谱：
+
+* *父节点*：直接包裹你的元素。
+* *子节点*：你直接包裹的元素。
+* *兄弟节点*：和你同级、同一个父元素的元素。
+
+
+*代码演示*：
+
+[source,html]
+----
+<div class="father">
+    <div class="son">儿子</div>
+    <div class="daughter">女儿</div>
+</div>
+
+<script>
+    let son = document.querySelector('.son');
+
+    // 找爸爸
+    console.log(son.parentNode); // <div class="father">...
+
+    // 找兄弟 (nextElementSibling 下一个兄弟)
+    console.log(son.nextElementSibling); // <div class="daughter">...
+</script>
+----
+
+=== 二：获取元素——querySelector 全家桶
+以前我们用 `document.getElementById('id')`，太长了，而且只能用 ID。
+
+现在我们学现代方法，**就像写 CSS 一样**来选元素。
+
+==== 1. 获取单个元素
+语法：`document.querySelector('选择器')`。
+
+* 返回：第一个匹配的元素。如果没有，返回 `null`。
+
+
+.代码实例
+[source,html]
+----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>querySelector 示例</title>
+    <style>
+        .highlight { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <nav id="nav">欢迎来到我的网页</nav>
+
+    <ul class="list">
+        <li class="item">HTML 基础</li>
+        <li class="item">CSS 样式</li>
+        <li class="item">JavaScript 逻辑</li>
+    </ul>
+
+    <script>
+        // 1. 选 ID (#nav)
+        let nav = document.querySelector('#nav');
+        nav.style.color = 'blue';
+
+        // 2. 选类名 (.item) -> 注意：只会选中第一个（HTML 基础）
+        let firstItem = document.querySelector('.item');
+        firstItem.className = 'highlight';
+
+        // 3. 选标签 (li) -> 同样只会选中第一个
+        let firstLi = document.querySelector('li');
+        console.log('选中的标签内容是：' + firstLi.textContent);
+    </script>
+</body>
+</html>
+----
+
+==== 2. 获取所有元素
+语法：`document.querySelectorAll('选择器')`。
+
+* 返回：一个伪数组。即使只有一个元素，也是数组。要想操作每一个，必须遍历！
+
+
+.代码实例
+[source,html]
+----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>querySelector 示例</title>
+    <style>
+        .highlight { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <nav id="nav">欢迎来到我的网页</nav>
+
+    <ul class="list">
+        <li class="item">HTML 基础</li>
+        <li class="item">CSS 样式</li>
+        <li class="item">JavaScript 逻辑</li>
+    </ul>
+
+    <script>
+        let allLis = document.querySelectorAll('li');
+        // 这是一个伪数组，不能直接 allLis.style.color = 'red' (报错！)
+
+        allLis.forEach(function(li) {
+            li.style.color = 'red'; // 遍历后逐个修改
+        });
+    </script>
+</body>
+</html>
+----
+
+=== 三：操作元素内容
+innerText
+
+* 获取或设置标签里面的**纯文本**。
+* 特点：不识别 HTML 标签，读取时会去掉换行和空格。
+
+innerHTML
+
+* 获取或设置标签里面的**HTML代码**。
+* 特点：识别标签，保留格式。*开发中最常用*。
+
+
+.代码演示
+[source,html]
+----
+<div id="box">
+    <strong>你好</strong>
+</div>
+
+<script>
+    let box = document.querySelector('#box');
+
+    console.log(box.innerText);  // 输出: 你好 (强标签没了)
+    console.log(box.innerHTML);  // 输出: <strong>你好</strong>
+
+    // 修改内容
+    box.innerText = '<em>新的内容</em>'; // 页面显示: <em>新的内容</em> (原样输出)
+    box.innerHTML = '<em>新的内容</em>'; // 页面显示: 新的内容 (斜体，em生效了)
+</script>
+----
+
+=== 三：操作元素内容
+下表总结了操作 DOM 元素内容时最常用的两个属性：
+
+[cols="1,2,3", options="header"]
+|===
+| 属性 | 功能描述 | 特点
+| `innerText` | 获取或设置标签内的 *纯文本* | 不识别 HTML 标签，读取时会触发重排（Reflow），自动过滤隐藏元素的文本。
+| `innerHTML` | 获取或设置标签内的 *HTML 代码* | 识别并解析标签，保留原始格式。*开发中最常用，但需注意安全*。
+|===
+
+
+.代码演示与对比
+[source,html]
+----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>querySelector 示例</title>
+</head>
+<body>
+    <div id="box">
+        <strong>你好</strong>
+        <span style="display:none">看不见我</span>
+    </div>
+    <script>
+        const box = document.querySelector('#box');
+
+        // 1. 读取测试
+        console.log('innerText:', box.innerText);   // 输出: "你好" (粗体没了，隐藏内容也没了)
+        console.log('innerHTML:', box.innerHTML);   // 输出: "<strong>你好</strong> <span style='...'>...</span>"
+
+        // 2. 写入测试 (innerText)
+        // 页面显示: <em>新的内容</em> (标签被转义为纯字符串)
+        // box.innerText = '<em>新的内容</em>'; 
+
+        // 3. 写入测试 (innerHTML)
+        // 页面显示: 新的内容 (斜体效果生效)
+        // box.innerHTML = '<em>新的内容</em>'; 
+
+        // 4. 安全风险演示 (XSS)
+        // 如果恶意脚本通过 innerHTML 注入，浏览器会执行它
+        const peach = "<img src='x' onerror='alert(\"XSS攻击!\")'>";
+        box.innerHTML = peach; 
+    </script>
+</body>
+</html>
+----
+
+
+.**安全提示：**
+[CAUTION]
+====
+* 永远不要将未经脱敏的用户输入直接赋值给 `innerHTML`，这会导致跨站脚本攻击（XSS）。
+* 对于纯文本展示，建议优先使用 `textContent` 或 `innerText`。
+====
+
+=== 四：操作元素样式
+
+
+==== 1. style 属性（行内样式）
+* 语法：`元素.style.属性名 = '值'`。
+
+* **注意**：JS 里的属性名要用驼峰命名法。
+  ** CSS: `background-color` -> JS: `backgroundColor`
+  ** CSS: `font-size` -> JS: `fontSize`
+
+==== 2. className 类名操作
+* 语法：`元素.className = '类名'`。
+
+* **雷区**：这会覆盖掉原来的类名。
+
+==== 3. classList 类名列表（推荐）
+* `元素.classList.add('类名')`：添加类。
+* `元素.classList.remove('类名')`：移除类。
+* `元素.classList.toggle('类名')`：切换类（有则删，无则加）。
+
+*代码演示*：
+
+[source,javascript]
+----
+let box = document.querySelector('#box');
+
+// 1. 行内样式修改
+box.style.backgroundColor = 'pink';
+box.style.width = '200px';
+
+// 2. 类名修改
+box.classList.add('active'); // 添加 active 类
+box.classList.toggle('hide'); // 切换 hide 类
+----
+
+=== S2：实战演练与项目推进（4课时）
+
+
+==== 第一、二课时：随堂实战案例
+
+
+===== 案例 1：密码框明文/密文切换
+**需求**：点击按钮，密码框在“黑点点”和“明文”之间切换。
+
+```html
+<input type="password" id="pwd">
+<button id="btn">显示密码</button>
+
+<script>
+    let pwd = document.querySelector('#pwd');
+    let btn = document.querySelector('#btn');
+    let flag = true; // true表示当前是密码状态
+
+    btn.onclick = function() {
+        if (flag) {
+            pwd.type = 'text'; // 变成文本
+            btn.innerText = '隐藏密码';
+        } else {
+            pwd.type = 'password'; // 变回密码
+            btn.innerText = '显示密码';
+        }
+        flag = !flag; // 状态取反
+    };
+</script>
+```
+
+===== 案例 2：列表隔行变色
+**需求**：表格或列表，奇数行白色，偶数行灰色，鼠标放上去变高亮。
+
+```javascript
+let trs = document.querySelectorAll('tr');
+for (let i = 0; i < trs.length; i++) {
+    // 隔行变色：索引为奇数时变色
+    if (i % 2 === 1) {
+        trs[i].style.backgroundColor = '#f5f5f5';
+    }
+
+    // 鼠标经过高亮
+    trs[i].onmouseover = function() {
+        this.style.backgroundColor = 'yellow';
+    };
+    trs[i].onmouseout = function() {
+        // 移开要恢复原色，这里需要逻辑判断，或者用class做
+        // 简单做法：恢复默认或隔行逻辑
+        this.style.backgroundColor = '';
+    };
+}
+```
+
+---
+
+==== 第三、四课时：贯穿项目推进——《易校园》卡片样式
+**场景**：今天我们要为项目编写静态的商品卡片结构，并用JS控制它的样式（比如卖出去的商品变灰）。
+
+**步骤 1：编写 HTML 结构**
+在 `index.html` 中：
+```html
+<div class="goods-card" id="card1">
+    <img src="images/book.jpg" alt="">
+    <h4 class="title">高等数学</h4>
+    <p class="price">￥15.00</p>
+    <span class="status">在售</span>
+</div>
+```
+
+**步骤 2：编写 CSS 样式**
+```css
+.goods-card {
+    width: 200px; border: 1px solid #ccc; padding: 10px;
+}
+.sold-out {
+    opacity: 0.5; /* 半透明 */
+    filter: grayscale(100%); /* 变成黑白 */
+    position: relative;
+}
+.sold-out .status::after {
+    content: "已售罄";
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.3); color: white; text-align: center;
+    line-height: 200px;
+}
+```
+
+**步骤 3：JS 动态控制样式**
+模拟后台数据，如果 `isSold` 为 true，就给卡片加上 `sold-out` 类。
+
+```javascript
+// 模拟商品数据
+let goodsData = {
+    id: 1,
+    name: '高等数学',
+    price: 15,
+    isSold: true // 假设已经卖掉了
+};
+
+// 获取卡片元素
+let card = document.querySelector('#card1');
+
+// 逻辑判断
+if (goodsData.isSold) {
+    // 添加 sold-out 类，卡片变灰
+    card.classList.add('sold-out');
+} else {
+    // 移除
+    card.classList.remove('sold-out');
+}
+```
+
+---
+
+==== 作业
+
+1.  **概念题**：`innerText` 和 `innerHTML` 有什么区别？`className` 和 `classList.add` 有什么区别？
+2.  **代码题**：做一个“开关灯”效果。页面有一个按钮和一个div，点击按钮，div背景在红色和蓝色之间切换。
+3.  **项目扩展**：修改商品卡片，如果价格小于 20 元，价格字体显示为绿色；否则显示为红色。
+
+---
 
