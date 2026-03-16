@@ -649,9 +649,6 @@
 <v t="swot.20260302161253.1"><vh>7. 深度思考：为什么坚持在容器中运行 Java？</vh></v>
 </v>
 </v>
-<v t="swot.20260304165602.1"><vh>@adoc 给AI分析的资源.adoc</vh>
-<v t="swot.20260304165736.1"><vh>给AI分析的资源</vh></v>
-</v>
 <v t="swot.20260302215851.1"><vh>@adoc Java高级程序设计进阶实验.adoc -- 里面的条目留在以后再参考</vh>
 <v t="swot.20260302215945.1"><vh>Java高级程序设计进阶实验--JavaSE 门禁系统实训（共 36 学时）</vh>
 <v t="swot.20260215212523.1"><vh>实验二：数据模型与实体类开发 (4学时)</vh></v>
@@ -1005,10 +1002,9 @@
 </v>
 </v>
 </v>
-<v t="swot.20260315231022.1"><vh>三：操作元素内容</vh></v>
 <v t="swot.20260315231921.1"><vh>三：操作元素内容</vh>
 <v t="swot.20260315232647.1"><vh>@clean code/examples/innerTextANDinnerHTML.html</vh>
-<v t="swot.20260316212622.1"><vh>innerTextANDinnerHTML</vh></v>
+<v t="swot.20260316212622.1"><vh>innerText-textContent-innerHTML</vh></v>
 </v>
 </v>
 <v t="swot.20260313114540.152"><vh>四：操作元素样式</vh>
@@ -1256,6 +1252,9 @@
 <v t="swot.20260313114540.330"><vh>📝 今日作业（晚自习）</vh></v>
 </v>
 </v>
+</v>
+<v t="swot.20260316225122.1"><vh>@adoc 给AI分析的资源.adoc</vh>
+<v t="swot.20260316225122.2"><vh>给AI分析的资源</vh></v>
 </v>
 </v>
 </v>
@@ -18721,45 +18720,6 @@ class AdminCard extends BaseDoorCard {
 }
 
 </t>
-<t tx="swot.20260304165602.1">@language asciidoc
-:author: https://github.com/wangzhaohe/swot-learning
-:source-highlighter: pygments
-:icons: font
-:scripts: cjk
-:stem: latexmath
-:experimental:
-:toc:
-:toc: right
-:toc-title: 目录
-:toclevels: 3
-:tip-caption: ⚡
-:note-caption: ❕
-:important-caption: ❗
-:warning-caption: ‼️
-:caution-caption: ⚠️
-</t>
-<t tx="swot.20260304165736.1">
-++++
-&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
-&lt;script&gt;
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
-
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () =&gt; {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
-&lt;/script&gt;
-++++
-</t>
 <t tx="swot.20260304170224.1">这一版在继承的基础上 ，通过 `abstract` 关键字从语义和语法上解决了 `BaseDoorCard` 不应被实例化”的问题。
 
 另外还通过声明包，解决类名冲突问题。
@@ -30020,43 +29980,23 @@ allLis.forEach(function(li) {
     li.style.color = 'red'; // 遍历后逐个修改
 });
 </t>
-<t tx="swot.20260315231022.1">innerText
-
-* 获取或设置标签里面的**纯文本**。
-* 特点：不识别 HTML 标签，读取时会去掉换行和空格。
-
-innerHTML
-
-* 获取或设置标签里面的**HTML代码**。
-* 特点：识别标签，保留格式。*开发中最常用*。
-
-
-.代码演示
-[source,html]
-----
-&lt;div id="box"&gt;
-    &lt;strong&gt;你好&lt;/strong&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-    let box = document.querySelector('#box');
-    
-    console.log(box.innerText);  // 输出: 你好 (强标签没了)
-    console.log(box.innerHTML);  // 输出: &lt;strong&gt;你好&lt;/strong&gt;
-
-    // 修改内容
-    box.innerText = '&lt;em&gt;新的内容&lt;/em&gt;'; // 页面显示: &lt;em&gt;新的内容&lt;/em&gt; (原样输出)
-    box.innerHTML = '&lt;em&gt;新的内容&lt;/em&gt;'; // 页面显示: 新的内容 (斜体，em生效了)
-&lt;/script&gt;
-----
-</t>
-<t tx="swot.20260315231921.1">下表总结了操作 DOM 元素内容时最常用的两个属性：
+<t tx="swot.20260315231921.1">下表总结了操作 DOM 元素内容时最常用的三个属性：
 
 [cols="1,2,3", options="header"]
 |===
 | 属性 | 功能描述 | 特点
-| `innerText` | 获取或设置标签内的 *纯文本* | 不识别 HTML 标签，读取时会触发重排（Reflow），自动过滤隐藏元素的文本。
-| `innerHTML` | 获取或设置标签内的 *HTML 代码* | 识别并解析标签，保留原始格式。*开发中最常用，但需注意安全*。
+
+| `innerText` 
+| 获取或设置标签内的 *纯文本*
+| 不识别 HTML 标签，读取时会触发重排（Reflow），自动过滤 隐藏元素 的文本。
+
+| `textContent`
+| 获取或设置标签内的 *纯文本*
+| 不识别 HTML 标签；**性能更高**（不触发重排）；**会获取隐藏元素的文本**，保留原始代码格式。
+
+| `innerHTML` 
+| 获取或设置标签内的 *HTML 代码*
+| 识别并解析标签，保留原始格式。*开发中最常用，但需注意安全*。
 |===
 
 
@@ -30067,14 +30007,15 @@ innerHTML
 ----
 
 
-.**安全提示：**
+.**安全与性能提示：**
 [CAUTION]
 ====
-* 永远不要将未经脱敏的用户输入直接赋值给 `innerHTML`，这会导致跨站脚本攻击（XSS）。
-* 对于纯文本展示，建议优先使用 `textContent` 或 `innerText`。
+* **严禁直接赋值**：永远不要将未经脱敏的用户输入直接赋值给 `innerHTML`，这会导致跨站脚本攻击（XSS）。
+* **优先原则**：对于纯文本展示，建议优先使用 `textContent` 或 `innerText`。
+* **性能考量**：`textContent` 性能优于 `innerText`，因为它不需要计算 CSS 布局来确定文本是否可见。
 ====
 </t>
-<t tx="swot.20260315232647.1" _mod_time="4741da6e016c1fd3242e">@language html
+<t tx="swot.20260315232647.1" _mod_time="4741da6e07194798ae2e">@language html
 &lt;!DOCTYPE html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
@@ -30135,7 +30076,8 @@ console.log('name:', name);  // null
 const box = document.querySelector('#box');
 
 // 1. 读取测试
-console.log('innerText:', box.innerText);   // 输出: "你好" (粗体没了，隐藏内容也没了)
+console.log('innerText:', box.innerText);     // 输出: "你好" (隐藏内容及标签样式均丢失)
+console.log('textContent:', box.textContent); // 输出: "你好 看不见我" (包含隐藏文本)
 console.log('innerHTML:', box.innerHTML);   // 输出: "&lt;strong&gt;你好&lt;/strong&gt; &lt;span style='...'&gt;...&lt;/span&gt;"
 
 // 2. 写入测试 (innerText)
@@ -30148,8 +30090,14 @@ console.log('innerHTML:', box.innerHTML);   // 输出: "&lt;strong&gt;你好&lt;
 
 // 4. 安全风险演示 (XSS)
 // 如果恶意脚本通过 innerHTML 注入，浏览器会执行它
-const peach = "&lt;img src='x' onerror='alert(\"XSS攻击!\")'&gt;";
-box.innerHTML = peach; 
+const unsafeData = "&lt;img src='x' onerror='alert(\"XSS攻击!\")'&gt;";
+
+// 安全：innerText/textContent 会将标签转义为纯字符串展示
+// box.innerText = unsafeData;
+// box.textContent = unsafeData; 
+
+// 危险：innerHTML 会解析并执行恶意脚本
+// box.innerHTML = unsafeData; 
 </t>
 <t tx="swot.20260316213222.1">* `元素.classList.add('类名')`：添加类。
 * `元素.classList.remove('类名')`：移除类。
@@ -30170,5 +30118,7 @@ box.classList.add('active'); // 添加 active 类
 box.classList.toggle('hide'); // 切换 hide 类
 ----
 </t>
+<t tx="swot.20260316225122.1"></t>
+<t tx="swot.20260316225122.2"></t>
 </tnodes>
 </leo_file>
