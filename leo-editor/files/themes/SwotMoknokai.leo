@@ -774,7 +774,7 @@ QTextEdit:focus#log-widget,LeoQTreeWidget:focus#treeWidget, QTextEdit:focus#rich
   margin-right: 5px;
 }
 QPushButton:hover {
-  color: @button-hover-fg;
+  color: @solarized-orange;
   background: @bg-gradient-hover;
 }
 </t>
