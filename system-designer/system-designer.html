@@ -454,6 +454,12 @@ body.toc2.toc-right {
     padding-left: 0;
     padding-right: 0em;
 }
+
+/* 设置整个 HTML 文档的滚动留白 */
+html {
+    scroll-padding-top: 10px; /* 这个数值就是跳转后标题距离屏幕顶部的像素 */
+    scroll-behavior: smooth;  /* 顺便加上平滑滚动效果，跳转不突兀 */
+}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -545,27 +551,27 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_2026_02_14_开发语言解惑汇总">2026-02-14 开发语言解惑汇总</a>
 <ul class="sectlevel2">
-<li><a href="#_1_编程语言执行机制与性能哲学">1. 编程语言执行机制与性能哲学</a>
+<li><a href="#_编程语言执行机制与性能哲学">编程语言执行机制与性能哲学</a>
 <ul class="sectlevel3">
-<li><a href="#_1_1_lua极致的嵌入式胶水">1.1 Lua：极致的嵌入式胶水</a></li>
-<li><a href="#_1_2_编译解释与_jit_的三角关系">1.2 编译、解释与 JIT 的三角关系</a></li>
-<li><a href="#_1_3_为什么_ai_偏爱_python_而非_java">1.3 为什么 AI 偏爱 Python 而非 Java？</a></li>
+<li><a href="#_lua极致的嵌入式胶水">Lua：极致的嵌入式胶水</a></li>
+<li><a href="#_编译解释与_jit_的三角关系">编译、解释与 JIT 的三角关系</a></li>
+<li><a href="#_为什么_ai_偏爱_python_而非_java">为什么 AI 偏爱 Python 而非 Java？</a></li>
 </ul>
 </li>
-<li><a href="#_2_web_图形与计算架构演进">2. Web 图形与计算架构演进</a>
+<li><a href="#_web_图形与计算架构演进">Web 图形与计算架构演进</a>
 <ul class="sectlevel3">
-<li><a href="#_2_1_webassembly_wasm">2.1 WebAssembly (WASM)</a></li>
-<li><a href="#_2_2_从_webgl_到_webgpu_的跨越">2.2 从 WebGL 到 WebGPU 的跨越</a></li>
-<li><a href="#_2_3_three_js_unity_ue_技术选型深度对比">2.3 Three.js / Unity / UE 技术选型深度对比</a></li>
+<li><a href="#_webassembly_wasm">WebAssembly (WASM)</a></li>
+<li><a href="#_从_webgl_到_webgpu_的跨越">从 WebGL 到 WebGPU 的跨越</a></li>
+<li><a href="#_three_js_unity_ue_技术选型深度对比">Three.js / Unity / UE 技术选型深度对比</a></li>
 </ul>
 </li>
-<li><a href="#_3_类型系统的深度工程化">3. 类型系统的深度工程化</a>
+<li><a href="#_类型系统的深度工程化">类型系统的深度工程化</a>
 <ul class="sectlevel3">
-<li><a href="#_3_1_类型的本质与负担">3.1 类型的本质与负担</a></li>
-<li><a href="#_3_2_零编译的类型方案jsdoc_d_ts">3.2 零编译的类型方案：JSDoc + .d.ts</a></li>
+<li><a href="#_类型的本质与负担">类型的本质与负担</a></li>
+<li><a href="#_零编译的类型方案jsdoc_d_ts">零编译的类型方案：JSDoc + .d.ts</a></li>
 </ul>
 </li>
-<li><a href="#_4_商业版权与开源治理">4. 商业版权与开源治理</a>
+<li><a href="#_商业版权与开源治理">商业版权与开源治理</a>
 <ul class="sectlevel3">
 <li><a href="#_甲骨文_oracle_与_java_诉讼">甲骨文 (Oracle) 与 Java 诉讼</a></li>
 <li><a href="#_python_psf_的自由之路">Python (PSF) 的自由之路</a></li>
@@ -579,23 +585,57 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<button id="toggleButton">目录开关</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+<style>
+/* 1. 默认状态：顺应你原本的展开状态 */
+#toc {
+    min-width: 0 !important;
+    max-height: 100vh;
+    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
+    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
+    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    white-space: nowrap !important;
+    max-width: 530px;
+    opacity: 1;
+
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
+#toc.collapsed {
+    max-width: 0 !important; /* 宽度强制缩到 0 */
+    opacity: 0 !important; /* 透明度消失 */
+
+    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 3. 修复行间距（保留你需要的紧凑排版） */
+#toc ul, #toc li {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+</style>
+
+<button id="toggleButton">目录开关</button>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
+// 默认没有任何类名，所以默认是自然展开的。
+toggleButton.addEventListener('click', () => {
+    contentDiv.classList.toggle('collapsed');
+});
 </script>
 </div>
 </div>
@@ -773,9 +813,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <h2 id="_2026_02_14_开发语言解惑汇总">2026-02-14 开发语言解惑汇总</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_1_编程语言执行机制与性能哲学">1. 编程语言执行机制与性能哲学</h3>
+<h3 id="_编程语言执行机制与性能哲学">编程语言执行机制与性能哲学</h3>
 <div class="sect3">
-<h4 id="_1_1_lua极致的嵌入式胶水">1.1 Lua：极致的嵌入式胶水</h4>
+<h4 id="_lua极致的嵌入式胶水">Lua：极致的嵌入式胶水</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -810,27 +850,27 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_2_编译解释与_jit_的三角关系">1.2 编译、解释与 JIT 的三角关系</h4>
+<h4 id="_编译解释与_jit_的三角关系">编译、解释与 JIT 的三角关系</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>JavaScript (JS)：</strong> 为了跨平台和网络分发而采用源码传输。比如 Chrome 浏览器的现代引擎（V8）使用 <strong>JIT (Just-In-Time)</strong> 在运行时将热点代码转为机器码。</p>
+<p><strong>JavaScript (JS)：</strong></p>
 <div class="ulist">
 <ul>
 <li>
 <p>跨平台与碎片化（最大的障碍）： 浏览器环境极其复杂。Chrome、Safari、Firefox 都有不同的内核，且运行在 Windows、Android、iOS 等各种硬件架构上。如果 JS 是编译后的二进制文件，开发者就得像发布安卓 App 或 Windows 软件一样，为每个平台编译一个版本。目前的 JS 代码（文本）由浏览器实时解析，确保了<strong>“一份代码，到处运行”</strong>。</p>
 </li>
 <li>
-<p>网络传输效率： 编译后的二进制文件往往比压缩后的文本（Gzip/Brotli）大得多。在 Web 早期，带宽极其珍贵，传输文本更高效。</p>
+<p>网络传输效率：为了跨平台和网络分发而采用<mark>源码传输</mark>。编译后的二进制文件往往比压缩后的文本（Gzip/Brotli）大得多。在 Web 早期，带宽极其珍贵，传输文本更高效。</p>
 </li>
 <li>
 <p>安全性： 浏览器是一个高度受限的“沙箱”。如果执行预编译的代码，浏览器很难实时监控代码是否在非法操作内存，安全性会大打折扣。</p>
 </li>
 <li>
-<p>当前的“中间方案”： 实际上，现代浏览器已经进化了。它们不再是简单的“逐行解释”，而是采用了 JIT (Just-In-Time) 编译技术。</p>
-</li>
-<li>
-<p>现在的做法是： JS 代码以文本形式传给浏览器，浏览器在运行过程中，把经常执行的热点代码直接编译成机器码。这兼顾了文本传输的灵活性和编译语言的高性能。</p>
+<p>当前的“中间方案”： 实际上，现代浏览器已经进化了。它们不再是简单的“逐行解释”，而是采用了 JIT (Just-In-Time) 编译技术。Chrome 浏览器的现代引擎（V8）使用 <strong>JIT (Just-In-Time)</strong> 在运行时将热点代码转为机器码。这样代码的执行效率更高。</p>
+<div class="paragraph">
+<p><strong>小结：</strong>现在的做法是： JS 代码以文本形式传给浏览器，浏览器在运行过程中，使用 JIT 技术把经常执行的热点代码直接编译成机器码。这兼顾了文本传输的灵活性和编译语言的高性能。</p>
+</div>
 </li>
 </ul>
 </div>
@@ -891,7 +931,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_3_为什么_ai_偏爱_python_而非_java">1.3 为什么 AI 偏爱 Python 而非 Java？</h4>
+<h4 id="_为什么_ai_偏爱_python_而非_java">为什么 AI 偏爱 Python 而非 Java？</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -920,9 +960,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_web_图形与计算架构演进">2. Web 图形与计算架构演进</h3>
+<h3 id="_web_图形与计算架构演进">Web 图形与计算架构演进</h3>
 <div class="sect3">
-<h4 id="_2_1_webassembly_wasm">2.1 WebAssembly (WASM)</h4>
+<h4 id="_webassembly_wasm">WebAssembly (WASM)</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -978,7 +1018,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect3">
-<h4 id="_2_2_从_webgl_到_webgpu_的跨越">2.2 从 WebGL 到 WebGPU 的跨越</h4>
+<h4 id="_从_webgl_到_webgpu_的跨越">从 WebGL 到 WebGPU 的跨越</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1023,12 +1063,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect3">
-<h4 id="_2_3_three_js_unity_ue_技术选型深度对比">2.3 Three.js / Unity / UE 技术选型深度对比</h4>
+<h4 id="_three_js_unity_ue_技术选型深度对比">Three.js / Unity / UE 技术选型深度对比</h4>
 <div class="paragraph">
 <p>在 2026 年的技术环境下，选择这三个工具本质上是在 <strong>“网页原生性”</strong>、<strong>“全平台平衡性”</strong> 与 <strong>“极致视觉性能”</strong> 之间做取舍。</p>
 </div>
 <div class="sect4">
-<h5 id="_2_3_1_核心定位与技术栈概览">2.3.1 核心定位与技术栈概览</h5>
+<h5 id="_核心定位与技术栈概览">核心定位与技术栈概览</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 14.2857%;">
@@ -1073,9 +1113,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </table>
 </div>
 <div class="sect4">
-<h5 id="_2_3_2_三者深度解析">2.3.2 三者深度解析</h5>
+<h5 id="_三者深度解析">三者深度解析</h5>
 <div class="sect5">
-<h6 id="_2_3_2_1_three_js网页端的无冕之王">2.3.2.1 Three.js：网页端的“无冕之王”</h6>
+<h6 id="_three_js网页端的无冕之王">Three.js：网页端的“无冕之王”</h6>
 <div class="paragraph">
 <p>如果您追求的是 <strong>网站交互、数据可视化或轻量级 Web 应用</strong>，它是最优解。</p>
 </div>
@@ -1089,7 +1129,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p><strong>零安装成本</strong>：Bundle 极小（通常 &lt; 1MB），用户即开即看。</p>
 </li>
 <li>
-<p><strong>前端生态融合</strong>：与 React (R3F) 或 Svelte (Threlte) 完美结合。</p>
+<p><strong>前端生态融合</strong>：与 React (R3F) 或 Svelte (Threlte) 或 Vue3(TresJS) 完美结合。</p>
 </li>
 <li>
 <p><strong>WebGPU 原生支持</strong>：在 2026 年已全面普及，能榨干浏览器渲染性能。</p>
@@ -1104,7 +1144,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect5">
-<h6 id="_2_3_2_2_unity全能的斜杠青年">2.3.2.2 Unity：全能的“斜杠青年”</h6>
+<h6 id="_unity全能的斜杠青年">Unity：全能的“斜杠青年”</h6>
 <div class="paragraph">
 <p>Unity 是 <strong>中小团队、移动端游戏和跨平台应用</strong> 的标准答案。</p>
 </div>
@@ -1133,7 +1173,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect5">
-<h6 id="_2_3_2_3_unreal_engine极致的视觉天花板">2.3.2.3 Unreal Engine：极致的视觉天花板</h6>
+<h6 id="_unreal_engine极致的视觉天花板">Unreal Engine：极致的视觉天花板</h6>
 <div class="paragraph">
 <p>追求 <strong>照片级写实、超大场景或 AAA 级表现力</strong> 时的不二之选。</p>
 </div>
@@ -1147,7 +1187,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p><strong>影视级画质</strong>：Lumen (动态光照) 与 Nanite (微多边形) 技术带来了无与伦比的震撼力。</p>
 </li>
 <li>
-<p><strong>工业级工具</strong>：蓝图系统极强，逻辑构建逻辑严密且可视化程度高。</p>
+<p><strong>工业级工具</strong>：蓝图系统极强，逻辑构建严密且可视化程度高。</p>
 </li>
 </ul>
 </div>
@@ -1160,7 +1200,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect4">
-<h5 id="_2_3_3_场景决策指南">2.3.3 场景决策指南</h5>
+<h5 id="_场景决策指南">场景决策指南</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1199,13 +1239,13 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_3_类型系统的深度工程化">3. 类型系统的深度工程化</h3>
+<h3 id="_类型系统的深度工程化">类型系统的深度工程化</h3>
 <div class="sect3">
-<h4 id="_3_1_类型的本质与负担">3.1 类型的本质与负担</h4>
+<h4 id="_类型的本质与负担">类型的本质与负担</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Java(名义类型)：</strong> 类型是程序的物理骨架，不可剥离。</p>
+<p><strong>Java(名义类型)：</strong> <mark>类型</mark>是程序的物理骨架，不可剥离。</p>
 </li>
 <li>
 <p><strong>Python：</strong> 运行过程中根本不看类型。</p>
@@ -1230,7 +1270,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect3">
-<h4 id="_3_2_零编译的类型方案jsdoc_d_ts">3.2 零编译的类型方案：JSDoc + .d.ts</h4>
+<h4 id="_零编译的类型方案jsdoc_d_ts">零编译的类型方案：JSDoc + .d.ts</h4>
 <div class="paragraph">
 <p><mark>心智 vs 体力：写 TS 有思考负担，写 JSDoc 有体力负担（注释冗长）</mark></p>
 </div>
@@ -1376,7 +1416,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect2">
-<h3 id="_4_商业版权与开源治理">4. 商业版权与开源治理</h3>
+<h3 id="_商业版权与开源治理">商业版权与开源治理</h3>
 <div class="sect3">
 <h4 id="_甲骨文_oracle_与_java_诉讼">甲骨文 (Oracle) 与 Java 诉讼</h4>
 <div class="ulist">
@@ -1403,7 +1443,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-24 11:08:59 +0800
+Last updated 2026-03-16 09:48:20 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
