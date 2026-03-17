@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>样式操作示例</title>
+    <style>
+        .box {
+            width: 200px;
+            height: 200px;
+            background-color: #eee;
+            transition: all 0.3s;
+
+            /* 文字布局居中 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        /* 激活状态的类 */
+        .active {
+            border: 5px solid #ff4444;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+
+        /* 隐藏类 */
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">目标元素</div>
+    <hr>
+    <button id="btn-style">修改行内样式</button>
+    <button id="btn-class">切换 Active 类</button>
+    <button id="btn-toggle">隐藏 / 显示</button>
+
+    <script>
+        const box = document.querySelector('.box');
+        const btnStyle = document.querySelector('#btn-style');
+        const btnClass = document.querySelector('#btn-class');
+        const btnToggle = document.querySelector('#btn-toggle');
+
+        // 1. 修改行内样式 (style)
+        btnStyle.addEventListener('click', () => {
+            // 注意驼峰命名法
+            box.style.backgroundColor = 'skyblue';
+            box.style.fontSize = '24px';
+            box.style.fontWeight = 'bold';
+        });
+
+        // 2. 修改类名 (classList)
+        btnClass.addEventListener('click', () => {
+            // add/remove 或者更方便的 toggle
+            box.classList.toggle('active');
+        });
+
+        // 3. 隐藏与显示
+        btnToggle.addEventListener('click', () => {
+            box.classList.toggle('hide');
+        });
+    </script>
+</body>
+</html>

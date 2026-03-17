@@ -430,13 +430,10 @@ TIP: 可能会遇到文件路径错误（`src="./js/main.js"` 写错）、中英
 
 4.  在项目中实现“会员折扣计算”和“用户身份验证”功能。
 
-=== S1：核心精讲（4课时）
+=== 一：运算符基础——不只是加减乘除
 
 
-==== 一：运算符基础——不只是加减乘除
-
-
-===== 1. 算术运算符
+==== 1. 算术运算符
 * 基础：`+` (加)、`-` (减)、`*` (乘)、`/` (除)。
 
 * 重点：`%` (取模/取余数)。
@@ -448,15 +445,15 @@ TIP: 可能会遇到文件路径错误（`src="./js/main.js"` 写错）、中英
 [source,javascript]
 ----
 let num = 10;
-console.log(num % 2); // 输出 0 -> 偶数
-console.log(9 % 2);   // 输出 1 -> 奇数
+console.log(num % 2); // 余数 0 -> 偶数
+console.log(9 % 2);   // 余数 1 -> 奇数
 
 // 经典面试题：如何获取一个三位数 123 的个位数？
 let number = 123;
-console.log(number % 10); // 输出 3
+console.log(number % 10); // 余数 3
 ----
 
-===== 2. 赋值运算符
+==== 2. 赋值运算符
 * `=`：把右边的值给左边（不是相等！）。
 * 复合赋值：`+=`, `-=`, `*=`, `/=`。
 
@@ -466,43 +463,40 @@ console.log(number % 10); // 输出 3
 ----
 let money = 100;
 // 我想存50块进去
-// money = money + 50; // 传统写法
+// money = money + 50; // 传统写法最好理解
 money += 50; // 简写，推荐！
 console.log(money); // 150
 ----
 
-===== 3. 自增自减运算符（难点）
-* `++`：自增1。
+==== 3. 自增自减运算符（难点）
+* `++`：自增 1
 * 前置（`++i`）与后置（`i++`）的区别：
-** *单独使用*：效果一样，都是 `i = i + 1`。
-** *参与运算/输出*：
-*** *后置*：先用后加。（先输出当前的值，再加1）。
-*** *前置*：先加后用。（先加1，再输出新值）。
+  ** *单独使用*：效果一样，都是 `i = i + 1`。
+  ** *是否参与表达式运算*：
+    *** *后置*：先用后加。（先输出当前的值，再加 1）。
+    *** *前置*：先加后用。（先加 1，再输出新值）。
 
 *代码演示*：
 
 [source,javascript]
 ----
 let a = 10;
-console.log(a++); // 输出 10。因为先用了10，a变成了11
-console.log(a);   // 输出 11
+console.log( a++ ); // 输出 10。因为先用了10，a 变成了11
+console.log( a );   // 输出 11
 
 let b = 10;
-console.log(++b); // 输出 11。直接加1变成11，再输出
+console.log(++b); // 输出 11。b 直接加 1 变成 11，再输出 b 的值
 ----
 
-*教学提示*：告诉学生，如果不确定，就分开写，不要为了省事写复杂代码导致Bug。
+*教学提示*：如果不确定，就分开写，不要为了省事写复杂代码导致 Bug。
 
-==== 二：比较运算符——真与假的较量
-
-
-===== 比较运算符
+=== 二：比较运算符——真与假的较量
 结果只有两个：`true` (真) 或 `false` (假)。
 
-* `++>++` , `++<++` , `++>++=` , `++<++=` ：数字比较。
+* `>` , `<` , `>=` , `<=` ：数字比较。
 * *雷区*：`==` 与 `===` 的区别。
-** `==` (双等)：只比较**值**，会自动进行类型转换（默认行为，容易出Bug）。
-** `===` (三等)：比较**值**和**数据类型**（全等，*强烈推荐*）。
+    ** `==` (双等)： 只比较**值**，会自动进行类型转换（默认行为，容易出 Bug）。
+    ** `===` (三等)：比较**值**和**数据类型**（全等，*强烈推荐*）。
 
 *代码演示*：
 
@@ -512,21 +506,23 @@ let a = 10;
 let b = "10";
 
 // 雷区演示
-console.log(a == b);  // true  -> JS把字符串"10"转成了数字10进行比较
-console.log(a === b); // false -> 数字10 不全等于 字符串"10"
+console.log( a == b );  // true  -> JS 把字符串 "10" 转成了数字 10 进行比较
+console.log( a === b ); // false -> 数字 10 不全等于 字符串 "10"
 
-// 结论：以后判断相等，无脑使用 ===
+// 结论：以后判断相等，无脑使用三个等号 `===`
 console.log(1 === 1); // true
 console.log(1 === 2); // false
 ----
 
-==== 三：逻辑运算符——组合条件
+=== 三：逻辑运算符——组合条件
 
 
-===== 1. 逻辑与 (AND) `&&`
-* *口诀*：一假则假。
-* 只有两边都为真，结果才为真。
-* *应用*：比如“必须同时满足有身份证且年满18岁才能办卡”。
+==== 1. 逻辑与 (AND) `&&`
+* *口诀*：一假则假。即整个表达式结果为假。
+
+* 只有两边都为真，整个表达式结果才为真。
+
+* *应用*：比如“必须同时满足有 _身份证且年满18岁_ 才能办卡”。
 
 *代码演示*：
 
@@ -540,17 +536,42 @@ let canApply = hasID && isAdult;
 console.log(canApply); // false，因为未成年
 ----
 
-===== 2. 逻辑或 (OR) `||`
+==== 2. 逻辑或 (OR) `||`
 * *口诀*：一真则真。
-* 只要有一边为真，结果就为真。
-* *应用*：比如“有优惠券或者会员卡都可以打折”。
 
-===== 3. 逻辑非 `!`
+* 只要有一边为真，结果就为真。
+
+* *应用*：比如 “有优惠券或者会员卡 都可以打折”。
+
+*代码演示*：
+
+[source,javascript]
+----
+let hasCoupon‌ = true;
+let isVip = false;
+
+// 打折条件
+let canDiscount = hasCoupon‌ || isVip;
+console.log(canDiscount); // true
+----
+
+==== 3. 逻辑非 `!`
 * 取反。`!true` 变 `false`。
 
-===== 4. 短路运算（进阶重点）
+*代码演示*：
+
+[source,javascript]
+----
+let hasCoupon‌ = true;
+
+// 优惠券取反
+console.log(!hasCoupon‌); // false
+----
+
+==== 4. 短路运算（进阶重点）
 * *`&&` 短路*：如果左边为假，右边不再执行（因为结果注定是假）。
-* *`++||++` 短路*：如果左边为真，右边不再执行（因为结果注定是真）。
+
+* *`||` 短路*：如果左边为真，右边不再执行（因为结果注定是真）。
 
 *代码演示*：
 
@@ -558,19 +579,19 @@ console.log(canApply); // false，因为未成年
 ----
 let num = 0;
 // false && (右边代码不执行)
-false && num++;
+console.log('false && num++:', false && num++);
 console.log(num); // 0，num++ 根本没运行
 
 // true || (右边代码不执行)
-true || num++;
-console.log(num); // 0
+console.log('true || num++:', true || num++);
+console.log(num); // 0，num++ 根本没运行
 ----
 
-==== 四：流程控制——If 分支结构
+=== 四：流程控制——If 分支结构
 
 
-===== 1. if 语句
-如果条件为真，执行大括号里的代码。
+==== 1. if 语句
+如果条件为真，执行大括号里的代码块。
 
 *语法*：
 
@@ -581,7 +602,7 @@ if (条件) {
 }
 ----
 
-===== 2. if-else 语句
+==== 2. if-else 语句
 二选一。
 
 *场景*：如果下雨带伞，否则带墨镜。
@@ -597,7 +618,7 @@ if (weather === "下雨") {
 }
 ----
 
-===== 3. if-else if-else 语句
+==== 3. if-else if-else 语句
 多选一。
 
 *场景*：成绩评价系统。
@@ -2763,44 +2784,23 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
 ----
 
 === 三：操作元素内容
-innerText
-
-* 获取或设置标签里面的**纯文本**。
-* 特点：不识别 HTML 标签，读取时会去掉换行和空格。
-
-innerHTML
-
-* 获取或设置标签里面的**HTML代码**。
-* 特点：识别标签，保留格式。*开发中最常用*。
-
-
-.代码演示
-[source,html]
-----
-<div id="box">
-    <strong>你好</strong>
-</div>
-
-<script>
-    let box = document.querySelector('#box');
-
-    console.log(box.innerText);  // 输出: 你好 (强标签没了)
-    console.log(box.innerHTML);  // 输出: <strong>你好</strong>
-
-    // 修改内容
-    box.innerText = '<em>新的内容</em>'; // 页面显示: <em>新的内容</em> (原样输出)
-    box.innerHTML = '<em>新的内容</em>'; // 页面显示: 新的内容 (斜体，em生效了)
-</script>
-----
-
-=== 三：操作元素内容
-下表总结了操作 DOM 元素内容时最常用的两个属性：
+下表总结了操作 DOM 元素内容时最常用的三个属性：
 
 [cols="1,2,3", options="header"]
 |===
 | 属性 | 功能描述 | 特点
-| `innerText` | 获取或设置标签内的 *纯文本* | 不识别 HTML 标签，读取时会触发重排（Reflow），自动过滤隐藏元素的文本。
-| `innerHTML` | 获取或设置标签内的 *HTML 代码* | 识别并解析标签，保留原始格式。*开发中最常用，但需注意安全*。
+
+| `innerText` 
+| 获取或设置标签内的 *纯文本*
+| 不识别 HTML 标签，读取时会触发重排（Reflow），自动过滤 隐藏元素 的文本。
+
+| `textContent`
+| 获取或设置标签内的 *纯文本*
+| 不识别 HTML 标签；**性能更高**（不触发重排）；**会获取隐藏元素的文本**，保留原始代码格式。
+
+| `innerHTML` 
+| 获取或设置标签内的 *HTML 代码*
+| 识别并解析标签，保留原始格式。*开发中最常用，但需注意安全*。
 |===
 
 
@@ -2822,7 +2822,8 @@ innerHTML
         const box = document.querySelector('#box');
 
         // 1. 读取测试
-        console.log('innerText:', box.innerText);   // 输出: "你好" (粗体没了，隐藏内容也没了)
+        console.log('innerText:', box.innerText);     // 输出: "你好" (隐藏内容及标签样式均丢失)
+        console.log('textContent:', box.textContent); // 输出: "你好 看不见我" (包含隐藏文本)
         console.log('innerHTML:', box.innerHTML);   // 输出: "<strong>你好</strong> <span style='...'>...</span>"
 
         // 2. 写入测试 (innerText)
@@ -2835,57 +2836,129 @@ innerHTML
 
         // 4. 安全风险演示 (XSS)
         // 如果恶意脚本通过 innerHTML 注入，浏览器会执行它
-        const peach = "<img src='x' onerror='alert(\"XSS攻击!\")'>";
-        box.innerHTML = peach; 
+        const unsafeData = "<img src='x' onerror='alert(\"XSS攻击!\")'>";
+
+        // 安全：innerText/textContent 会将标签转义为纯字符串展示
+        // box.innerText = unsafeData;
+        // box.textContent = unsafeData; 
+
+        // 危险：innerHTML 会解析并执行恶意脚本
+        // box.innerHTML = unsafeData; 
     </script>
 </body>
 </html>
 ----
 
 
-.**安全提示：**
+.**安全与性能提示：**
 [CAUTION]
 ====
-* 永远不要将未经脱敏的用户输入直接赋值给 `innerHTML`，这会导致跨站脚本攻击（XSS）。
-* 对于纯文本展示，建议优先使用 `textContent` 或 `innerText`。
+* **严禁直接赋值**：永远不要将未经脱敏的用户输入直接赋值给 `innerHTML`，这会导致跨站脚本攻击（XSS）。
+* **优先原则**：对于纯文本展示，建议优先使用 `textContent` 或 `innerText`。
+* **性能考量**：`textContent` 性能优于 `innerText`，因为它不需要计算 CSS 布局来确定文本是否可见。
 ====
 
 === 四：操作元素样式
-
-
-==== 1. style 属性（行内样式）
+[upperalpha]
+. style 属性（行内样式）
 * 语法：`元素.style.属性名 = '值'`。
+* **注意**：JS 里的属性名要用**驼峰命名法**。
+  ** CSS: `background-color` -> JS: `backgroundColor` 
+  ** CSS: `font-size` -> JS: `fontSize` 
 
-* **注意**：JS 里的属性名要用驼峰命名法。
-  ** CSS: `background-color` -> JS: `backgroundColor`
-  ** CSS: `font-size` -> JS: `fontSize`
 
-==== 2. className 类名操作
-* 语法：`元素.className = '类名'`。
+. className 类名操作
+* 语法：`元素.className = '类名'` 。
+* **雷区**：这种方式会**直接覆盖**掉元素原本所有的类名。
+           推荐使用下面 `.classList` 的方式。
 
-* **雷区**：这会覆盖掉原来的类名。
 
-==== 3. classList 类名列表（推荐）
-* `元素.classList.add('类名')`：添加类。
-* `元素.classList.remove('类名')`：移除类。
+. classList 类名列表（推荐）
+* `元素.classList.add('类名')`：添加类，不影响原有类。
+* `元素.classList.remove('类名')`：移除类 。
 * `元素.classList.toggle('类名')`：切换类（有则删，无则加）。
 
-*代码演示*：
 
-[source,javascript]
+.样式操作综合演示
+[source,html]
 ----
-let box = document.querySelector('#box');
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>样式操作示例</title>
+    <style>
+        .box {
+            width: 200px;
+            height: 200px;
+            background-color: #eee;
+            transition: all 0.3s;
 
-// 1. 行内样式修改
-box.style.backgroundColor = 'pink';
-box.style.width = '200px';
+            /* 文字布局居中 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-// 2. 类名修改
-box.classList.add('active'); // 添加 active 类
-box.classList.toggle('hide'); // 切换 hide 类
+
+        /* 激活状态的类 */
+        .active {
+            border: 5px solid #ff4444;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+
+        /* 隐藏类 */
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">目标元素</div>
+    <hr>
+    <button id="btn-style">修改行内样式</button>
+    <button id="btn-class">切换 Active 类</button>
+    <button id="btn-toggle">隐藏 / 显示</button>
+
+    <script>
+        const box = document.querySelector('.box');
+        const btnStyle = document.querySelector('#btn-style');
+        const btnClass = document.querySelector('#btn-class');
+        const btnToggle = document.querySelector('#btn-toggle');
+
+        // 1. 修改行内样式 (style)
+        btnStyle.addEventListener('click', () => {
+            // 注意驼峰命名法
+            box.style.backgroundColor = 'skyblue';
+            box.style.fontSize = '24px';
+            box.style.fontWeight = 'bold';
+        });
+
+        // 2. 修改类名 (classList)
+        btnClass.addEventListener('click', () => {
+            // add/remove 或者更方便的 toggle
+            box.classList.toggle('active');
+        });
+
+        // 3. 隐藏与显示
+        btnToggle.addEventListener('click', () => {
+            box.classList.toggle('hide');
+        });
+    </script>
+</body>
+</html>
 ----
 
-=== S2：实战演练与项目推进（4课时）
+
+[TIP]
+====
+在实际开发中，**优先使用 `classList`**。
+将样式写在 CSS 中，通过 JS 切换类名，能实现“样式与逻辑分离”，代码更易于维护。
+====
+
+=== 实战演练与项目推进（4课时）
 
 
 ==== 第一、二课时：随堂实战案例
@@ -2997,8 +3070,6 @@ if (goodsData.isSold) {
     card.classList.remove('sold-out');
 }
 ```
-
----
 
 ==== 作业
 
