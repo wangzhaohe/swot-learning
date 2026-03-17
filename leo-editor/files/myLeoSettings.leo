@@ -164,7 +164,6 @@
 <v t="swot.20221029071117.1"><vh>leo-editor</vh></v>
 <v t="swot.20240314073153.1"><vh>java</vh></v>
 <v t="swot.20221124162354.1"><vh>asciidoc</vh>
-<v t="swot.20241016234556.1"><vh>insert html and javascript</vh></v>
 <v t="swot.20260316223014.1"><vh>sidebar</vh></v>
 <v t="swot.20230101091320.1"><vh>temp</vh></v>
 <v t="swot.20221230220909.1"><vh>toc</vh></v>
@@ -2233,90 +2232,6 @@ rrs;;=return Result.success(&lt;||&gt;);
 iftest;;=&lt;if test = "&lt;||&gt; != null"&gt; &lt;||&gt; = #{&lt;||&gt;}, &lt;/if&gt;
 
 hd;;=hdfs dfs 
-</t>
-<t tx="swot.20241016234556.1">dir;;=
-\:++++
-\:&lt;style&gt;
-\:/* 1. 默认状态：顺应你原本的展开状态 */
-\:#toc {
-\:    min-width: 0 !important;
-\:    max-height: 100vh;
-\:    /* 【关键修复】：将一刀切的 hidden 改为分别控制 */
-\:    overflow-x: hidden !important; /* 横向：隐藏溢出，保证收缩动画丝滑 */
-\:    overflow-y: auto !important;   /* 纵向：内容过多时自动显示上下滚动条 */
-\:
-\:    white-space: nowrap !important;
-\:    max-width: 530px;
-\:    opacity: 1;
-\:
-\:    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-\:                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-\:                opacity 0.3s ease;
-\:}
-\:
-\:/* 2. 收起状态（当 JS 添加此类时，平滑压扁到 0） */
-\:#toc.collapsed {
-\:    max-width: 0 !important; /* 宽度强制缩到 0 */
-\:    opacity: 0 !important; /* 透明度消失 */
-\:
-\:    /* 必须同时干掉 padding 和 border，否则它们会残留在页面上占用空间 */
-\:    padding-left: 0 !important;
-\:    padding-right: 0 !important;
-\:    border-left: none !important;
-\:    border-right: none !important;
-\:}
-\:
-\:/* 3. 修复行间距（保留你需要的紧凑排版） */
-\:#toc ul, #toc li {
-\:    margin-top: 0 !important;
-\:    margin-bottom: 8px !important;
-\:    line-height: 1.4 !important;
-\:    padding-top: 0 !important;
-\:    padding-bottom: 0 !important;
-\:}
-\:&lt;/style&gt;
-\:
-\:&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
-\:
-\:&lt;script&gt;
-\:const toggleButton = document.getElementById('toggleButton');
-\:const contentDiv = document.getElementById('toc');
-\:
-\:// 现在的逻辑更简单：点击时，切换 "collapsed"（收缩）状态。
-\:// 默认没有任何类名，所以默认是自然展开的。
-\:toggleButton.addEventListener('click', () =&gt; {
-\:    contentDiv.classList.toggle('collapsed');
-\:});
-\:&lt;/script&gt;
-\:++++
-\:
-
-
-\:////
-\:对应于 ~/.rvm/gems/ruby-2.7.2/gems/asciidoctor-2.0.23/data/stylesheets/asciidoctor-default.css
-\:
-\:/* 自定义输出 HTML 样式 */
-\:/* 固定按钮在左上角 */
-\:#toggleButton {
-\:    position: fixed;
-\:    top: 10px;
-\:    left: 10px;
-\:    z-index: 1000;
-\:    /*background-color: lightgrey;*/
-\:    color: #AB2C21;
-\:    border: none;
-\:    /*padding: 6px 10px;*/
-\:    cursor: pointer;
-\:}
-\:#toc.toc2{width:40em}
-\:#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:85em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
-\:
-\:body.toc2.toc-right {
-\:    padding-left: 0;
-\:    padding-right: 0em;
-\:}
-\:////
-\:
 </t>
 <t tx="swot.20241223112834.1">plantuml;;=[plantuml, target=img/diagram-&lt;|name|&gt;, format=svg]
 \:....
