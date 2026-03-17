@@ -1010,11 +1010,11 @@
 </v>
 </v>
 <v t="swot.20260313114540.156"><vh>实战演练与项目推进（4课时）</vh>
-<v t="swot.20260313114540.157"><vh>第一、二课时：随堂实战案例</vh>
-<v t="swot.20260313114540.158"><vh>案例 1：密码框明文/密文切换</vh></v>
-<v t="swot.20260313114540.159"><vh>案例 2：列表隔行变色</vh></v>
+<v t="swot.20260317092107.1"><vh>案例 1：密码框明文/密文切换</vh>
+<v t="swot.20260317092256.1"><vh>@clean code/examples/show-password.html</vh></v>
 </v>
-<v t="swot.20260313114540.160"><vh>第三、四课时：贯穿项目推进——《易校园》卡片样式</vh></v>
+<v t="swot.20260313114540.159"><vh>案例 2：列表隔行变色</vh></v>
+<v t="swot.20260313114540.160"><vh>贯穿项目推进——《易校园》卡片样式</vh></v>
 <v t="swot.20260313114540.161"><vh>作业</vh></v>
 </v>
 </v>
@@ -24147,33 +24147,6 @@ console.log('name:', name);  // null
 ====
 </t>
 <t tx="swot.20260313114540.156"></t>
-<t tx="swot.20260313114540.157">
-</t>
-<t tx="swot.20260313114540.158">**需求**：点击按钮，密码框在“黑点点”和“明文”之间切换。
-
-```html
-&lt;input type="password" id="pwd"&gt;
-&lt;button id="btn"&gt;显示密码&lt;/button&gt;
-
-&lt;script&gt;
-    let pwd = document.querySelector('#pwd');
-    let btn = document.querySelector('#btn');
-    let flag = true; // true表示当前是密码状态
-
-    btn.onclick = function() {
-        if (flag) {
-            pwd.type = 'text'; // 变成文本
-            btn.innerText = '隐藏密码';
-        } else {
-            pwd.type = 'password'; // 变回密码
-            btn.innerText = '显示密码';
-        }
-        flag = !flag; // 状态取反
-    };
-&lt;/script&gt;
-```
-
-</t>
 <t tx="swot.20260313114540.159">**需求**：表格或列表，奇数行白色，偶数行灰色，鼠标放上去变高亮。
 
 ```javascript
@@ -24269,13 +24242,11 @@ if (goodsData.isSold) {
 }
 ```
 </t>
-<t tx="swot.20260313114540.161">
-1.  **概念题**：`innerText` 和 `innerHTML` 有什么区别？`className` 和 `classList.add` 有什么区别？
+<t tx="swot.20260313114540.161">1.  **概念题**：`innerText` 和 `innerHTML` 有什么区别？`className` 和 `classList.add` 有什么区别？
+
 2.  **代码题**：做一个“开关灯”效果。页面有一个按钮和一个div，点击按钮，div背景在红色和蓝色之间切换。
+
 3.  **项目扩展**：修改商品卡片，如果价格小于 20 元，价格字体显示为绿色；否则显示为红色。
-
----
-
 </t>
 <t tx="swot.20260313114540.162">
 **今日目标**：
@@ -30216,6 +30187,44 @@ btnClass.addEventListener('click', () =&gt; {
 btnToggle.addEventListener('click', () =&gt; {
     box.classList.toggle('hide');
 });
+</t>
+<t tx="swot.20260317092107.1">*需求*：点击按钮，密码框在 “黑点点” 和 “明文” 之间切换。
+
+code/examples/show-password.html
+[source,html]
+----
+@others
+----
+</t>
+<t tx="swot.20260317092256.1" _mod_time="4741da6e2b8bb2f6e02e">@language html
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;querySelector 示例&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;input type="password" id="pwd" value="123456"&gt;
+&lt;button id="btn"&gt;显示密码&lt;/button&gt;
+
+&lt;script&gt;
+let pwd = document.querySelector('#pwd');
+let btn = document.querySelector('#btn');
+let flag = true; // true 表示当前是密码状态
+
+btn.onclick = function() {
+    if (flag) {
+        pwd.type = 'text'; // 变成文本
+        btn.innerText = '隐藏密码';
+    } else {
+        pwd.type = 'password'; // 变回密码
+        btn.innerText = '显示密码';
+    }
+    flag = !flag; // 状态取反
+};
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </t>
 </tnodes>
 </leo_file>

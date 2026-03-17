@@ -716,8 +716,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_四操作元素样式">四：操作元素样式</a></li>
 <li><a href="#_实战演练与项目推进4课时_2">实战演练与项目推进（4课时）</a>
 <ul class="sectlevel3">
-<li><a href="#_第一二课时随堂实战案例_3">第一、二课时：随堂实战案例</a></li>
-<li><a href="#_第三四课时贯穿项目推进易校园卡片样式">第三、四课时：贯穿项目推进——《易校园》卡片样式</a></li>
+<li><a href="#_案例_1密码框明文密文切换">案例 1：密码框明文/密文切换</a></li>
+<li><a href="#_案例_2列表隔行变色">案例 2：列表隔行变色</a></li>
+<li><a href="#_贯穿项目推进易校园卡片样式">贯穿项目推进——《易校园》卡片样式</a></li>
 <li><a href="#_作业_8">作业</a></li>
 </ul>
 </li>
@@ -4941,38 +4942,48 @@ note over Start, Console: 九九乘法表打印结束
 <div class="sect2">
 <h3 id="_实战演练与项目推进4课时_2">实战演练与项目推进（4课时）</h3>
 <div class="sect3">
-<h4 id="_第一二课时随堂实战案例_3">第一、二课时：随堂实战案例</h4>
-<div class="sect4">
-<h5 id="_案例_1密码框明文密文切换">案例 1：密码框明文/密文切换</h5>
+<h4 id="_案例_1密码框明文密文切换">案例 1：密码框明文/密文切换</h4>
 <div class="paragraph">
-<p><strong>需求</strong>：点击按钮，密码框在“黑点点”和“明文”之间切换。</p>
+<p><strong>需求</strong>：点击按钮，密码框在 “黑点点” 和 “明文” 之间切换。</p>
+</div>
+<div class="paragraph">
+<p>code/examples/show-password.html</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;password&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;pwd&quot;</span><span class="tok-p">&gt;</span>
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-cp">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">html</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;zh-CN&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">meta</span> <span class="tok-na">charset</span><span class="tok-o">=</span><span class="tok-s">&quot;UTF-8&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>querySelector 示例<span class="tok-p">&lt;/</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;password&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;pwd&quot;</span> <span class="tok-na">value</span><span class="tok-o">=</span><span class="tok-s">&quot;123456&quot;</span><span class="tok-p">&gt;</span>
 <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;btn&quot;</span><span class="tok-p">&gt;</span>显示密码<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
 
 <span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">pwd</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#pwd&#39;</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">btn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#btn&#39;</span><span class="tok-p">);</span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">flag</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// true表示当前是密码状态</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">pwd</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#pwd&#39;</span><span class="tok-p">);</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">btn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#btn&#39;</span><span class="tok-p">);</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">flag</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// true 表示当前是密码状态</span>
 
-<span class="tok-w">    </span><span class="tok-nx">btn</span><span class="tok-p">.</span><span class="tok-nx">onclick</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">flag</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-nx">pwd</span><span class="tok-p">.</span><span class="tok-nx">type</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;text&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 变成文本</span>
-<span class="tok-w">            </span><span class="tok-nx">btn</span><span class="tok-p">.</span><span class="tok-nx">innerText</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;隐藏密码&#39;</span><span class="tok-p">;</span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">            </span><span class="tok-nx">pwd</span><span class="tok-p">.</span><span class="tok-nx">type</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;password&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 变回密码</span>
-<span class="tok-w">            </span><span class="tok-nx">btn</span><span class="tok-p">.</span><span class="tok-nx">innerText</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;显示密码&#39;</span><span class="tok-p">;</span>
-<span class="tok-w">        </span><span class="tok-p">}</span>
-<span class="tok-w">        </span><span class="tok-nx">flag</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">!</span><span class="tok-nx">flag</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 状态取反</span>
-<span class="tok-w">    </span><span class="tok-p">};</span>
-<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+<span class="tok-nx">btn</span><span class="tok-p">.</span><span class="tok-nx">onclick</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">flag</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">pwd</span><span class="tok-p">.</span><span class="tok-nx">type</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;text&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 变成文本</span>
+<span class="tok-w">        </span><span class="tok-nx">btn</span><span class="tok-p">.</span><span class="tok-nx">innerText</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;隐藏密码&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">pwd</span><span class="tok-p">.</span><span class="tok-nx">type</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;password&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 变回密码</span>
+<span class="tok-w">        </span><span class="tok-nx">btn</span><span class="tok-p">.</span><span class="tok-nx">innerText</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;显示密码&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-nx">flag</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">!</span><span class="tok-nx">flag</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 状态取反</span>
+<span class="tok-p">};</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">html</span><span class="tok-p">&gt;</span></code></pre>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_案例_2列表隔行变色">案例 2：列表隔行变色</h5>
+<div class="sect3">
+<h4 id="_案例_2列表隔行变色">案例 2：列表隔行变色</h4>
 <div class="paragraph">
 <p><strong>需求</strong>：表格或列表，奇数行白色，偶数行灰色，鼠标放上去变高亮。</p>
 </div>
@@ -4999,9 +5010,8 @@ note over Start, Console: 九九乘法表打印结束
 </div>
 <hr>
 </div>
-</div>
 <div class="sect3">
-<h4 id="_第三四课时贯穿项目推进易校园卡片样式">第三、四课时：贯穿项目推进——《易校园》卡片样式</h4>
+<h4 id="_贯穿项目推进易校园卡片样式">贯穿项目推进——《易校园》卡片样式</h4>
 <div class="paragraph">
 <p><strong>场景</strong>：今天我们要为项目编写静态的商品卡片结构，并用JS控制它的样式（比如卖出去的商品变灰）。</p>
 </div>
@@ -5083,7 +5093,6 @@ note over Start, Console: 九九乘法表打印结束
 </li>
 </ol>
 </div>
-<hr>
 </div>
 </div>
 </div>
@@ -5091,7 +5100,7 @@ note over Start, Console: 九九乘法表打印结束
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-17 09:17:04 +0800
+Last updated 2026-03-17 09:28:49 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
