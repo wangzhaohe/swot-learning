@@ -3013,7 +3013,7 @@ btn.onclick = function() {
 ==== 案例 2：列表隔行变色
 *需求*：表格或列表，奇数行白色，偶数行灰色，鼠标放上去变高亮。
 
-[source,javascript]
+[source,html]
 ----
 <!DOCTYPE html>
 <html>
@@ -3118,41 +3118,58 @@ btn.onclick = function() {
 ----
 
 ==== 贯穿项目推进——《易校园》卡片样式
-**场景**：今天我们要为项目编写静态的商品卡片结构，并用JS控制它的样式（比如卖出去的商品变灰）。
+*场景*：
 
-**步骤 1：编写 HTML 结构**
-在 `index.html` 中：
-```html
+现在我们要为项目编写静态的商品卡片结构，并用 JS 控制它的样式（比如卖出去的商品变灰）。
+
+===== 步骤 1：编写 HTML 结构
+.在 `index.html` 中
+[source,html]
+----
 <div class="goods-card" id="card1">
-    <img src="images/book.jpg" alt="">
+    <img src="img/gaodeng-shuxue.jpg" alt="book">
     <h4 class="title">高等数学</h4>
     <p class="price">￥15.00</p>
     <span class="status">在售</span>
 </div>
-```
+----
 
-**步骤 2：编写 CSS 样式**
-```css
+===== 步骤 2：编写 CSS 样式
+[source,css]
+----
 .goods-card {
     width: 200px; border: 1px solid #ccc; padding: 10px;
 }
+
+/* 限制商品图片大小 */
+.goods-card img {
+    width: 100%;       /* 宽度填满 200px 的父容器 */
+    height: 150px;     /* 固定高度，防止图片高矮不一 */
+    object-fit: cover; /* 裁剪图片以填充高度，不拉伸变形 */
+    display: block;    /* 消除图片下方的微小间隙 */
+    margin-bottom: 10px;
+}
+
 .sold-out {
     opacity: 0.5; /* 半透明 */
     filter: grayscale(100%); /* 变成黑白 */
     position: relative;
 }
+
 .sold-out .status::after {
     content: "已售罄";
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0,0,0,0.3); color: white; text-align: center;
     line-height: 200px;
 }
-```
 
-**步骤 3：JS 动态控制样式**
+----
+
+===== 步骤 3：JS 动态控制样式
 模拟后台数据，如果 `isSold` 为 true，就给卡片加上 `sold-out` 类。
 
-```javascript
+[source,javascript]
+----
 // 模拟商品数据
 let goodsData = {
     id: 1,
@@ -3172,12 +3189,13 @@ if (goodsData.isSold) {
     // 移除
     card.classList.remove('sold-out');
 }
-```
+----
 
 ==== 作业
-1.  **概念题**：`innerText` 和 `innerHTML` 有什么区别？`className` 和 `classList.add` 有什么区别？
+[upperalpha]
+. **概念题**：`innerText` 和 `innerHTML` 有什么区别？`className` 和 `classList.add` 有什么区别？
 
-2.  **代码题**：做一个“开关灯”效果。页面有一个按钮和一个div，点击按钮，div背景在红色和蓝色之间切换。
+. **代码题**：做一个“开关灯”效果。页面有一个按钮和一个div，点击按钮，div背景在红色和蓝色之间切换。
 
-3.  **项目扩展**：修改商品卡片，如果价格小于 20 元，价格字体显示为绿色；否则显示为红色。
+. **项目扩展**：修改商品卡片，如果价格小于 20 元，价格字体显示为绿色；否则显示为红色。
 
