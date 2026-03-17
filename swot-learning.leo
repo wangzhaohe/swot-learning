@@ -1013,7 +1013,13 @@
 <v t="swot.20260317092107.1"><vh>案例 1：密码框明文/密文切换</vh>
 <v t="swot.20260317092256.1"><vh>@clean code/examples/show-password.html</vh></v>
 </v>
-<v t="swot.20260313114540.159"><vh>案例 2：列表隔行变色</vh></v>
+<v t="swot.20260317092956.1"><vh>案例 2：列表隔行变色</vh>
+<v t="swot.20260317093716.1"><vh>@clean code/examples/table-color.html</vh>
+<v t="swot.20260317095224.1"><vh>&lt;&lt; mystyle &gt;&gt;</vh></v>
+<v t="swot.20260317095226.1"><vh>&lt;&lt; mybody &gt;&gt;</vh></v>
+<v t="swot.20260317095228.1"><vh>&lt;&lt; myscript &gt;&gt;</vh></v>
+</v>
+</v>
 <v t="swot.20260313114540.160"><vh>贯穿项目推进——《易校园》卡片样式</vh></v>
 <v t="swot.20260313114540.161"><vh>作业</vh></v>
 </v>
@@ -1251,7 +1257,13 @@
 </v>
 </v>
 <v t="swot.20260316225122.1"><vh>@adoc 给AI分析的资源.adoc</vh>
-<v t="swot.20260316225122.2"><vh>给AI分析的资源</vh></v>
+<v t="swot.20260316225122.2"><vh>给AI分析的资源</vh>
+<v t="swot.20260317094821.1"><vh>案例 2：列表隔行变色</vh>
+<v t="swot.20260317094821.2"><vh>@clean code/examples/table-color.html</vh>
+<v t="swot.20260317094821.3"><vh>表格颜色控制</vh></v>
+</v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -24147,31 +24159,6 @@ console.log('name:', name);  // null
 ====
 </t>
 <t tx="swot.20260313114540.156"></t>
-<t tx="swot.20260313114540.159">**需求**：表格或列表，奇数行白色，偶数行灰色，鼠标放上去变高亮。
-
-```javascript
-let trs = document.querySelectorAll('tr');
-for (let i = 0; i &lt; trs.length; i++) {
-    // 隔行变色：索引为奇数时变色
-    if (i % 2 === 1) {
-        trs[i].style.backgroundColor = '#f5f5f5';
-    }
-
-    // 鼠标经过高亮
-    trs[i].onmouseover = function() {
-        this.style.backgroundColor = 'yellow';
-    };
-    trs[i].onmouseout = function() {
-        // 移开要恢复原色，这里需要逻辑判断，或者用class做
-        // 简单做法：恢复默认或隔行逻辑
-        this.style.backgroundColor = '';
-    };
-}
-```
-
----
-
-</t>
 <t tx="swot.20260313114540.16">以前我们要把变量放进字符串，很麻烦：
 
 [source,javascript]
@@ -30225,6 +30212,163 @@ btn.onclick = function() {
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
+</t>
+<t tx="swot.20260317092956.1">*需求*：表格或列表，奇数行白色，偶数行灰色，鼠标放上去变高亮。
+
+[source,javascript]
+----
+@others
+----
+</t>
+<t tx="swot.20260317093716.1" _mod_time="4741da6e2fb46bf9942e">@language xml
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width" /&gt;
+    &lt;title&gt;表格颜色控制&lt;/title&gt;
+    &lt;style&gt;
+        &lt;&lt; mystyle &gt;&gt;
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;&lt; mybody &gt;&gt;
+    &lt;script&gt;
+        &lt;&lt; myscript &gt;&gt;
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</t>
+<t tx="swot.20260317094821.1">*需求*：表格或列表，奇数行白色，偶数行灰色，鼠标放上去变高亮。
+
+[source,javascript]
+----
+@others
+----
+</t>
+<t tx="swot.20260317094821.2" _mod_time="4741da6e2ca71811f52e">@language xml
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width" /&gt;
+    &lt;title&gt;表格颜色控制&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script&gt;
+@others
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</t>
+<t tx="swot.20260317094821.3">@language javascript
+let trs = document.querySelectorAll('tr');
+
+for (let i = 0; i &lt; trs.length; i++) {
+    // 隔行变色：索引为奇数时变色
+    if (i % 2 === 1) {
+        trs[i].style.backgroundColor = '#f5f5f5';
+    }
+
+    // 鼠标经过高亮
+    trs[i].onmouseover = function() {
+        this.style.backgroundColor = 'yellow';
+    };
+
+    trs[i].onmouseout = function() {
+        // 移开要恢复原色，这里需要逻辑判断，或者用class做
+        // 简单做法：恢复默认或隔行逻辑
+        this.style.backgroundColor = '';
+    };
+}
+</t>
+<t tx="swot.20260317095224.1">@language css
+/* 添加简单的样式让表格更易读 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: sans-serif;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}</t>
+<t tx="swot.20260317095226.1">@language html
+&lt;h2&gt;员工信息表&lt;/h2&gt;
+
+&lt;table id="myTable"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;ID&lt;/th&gt;
+            &lt;th&gt;姓名&lt;/th&gt;
+            &lt;th&gt;职位&lt;/th&gt;
+            &lt;th&gt;部门&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;001&lt;/td&gt;
+            &lt;td&gt;张三&lt;/td&gt;
+            &lt;td&gt;前端工程师&lt;/td&gt;
+            &lt;td&gt;技术部&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;002&lt;/td&gt;
+            &lt;td&gt;李四&lt;/td&gt;
+            &lt;td&gt;产品经理&lt;/td&gt;
+            &lt;td&gt;产品部&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;003&lt;/td&gt;
+            &lt;td&gt;王五&lt;/td&gt;
+            &lt;td&gt;UI设计师&lt;/td&gt;
+            &lt;td&gt;设计部&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;004&lt;/td&gt;
+            &lt;td&gt;赵六&lt;/td&gt;
+            &lt;td&gt;后端工程师&lt;/td&gt;
+            &lt;td&gt;技术部&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;005&lt;/td&gt;
+            &lt;td&gt;钱七&lt;/td&gt;
+            &lt;td&gt;运维专家&lt;/td&gt;
+            &lt;td&gt;技术部&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;</t>
+<t tx="swot.20260317095228.1">@language javascript
+// 获取所有行
+let trs = document.querySelectorAll('tr');
+
+// 遍历每一行进行逻辑处理
+for (let i = 0; i &lt; trs.length; i++) {
+
+    // 隔行变色：索引为奇数时变色（即偶数行，因索引从0开始）变色
+    if (i % 2 === 1) {
+        trs[i].style.backgroundColor = '#f5f5f5';
+    }
+
+    // 鼠标经过高亮
+    trs[i].onmouseover = function() {
+        this.style.backgroundColor = 'yellow';
+    };
+
+    trs[i].onmouseout = function() {
+        // 恢复逻辑：如果索引是奇数，恢复灰色；否则恢复白色（默认）
+        if (i % 2 === 1) {
+            this.style.backgroundColor = '#f5f5f5';
+        } else {
+            this.style.backgroundColor = '';
+        }
+    };
+}
 </t>
 </tnodes>
 </leo_file>

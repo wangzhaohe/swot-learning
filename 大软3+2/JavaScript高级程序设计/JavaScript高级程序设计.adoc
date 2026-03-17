@@ -2998,29 +2998,111 @@ btn.onclick = function() {
 ----
 
 ==== 案例 2：列表隔行变色
-**需求**：表格或列表，奇数行白色，偶数行灰色，鼠标放上去变高亮。
+*需求*：表格或列表，奇数行白色，偶数行灰色，鼠标放上去变高亮。
 
-```javascript
-let trs = document.querySelectorAll('tr');
-for (let i = 0; i < trs.length; i++) {
-    // 隔行变色：索引为奇数时变色
-    if (i % 2 === 1) {
-        trs[i].style.backgroundColor = '#f5f5f5';
-    }
+[source,javascript]
+----
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>表格颜色控制</title>
+    <style>
+        /* 添加简单的样式让表格更易读 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: sans-serif;
+        }
 
-    // 鼠标经过高亮
-    trs[i].onmouseover = function() {
-        this.style.backgroundColor = 'yellow';
-    };
-    trs[i].onmouseout = function() {
-        // 移开要恢复原色，这里需要逻辑判断，或者用class做
-        // 简单做法：恢复默认或隔行逻辑
-        this.style.backgroundColor = '';
-    };
-}
-```
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
 
----
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>员工信息表</h2>
+
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>姓名</th>
+                <th>职位</th>
+                <th>部门</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>001</td>
+                <td>张三</td>
+                <td>前端工程师</td>
+                <td>技术部</td>
+            </tr>
+            <tr>
+                <td>002</td>
+                <td>李四</td>
+                <td>产品经理</td>
+                <td>产品部</td>
+            </tr>
+            <tr>
+                <td>003</td>
+                <td>王五</td>
+                <td>UI设计师</td>
+                <td>设计部</td>
+            </tr>
+            <tr>
+                <td>004</td>
+                <td>赵六</td>
+                <td>后端工程师</td>
+                <td>技术部</td>
+            </tr>
+            <tr>
+                <td>005</td>
+                <td>钱七</td>
+                <td>运维专家</td>
+                <td>技术部</td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        // 获取所有行
+        let trs = document.querySelectorAll('tr');
+
+        // 遍历每一行进行逻辑处理
+        for (let i = 0; i < trs.length; i++) {
+
+            // 隔行变色：索引为奇数时变色（即偶数行，因索引从0开始）变色
+            if (i % 2 === 1) {
+                trs[i].style.backgroundColor = '#f5f5f5';
+            }
+
+            // 鼠标经过高亮
+            trs[i].onmouseover = function() {
+                this.style.backgroundColor = 'yellow';
+            };
+
+            trs[i].onmouseout = function() {
+                // 恢复逻辑：如果索引是奇数，恢复灰色；否则恢复白色（默认）
+                if (i % 2 === 1) {
+                    this.style.backgroundColor = '#f5f5f5';
+                } else {
+                    this.style.backgroundColor = '';
+                }
+            };
+        }
+    </script>
+</body>
+</html>
+----
 
 ==== 贯穿项目推进——《易校园》卡片样式
 **场景**：今天我们要为项目编写静态的商品卡片结构，并用JS控制它的样式（比如卖出去的商品变灰）。
