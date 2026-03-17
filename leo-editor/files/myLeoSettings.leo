@@ -190,6 +190,7 @@
 <v t="swot.20221229205629.1"><vh>jQuery</vh></v>
 <v t="swot.20220220162739.1"><vh>tags</vh></v>
 <v t="swot.20230114084325.1"><vh>vue</vh></v>
+<v t="swot.20260317093115.1"><vh>html</vh></v>
 </v>
 <v t="swot.20230816100435.1"><vh>css</vh></v>
 <v t="swot.20220211081841.1"><vh>javascript</vh></v>
@@ -1158,7 +1159,9 @@ wo;;=window.onload = function () {&lt;||&gt;}
 
 fun;;=function &lt;||&gt;() {&lt;||&gt;}
 
-script;;=&lt;script&gt;&lt;||&gt;&lt;/script&gt;
+script;;=&lt;script&gt;
+\:&lt;||&gt;
+\:&lt;/script&gt;
 scr;;=&lt;script src="&lt;||&gt;"&gt;&lt;/script&gt;
 scm;;=&lt;script type="module"&gt;&lt;||&gt;&lt;/script&gt;
 
@@ -1879,21 +1882,6 @@ vue;;=@tabwidth -2
 \:&lt;/html&gt;
 \:
 
-
-html;;=@language xml
-\:&lt;!DOCTYPE html&gt;
-\:&lt;html&gt;
-\:  &lt;head&gt;
-\:    &lt;meta charset="UTF-8" /&gt;
-\:    &lt;meta name="viewport" content="width=device-width" /&gt;
-\:    &lt;title&gt;&lt;||&gt;&lt;/title&gt;
-\:  &lt;/head&gt;
-\:  &lt;body&gt;
-\:    &lt;div id="root"&gt;&lt;/div&gt;
-\:    &lt;script src="./js/vue.js"&gt;&lt;/script&gt;
-\:    &lt;script src="./main.js"&gt;&lt;/script&gt;
-\:  &lt;/body&gt;
-\:&lt;/html&gt;
 
 127;;=http://127.0.0.1:5500/&lt;||&gt;.html
 </t>
@@ -2977,6 +2965,24 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 \:}
 \:////
 \:
+</t>
+<t tx="swot.20260317093115.1">html;;=@language xml
+\:&lt;!DOCTYPE html&gt;
+\:&lt;html&gt;
+\:&lt;head&gt;
+\:    &lt;meta charset="UTF-8" /&gt;
+\:    &lt;meta name="viewport" content="width=device-width" /&gt;
+\:    &lt;title&gt;&lt;|网页标题|&gt;&lt;/title&gt;
+\:&lt;/head&gt;
+\:&lt;body&gt;
+\:    &lt;|网页主体内容|&gt;
+\:&lt;/body&gt;
+\:&lt;/html&gt;
+
+
+#\:    &lt;div id="root"&gt;&lt;/div&gt;
+#\:    &lt;script src="./js/vue.js"&gt;&lt;/script&gt;
+#\:    &lt;script src="./main.js"&gt;&lt;/script&gt;
 </t>
 </tnodes>
 </leo_file>
