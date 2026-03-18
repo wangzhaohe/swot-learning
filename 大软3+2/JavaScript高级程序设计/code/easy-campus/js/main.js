@@ -76,5 +76,55 @@ if (isVIP && currentMoney > 0) {
 else {
     console.log("您不是会员或余额不足，无法访问该板块！");
 }
+//@+node:swot.20260318085639.1: ** Ch 3 更新: 数据模拟 2026-03-18
+console.log('Ch 3 更新: 数据模拟 2026-03-18');
+//@+node:swot.20260314150831.1: *3* BB 定义商品仓库
+//@@language javascript
+let goodsList = [];  // 定义商品仓库
+//@+node:swot.20260314151306.1: *3* BB 定义生成测试商品数据函数 generateGoods(count)
+//@@language javascript
+/**
+ * 函数：生成测试商品数据
+ * 参数：count (生成多少个)
+ */
+function generateGoods(count) {
+    // 清空原数组
+    goodsList = [];
+
+    // 商品名称模板
+    const names = ["高等数学", "大学英语", "计算机网络", "二手自行车", "台灯", "风扇", "U盘"];
+            // 索引  0          1         2            3           4      5       6
+
+    for (let i = 1; i <= count; i++) {
+        // 生成一个随机商品对象 Object
+        let goods = {
+            id: i,
+            name: names[Math.floor(Math.random() * names.length)] + " (第" + i + "件)",
+            finalPrice: Math.floor(Math.random() * 100) + 10, // 10-110之间的随机价格
+            date: "2026-02-" + (Math.floor(Math.random() * 28) + 1), // 随机日期
+            isSold: Math.random() > 0.8 // 随机生成是否已售出 (80% 未售，20% 已售)
+        };
+        // 把商品推入仓库
+        goodsList.push(goods);
+    }
+    console.log(`成功生成 ${count} 条商品数据！`);
+}
+//@+node:swot.20260314151757.1: *3* BB 调用函数存入端口仓库 call generateGoods()
+//@@language javascript
+// 调用函数，生成10个商品
+generateGoods(10);
+
+// 在控制台打印查看
+console.log(goodsList);
+//@+node:swot.20260314151902.1: *3* BB 循环打印商品清单预览
+//@@language javascript
+console.log("========== 商品清单预览 ==========");
+
+for (let i = 0; i < goodsList.length; i++) {
+    // 取出第 i 个商品
+    let item = goodsList[i];  // 数组索引是从 0 开始的
+    // 打印简略信息
+    console.log(`ID: ${item.id} | 名称: ${item.name} | 价格: ${item.finalPrice}元`);
+}
 //@-others
 //@-leo

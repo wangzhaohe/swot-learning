@@ -1133,14 +1133,14 @@ note over Start, Console: 九九乘法表打印结束
 - **交互箭头：**
 箭头清晰地展示了字符串是如何在内层一步步拼接，最后交由外层一次性“发射”给控制台打印的。
 
-=== S2：实战演练与项目推进（4课时）
+=== 实战演练与项目推进（4课时）
 
 
 ==== 一：随堂实战案例
 
 
 ===== 案例 1：求偶数和
-*需求*：计算1到100之间所有偶数的和。
+*需求*：计算 1 到 100 之间所有偶数的和。
 
 *思路*：在循环内部加一个 `if` 判断。
 
@@ -1148,6 +1148,7 @@ note over Start, Console: 九九乘法表打印结束
 [source,javascript]
 ----
 let evenSum = 0;
+
 for (let i = 1; i <= 100; i++) {
     if (i % 2 === 0) { // 判断是否是偶数
         evenSum += i;
@@ -1157,7 +1158,7 @@ console.log(`偶数和是：${evenSum}`);
 ----
 
 ===== 案例 2：简易 ATM 取款机（循环版）
-*需求*：之前的 ATM 只能操作一次，现在要让它一直运行，直到用户选择“退出”。
+*需求*：之前的 ATM 只能操作一次，现在要让它一直运行，直到用户选择 “退出”。
 
 *关键技术*：`while (true)` 配合 `break`。
 
@@ -1172,7 +1173,7 @@ console.log(`偶数和是：${evenSum}`);
     <script>
         let balance = 1000;
 
-        while (true) { // 死循环，一直运行
+        while (true) {  // 死循环，一直运行
             let choice = prompt("请选择操作：\n1. 查询余额\n2. 存款\n3. 取款\n4. 退出");
 
             if (choice === "1") {
@@ -1194,10 +1195,10 @@ console.log(`偶数和是：${evenSum}`);
             }
             else if (choice === "4") {
                 alert("感谢使用，再见！");
-                break; // 退出死循环
+                break; // 退出 while 死循环
             }
             else {
-                alert("输入错误，请重试！");
+                alert("输入错误，请重试！");  // 不是 1,2,3,4 选项
             }
         }
     </script>
@@ -1207,6 +1208,8 @@ console.log(`偶数和是：${evenSum}`);
 </body>
 </html>
 ----
+
+因为使用了浏览器的内置函数 `prompt` 和 `alert`，所以例子放在网页里。
 
 _注意_：`prompt` 返回的是字符串，如果是数字操作建议用 `parseFloat` 转换。
 
@@ -1235,15 +1238,16 @@ function generateGoods(count) {
 
     // 商品名称模板
     const names = ["高等数学", "大学英语", "计算机网络", "二手自行车", "台灯", "风扇", "U盘"];
+            // 索引  0          1         2            3           4      5       6
 
     for (let i = 1; i <= count; i++) {
-        // 生成一个随机商品对象
+        // 生成一个随机商品对象 Object
         let goods = {
             id: i,
             name: names[Math.floor(Math.random() * names.length)] + " (第" + i + "件)",
             finalPrice: Math.floor(Math.random() * 100) + 10, // 10-110之间的随机价格
-            date: "2026-10-" + (Math.floor(Math.random() * 28) + 1), // 随机日期
-            isSold: Math.random() > 0.8 // 随机生成是否已售出 (80%未售，20%已售)
+            date: "2026-02-" + (Math.floor(Math.random() * 28) + 1), // 随机日期
+            isSold: Math.random() > 0.8 // 随机生成是否已售出 (80% 未售，20% 已售)
         };
         // 把商品推入仓库
         goodsList.push(goods);
@@ -1255,7 +1259,9 @@ function generateGoods(count) {
 *知识点解释*：
 
 * `Math.random()`：生成 0 到 1 之间的随机小数。
+
 * `Math.floor()`：向下取整（去掉小数部分）。
+
 * `goodsList.push(goods)`：把生成的对象塞进数组。虽然数组还没细讲，但这里作为容器使用，理解为“存进去”即可。
 
 ===== 步骤 3：调用函数并查看数据
@@ -1277,14 +1283,14 @@ console.log("========== 商品清单预览 ==========");
 
 for (let i = 0; i < goodsList.length; i++) {
     // 取出第 i 个商品
-    let item = goodsList[i];
+    let item = goodsList[i];  // 数组索引是从 0 开始的
     // 打印简略信息
     console.log(`ID: ${item.id} | 名称: ${item.name} | 价格: ${item.finalPrice}元`);
 }
 ----
 
 ===== 步骤 5：调试环节
-展开控制台中的 `Array(20)`，查看每一个对象的结构。
+展开控制台中的 `Array(10)`，查看每一个对象的结构。
 *这就是未来我们要渲染到网页上的数据原材料。*
 
 ==== 作业
