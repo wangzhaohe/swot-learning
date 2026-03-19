@@ -81,34 +81,6 @@ console.log('Ch 3 更新: 数据模拟 2026-03-18');
 //@+node:swot.20260314150831.1: *3* BB 定义商品仓库
 //@@language javascript
 let goodsList = [];  // 定义商品仓库
-//@+node:swot.20260314151306.1: *3* BB 定义生成测试商品数据函数 generateGoods(count)
-//@@language javascript
-/**
- * 函数：生成测试商品数据
- * 参数：count (生成多少个)
- */
-function generateGoods(count) {
-    // 清空原数组
-    goodsList = [];
-
-    // 商品名称模板
-    const names = ["高等数学", "大学英语", "计算机网络", "二手自行车", "台灯", "风扇", "U盘"];
-            // 索引  0          1         2            3           4      5       6
-
-    for (let i = 1; i <= count; i++) {
-        // 生成一个随机商品对象 Object
-        let goods = {
-            id: i,
-            name: names[Math.floor(Math.random() * names.length)] + " (第" + i + "件)",
-            finalPrice: Math.floor(Math.random() * 100) + 10, // 10-110之间的随机价格
-            date: "2026-02-" + (Math.floor(Math.random() * 28) + 1), // 随机日期
-            isSold: Math.random() > 0.8 // 随机生成是否已售出 (80% 未售，20% 已售)
-        };
-        // 把商品推入仓库
-        goodsList.push(goods);
-    }
-    console.log(`成功生成 ${count} 条商品数据！`);
-}
 //@+node:swot.20260314151757.1: *3* BB 调用函数存入端口仓库 call generateGoods()
 //@@language javascript
 // 调用函数，生成10个商品
@@ -126,5 +98,89 @@ for (let i = 0; i < goodsList.length; i++) {
     // 打印简略信息
     console.log(`ID: ${item.id} | 名称: ${item.name} | 价格: ${item.finalPrice}元`);
 }
+//@+node:swot.20260318163307.1: ** Ch 4：函数与作用域——代码的“封装”艺术
+//@+node:swot.20260314165234.1: *3* 重构“商品折扣计算” calculatePrice()
+//@@language javascript
+/**
+ * 功能：计算折扣价格
+ * @param {number} originalPrice - 原价
+ * @param {number} level - 会员等级 (1 or 2)
+ * @returns {number} - 最终价格
+ */
+function calculatePrice (originalPrice, level) {
+    if (level === 2) {
+        return originalPrice * 0.8;
+    }
+    else if (level === 1) {
+        return originalPrice * 0.9;
+    }
+    else {
+        return originalPrice;
+    }
+};
+
+//@+node:swot.20260314165417.1: *3* 重构“日期格式化” getFormatDate()
+//@@language javascript
+/**
+ * 功能：获取当前格式化时间
+ * @returns {string} - 如 "2023-10-25 14:30:00"
+ */
+function getFormatDate() {
+
+    const date = new Date();
+
+    let y = date.getFullYear();
+    let m = date.getMonth() + 1; // 月份要+1
+    let d = date.getDate();
+    let h = date.getHours();
+    let min = date.getMinutes();
+    let s = date.getSeconds();
+
+    // 补零操作：如果是个位数，前面加0。使用三元运算符
+    m = m < 10 ? "0" + m : m;
+    d = d < 10 ? "0" + d : d;
+    h = h < 10 ? "0" + h : h;
+    min = min < 10 ? "0" + min : min;
+    s = s < 10 ? "0" + s : s;
+
+    return `${y}-${m}-${d} ${h}:${min}:${s}`;
+}
+
+//@+node:swot.20260314165448.1: *3* 重构“批量数据生成器” generateGoods()
+//@@language javascript
+/**
+ * 生成商品数据（升级版）
+ * @param {number} count
+ */
+function generateGoods(count) {
+    goodsList = []; // 清空原数组
+    const names = ["高等数学", "大学英语", "计算机网络", "二手自行车", "台灯"];
+
+    for (let i = 1; i <= count; i++) {
+        // 1. 生成随机原价
+        let originalPrice = Math.floor(Math.random() * 100) + 10;
+
+        // 2. 随机会员等级 (0, 1, 2)
+        let randomLevel = Math.floor(Math.random() * 3);
+
+        // 3. 调用计算折扣函数
+        let finalPrice = calculatePrice(originalPrice, randomLevel);
+
+        let goods = {
+            id: i,
+            name: names[Math.floor(Math.random() * names.length)] + "-" + i,
+            // -- new START --
+            originalPrice: originalPrice,
+            finalPrice: finalPrice,
+            createTime: getFormatDate(), // 调用时间函数
+            // -- new ENT --
+            isSold: Math.random() > 0.8 // 随机生成是否已售出 (80% 未售，20% 已售)
+        };
+
+        goodsList.push(goods);
+    }
+    console.log("商品数据生成完毕：", goodsList);
+}
+
 //@-others
 //@-leo
