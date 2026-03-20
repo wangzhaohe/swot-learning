@@ -3435,7 +3435,7 @@ if (goodsData.isSold) {
 </html>
 ----
 
-=== 四：节点操作——增删改
+=== 案例：任务列表（增删综合）
 之前我们用 `innerHTML` 拼接字符串，虽然简单，但效率较低且不安全。专业的做法是操作节点。
 
 [upperalpha]
@@ -3450,52 +3450,54 @@ if (goodsData.isSold) {
   * 新写法：`元素.remove()`
 
 
- .code/examples/node-operation.html
- [source,html]
+*需求*：输入内容，点击添加，添加到列表；点击列表项，删除该条任务。
+
+.code/examples/task-list.html
+[source,html]
 ----
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>节点操作——增删改</title>
+    <title>任务列表（增删综合）</title>
 </head>
 <body>
-    <input type="text" id="taskInput" placeholder="请输入任务...">
+    <input type="text" id="task" placeholder="请输入任务...">
     <button id="addBtn">添加任务</button>
-
-    <ul id="taskList">
+    <ul id="list">
         <li>原有的老任务 (点击我删除)</li>
     </ul>
 
     <script>
-        const input = document.querySelector('#taskInput');
-        const addBtn = document.querySelector('#addBtn');
-        const ul = document.querySelector('#taskList');
-
-        // 1. 添加功能
+        let task = document.querySelector('#task');
+        let addBtn = document.querySelector('#addBtn');
+        let list = document.querySelector('#list');
         addBtn.onclick = function() {
 
-            if (input.value.trim() === '')
-                return; // 空值校验
+            let content = task.value;
+            if (content.trim() === '') {
+                alert('内容不能为空！');
+                return;
+            }
 
-            // A. 创建节点
+            // 创建 li
             let newLi = document.createElement('li');
-            newLi.textContent = input.value;
+            newLi.textContent = content;
 
-            // B. 添加节点
-            ul.appendChild(newLi);
-            
-            // 清空输入框
-            input.value = '';
+            // 添加到 ul 的最前面 (insertBefore)，即在索引 0 前面
+            list.insertBefore(newLi, list.children[0]);
+            // list.appendChild(newLi);
+
+            task.value = '';  // 清空文本框
         };
 
-        // 2. 删除功能 (给 ul 绑定点击事件，子节点 li 的点击会冒泡给 ul)
-        ul.onclick = function(e) {
-            // C. 删除节点：点击哪个 li 就杀掉哪个
+        // 这里给 ul 注册点击事件，利用事件源判断
+        list.onclick = function(e) {
+            // e.target 返回的是你点击的那个元素
             if (e.target.tagName === 'LI') {
-                // ul.removeChild(e.target);  // 父节点清理门户
-                e.target.remove()  // 这样写也可以 子节点自我了断
+                list.removeChild(e.target);
+                // e.target.remove()  // 这样写也可以 子节点自我了断
             }
         };
     </script>
@@ -3503,54 +3505,7 @@ if (goodsData.isSold) {
 </html>
 ----
 
-=== 实战演练与项目推进
-
-
-==== 案例：留言板（增删综合）
-*需求*：输入内容，点击发布，添加到列表；点击列表项，删除该条留言。
-
-[source,html]
-----
-<textarea id="msg"></textarea>
-<button id="publish">发布</button>
-<ul id="list"></ul>
-
-<script>
-    let msg = document.querySelector('#msg');
-    let publish = document.querySelector('#publish');
-    let list = document.querySelector('#list');
-
-    // 1. 发布功能
-    publish.onclick = function() {
-        let content = msg.value;
-        if (content.trim() === '') {
-            alert('内容不能为空！');
-            return;
-        }
-
-        // 创建li
-        let li = document.createElement('li');
-        li.innerText = content;
-
-        // 添加到ul的最前面 (insertBefore)
-        list.insertBefore(li, list.children[0]);
-
-        // 清空文本框
-        msg.value = '';
-    };
-
-    // 2. 删除功能 (点击留言删除)
-    // 这里给ul注册点击事件，利用事件源判断
-    list.onclick = function(e) {
-        // e.target 返回的是你点击的那个元素
-        if (e.target.tagName === 'LI') {
-            list.removeChild(e.target);
-        }
-    };
-</script>
-----
-
-==== 第三、四课时：贯穿项目推进——《易校园》列表渲染
+=== 贯穿项目推进——《易校园》列表渲染
 
 **场景**：这是前端开发最核心的环节：**数据驱动视图**。我们要把内存里的数组数据，变成网页上的HTML结构。
 
@@ -3625,11 +3580,10 @@ addBtn.onclick = function() {
 
 ---
 
-==== 作业
-
+=== 作业
 1.  **概念题**：`appendChild` 和 `innerHTML +=` 实现效果一样，为什么推荐用节点操作？（提示：性能和事件绑定）。
-2.  **代码题**：修改留言板案例，每条留言后面加一个“删除”按钮，点击按钮删除该条留言。
-3.  **项目扩展**：在渲染函数中，给每个商品卡片加上“加入购物车”按钮，点击按钮时，控制台打印该商品的名字。
 
----
+2.  **代码题**：修改留言板案例，每条留言后面加一个“删除”按钮，点击按钮删除该条留言。
+
+3.  **项目扩展**：在渲染函数中，给每个商品卡片加上“加入购物车”按钮，点击按钮时，控制台打印该商品的名字。
 

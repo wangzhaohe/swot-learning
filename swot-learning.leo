@@ -1055,16 +1055,15 @@
 </v>
 </v>
 </v>
-<v t="swot.20260317135614.1"><vh>四：节点操作——增删改</vh>
-<v t="swot.20260320081445.1"><vh>@clean code/examples/node-operation.html</vh>
-<v t="swot.20260320091413.1"><vh>节点操作——增删改 js</vh></v>
+<v t="swot.20260320112722.1"><vh>案例：任务列表（增删综合）</vh>
+<v t="swot.20260320113234.1"><vh>@clean code/examples/task-list.html</vh>
+<v t="swot.20260320115825.1"><vh>获取 DOM 元素</vh></v>
+<v t="swot.20260320113423.1"><vh>添加功能</vh></v>
+<v t="swot.20260320115912.1"><vh>删除功能 (点击任务删除)</vh></v>
 </v>
 </v>
-<v t="swot.20260313114540.175"><vh>实战演练与项目推进</vh>
-<v t="swot.20260320112722.1"><vh>案例：留言板（增删综合）</vh></v>
-<v t="swot.20260313114540.178"><vh>第三、四课时：贯穿项目推进——《易校园》列表渲染</vh></v>
+<v t="swot.20260313114540.178"><vh>贯穿项目推进——《易校园》列表渲染</vh></v>
 <v t="swot.20260313114540.179"><vh>作业</vh></v>
-</v>
 </v>
 </v>
 </v>
@@ -24258,8 +24257,6 @@ console.log(intro);
 **教学重点**：强调反引号的便捷性，以后项目里全都要用这个，告别 `+` 号拼接字符串。
 </t>
 <t tx="swot.20260313114540.174"></t>
-<t tx="swot.20260313114540.175">
-</t>
 <t tx="swot.20260313114540.178">
 **场景**：这是前端开发最核心的环节：**数据驱动视图**。我们要把内存里的数组数据，变成网页上的HTML结构。
 
@@ -24335,13 +24332,11 @@ addBtn.onclick = function() {
 ---
 
 </t>
-<t tx="swot.20260313114540.179">
-1.  **概念题**：`appendChild` 和 `innerHTML +=` 实现效果一样，为什么推荐用节点操作？（提示：性能和事件绑定）。
+<t tx="swot.20260313114540.179">1.  **概念题**：`appendChild` 和 `innerHTML +=` 实现效果一样，为什么推荐用节点操作？（提示：性能和事件绑定）。
+
 2.  **代码题**：修改留言板案例，每条留言后面加一个“删除”按钮，点击按钮删除该条留言。
+
 3.  **项目扩展**：在渲染函数中，给每个商品卡片加上“加入购物车”按钮，点击按钮时，控制台打印该商品的名字。
-
----
-
 </t>
 <t tx="swot.20260313114540.18"></t>
 <t tx="swot.20260313114540.180">
@@ -30269,25 +30264,6 @@ if (goodsData.isSold) {
 </t>
 <t tx="swot.20260317131907.2">@others</t>
 <t tx="swot.20260317131938.1"></t>
-<t tx="swot.20260317135614.1">之前我们用 `innerHTML` 拼接字符串，虽然简单，但效率较低且不安全。专业的做法是操作节点。
-
-[upperalpha]
-. 创建节点
-  * `document.createElement('标签名')`
-
-. 添加节点
-  * `父元素.appendChild(子元素)`：添加到父元素内部的最后面。
-
-. 删除节点
-  * 老写法：`父元素.removeChild(子元素)`：父元素杀掉子元素。
-  * 新写法：`元素.remove()`
-
- 
- .code/examples/node-operation.html
- [source,html]
-----
-@others
-----</t>
 <t tx="swot.20260318143446.1">现代前端开发（Vue/React）中，箭头函数是主流。
 
 语法:
@@ -30326,58 +30302,6 @@ const addSimple = (a, b) =&gt; a + b;
 console.log('1 + 2 = ', addSimple(1, 2));  // 3
 ----
 </t>
-<t tx="swot.20260320081445.1" _mod_time="4741da6f28cb0c4c3a2e">@language xml
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8" /&gt;
-    &lt;meta name="viewport" content="width=device-width" /&gt;
-    &lt;title&gt;节点操作——增删改&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;input type="text" id="taskInput" placeholder="请输入任务..."&gt;
-    &lt;button id="addBtn"&gt;添加任务&lt;/button&gt;
-
-    &lt;ul id="taskList"&gt;
-        &lt;li&gt;原有的老任务 (点击我删除)&lt;/li&gt;
-    &lt;/ul&gt;
-
-    &lt;script&gt;
-        @others
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</t>
-<t tx="swot.20260320091413.1">@language javascript
-const input = document.querySelector('#taskInput');
-const addBtn = document.querySelector('#addBtn');
-const ul = document.querySelector('#taskList');
-
-// 1. 添加功能
-addBtn.onclick = function() {
-
-    if (input.value.trim() === '')
-        return; // 空值校验
-
-    // A. 创建节点
-    let newLi = document.createElement('li');
-    newLi.textContent = input.value;
-
-    // B. 添加节点
-    ul.appendChild(newLi);
-    
-    // 清空输入框
-    input.value = '';
-};
-
-// 2. 删除功能 (给 ul 绑定点击事件，子节点 li 的点击会冒泡给 ul)
-ul.onclick = function(e) {
-    // C. 删除节点：点击哪个 li 就杀掉哪个
-    if (e.target.tagName === 'LI') {
-        // ul.removeChild(e.target);  // 父节点清理门户
-        e.target.remove()  // 这样写也可以 子节点自我了断
-    }
-};</t>
 <t tx="swot.20260320094123.1" _mod_time="4741da6f29910d4ddc2e">@language html
 &lt;!DOCTYPE html&gt;
 &lt;html lang="zh-CN"&gt;
@@ -30576,49 +30500,84 @@ btn.addEventListener('click', function() {
 }, { once: true }); // 这里的 once: true 会自动帮你处理解绑
 */
 </t>
-<t tx="swot.20260320112722.1">*需求*：输入内容，点击发布，添加到列表；点击列表项，删除该条留言。
+<t tx="swot.20260320112722.1">之前我们用 `innerHTML` 拼接字符串，虽然简单，但效率较低且不安全。专业的做法是操作节点。
 
+[upperalpha]
+. 创建节点
+  * `document.createElement('标签名')`
+
+. 添加节点
+  * `父元素.appendChild(子元素)`：添加到父元素内部的最后面。
+
+. 删除节点
+  * 老写法：`父元素.removeChild(子元素)`：父元素杀掉子元素。
+  * 新写法：`元素.remove()`
+
+ 
+*需求*：输入内容，点击添加，添加到列表；点击列表项，删除该条任务。
+
+.code/examples/task-list.html
 [source,html]
 ----
 @others
-&lt;textarea id="msg"&gt;&lt;/textarea&gt;
-&lt;button id="publish"&gt;发布&lt;/button&gt;
-&lt;ul id="list"&gt;&lt;/ul&gt;
-
-&lt;script&gt;
-    let msg = document.querySelector('#msg');
-    let publish = document.querySelector('#publish');
-    let list = document.querySelector('#list');
-
-    // 1. 发布功能
-    publish.onclick = function() {
-        let content = msg.value;
-        if (content.trim() === '') {
-            alert('内容不能为空！');
-            return;
-        }
-
-        // 创建li
-        let li = document.createElement('li');
-        li.innerText = content;
-
-        // 添加到ul的最前面 (insertBefore)
-        list.insertBefore(li, list.children[0]);
-
-        // 清空文本框
-        msg.value = '';
-    };
-
-    // 2. 删除功能 (点击留言删除)
-    // 这里给ul注册点击事件，利用事件源判断
-    list.onclick = function(e) {
-        // e.target 返回的是你点击的那个元素
-        if (e.target.tagName === 'LI') {
-            list.removeChild(e.target);
-        }
-    };
-&lt;/script&gt;
 ----
+</t>
+<t tx="swot.20260320113234.1" _mod_time="4741da6f31eeb7cd2c2e">@language html
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width" /&gt;
+    &lt;title&gt;任务列表（增删综合）&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;input type="text" id="task" placeholder="请输入任务..."&gt;
+    &lt;button id="addBtn"&gt;添加任务&lt;/button&gt;
+    &lt;ul id="list"&gt;
+        &lt;li&gt;原有的老任务 (点击我删除)&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;script&gt;
+        @others
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</t>
+<t tx="swot.20260320113423.1">@language javascript
+addBtn.onclick = function() {
+
+    let content = task.value;
+    if (content.trim() === '') {
+        alert('内容不能为空！');
+        return;
+    }
+
+    // 创建 li
+    let newLi = document.createElement('li');
+    newLi.textContent = content;
+
+    // 添加到 ul 的最前面 (insertBefore)，即在索引 0 前面
+    list.insertBefore(newLi, list.children[0]);
+    // list.appendChild(newLi);
+
+    task.value = '';  // 清空文本框
+};
+
+</t>
+<t tx="swot.20260320115825.1">@language javascript
+let task = document.querySelector('#task');
+let addBtn = document.querySelector('#addBtn');
+let list = document.querySelector('#list');
+</t>
+<t tx="swot.20260320115912.1">@language javascript
+// 这里给 ul 注册点击事件，利用事件源判断
+list.onclick = function(e) {
+    // e.target 返回的是你点击的那个元素
+    if (e.target.tagName === 'LI') {
+        list.removeChild(e.target);
+        // e.target.remove()  // 这样写也可以 子节点自我了断
+    }
+};
 </t>
 </tnodes>
 </leo_file>

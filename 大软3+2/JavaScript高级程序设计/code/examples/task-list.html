@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>任务列表（增删综合）</title>
+</head>
+<body>
+    <input type="text" id="task" placeholder="请输入任务...">
+    <button id="addBtn">添加任务</button>
+    <ul id="list">
+        <li>原有的老任务 (点击我删除)</li>
+    </ul>
+
+    <script>
+        let task = document.querySelector('#task');
+        let addBtn = document.querySelector('#addBtn');
+        let list = document.querySelector('#list');
+        addBtn.onclick = function() {
+
+            let content = task.value;
+            if (content.trim() === '') {
+                alert('内容不能为空！');
+                return;
+            }
+
+            // 创建 li
+            let newLi = document.createElement('li');
+            newLi.textContent = content;
+
+            // 添加到 ul 的最前面 (insertBefore)，即在索引 0 前面
+            list.insertBefore(newLi, list.children[0]);
+            // list.appendChild(newLi);
+
+            task.value = '';  // 清空文本框
+        };
+
+        // 这里给 ul 注册点击事件，利用事件源判断
+        list.onclick = function(e) {
+            // e.target 返回的是你点击的那个元素
+            if (e.target.tagName === 'LI') {
+                list.removeChild(e.target);
+                // e.target.remove()  // 这样写也可以 子节点自我了断
+            }
+        };
+    </script>
+</body>
+</html>
