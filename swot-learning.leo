@@ -1060,10 +1060,8 @@
 <v t="swot.20260320091413.1"><vh>节点操作——增删改 js</vh></v>
 </v>
 </v>
-<v t="swot.20260313114540.175"><vh>实战演练与项目推进（4课时）</vh>
-<v t="swot.20260313114540.176"><vh>第一、二课时：随堂实战案例</vh>
-<v t="swot.20260313114540.177"><vh>案例：留言板（增删综合）</vh></v>
-</v>
+<v t="swot.20260313114540.175"><vh>实战演练与项目推进</vh>
+<v t="swot.20260320112722.1"><vh>案例：留言板（增删综合）</vh></v>
 <v t="swot.20260313114540.178"><vh>第三、四课时：贯穿项目推进——《易校园》列表渲染</vh></v>
 <v t="swot.20260313114540.179"><vh>作业</vh></v>
 </v>
@@ -24231,6 +24229,13 @@ console.log(info);
 . 获取事件源。
 . 注册事件（绑定事件）。
 . 编写处理程序。
+
+
+.code/examples/onclick.html
+[source,html]
+----
+@others
+----
 </t>
 <t tx="swot.20260313114540.17">使用反引号 `` ` `` （键盘左上角ESC下面那个键）和 `${}`。
 
@@ -24254,53 +24259,6 @@ console.log(intro);
 </t>
 <t tx="swot.20260313114540.174"></t>
 <t tx="swot.20260313114540.175">
-</t>
-<t tx="swot.20260313114540.176">
-</t>
-<t tx="swot.20260313114540.177">**需求**：输入内容，点击发布，添加到列表；点击列表项，删除该条留言。
-
-```html
-&lt;textarea id="msg"&gt;&lt;/textarea&gt;
-&lt;button id="publish"&gt;发布&lt;/button&gt;
-&lt;ul id="list"&gt;&lt;/ul&gt;
-
-&lt;script&gt;
-    let msg = document.querySelector('#msg');
-    let publish = document.querySelector('#publish');
-    let list = document.querySelector('#list');
-
-    // 1. 发布功能
-    publish.onclick = function() {
-        let content = msg.value;
-        if (content.trim() === '') {
-            alert('内容不能为空！');
-            return;
-        }
-
-        // 创建li
-        let li = document.createElement('li');
-        li.innerText = content;
-
-        // 添加到ul的最前面 (insertBefore)
-        list.insertBefore(li, list.children[0]);
-
-        // 清空文本框
-        msg.value = '';
-    };
-
-    // 2. 删除功能 (点击留言删除)
-    // 这里给ul注册点击事件，利用事件源判断
-    list.onclick = function(e) {
-        // e.target 返回的是你点击的那个元素
-        if (e.target.tagName === 'LI') {
-            list.removeChild(e.target);
-        }
-    };
-&lt;/script&gt;
-```
-
----
-
 </t>
 <t tx="swot.20260313114540.178">
 **场景**：这是前端开发最核心的环节：**数据驱动视图**。我们要把内存里的数组数据，变成网页上的HTML结构。
@@ -30324,7 +30282,12 @@ if (goodsData.isSold) {
   * 老写法：`父元素.removeChild(子元素)`：父元素杀掉子元素。
   * 新写法：`元素.remove()`
 
- </t>
+ 
+ .code/examples/node-operation.html
+ [source,html]
+----
+@others
+----</t>
 <t tx="swot.20260318143446.1">现代前端开发（Vue/React）中，箭头函数是主流。
 
 语法:
@@ -30457,6 +30420,12 @@ ul.onclick = function(e) {
 `元素.addEventListener('事件类型', function() ++{++})`
 
 * 特点：不会被覆盖，可以绑定多个事件。
+
+.code/examples/addEventListener.html
+[source,html]
+----
+@others
+----
 </t>
 <t tx="swot.20260320095702.1" _mod_time="4741da6f2a7244bccd2e">@language html
 &lt;!DOCTYPE html&gt;
@@ -30546,11 +30515,25 @@ btn.onclick = function() {
 <t tx="swot.20260320111154.1">传统方式：`btn.onclick = null;`
 
 这种方式非常简单暴力。因为 onclick 本质上是对象的一个属性，同一时间只能指向一个函数。你想卸载它，直接把这个属性清空（赋值为 null）即可。
+
+
+.code/examples/onclick-null.html
+[source,html]
+----
+@others
+----
 </t>
 <t tx="swot.20260320111215.1">监听方式：`btn.removeEventListener('click', 函数名)`。
 
 这是现代开发的主流。但它有一个硬性要求：解铃还须系铃人。
 你绑定时用的是哪个函数名，移除时就必须传入同一个函数名。
+
+
+.code/examples/removeEventListener.html
+[source,html]
+----
+@others
+----
 </t>
 <t tx="swot.20260320111649.1" _mod_time="4741da6f2f7c35a7a92e">@language html
 &lt;!DOCTYPE html&gt;
@@ -30592,6 +30575,50 @@ btn.addEventListener('click', function() {
     alert('我只会触发一次，然后自动消失！');
 }, { once: true }); // 这里的 once: true 会自动帮你处理解绑
 */
+</t>
+<t tx="swot.20260320112722.1">*需求*：输入内容，点击发布，添加到列表；点击列表项，删除该条留言。
+
+[source,html]
+----
+@others
+&lt;textarea id="msg"&gt;&lt;/textarea&gt;
+&lt;button id="publish"&gt;发布&lt;/button&gt;
+&lt;ul id="list"&gt;&lt;/ul&gt;
+
+&lt;script&gt;
+    let msg = document.querySelector('#msg');
+    let publish = document.querySelector('#publish');
+    let list = document.querySelector('#list');
+
+    // 1. 发布功能
+    publish.onclick = function() {
+        let content = msg.value;
+        if (content.trim() === '') {
+            alert('内容不能为空！');
+            return;
+        }
+
+        // 创建li
+        let li = document.createElement('li');
+        li.innerText = content;
+
+        // 添加到ul的最前面 (insertBefore)
+        list.insertBefore(li, list.children[0]);
+
+        // 清空文本框
+        msg.value = '';
+    };
+
+    // 2. 删除功能 (点击留言删除)
+    // 这里给ul注册点击事件，利用事件源判断
+    list.onclick = function(e) {
+        // e.target 返回的是你点击的那个元素
+        if (e.target.tagName === 'LI') {
+            list.removeChild(e.target);
+        }
+    };
+&lt;/script&gt;
+----
 </t>
 </tnodes>
 </leo_file>
