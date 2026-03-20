@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>监听方式删除事件</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <button id="myBtn">点我一下</button>
+
+    <script>
+        // 通过 ID 找到页面上的按钮
+        const btn = document.querySelector('#myBtn');
+
+        // 1. 先定义好处理函数（给它个名字），在被调用时执行内部逻辑。
+        function sayHi() {
+            alert('你好！这是最后一次打招呼。');
+            // 2. 在内部移除自己
+            btn.removeEventListener('click', sayHi);
+        }
+
+        // 3. 绑定
+        btn.addEventListener('click', sayHi);
+
+
+        // 如果你只想让事件执行一次就自动销毁，甚至不需要手动调用 remove，现代浏览器支持一个配置参数。
+        /*
+        btn.addEventListener('click', function() {
+            alert('我只会触发一次，然后自动消失！');
+        }, { once: true }); // 这里的 once: true 会自动帮你处理解绑
+        */
+    </script>
+</body>
+</html>

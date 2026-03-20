@@ -3336,16 +3336,91 @@ if (goodsData.isSold) {
 </body>
 </html>
 
-=== 四：删除事件
-*   传统方式：`btn.onclick = null;`
+=== 三：删除事件
 
-*   监听方式：`btn.removeEventListener('click', 函数名)`。
 
-*   注意：如果要移除，函数必须有名字，不能是匿名函数。
+==== 传统方式
+传统方式：`btn.onclick = null;`
 
-
+这种方式非常简单暴力。因为 onclick 本质上是对象的一个属性，同一时间只能指向一个函数。你想卸载它，直接把这个属性清空（赋值为 null）即可。
 
-=== 二：节点操作——增删改
+===== @clean code/examples/onclick-null.html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>传统方式删除事件</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <button id="myBtn">点我一下</button>
+
+    <script>
+        // 第一步：获取事件源
+        // 我们通过 ID 找到页面上的按钮
+        const btn = document.querySelector('#myBtn');
+
+        // 第二步：注册事件（绑定事件类型 click）
+        // 第三步：添加事件处理程序（匿名函数内的逻辑）
+        btn.onclick = function() {
+            alert('别点我，疼！');
+
+            // --new-- 移除事件绑定：直接把自己置空
+            btn.onclick = null;
+        };
+    </script>
+</body>
+</html>
+
+==== 监听方式
+监听方式：`btn.removeEventListener('click', 函数名)`。
+
+这是现代开发的主流。但它有一个硬性要求：解铃还须系铃人。
+你绑定时用的是哪个函数名，移除时就必须传入同一个函数名。
+
+===== @clean code/examples/removeEventListener.html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>监听方式删除事件</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <button id="myBtn">点我一下</button>
+
+    <script>
+        // 通过 ID 找到页面上的按钮
+        const btn = document.querySelector('#myBtn');
+
+        // 1. 先定义好处理函数（给它个名字），在被调用时执行内部逻辑。
+        function sayHi() {
+            alert('你好！这是最后一次打招呼。');
+            // 2. 在内部移除自己
+            btn.removeEventListener('click', sayHi);
+        }
+
+        // 3. 绑定
+        btn.addEventListener('click', sayHi);
+
+
+        // 如果你只想让事件执行一次就自动销毁，甚至不需要手动调用 remove，现代浏览器支持一个配置参数。
+        /*
+        btn.addEventListener('click', function() {
+            alert('我只会触发一次，然后自动消失！');
+        }, { once: true }); // 这里的 once: true 会自动帮你处理解绑
+        */
+    </script>
+</body>
+</html>
+
+=== 四：节点操作——增删改
 之前我们用 `innerHTML` 拼接字符串，虽然简单，但效率较低且不安全。专业的做法是操作节点。
 
 [upperalpha]

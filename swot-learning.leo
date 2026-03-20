@@ -1043,8 +1043,19 @@
 <v t="swot.20260320094855.1"><vh>二：注册事件两种方式</vh>
 <v t="swot.20260320095702.1"><vh>@clean code/examples/addEventListener.html</vh></v>
 </v>
-<v t="swot.20260313114540.174"><vh>四：删除事件</vh></v>
-<v t="swot.20260317135614.1"><vh>二：节点操作——增删改</vh>
+<v t="swot.20260313114540.174"><vh>三：删除事件</vh>
+<v t="swot.20260320111154.1"><vh>传统方式</vh>
+<v t="swot.20260320110716.1"><vh>@clean code/examples/onclick-null.html</vh>
+<v t="swot.20260320111051.1"><vh>执行一次后删除事件</vh></v>
+</v>
+</v>
+<v t="swot.20260320111215.1"><vh>监听方式</vh>
+<v t="swot.20260320111649.1"><vh>@clean code/examples/removeEventListener.html</vh>
+<v t="swot.20260320111649.2"><vh>执行一次后删除事件</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20260317135614.1"><vh>四：节点操作——增删改</vh>
 <v t="swot.20260320081445.1"><vh>@clean code/examples/node-operation.html</vh>
 <v t="swot.20260320091413.1"><vh>节点操作——增删改 js</vh></v>
 </v>
@@ -24241,13 +24252,7 @@ console.log(intro);
 
 **教学重点**：强调反引号的便捷性，以后项目里全都要用这个，告别 `+` 号拼接字符串。
 </t>
-<t tx="swot.20260313114540.174">*   传统方式：`btn.onclick = null;`
-
-*   监听方式：`btn.removeEventListener('click', 函数名)`。
-
-*   注意：如果要移除，函数必须有名字，不能是匿名函数。
-
-</t>
+<t tx="swot.20260313114540.174"></t>
 <t tx="swot.20260313114540.175">
 </t>
 <t tx="swot.20260313114540.176">
@@ -30504,6 +30509,89 @@ console.log(`你掷出的点数是: ${result}`);
 
 NOTE: 该公式包含最小值和最大值（即闭区间）。如果你只需要不包含最大值的半开区间，公式可以简化为: +
 `Math.floor(Math.random() * (max - min)) + min`
+</t>
+<t tx="swot.20260320110716.1" _mod_time="4741da6f2f19bc2aba2e">@language html
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;传统方式删除事件&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;button id="myBtn"&gt;点我一下&lt;/button&gt;
+
+    &lt;script&gt;
+        @others
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</t>
+<t tx="swot.20260320111051.1">@language javascript
+// 第一步：获取事件源
+// 我们通过 ID 找到页面上的按钮
+const btn = document.querySelector('#myBtn');
+
+// 第二步：注册事件（绑定事件类型 click）
+// 第三步：添加事件处理程序（匿名函数内的逻辑）
+btn.onclick = function() {
+    alert('别点我，疼！');
+
+    // --new-- 移除事件绑定：直接把自己置空
+    btn.onclick = null;
+};
+</t>
+<t tx="swot.20260320111154.1">传统方式：`btn.onclick = null;`
+
+这种方式非常简单暴力。因为 onclick 本质上是对象的一个属性，同一时间只能指向一个函数。你想卸载它，直接把这个属性清空（赋值为 null）即可。
+</t>
+<t tx="swot.20260320111215.1">监听方式：`btn.removeEventListener('click', 函数名)`。
+
+这是现代开发的主流。但它有一个硬性要求：解铃还须系铃人。
+你绑定时用的是哪个函数名，移除时就必须传入同一个函数名。
+</t>
+<t tx="swot.20260320111649.1" _mod_time="4741da6f2f7c35a7a92e">@language html
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;监听方式删除事件&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;button id="myBtn"&gt;点我一下&lt;/button&gt;
+
+    &lt;script&gt;
+        @others
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</t>
+<t tx="swot.20260320111649.2">@language javascript
+// 通过 ID 找到页面上的按钮
+const btn = document.querySelector('#myBtn');
+
+// 1. 先定义好处理函数（给它个名字），在被调用时执行内部逻辑。
+function sayHi() {
+    alert('你好！这是最后一次打招呼。');
+    // 2. 在内部移除自己
+    btn.removeEventListener('click', sayHi);
+}
+
+// 3. 绑定
+btn.addEventListener('click', sayHi);
+
+
+// 如果你只想让事件执行一次就自动销毁，甚至不需要手动调用 remove，现代浏览器支持一个配置参数。
+/*
+btn.addEventListener('click', function() {
+    alert('我只会触发一次，然后自动消失！');
+}, { once: true }); // 这里的 once: true 会自动帮你处理解绑
+*/
 </t>
 </tnodes>
 </leo_file>
