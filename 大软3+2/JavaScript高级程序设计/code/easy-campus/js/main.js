@@ -204,7 +204,7 @@ const GoodsDB = {
             name:     name,
             price:    price,
             category: category,
-            pubTime: "2026-03-15 10:16:40"  // publishTime
+            pubTime: "2026-03-20 10:16:40"  // publishTime
         };
 
         goodsList.push(newGoods);
@@ -252,5 +252,57 @@ GoodsDB.add("大学英语", 10, "书籍");
 GoodsDB.deleteById(1);
 
 GoodsDB.show();
+//@+node:swot.20260320143308.1: ** Ch 6 更新: 筛选与时间 2026-03-20
+//@+node:swot.20260315085646.1: *3* BB 筛选商品 filterByCategory(category)
+//@@language javascript
+// 筛选特定“类别”的商品
+function filterByCategory(category) {
+    if (category === "全部") {
+        return goodsList;  // 跳出本函数
+    }
+    // 使用 filter
+    return goodsList.filter(
+        item => item.category === category
+    );
+}
+
+//@+node:swot.20260315104339.1: *3* 测试筛选商品
+//@@language javascript
+let books = filterByCategory("书籍");
+console.log("所有书籍类商品：", books);
+//@+node:swot.20260315101941.1: *3* BB 格式化商品发布时间 formatTime()
+//@@language javascript
+/**
+    dateStr: 字符串
+ */
+function formatTime(dateStr) {
+
+    // 假设传入的发布时间是日期字符串
+    let pubTime = new Date(dateStr).getTime(); // 发布时间的毫秒数
+    // console.log('pubTime:', pubTime);  // 1773541000000
+    
+    // 当前时间的毫秒数，模拟用户现在点击网页浏览的时间
+    let now = Date.now();  // 1773989576083
+    let diff = (now - pubTime) / 1000; // 转换成秒差值
+
+    if (diff < 60) {
+        return "刚刚";
+    } else if (diff < 3600) {
+        return Math.floor(diff / 60) + "分钟前";
+    } else if (diff < 3600 * 24) {
+        return Math.floor(diff / 3600) + "小时前";
+    } else {
+        // 超过 1 天，显示具体日期
+        let d = new Date(dateStr);  // dateStr = "2026-03-15 10:16:40"
+        return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    }
+}
+//@+node:swot.20260320150257.1: *3* 展示筛选商品 -> 主要看发布时间
+//@@language javascript
+books.forEach((book, index) => {
+    console.log(
+        `索引：${index} 值：${book.name} ${formatTime(book.pubTime)}`
+    );
+});
 //@-others
 //@-leo

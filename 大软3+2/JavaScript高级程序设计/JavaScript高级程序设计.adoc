@@ -1928,7 +1928,7 @@ const GoodsDB = {
             name:     name,
             price:    price,
             category: category,
-            pubTime: "2026-03-15 10:16:40"  // publishTime
+            pubTime: "2026-03-20 10:16:40"  // publishTime
         };
 
         goodsList.push(newGoods);
@@ -2163,13 +2163,13 @@ console.log(getNowTime());  // 2026年 3月 20日
 [source,javascript]
 ----
 let students = ["张三", "李四", "王五", "赵六"];
-let index = Math.floor(Math.random() * students.length);
+let index = Math.floor(Math.random() * students.length);  // 随机值 0,1,2,3
 
 console.log(`幸运儿是：${students[index]}`);
 ----
 
 ===== 案例：商品价格筛选
-*需求*：筛选出价格大于100的商品。
+*需求*：筛选出价格大于 100 的商品。
 
 [source,javascript]
 ----
@@ -2181,6 +2181,8 @@ let goods = [
 
 let expensive = goods.filter(item => item.price > 100);
 console.log("昂贵商品：", expensive);
+
+// 昂贵商品： [ { name: '手机', price: 2000 }, { name: '充电宝', price: 150 } ]
 ----
 
 ==== 二：贯穿项目推进——《易校园》筛选与时间
@@ -2193,18 +2195,6 @@ console.log("昂贵商品：", expensive);
 ----
 // 测试代码
 let goodsList = [];
-GoodsDB.add("高等数学", 15, "书籍");
-GoodsDB.add("台灯", 30, "生活");
-GoodsDB.add("线性代数", 10, "书籍");
-// 筛选特定类别的商品
-function filterByCategory(category) {
-    if (category === "全部") {
-        return goodsList;
-    }
-    // 使用 filter
-    return goodsList.filter(item => item.category === category);
-}
-
 const GoodsDB = {
     add: function(name, price, category) {
         // 自己写比较 low 的小算法
@@ -2219,7 +2209,7 @@ const GoodsDB = {
             name:     name,
             price:    price,
             category: category,
-            pubTime: "2026-03-15 10:16:40"  // publishTime
+            pubTime: "2026-03-20 10:16:40"  // publishTime
         };
 
         goodsList.push(newGoods);
@@ -2254,7 +2244,26 @@ const GoodsDB = {
         console.table(goodsList);
     }
 };
+// 筛选特定“类别”的商品
+function filterByCategory(category) {
+    if (category === "全部") {
+        return goodsList;  // 跳出本函数
+    }
+    // 使用 filter
+    return goodsList.filter(
+        item => item.category === category
+    );
+}
+
 let books = filterByCategory("书籍");
+console.log("所有书籍类商品：", books);
+
+// 为了能够测试筛选功能，先添加 3 个商品
+GoodsDB.add("高等数学", 15, "书籍");
+GoodsDB.add("台灯", 30, "生活");
+GoodsDB.add("线性代数", 10, "书籍");
+
+books = filterByCategory("书籍");
 console.log("所有书籍类商品：", books);
 ----
 
@@ -2263,10 +2272,17 @@ console.log("所有书籍类商品：", books);
 
 [source,javascript]
 ----
+/**
+    dateStr: 字符串
+ */
 function formatTime(dateStr) {
-    // 假设传入的发布时间是时间戳或日期字符串，这里模拟一个时间戳
+
+    // 假设传入的发布时间是日期字符串
     let pubTime = new Date(dateStr).getTime(); // 发布时间的毫秒数
-    let now = Date.now(); // 当前时间的毫秒数
+    // console.log('pubTime:', pubTime);  // 1773541000000
+    
+    // 当前时间的毫秒数，模拟用户现在点击网页浏览的时间
+    let now = Date.now();  // 1773989576083
     let diff = (now - pubTime) / 1000; // 转换成秒差值
 
     if (diff < 60) {
@@ -2276,16 +2292,12 @@ function formatTime(dateStr) {
     } else if (diff < 3600 * 24) {
         return Math.floor(diff / 3600) + "小时前";
     } else {
-        // 超过1天，显示具体日期
-        let d = new Date(dateStr);
+        // 超过 1 天，显示具体日期
+        let d = new Date(dateStr);  // dateStr = "2026-03-15 10:16:40"
         return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
     }
 }
-
-// 传入发布时间模拟测试
-// let testTime = new Date("2023-10-20 10:00:00");
-let testTime = new Date("2026-03-15 10:16:40");
-console.log(formatTime(testTime)); // 根据 now 输出不同结果
+console.log(formatTime("2026-03-15 10:16:40"));
 ----
 
 ==== 作业
@@ -3506,21 +3518,22 @@ if (goodsData.isSold) {
 ----
 
 === 贯穿项目推进——《易校园》列表渲染
+*场景*：这是前端开发最核心的环节：*数据驱动视图*。我们要把内存里的数组数据，变成网页上的 HTML 结构。
 
-**场景**：这是前端开发最核心的环节：**数据驱动视图**。我们要把内存里的数组数据，变成网页上的HTML结构。
-
-**步骤 1：准备容器**
-HTML中只保留一个空壳：
-```html
+==== 步骤 1：准备容器-HTML中只保留一个空壳
+[source,html]
+----
 <div class="goods-list" id="goodsBox">
     <!-- 这里原本是空的 -->
 </div>
-```
 
-**步骤 2：封装渲染函数**
+----
+
+==== 步骤 2：封装渲染函数
 核心思想：遍历数组 -> 拼接字符串 -> innerHTML 填入。
 
-```javascript
+[source,javascript]
+----
 // 模拟数据
 let goodsData = [
     { id: 1, name: '高等数学', price: 15 },
@@ -3553,10 +3566,11 @@ function renderGoods() {
 
 // 页面加载先渲染一次
 renderGoods();
-```
+----
 
-**步骤 3：实现“发布商品”功能**
-```javascript
+==== 步骤 3：实现“发布商品”功能
+[source,javascript]
+----
 let addBtn = document.querySelector('#addBtn'); // 假设HTML里有一个添加按钮
 
 addBtn.onclick = function() {
@@ -3576,14 +3590,12 @@ addBtn.onclick = function() {
     // 4. 重新渲染页面
     renderGoods();
 };
-```
-
----
+----
 
 === 作业
-1.  **概念题**：`appendChild` 和 `innerHTML +=` 实现效果一样，为什么推荐用节点操作？（提示：性能和事件绑定）。
+1. **概念题**：`appendChild` 和 `innerHTML +=` 实现效果一样，为什么推荐用节点操作？（提示：性能和事件绑定）。
 
-2.  **代码题**：修改留言板案例，每条留言后面加一个“删除”按钮，点击按钮删除该条留言。
+2. **代码题**：修改留言板案例，每条留言后面加一个“删除”按钮，点击按钮删除该条留言。
 
-3.  **项目扩展**：在渲染函数中，给每个商品卡片加上“加入购物车”按钮，点击按钮时，控制台打印该商品的名字。
+3. **项目扩展**：在渲染函数中，给每个商品卡片加上“加入购物车”按钮，点击按钮时，控制台打印该商品的名字。
 
