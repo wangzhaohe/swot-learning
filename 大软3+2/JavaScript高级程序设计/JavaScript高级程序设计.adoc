@@ -1991,13 +1991,10 @@ GoodsDB.show();
 
 4. 实现商品筛选与时间格式化。
 
-=== S1：核心精讲（4课时）
+=== 一：数组高阶方法——告别 for 循环
 
 
-==== 一：数组高阶方法——告别 for 循环
-
-
-===== 1. forEach 迭代
+==== 1. forEach 迭代
 * 作用：遍历数组，没有返回值。
 * 语法：`arr.forEach((item, index) => {...})`
 
@@ -2013,7 +2010,7 @@ arr.forEach((item, index) => {
 });
 ----
 
-===== 2. filter 过滤（非常常用）
+==== 2. filter 过滤（非常常用）
 * 作用：筛选符合条件的元素，*返回新数组*。
 * 语法：`return 条件`。
 
@@ -2029,10 +2026,10 @@ let passScores = scores.filter(item => item >= 60);
 console.log(passScores); // [88, 92, 60]
 ----
 
-==== 二：map 与 some
+=== 二：map 与 some
 
 
-===== 1. map 映射
+==== 1. map 映射
 * 作用：对数组每个元素进行处理，*返回新数组*。
 
 *代码演示*：
@@ -2046,7 +2043,7 @@ let newPrices = prices.map(item => item * 0.8);
 console.log(newPrices); // [8, 16, 24]
 ----
 
-===== 2. some 查找
+==== 2. some 查找
 * 作用：查找数组中是否存在满足条件的元素，返回 `true` 或 `false`。
 
 *代码演示*：
@@ -2061,10 +2058,10 @@ let hasEven = nums.some(item => item % 2 === 0);
 console.log(hasEven); // false
 ----
 
-==== 三：对象基础与 this
+=== 三：对象基础与 this
 
 
-===== 1. 对象方法
+==== 1. 对象方法
 对象里不仅可以存数据，还可以存函数。
 
 [source,javascript]
@@ -2080,15 +2077,15 @@ let student = {
 student.study("JavaScript"); // this 指向 student 对象
 ----
 
-===== 2. this 的指向（初步）
+==== 2. this 的指向（初步）
 * 谁调用这个函数，`this` 就指向谁。
 
 * 这里的 `student.study()` 是 `student` 调用的，所以 `this` 是 `student`。
 
-==== 四：内置对象 Math 与 Date
+=== 四：内置对象 Math 与 Date
 
 
-===== 1. Math 对象
+==== 1. Math 对象
 JavaScript 随机整数生成指南
 
 * `Math.random()`：[0, 1) 随机数。
@@ -2140,7 +2137,7 @@ console.log(`你掷出的点数是: ${result}`);
 NOTE: 该公式包含最小值和最大值（即闭区间）。如果你只需要不包含最大值的半开区间，公式可以简化为: +
 `Math.floor(Math.random() * (max - min)) + min`
 
-===== 2. Date 对象
+==== 2. Date 对象
 * `new Date()`：获取当前时间。
 
 * `getFullYear()`, `getMonth()` (0-11), `getDate()`。
@@ -2159,7 +2156,7 @@ function getNowTime() {
 console.log(getNowTime());
 ----
 
-=== S2：实战演练与项目推进（4课时）
+=== 实战演练与项目推进（4课时）
 
 
 ==== 一：随堂实战案例
@@ -3279,17 +3276,44 @@ if (goodsData.isSold) {
     <title>节点操作——增删改</title>
 </head>
 <body>
+    <input type="text" id="taskInput" placeholder="请输入任务...">
+    <button id="addBtn">添加任务</button>
 
-<input type="text" id="taskInput" placeholder="请输入任务...">
-<button id="addBtn">添加任务</button>
+    <ul id="taskList">
+        <li>原有的老任务 (点击我删除)</li>
+    </ul>
 
-<ul id="taskList">
-  <li>原有的老任务 (点击我删除)</li>
-</ul>
+    <script>
+        const input = document.querySelector('#taskInput');
+        const addBtn = document.querySelector('#addBtn');
+        const ul = document.querySelector('#taskList');
 
-<script>
-</script>
+        // 1. 添加功能
+        addBtn.onclick = function() {
 
+            if (input.value.trim() === '')
+                return; // 空值校验
+
+            // A. 创建节点
+            let newLi = document.createElement('li');
+            newLi.textContent = input.value;
+
+            // B. 添加节点
+            ul.appendChild(newLi);
+            
+            // 清空输入框
+            input.value = '';
+        };
+
+        // 2. 删除功能 (给 ul 绑定点击事件，子节点 li 的点击会冒泡给 ul)
+        ul.onclick = function(e) {
+            // C. 删除节点：点击哪个 li 就杀掉哪个
+            if (e.target.tagName === 'LI') {
+                // ul.removeChild(e.target);  // 父节点清理门户
+                e.target.remove()  // 这样写也可以 子节点自我了断
+            }
+        };
+    </script>
 </body>
 </html>
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>节点操作——增删改</title>
+</head>
+<body>
+    <input type="text" id="taskInput" placeholder="请输入任务...">
+    <button id="addBtn">添加任务</button>
+
+    <ul id="taskList">
+        <li>原有的老任务 (点击我删除)</li>
+    </ul>
+
+    <script>
+        const input = document.querySelector('#taskInput');
+        const addBtn = document.querySelector('#addBtn');
+        const ul = document.querySelector('#taskList');
+
+        // 1. 添加功能
+        addBtn.onclick = function() {
+
+            if (input.value.trim() === '')
+                return; // 空值校验
+
+            // A. 创建节点
+            let newLi = document.createElement('li');
+            newLi.textContent = input.value;
+
+            // B. 添加节点
+            ul.appendChild(newLi);
+            
+            // 清空输入框
+            input.value = '';
+        };
+
+        // 2. 删除功能 (给 ul 绑定点击事件，子节点 li 的点击会冒泡给 ul)
+        ul.onclick = function(e) {
+            // C. 删除节点：点击哪个 li 就杀掉哪个
+            if (e.target.tagName === 'LI') {
+                // ul.removeChild(e.target);  // 父节点清理门户
+                e.target.remove()  // 这样写也可以 子节点自我了断
+            }
+        };
+    </script>
+</body>
+</html>
