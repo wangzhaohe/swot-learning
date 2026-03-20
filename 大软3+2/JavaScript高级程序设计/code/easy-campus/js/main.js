@@ -99,6 +99,7 @@ for (let i = 0; i < goodsList.length; i++) {
     console.log(`ID: ${item.id} | 名称: ${item.name} | 价格: ${item.finalPrice}元`);
 }
 //@+node:swot.20260318163307.1: ** Ch 4：函数与作用域——代码的“封装”艺术
+console.log('Ch 4：函数与作用域——代码的“封装”艺术');
 //@+node:swot.20260314165234.1: *3* 重构“商品折扣计算” calculatePrice()
 //@@language javascript
 /**
@@ -149,7 +150,7 @@ function getFormatDate() {
 //@+node:swot.20260314165448.1: *3* 重构“批量数据生成器” generateGoods()
 //@@language javascript
 /**
- * 生成商品数据（升级版）
+ * 批量生成商品数据（升级版）
  * @param {number} count
  */
 function generateGoods(count) {
@@ -182,5 +183,74 @@ function generateGoods(count) {
     console.log("商品数据生成完毕：", goodsList);
 }
 
+//@+node:swot.20260320084054.1: ** Ch 5：数组与常用API——数据的“仓库管理”
+console.log('Ch 5：数组与常用API——数据的“仓库管理”');
+//@+node:swot.20260314232813.1: *3* BB 专门管理商品的对象 GoodsDB = {}
+//@@language javascript
+const GoodsDB = {
+    //@+others
+    //@+node:swot.20260314233406.1: *4* 1. 添加商品 add
+    //@@language javascript
+    add: function(name, price, category) {
+        // 自己写比较 low 的小算法
+        // 实际开发中，比如使用关系型数据库，则会默认使用数据库表中自动 id
+        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从 1 开始
+        let id = goodsList.length > 0 
+            ? goodsList[goodsList.length - 1].id + 1
+            : 1;
+
+        let newGoods = {
+            id:       id,
+            name:     name,
+            price:    price,
+            category: category,
+            pubTime: "2026-03-15 10:16:40"  // publishTime
+        };
+
+        goodsList.push(newGoods);
+
+        console.log(`商品 ${name} 添加成功！`);
+    },
+    //@+node:swot.20260314233347.1: *4* 2. 删除商品 deleteById
+    //@@language javascript
+    deleteById: function(id) {
+        // 遍历查找索引，默认值为 -1，代表默认无商品
+        let index = -1;
+
+        for (let i = 0; i < goodsList.length; i++) {
+            if (goodsList[i].id === id) {
+                index = i;
+                break;  // 退出循环以节省时间
+            }
+        }
+        // 也可以用 findIndex 方法（明天的内容）
+
+        // 找到商品
+        if (index !== -1) {
+            let delName = goodsList[index].name;
+            goodsList.splice(index, 1);
+            console.log(`商品【${delName}】已删除！`);
+        }
+        // 未找到商品
+        else {
+            console.log("未找到该 ID 的商品！");
+        }
+    },
+    //@+node:swot.20260314233318.1: *4* 3. 打印列表 show
+    //@@language javascript
+    show: function() {
+        // console.table 可以用表格形式展示数组对象，非常直观
+        console.table(goodsList);
+    }
+    //@-others
+};
+//@+node:swot.20260314234349.1: *3* 测试 GoodsDB 操作数据
+GoodsDB.show();
+
+GoodsDB.add("大学英语", 10, "书籍");
+
+GoodsDB.deleteById(1);
+
+GoodsDB.show();
 //@-others
 //@-leo
