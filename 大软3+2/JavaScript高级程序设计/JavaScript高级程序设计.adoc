@@ -1633,7 +1633,7 @@ function getFormatDate() {
 }
 
 /**
- * 生成商品数据（升级版）
+ * 批量生成商品数据（升级版）
  * @param {number} count
  */
 function generateGoods(count) {
@@ -1901,7 +1901,7 @@ for (let i = 0; i < oldArr.length; i++) {
 console.log(newArr);  // [ 'a', 'b', 'c' ]
 ----
 
-==== 第三、四课时：贯穿项目推进——《易校园》数据仓库
+==== 贯穿项目推进——《易校园》数据仓库
 *场景*：今天我们暂时不写网页界面，而是专注于底层的数据逻辑。我们要构建一个“商品数据仓库”。
 
 编写一个专门管理商品的对象，里面的 key 封装对应的功能函数。
@@ -1916,42 +1916,46 @@ let goodsList = [
 
 const GoodsDB = {
     add: function(name, price, category) {
-        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
+        // 自己写比较 low 的小算法
+        // 实际开发中，比如使用关系型数据库，则会默认使用数据库表中自动 id
+        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从 1 开始
         let id = goodsList.length > 0 
             ? goodsList[goodsList.length - 1].id + 1
             : 1;
 
         let newGoods = {
-            id: id,
-            name: name,
-            price: price,
+            id:       id,
+            name:     name,
+            price:    price,
             category: category,
-            pubTime: "2026-03-15 10:16:40",
+            pubTime: "2026-03-15 10:16:40"  // publishTime
         };
 
         goodsList.push(newGoods);
 
-        console.log(`商品【${name}】添加成功！`);
+        console.log(`商品 ${name} 添加成功！`);
     },
     deleteById: function(id) {
-        // 遍历查找索引
+        // 遍历查找索引，默认值为 -1，代表默认无商品
         let index = -1;
 
         for (let i = 0; i < goodsList.length; i++) {
             if (goodsList[i].id === id) {
                 index = i;
-                break;
+                break;  // 退出循环以节省时间
             }
         }
         // 也可以用 findIndex 方法（明天的内容）
 
+        // 找到商品
         if (index !== -1) {
             let delName = goodsList[index].name;
             goodsList.splice(index, 1);
             console.log(`商品【${delName}】已删除！`);
         }
+        // 未找到商品
         else {
-            console.log("未找到该ID的商品！");
+            console.log("未找到该 ID 的商品！");
         }
     },
     show: function() {
@@ -1960,8 +1964,11 @@ const GoodsDB = {
     }
 };
 GoodsDB.show();
+
 GoodsDB.add("大学英语", 10, "书籍");
+
 GoodsDB.deleteById(1);
+
 GoodsDB.show();
 ----
 
@@ -2208,42 +2215,46 @@ function filterByCategory(category) {
 
 const GoodsDB = {
     add: function(name, price, category) {
-        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从1开始
+        // 自己写比较 low 的小算法
+        // 实际开发中，比如使用关系型数据库，则会默认使用数据库表中自动 id
+        // 生成ID：取数组最后一个元素的ID + 1，如果数组为空则从 1 开始
         let id = goodsList.length > 0 
             ? goodsList[goodsList.length - 1].id + 1
             : 1;
 
         let newGoods = {
-            id: id,
-            name: name,
-            price: price,
+            id:       id,
+            name:     name,
+            price:    price,
             category: category,
-            pubTime: "2026-03-15 10:16:40",
+            pubTime: "2026-03-15 10:16:40"  // publishTime
         };
 
         goodsList.push(newGoods);
 
-        console.log(`商品【${name}】添加成功！`);
+        console.log(`商品 ${name} 添加成功！`);
     },
     deleteById: function(id) {
-        // 遍历查找索引
+        // 遍历查找索引，默认值为 -1，代表默认无商品
         let index = -1;
 
         for (let i = 0; i < goodsList.length; i++) {
             if (goodsList[i].id === id) {
                 index = i;
-                break;
+                break;  // 退出循环以节省时间
             }
         }
         // 也可以用 findIndex 方法（明天的内容）
 
+        // 找到商品
         if (index !== -1) {
             let delName = goodsList[index].name;
             goodsList.splice(index, 1);
             console.log(`商品【${delName}】已删除！`);
         }
+        // 未找到商品
         else {
-            console.log("未找到该ID的商品！");
+            console.log("未找到该 ID 的商品！");
         }
     },
     show: function() {
@@ -3246,40 +3257,41 @@ if (goodsData.isSold) {
 4.  在项目中实现动态渲染商品列表。
 
 === 一：节点操作——增删改
-之前我们用 `innerHTML`
-拼接字符串，虽然简单，但效率较低且不安全。专业的做法是操作节点。
+之前我们用 `innerHTML` 拼接字符串，虽然简单，但效率较低且不安全。专业的做法是操作节点。
 
 [upperalpha]
 . 创建节点
-+
-.`document.createElement('标签名')`
-[source,javascript]
-----
-let li = document.createElement('li'); // 创建了一个li标签
-----
+  * `document.createElement('标签名')`
 
 . 添加节点
-+
-.`父元素.appendChild(子元素)`：添加到父元素内部的最后面。
-[source,javascript]
-----
-let ul = document.querySelector('ul');
-ul.appendChild(li); // 把li塞进ul里
-----
+  * `父元素.appendChild(子元素)`：添加到父元素内部的最后面。
 
 . 删除节点
-+
-`父元素.removeChild(子元素)`：父元素杀掉子元素。
+  * 老写法：`父元素.removeChild(子元素)`：父元素杀掉子元素。
+  * 新写法：`元素.remove()`
 
-*案例演示*：
+==== @clean code/examples/node-operation.html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>节点操作——增删改</title>
+</head>
+<body>
 
-[source,javascript]
-----
-let ul = document.querySelector('ul');
-// 删除第一个li
-let firstLi = ul.children[0];
-ul.removeChild(firstLi);
-----
+<input type="text" id="taskInput" placeholder="请输入任务...">
+<button id="addBtn">添加任务</button>
+
+<ul id="taskList">
+  <li>原有的老任务 (点击我删除)</li>
+</ul>
+
+<script>
+</script>
+
+</body>
+</html>
 
 === 二：事件基础——互动的桥梁
 
@@ -3466,7 +3478,7 @@ addBtn.onclick = function() {
 
 ---
 
-==== 📝 作业
+==== 作业
 
 1.  **概念题**：`appendChild` 和 `innerHTML +=` 实现效果一样，为什么推荐用节点操作？（提示：性能和事件绑定）。
 2.  **代码题**：修改留言板案例，每条留言后面加一个“删除”按钮，点击按钮删除该条留言。
