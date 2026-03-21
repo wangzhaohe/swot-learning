@@ -244,6 +244,12 @@
 <v t="swot.20190507134809.1"><vh>def get</vh></v>
 <v t="swot.20190507134814.1"><vh>def post</vh></v>
 </v>
+<v t="swot.20260321214912.1"><vh>sve;;</vh>
+<v t="swot.20260321222934.1"><vh>#file .svelte</vh>
+<v t="swot.20260321221726.1"><vh>import</vh></v>
+<v t="swot.20260321221759.1"><vh>template</vh></v>
+</v>
+</v>
 </v>
 <v t="swot.20200206155945.1"><vh>@@string central-dock-widget = outline</vh></v>
 <v t="swot.20181202012654.207"><vh>@keys</vh>
@@ -645,7 +651,7 @@ getpost;;
 vc2;;
 vc3js;;
 vue;;
-
+sve;;
 </t>
 <t tx="swot.20190507115152.1"></t>
 <t tx="swot.20190507115306.1">def save_model(self, request, obj, form, change):
@@ -2898,6 +2904,19 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 #\:    &lt;div id="root"&gt;&lt;/div&gt;
 #\:    &lt;script src="./js/vue.js"&gt;&lt;/script&gt;
 #\:    &lt;script src="./main.js"&gt;&lt;/script&gt;
+</t>
+<t tx="swot.20260321214912.1"></t>
+<t tx="swot.20260321221726.1"></t>
+<t tx="swot.20260321221759.1">@language html
+@delims &lt;!-- --&gt;
+&lt;/script&gt;
+&lt;|your html|&gt;
+</t>
+<t tx="swot.20260321222934.1">@first &lt;script lang="ts"&gt;
+@language javascript
+@others
+@doc
+&lt;|文件描述|&gt;
 </t>
 </tnodes>
 </leo_file>
