@@ -3188,7 +3188,39 @@ btn.onclick = function() {
 [source,css]
 ----
 .goods-card {
-    width: 200px; border: 1px solid #ccc; padding: 10px;
+    width: 200px;
+    border: 1px solid #eee;
+    border-radius: 8px; /* 圆角让视觉更柔和 */
+    overflow: hidden;   /* 不让图片挡住圆角功能 */
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 添加淡淡的阴影 */
+    transition: transform 0.2s; /* 增加鼠标悬停动画 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* 鼠标移上去有个轻微浮起的效果 */
+.goods-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 内部按钮样式优化 */
+.goods-card button {
+    margin-top: auto; /* 让按钮始终在卡片底部 */
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.goods-card button:hover {
+    background-color: #ff7875;
 }
 
 /* 限制商品图片大小 */
@@ -3212,7 +3244,6 @@ btn.onclick = function() {
     background: rgba(0,0,0,0.3); color: white; text-align: center;
     line-height: 200px;
 }
-
 ----
 
 ===== 步骤 3：JS 动态控制样式
@@ -3523,10 +3554,13 @@ if (goodsData.isSold) {
 ==== 步骤 1：准备容器-HTML中只保留一个空壳
 [source,html]
 ----
-<div class="goods-list" id="goodsBox">
-    <!-- 这里原本是空的 -->
+<hr>
+<div>
+    <button id="addBtn">添加商品</button>
 </div>
+<div class="goods-list" id="goodsBox">
 
+</div>
 ----
 
 ==== 步骤 2：封装渲染函数
@@ -3534,31 +3568,22 @@ if (goodsData.isSold) {
 
 [source,javascript]
 ----
-// 模拟数据
-let goodsData = [
-    { id: 1, name: '高等数学', price: 15 },
-    { id: 2, name: '二手吉他', price: 200 }
-];
-
 let goodsBox = document.querySelector('#goodsBox');
 
 function renderGoods() {
-    // 清空容器
-    goodsBox.innerHTML = '';
-
+    goodsBox.innerHTML = '';  // 清空容器
     // 遍历数组
-    goodsData.forEach(item => {
+    goodsList.forEach(item => {
         // 创建 div
         let div = document.createElement('div');
-        div.className = 'goods-item';
+        div.className = 'goods-card';
 
         // 填充内容
         div.innerHTML = `
             <h4>${item.name}</h4>
-            <p>价格：￥${item.price}</p>
+            <p>价格：￥${item.finalPrice}</p>
             <button data-id="${item.id}">删除</button>
         `;
-
         // 添加到容器
         goodsBox.appendChild(div);
     });
@@ -3568,34 +3593,46 @@ function renderGoods() {
 renderGoods();
 ----
 
-==== 步骤 3：实现“发布商品”功能
+==== 步骤 3：实现“添加商品”功能
 [source,javascript]
 ----
-let addBtn = document.querySelector('#addBtn'); // 假设HTML里有一个添加按钮
+// 假设 HTML 里有一个添加按钮
+let addBtn = document.querySelector('#addBtn');
 
 addBtn.onclick = function() {
     // 1. 获取用户输入(假设有输入框)
     // ...
 
     // 2. 模拟新增数据
-    let newGoods = {
-        id: Date.now(), // 时间戳做ID
-        name: '新书' + Math.random(),
-        price: 50
-    };
+    GoodsDB.add(
+        '新书' + Math.floor(Math.random() * 10),
+        50,
+        "书籍"
+    );
 
-    // 3. 数据推入数组
-    goodsData.push(newGoods);
-
-    // 4. 重新渲染页面
+    // 3. 重新渲染页面
     renderGoods();
 };
+----
+
+==== 步骤 4：商品列表和商品样式
+[source,scss]
+----
+/* 容器：使用 Flex 布局让商品排成行，并允许换行 */
+.goods-list {
+    display: flex;
+    flex-wrap: wrap;    /* 自动换行 */
+    gap: 20px;          /* 卡片之间的间距 */
+    padding: 20px;
+    justify-content: flex-start; /* 左对齐 */
+}
+
 ----
 
 === 作业
 1. **概念题**：`appendChild` 和 `innerHTML +=` 实现效果一样，为什么推荐用节点操作？（提示：性能和事件绑定）。
 
-2. **代码题**：修改留言板案例，每条留言后面加一个“删除”按钮，点击按钮删除该条留言。
+2. **代码题**：修改任务列表案例，每条任务后面加一个“删除”按钮，点击按钮删除该条任务。
 
 3. **项目扩展**：在渲染函数中，给每个商品卡片加上“加入购物车”按钮，点击按钮时，控制台打印该商品的名字。
 

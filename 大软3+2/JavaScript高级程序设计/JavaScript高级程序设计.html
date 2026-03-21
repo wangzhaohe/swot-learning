@@ -783,7 +783,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel3">
 <li><a href="#_步骤_1准备容器_html中只保留一个空壳">步骤 1：准备容器-HTML中只保留一个空壳</a></li>
 <li><a href="#_步骤_2封装渲染函数">步骤 2：封装渲染函数</a></li>
-<li><a href="#_步骤_3实现发布商品功能">步骤 3：实现“发布商品”功能</a></li>
+<li><a href="#_步骤_3实现添加商品功能">步骤 3：实现“添加商品”功能</a></li>
+<li><a href="#_步骤_4商品列表和商品样式">步骤 4：商品列表和商品样式</a></li>
 </ul>
 </li>
 <li><a href="#_作业_9">作业</a></li>
@@ -5158,7 +5159,39 @@ toggleButton.addEventListener('click', () => {
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="css"><span></span><span class="tok-p">.</span><span class="tok-nc">goods-card</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-k">width</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">200</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">border</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">solid</span><span class="tok-w"> </span><span class="tok-mh">#ccc</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">width</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">200</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">border</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">solid</span><span class="tok-w"> </span><span class="tok-mh">#eee</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c">/* 圆角让视觉更柔和 */</span>
+<span class="tok-w">    </span><span class="tok-k">overflow</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">hidden</span><span class="tok-p">;</span><span class="tok-w">   </span><span class="tok-c">/* 不让图片挡住圆角功能 */</span>
+<span class="tok-w">    </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">15</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">background-color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#fff</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">box-shadow</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-nb">rgba</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mf">0.1</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c">/* 添加淡淡的阴影 */</span>
+<span class="tok-w">    </span><span class="tok-k">transition</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-k">transform</span><span class="tok-w"> </span><span class="tok-mf">0.2</span><span class="tok-kt">s</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c">/* 增加鼠标悬停动画 */</span>
+<span class="tok-w">    </span><span class="tok-k">display</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">flex</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">flex-direction</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">column</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">align-items</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">center</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">text-align</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">center</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c">/* 鼠标移上去有个轻微浮起的效果 */</span>
+<span class="tok-p">.</span><span class="tok-nc">goods-card</span><span class="tok-p">:</span><span class="tok-nd">hover</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">transform</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nb">translateY</span><span class="tok-p">(</span><span class="tok-mi">-5</span><span class="tok-kt">px</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">box-shadow</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">12</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-nb">rgba</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mf">0.15</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c">/* 内部按钮样式优化 */</span>
+<span class="tok-p">.</span><span class="tok-nc">goods-card</span><span class="tok-w"> </span><span class="tok-nt">button</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">margin-top</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">auto</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c">/* 让按钮始终在卡片底部 */</span>
+<span class="tok-w">    </span><span class="tok-k">background-color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#ff4d4f</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">white</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">border</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">none</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">15</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">cursor</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">pointer</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+
+<span class="tok-p">.</span><span class="tok-nc">goods-card</span><span class="tok-w"> </span><span class="tok-nt">button</span><span class="tok-p">:</span><span class="tok-nd">hover</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">background-color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#ff7875</span><span class="tok-p">;</span>
 <span class="tok-p">}</span>
 
 <span class="tok-c">/* 限制商品图片大小 */</span>
@@ -5589,8 +5622,12 @@ toggleButton.addEventListener('click', () => {
 <h4 id="_步骤_1准备容器_html中只保留一个空壳">步骤 1：准备容器-HTML中只保留一个空壳</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;goods-list&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;goodsBox&quot;</span><span class="tok-p">&gt;</span>
-    <span class="tok-cm">&lt;!-- 这里原本是空的 --&gt;</span>
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">hr</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;addBtn&quot;</span><span class="tok-p">&gt;</span>添加商品<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;goods-list&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;goodsBox&quot;</span><span class="tok-p">&gt;</span>
+
 <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
 </div>
 </div>
@@ -5602,31 +5639,22 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 模拟数据</span>
-<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">goodsData</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span>
-<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;高等数学&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">15</span><span class="tok-w"> </span><span class="tok-p">},</span>
-<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;二手吉他&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">200</span><span class="tok-w"> </span><span class="tok-p">}</span>
-<span class="tok-p">];</span>
-
-<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">goodsBox</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#goodsBox&#39;</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">goodsBox</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#goodsBox&#39;</span><span class="tok-p">);</span>
 
 <span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">renderGoods</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// 清空容器</span>
-<span class="tok-w">    </span><span class="tok-nx">goodsBox</span><span class="tok-p">.</span><span class="tok-nx">innerHTML</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">;</span>
-
+<span class="tok-w">    </span><span class="tok-nx">goodsBox</span><span class="tok-p">.</span><span class="tok-nx">innerHTML</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 清空容器</span>
 <span class="tok-w">    </span><span class="tok-c1">// 遍历数组</span>
-<span class="tok-w">    </span><span class="tok-nx">goodsData</span><span class="tok-p">.</span><span class="tok-nx">forEach</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">goodsList</span><span class="tok-p">.</span><span class="tok-nx">forEach</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-c1">// 创建 div</span>
 <span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">div</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">createElement</span><span class="tok-p">(</span><span class="tok-s1">&#39;div&#39;</span><span class="tok-p">);</span>
-<span class="tok-w">        </span><span class="tok-nx">div</span><span class="tok-p">.</span><span class="tok-nx">className</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;goods-item&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-nx">div</span><span class="tok-p">.</span><span class="tok-nx">className</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;goods-card&#39;</span><span class="tok-p">;</span>
 
 <span class="tok-w">        </span><span class="tok-c1">// 填充内容</span>
 <span class="tok-w">        </span><span class="tok-nx">div</span><span class="tok-p">.</span><span class="tok-nx">innerHTML</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sb">`</span>
 <span class="tok-sb">            &lt;h4&gt;</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb">&lt;/h4&gt;</span>
-<span class="tok-sb">            &lt;p&gt;价格：￥</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">price</span><span class="tok-si">}</span><span class="tok-sb">&lt;/p&gt;</span>
+<span class="tok-sb">            &lt;p&gt;价格：￥</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">finalPrice</span><span class="tok-si">}</span><span class="tok-sb">&lt;/p&gt;</span>
 <span class="tok-sb">            &lt;button data-id=&quot;</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-si">}</span><span class="tok-sb">&quot;&gt;删除&lt;/button&gt;</span>
 <span class="tok-sb">        `</span><span class="tok-p">;</span>
-
 <span class="tok-w">        </span><span class="tok-c1">// 添加到容器</span>
 <span class="tok-w">        </span><span class="tok-nx">goodsBox</span><span class="tok-p">.</span><span class="tok-nx">appendChild</span><span class="tok-p">(</span><span class="tok-nx">div</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">});</span>
@@ -5638,28 +5666,41 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_步骤_3实现发布商品功能">步骤 3：实现“发布商品”功能</h4>
+<h4 id="_步骤_3实现添加商品功能">步骤 3：实现“添加商品”功能</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">addBtn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#addBtn&#39;</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 假设HTML里有一个添加按钮</span>
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 假设 HTML 里有一个添加按钮</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">addBtn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#addBtn&#39;</span><span class="tok-p">);</span>
 
 <span class="tok-nx">addBtn</span><span class="tok-p">.</span><span class="tok-nx">onclick</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-c1">// 1. 获取用户输入(假设有输入框)</span>
 <span class="tok-w">    </span><span class="tok-c1">// ...</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// 2. 模拟新增数据</span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">newGoods</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-c1">// 时间戳做ID</span>
-<span class="tok-w">        </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;新书&#39;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">random</span><span class="tok-p">(),</span>
-<span class="tok-w">        </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">50</span>
-<span class="tok-w">    </span><span class="tok-p">};</span>
+<span class="tok-w">    </span><span class="tok-nx">GoodsDB</span><span class="tok-p">.</span><span class="tok-nx">add</span><span class="tok-p">(</span>
+<span class="tok-w">        </span><span class="tok-s1">&#39;新书&#39;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">floor</span><span class="tok-p">(</span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">random</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">),</span>
+<span class="tok-w">        </span><span class="tok-mf">50</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-s2">&quot;书籍&quot;</span>
+<span class="tok-w">    </span><span class="tok-p">);</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// 3. 数据推入数组</span>
-<span class="tok-w">    </span><span class="tok-nx">goodsData</span><span class="tok-p">.</span><span class="tok-nx">push</span><span class="tok-p">(</span><span class="tok-nx">newGoods</span><span class="tok-p">);</span>
-
-<span class="tok-w">    </span><span class="tok-c1">// 4. 重新渲染页面</span>
+<span class="tok-w">    </span><span class="tok-c1">// 3. 重新渲染页面</span>
 <span class="tok-w">    </span><span class="tok-nx">renderGoods</span><span class="tok-p">();</span>
 <span class="tok-p">};</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_步骤_4商品列表和商品样式">步骤 4：商品列表和商品样式</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-cm">/* 容器：使用 Flex 布局让商品排成行，并允许换行 */</span>
+<span class="tok-nc">.goods-list</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">display</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">flex</span><span class="tok-o">;</span>
+<span class="tok-w">    </span><span class="tok-nt">flex-wrap</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">wrap</span><span class="tok-o">;</span><span class="tok-w">    </span><span class="tok-o">/*</span><span class="tok-w"> </span><span class="tok-nt">自动换行</span><span class="tok-w"> </span><span class="tok-o">*/</span>
+<span class="tok-w">    </span><span class="tok-nt">gap</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">20px</span><span class="tok-o">;</span><span class="tok-w">          </span><span class="tok-o">/*</span><span class="tok-w"> </span><span class="tok-nt">卡片之间的间距</span><span class="tok-w"> </span><span class="tok-o">*/</span>
+<span class="tok-w">    </span><span class="tok-nt">padding</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">20px</span><span class="tok-o">;</span>
+<span class="tok-w">    </span><span class="tok-nt">justify-content</span><span class="tok-nd">:</span><span class="tok-w"> </span><span class="tok-nt">flex-start</span><span class="tok-o">;</span><span class="tok-w"> </span><span class="tok-o">/*</span><span class="tok-w"> </span><span class="tok-nt">左对齐</span><span class="tok-w"> </span><span class="tok-o">*/</span>
+<span class="tok-p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -5672,7 +5713,7 @@ toggleButton.addEventListener('click', () => {
 <p><strong>概念题</strong>：<code>appendChild</code> 和 <code>innerHTML +=</code> 实现效果一样，为什么推荐用节点操作？（提示：性能和事件绑定）。</p>
 </li>
 <li>
-<p><strong>代码题</strong>：修改留言板案例，每条留言后面加一个“删除”按钮，点击按钮删除该条留言。</p>
+<p><strong>代码题</strong>：修改任务列表案例，每条任务后面加一个“删除”按钮，点击按钮删除该条任务。</p>
 </li>
 <li>
 <p><strong>项目扩展</strong>：在渲染函数中，给每个商品卡片加上“加入购物车”按钮，点击按钮时，控制台打印该商品的名字。</p>
@@ -5685,7 +5726,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-20 15:07:11 +0800
+Last updated 2026-03-21 20:16:48 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

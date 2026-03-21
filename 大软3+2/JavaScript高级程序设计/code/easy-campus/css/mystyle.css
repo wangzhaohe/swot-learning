@@ -2,10 +2,43 @@
 /*@+node:swot.20260317122933.1: * @file code/easy-campus/css/mystyle.css*/
 /*@@language css*/
 /*@+others*/
-/*@+node:swot.20260317113843.1: ** BB 商品卡片样式 goods-card*/
+/*@+node:swot.20260320140119.1: ** Ch 8 更新: 卡片样式 2026-03-17*/
+/*@+node:swot.20260317113843.1: *3* BB 商品卡片样式 goods-card*/
 /*@@language css*/
 .goods-card {
-    width: 200px; border: 1px solid #ccc; padding: 10px;
+    width: 200px;
+    border: 1px solid #eee;
+    border-radius: 8px; /* 圆角让视觉更柔和 */
+    overflow: hidden;   /* 不让图片挡住圆角功能 */
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 添加淡淡的阴影 */
+    transition: transform 0.2s; /* 增加鼠标悬停动画 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* 鼠标移上去有个轻微浮起的效果 */
+.goods-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 内部按钮样式优化 */
+.goods-card button {
+    margin-top: auto; /* 让按钮始终在卡片底部 */
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.goods-card button:hover {
+    background-color: #ff7875;
 }
 
 /* 限制商品图片大小 */
@@ -28,6 +61,17 @@
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0,0,0,0.3); color: white; text-align: center;
     line-height: 200px;
+}
+/*@+node:swot.20260320165443.1: ** Ch 9 更新: 列表渲染 2026-03-20*/
+/*@+node:swot.20260320165151.1: *3* css: goods-list*/
+/*@@language css*/
+/* 容器：使用 Flex 布局让商品排成行，并允许换行 */
+.goods-list {
+    display: flex;
+    flex-wrap: wrap;    /* 自动换行 */
+    gap: 20px;          /* 卡片之间的间距 */
+    padding: 20px;
+    justify-content: flex-start; /* 左对齐 */
 }
 
 /*@-others*/
