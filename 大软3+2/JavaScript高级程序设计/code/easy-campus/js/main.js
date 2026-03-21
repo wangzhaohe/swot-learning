@@ -369,7 +369,7 @@ function renderGoods() {
 
 // 页面加载先渲染一次
 renderGoods();
-//@+node:swot.20260320134724.1: *3* 添加商品功能 addBtn -> newGoods 应该使用 Product
+//@+node:swot.20260320134724.1: *3* 添加商品功能 addBtn -> 使用数据驱动的方式(Vue/Svelte5中的概念)
 //@@language javascript
 // 假设 HTML 里有一个添加按钮
 let addBtn = document.querySelector('#addBtn');
