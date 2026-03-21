@@ -40,6 +40,8 @@
 
 项目采用 **Leo Editor** 进行文学化编程（Literate Programming），代码组织结构清晰，逻辑与文档高度统一。
 
+惠普机械键盘定制化网址: https://hub.hpgthub.com/
+
 == 2. 开发环境与工具
 * **编辑器**:
   ** Leo Editor 文学化编程核心工具管理大纲
@@ -432,7 +434,14 @@ NOTE: **自动化路径锁定**: 代码中使用了 `os.chdir(SCRIPT_DIR)`，确
 ----
 server_thread = threading.Thread(target=start_server, args=(8099,), daemon=True)
 server_thread.start()
-webbrowser.open("http://localhost:8099")
+
+# 稍微延迟 0.5 秒再开浏览器，确保服务器已经 Listen 成功
+def open_browser():
+    time.sleep(0.5)
+    webbrowser.open("http://localhost:8099")
+
+threading.Thread(target=open_browser, daemon=True).start()
+
 ----
 
 NOTE: **一键启停：**: 当你关闭 Python 脚本时，由于我们设置了 daemon=True，HTTP 服务器会随之自动关闭，不会像命令行版那样可能被遗忘在后台占用端口。
