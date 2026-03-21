@@ -3615,7 +3615,27 @@ addBtn.onclick = function() {
 };
 ----
 
-==== 步骤 4：商品列表和商品样式
+==== 步骤 4：实现“删除商品”功能
+[source,javascript]
+----
+// 这里给商品列表注册点击事件，利用事件源判断
+goodsBox.onclick = function(e) {
+    if (e.target.tagName === 'BUTTON') {
+
+        // 1. 获取保存在按钮自定义属性中的 ID
+        // 注意：Dataset 拿到的 id 是字符串，需要转成数字
+        let id = Number(e.target.dataset.id);
+
+        // 2. 调用你之前写好的 GoodsDB.deleteById 方法从数组删除数据
+        GoodsDB.deleteById(id);
+
+        // 3. 重新渲染列表，保证页面和数据同步
+        renderGoods();
+    }
+};
+----
+
+==== 步骤 5：商品列表和商品样式
 [source,scss]
 ----
 /* 容器：使用 Flex 布局让商品排成行，并允许换行 */

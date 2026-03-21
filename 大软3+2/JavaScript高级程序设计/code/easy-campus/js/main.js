@@ -369,7 +369,7 @@ function renderGoods() {
 
 // 页面加载先渲染一次
 renderGoods();
-//@+node:swot.20260320134724.1: *3* addBtn -> newGoods 应该使用 Product
+//@+node:swot.20260320134724.1: *3* 添加商品功能 addBtn -> newGoods 应该使用 Product
 //@@language javascript
 // 假设 HTML 里有一个添加按钮
 let addBtn = document.querySelector('#addBtn');
@@ -387,6 +387,23 @@ addBtn.onclick = function() {
 
     // 3. 重新渲染页面
     renderGoods();
+};
+//@+node:swot.20260321202709.1: *3* 删除商品功能 list.onclick -> 使用数据驱动的方式(Vue/Svelte5中的概念)
+//@@language javascript
+// 这里给商品列表注册点击事件，利用事件源判断
+goodsBox.onclick = function(e) {
+    if (e.target.tagName === 'BUTTON') {
+
+        // 1. 获取保存在按钮自定义属性中的 ID
+        // 注意：Dataset 拿到的 id 是字符串，需要转成数字
+        let id = Number(e.target.dataset.id);
+
+        // 2. 调用你之前写好的 GoodsDB.deleteById 方法从数组删除数据
+        GoodsDB.deleteById(id);
+
+        // 3. 重新渲染列表，保证页面和数据同步
+        renderGoods();
+    }
 };
 //@-others
 

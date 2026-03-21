@@ -784,7 +784,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_步骤_1准备容器_html中只保留一个空壳">步骤 1：准备容器-HTML中只保留一个空壳</a></li>
 <li><a href="#_步骤_2封装渲染函数">步骤 2：封装渲染函数</a></li>
 <li><a href="#_步骤_3实现添加商品功能">步骤 3：实现“添加商品”功能</a></li>
-<li><a href="#_步骤_4商品列表和商品样式">步骤 4：商品列表和商品样式</a></li>
+<li><a href="#_步骤_4实现删除商品功能">步骤 4：实现“删除商品”功能</a></li>
+<li><a href="#_步骤_5商品列表和商品样式">步骤 5：商品列表和商品样式</a></li>
 </ul>
 </li>
 <li><a href="#_作业_9">作业</a></li>
@@ -5690,7 +5691,29 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_步骤_4商品列表和商品样式">步骤 4：商品列表和商品样式</h4>
+<h4 id="_步骤_4实现删除商品功能">步骤 4：实现“删除商品”功能</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 这里给商品列表注册点击事件，利用事件源判断</span>
+<span class="tok-nx">goodsBox</span><span class="tok-p">.</span><span class="tok-nx">onclick</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">target</span><span class="tok-p">.</span><span class="tok-nx">tagName</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;BUTTON&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 1. 获取保存在按钮自定义属性中的 ID</span>
+<span class="tok-w">        </span><span class="tok-c1">// 注意：Dataset 拿到的 id 是字符串，需要转成数字</span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Number</span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">target</span><span class="tok-p">.</span><span class="tok-nx">dataset</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 2. 调用你之前写好的 GoodsDB.deleteById 方法从数组删除数据</span>
+<span class="tok-w">        </span><span class="tok-nx">GoodsDB</span><span class="tok-p">.</span><span class="tok-nx">deleteById</span><span class="tok-p">(</span><span class="tok-nx">id</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 3. 重新渲染列表，保证页面和数据同步</span>
+<span class="tok-w">        </span><span class="tok-nx">renderGoods</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">};</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_步骤_5商品列表和商品样式">步骤 5：商品列表和商品样式</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="scss"><span></span><span class="tok-cm">/* 容器：使用 Flex 布局让商品排成行，并允许换行 */</span>
@@ -5726,7 +5749,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-21 20:16:48 +0800
+Last updated 2026-03-21 20:44:04 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
