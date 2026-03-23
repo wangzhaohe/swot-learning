@@ -944,10 +944,8 @@
 </v>
 </v>
 <v t="swot.20260313114540.125" descendentVnodeUnknownAttributes="7d71005807000000302e342e312e3371017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30332d313571077573732e"><vh>Ch 7：综合数据练习与面向对象——构建代码的“骨架”</vh>
-<v t="swot.20260313114540.127"><vh>一：复杂数据结构——对象数组</vh>
-<v t="swot.20260315121557.1"><vh>1. 为什么需要对象数组？</vh></v>
-</v>
-<v t="swot.20260313114540.129"><vh>二：ES6 面向对象——Class</vh>
+<v t="swot.20260313114540.127"><vh>一：复杂数据结构——对象数组</vh></v>
+<v t="swot.20260313114540.129"><vh>二：ES6 面向对象 Class 关键字</vh>
 <v t="swot.20260313114540.130"><vh>1. 面向过程 vs 面向对象</vh></v>
 <v t="swot.20260315124025.1"><vh>2. Class 类的语法</vh>
 <v t="swot.20260315145013.1"><vh>class Person</vh></v>
@@ -1078,13 +1076,9 @@
 </v>
 <v t="swot.20260313114540.179"><vh>作业</vh></v>
 </v>
-</v>
-</v>
-<v t="swot.20260314165640.1"><vh>waiting for arrange</vh>
 <v t="swot.20260313114540.180"><vh>Ch 10：事件进阶与表单——更复杂的交互</vh>
-<v t="swot.20260313114540.181"><vh>S1：核心精讲（4课时）</vh>
 <v t="swot.20260313114540.182"><vh>一：事件对象</vh>
-<v t="swot.20260313114540.183"><vh>1. 什么是事件对象？</vh></v>
+<v t="swot.20260321210801.1"><vh>1. 什么是事件对象？</vh></v>
 <v t="swot.20260313114540.184"><vh>2. 常见属性</vh></v>
 </v>
 <v t="swot.20260313114540.185"><vh>二：事件流与阻止默认行为</vh>
@@ -1096,7 +1090,6 @@
 <v t="swot.20260313114540.190"><vh>2. 正则表达式入门</vh></v>
 </v>
 <v t="swot.20260313114540.191"><vh>四：综合验证逻辑</vh></v>
-</v>
 <v t="swot.20260313114540.192"><vh>S2：实战演练与项目推进（4课时）</vh>
 <v t="swot.20260313114540.193"><vh>第一、二课时：随堂实战案例</vh>
 <v t="swot.20260313114540.194"><vh>案例：键盘控制方块移动</vh></v>
@@ -1106,6 +1099,9 @@
 <v t="swot.20260313114540.197"><vh>📝 作业</vh></v>
 </v>
 </v>
+</v>
+</v>
+<v t="swot.20260314165640.1"><vh>waiting for arrange</vh>
 <v t="swot.20260313114540.198"><vh>Ch 11：BOM与特效开发——浏览器的控制权</vh>
 <v t="swot.20260313114540.199"><vh>S1：核心精讲（4课时）</vh>
 <v t="swot.20260313114540.200"><vh>一：BOM 对象</vh>
@@ -24057,12 +24053,40 @@ student.study("高等数学");    // this 指向 student 对象
 <t tx="swot.20260313114540.120"></t>
 <t tx="swot.20260313114540.125">**今日目标**：
 
-1.  理解对象数组这一前端最核心的数据结构。
+1.  理解对象数组这一前端最核心的数据结构。由对象组成的数组。
+
 2.  掌握 ES6 `class` 类语法，实现面向对象编程。
+
 3.  完成“斗地主发牌”综合案例。
-4.  使用类重构项目数据结构。
+
+4.  使用类重构易校园项目数据结构。
 </t>
-<t tx="swot.20260313114540.127">
+<t tx="swot.20260313114540.127">真实世界的数据往往是复杂的。比如“学生名单”，不仅要有名字，还要有年龄、分数。
+
+* 数组：有序列表。
+* 对象：属性描述，对象由属性和值组成。
+* 对象数组：把对象放进数组里，既有顺序，又有详细属性。
+
+*代码演示*：
+
+[source,javascript]
+----
+@language javascript
+let students = [
+    { name: "张三", age: 18, score: 90 },  // 索引 0
+    { name: "李四", age: 19, score: 80 },  // 索引 1
+    { name: "王五", age: 18, score: 95 }   // 索引 2
+];
+
+// 访问李四的分数，两种方式
+console.log(students[1].score);    // 80
+console.log(students[1]["score"]); // 80
+
+// 遍历数组
+students.forEach(item =&gt; {
+    console.log(`${item.name} 的分数是 ${item.score}`);
+});
+----
 </t>
 <t tx="swot.20260313114540.129">
 </t>
@@ -24092,7 +24116,9 @@ console.log(typeof isLogin); // 输出: boolean
 </t>
 <t tx="swot.20260313114540.130">* **面向过程**：关注“怎么一步步做”（之前的代码）。
 
-* **面向对象**：关注“谁来做”。把功能封装成“类”，生成“对象”去干活。
+* **面向对象**：关注“谁来做”。把功能封装成“类”，生成“对象(实例)”去干活。
+  ** 类 class：相当于造汽车的图纸。
+  ** 对象(也叫实例) instance: 相当于制造出来的某辆具体的汽车。
 </t>
 <t tx="swot.20260313114540.134">用“造车”的例子总结。
 
@@ -24278,37 +24304,22 @@ console.log(intro);
 3. **项目扩展**：在渲染函数中，给每个商品卡片加上“加入购物车”按钮，点击按钮时，控制台打印该商品的名字。
 </t>
 <t tx="swot.20260313114540.18"></t>
-<t tx="swot.20260313114540.180">
-**今日目标**：
+<t tx="swot.20260313114540.180">**今日目标**：
+
 1.  掌握事件对象，获取鼠标坐标和按键。
+
 2.  理解事件冒泡与捕获，学会阻止默认行为。
+
 3.  掌握正则表达式基础，完成表单验证。
+
 4.  完善项目中的发布表单校验。
 
----
-
-</t>
-<t tx="swot.20260313114540.181">
 </t>
 <t tx="swot.20260313114540.182">
-</t>
-<t tx="swot.20260313114540.183">事件触发后，浏览器会把触发时的详细信息（鼠标位置、按了哪个键）打包成一个对象，传给事件处理函数。
-语法：`e` 或 `event`。
-
-```javascript
-div.onclick = function(e) {
-    // e 就是事件对象
-    console.log(e);
-};
-```
-
 </t>
 <t tx="swot.20260313114540.184">*   `e.target`：真正触发事件的那个元素（目标元素）。
 *   `e.clientX / e.clientY`：鼠标距离浏览器窗口左上角的坐标。
 *   `e.pageX / e.pageY`：鼠标距离文档页面左上角的坐标（包含滚动距离，常用）。
-
----
-
 </t>
 <t tx="swot.20260313114540.185">
 </t>
@@ -27717,7 +27728,8 @@ except Exception as e:
 finally:
     # 清理临时文件
     if os.path.exists(temp_md): os.remove(temp_md)
-    if os.path.exists(temp_adoc): os.remove(temp_adoc)</t>
+    if os.path.exists(temp_adoc): os.remove(temp_adoc)
+</t>
 <t tx="swot.20260314064938.1">* `=`：把右边的值给左边（不是相等！）。
 * 复合赋值：`+=`, `-=`, `*=`, `/=`。
 
@@ -29286,33 +29298,7 @@ function formatTime(dateStr) {
 let books = filterByCategory("书籍");
 console.log("所有书籍类商品：", books);
 </t>
-<t tx="swot.20260315121557.1">真实世界的数据往往是复杂的。比如“学生名单”，不仅要有名字，还要有年龄、分数。
-
-* 数组：有序列表。
-* 对象：属性描述。
-* 对象数组：把对象放进数组里，既有顺序，又有详细属性。
-
-*代码演示*：
-
-[source,javascript]
-----
-@language javascript
-let students = [
-    { name: "张三", age: 18, score: 90 },
-    { name: "李四", age: 19, score: 80 },
-    { name: "王五", age: 18, score: 95 }
-];
-
-// 访问李四的分数
-console.log(students[1].score); // 80
-
-// 遍历
-students.forEach(item =&gt; {
-    console.log(`${item.name} 的分数是 ${item.score}`);
-});
-----
-</t>
-<t tx="swot.20260315124025.1">类是制造对象的“模具”。
+<t tx="swot.20260315124025.1">类是制造对象的“模具/图纸”。
 
 .代码演示
 [source,javascript]
@@ -29334,12 +29320,12 @@ console.log('p1.age:', p1.age);
 </t>
 <t tx="swot.20260315145013.1">@language javascript
 class Person {
-    // 提前声明私有属性（在 JS 中，私有属性必须提前声明）
+    // 提前声明私有属性（在 JS 中，私有属性必须提前声明，用 # 表示私有属性）
     #name;
     #age;
 
-    // 构造函数：new 的时候自动执行，用来初始化属性
-    constructor(name, age) {
+    // 构造函数：new 的时候自动执行，用接收到的参数来初始化类的属性
+    constructor(name, age) {  // 形式参数，可以自己随便命名
         this.#name = name;
         this.#age = age;  // 直接赋值，不会通过 setter 进行校验
         // this.age = age;  // 会通过 setter 进行校验
@@ -29351,9 +29337,10 @@ class Person {
     }
 
     // --- Getter/Setter 像 Java 一样控制访问逻辑 ---
+    // 可以访问属性值
     get name() { return this.#name }
     get age() { return this.#age; }
-
+    // 可以修改属性值
     set age(value) {
         if (value &lt; 0) {
             console.error("年龄不能为负数!");
@@ -29362,9 +29349,8 @@ class Person {
         this.#age = value;
     }
 }
-
 </t>
-<t tx="swot.20260315152906.1">子类可以继承父类的属性和方法，并扩展自己的。
+<t tx="swot.20260315152906.1">子类可以继承父类的属性和方法，并可以扩展自己的属性和方法。
 
 *代码演示*：
 
@@ -29378,16 +29364,19 @@ s1.sayHello(); // 继承来的方法
 s1.study();    // 自己的方法
 ----</t>
 <t tx="swot.20260315161843.1">@language javascript
-// 学生类继承人类
+// Student 类继承 Person 类
 class Student extends Person {
+    #score;
+
+    // 构造方法
     constructor(name, age, score) {
-        super(name, age); // 必须先调用父类的构造函数
-        this.score = score; // 扩展自己的属性
+        super(name, age);   // 必须先调用父类的构造函数
+        this.#score = score; // 扩展自己的属性
     }
 
     // 扩展自己的方法
     study() {
-        console.log(`${this.name} 正在学习，考了 ${this.score} 分`);
+        console.log(`${this.name} 正在学习，考了 ${this.#score} 分`);
     }
 }</t>
 <t tx="swot.20260315165114.1">*需求*：定义一个小球类，有颜色、大小属性，有移动的方法。
@@ -30674,6 +30663,18 @@ goodsBox.onclick = function(e) {
         renderGoods();
     }
 };
+</t>
+<t tx="swot.20260321210801.1">事件触发后，浏览器会把触发时的详细信息（鼠标位置、按了哪个键）打包成一个对象，传给事件处理函数。
+
+语法：`e` 或 `event`。
+
+[source,javascript]
+----
+div.onclick = function(e) {
+    // e 就是事件对象
+    console.log(e);
+};
+----
 </t>
 </tnodes>
 </leo_file>

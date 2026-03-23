@@ -2312,19 +2312,19 @@ console.log(formatTime("2026-03-15 10:16:40"));
 == Ch 7：综合数据练习与面向对象——构建代码的“骨架”
 **今日目标**：
 
-1.  理解对象数组这一前端最核心的数据结构。
+1.  理解对象数组这一前端最核心的数据结构。由对象组成的数组。
+
 2.  掌握 ES6 `class` 类语法，实现面向对象编程。
+
 3.  完成“斗地主发牌”综合案例。
-4.  使用类重构项目数据结构。
+
+4.  使用类重构易校园项目数据结构。
 
 === 一：复杂数据结构——对象数组
-
-
-==== 1. 为什么需要对象数组？
 真实世界的数据往往是复杂的。比如“学生名单”，不仅要有名字，还要有年龄、分数。
 
 * 数组：有序列表。
-* 对象：属性描述。
+* 对象：属性描述，对象由属性和值组成。
 * 对象数组：把对象放进数组里，既有顺序，又有详细属性。
 
 *代码演示*：
@@ -2332,41 +2332,44 @@ console.log(formatTime("2026-03-15 10:16:40"));
 [source,javascript]
 ----
 let students = [
-    { name: "张三", age: 18, score: 90 },
-    { name: "李四", age: 19, score: 80 },
-    { name: "王五", age: 18, score: 95 }
+    { name: "张三", age: 18, score: 90 },  // 索引 0
+    { name: "李四", age: 19, score: 80 },  // 索引 1
+    { name: "王五", age: 18, score: 95 }   // 索引 2
 ];
 
-// 访问李四的分数
-console.log(students[1].score); // 80
+// 访问李四的分数，两种方式
+console.log(students[1].score);    // 80
+console.log(students[1]["score"]); // 80
 
-// 遍历
+// 遍历数组
 students.forEach(item => {
     console.log(`${item.name} 的分数是 ${item.score}`);
 });
 ----
 
-=== 二：ES6 面向对象——Class
+=== 二：ES6 面向对象 Class 关键字
 
 
 ==== 1. 面向过程 vs 面向对象
 * **面向过程**：关注“怎么一步步做”（之前的代码）。
 
-* **面向对象**：关注“谁来做”。把功能封装成“类”，生成“对象”去干活。
+* **面向对象**：关注“谁来做”。把功能封装成“类”，生成“对象(实例)”去干活。
+  ** 类 class：相当于造汽车的图纸。
+  ** 对象(也叫实例) instance: 相当于制造出来的某辆具体的汽车。
 
 ==== 2. Class 类的语法
-类是制造对象的“模具”。
+类是制造对象的“模具/图纸”。
 
 .代码演示
 [source,javascript]
 ----
 class Person {
-    // 提前声明私有属性（在 JS 中，私有属性必须提前声明）
+    // 提前声明私有属性（在 JS 中，私有属性必须提前声明，用 # 表示私有属性）
     #name;
     #age;
 
-    // 构造函数：new 的时候自动执行，用来初始化属性
-    constructor(name, age) {
+    // 构造函数：new 的时候自动执行，用接收到的参数来初始化类的属性
+    constructor(name, age) {  // 形式参数，可以自己随便命名
         this.#name = name;
         this.#age = age;  // 直接赋值，不会通过 setter 进行校验
         // this.age = age;  // 会通过 setter 进行校验
@@ -2378,9 +2381,10 @@ class Person {
     }
 
     // --- Getter/Setter 像 Java 一样控制访问逻辑 ---
+    // 可以访问属性值
     get name() { return this.#name }
     get age() { return this.#age; }
-
+    // 可以修改属性值
     set age(value) {
         if (value < 0) {
             console.error("年龄不能为负数!");
@@ -2389,7 +2393,6 @@ class Person {
         this.#age = value;
     }
 }
-
 
 // 使用类创建对象
 let p1 = new Person("张三", 20);
@@ -2404,19 +2407,19 @@ console.log('p1.age:', p1.age);
 ----
 
 === 三：继承 extends 关键字
-子类可以继承父类的属性和方法，并扩展自己的。
+子类可以继承父类的属性和方法，并可以扩展自己的属性和方法。
 
 *代码演示*：
 
 [source,javascript]
 ----
 class Person {
-    // 提前声明私有属性（在 JS 中，私有属性必须提前声明）
+    // 提前声明私有属性（在 JS 中，私有属性必须提前声明，用 # 表示私有属性）
     #name;
     #age;
 
-    // 构造函数：new 的时候自动执行，用来初始化属性
-    constructor(name, age) {
+    // 构造函数：new 的时候自动执行，用接收到的参数来初始化类的属性
+    constructor(name, age) {  // 形式参数，可以自己随便命名
         this.#name = name;
         this.#age = age;  // 直接赋值，不会通过 setter 进行校验
         // this.age = age;  // 会通过 setter 进行校验
@@ -2428,9 +2431,10 @@ class Person {
     }
 
     // --- Getter/Setter 像 Java 一样控制访问逻辑 ---
+    // 可以访问属性值
     get name() { return this.#name }
     get age() { return this.#age; }
-
+    // 可以修改属性值
     set age(value) {
         if (value < 0) {
             console.error("年龄不能为负数!");
@@ -2439,17 +2443,19 @@ class Person {
         this.#age = value;
     }
 }
-
-// 学生类继承人类
+// Student 类继承 Person 类
 class Student extends Person {
+    #score;
+
+    // 构造方法
     constructor(name, age, score) {
-        super(name, age); // 必须先调用父类的构造函数
-        this.score = score; // 扩展自己的属性
+        super(name, age);   // 必须先调用父类的构造函数
+        this.#score = score; // 扩展自己的属性
     }
 
     // 扩展自己的方法
     study() {
-        console.log(`${this.name} 正在学习，考了 ${this.score} 分`);
+        console.log(`${this.name} 正在学习，考了 ${this.#score} 分`);
     }
 }
 
@@ -3655,4 +3661,217 @@ goodsBox.onclick = function(e) {
 2. **代码题**：修改任务列表案例，每条任务后面加一个“删除”按钮，点击按钮删除该条任务。
 
 3. **项目扩展**：在渲染函数中，给每个商品卡片加上“加入购物车”按钮，点击按钮时，控制台打印该商品的名字。
+
+== Ch 10：事件进阶与表单——更复杂的交互
+**今日目标**：
+
+1.  掌握事件对象，获取鼠标坐标和按键。
+
+2.  理解事件冒泡与捕获，学会阻止默认行为。
+
+3.  掌握正则表达式基础，完成表单验证。
+
+4.  完善项目中的发布表单校验。
+
+=== 一：事件对象
+
+
+==== 1. 什么是事件对象？
+事件触发后，浏览器会把触发时的详细信息（鼠标位置、按了哪个键）打包成一个对象，传给事件处理函数。
+
+语法：`e` 或 `event`。
+
+[source,javascript]
+----
+div.onclick = function(e) {
+    // e 就是事件对象
+    console.log(e);
+};
+----
+
+==== 2. 常见属性
+*   `e.target`：真正触发事件的那个元素（目标元素）。
+*   `e.clientX / e.clientY`：鼠标距离浏览器窗口左上角的坐标。
+*   `e.pageX / e.pageY`：鼠标距离文档页面左上角的坐标（包含滚动距离，常用）。
+
+=== 二：事件流与阻止默认行为
+
+
+==== 1. 事件冒泡
+*   **现象**：当你点击子元素时，父元素的点击事件也会触发。就像往水里扔石头，水泡会从下往上冒。
+*   **阻止冒泡**：`e.stopPropagation()`。
+
+==== 2. 阻止默认行为
+*   比如：点击链接不跳转、表单提交按钮不提交。
+*   **语法**：`e.preventDefault()`。
+
+**代码演示**：
+```javascript
+let link = document.querySelector('a');
+link.onclick = function(e) {
+    e.preventDefault(); // 阻止跳转
+    alert('链接被禁止访问');
+};
+```
+
+---
+
+=== 三：表单验证基础
+
+表单是收集用户数据的窗口，验证是必须的。
+
+==== 1. 表单属性
+*   `input.value`：获取输入值。
+*   `input.disabled`：禁用输入框。
+
+==== 2. 正则表达式入门
+*   **概念**：一种用来匹配字符串的工具。
+*   **语法**：`/规则/`。
+    *   `\d`：数字。
+    *   `^`：开头。
+    *   `$`：结尾。
+    *   `{n,m}`：长度范围。
+
+**常用案例**：
+```javascript
+// 验证手机号：1开头，第二位3-9，总共11位
+let reg = /^1[3-9]\d{9}$/;
+
+// 测试方法 test()：匹配返回true，否则false
+console.log(reg.test('13800138000')); // true
+console.log(reg.test('123456')); // false
+```
+
+---
+
+=== 四：综合验证逻辑
+
+**场景**：用户名长度验证、手机号格式验证。
+
+```javascript
+let usernameInput = document.querySelector('#username');
+
+usernameInput.onblur = function() {
+    let val = this.value;
+    // 非空验证
+    if (val.trim() === '') {
+        alert('用户名不能为空');
+    } else if (val.length < 6) {
+        alert('用户名至少6位');
+    }
+};
+```
+
+---
+
+=== S2：实战演练与项目推进（4课时）
+
+
+==== 第一、二课时：随堂实战案例
+
+
+===== 案例：键盘控制方块移动
+**需求**：按上下左右键，页面上的方块跟着移动。
+
+```javascript
+let box = document.querySelector('.box');
+let x = 0, y = 0;
+
+// 给整个文档注册键盘事件
+document.addEventListener('keydown', function(e) {
+    // e.keyCode 获取按键码 (左37 上38 右39 下40)
+    switch (e.keyCode) {
+        case 37:
+            x -= 10;
+            break;
+        case 39:
+            x += 10;
+            break;
+        // ... 其他方向
+    }
+    box.style.left = x + 'px';
+    box.style.top = y + 'px';
+});
+```
+
+===== 案例：跟随鼠标的天使
+图片始终跟随鼠标移动。
+```javascript
+let img = document.querySelector('img');
+document.addEventListener('mousemove', function(e) {
+    let x = e.pageX;
+    let y = e.pageY;
+    img.style.left = x + 'px';
+    img.style.top = y + 'px';
+});
+```
+
+---
+
+==== 第三、四课时：贯穿项目推进——《易校园》表单验证
+
+**场景**：完善 Ch 9 的发布商品功能，加入严格的验证逻辑。
+
+**步骤 1：HTML 表单结构**
+```html
+<form id="addForm">
+    商品名：<input type="text" id="g-name"> <span class="msg"></span><br>
+    价格：<input type="text" id="g-price"> <span class="msg"></span><br>
+    手机号：<input type="text" id="g-phone"> <span class="msg"></span><br>
+    <button type="submit">发布</button>
+</form>
+```
+
+**步骤 2：JS 验证逻辑**
+```javascript
+let form = document.querySelector('#addForm');
+let gName = document.querySelector('#g-name');
+let gPrice = document.querySelector('#g-price');
+let gPhone = document.querySelector('#g-phone');
+
+// 表单提交事件
+form.onsubmit = function(e) {
+    // 1. 阻止默认提交行为
+    e.preventDefault();
+
+    // 2. 获取值
+    let nameVal = gName.value.trim();
+    let priceVal = gPrice.value.trim();
+    let phoneVal = gPhone.value.trim();
+
+    // 3. 验证逻辑
+    if (nameVal === '') {
+        alert('商品名不能为空');
+        return; // 终止函数
+    }
+
+    // 价格必须是数字且大于0
+    // isNaN() 判断是否为非数字
+    if (isNaN(priceVal) || priceVal <= 0) {
+        alert('请输入正确的价格');
+        return;
+    }
+
+    // 手机号正则
+    let phoneReg = /^1[3-9]\d{9}$/;
+    if (!phoneReg.test(phoneVal)) {
+        alert('手机号格式错误');
+        return;
+    }
+
+    // 4. 全部通过，执行添加逻辑
+    alert('验证通过，发布成功！');
+    // ... 调用之前的添加函数 ...
+};
+```
+
+---
+
+==== 📝 作业
+
+1.  **概念题**：什么是事件冒泡？`e.preventDefault()` 和 `e.stopPropagation()` 有什么区别？
+2.  **代码题**：编写一个验证邮箱的正则表达式，测试 `test@test.com`。
+3.  **项目扩展**：在发布表单中增加“商品分类”下拉框，提交时验证是否选择了分类（默认选项“请选择”不能提交）。
+
+---
 

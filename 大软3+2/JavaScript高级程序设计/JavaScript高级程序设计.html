@@ -720,12 +720,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_ch_7综合数据练习与面向对象构建代码的骨架">Ch 7：综合数据练习与面向对象——构建代码的“骨架”</a>
 <ul class="sectlevel2">
-<li><a href="#_一复杂数据结构对象数组">一：复杂数据结构——对象数组</a>
-<ul class="sectlevel3">
-<li><a href="#_1_为什么需要对象数组">1. 为什么需要对象数组？</a></li>
-</ul>
-</li>
-<li><a href="#_二es6_面向对象class">二：ES6 面向对象——Class</a>
+<li><a href="#_一复杂数据结构对象数组">一：复杂数据结构——对象数组</a></li>
+<li><a href="#_二es6_面向对象_class_关键字">二：ES6 面向对象 Class 关键字</a>
 <ul class="sectlevel3">
 <li><a href="#_1_面向过程_vs_面向对象">1. 面向过程 vs 面向对象</a></li>
 <li><a href="#_2_class_类的语法">2. Class 类的语法</a></li>
@@ -789,6 +785,36 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </li>
 <li><a href="#_作业_9">作业</a></li>
+</ul>
+</li>
+<li><a href="#_ch_10事件进阶与表单更复杂的交互">Ch 10：事件进阶与表单——更复杂的交互</a>
+<ul class="sectlevel2">
+<li><a href="#_一事件对象">一：事件对象</a>
+<ul class="sectlevel3">
+<li><a href="#_1_什么是事件对象">1. 什么是事件对象？</a></li>
+<li><a href="#_2_常见属性">2. 常见属性</a></li>
+</ul>
+</li>
+<li><a href="#_二事件流与阻止默认行为">二：事件流与阻止默认行为</a>
+<ul class="sectlevel3">
+<li><a href="#_1_事件冒泡">1. 事件冒泡</a></li>
+<li><a href="#_2_阻止默认行为">2. 阻止默认行为</a></li>
+</ul>
+</li>
+<li><a href="#_三表单验证基础">三：表单验证基础</a>
+<ul class="sectlevel3">
+<li><a href="#_1_表单属性">1. 表单属性</a></li>
+<li><a href="#_2_正则表达式入门">2. 正则表达式入门</a></li>
+</ul>
+</li>
+<li><a href="#_四综合验证逻辑">四：综合验证逻辑</a></li>
+<li><a href="#_s2实战演练与项目推进4课时_2">S2：实战演练与项目推进（4课时）</a>
+<ul class="sectlevel3">
+<li><a href="#_第一二课时随堂实战案例_2">第一、二课时：随堂实战案例</a></li>
+<li><a href="#_第三四课时贯穿项目推进易校园表单验证">第三、四课时：贯穿项目推进——《易校园》表单验证</a></li>
+<li><a href="#_作业_10">📝 作业</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -4038,7 +4064,7 @@ toggleButton.addEventListener('click', () => {
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>理解对象数组这一前端最核心的数据结构。</p>
+<p>理解对象数组这一前端最核心的数据结构。由对象组成的数组。</p>
 </li>
 <li>
 <p>掌握 ES6 <code>class</code> 类语法，实现面向对象编程。</p>
@@ -4047,14 +4073,12 @@ toggleButton.addEventListener('click', () => {
 <p>完成“斗地主发牌”综合案例。</p>
 </li>
 <li>
-<p>使用类重构项目数据结构。</p>
+<p>使用类重构易校园项目数据结构。</p>
 </li>
 </ol>
 </div>
 <div class="sect2">
 <h3 id="_一复杂数据结构对象数组">一：复杂数据结构——对象数组</h3>
-<div class="sect3">
-<h4 id="_1_为什么需要对象数组">1. 为什么需要对象数组？</h4>
 <div class="paragraph">
 <p>真实世界的数据往往是复杂的。比如“学生名单”，不仅要有名字，还要有年龄、分数。</p>
 </div>
@@ -4064,7 +4088,7 @@ toggleButton.addEventListener('click', () => {
 <p>数组：有序列表。</p>
 </li>
 <li>
-<p>对象：属性描述。</p>
+<p>对象：属性描述，对象由属性和值组成。</p>
 </li>
 <li>
 <p>对象数组：把对象放进数组里，既有顺序，又有详细属性。</p>
@@ -4077,24 +4101,24 @@ toggleButton.addEventListener('click', () => {
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">students</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[</span>
-<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;张三&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">18</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">score</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">90</span><span class="tok-w"> </span><span class="tok-p">},</span>
-<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;李四&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">19</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">score</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">80</span><span class="tok-w"> </span><span class="tok-p">},</span>
-<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;王五&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">18</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">score</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">95</span><span class="tok-w"> </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;张三&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">18</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">score</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">90</span><span class="tok-w"> </span><span class="tok-p">},</span><span class="tok-w">  </span><span class="tok-c1">// 索引 0</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;李四&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">19</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">score</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">80</span><span class="tok-w"> </span><span class="tok-p">},</span><span class="tok-w">  </span><span class="tok-c1">// 索引 1</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;王五&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">18</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">score</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">95</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w">   </span><span class="tok-c1">// 索引 2</span>
 <span class="tok-p">];</span>
 
-<span class="tok-c1">// 访问李四的分数</span>
-<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">students</span><span class="tok-p">[</span><span class="tok-mf">1</span><span class="tok-p">].</span><span class="tok-nx">score</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 80</span>
+<span class="tok-c1">// 访问李四的分数，两种方式</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">students</span><span class="tok-p">[</span><span class="tok-mf">1</span><span class="tok-p">].</span><span class="tok-nx">score</span><span class="tok-p">);</span><span class="tok-w">    </span><span class="tok-c1">// 80</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">students</span><span class="tok-p">[</span><span class="tok-mf">1</span><span class="tok-p">][</span><span class="tok-s2">&quot;score&quot;</span><span class="tok-p">]);</span><span class="tok-w"> </span><span class="tok-c1">// 80</span>
 
-<span class="tok-c1">// 遍历</span>
+<span class="tok-c1">// 遍历数组</span>
 <span class="tok-nx">students</span><span class="tok-p">.</span><span class="tok-nx">forEach</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb"> 的分数是 </span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">score</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span>
 <span class="tok-p">});</span></code></pre>
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
-<h3 id="_二es6_面向对象class">二：ES6 面向对象——Class</h3>
+<h3 id="_二es6_面向对象_class_关键字">二：ES6 面向对象 Class 关键字</h3>
 <div class="sect3">
 <h4 id="_1_面向过程_vs_面向对象">1. 面向过程 vs 面向对象</h4>
 <div class="ulist">
@@ -4103,7 +4127,17 @@ toggleButton.addEventListener('click', () => {
 <p><strong>面向过程</strong>：关注“怎么一步步做”（之前的代码）。</p>
 </li>
 <li>
-<p><strong>面向对象</strong>：关注“谁来做”。把功能封装成“类”，生成“对象”去干活。</p>
+<p><strong>面向对象</strong>：关注“谁来做”。把功能封装成“类”，生成“对象(实例)”去干活。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>类 class：相当于造汽车的图纸。</p>
+</li>
+<li>
+<p>对象(也叫实例) instance: 相当于制造出来的某辆具体的汽车。</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -4111,18 +4145,18 @@ toggleButton.addEventListener('click', () => {
 <div class="sect3">
 <h4 id="_2_class_类的语法">2. Class 类的语法</h4>
 <div class="paragraph">
-<p>类是制造对象的“模具”。</p>
+<p>类是制造对象的“模具/图纸”。</p>
 </div>
 <div class="listingblock">
 <div class="title">代码演示</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">class</span><span class="tok-w"> </span><span class="tok-nx">Person</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// 提前声明私有属性（在 JS 中，私有属性必须提前声明）</span>
+<span class="tok-w">    </span><span class="tok-c1">// 提前声明私有属性（在 JS 中，私有属性必须提前声明，用 # 表示私有属性）</span>
 <span class="tok-w">    </span><span class="tok-err">#</span><span class="tok-nx">name</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-err">#</span><span class="tok-nx">age</span><span class="tok-p">;</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// 构造函数：new 的时候自动执行，用来初始化属性</span>
-<span class="tok-w">    </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 构造函数：new 的时候自动执行，用接收到的参数来初始化类的属性</span>
+<span class="tok-w">    </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 形式参数，可以自己随便命名</span>
 <span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">;</span>
 <span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">age</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 直接赋值，不会通过 setter 进行校验</span>
 <span class="tok-w">        </span><span class="tok-c1">// this.age = age;  // 会通过 setter 进行校验</span>
@@ -4134,9 +4168,10 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// --- Getter/Setter 像 Java 一样控制访问逻辑 ---</span>
+<span class="tok-w">    </span><span class="tok-c1">// 可以访问属性值</span>
 <span class="tok-w">    </span><span class="tok-nx">get</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-nx">get</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">age</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span>
-
+<span class="tok-w">    </span><span class="tok-c1">// 可以修改属性值</span>
 <span class="tok-w">    </span><span class="tok-nx">set</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">(</span><span class="tok-nx">value</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">error</span><span class="tok-p">(</span><span class="tok-s2">&quot;年龄不能为负数!&quot;</span><span class="tok-p">);</span>
@@ -4145,7 +4180,6 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">age</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
-
 
 <span class="tok-c1">// 使用类创建对象</span>
 <span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">p1</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Person</span><span class="tok-p">(</span><span class="tok-s2">&quot;张三&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">20</span><span class="tok-p">);</span>
@@ -4164,7 +4198,7 @@ toggleButton.addEventListener('click', () => {
 <div class="sect2">
 <h3 id="_三继承_extends_关键字">三：继承 extends 关键字</h3>
 <div class="paragraph">
-<p>子类可以继承父类的属性和方法，并扩展自己的。</p>
+<p>子类可以继承父类的属性和方法，并可以扩展自己的属性和方法。</p>
 </div>
 <div class="paragraph">
 <p><strong>代码演示</strong>：</p>
@@ -4172,12 +4206,12 @@ toggleButton.addEventListener('click', () => {
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">class</span><span class="tok-w"> </span><span class="tok-nx">Person</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">    </span><span class="tok-c1">// 提前声明私有属性（在 JS 中，私有属性必须提前声明）</span>
+<span class="tok-w">    </span><span class="tok-c1">// 提前声明私有属性（在 JS 中，私有属性必须提前声明，用 # 表示私有属性）</span>
 <span class="tok-w">    </span><span class="tok-err">#</span><span class="tok-nx">name</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-err">#</span><span class="tok-nx">age</span><span class="tok-p">;</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// 构造函数：new 的时候自动执行，用来初始化属性</span>
-<span class="tok-w">    </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 构造函数：new 的时候自动执行，用接收到的参数来初始化类的属性</span>
+<span class="tok-w">    </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 形式参数，可以自己随便命名</span>
 <span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">;</span>
 <span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">age</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 直接赋值，不会通过 setter 进行校验</span>
 <span class="tok-w">        </span><span class="tok-c1">// this.age = age;  // 会通过 setter 进行校验</span>
@@ -4189,9 +4223,10 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// --- Getter/Setter 像 Java 一样控制访问逻辑 ---</span>
+<span class="tok-w">    </span><span class="tok-c1">// 可以访问属性值</span>
 <span class="tok-w">    </span><span class="tok-nx">get</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-p">}</span>
 <span class="tok-w">    </span><span class="tok-nx">get</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">age</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span>
-
+<span class="tok-w">    </span><span class="tok-c1">// 可以修改属性值</span>
 <span class="tok-w">    </span><span class="tok-nx">set</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">(</span><span class="tok-nx">value</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">error</span><span class="tok-p">(</span><span class="tok-s2">&quot;年龄不能为负数!&quot;</span><span class="tok-p">);</span>
@@ -4200,17 +4235,19 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">age</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-p">;</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
-
-<span class="tok-c1">// 学生类继承人类</span>
+<span class="tok-c1">// Student 类继承 Person 类</span>
 <span class="tok-kd">class</span><span class="tok-w"> </span><span class="tok-nx">Student</span><span class="tok-w"> </span><span class="tok-k">extends</span><span class="tok-w"> </span><span class="tok-nx">Person</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-err">#</span><span class="tok-nx">score</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 构造方法</span>
 <span class="tok-w">    </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">score</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-k">super</span><span class="tok-p">(</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 必须先调用父类的构造函数</span>
-<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">score</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">score</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 扩展自己的属性</span>
+<span class="tok-w">        </span><span class="tok-k">super</span><span class="tok-p">(</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-p">);</span><span class="tok-w">   </span><span class="tok-c1">// 必须先调用父类的构造函数</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">score</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">score</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 扩展自己的属性</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 
 <span class="tok-w">    </span><span class="tok-c1">// 扩展自己的方法</span>
 <span class="tok-w">    </span><span class="tok-nx">study</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb"> 正在学习，考了 </span><span class="tok-si">${</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">score</span><span class="tok-si">}</span><span class="tok-sb"> 分`</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb"> 正在学习，考了 </span><span class="tok-si">${</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">score</span><span class="tok-si">}</span><span class="tok-sb"> 分`</span><span class="tok-p">);</span>
 <span class="tok-w">    </span><span class="tok-p">}</span>
 <span class="tok-p">}</span>
 
@@ -5746,10 +5783,327 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_ch_10事件进阶与表单更复杂的交互">Ch 10：事件进阶与表单——更复杂的交互</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>今日目标</strong>：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>掌握事件对象，获取鼠标坐标和按键。</p>
+</li>
+<li>
+<p>理解事件冒泡与捕获，学会阻止默认行为。</p>
+</li>
+<li>
+<p>掌握正则表达式基础，完成表单验证。</p>
+</li>
+<li>
+<p>完善项目中的发布表单校验。</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_一事件对象">一：事件对象</h3>
+<div class="sect3">
+<h4 id="_1_什么是事件对象">1. 什么是事件对象？</h4>
+<div class="paragraph">
+<p>事件触发后，浏览器会把触发时的详细信息（鼠标位置、按了哪个键）打包成一个对象，传给事件处理函数。</p>
+</div>
+<div class="paragraph">
+<p>语法：<code>e</code> 或 <code>event</code>。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nx">div</span><span class="tok-p">.</span><span class="tok-nx">onclick</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// e 就是事件对象</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">);</span>
+<span class="tok-p">};</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_常见属性">2. 常见属性</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>e.target</code>：真正触发事件的那个元素（目标元素）。</p>
+</li>
+<li>
+<p><code>e.clientX / e.clientY</code>：鼠标距离浏览器窗口左上角的坐标。</p>
+</li>
+<li>
+<p><code>e.pageX / e.pageY</code>：鼠标距离文档页面左上角的坐标（包含滚动距离，常用）。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_二事件流与阻止默认行为">二：事件流与阻止默认行为</h3>
+<div class="sect3">
+<h4 id="_1_事件冒泡">1. 事件冒泡</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>现象</strong>：当你点击子元素时，父元素的点击事件也会触发。就像往水里扔石头，水泡会从下往上冒。</p>
+</li>
+<li>
+<p><strong>阻止冒泡</strong>：<code>e.stopPropagation()</code>。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_阻止默认行为">2. 阻止默认行为</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>比如：点击链接不跳转、表单提交按钮不提交。</p>
+</li>
+<li>
+<p><strong>语法</strong>：<code>e.preventDefault()</code>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>代码演示</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">link</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-p">);</span>
+<span class="tok-nx">link</span><span class="tok-p">.</span><span class="tok-nx">onclick</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 阻止跳转</span>
+<span class="tok-w">    </span><span class="tok-nx">alert</span><span class="tok-p">(</span><span class="tok-s1">&#39;链接被禁止访问&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">};</span></code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_三表单验证基础">三：表单验证基础</h3>
+<div class="paragraph">
+<p>表单是收集用户数据的窗口，验证是必须的。</p>
+</div>
+<div class="sect3">
+<h4 id="_1_表单属性">1. 表单属性</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>input.value</code>：获取输入值。</p>
+</li>
+<li>
+<p><code>input.disabled</code>：禁用输入框。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_正则表达式入门">2. 正则表达式入门</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>概念</strong>：一种用来匹配字符串的工具。</p>
+</li>
+<li>
+<p><strong>语法</strong>：<code>/规则/</code>。</p>
+</li>
+<li>
+<p><code>\d</code>：数字。</p>
+</li>
+<li>
+<p><code>^</code>：开头。</p>
+</li>
+<li>
+<p><code>$</code>：结尾。</p>
+</li>
+<li>
+<p><code>{n,m}</code>：长度范围。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>常用案例</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 验证手机号：1开头，第二位3-9，总共11位</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">reg</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sr">/^1[3-9]\d{9}$/</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 测试方法 test()：匹配返回true，否则false</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">reg</span><span class="tok-p">.</span><span class="tok-nx">test</span><span class="tok-p">(</span><span class="tok-s1">&#39;13800138000&#39;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// true</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">reg</span><span class="tok-p">.</span><span class="tok-nx">test</span><span class="tok-p">(</span><span class="tok-s1">&#39;123456&#39;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// false</span></code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_四综合验证逻辑">四：综合验证逻辑</h3>
+<div class="paragraph">
+<p><strong>场景</strong>：用户名长度验证、手机号格式验证。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">usernameInput</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#username&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-nx">usernameInput</span><span class="tok-p">.</span><span class="tok-nx">onblur</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">val</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-c1">// 非空验证</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">val</span><span class="tok-p">.</span><span class="tok-nx">trim</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">alert</span><span class="tok-p">(</span><span class="tok-s1">&#39;用户名不能为空&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">val</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-mf">6</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">alert</span><span class="tok-p">(</span><span class="tok-s1">&#39;用户名至少6位&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">};</span></code></pre>
+</div>
+</div>
+<hr>
+</div>
+<div class="sect2">
+<h3 id="_s2实战演练与项目推进4课时_2">S2：实战演练与项目推进（4课时）</h3>
+<div class="sect3">
+<h4 id="_第一二课时随堂实战案例_2">第一、二课时：随堂实战案例</h4>
+<div class="sect4">
+<h5 id="_案例键盘控制方块移动">案例：键盘控制方块移动</h5>
+<div class="paragraph">
+<p><strong>需求</strong>：按上下左右键，页面上的方块跟着移动。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">box</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;.box&#39;</span><span class="tok-p">);</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 给整个文档注册键盘事件</span>
+<span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;keydown&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// e.keyCode 获取按键码 (左37 上38 右39 下40)</span>
+<span class="tok-w">    </span><span class="tok-k">switch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">keyCode</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">case</span><span class="tok-w"> </span><span class="tok-mf">37</span><span class="tok-o">:</span>
+<span class="tok-w">            </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">-=</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">break</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">case</span><span class="tok-w"> </span><span class="tok-mf">39</span><span class="tok-o">:</span>
+<span class="tok-w">            </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">break</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-c1">// ... 其他方向</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">left</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s1">&#39;px&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">top</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s1">&#39;px&#39;</span><span class="tok-p">;</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_案例跟随鼠标的天使">案例：跟随鼠标的天使</h5>
+<div class="paragraph">
+<p>图片始终跟随鼠标移动。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">img</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;img&#39;</span><span class="tok-p">);</span>
+<span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;mousemove&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">pageX</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">pageY</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-nx">img</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">left</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s1">&#39;px&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-nx">img</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">top</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s1">&#39;px&#39;</span><span class="tok-p">;</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_第三四课时贯穿项目推进易校园表单验证">第三、四课时：贯穿项目推进——《易校园》表单验证</h4>
+<div class="paragraph">
+<p><strong>场景</strong>：完善 Ch 9 的发布商品功能，加入严格的验证逻辑。</p>
+</div>
+<div class="paragraph">
+<p><strong>步骤 1：HTML 表单结构</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">form</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;addForm&quot;</span><span class="tok-p">&gt;</span>
+    商品名：<span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;g-name&quot;</span><span class="tok-p">&gt;</span> <span class="tok-p">&lt;</span><span class="tok-nt">span</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;msg&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;&lt;</span><span class="tok-nt">br</span><span class="tok-p">&gt;</span>
+    价格：<span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;g-price&quot;</span><span class="tok-p">&gt;</span> <span class="tok-p">&lt;</span><span class="tok-nt">span</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;msg&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;&lt;</span><span class="tok-nt">br</span><span class="tok-p">&gt;</span>
+    手机号：<span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;g-phone&quot;</span><span class="tok-p">&gt;</span> <span class="tok-p">&lt;</span><span class="tok-nt">span</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;msg&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;&lt;</span><span class="tok-nt">br</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;submit&quot;</span><span class="tok-p">&gt;</span>发布<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">form</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>步骤 2：JS 验证逻辑</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">form</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#addForm&#39;</span><span class="tok-p">);</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">gName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#g-name&#39;</span><span class="tok-p">);</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">gPrice</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#g-price&#39;</span><span class="tok-p">);</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">gPhone</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#g-phone&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// 表单提交事件</span>
+<span class="tok-nx">form</span><span class="tok-p">.</span><span class="tok-nx">onsubmit</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 1. 阻止默认提交行为</span>
+<span class="tok-w">    </span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 2. 获取值</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">nameVal</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">gName</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">.</span><span class="tok-nx">trim</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">priceVal</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">gPrice</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">.</span><span class="tok-nx">trim</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">phoneVal</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">gPhone</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">.</span><span class="tok-nx">trim</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 3. 验证逻辑</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">nameVal</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">alert</span><span class="tok-p">(</span><span class="tok-s1">&#39;商品名不能为空&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 终止函数</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 价格必须是数字且大于0</span>
+<span class="tok-w">    </span><span class="tok-c1">// isNaN() 判断是否为非数字</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nb">isNaN</span><span class="tok-p">(</span><span class="tok-nx">priceVal</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-nx">priceVal</span><span class="tok-w"> </span><span class="tok-o">&lt;=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">alert</span><span class="tok-p">(</span><span class="tok-s1">&#39;请输入正确的价格&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 手机号正则</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">phoneReg</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sr">/^1[3-9]\d{9}$/</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">phoneReg</span><span class="tok-p">.</span><span class="tok-nx">test</span><span class="tok-p">(</span><span class="tok-nx">phoneVal</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">alert</span><span class="tok-p">(</span><span class="tok-s1">&#39;手机号格式错误&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 4. 全部通过，执行添加逻辑</span>
+<span class="tok-w">    </span><span class="tok-nx">alert</span><span class="tok-p">(</span><span class="tok-s1">&#39;验证通过，发布成功！&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-c1">// ... 调用之前的添加函数 ...</span>
+<span class="tok-p">};</span></code></pre>
+</div>
+</div>
+<hr>
+</div>
+<div class="sect3">
+<h4 id="_作业_10">📝 作业</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>概念题</strong>：什么是事件冒泡？<code>e.preventDefault()</code> 和 <code>e.stopPropagation()</code> 有什么区别？</p>
+</li>
+<li>
+<p><strong>代码题</strong>：编写一个验证邮箱的正则表达式，测试 <code>test@test.com</code>。</p>
+</li>
+<li>
+<p><strong>项目扩展</strong>：在发布表单中增加“商品分类”下拉框，提交时验证是否选择了分类（默认选项“请选择”不能提交）。</p>
+</li>
+</ol>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-21 20:44:04 +0800
+Last updated 2026-03-23 09:11:26 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
