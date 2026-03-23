@@ -2468,17 +2468,17 @@ s1.study();    // 自己的方法
 用“造车”的例子总结。
 
 *  Class：图纸。
+
 *  Constructor：造车时的初始化（颜色、品牌）。
+
 *  new：工厂生产线，造出一辆车。
+
 *  Method：车的功能（跑、停）。
 
-=== 实战演练与项目推进（4课时）
+=== 实战演练与项目推进
 
 
-==== 第一、二课时：随堂实战案例
-
-
-===== 案例 1：小球类
+==== 案例 1：小球类
 *需求*：定义一个小球类，有颜色、大小属性，有移动的方法。
 
 [source,javascript]
@@ -2508,13 +2508,13 @@ ball1.move(100, 200);
 ball1.changeColor("blue");
 ----
 
-===== 案例 2：斗地主发牌逻辑（综合练习）
+==== 案例 2：斗地主发牌逻辑（综合练习）
 *需求*：
 
 [arabic]
-. 生成54张牌。
+. 生成 54 张牌。
 . 洗牌（乱序）。
-. 发牌（3个玩家，留3张底牌）。
+. 发牌（3 个玩家，留 3 张底牌）。
 
 
 *核心逻辑*：
@@ -2532,21 +2532,24 @@ for (let i = 0; i < colors.length; i++) {
         cards.push(colors[i] + nums[j]);
     }
 }
-cards.push('大王', '小王');
+cards.push('大王', '小王');  // 一副新牌生成了
+// console.log('cards:', cards);
 
 // 2. 洗牌
 // 原理：遍历数组，随机抽取一张牌与当前位置交换
 for (let i = 0; i < cards.length; i++) {
+    // 生成 0~53 之间的正整数
     let randomIndex = Math.floor(Math.random() * cards.length);
     // 交换：通过数组解构赋值（Array Destructuring）
-    [cards[i], cards[randomIndex]] = [cards[randomIndex], cards[i]];
+    [cards[i], cards[randomIndex]] = [ cards[randomIndex], cards[i] ];
+    // 第i张牌  随机抽出的一张牌           随机抽出的一张牌       第 i 张牌   交换位置
 }
 
 // 3. 发牌
 let player1 = cards.slice(0, 17);
 let player2 = cards.slice(17, 34);
 let player3 = cards.slice(34, 51);
-let dipai = cards.slice(51);
+let dipai = cards.slice(51);  // 3张底牌
 
 console.log("玩家1：", player1);
 console.log("玩家2：", player2);
@@ -2554,7 +2557,7 @@ console.log("玩家3：", player3);
 console.log("底牌：", dipai);
 ----
 
-==== 第三、四课时：贯穿项目推进——《易校园》用类重构
+==== 贯穿项目推进——《易校园》用类重构
 *场景*：使用面向对象思想，使项目代码规范化。不再是零散的函数，而是“类”和“对象”。
 
 [source,javascript]
@@ -3690,90 +3693,182 @@ div.onclick = function(e) {
 ----
 
 ==== 2. 常见属性
-*   `e.target`：真正触发事件的那个元素（目标元素）。
-*   `e.clientX / e.clientY`：鼠标距离浏览器窗口左上角的坐标。
-*   `e.pageX / e.pageY`：鼠标距离文档页面左上角的坐标（包含滚动距离，常用）。
+* `e.target`：真正触发事件的那个元素（目标元素）。
+
+* `e.clientX / e.clientY`：鼠标距离浏览器窗口左上角的坐标。
+
+* `e.pageX / e.pageY`：鼠标距离文档页面左上角的坐标（包含滚动距离，常用）。
 
 === 二：事件流与阻止默认行为
 
 
 ==== 1. 事件冒泡
-*   **现象**：当你点击子元素时，父元素的点击事件也会触发。就像往水里扔石头，水泡会从下往上冒。
-*   **阻止冒泡**：`e.stopPropagation()`。
+* **现象**：当你点击子元素时，父元素的点击事件也会触发。就像用水壶烧水，下面加热水，水泡会从下往上冒。
+
+* **阻止冒泡**：`e.stopPropagation()`。
 
 ==== 2. 阻止默认行为
-*   比如：点击链接不跳转、表单提交按钮不提交。
-*   **语法**：`e.preventDefault()`。
+* 比如：点击链接不跳转、表单提交按钮不提交。
 
-**代码演示**：
-```javascript
+* *语法*：`e.preventDefault()`。
+
+*代码演示*：
+
+[source,javascript]
+----
 let link = document.querySelector('a');
+
 link.onclick = function(e) {
     e.preventDefault(); // 阻止跳转
     alert('链接被禁止访问');
 };
-```
-
----
+----
 
 === 三：表单验证基础
-
 表单是收集用户数据的窗口，验证是必须的。
+因为用户输入的数据不可完全控制，且无法完全预料。
 
 ==== 1. 表单属性
-*   `input.value`：获取输入值。
-*   `input.disabled`：禁用输入框。
+* `input.value`：获取输入值。
+
+* `input.disabled`：禁用输入框。
 
 ==== 2. 正则表达式入门
-*   **概念**：一种用来匹配字符串的工具。
-*   **语法**：`/规则/`。
-    *   `\d`：数字。
-    *   `^`：开头。
-    *   `$`：结尾。
-    *   `{n,m}`：长度范围。
+* **概念**：一种用来匹配字符串的工具。
+
+* **语法**：`/规则/`。
+  ** `\d`：数字。
+  ** `^`：开头。
+  ** `$`：结尾。
+  ** `{n,m}`：长度范围。
 
 **常用案例**：
-```javascript
+
+[source,javascript]
+----
 // 验证手机号：1开头，第二位3-9，总共11位
 let reg = /^1[3-9]\d{9}$/;
 
 // 测试方法 test()：匹配返回true，否则false
 console.log(reg.test('13800138000')); // true
 console.log(reg.test('123456')); // false
-```
-
----
+----
 
 === 四：综合验证逻辑
+*场景*：用户名长度验证、手机号格式验证。
 
-**场景**：用户名长度验证、手机号格式验证。
+[source,html]
+----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>完整表单验证示例</title>
+    <style>
+        .form-container { width: 300px; margin: 50px auto; padding: 20px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-item { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; transition: all 0.3s; }
 
-```javascript
-let usernameInput = document.querySelector('#username');
+        /* 状态样式 */
+        input.error { border-color: #ff4d4f; background-color: #fff2f0; }
+        input.success { border-color: #52c41a; }
 
-usernameInput.onblur = function() {
-    let val = this.value;
-    // 非空验证
-    if (val.trim() === '') {
-        alert('用户名不能为空');
-    } else if (val.length < 6) {
-        alert('用户名至少6位');
-    }
-};
-```
+        .msg {
+            display: block;
+            font-size: 12px;
+            min-height: 18px;
+            color: #ff4d4f;
+            margin-top: 4px;
+        }
 
----
+        button { width: 100%; padding: 10px; background-color: #1890ff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background-color: #40a9ff; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-item">
+            <label>用户名</label>
+            <input type="text" id="username" placeholder="至少6位">
+            <span id="usernameMsg" class="msg"></span>
+        </div>
 
-=== S2：实战演练与项目推进（4课时）
+        <div class="form-item">
+            <label>手机号</label>
+            <input type="text" id="phone" placeholder="11位手机号">
+            <span id="phoneMsg" class="msg"></span>
+        </div>
+
+        <button id="submitBtn">立即注册</button>
+    </div>
+    <script>
+        const usernameInput = document.querySelector('#username');
+        const phoneInput = document.querySelector('#phone');
+        const submitBtn = document.querySelector('#submitBtn');
+
+        // 状态更新工具函数
+        function validateField(inputEl, msgEl, condition, errorMsg) {
+            const val = inputEl.value.trim();
+            const isValid = condition(val);
+
+            if (!isValid) {
+                msgEl.innerText = errorMsg;
+                inputEl.classList.add('error');
+                inputEl.classList.remove('success');
+                return false;
+            } else {
+                msgEl.innerText = '';
+                inputEl.classList.remove('error');
+                inputEl.classList.add('success');
+                return true;
+            }
+        }
+        // 定义具体的验证规则
+        const checkUsername = () => validateField(
+            usernameInput,
+            document.querySelector('#usernameMsg'),
+            val => val.length >= 6,
+            '用户名至少需要6位'
+        );
+
+        const checkPhone = () => validateField(
+            phoneInput,
+            document.querySelector('#phoneMsg'),
+            val => /^1[3-9]\d{9}$/.test(val),
+            '请输入正确的11位手机号'
+        );
+        // 提交按钮点击事件
+        submitBtn.onclick = function() {
+            // 关键：点击提交时手动触发所有验证
+            const isUserValid = checkUsername();
+            const isPhoneValid = checkPhone();
+
+            if (isUserValid && isPhoneValid) {
+                alert('验证通过！准备提交数据...');
+                // 这里可以写 fetch 或 ajax 请求发送数据到后端
+            } else {
+                console.error('表单中有错误，无法提交');
+            }
+        };
+
+        // 绑定失去焦点事件
+        usernameInput.onblur = checkUsername;
+        phoneInput.onblur = checkPhone;
+    </script>
+</body>
+</html>
+----
+
+=== 实战演练与项目推进
 
 
-==== 第一、二课时：随堂实战案例
+==== 案例：键盘控制方块移动
+*需求*：按上下左右键，页面上的方块跟着移动。
 
-
-===== 案例：键盘控制方块移动
-**需求**：按上下左右键，页面上的方块跟着移动。
-
-```javascript
+[source,javascript]
+----
 let box = document.querySelector('.box');
 let x = 0, y = 0;
 
@@ -3792,9 +3887,9 @@ document.addEventListener('keydown', function(e) {
     box.style.left = x + 'px';
     box.style.top = y + 'px';
 });
-```
+----
 
-===== 案例：跟随鼠标的天使
+==== 案例：跟随鼠标的天使
 图片始终跟随鼠标移动。
 ```javascript
 let img = document.querySelector('img');
@@ -3806,10 +3901,7 @@ document.addEventListener('mousemove', function(e) {
 });
 ```
 
----
-
-==== 第三、四课时：贯穿项目推进——《易校园》表单验证
-
+==== 贯穿项目推进——《易校园》表单验证
 **场景**：完善 Ch 9 的发布商品功能，加入严格的验证逻辑。
 
 **步骤 1：HTML 表单结构**
@@ -3865,9 +3957,7 @@ form.onsubmit = function(e) {
 };
 ```
 
----
-
-==== 📝 作业
+==== 作业
 
 1.  **概念题**：什么是事件冒泡？`e.preventDefault()` 和 `e.stopPropagation()` 有什么区别？
 2.  **代码题**：编写一个验证邮箱的正则表达式，测试 `test@test.com`。
