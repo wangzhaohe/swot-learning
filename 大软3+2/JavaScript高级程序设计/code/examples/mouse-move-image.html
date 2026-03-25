@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>跟随鼠标的天使</title>
+    <style>
+        #angel {
+            /* 核心：绝对定位使其脱离文档流 */
+            position: absolute;
+
+            /* 可选：调整图片大小 */
+            width: 80px;
+
+            /* 可选：为了让鼠标处于图片中心，可以利用 transform 偏移 */
+            /* 如果不加这一行，鼠标会在图片的左上角 */
+            transform: translate(-50%, -50%);
+
+            /* 防止图片遮挡点击事件（可选） */
+            pointer-events: none;
+
+            /* ========== 新增的过渡效果 ========== */
+            /* all: 监听所有可动画属性的变化（这里主要是 left 和 top）
+               0.2s: 过渡持续时间，越小越紧贴鼠标，越大越丝滑延迟
+               ease-out: 动画曲线，快出慢停，适合跟随效果
+            */
+            transition: all 0.2s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://img.icons8.com/color/96/angel.png" alt="天使" id="angel">
+    <script>
+        // 获取图片元素
+        let img = document.querySelector('#angel');
+
+        // 监听文档的鼠标移动事件
+        document.addEventListener('mousemove', function(e) {
+            // pageX 和 pageY 获取的是鼠标相对于整个文档的坐标
+            let x = e.pageX;
+            let y = e.pageY;
+            
+            // 将坐标赋值给图片的 left 和 top
+            // 注意：一定要记得加 'px' 单位
+            img.style.left = x + 'px';
+            img.style.top = y + 'px';
+        });
+    </script>
+</body>
+</html>

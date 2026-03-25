@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>键盘控制方块移动</title>
+    <style>
+        /* 容器样式 */
+        .container {
+            width: 100%;
+            height: 400px;
+            background-color: #f0f0f0;
+            position: relative; /* 子元素相对于它定位 */
+            overflow: hidden;   /* 防止方块跑出边界后出现滚动条 */
+            border: 2px solid #ccc;
+        }
+
+        /* 方块样式 */
+        .box {
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            border-radius: 8px; /* 加点圆角更好看 */
+
+            /* 核心设置：必须有定位 */
+            position: absolute;
+            left: 0;
+            top: 0;
+
+            /* 可选：添加平滑移动效果 */
+            transition: all 0.1s ease-out; 
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box"></div>
+    </div>
+
+    <p>使用方向键 (↑ ↓ ← →) 来移动方块</p>
+
+    <script>
+        let box = document.querySelector('.box');
+        let x = 0, y = 0;
+
+        const step = 20;  // 步长：每次移动的像素
+
+        // 给整个文档注册键盘事件
+        document.addEventListener('keydown', function(e) {
+            // 打印一下按键，方便调试
+            console.log('e.key:', e.key);
+            
+            switch (e.key) {
+                case 'ArrowLeft':
+                case 'Left': // 兼容旧浏览器
+                    x -= step;
+                    break;
+                case 'ArrowRight':
+                case 'Right':
+                    x += step;
+                    break;
+                case 'ArrowUp':
+                case 'Up':
+                    y -= step;
+                    break;
+                case 'ArrowDown':
+                case 'Down':
+                    y += step;
+                    break;
+            }
+
+            // 更新 DOM 样式
+            box.style.left = x + 'px';
+            box.style.top = y + 'px';
+        });
+    </script>
+</body>
+</html>
