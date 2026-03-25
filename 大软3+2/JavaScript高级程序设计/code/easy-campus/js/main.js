@@ -330,5 +330,90 @@ books.forEach((book, index) => {
         `索引：${index} 值：${book.name} ${formatTime(book.pubTime)}`
     );
 });
+//@+node:swot.20260325105157.1: ** Ch 8 更新: 卡片样式 2026-03-25 
+//@+node:swot.20260317113944.1: *3* BB 商品卡片样式控制 goods-card
+//@@language javascript
+// 模拟商品数据
+let goodsData = {
+    id: 1,
+    name: '高等数学',
+    price: 15,
+    isSold: true // 假设已经卖掉了
+};
+
+// 获取卡片元素
+let card = document.querySelector('#card1');
+
+// 逻辑判断
+if (goodsData.isSold) {  // true
+    // 添加 sold-out 类，卡片变灰
+    card.classList.add('sold-out');
+} else {
+    // 移除
+    card.classList.remove('sold-out');
+}
+//@+node:swot.20260325161417.1: ** Ch 9 更新: 列表渲染 2026-03-25
+//@+node:swot.20260320134247.1: *3* BB 列表渲染商品函数 renderGoods()
+//@@language javascript
+let goodsBox = document.querySelector('#goodsBox');
+
+function renderGoods() {
+    goodsBox.innerHTML = '';  // 清空容器
+
+    // 遍历数组
+    goodsList.forEach(item => {
+        // 创建 div
+        let div = document.createElement('div');
+        div.className = 'goods-card';
+
+        // 填充内容：使用 innerHTML 拼装内容
+        div.innerHTML = `
+            <h4>${item.name}</h4>
+            <p>价格：￥${item.finalPrice}</p>
+            <button data-id="${item.id}">删除</button>
+        `;
+        // 添加到容器
+        goodsBox.appendChild(div);
+    });
+}
+
+// 页面加载先渲染一次
+renderGoods();
+//@+node:swot.20260320134724.1: *3* 添加商品功能 addBtn -> 使用数据驱动的方式(Vue/Svelte5中的概念)
+//@@language javascript
+// 假设 HTML 里有一个添加按钮
+let addBtn = document.querySelector('#addBtn');
+
+addBtn.onclick = function() {
+    // 1. 获取用户输入(假设有输入框)
+    // ...
+
+    // 2. 模拟新增数据，goodsList 会改变
+    GoodsDB.add(
+        '新书' + Math.floor(Math.random() * 10),
+        50,
+        "书籍"
+    );
+
+    // 3. 从 goodsList 拿重新渲染页面
+    renderGoods();
+};
+//@+node:swot.20260321202709.1: *3* 删除商品功能 list.onclick -> 使用数据驱动的方式(Vue/Svelte5中的概念)
+//@@language javascript
+// 这里给商品列表注册点击事件，利用事件源判断
+goodsBox.onclick = function(e) {
+    if (e.target.tagName === 'BUTTON') {
+
+        // 1. 获取保存在按钮自定义属性中的 ID
+        // 注意：Dataset 拿到的 id 是字符串，需要转成数字
+        let id = Number(e.target.dataset.id);
+
+        // 2. 调用你之前写好的 GoodsDB.deleteById 方法从数组删除数据
+        GoodsDB.deleteById(id);
+
+        // 3. 重新渲染列表，保证页面和数据同步
+        renderGoods();
+    }
+};
 //@-others
 //@-leo
