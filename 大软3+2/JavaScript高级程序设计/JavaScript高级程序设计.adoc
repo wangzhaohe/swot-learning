@@ -1637,6 +1637,7 @@ function getFormatDate() {
  * @param {number} count
  */
 function generateGoods(count) {
+    // 假设项目上线前批量生成一批商品的数据
     goodsList = []; // 清空原数组
     const names = ["高等数学", "大学英语", "计算机网络", "二手自行车", "台灯"];
 
@@ -1649,7 +1650,8 @@ function generateGoods(count) {
 
         // 3. 调用计算折扣函数
         let finalPrice = calculatePrice(originalPrice, randomLevel);
-
+        
+        // 4. 定义商品对象
         let goods = {
             id: i,
             name: names[Math.floor(Math.random() * names.length)] + "-" + i,
@@ -2273,7 +2275,7 @@ console.log("所有书籍类商品：", books);
 [source,javascript]
 ----
 /**
-    dateStr: 字符串
+    dateStr: 字符串，商品的发布日期
  */
 function formatTime(dateStr) {
 
@@ -2563,6 +2565,8 @@ console.log("底牌：", dipai);
 [source,javascript]
 ----
 class Product {
+    #isSold = false;
+    // 类构造方法
     constructor(id, name, originalPrice, finalPrice, category) {
         this.id = id;
         this.name = name;
@@ -2582,8 +2586,12 @@ class Product {
         this.finalPrice = calculatePrice(this.originalPrice, randomLevel);
         console.log(`${this.name} 打折后价格：${this.finalPrice}`);
     }
+    
+    // stter：商品是否已售，这样调用 setter: 实例.isSold = true
+    set isSold(status) {
+        this.#isSold = status;
+    }
 }
-
 class User {
     constructor(username, password) {
         this.username = username;
@@ -2724,9 +2732,12 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
 == Ch 8：DOM 基础与样式操作——让网页“动”起来
 **今日目标**：
 
-* 理解 DOM 树结构，搞清楚谁是爹、谁是儿子。
+* 理解 DOM 树结构，搞清楚元素之间的父子关系。
+
 * 学会使用 `querySelector` 精准捕捉页面元素。
-* 掌握修改文字内容和样式的三种方式。
+
+* 掌握修改文字内容和样式的基本方式。
+
 * 在项目中实现商品卡片的动态样式变化。
 
 === 一：DOM 树与节点关系
@@ -2743,7 +2754,9 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
 把 DOM 树想象成家谱：
 
 * *父节点*：直接包裹你的元素。
+
 * *子节点*：你直接包裹的元素。
+
 * *兄弟节点*：和你同级、同一个父元素的元素。
 
 
@@ -2751,20 +2764,30 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
 
 [source,html]
 ----
-<div class="father">
-    <div class="son">儿子</div>
-    <div class="daughter">女儿</div>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>节点关系</title>
+</head>
+<body>
+    <div class="father">
+        <div class="son">儿子</div>
+        <div class="daughter">女儿</div>
+    </div>    
 
-<script>
-    let son = document.querySelector('.son');
+    <script>
+        let son = document.querySelector('.son');
 
-    // 找爸爸
-    console.log(son.parentNode); // <div class="father">...
+        // 找父节点
+        console.log(son.parentNode); // <div class="father">...
 
-    // 找兄弟 (nextElementSibling 下一个兄弟)
-    console.log(son.nextElementSibling); // <div class="daughter">...
-</script>
+        // 找兄弟节点 (nextElementSibling 下一个兄弟)
+        console.log(son.nextElementSibling); // <div class="daughter">...
+    </script>
+</body>
+</html>
 ----
 
 === 二：获取元素——querySelector 全家桶
@@ -2896,15 +2919,15 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
         // 1. 读取测试
         console.log('innerText:', box.innerText);     // 输出: "你好" (隐藏内容及标签样式均丢失)
         console.log('textContent:', box.textContent); // 输出: "你好 看不见我" (包含隐藏文本)
-        console.log('innerHTML:', box.innerHTML);   // 输出: "<strong>你好</strong> <span style='...'>...</span>"
+        console.log('innerHTML:', box.innerHTML);   // 输出: "3<strong>你好</strong> <span style='...'>...</span>"
 
         // 2. 写入测试 (innerText)
         // 页面显示: <em>新的内容</em> (标签被转义为纯字符串)
-        // box.innerText = '<em>新的内容</em>'; 
+        // box.innerText = '<em>新的内容</em>';
 
         // 3. 写入测试 (innerHTML)
         // 页面显示: 新的内容 (斜体效果生效)
-        // box.innerHTML = '<em>新的内容</em>'; 
+        // box.innerHTML = '<em>新的内容</em>';
 
         // 4. 安全风险演示 (XSS)
         // 如果恶意脚本通过 innerHTML 注入，浏览器会执行它
@@ -2951,7 +2974,9 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
 * `元素.classList.toggle('类名')`：切换类（有则删，无则加）。
 
 
-.样式操作综合演示
+. 样式操作综合演示
+
+.code/examples/change-style.html
 [source,html]
 ----
 <!DOCTYPE html>
@@ -2966,7 +2991,7 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
             background-color: #eee;
             transition: all 0.3s;
 
-            /* 文字布局居中 */
+            /* box 里的文字布局居中 */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2990,6 +3015,7 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
 <body>
     <div class="box">目标元素</div>
     <hr>
+    <!-- 在一个网页中，元素(tag)的 id 不能重复，必须是唯一的 -->
     <button id="btn-style">修改行内样式</button>
     <button id="btn-class">切换 Active 类</button>
     <button id="btn-toggle">隐藏 / 显示</button>
@@ -2999,6 +3025,8 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
         const btnStyle = document.querySelector('#btn-style');
         const btnClass = document.querySelector('#btn-class');
         const btnToggle = document.querySelector('#btn-toggle');
+
+        // 下面对三个按钮 button 绑定操作行为
 
         // 1. 修改行内样式 (style)
         btnStyle.addEventListener('click', () => {
@@ -3030,7 +3058,7 @@ console.log(`购物车总额：${u1.getTotal()} 元`);
 将样式写在 CSS 中，通过 JS 切换类名，能实现“样式与逻辑分离”，代码更易于维护。
 ====
 
-=== 实战演练与项目推进（4课时）
+=== 实战演练与项目推进
 
 
 ==== 案例 1：密码框明文/密文切换
@@ -3046,20 +3074,25 @@ code/examples/show-password.html
     <title>querySelector 示例</title>
 </head>
 <body>
+<!-- 定义一个密码框（默认显示黑点）和一个按钮 -->
 <input type="password" id="pwd" value="123456">
 <button id="btn">显示密码</button>
 
 <script>
+// 获取密码框对象 和 按钮对象
 let pwd = document.querySelector('#pwd');
 let btn = document.querySelector('#btn');
+
 let flag = true; // true 表示当前是密码状态
 
+//  直接使用 onclick 进行点击事件的绑定
+// onclick 只能绑定一次事件，在实际开发中如果需要绑定多个事件，请使用 addEventListener
 btn.onclick = function() {
     if (flag) {
         pwd.type = 'text'; // 变成文本
         btn.innerText = '隐藏密码';
     } else {
-        pwd.type = 'password'; // 变回密码
+        pwd.type = 'password'; // 变成黑点点
         btn.innerText = '显示密码';
     }
     flag = !flag; // 状态取反
@@ -3247,6 +3280,7 @@ btn.onclick = function() {
     position: relative;
 }
 
+/* 只有当 soud-out 类被激活时 .status 才会生效 */
 .sold-out .status::after {
     content: "已售罄";
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -3272,7 +3306,7 @@ let goodsData = {
 let card = document.querySelector('#card1');
 
 // 逻辑判断
-if (goodsData.isSold) {
+if (goodsData.isSold) {  // true
     // 添加 sold-out 类，卡片变灰
     card.classList.add('sold-out');
 } else {
@@ -3348,19 +3382,17 @@ if (goodsData.isSold) {
 ----
 
 === 二：注册事件两种方式
-传统方式
+传统方式：
 
-`元素.onclick = function() ++{++}`
+`元素.onclick = function() {}`
 
 * 特点：简单，但会被覆盖。后面写的 `onclick` 会覆盖前面的。
 
-
 ***
-
 
 方法监听方式（推荐）
 
-`元素.addEventListener('事件类型', function() ++{++})`
+`元素.addEventListener('事件类型', function() {})`
 
 * 特点：不会被覆盖，可以绑定多个事件。
 
@@ -3867,101 +3899,154 @@ console.log(reg.test('123456')); // false
 ==== 案例：键盘控制方块移动
 *需求*：按上下左右键，页面上的方块跟着移动。
 
-[source,javascript]
+[source,html]
 ----
-let box = document.querySelector('.box');
-let x = 0, y = 0;
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>键盘控制方块移动</title>
+    <style>
+        /* 容器样式 */
+        .container {
+            width: 100%;
+            height: 400px;
+            background-color: #f0f0f0;
+            position: relative; /* 子元素相对于它定位 */
+            overflow: hidden;   /* 防止方块跑出边界后出现滚动条 */
+            border: 2px solid #ccc;
+        }
 
-// 给整个文档注册键盘事件
-document.addEventListener('keydown', function(e) {
-    // e.keyCode 获取按键码 (左37 上38 右39 下40)
-    switch (e.keyCode) {
-        case 37:
-            x -= 10;
-            break;
-        case 39:
-            x += 10;
-            break;
-        // ... 其他方向
-    }
-    box.style.left = x + 'px';
-    box.style.top = y + 'px';
-});
+        /* 方块样式 */
+        .box {
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            border-radius: 8px; /* 加点圆角更好看 */
+
+            /* 核心设置：必须有定位 */
+            position: absolute;
+            left: 0;
+            top: 0;
+
+            /* 可选：添加平滑移动效果 */
+            transition: all 0.1s ease-out; 
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box"></div>
+    </div>
+
+    <p>使用方向键 (↑ ↓ ← →) 来移动方块</p>
+
+    <script>
+        let box = document.querySelector('.box');
+        let x = 0, y = 0;
+
+        const step = 20;  // 步长：每次移动的像素
+
+        // 给整个文档注册键盘事件
+        document.addEventListener('keydown', function(e) {
+            // 打印一下按键，方便调试
+            console.log('e.key:', e.key);
+            
+            switch (e.key) {
+                case 'ArrowLeft':
+                case 'Left': // 兼容旧浏览器
+                    x -= step;
+                    break;
+                case 'ArrowRight':
+                case 'Right':
+                    x += step;
+                    break;
+                case 'ArrowUp':
+                case 'Up':
+                    y -= step;
+                    break;
+                case 'ArrowDown':
+                case 'Down':
+                    y += step;
+                    break;
+            }
+
+            // 更新 DOM 样式
+            box.style.left = x + 'px';
+            box.style.top = y + 'px';
+        });
+    </script>
+</body>
+</html>
 ----
 
 ==== 案例：跟随鼠标的天使
 图片始终跟随鼠标移动。
-```javascript
-let img = document.querySelector('img');
-document.addEventListener('mousemove', function(e) {
-    let x = e.pageX;
-    let y = e.pageY;
-    img.style.left = x + 'px';
-    img.style.top = y + 'px';
-});
-```
 
-==== 贯穿项目推进——《易校园》表单验证
-**场景**：完善 Ch 9 的发布商品功能，加入严格的验证逻辑。
+[source,javascript]
+----
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>跟随鼠标的天使</title>
+    <style>
+        #angel {
+            /* 核心：绝对定位使其脱离文档流 */
+            position: absolute;
 
-**步骤 1：HTML 表单结构**
-```html
-<form id="addForm">
-    商品名：<input type="text" id="g-name"> <span class="msg"></span><br>
-    价格：<input type="text" id="g-price"> <span class="msg"></span><br>
-    手机号：<input type="text" id="g-phone"> <span class="msg"></span><br>
-    <button type="submit">发布</button>
-</form>
-```
+            /* 可选：调整图片大小 */
+            width: 80px;
 
-**步骤 2：JS 验证逻辑**
-```javascript
-let form = document.querySelector('#addForm');
-let gName = document.querySelector('#g-name');
-let gPrice = document.querySelector('#g-price');
-let gPhone = document.querySelector('#g-phone');
+            /* 可选：为了让鼠标处于图片中心，可以利用 transform 偏移 */
+            /* 如果不加这一行，鼠标会在图片的左上角 */
+            transform: translate(-50%, -50%);
 
-// 表单提交事件
-form.onsubmit = function(e) {
-    // 1. 阻止默认提交行为
-    e.preventDefault();
+            /* 防止图片遮挡点击事件（可选） */
+            pointer-events: none;
 
-    // 2. 获取值
-    let nameVal = gName.value.trim();
-    let priceVal = gPrice.value.trim();
-    let phoneVal = gPhone.value.trim();
+            /* ========== 新增的过渡效果 ========== */
+            /* all: 监听所有可动画属性的变化（这里主要是 left 和 top）
+               0.2s: 过渡持续时间，越小越紧贴鼠标，越大越丝滑延迟
+               ease-out: 动画曲线，快出慢停，适合跟随效果
+            */
+            transition: all 0.2s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://img.icons8.com/color/96/angel.png" alt="天使" id="angel">
+    <script>
+        // 获取图片元素
+        let img = document.querySelector('#angel');
 
-    // 3. 验证逻辑
-    if (nameVal === '') {
-        alert('商品名不能为空');
-        return; // 终止函数
-    }
-
-    // 价格必须是数字且大于0
-    // isNaN() 判断是否为非数字
-    if (isNaN(priceVal) || priceVal <= 0) {
-        alert('请输入正确的价格');
-        return;
-    }
-
-    // 手机号正则
-    let phoneReg = /^1[3-9]\d{9}$/;
-    if (!phoneReg.test(phoneVal)) {
-        alert('手机号格式错误');
-        return;
-    }
-
-    // 4. 全部通过，执行添加逻辑
-    alert('验证通过，发布成功！');
-    // ... 调用之前的添加函数 ...
-};
-```
+        // 监听文档的鼠标移动事件
+        document.addEventListener('mousemove', function(e) {
+            // pageX 和 pageY 获取的是鼠标相对于整个文档的坐标
+            let x = e.pageX;
+            let y = e.pageY;
+            
+            // 将坐标赋值给图片的 left 和 top
+            // 注意：一定要记得加 'px' 单位
+            img.style.left = x + 'px';
+            img.style.top = y + 'px';
+        });
+    </script>
+</body>
+</html>
+----
 
 ==== 作业
+1. **概念题**：什么是事件冒泡？`e.preventDefault()` 和 `e.stopPropagation()` 有什么区别？
 
-1.  **概念题**：什么是事件冒泡？`e.preventDefault()` 和 `e.stopPropagation()` 有什么区别？
-2.  **代码题**：编写一个验证邮箱的正则表达式，测试 `test@test.com`。
-3.  **项目扩展**：在发布表单中增加“商品分类”下拉框，提交时验证是否选择了分类（默认选项“请选择”不能提交）。
+2. **代码题**：编写一个验证邮箱的正则表达式，测试 `test@test.com`。
 
----
+3. **项目扩展**：在发布表单中增加“商品分类”下拉框，提交时验证是否选择了分类（默认选项“请选择”不能提交）。
 
