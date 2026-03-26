@@ -3418,6 +3418,7 @@ if (goodsData.isSold) {  // true
         btn.addEventListener('click', function() {
             alert('事件1');
         });
+
         btn.addEventListener('click', function() {
             alert('事件2');
         });
@@ -3434,7 +3435,6 @@ if (goodsData.isSold) {  // true
 传统方式：`btn.onclick = null;`
 
 这种方式非常简单暴力。因为 onclick 本质上是对象的一个属性，同一时间只能指向一个函数。你想卸载它，直接把这个属性清空（赋值为 null）即可。
-
 
 .code/examples/onclick-null.html
 [source,html]
@@ -3476,7 +3476,6 @@ if (goodsData.isSold) {  // true
 这是现代开发的主流。但它有一个硬性要求：解铃还须系铃人。
 你绑定时用的是哪个函数名，移除时就必须传入同一个函数名。
 
-
 .code/examples/removeEventListener.html
 [source,html]
 ----
@@ -3496,7 +3495,6 @@ if (goodsData.isSold) {  // true
     <script>
         // 通过 ID 找到页面上的按钮
         const btn = document.querySelector('#myBtn');
-
         // 1. 先定义好处理函数（给它个名字），在被调用时执行内部逻辑。
         function sayHi() {
             alert('你好！这是最后一次打招呼。');
@@ -3506,35 +3504,32 @@ if (goodsData.isSold) {  // true
 
         // 3. 绑定
         btn.addEventListener('click', sayHi);
-
-
         // 如果你只想让事件执行一次就自动销毁，甚至不需要手动调用 remove，现代浏览器支持一个配置参数。
-        /*
         btn.addEventListener('click', function() {
             alert('我只会触发一次，然后自动消失！');
         }, { once: true }); // 这里的 once: true 会自动帮你处理解绑
-        */
     </script>
 </body>
 </html>
 ----
 
-=== 案例：任务列表（增删综合）
-之前我们用 `innerHTML` 拼接字符串，虽然简单，但效率较低且不安全。专业的做法是操作节点。
-
+=== 案例：创建节点的任务列表（增删综合）
 [upperalpha]
-. 创建节点
+. 创建节点（在内存里创建）
   * `document.createElement('标签名')`
 
 . 添加节点
-  * `父元素.appendChild(子元素)`：添加到父元素内部的最后面。
+  * `父元素.appendChild(子元素)`：将上面创建的节点，添加到父元素内部的最后面。
 
 . 删除节点
   * 老写法：`父元素.removeChild(子元素)`：父元素杀掉子元素。
-  * 新写法：`元素.remove()`
+  * 新写法：`元素.remove()`，自己了断自己。
 
 
-*需求*：输入内容，点击添加，添加到列表；点击列表项，删除该条任务。
+*需求*：
+
+* 在文本框 input 中输入任务内容，点击添加按钮，将任务内容添加到列表中；
+* 点击列表中任务，删除该任务。
 
 .code/examples/task-list.html
 [source,html]
@@ -3549,17 +3544,23 @@ if (goodsData.isSold) {  // true
 <body>
     <input type="text" id="task" placeholder="请输入任务...">
     <button id="addBtn">添加任务</button>
+
     <ul id="list">
         <li>原有的老任务 (点击我删除)</li>
     </ul>
 
     <script>
         let task = document.querySelector('#task');
+
         let addBtn = document.querySelector('#addBtn');
+
         let list = document.querySelector('#list');
         addBtn.onclick = function() {
 
+            // 获取 input 框的文本
             let content = task.value;
+
+            // 如果删除前后空格后是空的，则返回
             if (content.trim() === '') {
                 alert('内容不能为空！');
                 return;
@@ -3569,18 +3570,18 @@ if (goodsData.isSold) {  // true
             let newLi = document.createElement('li');
             newLi.textContent = content;
 
-            // 添加到 ul 的最前面 (insertBefore)，即在索引 0 前面
+            // 将内存中的 newLi 添加到 ul 的最前面 (insertBefore)，即在索引 0 前面
             list.insertBefore(newLi, list.children[0]);
             // list.appendChild(newLi);
 
-            task.value = '';  // 清空文本框
+            task.value = '';  // 清空输入框
         };
 
         // 这里给 ul 注册点击事件，利用事件源判断
-        list.onclick = function(e) {
+        list.onclick = function(event) {
             // e.target 返回的是你点击的那个元素
-            if (e.target.tagName === 'LI') {
-                list.removeChild(e.target);
+            if (event.target.tagName === 'LI') {
+                list.removeChild(event.target);
                 // e.target.remove()  // 这样写也可以 子节点自我了断
             }
         };
@@ -3590,15 +3591,18 @@ if (goodsData.isSold) {  // true
 ----
 
 === 贯穿项目推进——《易校园》列表渲染
-*场景*：这是前端开发最核心的环节：*数据驱动视图*。我们要把内存里的数组数据，变成网页上的 HTML 结构。
+*场景*：这是前端开发最核心的环节：*数据驱动视图*。
+我们要把内存里的数组数据，变成网页上的 HTML 结构。
 
 ==== 步骤 1：准备容器-HTML中只保留一个空壳
 [source,html]
 ----
 <hr>
+
 <div>
     <button id="addBtn">添加商品</button>
 </div>
+
 <div class="goods-list" id="goodsBox">
 
 </div>
@@ -3613,13 +3617,14 @@ let goodsBox = document.querySelector('#goodsBox');
 
 function renderGoods() {
     goodsBox.innerHTML = '';  // 清空容器
+
     // 遍历数组
     goodsList.forEach(item => {
         // 创建 div
         let div = document.createElement('div');
         div.className = 'goods-card';
 
-        // 填充内容
+        // 填充内容：使用 innerHTML 拼装内容
         div.innerHTML = `
             <h4>${item.name}</h4>
             <p>价格：￥${item.finalPrice}</p>
@@ -3644,14 +3649,14 @@ addBtn.onclick = function() {
     // 1. 获取用户输入(假设有输入框)
     // ...
 
-    // 2. 模拟新增数据
+    // 2. 模拟新增数据，goodsList 会改变
     GoodsDB.add(
         '新书' + Math.floor(Math.random() * 10),
         50,
         "书籍"
     );
 
-    // 3. 重新渲染页面
+    // 3. 从 goodsList 拿重新渲染页面
     renderGoods();
 };
 ----
@@ -3714,10 +3719,11 @@ goodsBox.onclick = function(e) {
 ==== 1. 什么是事件对象？
 事件触发后，浏览器会把触发时的详细信息（鼠标位置、按了哪个键）打包成一个对象，传给事件处理函数。
 
-语法：`e` 或 `event`。
+`e` 或 `event` 表示是事件对象。
 
 [source,javascript]
 ----
+// div 指已获取到的 dom 对象
 div.onclick = function(e) {
     // e 就是事件对象
     console.log(e);
@@ -3730,6 +3736,41 @@ div.onclick = function(e) {
 * `e.clientX / e.clientY`：鼠标距离浏览器窗口左上角的坐标。
 
 * `e.pageX / e.pageY`：鼠标距离文档页面左上角的坐标（包含滚动距离，常用）。
+
+
+在大多数开发场景中，它们的转换关系如下（以 Y 轴为例）：
+
+根据坐标计算公式 latexmath:[pageY = clientY + \text{页面滚动的垂直距离 (scrollTop)}]
+
+- **当页面没有滚动时**：`e.clientY` 等于 `e.pageY`。
+
+- **当页面向下滚动了 100px 时**：
+  - 如果鼠标点在窗口顶端，`e.clientY` 是 **0**。
+  - 此时 `e.pageY` 则是 **100px**（因为它距离文档开头的起点有 100px 的滚动距离）。
+
+===== @clean code/examples/client-vs-page.html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Client VS Page</title>
+</head>
+<body>
+    <div style="height: 2000px; padding: 20px;">
+        <p>请向下滚动页面，然后点击任意位置查看控制台输出：</p>
+    </div>
+
+    <script>
+        window.addEventListener('click', (e) => {
+            console.log('--- 点击坐标 ---');
+            console.log('clientY:', e.clientY, '（相对于浏览器窗口）');
+            console.log('pageY:  ', e.pageY,  '（相对于整个文档，包含滚动距离）');
+            console.log('当前滚动距离:', window.scrollY);
+        });
+    </script>
+</body>
+</html>
 
 === 二：事件流与阻止默认行为
 
