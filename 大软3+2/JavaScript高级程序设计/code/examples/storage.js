@@ -21,7 +21,8 @@ class StorageWrapper {
             };
             this.storage.setItem(key, JSON.stringify(data));
             return true;
-        } catch (e) {
+        }
+        catch (e) {
             // 如果存储空间满了，尝试清理过期数据后重试
             if (e.name === 'QuotaExceededError') {
                 console.warn('Storage space full, clearing expired items...');
@@ -43,7 +44,9 @@ class StorageWrapper {
     get(key, defaultValue = null) {
         try {
             const item = this.storage.getItem(key);
-            if (!item) return defaultValue;
+
+            if (!item)
+                return defaultValue;
 
             const data = JSON.parse(item);
 
@@ -53,7 +56,8 @@ class StorageWrapper {
                 return defaultValue;
             }
             return data.value;
-        } catch (e) {
+        }
+        catch (e) {
             return defaultValue;
         }
     }

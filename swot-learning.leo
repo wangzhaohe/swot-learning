@@ -1152,9 +1152,6 @@
 <v t="swot.20260313114540.197"><vh>作业</vh></v>
 </v>
 </v>
-</v>
-</v>
-<v t="swot.20260314165640.1"><vh>waiting for arrange</vh>
 <v t="swot.20260313114540.198"><vh>Ch 11：BOM与特效开发——浏览器的控制权</vh>
 <v t="swot.20260313114540.200"><vh>一：BOM 对象</vh>
 <v t="swot.20260313114540.201"><vh>1. window 对象</vh></v>
@@ -1181,7 +1178,10 @@
 <v t="swot.20260326075931.1"><vh>示例 2：购物车实战（LocalStorage + 跨标签同步）</vh>
 <v t="swot.20260326080805.1"><vh>@clean code/examples/cart.html</vh>
 <v t="swot.20260326081204.1"><vh>&lt;&lt; mystyle &gt;&gt;</vh></v>
-<v t="swot.20260326081234.1"><vh>&lt;&lt; mybody &gt;&gt;</vh></v>
+<v t="swot.20260326081234.1"><vh>&lt;&lt; mybody &gt;&gt;</vh>
+<v t="swot.20260327113139.1"><vh>商品列表</vh></v>
+<v t="swot.20260327113151.1"><vh>我的购物车</vh></v>
+</v>
 <v t="swot.20260326081507.1"><vh>&lt;&lt; myscript &gt;&gt;</vh>
 <v t="swot.20260326081922.1"><vh>1. 核心业务逻辑：ShoppingCart 类</vh>
 <v t="swot.20260326103912.1"><vh>constructor</vh></v>
@@ -1221,6 +1221,9 @@
 <v t="swot.20260313114540.221"><vh>📝 作业</vh></v>
 </v>
 </v>
+</v>
+</v>
+<v t="swot.20260314165640.1"><vh>waiting for arrange</vh>
 <v t="swot.20260313114540.223"><vh>Ch 12：网络编程与 Promise——打破浏览器壁垒</vh>
 <v t="swot.20260313114540.224"><vh>S1：核心精讲（4课时）</vh>
 <v t="swot.20260313114540.225"><vh>一：网络通信基础</vh>
@@ -2230,6 +2233,7 @@
 </v>
 <v t="swot.20260310142409.1"><vh>open-at-leo-file 打开的 leo 文件，不能执行 myLeoSettings.leo 中的命令 @command adoc-live</vh></v>
 <v t="swot.20260316150606.1"><vh>3. Undefined 与 Null -&gt; 有bug，只能写一个 @language javascript，写2个则 asciidoc 生成的 html 乱了</vh></v>
+<v t="swot.20260313114540.196"></v>
 </v>
 <v t="swot.20260308115402.1"><vh>获取 leo 主进程派生的子进程</vh></v>
 </vnodes>
@@ -24475,7 +24479,9 @@ console.log(reg.test('13812345678')); // true
 console.log(reg.test('123456')); // false
 ----</t>
 <t tx="swot.20260313114540.192"></t>
-<t tx="swot.20260313114540.196">**场景**：完善 Ch 9 的发布商品功能，加入严格的验证逻辑。
+<t tx="swot.20260313114540.196">TODO: 有待更新到项目中
+
+**场景**：完善 Ch 9 的发布商品功能，加入严格的验证逻辑。
 
 **步骤 1：HTML 表单结构**
 ```html
@@ -30453,7 +30459,7 @@ p {
 }</t>
 <t tx="swot.20260325113847.1">图片始终跟随鼠标移动。
 
-[source,javascript]
+[source,html]
 ----
 @others
 ----
@@ -30564,10 +30570,18 @@ btn.addEventListener('click', sayHi);
 
 [source,javascript]
 ----
-// 5 秒后跳转到百度
+@language javascript
+/** * 页面跳转前的延迟时间（毫秒）
+ * @constant {number} 
+ */
+const DELAY = 5000;
+
+/**
+ * 5 秒后跳转到百度
+ */
 setTimeout(function() {
     location.href = 'http://www.baidu.com';
-}, 5000);
+}, DELAY);
 ----
 </t>
 <t tx="swot.20260325145754.1">[width="100%",cols="23%,40%,37%",options="header",]
@@ -31016,8 +31030,29 @@ button {
 </t>
 <t tx="swot.20260326075931.1">下面案例使用 *发布-订阅模式 (Pub-Sub)* ，结合 BOM 的 storage 事件，解决了“本地状态管理”与“跨标签页同步”的问题。
 
+[mermaid, target=img/mermaid-2026-03-27-144243, format=svg]
+....
+graph TD
+    A[用户点击按钮] --&gt; B[调用 handleAddToCart]
+    B --&gt; C[执行 cart.addItem]
+    C --&gt; D[数据存入 LocalStorage]
+    D --&gt; E{执行 save 方法}
+    E --&gt; F[当前页: notifyListeners]
+    F --&gt; G[执行 subscribe 里的 renderUI]
+    G --&gt; H[当前页界面更新]
+    
+    D -.-&gt; I[[浏览器监测到 Storage 变化]]
+    I -.-&gt; J[其他标签页: 触发 storage 事件]
+    J -.-&gt; K[其他标签页: notifyListeners]
+    K -.-&gt; L[执行该页 subscribe 里的 renderUI]
+    L -.-&gt; M[其他标签页界面同步更新]
+
+    style F fill:#f9f,stroke:#333
+    style K fill:#f9f,stroke:#333
+    style I stroke-dasharray: 5 5
+....
 </t>
-<t tx="swot.20260326080805.1" _mod_time="4741da717854fff84d2e">@language html
+<t tx="swot.20260326080805.1" _mod_time="4741da7188e8a3f9fb2e">@language html
 &lt;!DOCTYPE html&gt;
 &lt;html lang="zh-CN"&gt;
 
@@ -31102,41 +31137,27 @@ button:hover {
     在任意一个页面点击添加/删除商品，观察另一个页面的实时变化。
 &lt;/p&gt;
 
-&lt;div class="card"&gt;
-    &lt;h2&gt;商品列表&lt;/h2&gt;
-    &lt;div class="item"&gt;
-        &lt;span&gt;iPhone 15 (¥5999)&lt;/span&gt;
-        &lt;button onclick="handleAddToCart(1, 'iPhone 15', 5999)"&gt;加入购物车&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div class="item"&gt;
-        &lt;span&gt;MacBook Pro (¥14999)&lt;/span&gt;
-        &lt;button onclick="handleAddToCart(2, 'MacBook Pro', 14999)"&gt;加入购物车&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div class="item"&gt;
-        &lt;span&gt;AirPods Pro (¥1899)&lt;/span&gt;
-        &lt;button onclick="handleAddToCart(3, 'AirPods Pro', 1899)"&gt;加入购物车&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class="card"&gt;
-    &lt;div style="display: flex; justify-content: space-between; align-items: center;"&gt;
-        &lt;h2&gt;我的购物车&lt;/h2&gt;
-        &lt;button class="btn-danger" onclick="handleClearCart()"&gt;清空全部&lt;/button&gt;
-    &lt;/div&gt;
-
-    &lt;div id="cart-container"&gt;&lt;/div&gt;
-
-    &lt;h3 style="text-align: right; border-top: 2px solid #eee; padding-top: 15px;"&gt;
-        总价:
-        &lt;span style="color: #e4393c;"&gt;¥
-            &lt;span id="total-price"&gt;0&lt;/span&gt;
-        &lt;/span&gt;
-    &lt;/h3&gt;
-&lt;/div&gt;
+@others
 </t>
 <t tx="swot.20260326081507.1">@others
 </t>
 <t tx="swot.20260326081922.1">@language javascript
+/**
+ * 基础商品信息（只包含 ID、名称、价格）
+ * @typedef {Object} Product
+ * @property {number} id
+ * @property {string} name
+ * @property {number} price
+ */
+
+/**
+ * 购物车里的完整条目（商品 + 购物车业务属性）
+ * @typedef {Product} CartItem
+ * @property {number} quantity - 数量
+ * @property {number} addedAt - 第一次放入购物车的时间
+ * @property {number} [updatedAt] - 最后一次修改数量的时间
+ */
+
 /**
  * 购物车状态管理 - 支持多标签页同步
  */
@@ -31313,14 +31334,21 @@ window.handleClearCart = () =&gt; {
 };
 </t>
 <t tx="swot.20260326103912.1">constructor() {
+    /** * LocalStorage 存储使用的键名
+     * @type {string}
+     */
     this.STORAGE_KEY = 'cart_data';
+
+    /** * 订阅更新的回调函数列表
+     * @type {Function[]}
+     */
     this.listeners = [];
 
     // 监听其他标签页的修改（BOM特性）
     window.addEventListener('storage', (e) =&gt; {
         if (e.key === this.STORAGE_KEY) {
-            console.log('监听到其他标签页数据变化');
             this.notifyListeners();
+            console.log('监听到其他标签页数据变化');
         }
     });
 }
@@ -31334,8 +31362,9 @@ getItems() {
 }
 </t>
 <t tx="swot.20260326104026.1">/**
-* 添加商品
-*/
+ * 添加商品
+ * @param {Product} product - 传入的只需是基础商品信息
+ */
 addItem(product) {
     const items = this.getItems();
     const existing = items.find(item =&gt; item.id === product.id);
@@ -31419,6 +31448,44 @@ subscribe(callback) {
     const items = this.getItems();
     this.listeners.forEach(cb =&gt; cb(items));
 }
+</t>
+<t tx="swot.20260327113139.1">&lt;div class="card"&gt;
+    &lt;h2&gt;商品列表&lt;/h2&gt;
+
+    &lt;div class="item"&gt;
+        &lt;span&gt;iPhone 15 (¥5999)&lt;/span&gt;
+        &lt;button onclick="handleAddToCart(1, 'iPhone 15', 5999)"&gt;加入购物车&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;div class="item"&gt;
+        &lt;span&gt;MacBook Pro (¥14999)&lt;/span&gt;
+        &lt;button onclick="handleAddToCart(2, 'MacBook Pro', 14999)"&gt;加入购物车&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;div class="item"&gt;
+        &lt;span&gt;AirPods Pro (¥1899)&lt;/span&gt;
+        &lt;button onclick="handleAddToCart(3, 'AirPods Pro', 1899)"&gt;加入购物车&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+</t>
+<t tx="swot.20260327113151.1">&lt;div class="card"&gt;
+    &lt;div style="display: flex; justify-content: space-between; align-items: center;"&gt;
+        &lt;h2&gt;我的购物车&lt;/h2&gt;
+        &lt;button class="btn-danger" onclick="handleClearCart()"&gt;
+            清空全部
+        &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;div id="cart-container"&gt;&lt;/div&gt;
+
+    &lt;h3 style="text-align: right; border-top: 2px solid #eee; padding-top: 15px;"&gt;
+        总价:
+        &lt;span style="color: #e4393c;"&gt;¥
+            &lt;span id="total-price"&gt;0&lt;/span&gt;
+        &lt;/span&gt;
+    &lt;/h3&gt;
+&lt;/div&gt;
 </t>
 </tnodes>
 </leo_file>

@@ -4,30 +4,49 @@
     <meta charset="UTF-8">
     <title>Storage 工具类测试</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        .card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9; }
-        button { padding: 8px 16px; cursor: pointer; margin-top: 10px; }
-        #log { background: #333; color: #fff; padding: 15px; border-radius: 5px; min-height: 100px; margin-top: 20px; white-space: pre-wrap; }
+        body {
+            font-family: sans-serif; padding: 20px; line-height: 1.6;
+        }
+
+        .card {
+            border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9;
+        }
+
+        button {
+            padding: 8px 16px; cursor: pointer; margin-top: 10px;
+        }
+
+        #log {
+            background: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            min-height: 100px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 <body>
     <h2>示例 1：基础封装测试</h2>
+
     <div class="card">
         <p>1. 点击“存储数据”，我们将存入一个对象，并设置 1 分钟后过期。</p>
         <p>2. 点击“读取数据”，查看控制台输出或下方日志。</p>
+
         <button id="btnSave">存储数据 (1分钟过期)</button>
         <button id="btnRead">读取数据</button>
     </div>
 
     <div id="log">等待操作...</div>
-
     <script type="module">
-        
         // 从外部文件导入工具类
         import { local } from './storage.js';
 
         const logEl = document.getElementById('log');
+
         const print = (msg) => {
+            // 新的信息 + 原来的信息
             logEl.textContent = `[${new Date().toLocaleTimeString()}] ${msg}\n` + logEl.textContent;
         };
 
@@ -35,15 +54,15 @@
         document.getElementById('btnSave').onclick = () => {
             const userData = { id: 101, name: "Gemini", role: "AI" };
             const success = local.set('user_info', userData, 1); // 1分钟过期
-            if (success) print("✅ 已存入对象: " + JSON.stringify(userData));
+            if (success) print("已存入对象: " + JSON.stringify(userData));
         };
 
         document.getElementById('btnRead').onclick = () => {
             const data = local.get('user_info');
             if (data) {
-                print("🔍 读取成功: " + JSON.stringify(data));
+                print("读取成功: " + JSON.stringify(data));
             } else {
-                print("❌ 数据不存在或已过期");
+                print("数据不存在或已过期");
             }
         };
     </script>
