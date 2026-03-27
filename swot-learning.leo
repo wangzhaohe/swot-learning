@@ -1162,6 +1162,7 @@
 <v t="swot.20260325145954.1"><vh>2 与 Cookie 的本质区别</vh></v>
 <v t="swot.20260325150139.1"><vh>3 在 Console 中测试使用方式</vh></v>
 <v t="swot.20260325152853.1"><vh>示例 1：基础封装（JSDoc 类型安全版）</vh>
+<v t="swot.20260327161230.1"><vh>&lt;&lt; storage.js &gt;&gt;</vh>
 <v t="swot.20260325152653.1"><vh>@clean code/examples/storage.js</vh>
 <v t="swot.20260325155350.1"><vh>set</vh></v>
 <v t="swot.20260325155420.1"><vh>get</vh></v>
@@ -1169,10 +1170,13 @@
 <v t="swot.20260325155455.1"><vh>clear</vh></v>
 <v t="swot.20260325155511.1"><vh>clearExpired</vh></v>
 </v>
+</v>
+<v t="swot.20260327161340.1"><vh>&lt;&lt; storage.html &gt;&gt;</vh>
 <v t="swot.20260325152752.1"><vh>@clean code/examples/storage.html</vh>
 <v t="swot.20260325165643.1"><vh>&lt;&lt; mystyle &gt;&gt;</vh></v>
 <v t="swot.20260325165403.1"><vh>&lt;&lt; mybody &gt;&gt;</vh></v>
 <v t="swot.20260325165329.1"><vh>&lt;&lt; myscript &gt;&gt;</vh></v>
+</v>
 </v>
 </v>
 <v t="swot.20260326075931.1"><vh>示例 2：购物车实战（LocalStorage + 跨标签同步）</vh>
@@ -1189,13 +1193,15 @@
 <v t="swot.20260326104026.1"><vh>addItem</vh></v>
 <v t="swot.20260326104037.1"><vh>updateQuantity</vh></v>
 <v t="swot.20260326104052.1"><vh>removeItem</vh></v>
+<v t="swot.20260326104200.1"><vh>save()</vh></v>
 <v t="swot.20260326104118.1"><vh>clear</vh></v>
 <v t="swot.20260326104134.1"><vh>getTotal</vh></v>
-<v t="swot.20260326104200.1"><vh>save</vh></v>
 <v t="swot.20260326104213.1"><vh>subscribe</vh></v>
 <v t="swot.20260326104224.1"><vh>notifyListeners</vh></v>
 </v>
-<v t="swot.20260326102529.1"><vh>2. 视图与控制器层：连接类与 DOM 界面</vh></v>
+<v t="swot.20260326102529.1"><vh>2. 视图与控制器层：连接类与 DOM 界面</vh>
+<v t="swot.20260327171556.1"><vh>function renderUI(items)</vh></v>
+</v>
 <v t="swot.20260326102602.1"><vh>3. 全局事件绑定 (供 HTML 中的 onclick 调用)</vh></v>
 </v>
 </v>
@@ -30871,6 +30877,7 @@ export const session = new StorageWrapper(sessionStorage);
 
 [source,javascript]
 ----
+@language javascript
 import { local, session } from './storage';
 
 // LocalStorage：持久保存用户偏好
@@ -30886,8 +30893,20 @@ const user = local.get('user');
 session.set('formDraft', { title: '未完成的商品', price: 100 });
 ----
 
-NOTE: 自己封装的很好用，因为小巧。也可以使用第三方库，但是有体积大一些。
-</t>
+NOTE: 自己封装的很好用，因为小巧。也可以使用第三方库，但是有的体积大一些。
+
+
+.code/examples/storage.js
+[source,javascript]
+----
+&lt;&lt; storage.js &gt;&gt;
+----
+
+.code/examples/storage.html
+[source,html]
+----
+&lt;&lt; storage.html &gt;&gt;
+----</t>
 <t tx="swot.20260325155350.1">/**
  * 设置值
  * @param {string} key 键名
@@ -31051,8 +31070,36 @@ graph TD
     style K fill:#f9f,stroke:#333
     style I stroke-dasharray: 5 5
 ....
+
+***
+
+storage 事件在“修改数据的那个标签页”里是不会触发的，所以必须手动调用 notifyListeners。
+
+[mermaid, target=img/mermaid-2026-03-27-152717, format=svg]
+....
+sequenceDiagram
+    participant TabA as 标签页 A (你正在操作)
+    participant LS as LocalStorage (公共储物柜)
+    participant TabB as 标签页 B (在后台运行)
+
+    Note over TabA: 用户点击“加入购物车”
+    TabA-&gt;&gt;LS: 执行 setItem() 保存数据
+    
+    Note right of LS: 数据发生变化
+    LS--&gt;&gt;TabB: ⚡ 触发 storage 事件 (BOM 机制)
+    TabB-&gt;&gt;TabB: 自动更新 B 的 UI
+
+    Note left of LS: ❌ 不会向 A 发送事件
+    Note over TabA: 如果不手动调用 notifyListeners...
+    Note over TabA: A 的界面将永远不会更新！
+....
+
+[source,html]
+----
+@others
+----
 </t>
-<t tx="swot.20260326080805.1" _mod_time="4741da7188e8a3f9fb2e">@language html
+<t tx="swot.20260326080805.1" _mod_time="4741da7193d0cf6ce42e">@language html
 &lt;!DOCTYPE html&gt;
 &lt;html lang="zh-CN"&gt;
 
@@ -31139,27 +31186,35 @@ button:hover {
 
 @others
 </t>
-<t tx="swot.20260326081507.1">@others
+<t tx="swot.20260326081507.1">@language javascript
+/**
+ * 基础商品信息
+ * @typedef {Object} Product
+ * @property {number} id - 商品唯一 ID
+ * @property {string} name - 商品名称
+ * @property {number} price - 商品单价
+ */
+
+/**
+ * 购物车里的完整条目（继承 Product 并增加业务属性）
+ * @typedef {Product} CartItem
+ * @property {number} quantity - 购买数量
+ * @property {number} addedAt - 第一次放入购物车的时间戳
+ * @property {number} [updatedAt] - 最后一次修改数量的时间戳
+ */
+
+/**
+ * 购物车状态变更的回调函数
+ * @callback OnCartChange
+ * @param {CartItem[]} items - 当前购物车中的所有商品列表
+ */
+
+@others
 </t>
 <t tx="swot.20260326081922.1">@language javascript
 /**
- * 基础商品信息（只包含 ID、名称、价格）
- * @typedef {Object} Product
- * @property {number} id
- * @property {string} name
- * @property {number} price
- */
-
-/**
- * 购物车里的完整条目（商品 + 购物车业务属性）
- * @typedef {Product} CartItem
- * @property {number} quantity - 数量
- * @property {number} addedAt - 第一次放入购物车的时间
- * @property {number} [updatedAt] - 最后一次修改数量的时间
- */
-
-/**
- * 购物车状态管理 - 支持多标签页同步
+ * 购物车状态管理类
+ * 实现功能：单例状态维护、LocalStorage 持久化、跨标签页同步
  */
 class ShoppingCart {
     @others
@@ -31285,30 +31340,7 @@ const cart = new ShoppingCart();
 const cartContainer = document.getElementById('cart-container');
 const totalPriceEl = document.getElementById('total-price');
 
-// 渲染界面的函数
-function renderUI(items) {
-    if (items.length === 0) {
-        cartContainer.innerHTML = '&lt;div class="empty-tip"&gt;购物车空空如也，快去选购吧~&lt;/div&gt;';
-    } else {
-        cartContainer.innerHTML = items.map(item =&gt; `
-  &lt;div class="item"&gt;
-    &lt;div&gt;
-      &lt;strong&gt;${item.name}&lt;/strong&gt; &lt;br/&gt;
-      &lt;span style="color: #888; font-size: 0.9em;"&gt;¥${item.price}&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div&gt;
-      &lt;button onclick="handleUpdateQty(${item.id}, ${item.quantity - 1})"&gt; - &lt;/button&gt;
-      &lt;span style="display:inline-block; width:30px; text-align:center;"&gt;${item.quantity}&lt;/span&gt;
-      &lt;button onclick="handleUpdateQty(${item.id}, ${item.quantity + 1})"&gt; + &lt;/button&gt;
-      &lt;button class="btn-danger" style="margin-left: 10px;" onclick="handleRemove(${item.id})"&gt;删除&lt;/button&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-`).join('');
-    }
-    // 上面 .join('') 是为了清除数组默认带入的逗号
-    // 更新总价
-    totalPriceEl.innerText = cart.getTotal();
-}
+@others
 
 // 核心：订阅购物车状态，只要数据变了（无论当前页还是其他页），自动更新 UI
 cart.subscribe((items) =&gt; {
@@ -31336,15 +31368,20 @@ window.handleClearCart = () =&gt; {
 <t tx="swot.20260326103912.1">constructor() {
     /** * LocalStorage 存储使用的键名
      * @type {string}
+     * @private
      */
     this.STORAGE_KEY = 'cart_data';
 
     /** * 订阅更新的回调函数列表
-     * @type {Function[]}
+     * @type {onCartChange[]}
+     * @private
      */
     this.listeners = [];
 
-    // 监听其他标签页的修改（BOM特性）
+    /**
+     * 监听其他标签页的修改（BOM特性）
+     * 当同源的其他窗口修改了 LocalStorage 时，本窗口会触发 storage 事件。
+     */
     window.addEventListener('storage', (e) =&gt; {
         if (e.key === this.STORAGE_KEY) {
             this.notifyListeners();
@@ -31354,16 +31391,22 @@ window.handleClearCart = () =&gt; {
 }
 </t>
 <t tx="swot.20260326104007.1">/**
-* 获取购物车数据
-*/
+ * 从本地存储中获取最新的购物车数据
+ * @returns {CartItem[]} 购物车条目数组
+ */
 getItems() {
-    const data = localStorage.getItem(this.STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+    try {
+        const data = localStorage.getItem(this.STORAGE_KEY);
+        return data ? JSON.parse(data) : [];
+    } catch (err) {
+        console.error('读取购物车数据失败:', err);
+        return [];
+    }
 }
 </t>
 <t tx="swot.20260326104026.1">/**
- * 添加商品
- * @param {Product} product - 传入的只需是基础商品信息
+ * 添加商品到购物车。如果商品已存在，则累加数量。
+ * @param {Product &amp; {quantity?: number}} product - 商品基础信息，可带初始数量
  */
 addItem(product) {
     const items = this.getItems();
@@ -31383,8 +31426,11 @@ addItem(product) {
 }
 </t>
 <t tx="swot.20260326104037.1">/**
-* 更新数量
-*/
+ * 更新指定商品的数量
+ * @param {number} productId - 商品 ID
+ * @param {number} quantity - 目标数量，若小于等于 0 则移除商品
+ * @returns {CartItem[]} 更新后的购物车数据
+ */
 updateQuantity(productId, quantity) {
     const items = this.getItems();
     const item = items.find(i =&gt; i.id === productId);
@@ -31399,8 +31445,10 @@ updateQuantity(productId, quantity) {
 }
 </t>
 <t tx="swot.20260326104052.1">/**
-* 删除商品
-*/
+ * 从购物车中移除特定商品
+ * @param {number} productId - 要移除的商品 ID
+ * @returns {CartItem[]}     - 移除某商品后的购物车数据
+ */
 removeItem(productId) {
     const items = this.getItems().filter(i =&gt; i.id !== productId);
     this.save(items);
@@ -31408,7 +31456,7 @@ removeItem(productId) {
 }
 </t>
 <t tx="swot.20260326104118.1">/**
-* 清空购物车
+* 清空购物车所有数据
 */
 clear() {
     localStorage.removeItem(this.STORAGE_KEY);
@@ -31416,8 +31464,9 @@ clear() {
 }
 </t>
 <t tx="swot.20260326104134.1">/**
-* 计算总价
-*/
+ * 计算购物车所有数据的总价
+ * @returns {number} 总金额
+ */
 getTotal() {
     return this.getItems().reduce((sum, item) =&gt; 
         sum + (item.price * item.quantity), 0
@@ -31425,28 +31474,51 @@ getTotal() {
 }
 </t>
 <t tx="swot.20260326104200.1">/**
-* 保存并通知
-*/
+ * 将数据持久化到 LocalStorage 并触发当前页面的 UI 更新
+ * @param {CartItem[]} items - 待保存的商品数组
+ * @private - 指 save 函数是私有的
+ */
 save(items) {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
     this.notifyListeners(); // 通知当前页面的订阅者
 }
 </t>
 <t tx="swot.20260326104213.1">/**
-* 订阅变化（用于UI更新）
-*/
+ * 订阅购物车状态变化（用于UI更新）
+ * @param {OnCartChange} callback - 当数据变化时执行的回调
+ * @returns {Function} 取消订阅的函数
+ */
 subscribe(callback) {
     this.listeners.push(callback);
     callback(this.getItems()); // 立即执行一次，初始化UI
-    // 返回取消订阅函数
     return () =&gt; {
         this.listeners = this.listeners.filter(l =&gt; l !== callback);
     };
 }
+
+/**
+ * 给了可以取消订阅的选择
+// 1. 订阅并拿到那个返回的函数（即那个遥控器）
+const unsubscribe = cart.subscribe(myCallback);
+
+// 2. 当你不再需要监听（比如用户关闭了购物车弹窗）时：
+unsubscribe(); // 调用这个返回的函数，监听就被取消了
+*/
 </t>
-<t tx="swot.20260326104224.1">notifyListeners() {
-    const items = this.getItems();
-    this.listeners.forEach(cb =&gt; cb(items));
+<t tx="swot.20260326104224.1">/**
+ * 执行所有已订阅的回调函数
+ * @private
+ */
+notifyListeners() {
+    const items = this.getItems();  // 获取最新的购物车数据
+    this.listeners.forEach(callback =&gt; {
+        try {
+            callback(items);  // 依次给每个订阅者“打电话”
+        }
+        catch (error) {
+            console.error("回调执行出错:", error);
+        }
+    })
 }
 </t>
 <t tx="swot.20260327113139.1">&lt;div class="card"&gt;
@@ -31486,6 +31558,37 @@ subscribe(callback) {
         &lt;/span&gt;
     &lt;/h3&gt;
 &lt;/div&gt;
+</t>
+<t tx="swot.20260327161230.1">@others</t>
+<t tx="swot.20260327161340.1">@others</t>
+<t tx="swot.20260327171556.1">// 渲染界面的函数
+function renderUI(items) {
+    if (items.length === 0) {
+        cartContainer.innerHTML = '&lt;div class="empty-tip"&gt;购物车空空如也，快去选购吧~&lt;/div&gt;';
+    } else {
+        cartContainer.innerHTML = items.map(item =&gt; `
+            &lt;div class="item"&gt;
+                &lt;div&gt;
+                    &lt;strong&gt;${item.name}&lt;/strong&gt; &lt;br/&gt;
+                    &lt;span style="color: #888; font-size: 0.9em;"&gt;¥${item.price}&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div&gt;
+                    &lt;button onclick="handleUpdateQty(${item.id}, ${item.quantity - 1})"&gt; - &lt;/button&gt;
+                    &lt;span style="display:inline-block; width:30px; text-align:center;"&gt;
+                        ${item.quantity}
+                    &lt;/span&gt;
+                    &lt;button onclick="handleUpdateQty(${item.id}, ${item.quantity + 1})"&gt; + &lt;/button&gt;
+                    &lt;button class="btn-danger" style="margin-left: 10px;" onclick="handleRemove(${item.id})"&gt;
+                        删除
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        `).join('');
+    }
+    // 上面 .join('') 是为了清除数组默认带入的逗号
+    // 更新总价
+    totalPriceEl.innerText = cart.getTotal();
+}
 </t>
 </tnodes>
 </leo_file>

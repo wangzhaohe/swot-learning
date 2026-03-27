@@ -4225,3 +4225,1076 @@ console.log(reg.test('123456')); // false
 
 3. **项目扩展**：在发布表单中增加“商品分类”下拉框，提交时验证是否选择了分类（默认选项“请选择”不能提交）。
 
+== Ch 11：BOM与特效开发——浏览器的控制权
+**今日目标**：
+
+1.  掌握 BOM 核心对象 `window`、`location`。
+
+2.  深入理解 JS 动画原理与定时器。
+
+3.  实现网页常见特效：轮播图、倒计时、回到顶部。
+
+4.  项目界面美化与交互完善。
+
+=== 一：BOM 对象
+
+
+==== 1. window 对象
+* `window` 是全局对象，所有的变量和函数都是它的属性。
+
+* **常用事件**：
+  ** `window.onload`：  页面加载完执行。
+  ** `window.onscroll`：页面滚动时触发。
+
+==== 2. location 对象
+用于操作URL
+
+* `location.href`：获取或设置地址（跳转页面）。
+* `location.reload()`：刷新页面。
+
+*代码演示*：
+
+[source,javascript]
+----
+/** * 页面跳转前的延迟时间（毫秒）
+ * @constant {number} 
+ */
+const DELAY = 5000;
+
+/**
+ * 5 秒后跳转到百度
+ */
+setTimeout(function() {
+    location.href = 'http://www.baidu.com';
+}, DELAY);
+----
+
+=== 二：LocalStorage 与 SessionStorage
+
+
+==== 1 核心概念对比
+[width="100%",cols="23%,40%,37%",options="header",]
+|===
+|特性 |LocalStorage |SessionStorage
+|*生命周期* |永久存储（除非手动清除） |会话级，关闭标签页即清除
+
+|*作用域* |同源窗口共享（协议+域名+端口）|同一标签页内，新标签页不共享
+
+|*存储容量* |约 5-10 MB |约 5-10 MB
+
+|*数据类型* |仅支持字符串（需序列化） |仅支持字符串（需序列化）
+
+|*与服务端通信* |不自动发送，纯客户端 |不自动发送，纯客户端
+|===
+
+==== 2 与 Cookie 的本质区别
+Cookie 会随 HTTP 请求发送（影响性能）。
+
+LocalStorage / SessionStorage 纯客户端，不参与网络传输。
+
+==== 3 在 Console 中测试使用方式
+可以直接在浏览器的 Console 中执行。
+
+[source,javascript]
+----
+// 设置
+localStorage.setItem('key', 'value');
+localStorage.key = 'value';          // 属性方式（不推荐）
+localStorage['key'] = 'value';       // 括号方式
+
+// 获取
+localStorage.getItem('key');         // 推荐，key不存在返回null
+localStorage.key;                    // 属性方式，可能冲突原型属性
+
+// 删除
+localStorage.removeItem('key');      // 删除单个
+localStorage.clear();                // 清空所有
+
+// 遍历
+localStorage.length;                 // 存储项数量
+localStorage.key(index);             // 获取第 index 个 key
+----
+
+==== 示例 1：基础封装（JSDoc 类型安全版）
+*自己封装的 storage.js 使用示例*
+
+[source,javascript]
+----
+import { local, session } from './storage';
+
+// LocalStorage：持久保存用户偏好
+local.set('theme', 'dark', 60 * 24 * 7); // 7 天过期
+local.set('user', { id: 1, name: '张三' });
+
+const theme = local.get('theme', 'light'); // 获取，默认 light
+const user = local.get('user');
+
+
+// SessionStorage：临时保存表单数据
+// 标签页关闭后重新打开，formDraft不存在
+session.set('formDraft', { title: '未完成的商品', price: 100 });
+----
+
+NOTE: 自己封装的很好用，因为小巧。也可以使用第三方库，但是有的体积大一些。
+
+
+.code/examples/storage.js
+[source,javascript]
+----
+/**
+ * storage.js
+ * Storage 工具类 - 支持对象序列化、过期时间与容量溢出处理
+ */
+class StorageWrapper {
+    constructor(storage) {
+        this.storage = storage;
+    }
+    /**
+     * 设置值
+     * @param {string} key 键名
+     * @param {any} value 值（自动序列化）
+     * @param {number} expire 过期时间（分钟）
+     */
+    set(key, value, expire = null) {
+        try {
+            const data = {
+                value: value,
+                timestamp: Date.now(),
+                expire: expire ? Date.now() + expire * 60 * 1000 : null
+            };
+            this.storage.setItem(key, JSON.stringify(data));
+            return true;
+        }
+        catch (e) {
+            // 如果存储空间满了，尝试清理过期数据后重试
+            if (e.name === 'QuotaExceededError') {
+                console.warn('Storage space full, clearing expired items...');
+                this.clearExpired();
+                try {
+                    this.storage.setItem(key, JSON.stringify(data));
+                    return true;
+                } catch (retryError) {
+                    console.error('Storage still full after clearing:', retryError);
+                    return false;
+                }
+            }
+            return false;
+        }
+    }
+    /**
+     * 获取值
+     */
+    get(key, defaultValue = null) {
+        try {
+            const item = this.storage.getItem(key);
+
+            if (!item)
+                return defaultValue;
+
+            const data = JSON.parse(item);
+
+            // 过期判断
+            if (data.expire && Date.now() > data.expire) {
+                this.storage.removeItem(key);
+                return defaultValue;
+            }
+            return data.value;
+        }
+        catch (e) {
+            return defaultValue;
+        }
+    }
+    remove(key) {
+        this.storage.removeItem(key);
+    }
+    clear() {
+        this.storage.clear();
+    }
+    clearExpired() {
+        const now = Date.now();
+        for (let i = 0; i < this.storage.length; i++) {
+            const key = this.storage.key(i);
+            try {
+                const data = JSON.parse(this.storage.getItem(key));
+                if (data.expire && now > data.expire) {
+                    this.storage.removeItem(key);
+                }
+            } catch (e) { /* 忽略非工具类存入的普通字符串 */ }
+        }
+    }
+}
+
+// 导出实例（方便直接导入使用）
+export const local = new StorageWrapper(localStorage);
+export const session = new StorageWrapper(sessionStorage);
+----
+
+.code/examples/storage.html
+[source,html]
+----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Storage 工具类测试</title>
+    <style>
+        body {
+            font-family: sans-serif; padding: 20px; line-height: 1.6;
+        }
+
+        .card {
+            border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9;
+        }
+
+        button {
+            padding: 8px 16px; cursor: pointer; margin-top: 10px;
+        }
+
+        #log {
+            background: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            min-height: 100px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h2>示例 1：基础封装测试</h2>
+
+    <div class="card">
+        <p>1. 点击“存储数据”，我们将存入一个对象，并设置 1 分钟后过期。</p>
+        <p>2. 点击“读取数据”，查看控制台输出或下方日志。</p>
+
+        <button id="btnSave">存储数据 (1分钟过期)</button>
+        <button id="btnRead">读取数据</button>
+    </div>
+
+    <div id="log">等待操作...</div>
+    <script type="module">
+        // 从外部文件导入工具类
+        import { local } from './storage.js';
+
+        const logEl = document.getElementById('log');
+
+        const print = (msg) => {
+            // 新的信息 + 原来的信息
+            logEl.textContent = `[${new Date().toLocaleTimeString()}] ${msg}\n` + logEl.textContent;
+        };
+
+        // 按钮事件
+        document.getElementById('btnSave').onclick = () => {
+            const userData = { id: 101, name: "Gemini", role: "AI" };
+            const success = local.set('user_info', userData, 1); // 1分钟过期
+            if (success) print("已存入对象: " + JSON.stringify(userData));
+        };
+
+        document.getElementById('btnRead').onclick = () => {
+            const data = local.get('user_info');
+            if (data) {
+                print("读取成功: " + JSON.stringify(data));
+            } else {
+                print("数据不存在或已过期");
+            }
+        };
+    </script>
+</body>
+</html>
+----
+
+==== 示例 2：购物车实战（LocalStorage + 跨标签同步）
+下面案例使用 *发布-订阅模式 (Pub-Sub)* ，结合 BOM 的 storage 事件，解决了“本地状态管理”与“跨标签页同步”的问题。
+
+[mermaid, target=img/mermaid-2026-03-27-144243, format=svg]
+....
+graph TD
+    A[用户点击按钮] --> B[调用 handleAddToCart]
+    B --> C[执行 cart.addItem]
+    C --> D[数据存入 LocalStorage]
+    D --> E{执行 save 方法}
+    E --> F[当前页: notifyListeners]
+    F --> G[执行 subscribe 里的 renderUI]
+    G --> H[当前页界面更新]
+
+    D -.-> I[[浏览器监测到 Storage 变化]]
+    I -.-> J[其他标签页: 触发 storage 事件]
+    J -.-> K[其他标签页: notifyListeners]
+    K -.-> L[执行该页 subscribe 里的 renderUI]
+    L -.-> M[其他标签页界面同步更新]
+
+    style F fill:#f9f,stroke:#333
+    style K fill:#f9f,stroke:#333
+    style I stroke-dasharray: 5 5
+....
+
+***
+
+storage 事件在“修改数据的那个标签页”里是不会触发的，所以必须手动调用 notifyListeners。
+
+[mermaid, target=img/mermaid-2026-03-27-152717, format=svg]
+....
+sequenceDiagram
+    participant TabA as 标签页 A (你正在操作)
+    participant LS as LocalStorage (公共储物柜)
+    participant TabB as 标签页 B (在后台运行)
+
+    Note over TabA: 用户点击“加入购物车”
+    TabA->>LS: 执行 setItem() 保存数据
+
+    Note right of LS: 数据发生变化
+    LS-->>TabB: ⚡ 触发 storage 事件 (BOM 机制)
+    TabB->>TabB: 自动更新 B 的 UI
+
+    Note left of LS: ❌ 不会向 A 发送事件
+    Note over TabA: 如果不手动调用 notifyListeners...
+    Note over TabA: A 的界面将永远不会更新！
+....
+
+[source,html]
+----
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车 - 跨标签页同步实战</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #f9f9f9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #f0f0f0;
+        }
+
+        .btn-danger {
+            color: red;
+            border-color: #ffcccc;
+        }
+
+        .btn-danger:hover {
+            background: #ffeeee;
+        }
+
+        .empty-tip {
+            color: #888;
+            text-align: center;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>跨标签同步购物车</h1>
+
+    <p>
+        <strong>测试方法：</strong>请复制当前页面的 URL，在浏览器中
+        <strong>打开一个新标签页</strong>。
+        在任意一个页面点击添加/删除商品，观察另一个页面的实时变化。
+    </p>
+
+    <div class="card">
+        <h2>商品列表</h2>
+
+        <div class="item">
+            <span>iPhone 15 (¥5999)</span>
+            <button onclick="handleAddToCart(1, 'iPhone 15', 5999)">加入购物车</button>
+        </div>
+
+        <div class="item">
+            <span>MacBook Pro (¥14999)</span>
+            <button onclick="handleAddToCart(2, 'MacBook Pro', 14999)">加入购物车</button>
+        </div>
+
+        <div class="item">
+            <span>AirPods Pro (¥1899)</span>
+            <button onclick="handleAddToCart(3, 'AirPods Pro', 1899)">加入购物车</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>我的购物车</h2>
+            <button class="btn-danger" onclick="handleClearCart()">
+                清空全部
+            </button>
+        </div>
+
+        <div id="cart-container"></div>
+
+        <h3 style="text-align: right; border-top: 2px solid #eee; padding-top: 15px;">
+            总价:
+            <span style="color: #e4393c;">¥
+                <span id="total-price">0</span>
+            </span>
+        </h3>
+    </div>
+    <script>
+        /**
+         * 基础商品信息（只包含 ID、名称、价格）
+         * @typedef {Object} Product
+         * @property {number} id
+         * @property {string} name
+         * @property {number} price
+         */
+
+        /**
+         * 购物车里的完整条目（商品 + 购物车业务属性）
+         * @typedef {Product} CartItem
+         * @property {number} quantity - 数量
+         * @property {number} addedAt - 第一次放入购物车的时间
+         * @property {number} [updatedAt] - 最后一次修改数量的时间
+         */
+
+        /**
+         * 购物车状态管理 - 支持多标签页同步
+         */
+        class ShoppingCart {
+            constructor() {
+                /** * LocalStorage 存储使用的键名
+                 * @type {string}
+                 */
+                this.STORAGE_KEY = 'cart_data';
+
+                /** * 订阅更新的回调函数列表
+                 * @type {Function[]}
+                 */
+                this.listeners = [];
+
+                // 监听其他标签页的修改（BOM特性）
+                window.addEventListener('storage', (e) => {
+                    if (e.key === this.STORAGE_KEY) {
+                        this.notifyListeners();
+                        console.log('监听到其他标签页数据变化');
+                    }
+                });
+            }
+            /**
+            * 获取购物车数据
+            */
+            getItems() {
+                const data = localStorage.getItem(this.STORAGE_KEY);
+                return data ? JSON.parse(data) : [];
+            }
+            /**
+             * 添加商品
+             * @param {Product} product - 传入的只需是基础商品信息
+             */
+            addItem(product) {
+                const items = this.getItems();
+                const existing = items.find(item => item.id === product.id);
+                if (existing) {
+                    existing.quantity += product.quantity || 1;
+                    existing.updatedAt = Date.now();
+                } else {
+                    items.push({
+                        ...product,
+                        quantity: product.quantity || 1,
+                        addedAt: Date.now()
+                    });
+                }
+                this.save(items);
+                return items;
+            }
+            /**
+            * 更新数量
+            */
+            updateQuantity(productId, quantity) {
+                const items = this.getItems();
+                const item = items.find(i => i.id === productId);
+                if (item) {
+                    if (quantity <= 0)
+                        return this.removeItem(productId);
+                    item.quantity = quantity;
+                    item.updatedAt = Date.now();
+                    this.save(items);
+                }
+                return items;
+            }
+            /**
+            * 删除商品
+            */
+            removeItem(productId) {
+                const items = this.getItems().filter(i => i.id !== productId);
+                this.save(items);
+                return items;
+            }
+            /**
+            * 保存并通知
+            */
+            save(items) {
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
+                this.notifyListeners(); // 通知当前页面的订阅者
+            }
+            /**
+            * 清空购物车
+            */
+            clear() {
+                localStorage.removeItem(this.STORAGE_KEY);
+                this.notifyListeners();
+            }
+            /**
+            * 计算总价
+            */
+            getTotal() {
+                return this.getItems().reduce((sum, item) => 
+                    sum + (item.price * item.quantity), 0
+                );
+            }
+            /**
+            * 订阅变化（用于UI更新）
+            */
+            subscribe(callback) {
+                this.listeners.push(callback);
+                callback(this.getItems()); // 立即执行一次，初始化UI
+                // 返回取消订阅函数
+                return () => {
+                    this.listeners = this.listeners.filter(l => l !== callback);
+                };
+            }
+            notifyListeners() {
+                const items = this.getItems();
+                this.listeners.forEach(cb => cb(items));
+            }
+        }
+        const cart = new ShoppingCart();
+        const cartContainer = document.getElementById('cart-container');
+        const totalPriceEl = document.getElementById('total-price');
+
+        // 渲染界面的函数
+        function renderUI(items) {
+            if (items.length === 0) {
+                cartContainer.innerHTML = '<div class="empty-tip">购物车空空如也，快去选购吧~</div>';
+            } else {
+                cartContainer.innerHTML = items.map(item => `
+          <div class="item">
+            <div>
+              <strong>${item.name}</strong> <br/>
+              <span style="color: #888; font-size: 0.9em;">¥${item.price}</span>
+            </div>
+            <div>
+              <button onclick="handleUpdateQty(${item.id}, ${item.quantity - 1})"> - </button>
+              <span style="display:inline-block; width:30px; text-align:center;">${item.quantity}</span>
+              <button onclick="handleUpdateQty(${item.id}, ${item.quantity + 1})"> + </button>
+              <button class="btn-danger" style="margin-left: 10px;" onclick="handleRemove(${item.id})">删除</button>
+            </div>
+          </div>
+        `).join('');
+            }
+            // 上面 .join('') 是为了清除数组默认带入的逗号
+            // 更新总价
+            totalPriceEl.innerText = cart.getTotal();
+        }
+
+        // 核心：订阅购物车状态，只要数据变了（无论当前页还是其他页），自动更新 UI
+        cart.subscribe((items) => {
+            renderUI(items);  // 更新界面
+            console.log('购物车更新:', items);
+        });
+        window.handleAddToCart = (id, name, price) => {
+            cart.addItem({ id, name, price });
+        };
+
+        window.handleUpdateQty = (id, newQty) => {
+            cart.updateQuantity(id, newQty);
+        };
+
+        window.handleRemove = (id) => {
+            cart.removeItem(id);
+        };
+
+        window.handleClearCart = () => {
+            if (confirm('确定要清空购物车吗？')) cart.clear();
+        };
+    </script>
+</body>
+
+</html>
+----
+
+==== 4 实践示例 -> 要整理...
+示例 3：SessionStorage 实现页面状态保持
+[source,javascript]
+----
+/**
+ * 表单草稿自动保存（页面刷新/返回恢复）
+ */
+class FormAutoSave {
+  constructor(formId, options = {}) {
+    this.formId = formId;
+    this.key = `form_draft_${formId}`;
+    this.interval = options.interval || 3000; // 3秒自动保存
+    this.maxAge = options.maxAge || 30; // 30分钟过期
+
+    this.form = document.getElementById(formId);
+    this.timer = null;
+
+    this.init();
+  }
+
+  init() {
+    // 页面加载时恢复数据
+    this.restore();
+
+    // 监听输入变化
+    this.form.addEventListener('input', () => this.debounceSave());
+
+    // 页面可见性变化时保存（切回标签页）
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        this.save();
+      }
+    });
+
+    // 提交成功后清除草稿
+    this.form.addEventListener('submit', () => {
+      this.clear();
+    });
+  }
+
+  /**
+   * 防抖保存
+   */
+  debounceSave() {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => this.save(), this.interval);
+  }
+
+  /**
+   * 保存表单数据
+   */
+  save() {
+    const formData = new FormData(this.form);
+    const data = {
+      values: Object.fromEntries(formData),
+      timestamp: Date.now(),
+      url: window.location.href
+    };
+
+    sessionStorage.setItem(this.key, JSON.stringify(data));
+    console.log('表单草稿已保存');
+  }
+
+  /**
+   * 恢复表单数据
+   */
+  restore() {
+    const saved = sessionStorage.getItem(this.key);
+    if (!saved) return;
+
+    try {
+      const data = JSON.parse(saved);
+
+      // 检查过期时间
+      const age = (Date.now() - data.timestamp) / 1000 / 60; // 分钟
+      if (age > this.maxAge) {
+        console.log('草稿已过期');
+        this.clear();
+        return;
+      }
+
+      // 检查URL是否匹配（防止不同页面数据混淆）
+      if (data.url !== window.location.href) {
+        console.log('URL不匹配，跳过恢复');
+        return;
+      }
+
+      // 填充表单
+      Object.entries(data.values).forEach(([name, value]) => {
+        const field = this.form.elements[name];
+        if (field) {
+          if (field.type === 'checkbox') {
+            field.checked = value === 'on' || value === true;
+          } else if (field.type === 'radio') {
+            const radio = this.form.querySelector(`[name="${name}"][value="${value}"]`);
+            if (radio) radio.checked = true;
+          } else {
+            field.value = value;
+          }
+        }
+      });
+
+      console.log('表单草稿已恢复');
+    } catch (e) {
+      console.error('恢复草稿失败:', e);
+    }
+  }
+
+  /**
+   * 清除草稿
+   */
+  clear() {
+    sessionStorage.removeItem(this.key);
+  }
+}
+
+// HTML使用
+// <form id="productForm">
+//   <input name="title" />
+//   <textarea name="description"></textarea>
+// </form>
+
+// JS初始化
+const autoSave = new FormAutoSave('productForm', {
+  interval: 2000,  // 2秒保存一次
+  maxAge: 60       // 1小时过期
+});
+----
+
+'''''
+
+示例 4：Storage 事件跨标签通信
+[source,javascript]
+----
+/**
+ * 跨标签页通信通道（BroadcastChannel的降级方案）
+ */
+class StorageChannel {
+  constructor(channelName) {
+    this.channel = channelName;
+    this.listeners = new Map();
+
+    // 监听storage事件（BOM特性）
+    window.addEventListener('storage', (e) => {
+      if (e.key === this.channel && e.newValue) {
+        try {
+          const message = JSON.parse(e.newValue);
+          this.handleMessage(message);
+        } catch (err) {
+          console.error('消息解析失败:', err);
+        }
+      }
+    });
+  }
+
+  /**
+   * 发送消息到其他标签页
+   */
+  postMessage(type, payload) {
+    const message = {
+      type,
+      payload,
+      timestamp: Date.now(),
+      sender: Math.random().toString(36).substr(2, 9) // 简单ID
+    };
+
+    // 使用localStorage触发storage事件
+    // 立即删除，避免污染存储空间
+    localStorage.setItem(this.channel, JSON.stringify(message));
+    setTimeout(() => localStorage.removeItem(this.channel), 100);
+  }
+
+  /**
+   * 订阅消息
+   */
+  on(type, handler) {
+    if (!this.listeners.has(type)) {
+      this.listeners.set(type, new Set());
+    }
+    this.listeners.get(type).add(handler);
+
+    // 返回取消订阅
+    return () => this.listeners.get(type)?.delete(handler);
+  }
+
+  handleMessage(message) {
+    const handlers = this.listeners.get(message.type);
+    if (handlers) {
+      handlers.forEach(h => h(message.payload, message));
+    }
+  }
+}
+
+// 使用：实现多标签页登录状态同步
+const authChannel = new StorageChannel('app_auth');
+
+// 标签页A：监听登出
+authChannel.on('logout', () => {
+  window.location.href = '/login';
+  alert('您已在其他标签页退出登录');
+});
+
+// 标签页B：执行登出
+document.getElementById('logout').addEventListener('click', () => {
+  // 清除登录状态
+  localStorage.removeItem('token');
+  // 通知其他标签页
+  authChannel.postMessage('logout', { reason: 'user_action' });
+});
+
+==== 5 常见陷阱与解决方案
+
+| 问题             | 原因                      | 解决方案                                     |
+| ---------------- | ------------------------- | -------------------------------------------- |
+| **存储容量超限** | 超过5-10MB限制            | 封装时捕获`QuotaExceededError`，清理过期数据 |
+| **只能存字符串** | API设计限制               | 使用`JSON.stringify/parse`序列化             |
+| **同步阻塞**     | Storage操作是同步的       | 大数据量时改用IndexedDB                      |
+| **隐私模式失效** | Safari隐私模式禁用Storage | 使用`try-catch`封装，失败时降级到内存存储    |
+| **跨域不共享**   | 同源策略限制              | 使用PostMessage或后端同步                    |
+
+---
+
+==== 6 总结
+
+```javascript
+// 核心要点
+window.localStorage   // BOM对象 - 持久存储，跨标签共享
+window.sessionStorage // BOM对象 - 会话存储，标签隔离
+
+// 都属于 window（BOM），不属于 document（DOM）
+window.localStorage !== document.localStorage; // true
+```
+
+**选型建议**：
+- **LocalStorage**：用户偏好设置、购物车、草稿箱（长期）
+- **SessionStorage**：表单草稿、临时搜索条件、多步骤向导（短期）
+- **IndexedDB**：大量结构化数据、离线应用（替代方案）
+
+=== 三：定时器和动画
+
+
+==== 一 定时器
+
+
+===== 1. setInterval (闹钟)
+每隔一段时间执行一次。
+```javascript
+let timer = setInterval(function() {
+    console.log('我每秒打印一次');
+}, 1000);
+
+// 清除
+clearInterval(timer);
+```
+
+===== 2. setTimeout (炸弹)
+延时一段时间后执行一次。
+```javascript
+let timer = setTimeout(function() {
+    console.log('我3秒后才出现');
+}, 3000);
+```
+
+---
+
+==== 二 JS 动画原理
+
+**核心**：利用定时器，极短时间内修改元素的位置，利用人眼的视觉暂留形成动画。
+
+**步骤**：
+
+1.  获取元素当前位置。
+2.  修改位置（+1 或 -1）。
+3.  赋值回去。
+4.  使用定时器重复执行。
+
+**演示：匀速动画**
+```javascript
+let box = document.querySelector('.box');
+
+function move() {
+    let timer = setInterval(function() {
+        // 获取当前位置 (parseInt 去掉px单位)
+        let left = parseInt(window.getComputedStyle(box).left);
+
+        if (left >= 500) {
+            clearInterval(timer); // 到达终点停止
+        } else {
+            box.style.left = left + 5 + 'px'; // 每次走5px
+        }
+    }, 30); // 30毫秒刷新一次，约每秒33帧
+}
+```
+
+---
+
+=== 四：简单函数封装
+
+为了方便使用，我们把动画封装成函数。
+`animate(obj, target, speed)`
+
+```javascript
+function animate(obj, target) {
+    clearInterval(obj.timer); // 先清除以前的定时器，防止加速
+    obj.timer = setInterval(function() {
+        let left = parseInt(window.getComputedStyle(obj).left);
+        if (left >= target) {
+            clearInterval(obj.timer);
+        } else {
+            obj.style.left = left + 5 + 'px';
+        }
+    }, 30);
+}
+```
+
+---
+
+=== S2：实战演练与项目推进（4课时）
+
+
+==== 一：随堂实战案例
+
+
+===== 案例：倒计时跳转
+**需求**：页面显示“还剩5秒跳转”，倒计时结束后跳转。
+
+```javascript
+let span = document.querySelector('span');
+let time = 5;
+
+let timer = setInterval(function() {
+    time--;
+    span.innerText = time;
+    if (time <= 0) {
+        clearInterval(timer);
+        location.href = 'http://www.baidu.com';
+    }
+}, 1000);
+```
+
+===== 案例：固定导航栏
+**需求**：页面滚动超过一定距离，导航栏变成固定定位。
+
+```javascript
+let nav = document.querySelector('nav');
+window.onscroll = function() {
+    // 获取滚动距离
+    let top = document.documentElement.scrollTop;
+    if (top >= 100) {
+        nav.style.position = 'fixed';
+        nav.style.top = '0';
+    } else {
+        nav.style.position = 'static';
+    }
+};
+```
+
+---
+
+==== 二：贯穿项目推进——《易校园》特效实现
+
+**场景**：今天要给平台加上最吸睛的特效——**轮播图**。
+
+**步骤 1：HTML 结构**
+```html
+<div class="carousel" id="carousel">
+    <img src="img/ad1.jpg" class="active">
+    <img src="img/ad2.jpg">
+    <img src="img/ad3.jpg">
+</div>
+```
+
+**步骤 2：CSS 样式**
+```css
+.carousel { position: relative; width: 600px; height: 300px; }
+.carousel img {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0; transition: all 0.5s; /* 过渡动画 */
+}
+.carousel img.active { opacity: 1; }
+```
+
+**步骤 3：JS 逻辑**
+```javascript
+let imgs = document.querySelectorAll('.carousel img');
+let currentIndex = 0; // 当前显示的图片索引
+
+setInterval(function() {
+    // 1. 把当前的图片隐藏
+    imgs[currentIndex].classList.remove('active');
+
+    // 2. 索引加1，如果是最后一张，回到0
+    currentIndex++;
+    if (currentIndex >= imgs.length) {
+        currentIndex = 0;
+    }
+
+    // 3. 显示下一张
+    imgs[currentIndex].classList.add('active');
+
+}, 2000); // 每2秒切换一次
+```
+
+**步骤 4：实现“回到顶部”**
+```javascript
+let backTop = document.querySelector('#backTop');
+
+// 显示/隐藏按钮
+window.onscroll = function() {
+    if (document.documentElement.scrollTop >= 300) {
+        backTop.style.display = 'block';
+    } else {
+        backTop.style.display = 'none';
+    }
+};
+
+// 点击平滑滚动
+backTop.onclick = function() {
+    let timer = setInterval(function() {
+        let top = document.documentElement.scrollTop;
+        if (top <= 0) {
+            clearInterval(timer);
+        }
+        // 每次往上走50
+        document.documentElement.scrollTop = top - 50;
+    }, 10);
+};
+```
+
+---
+
+==== 📝 作业
+
+1.  **概念题**：`setInterval` 和 `setTimeout` 的区别？
+2.  **代码题**：做一个简单的电子时钟，在页面上显示当前的时分秒，每秒自动更新。
+3.  **项目扩展**：给轮播图左右两边加上“上一张”、“下一张”按钮，点击可以手动切换图片。
+
+---
+
+**讲师提示**：
+第三阶段结束，学生应该已经具备了制作一个完整动态网页的能力。
+Ch 11 的轮播图是前端面试的“保留节目”，务必让学生理解**“索引”**在其中的作用。
+明天开始，我们将进入更高级的异步编程和网络请求，让我们的网页能从服务器获取真实数据！
+
+
+
+
+
+---
+

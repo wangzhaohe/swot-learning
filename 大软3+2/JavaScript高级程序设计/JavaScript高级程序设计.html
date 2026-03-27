@@ -818,6 +818,26 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
+<li><a href="#_ch_11bom与特效开发浏览器的控制权">Ch 11：BOM与特效开发——浏览器的控制权</a>
+<ul class="sectlevel2">
+<li><a href="#_一bom_对象">一：BOM 对象</a>
+<ul class="sectlevel3">
+<li><a href="#_1_window_对象">1. window 对象</a></li>
+<li><a href="#_2_location_对象">2. location 对象</a></li>
+</ul>
+</li>
+<li><a href="#_二localstorage_与_sessionstorage">二：LocalStorage 与 SessionStorage</a>
+<ul class="sectlevel3">
+<li><a href="#_1_核心概念对比">1 核心概念对比</a></li>
+<li><a href="#_2_与_cookie_的本质区别">2 与 Cookie 的本质区别</a></li>
+<li><a href="#_3_在_console_中测试使用方式">3 在 Console 中测试使用方式</a></li>
+<li><a href="#_示例_1基础封装jsdoc_类型安全版">示例 1：基础封装（JSDoc 类型安全版）</a></li>
+<li><a href="#_示例_2购物车实战localstorage_跨标签同步">示例 2：购物车实战（LocalStorage + 跨标签同步）</a></li>
+<li><a href="#_4_实践示例_要整理">4 实践示例 &#8594; 要整理&#8230;&#8203;</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -6507,10 +6527,1149 @@ const msg = document.querySelector('#msg');</pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_ch_11bom与特效开发浏览器的控制权">Ch 11：BOM与特效开发——浏览器的控制权</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>今日目标</strong>：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>掌握 BOM 核心对象 <code>window</code>、<code>location</code>。</p>
+</li>
+<li>
+<p>深入理解 JS 动画原理与定时器。</p>
+</li>
+<li>
+<p>实现网页常见特效：轮播图、倒计时、回到顶部。</p>
+</li>
+<li>
+<p>项目界面美化与交互完善。</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_一bom_对象">一：BOM 对象</h3>
+<div class="sect3">
+<h4 id="_1_window_对象">1. window 对象</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>window</code> 是全局对象，所有的变量和函数都是它的属性。</p>
+</li>
+<li>
+<p><strong>常用事件</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>window.onload</code>：  页面加载完执行。</p>
+</li>
+<li>
+<p><code>window.onscroll</code>：页面滚动时触发。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_location_对象">2. location 对象</h4>
+<div class="paragraph">
+<p>用于操作URL</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>location.href</code>：获取或设置地址（跳转页面）。</p>
+</li>
+<li>
+<p><code>location.reload()</code>：刷新页面。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>代码演示</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/** * 页面跳转前的延迟时间（毫秒）</span>
+<span class="tok-cm"> * @constant {number}</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">DELAY</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">5000</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 5 秒后跳转到百度</span>
+<span class="tok-cm"> */</span>
+<span class="tok-nx">setTimeout</span><span class="tok-p">(</span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">location</span><span class="tok-p">.</span><span class="tok-nx">href</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;http://www.baidu.com&#39;</span><span class="tok-p">;</span>
+<span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-nx">DELAY</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_二localstorage_与_sessionstorage">二：LocalStorage 与 SessionStorage</h3>
+<div class="sect3">
+<h4 id="_1_核心概念对比">1 核心概念对比</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 23%;">
+<col style="width: 40%;">
+<col style="width: 37%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">特性</th>
+<th class="tableblock halign-left valign-top">LocalStorage</th>
+<th class="tableblock halign-left valign-top">SessionStorage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>生命周期</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">永久存储（除非手动清除）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">会话级，关闭标签页即清除</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>作用域</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">同源窗口共享（协议+域名+端口）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">同一标签页内，新标签页不共享</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>存储容量</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">约 5-10 MB</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">约 5-10 MB</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>数据类型</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">仅支持字符串（需序列化）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">仅支持字符串（需序列化）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>与服务端通信</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">不自动发送，纯客户端</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">不自动发送，纯客户端</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_2_与_cookie_的本质区别">2 与 Cookie 的本质区别</h4>
+<div class="paragraph">
+<p>Cookie 会随 HTTP 请求发送（影响性能）。</p>
+</div>
+<div class="paragraph">
+<p>LocalStorage / SessionStorage 纯客户端，不参与网络传输。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_3_在_console_中测试使用方式">3 在 Console 中测试使用方式</h4>
+<div class="paragraph">
+<p>可以直接在浏览器的 Console 中执行。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 设置</span>
+<span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">setItem</span><span class="tok-p">(</span><span class="tok-s1">&#39;key&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;value&#39;</span><span class="tok-p">);</span>
+<span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;value&#39;</span><span class="tok-p">;</span><span class="tok-w">          </span><span class="tok-c1">// 属性方式（不推荐）</span>
+<span class="tok-nx">localStorage</span><span class="tok-p">[</span><span class="tok-s1">&#39;key&#39;</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;value&#39;</span><span class="tok-p">;</span><span class="tok-w">       </span><span class="tok-c1">// 括号方式</span>
+
+<span class="tok-c1">// 获取</span>
+<span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">getItem</span><span class="tok-p">(</span><span class="tok-s1">&#39;key&#39;</span><span class="tok-p">);</span><span class="tok-w">         </span><span class="tok-c1">// 推荐，key不存在返回null</span>
+<span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-p">;</span><span class="tok-w">                    </span><span class="tok-c1">// 属性方式，可能冲突原型属性</span>
+
+<span class="tok-c1">// 删除</span>
+<span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-s1">&#39;key&#39;</span><span class="tok-p">);</span><span class="tok-w">      </span><span class="tok-c1">// 删除单个</span>
+<span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">clear</span><span class="tok-p">();</span><span class="tok-w">                </span><span class="tok-c1">// 清空所有</span>
+
+<span class="tok-c1">// 遍历</span>
+<span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-p">;</span><span class="tok-w">                 </span><span class="tok-c1">// 存储项数量</span>
+<span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-p">(</span><span class="tok-nx">index</span><span class="tok-p">);</span><span class="tok-w">             </span><span class="tok-c1">// 获取第 index 个 key</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_示例_1基础封装jsdoc_类型安全版">示例 1：基础封装（JSDoc 类型安全版）</h4>
+<div class="paragraph">
+<p><strong>自己封装的 storage.js 使用示例</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">local</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">session</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./storage&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// LocalStorage：持久保存用户偏好</span>
+<span class="tok-nx">local</span><span class="tok-p">.</span><span class="tok-nx">set</span><span class="tok-p">(</span><span class="tok-s1">&#39;theme&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;dark&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">60</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mf">24</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mf">7</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 7 天过期</span>
+<span class="tok-nx">local</span><span class="tok-p">.</span><span class="tok-nx">set</span><span class="tok-p">(</span><span class="tok-s1">&#39;user&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;张三&#39;</span><span class="tok-w"> </span><span class="tok-p">});</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">theme</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">local</span><span class="tok-p">.</span><span class="tok-nx">get</span><span class="tok-p">(</span><span class="tok-s1">&#39;theme&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;light&#39;</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 获取，默认 light</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">user</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">local</span><span class="tok-p">.</span><span class="tok-nx">get</span><span class="tok-p">(</span><span class="tok-s1">&#39;user&#39;</span><span class="tok-p">);</span>
+
+
+<span class="tok-c1">// SessionStorage：临时保存表单数据</span>
+<span class="tok-c1">// 标签页关闭后重新打开，formDraft不存在</span>
+<span class="tok-nx">session</span><span class="tok-p">.</span><span class="tok-nx">set</span><span class="tok-p">(</span><span class="tok-s1">&#39;formDraft&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">title</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;未完成的商品&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">100</span><span class="tok-w"> </span><span class="tok-p">});</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+自己封装的很好用，因为小巧。也可以使用第三方库，但是有的体积大一些。
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">code/examples/storage.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * storage.js</span>
+<span class="tok-cm"> * Storage 工具类 - 支持对象序列化、过期时间与容量溢出处理</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">class</span><span class="tok-w"> </span><span class="tok-nx">StorageWrapper</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">storage</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">storage</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 设置值</span>
+<span class="tok-cm">     * @param {string} key 键名</span>
+<span class="tok-cm">     * @param {any} value 值（自动序列化）</span>
+<span class="tok-cm">     * @param {number} expire 过期时间（分钟）</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nx">set</span><span class="tok-p">(</span><span class="tok-nx">key</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">expire</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">value</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-p">,</span>
+<span class="tok-w">                </span><span class="tok-nx">timestamp</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">(),</span>
+<span class="tok-w">                </span><span class="tok-nx">expire</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">expire</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nx">expire</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mf">60</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mf">1000</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">null</span>
+<span class="tok-w">            </span><span class="tok-p">};</span>
+<span class="tok-w">            </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-p">.</span><span class="tok-nx">setItem</span><span class="tok-p">(</span><span class="tok-nx">key</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">stringify</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">));</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 如果存储空间满了，尝试清理过期数据后重试</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;QuotaExceededError&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">warn</span><span class="tok-p">(</span><span class="tok-s1">&#39;Storage space full, clearing expired items...&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">clearExpired</span><span class="tok-p">();</span>
+<span class="tok-w">                </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-p">.</span><span class="tok-nx">setItem</span><span class="tok-p">(</span><span class="tok-nx">key</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">stringify</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">));</span>
+<span class="tok-w">                    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span>
+<span class="tok-w">                </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">retryError</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">error</span><span class="tok-p">(</span><span class="tok-s1">&#39;Storage still full after clearing:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">retryError</span><span class="tok-p">);</span>
+<span class="tok-w">                    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">;</span>
+<span class="tok-w">                </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 获取值</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nx">get</span><span class="tok-p">(</span><span class="tok-nx">key</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">defaultValue</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-p">.</span><span class="tok-nx">getItem</span><span class="tok-p">(</span><span class="tok-nx">key</span><span class="tok-p">);</span>
+
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">item</span><span class="tok-p">)</span>
+<span class="tok-w">                </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">defaultValue</span><span class="tok-p">;</span>
+
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">parse</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-p">);</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 过期判断</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">.</span><span class="tok-nx">expire</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">.</span><span class="tok-nx">expire</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-p">.</span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-nx">key</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">defaultValue</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">defaultValue</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-nx">remove</span><span class="tok-p">(</span><span class="tok-nx">key</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-p">.</span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-nx">key</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-nx">clear</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-p">.</span><span class="tok-nx">clear</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-nx">clearExpired</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">now</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-o">++</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">key</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-p">(</span><span class="tok-nx">i</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">parse</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-p">.</span><span class="tok-nx">getItem</span><span class="tok-p">(</span><span class="tok-nx">key</span><span class="tok-p">));</span>
+<span class="tok-w">                </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">.</span><span class="tok-nx">expire</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">now</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">.</span><span class="tok-nx">expire</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">storage</span><span class="tok-p">.</span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-nx">key</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-cm">/* 忽略非工具类存入的普通字符串 */</span><span class="tok-w"> </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c1">// 导出实例（方便直接导入使用）</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">local</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">StorageWrapper</span><span class="tok-p">(</span><span class="tok-nx">localStorage</span><span class="tok-p">);</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">session</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">StorageWrapper</span><span class="tok-p">(</span><span class="tok-nx">sessionStorage</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">code/examples/storage.html</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-cp">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">html</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;zh-CN&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">meta</span> <span class="tok-na">charset</span><span class="tok-o">=</span><span class="tok-s">&quot;UTF-8&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>Storage 工具类测试<span class="tok-p">&lt;/</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">body</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">font-family</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">sans-serif</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">20</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">line-height</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mf">1.6</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">card</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">border</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">solid</span><span class="tok-w"> </span><span class="tok-mh">#ddd</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">15</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#f9f9f9</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-nt">button</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">16</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">cursor</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">pointer</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">margin-top</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-p">#</span><span class="tok-nn">log</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#333</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#fff</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">15</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">min-height</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">100</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">margin-top</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">20</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">white-space</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">pre-wrap</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">h2</span><span class="tok-p">&gt;</span>示例 1：基础封装测试<span class="tok-p">&lt;/</span><span class="tok-nt">h2</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;card&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>1. 点击“存储数据”，我们将存入一个对象，并设置 1 分钟后过期。<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>2. 点击“读取数据”，查看控制台输出或下方日志。<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+        <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;btnSave&quot;</span><span class="tok-p">&gt;</span>存储数据 (1分钟过期)<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;btnRead&quot;</span><span class="tok-p">&gt;</span>读取数据<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;log&quot;</span><span class="tok-p">&gt;</span>等待操作...<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;module&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-c1">// 从外部文件导入工具类</span>
+<span class="tok-w">        </span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">local</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./storage.js&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">logEl</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">getElementById</span><span class="tok-p">(</span><span class="tok-s1">&#39;log&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">print</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 新的信息 + 原来的信息</span>
+<span class="tok-w">            </span><span class="tok-nx">logEl</span><span class="tok-p">.</span><span class="tok-nx">textContent</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sb">`[</span><span class="tok-si">${</span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">().</span><span class="tok-nx">toLocaleTimeString</span><span class="tok-p">()</span><span class="tok-si">}</span><span class="tok-sb">] </span><span class="tok-si">${</span><span class="tok-nx">msg</span><span class="tok-si">}</span><span class="tok-sb">\n`</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nx">logEl</span><span class="tok-p">.</span><span class="tok-nx">textContent</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 按钮事件</span>
+<span class="tok-w">        </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">getElementById</span><span class="tok-p">(</span><span class="tok-s1">&#39;btnSave&#39;</span><span class="tok-p">).</span><span class="tok-nx">onclick</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">userData</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">101</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;Gemini&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">role</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;AI&quot;</span><span class="tok-w"> </span><span class="tok-p">};</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">success</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">local</span><span class="tok-p">.</span><span class="tok-nx">set</span><span class="tok-p">(</span><span class="tok-s1">&#39;user_info&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">userData</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 1分钟过期</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">success</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-nx">print</span><span class="tok-p">(</span><span class="tok-s2">&quot;已存入对象: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">stringify</span><span class="tok-p">(</span><span class="tok-nx">userData</span><span class="tok-p">));</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
+
+<span class="tok-w">        </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">getElementById</span><span class="tok-p">(</span><span class="tok-s1">&#39;btnRead&#39;</span><span class="tok-p">).</span><span class="tok-nx">onclick</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">local</span><span class="tok-p">.</span><span class="tok-nx">get</span><span class="tok-p">(</span><span class="tok-s1">&#39;user_info&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">print</span><span class="tok-p">(</span><span class="tok-s2">&quot;读取成功: &quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">stringify</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">));</span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">print</span><span class="tok-p">(</span><span class="tok-s2">&quot;数据不存在或已过期&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
+<span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">html</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_示例_2购物车实战localstorage_跨标签同步">示例 2：购物车实战（LocalStorage + 跨标签同步）</h4>
+<div class="paragraph">
+<p>下面案例使用 <strong>发布-订阅模式 (Pub-Sub)</strong> ，结合 BOM 的 storage 事件，解决了“本地状态管理”与“跨标签页同步”的问题。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-2026-03-27-144243.svg" alt="mermaid 2026 03 27 144243" width="584" height="1079">
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>storage 事件在“修改数据的那个标签页”里是不会触发的，所以必须手动调用 notifyListeners。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-2026-03-27-152717.svg" alt="mermaid 2026 03 27 152717" width="933" height="601">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-cp">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">html</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;zh-CN&quot;</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">meta</span> <span class="tok-na">charset</span><span class="tok-o">=</span><span class="tok-s">&quot;UTF-8&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">meta</span> <span class="tok-na">name</span><span class="tok-o">=</span><span class="tok-s">&quot;viewport&quot;</span> <span class="tok-na">content</span><span class="tok-o">=</span><span class="tok-s">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>购物车 - 跨标签页同步实战<span class="tok-p">&lt;/</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">body</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">font-family</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-n">system-ui</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-n">apple-system</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">sans-serif</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">20</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">max-width</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">600</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">margin</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-kc">auto</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#f9f9f9</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">card</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">white</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">20</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">box-shadow</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-nb">rgba</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">0.1</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">margin-bottom</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">20</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">item</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">display</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">flex</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">justify-content</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">space-between</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">align-items</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">center</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">border-bottom</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">dashed</span><span class="tok-w"> </span><span class="tok-mh">#eee</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">item</span><span class="tok-p">:</span><span class="tok-nd">last-child</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">border-bottom</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">none</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-nt">button</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">cursor</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">pointer</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">border</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">solid</span><span class="tok-w"> </span><span class="tok-mh">#ccc</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#fff</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-nt">button</span><span class="tok-p">:</span><span class="tok-nd">hover</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#f0f0f0</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">btn-danger</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">red</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">border-color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#ffcccc</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">btn-danger</span><span class="tok-p">:</span><span class="tok-nd">hover</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#ffeeee</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">empty-tip</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mh">#888</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">text-align</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">center</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">20</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>跨标签同步购物车<span class="tok-p">&lt;/</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>测试方法：<span class="tok-p">&lt;/</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>请复制当前页面的 URL，在浏览器中
+        <span class="tok-p">&lt;</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>打开一个新标签页<span class="tok-p">&lt;/</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>。
+        在任意一个页面点击添加/删除商品，观察另一个页面的实时变化。
+    <span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;card&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">h2</span><span class="tok-p">&gt;</span>商品列表<span class="tok-p">&lt;/</span><span class="tok-nt">h2</span><span class="tok-p">&gt;</span>
+
+        <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;item&quot;</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>iPhone 15 (¥5999)<span class="tok-p">&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">&quot;handleAddToCart(1, &#39;iPhone 15&#39;, 5999)&quot;</span><span class="tok-p">&gt;</span>加入购物车<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+        <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;item&quot;</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>MacBook Pro (¥14999)<span class="tok-p">&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">&quot;handleAddToCart(2, &#39;MacBook Pro&#39;, 14999)&quot;</span><span class="tok-p">&gt;</span>加入购物车<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+        <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;item&quot;</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>AirPods Pro (¥1899)<span class="tok-p">&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">&quot;handleAddToCart(3, &#39;AirPods Pro&#39;, 1899)&quot;</span><span class="tok-p">&gt;</span>加入购物车<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;card&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">style</span><span class="tok-o">=</span><span class="tok-s">&quot;display: flex; justify-content: space-between; align-items: center;&quot;</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">h2</span><span class="tok-p">&gt;</span>我的购物车<span class="tok-p">&lt;/</span><span class="tok-nt">h2</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;btn-danger&quot;</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">&quot;handleClearCart()&quot;</span><span class="tok-p">&gt;</span>
+                清空全部
+            <span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+        <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;cart-container&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+        <span class="tok-p">&lt;</span><span class="tok-nt">h3</span> <span class="tok-na">style</span><span class="tok-o">=</span><span class="tok-s">&quot;text-align: right; border-top: 2px solid #eee; padding-top: 15px;&quot;</span><span class="tok-p">&gt;</span>
+            总价:
+            <span class="tok-p">&lt;</span><span class="tok-nt">span</span> <span class="tok-na">style</span><span class="tok-o">=</span><span class="tok-s">&quot;color: #e4393c;&quot;</span><span class="tok-p">&gt;</span>¥
+                <span class="tok-p">&lt;</span><span class="tok-nt">span</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;total-price&quot;</span><span class="tok-p">&gt;</span>0<span class="tok-p">&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;/</span><span class="tok-nt">h3</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-cm">/**</span>
+<span class="tok-cm">         * 基础商品信息（只包含 ID、名称、价格）</span>
+<span class="tok-cm">         * @typedef {Object} Product</span>
+<span class="tok-cm">         * @property {number} id</span>
+<span class="tok-cm">         * @property {string} name</span>
+<span class="tok-cm">         * @property {number} price</span>
+<span class="tok-cm">         */</span>
+
+<span class="tok-w">        </span><span class="tok-cm">/**</span>
+<span class="tok-cm">         * 购物车里的完整条目（商品 + 购物车业务属性）</span>
+<span class="tok-cm">         * @typedef {Product} CartItem</span>
+<span class="tok-cm">         * @property {number} quantity - 数量</span>
+<span class="tok-cm">         * @property {number} addedAt - 第一次放入购物车的时间</span>
+<span class="tok-cm">         * @property {number} [updatedAt] - 最后一次修改数量的时间</span>
+<span class="tok-cm">         */</span>
+
+<span class="tok-w">        </span><span class="tok-cm">/**</span>
+<span class="tok-cm">         * 购物车状态管理 - 支持多标签页同步</span>
+<span class="tok-cm">         */</span>
+<span class="tok-w">        </span><span class="tok-kd">class</span><span class="tok-w"> </span><span class="tok-nx">ShoppingCart</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-kr">constructor</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-cm">/** * LocalStorage 存储使用的键名</span>
+<span class="tok-cm">                 * @type {string}</span>
+<span class="tok-cm">                 */</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">STORAGE_KEY</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;cart_data&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-w">                </span><span class="tok-cm">/** * 订阅更新的回调函数列表</span>
+<span class="tok-cm">                 * @type {Function[]}</span>
+<span class="tok-cm">                 */</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">[];</span>
+
+<span class="tok-w">                </span><span class="tok-c1">// 监听其他标签页的修改（BOM特性）</span>
+<span class="tok-w">                </span><span class="tok-nb">window</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;storage&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">STORAGE_KEY</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">notifyListeners</span><span class="tok-p">();</span>
+<span class="tok-w">                        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;监听到其他标签页数据变化&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">                    </span><span class="tok-p">}</span>
+<span class="tok-w">                </span><span class="tok-p">});</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-cm">/**</span>
+<span class="tok-cm">            * 获取购物车数据</span>
+<span class="tok-cm">            */</span>
+<span class="tok-w">            </span><span class="tok-nx">getItems</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">getItem</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">STORAGE_KEY</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">parse</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">[];</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-cm">/**</span>
+<span class="tok-cm">             * 添加商品</span>
+<span class="tok-cm">             * @param {Product} product - 传入的只需是基础商品信息</span>
+<span class="tok-cm">             */</span>
+<span class="tok-w">            </span><span class="tok-nx">addItem</span><span class="tok-p">(</span><span class="tok-nx">product</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">getItems</span><span class="tok-p">();</span>
+<span class="tok-w">                </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">existing</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-p">.</span><span class="tok-nx">find</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-nx">product</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">existing</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                    </span><span class="tok-nx">existing</span><span class="tok-p">.</span><span class="tok-nx">quantity</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-nx">product</span><span class="tok-p">.</span><span class="tok-nx">quantity</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">;</span>
+<span class="tok-w">                    </span><span class="tok-nx">existing</span><span class="tok-p">.</span><span class="tok-nx">updatedAt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">();</span>
+<span class="tok-w">                </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                    </span><span class="tok-nx">items</span><span class="tok-p">.</span><span class="tok-nx">push</span><span class="tok-p">({</span>
+<span class="tok-w">                        </span><span class="tok-p">...</span><span class="tok-nx">product</span><span class="tok-p">,</span>
+<span class="tok-w">                        </span><span class="tok-nx">quantity</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">product</span><span class="tok-p">.</span><span class="tok-nx">quantity</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">,</span>
+<span class="tok-w">                        </span><span class="tok-nx">addedAt</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">()</span>
+<span class="tok-w">                    </span><span class="tok-p">});</span>
+<span class="tok-w">                </span><span class="tok-p">}</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">save</span><span class="tok-p">(</span><span class="tok-nx">items</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-cm">/**</span>
+<span class="tok-cm">            * 更新数量</span>
+<span class="tok-cm">            */</span>
+<span class="tok-w">            </span><span class="tok-nx">updateQuantity</span><span class="tok-p">(</span><span class="tok-nx">productId</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">quantity</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">getItems</span><span class="tok-p">();</span>
+<span class="tok-w">                </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-p">.</span><span class="tok-nx">find</span><span class="tok-p">(</span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-nx">productId</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">quantity</span><span class="tok-w"> </span><span class="tok-o">&lt;=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">)</span>
+<span class="tok-w">                        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-nx">productId</span><span class="tok-p">);</span>
+<span class="tok-w">                    </span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">quantity</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">quantity</span><span class="tok-p">;</span>
+<span class="tok-w">                    </span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">updatedAt</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">();</span>
+<span class="tok-w">                    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">save</span><span class="tok-p">(</span><span class="tok-nx">items</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-p">}</span>
+<span class="tok-w">                </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-cm">/**</span>
+<span class="tok-cm">            * 删除商品</span>
+<span class="tok-cm">            */</span>
+<span class="tok-w">            </span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-nx">productId</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">getItems</span><span class="tok-p">().</span><span class="tok-nx">filter</span><span class="tok-p">(</span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-w"> </span><span class="tok-o">!==</span><span class="tok-w"> </span><span class="tok-nx">productId</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">save</span><span class="tok-p">(</span><span class="tok-nx">items</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-cm">/**</span>
+<span class="tok-cm">            * 保存并通知</span>
+<span class="tok-cm">            */</span>
+<span class="tok-w">            </span><span class="tok-nx">save</span><span class="tok-p">(</span><span class="tok-nx">items</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">setItem</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">STORAGE_KEY</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">stringify</span><span class="tok-p">(</span><span class="tok-nx">items</span><span class="tok-p">));</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">notifyListeners</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 通知当前页面的订阅者</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-cm">/**</span>
+<span class="tok-cm">            * 清空购物车</span>
+<span class="tok-cm">            */</span>
+<span class="tok-w">            </span><span class="tok-nx">clear</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">STORAGE_KEY</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">notifyListeners</span><span class="tok-p">();</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-cm">/**</span>
+<span class="tok-cm">            * 计算总价</span>
+<span class="tok-cm">            */</span>
+<span class="tok-w">            </span><span class="tok-nx">getTotal</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">getItems</span><span class="tok-p">().</span><span class="tok-nx">reduce</span><span class="tok-p">((</span><span class="tok-nx">sum</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span>
+<span class="tok-w">                    </span><span class="tok-nx">sum</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">price</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">quantity</span><span class="tok-p">),</span><span class="tok-w"> </span><span class="tok-mf">0</span>
+<span class="tok-w">                </span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-cm">/**</span>
+<span class="tok-cm">            * 订阅变化（用于UI更新）</span>
+<span class="tok-cm">            */</span>
+<span class="tok-w">            </span><span class="tok-nx">subscribe</span><span class="tok-p">(</span><span class="tok-nx">callback</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-p">.</span><span class="tok-nx">push</span><span class="tok-p">(</span><span class="tok-nx">callback</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-nx">callback</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">getItems</span><span class="tok-p">());</span><span class="tok-w"> </span><span class="tok-c1">// 立即执行一次，初始化UI</span>
+<span class="tok-w">                </span><span class="tok-c1">// 返回取消订阅函数</span>
+<span class="tok-w">                </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-p">.</span><span class="tok-nx">filter</span><span class="tok-p">(</span><span class="tok-nx">l</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">l</span><span class="tok-w"> </span><span class="tok-o">!==</span><span class="tok-w"> </span><span class="tok-nx">callback</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-p">};</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-nx">notifyListeners</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">getItems</span><span class="tok-p">();</span>
+<span class="tok-w">                </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-p">.</span><span class="tok-nx">forEach</span><span class="tok-p">(</span><span class="tok-nx">cb</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">cb</span><span class="tok-p">(</span><span class="tok-nx">items</span><span class="tok-p">));</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">cart</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">ShoppingCart</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">cartContainer</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">getElementById</span><span class="tok-p">(</span><span class="tok-s1">&#39;cart-container&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">totalPriceEl</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">getElementById</span><span class="tok-p">(</span><span class="tok-s1">&#39;total-price&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 渲染界面的函数</span>
+<span class="tok-w">        </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">renderUI</span><span class="tok-p">(</span><span class="tok-nx">items</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">items</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">cartContainer</span><span class="tok-p">.</span><span class="tok-nx">innerHTML</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;&lt;div class=&quot;empty-tip&quot;&gt;购物车空空如也，快去选购吧~&lt;/div&gt;&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">cartContainer</span><span class="tok-p">.</span><span class="tok-nx">innerHTML</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-p">.</span><span class="tok-nx">map</span><span class="tok-p">(</span><span class="tok-nx">item</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-sb">`</span>
+<span class="tok-sb">          &lt;div class=&quot;item&quot;&gt;</span>
+<span class="tok-sb">            &lt;div&gt;</span>
+<span class="tok-sb">              &lt;strong&gt;</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb">&lt;/strong&gt; &lt;br/&gt;</span>
+<span class="tok-sb">              &lt;span style=&quot;color: #888; font-size: 0.9em;&quot;&gt;¥</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">price</span><span class="tok-si">}</span><span class="tok-sb">&lt;/span&gt;</span>
+<span class="tok-sb">            &lt;/div&gt;</span>
+<span class="tok-sb">            &lt;div&gt;</span>
+<span class="tok-sb">              &lt;button onclick=&quot;handleUpdateQty(</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-si">}</span><span class="tok-sb">, </span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">quantity</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-si">}</span><span class="tok-sb">)&quot;&gt; - &lt;/button&gt;</span>
+<span class="tok-sb">              &lt;span style=&quot;display:inline-block; width:30px; text-align:center;&quot;&gt;</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">quantity</span><span class="tok-si">}</span><span class="tok-sb">&lt;/span&gt;</span>
+<span class="tok-sb">              &lt;button onclick=&quot;handleUpdateQty(</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-si">}</span><span class="tok-sb">, </span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">quantity</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-si">}</span><span class="tok-sb">)&quot;&gt; + &lt;/button&gt;</span>
+<span class="tok-sb">              &lt;button class=&quot;btn-danger&quot; style=&quot;margin-left: 10px;&quot; onclick=&quot;handleRemove(</span><span class="tok-si">${</span><span class="tok-nx">item</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-si">}</span><span class="tok-sb">)&quot;&gt;删除&lt;/button&gt;</span>
+<span class="tok-sb">            &lt;/div&gt;</span>
+<span class="tok-sb">          &lt;/div&gt;</span>
+<span class="tok-sb">        `</span><span class="tok-p">).</span><span class="tok-nx">join</span><span class="tok-p">(</span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-c1">// 上面 .join(&#39;&#39;) 是为了清除数组默认带入的逗号</span>
+<span class="tok-w">            </span><span class="tok-c1">// 更新总价</span>
+<span class="tok-w">            </span><span class="tok-nx">totalPriceEl</span><span class="tok-p">.</span><span class="tok-nx">innerText</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">cart</span><span class="tok-p">.</span><span class="tok-nx">getTotal</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 核心：订阅购物车状态，只要数据变了（无论当前页还是其他页），自动更新 UI</span>
+<span class="tok-w">        </span><span class="tok-nx">cart</span><span class="tok-p">.</span><span class="tok-nx">subscribe</span><span class="tok-p">((</span><span class="tok-nx">items</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">renderUI</span><span class="tok-p">(</span><span class="tok-nx">items</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 更新界面</span>
+<span class="tok-w">            </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;购物车更新:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+<span class="tok-w">        </span><span class="tok-nb">window</span><span class="tok-p">.</span><span class="tok-nx">handleAddToCart</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">cart</span><span class="tok-p">.</span><span class="tok-nx">addItem</span><span class="tok-p">({</span><span class="tok-w"> </span><span class="tok-nx">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-w"> </span><span class="tok-p">});</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
+
+<span class="tok-w">        </span><span class="tok-nb">window</span><span class="tok-p">.</span><span class="tok-nx">handleUpdateQty</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">newQty</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">cart</span><span class="tok-p">.</span><span class="tok-nx">updateQuantity</span><span class="tok-p">(</span><span class="tok-nx">id</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">newQty</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
+
+<span class="tok-w">        </span><span class="tok-nb">window</span><span class="tok-p">.</span><span class="tok-nx">handleRemove</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">id</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">cart</span><span class="tok-p">.</span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-nx">id</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
+
+<span class="tok-w">        </span><span class="tok-nb">window</span><span class="tok-p">.</span><span class="tok-nx">handleClearCart</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">confirm</span><span class="tok-p">(</span><span class="tok-s1">&#39;确定要清空购物车吗？&#39;</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-nx">cart</span><span class="tok-p">.</span><span class="tok-nx">clear</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
+<span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;/</span><span class="tok-nt">html</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_4_实践示例_要整理">4 实践示例 &#8594; 要整理&#8230;&#8203;</h4>
+<div class="paragraph">
+<p>示例 3：SessionStorage 实现页面状态保持</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 表单草稿自动保存（页面刷新/返回恢复）</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">class</span><span class="tok-w"> </span><span class="tok-nx">FormAutoSave</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">formId</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">options</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{})</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">formId</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">formId</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sb">`form_draft_</span><span class="tok-si">${</span><span class="tok-nx">formId</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">interval</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">options</span><span class="tok-p">.</span><span class="tok-nx">interval</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-mf">3000</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 3秒自动保存</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">maxAge</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">options</span><span class="tok-p">.</span><span class="tok-nx">maxAge</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-mf">30</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 30分钟过期</span>
+
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">form</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">getElementById</span><span class="tok-p">(</span><span class="tok-nx">formId</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">timer</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">init</span><span class="tok-p">();</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+
+<span class="tok-w">  </span><span class="tok-nx">init</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 页面加载时恢复数据</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">restore</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 监听输入变化</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">form</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;input&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">debounceSave</span><span class="tok-p">());</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 页面可见性变化时保存（切回标签页）</span>
+<span class="tok-w">    </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;visibilitychange&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">visibilityState</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;hidden&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">save</span><span class="tok-p">();</span>
+<span class="tok-w">      </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 提交成功后清除草稿</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">form</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;submit&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">clear</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+
+<span class="tok-w">  </span><span class="tok-cm">/**</span>
+<span class="tok-cm">   * 防抖保存</span>
+<span class="tok-cm">   */</span>
+<span class="tok-w">  </span><span class="tok-nx">debounceSave</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">clearTimeout</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">timer</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">timer</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">setTimeout</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">save</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">interval</span><span class="tok-p">);</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+
+<span class="tok-w">  </span><span class="tok-cm">/**</span>
+<span class="tok-cm">   * 保存表单数据</span>
+<span class="tok-cm">   */</span>
+<span class="tok-w">  </span><span class="tok-nx">save</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">formData</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">FormData</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">form</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-nx">values</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Object</span><span class="tok-p">.</span><span class="tok-nx">fromEntries</span><span class="tok-p">(</span><span class="tok-nx">formData</span><span class="tok-p">),</span>
+<span class="tok-w">      </span><span class="tok-nx">timestamp</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">(),</span>
+<span class="tok-w">      </span><span class="tok-nx">url</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">window</span><span class="tok-p">.</span><span class="tok-nx">location</span><span class="tok-p">.</span><span class="tok-nx">href</span>
+<span class="tok-w">    </span><span class="tok-p">};</span>
+
+<span class="tok-w">    </span><span class="tok-nx">sessionStorage</span><span class="tok-p">.</span><span class="tok-nx">setItem</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">stringify</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">));</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;表单草稿已保存&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+
+<span class="tok-w">  </span><span class="tok-cm">/**</span>
+<span class="tok-cm">   * 恢复表单数据</span>
+<span class="tok-cm">   */</span>
+<span class="tok-w">  </span><span class="tok-nx">restore</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">saved</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">sessionStorage</span><span class="tok-p">.</span><span class="tok-nx">getItem</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">saved</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">parse</span><span class="tok-p">(</span><span class="tok-nx">saved</span><span class="tok-p">);</span>
+
+<span class="tok-w">      </span><span class="tok-c1">// 检查过期时间</span>
+<span class="tok-w">      </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">age</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">.</span><span class="tok-nx">timestamp</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-mf">1000</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-mf">60</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 分钟</span>
+<span class="tok-w">      </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">age</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">maxAge</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;草稿已过期&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">clear</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-p">;</span>
+<span class="tok-w">      </span><span class="tok-p">}</span>
+
+<span class="tok-w">      </span><span class="tok-c1">// 检查URL是否匹配（防止不同页面数据混淆）</span>
+<span class="tok-w">      </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">.</span><span class="tok-nx">url</span><span class="tok-w"> </span><span class="tok-o">!==</span><span class="tok-w"> </span><span class="tok-nb">window</span><span class="tok-p">.</span><span class="tok-nx">location</span><span class="tok-p">.</span><span class="tok-nx">href</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;URL不匹配，跳过恢复&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-p">;</span>
+<span class="tok-w">      </span><span class="tok-p">}</span>
+
+<span class="tok-w">      </span><span class="tok-c1">// 填充表单</span>
+<span class="tok-w">      </span><span class="tok-nb">Object</span><span class="tok-p">.</span><span class="tok-nx">entries</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">.</span><span class="tok-nx">values</span><span class="tok-p">).</span><span class="tok-nx">forEach</span><span class="tok-p">(([</span><span class="tok-nx">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-p">])</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">field</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">form</span><span class="tok-p">.</span><span class="tok-nx">elements</span><span class="tok-p">[</span><span class="tok-nx">name</span><span class="tok-p">];</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">field</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">          </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">field</span><span class="tok-p">.</span><span class="tok-nx">type</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;checkbox&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">field</span><span class="tok-p">.</span><span class="tok-nx">checked</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;on&#39;</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span>
+<span class="tok-w">          </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">field</span><span class="tok-p">.</span><span class="tok-nx">type</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;radio&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">radio</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">form</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-sb">`[name=&quot;</span><span class="tok-si">${</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb">&quot;][value=&quot;</span><span class="tok-si">${</span><span class="tok-nx">value</span><span class="tok-si">}</span><span class="tok-sb">&quot;]`</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">radio</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-nx">radio</span><span class="tok-p">.</span><span class="tok-nx">checked</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span>
+<span class="tok-w">          </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">field</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-p">;</span>
+<span class="tok-w">          </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">      </span><span class="tok-p">});</span>
+
+<span class="tok-w">      </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;表单草稿已恢复&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">error</span><span class="tok-p">(</span><span class="tok-s1">&#39;恢复草稿失败:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">e</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+
+<span class="tok-w">  </span><span class="tok-cm">/**</span>
+<span class="tok-cm">   * 清除草稿</span>
+<span class="tok-cm">   */</span>
+<span class="tok-w">  </span><span class="tok-nx">clear</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">sessionStorage</span><span class="tok-p">.</span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-p">);</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c1">// HTML使用</span>
+<span class="tok-c1">// &lt;form id=&quot;productForm&quot;&gt;</span>
+<span class="tok-c1">//   &lt;input name=&quot;title&quot; /&gt;</span>
+<span class="tok-c1">//   &lt;textarea name=&quot;description&quot;&gt;&lt;/textarea&gt;</span>
+<span class="tok-c1">// &lt;/form&gt;</span>
+
+<span class="tok-c1">// JS初始化</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">autoSave</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">FormAutoSave</span><span class="tok-p">(</span><span class="tok-s1">&#39;productForm&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-nx">interval</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">2000</span><span class="tok-p">,</span><span class="tok-w">  </span><span class="tok-c1">// 2秒保存一次</span>
+<span class="tok-w">  </span><span class="tok-nx">maxAge</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">60</span><span class="tok-w">       </span><span class="tok-c1">// 1小时过期</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>示例 4：Storage 事件跨标签通信</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 跨标签页通信通道（BroadcastChannel的降级方案）</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">class</span><span class="tok-w"> </span><span class="tok-nx">StorageChannel</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">channelName</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">channel</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">channelName</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nb">Map</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 监听storage事件（BOM特性）</span>
+<span class="tok-w">    </span><span class="tok-nb">window</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;storage&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">channel</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">newValue</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">          </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">parse</span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">newValue</span><span class="tok-p">);</span>
+<span class="tok-w">          </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">handleMessage</span><span class="tok-p">(</span><span class="tok-nx">message</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">err</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">          </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">error</span><span class="tok-p">(</span><span class="tok-s1">&#39;消息解析失败:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">err</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">      </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+
+<span class="tok-w">  </span><span class="tok-cm">/**</span>
+<span class="tok-cm">   * 发送消息到其他标签页</span>
+<span class="tok-cm">   */</span>
+<span class="tok-w">  </span><span class="tok-nx">postMessage</span><span class="tok-p">(</span><span class="tok-nx">type</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">payload</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-nx">type</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-nx">payload</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-nx">timestamp</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">.</span><span class="tok-nx">now</span><span class="tok-p">(),</span>
+<span class="tok-w">      </span><span class="tok-nx">sender</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Math</span><span class="tok-p">.</span><span class="tok-nx">random</span><span class="tok-p">().</span><span class="tok-nx">toString</span><span class="tok-p">(</span><span class="tok-mf">36</span><span class="tok-p">).</span><span class="tok-nx">substr</span><span class="tok-p">(</span><span class="tok-mf">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">9</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-c1">// 简单ID</span>
+<span class="tok-w">    </span><span class="tok-p">};</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 使用localStorage触发storage事件</span>
+<span class="tok-w">    </span><span class="tok-c1">// 立即删除，避免污染存储空间</span>
+<span class="tok-w">    </span><span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">setItem</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">channel</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">stringify</span><span class="tok-p">(</span><span class="tok-nx">message</span><span class="tok-p">));</span>
+<span class="tok-w">    </span><span class="tok-nx">setTimeout</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">channel</span><span class="tok-p">),</span><span class="tok-w"> </span><span class="tok-mf">100</span><span class="tok-p">);</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+
+<span class="tok-w">  </span><span class="tok-cm">/**</span>
+<span class="tok-cm">   * 订阅消息</span>
+<span class="tok-cm">   */</span>
+<span class="tok-w">  </span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-nx">type</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">handler</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-p">.</span><span class="tok-nx">has</span><span class="tok-p">(</span><span class="tok-nx">type</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-p">.</span><span class="tok-nx">set</span><span class="tok-p">(</span><span class="tok-nx">type</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nb">Set</span><span class="tok-p">());</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-p">.</span><span class="tok-nx">get</span><span class="tok-p">(</span><span class="tok-nx">type</span><span class="tok-p">).</span><span class="tok-nx">add</span><span class="tok-p">(</span><span class="tok-nx">handler</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 返回取消订阅</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-p">.</span><span class="tok-nx">get</span><span class="tok-p">(</span><span class="tok-nx">type</span><span class="tok-p">)</span><span class="tok-o">?</span><span class="tok-p">.</span><span class="tok-ow">delete</span><span class="tok-p">(</span><span class="tok-nx">handler</span><span class="tok-p">);</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+
+<span class="tok-w">  </span><span class="tok-nx">handleMessage</span><span class="tok-p">(</span><span class="tok-nx">message</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">handlers</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">listeners</span><span class="tok-p">.</span><span class="tok-nx">get</span><span class="tok-p">(</span><span class="tok-nx">message</span><span class="tok-p">.</span><span class="tok-nx">type</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">handlers</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-nx">handlers</span><span class="tok-p">.</span><span class="tok-nx">forEach</span><span class="tok-p">(</span><span class="tok-nx">h</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">h</span><span class="tok-p">(</span><span class="tok-nx">message</span><span class="tok-p">.</span><span class="tok-nx">payload</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-p">));</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c1">// 使用：实现多标签页登录状态同步</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">authChannel</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">StorageChannel</span><span class="tok-p">(</span><span class="tok-s1">&#39;app_auth&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// 标签页A：监听登出</span>
+<span class="tok-nx">authChannel</span><span class="tok-p">.</span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-s1">&#39;logout&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-nb">window</span><span class="tok-p">.</span><span class="tok-nx">location</span><span class="tok-p">.</span><span class="tok-nx">href</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;/login&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">  </span><span class="tok-nx">alert</span><span class="tok-p">(</span><span class="tok-s1">&#39;您已在其他标签页退出登录&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">});</span>
+
+<span class="tok-c1">// 标签页B：执行登出</span>
+<span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">getElementById</span><span class="tok-p">(</span><span class="tok-s1">&#39;logout&#39;</span><span class="tok-p">).</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;click&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-c1">// 清除登录状态</span>
+<span class="tok-w">  </span><span class="tok-nx">localStorage</span><span class="tok-p">.</span><span class="tok-nx">removeItem</span><span class="tok-p">(</span><span class="tok-s1">&#39;token&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">  </span><span class="tok-c1">// 通知其他标签页</span>
+<span class="tok-w">  </span><span class="tok-nx">authChannel</span><span class="tok-p">.</span><span class="tok-nx">postMessage</span><span class="tok-p">(</span><span class="tok-s1">&#39;logout&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">reason</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;user_action&#39;</span><span class="tok-w"> </span><span class="tok-p">});</span>
+<span class="tok-p">});</span>
+
+<span class="tok-o">====</span><span class="tok-w"> </span><span class="tok-mf">5</span><span class="tok-w"> </span><span class="tok-nx">常见陷阱与解决方案</span>
+
+<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">问题</span><span class="tok-w">             </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">原因</span><span class="tok-w">                      </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">解决方案</span><span class="tok-w">                                     </span><span class="tok-o">|</span>
+<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">----------------</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">-------------------------</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">--------------------------------------------</span><span class="tok-w"> </span><span class="tok-o">|</span>
+<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-nx">存储容量超限</span><span class="tok-o">**</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">超过5</span><span class="tok-o">-</span><span class="tok-mf">10</span><span class="tok-nx">MB限制</span><span class="tok-w">            </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">封装时捕获</span><span class="tok-sb">`QuotaExceededError`</span><span class="tok-err">，</span><span class="tok-nx">清理过期数据</span><span class="tok-w"> </span><span class="tok-o">|</span>
+<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-nx">只能存字符串</span><span class="tok-o">**</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">API设计限制</span><span class="tok-w">               </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">使用</span><span class="tok-sb">`JSON.stringify/parse`</span><span class="tok-nx">序列化</span><span class="tok-w">             </span><span class="tok-o">|</span>
+<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-nx">同步阻塞</span><span class="tok-o">**</span><span class="tok-w">     </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">Storage操作是同步的</span><span class="tok-w">       </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">大数据量时改用IndexedDB</span><span class="tok-w">                      </span><span class="tok-o">|</span>
+<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-nx">隐私模式失效</span><span class="tok-o">**</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">Safari隐私模式禁用Storage</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">使用</span><span class="tok-sb">`try-catch`</span><span class="tok-nx">封装</span><span class="tok-err">，</span><span class="tok-nx">失败时降级到内存存储</span><span class="tok-w">    </span><span class="tok-o">|</span>
+<span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-nx">跨域不共享</span><span class="tok-o">**</span><span class="tok-w">   </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">同源策略限制</span><span class="tok-w">              </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nx">使用PostMessage或后端同步</span><span class="tok-w">                    </span><span class="tok-o">|</span>
+
+<span class="tok-o">---</span>
+
+<span class="tok-o">====</span><span class="tok-w"> </span><span class="tok-mf">6</span><span class="tok-w"> </span><span class="tok-nx">总结</span>
+
+<span class="tok-sb">```javascript</span>
+<span class="tok-sb">// 核心要点</span>
+<span class="tok-sb">window.localStorage   // BOM对象 - 持久存储，跨标签共享</span>
+<span class="tok-sb">window.sessionStorage // BOM对象 - 会话存储，标签隔离</span>
+
+<span class="tok-sb">// 都属于 window（BOM），不属于 document（DOM）</span>
+<span class="tok-sb">window.localStorage !== document.localStorage; // true</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">**</span><span class="tok-nx">选型建议</span><span class="tok-o">**</span><span class="tok-err">：</span>
+<span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-nx">LocalStorage</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-nx">用户偏好设置</span><span class="tok-err">、</span><span class="tok-nx">购物车</span><span class="tok-err">、</span><span class="tok-nx">草稿箱</span><span class="tok-err">（</span><span class="tok-nx">长期</span><span class="tok-err">）</span>
+<span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-nx">SessionStorage</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-nx">表单草稿</span><span class="tok-err">、</span><span class="tok-nx">临时搜索条件</span><span class="tok-err">、</span><span class="tok-nx">多步骤向导</span><span class="tok-err">（</span><span class="tok-nx">短期</span><span class="tok-err">）</span>
+<span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-o">**</span><span class="tok-nx">IndexedDB</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-nx">大量结构化数据</span><span class="tok-err">、</span><span class="tok-nx">离线应用</span><span class="tok-err">（</span><span class="tok-nx">替代方案</span><span class="tok-err">）</span>
+
+<span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-nx">三</span><span class="tok-err">：</span><span class="tok-nx">定时器和动画</span>
+
+
+<span class="tok-o">====</span><span class="tok-w"> </span><span class="tok-nx">一</span><span class="tok-w"> </span><span class="tok-nx">定时器</span>
+
+
+<span class="tok-o">=====</span><span class="tok-w"> </span><span class="tok-mf">1.</span><span class="tok-w"> </span><span class="tok-nx">setInterval</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">闹钟</span><span class="tok-p">)</span>
+<span class="tok-nx">每隔一段时间执行一次</span><span class="tok-err">。</span>
+<span class="tok-sb">```javascript</span>
+<span class="tok-sb">let timer = setInterval(function() {</span>
+<span class="tok-sb">    console.log(&#39;我每秒打印一次&#39;);</span>
+<span class="tok-sb">}, 1000);</span>
+
+<span class="tok-sb">// 清除</span>
+<span class="tok-sb">clearInterval(timer);</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">=====</span><span class="tok-w"> </span><span class="tok-mf">2.</span><span class="tok-w"> </span><span class="tok-nx">setTimeout</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">炸弹</span><span class="tok-p">)</span>
+<span class="tok-nx">延时一段时间后执行一次</span><span class="tok-err">。</span>
+<span class="tok-sb">```javascript</span>
+<span class="tok-sb">let timer = setTimeout(function() {</span>
+<span class="tok-sb">    console.log(&#39;我3秒后才出现&#39;);</span>
+<span class="tok-sb">}, 3000);</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">---</span>
+
+<span class="tok-o">====</span><span class="tok-w"> </span><span class="tok-nx">二</span><span class="tok-w"> </span><span class="tok-nx">JS</span><span class="tok-w"> </span><span class="tok-nx">动画原理</span>
+
+<span class="tok-o">**</span><span class="tok-nx">核心</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-nx">利用定时器</span><span class="tok-err">，</span><span class="tok-nx">极短时间内修改元素的位置</span><span class="tok-err">，</span><span class="tok-nx">利用人眼的视觉暂留形成动画</span><span class="tok-err">。</span>
+
+<span class="tok-o">**</span><span class="tok-nx">步骤</span><span class="tok-o">**</span><span class="tok-err">：</span>
+
+<span class="tok-mf">1.</span><span class="tok-w">  </span><span class="tok-nx">获取元素当前位置</span><span class="tok-err">。</span>
+<span class="tok-mf">2.</span><span class="tok-w">  </span><span class="tok-nx">修改位置</span><span class="tok-err">（</span><span class="tok-o">+</span><span class="tok-mf">1</span><span class="tok-w"> </span><span class="tok-nx">或</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-mf">1</span><span class="tok-err">）。</span>
+<span class="tok-mf">3.</span><span class="tok-w">  </span><span class="tok-nx">赋值回去</span><span class="tok-err">。</span>
+<span class="tok-mf">4.</span><span class="tok-w">  </span><span class="tok-nx">使用定时器重复执行</span><span class="tok-err">。</span>
+
+<span class="tok-o">**</span><span class="tok-nx">演示</span><span class="tok-err">：</span><span class="tok-nx">匀速动画</span><span class="tok-o">**</span>
+<span class="tok-sb">```javascript</span>
+<span class="tok-sb">let box = document.querySelector(&#39;.box&#39;);</span>
+
+<span class="tok-sb">function move() {</span>
+<span class="tok-sb">    let timer = setInterval(function() {</span>
+<span class="tok-sb">        // 获取当前位置 (parseInt 去掉px单位)</span>
+<span class="tok-sb">        let left = parseInt(window.getComputedStyle(box).left);</span>
+
+<span class="tok-sb">        if (left &gt;= 500) {</span>
+<span class="tok-sb">            clearInterval(timer); // 到达终点停止</span>
+<span class="tok-sb">        } else {</span>
+<span class="tok-sb">            box.style.left = left + 5 + &#39;px&#39;; // 每次走5px</span>
+<span class="tok-sb">        }</span>
+<span class="tok-sb">    }, 30); // 30毫秒刷新一次，约每秒33帧</span>
+<span class="tok-sb">}</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">---</span>
+
+<span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-nx">四</span><span class="tok-err">：</span><span class="tok-nx">简单函数封装</span>
+
+<span class="tok-nx">为了方便使用</span><span class="tok-err">，</span><span class="tok-nx">我们把动画封装成函数</span><span class="tok-err">。</span>
+<span class="tok-sb">`animate(obj, target, speed)`</span>
+
+<span class="tok-sb">```javascript</span>
+<span class="tok-sb">function animate(obj, target) {</span>
+<span class="tok-sb">    clearInterval(obj.timer); // 先清除以前的定时器，防止加速</span>
+<span class="tok-sb">    obj.timer = setInterval(function() {</span>
+<span class="tok-sb">        let left = parseInt(window.getComputedStyle(obj).left);</span>
+<span class="tok-sb">        if (left &gt;= target) {</span>
+<span class="tok-sb">            clearInterval(obj.timer);</span>
+<span class="tok-sb">        } else {</span>
+<span class="tok-sb">            obj.style.left = left + 5 + &#39;px&#39;;</span>
+<span class="tok-sb">        }</span>
+<span class="tok-sb">    }, 30);</span>
+<span class="tok-sb">}</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">---</span>
+
+<span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-nx">S2</span><span class="tok-err">：</span><span class="tok-nx">实战演练与项目推进</span><span class="tok-err">（</span><span class="tok-mf">4</span><span class="tok-nx">课时</span><span class="tok-err">）</span>
+
+
+<span class="tok-o">====</span><span class="tok-w"> </span><span class="tok-nx">一</span><span class="tok-err">：</span><span class="tok-nx">随堂实战案例</span>
+
+
+<span class="tok-o">=====</span><span class="tok-w"> </span><span class="tok-nx">案例</span><span class="tok-err">：</span><span class="tok-nx">倒计时跳转</span>
+<span class="tok-o">**</span><span class="tok-nx">需求</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-nx">页面显示</span><span class="tok-err">“</span><span class="tok-nx">还剩5秒跳转</span><span class="tok-err">”，</span><span class="tok-nx">倒计时结束后跳转</span><span class="tok-err">。</span>
+
+<span class="tok-sb">```javascript</span>
+<span class="tok-sb">let span = document.querySelector(&#39;span&#39;);</span>
+<span class="tok-sb">let time = 5;</span>
+
+<span class="tok-sb">let timer = setInterval(function() {</span>
+<span class="tok-sb">    time--;</span>
+<span class="tok-sb">    span.innerText = time;</span>
+<span class="tok-sb">    if (time &lt;= 0) {</span>
+<span class="tok-sb">        clearInterval(timer);</span>
+<span class="tok-sb">        location.href = &#39;http://www.baidu.com&#39;;</span>
+<span class="tok-sb">    }</span>
+<span class="tok-sb">}, 1000);</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">=====</span><span class="tok-w"> </span><span class="tok-nx">案例</span><span class="tok-err">：</span><span class="tok-nx">固定导航栏</span>
+<span class="tok-o">**</span><span class="tok-nx">需求</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-nx">页面滚动超过一定距离</span><span class="tok-err">，</span><span class="tok-nx">导航栏变成固定定位</span><span class="tok-err">。</span>
+
+<span class="tok-sb">```javascript</span>
+<span class="tok-sb">let nav = document.querySelector(&#39;nav&#39;);</span>
+<span class="tok-sb">window.onscroll = function() {</span>
+<span class="tok-sb">    // 获取滚动距离</span>
+<span class="tok-sb">    let top = document.documentElement.scrollTop;</span>
+<span class="tok-sb">    if (top &gt;= 100) {</span>
+<span class="tok-sb">        nav.style.position = &#39;fixed&#39;;</span>
+<span class="tok-sb">        nav.style.top = &#39;0&#39;;</span>
+<span class="tok-sb">    } else {</span>
+<span class="tok-sb">        nav.style.position = &#39;static&#39;;</span>
+<span class="tok-sb">    }</span>
+<span class="tok-sb">};</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">---</span>
+
+<span class="tok-o">====</span><span class="tok-w"> </span><span class="tok-nx">二</span><span class="tok-err">：</span><span class="tok-nx">贯穿项目推进</span><span class="tok-err">——《</span><span class="tok-nx">易校园</span><span class="tok-err">》</span><span class="tok-nx">特效实现</span>
+
+<span class="tok-o">**</span><span class="tok-nx">场景</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-nx">今天要给平台加上最吸睛的特效</span><span class="tok-err">——</span><span class="tok-o">**</span><span class="tok-nx">轮播图</span><span class="tok-o">**</span><span class="tok-err">。</span>
+
+<span class="tok-o">**</span><span class="tok-nx">步骤</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-err">：</span><span class="tok-nx">HTML</span><span class="tok-w"> </span><span class="tok-nx">结构</span><span class="tok-o">**</span>
+<span class="tok-sb">```html</span>
+<span class="tok-sb">&lt;div class=&quot;carousel&quot; id=&quot;carousel&quot;&gt;</span>
+<span class="tok-sb">    &lt;img src=&quot;img/ad1.jpg&quot; class=&quot;active&quot;&gt;</span>
+<span class="tok-sb">    &lt;img src=&quot;img/ad2.jpg&quot;&gt;</span>
+<span class="tok-sb">    &lt;img src=&quot;img/ad3.jpg&quot;&gt;</span>
+<span class="tok-sb">&lt;/div&gt;</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">**</span><span class="tok-nx">步骤</span><span class="tok-w"> </span><span class="tok-mf">2</span><span class="tok-err">：</span><span class="tok-nx">CSS</span><span class="tok-w"> </span><span class="tok-nx">样式</span><span class="tok-o">**</span>
+<span class="tok-sb">```css</span>
+<span class="tok-sb">.carousel { position: relative; width: 600px; height: 300px; }</span>
+<span class="tok-sb">.carousel img {</span>
+<span class="tok-sb">    position: absolute; top: 0; left: 0;</span>
+<span class="tok-sb">    width: 100%; height: 100%;</span>
+<span class="tok-sb">    opacity: 0; transition: all 0.5s; /* 过渡动画 */</span>
+<span class="tok-sb">}</span>
+<span class="tok-sb">.carousel img.active { opacity: 1; }</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">**</span><span class="tok-nx">步骤</span><span class="tok-w"> </span><span class="tok-mf">3</span><span class="tok-err">：</span><span class="tok-nx">JS</span><span class="tok-w"> </span><span class="tok-nx">逻辑</span><span class="tok-o">**</span>
+<span class="tok-sb">```javascript</span>
+<span class="tok-sb">let imgs = document.querySelectorAll(&#39;.carousel img&#39;);</span>
+<span class="tok-sb">let currentIndex = 0; // 当前显示的图片索引</span>
+
+<span class="tok-sb">setInterval(function() {</span>
+<span class="tok-sb">    // 1. 把当前的图片隐藏</span>
+<span class="tok-sb">    imgs[currentIndex].classList.remove(&#39;active&#39;);</span>
+
+<span class="tok-sb">    // 2. 索引加1，如果是最后一张，回到0</span>
+<span class="tok-sb">    currentIndex++;</span>
+<span class="tok-sb">    if (currentIndex &gt;= imgs.length) {</span>
+<span class="tok-sb">        currentIndex = 0;</span>
+<span class="tok-sb">    }</span>
+
+<span class="tok-sb">    // 3. 显示下一张</span>
+<span class="tok-sb">    imgs[currentIndex].classList.add(&#39;active&#39;);</span>
+
+<span class="tok-sb">}, 2000); // 每2秒切换一次</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">**</span><span class="tok-nx">步骤</span><span class="tok-w"> </span><span class="tok-mf">4</span><span class="tok-err">：</span><span class="tok-nx">实现</span><span class="tok-err">“</span><span class="tok-nx">回到顶部</span><span class="tok-err">”</span><span class="tok-o">**</span>
+<span class="tok-sb">```javascript</span>
+<span class="tok-sb">let backTop = document.querySelector(&#39;#backTop&#39;);</span>
+
+<span class="tok-sb">// 显示/隐藏按钮</span>
+<span class="tok-sb">window.onscroll = function() {</span>
+<span class="tok-sb">    if (document.documentElement.scrollTop &gt;= 300) {</span>
+<span class="tok-sb">        backTop.style.display = &#39;block&#39;;</span>
+<span class="tok-sb">    } else {</span>
+<span class="tok-sb">        backTop.style.display = &#39;none&#39;;</span>
+<span class="tok-sb">    }</span>
+<span class="tok-sb">};</span>
+
+<span class="tok-sb">// 点击平滑滚动</span>
+<span class="tok-sb">backTop.onclick = function() {</span>
+<span class="tok-sb">    let timer = setInterval(function() {</span>
+<span class="tok-sb">        let top = document.documentElement.scrollTop;</span>
+<span class="tok-sb">        if (top &lt;= 0) {</span>
+<span class="tok-sb">            clearInterval(timer);</span>
+<span class="tok-sb">        }</span>
+<span class="tok-sb">        // 每次往上走50</span>
+<span class="tok-sb">        document.documentElement.scrollTop = top - 50;</span>
+<span class="tok-sb">    }, 10);</span>
+<span class="tok-sb">};</span>
+<span class="tok-sb">```</span>
+
+<span class="tok-o">---</span>
+
+<span class="tok-o">====</span><span class="tok-w"> </span><span class="tok-err">📝</span><span class="tok-w"> </span><span class="tok-nx">作业</span>
+
+<span class="tok-mf">1.</span><span class="tok-w">  </span><span class="tok-o">**</span><span class="tok-nx">概念题</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-sb">`setInterval`</span><span class="tok-w"> </span><span class="tok-nx">和</span><span class="tok-w"> </span><span class="tok-sb">`setTimeout`</span><span class="tok-w"> </span><span class="tok-nx">的区别</span><span class="tok-err">？</span>
+<span class="tok-mf">2.</span><span class="tok-w">  </span><span class="tok-o">**</span><span class="tok-nx">代码题</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-nx">做一个简单的电子时钟</span><span class="tok-err">，</span><span class="tok-nx">在页面上显示当前的时分秒</span><span class="tok-err">，</span><span class="tok-nx">每秒自动更新</span><span class="tok-err">。</span>
+<span class="tok-mf">3.</span><span class="tok-w">  </span><span class="tok-o">**</span><span class="tok-nx">项目扩展</span><span class="tok-o">**</span><span class="tok-err">：</span><span class="tok-nx">给轮播图左右两边加上</span><span class="tok-err">“</span><span class="tok-nx">上一张</span><span class="tok-err">”、“</span><span class="tok-nx">下一张</span><span class="tok-err">”</span><span class="tok-nx">按钮</span><span class="tok-err">，</span><span class="tok-nx">点击可以手动切换图片</span><span class="tok-err">。</span>
+
+<span class="tok-o">---</span>
+
+<span class="tok-o">**</span><span class="tok-nx">讲师提示</span><span class="tok-o">**</span><span class="tok-err">：</span>
+<span class="tok-nx">第三阶段结束</span><span class="tok-err">，</span><span class="tok-nx">学生应该已经具备了制作一个完整动态网页的能力</span><span class="tok-err">。</span>
+<span class="tok-nx">Ch</span><span class="tok-w"> </span><span class="tok-mf">11</span><span class="tok-w"> </span><span class="tok-nx">的轮播图是前端面试的</span><span class="tok-err">“</span><span class="tok-nx">保留节目</span><span class="tok-err">”，</span><span class="tok-nx">务必让学生理解</span><span class="tok-o">**</span><span class="tok-err">“</span><span class="tok-nx">索引</span><span class="tok-err">”</span><span class="tok-o">**</span><span class="tok-nx">在其中的作用</span><span class="tok-err">。</span>
+<span class="tok-nx">明天开始</span><span class="tok-err">，</span><span class="tok-nx">我们将进入更高级的异步编程和网络请求</span><span class="tok-err">，</span><span class="tok-nx">让我们的网页能从服务器获取真实数据</span><span class="tok-err">！</span>
+
+
+
+
+
+<span class="tok-o">---</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-27 14:44:44 +0800
+Last updated 2026-03-27 16:18:50 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

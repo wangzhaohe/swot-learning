@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车 - 跨标签页同步实战</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #f9f9f9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #f0f0f0;
+        }
+
+        .btn-danger {
+            color: red;
+            border-color: #ffcccc;
+        }
+
+        .btn-danger:hover {
+            background: #ffeeee;
+        }
+
+        .empty-tip {
+            color: #888;
+            text-align: center;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>跨标签同步购物车</h1>
+
+    <p>
+        <strong>测试方法：</strong>请复制当前页面的 URL，在浏览器中
+        <strong>打开一个新标签页</strong>。
+        在任意一个页面点击添加/删除商品，观察另一个页面的实时变化。
+    </p>
+
+    <div class="card">
+        <h2>商品列表</h2>
+
+        <div class="item">
+            <span>iPhone 15 (¥5999)</span>
+            <button onclick="handleAddToCart(1, 'iPhone 15', 5999)">加入购物车</button>
+        </div>
+
+        <div class="item">
+            <span>MacBook Pro (¥14999)</span>
+            <button onclick="handleAddToCart(2, 'MacBook Pro', 14999)">加入购物车</button>
+        </div>
+
+        <div class="item">
+            <span>AirPods Pro (¥1899)</span>
+            <button onclick="handleAddToCart(3, 'AirPods Pro', 1899)">加入购物车</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>我的购物车</h2>
+            <button class="btn-danger" onclick="handleClearCart()">
+                清空全部
+            </button>
+        </div>
+
+        <div id="cart-container"></div>
+
+        <h3 style="text-align: right; border-top: 2px solid #eee; padding-top: 15px;">
+            总价:
+            <span style="color: #e4393c;">¥
+                <span id="total-price">0</span>
+            </span>
+        </h3>
+    </div>
+    <script>
+        /**
+         * 基础商品信息
+         * @typedef {Object} Product
+         * @property {number} id - 商品唯一 ID
+         * @property {string} name - 商品名称
+         * @property {number} price - 商品单价
+         */
+
+        /**
+         * 购物车里的完整条目（继承 Product 并增加业务属性）
+         * @typedef {Product} CartItem
+         * @property {number} quantity - 购买数量
+         * @property {number} addedAt - 第一次放入购物车的时间戳
+         * @property {number} [updatedAt] - 最后一次修改数量的时间戳
+         */
+
+        /**
+         * 购物车状态变更的回调函数
+         * @callback OnCartChange
+         * @param {CartItem[]} items - 当前购物车中的所有商品列表
+         */
+
+        /**
+         * 购物车状态管理类
+         * 实现功能：单例状态维护、LocalStorage 持久化、跨标签页同步
+         */
+        class ShoppingCart {
+            constructor() {
+                /** * LocalStorage 存储使用的键名
+                 * @type {string}
+                 * @private
+                 */
+                this.STORAGE_KEY = 'cart_data';
+
+                /** * 订阅更新的回调函数列表
+                 * @type {onCartChange[]}
+                 * @private
+                 */
+                this.listeners = [];
+
+                /**
+                 * 监听其他标签页的修改（BOM特性）
+                 * 当同源的其他窗口修改了 LocalStorage 时，本窗口会触发 storage 事件。
+                 */
+                window.addEventListener('storage', (e) => {
+                    if (e.key === this.STORAGE_KEY) {
+                        this.notifyListeners();
+                        console.log('监听到其他标签页数据变化');
+                    }
+                });
+            }
+            /**
+             * 从本地存储中获取最新的购物车数据
+             * @returns {CartItem[]} 购物车条目数组
+             */
+            getItems() {
+                try {
+                    const data = localStorage.getItem(this.STORAGE_KEY);
+                    return data ? JSON.parse(data) : [];
+                } catch (err) {
+                    console.error('读取购物车数据失败:', err);
+                    return [];
+                }
+            }
+            /**
+             * 添加商品到购物车。如果商品已存在，则累加数量。
+             * @param {Product & {quantity?: number}} product - 商品基础信息，可带初始数量
+             */
+            addItem(product) {
+                const items = this.getItems();
+                const existing = items.find(item => item.id === product.id);
+                if (existing) {
+                    existing.quantity += product.quantity || 1;
+                    existing.updatedAt = Date.now();
+                } else {
+                    items.push({
+                        ...product,
+                        quantity: product.quantity || 1,
+                        addedAt: Date.now()
+                    });
+                }
+                this.save(items);
+                return items;
+            }
+            /**
+             * 更新指定商品的数量
+             * @param {number} productId - 商品 ID
+             * @param {number} quantity - 目标数量，若小于等于 0 则移除商品
+             * @returns {CartItem[]} 更新后的购物车数据
+             */
+            updateQuantity(productId, quantity) {
+                const items = this.getItems();
+                const item = items.find(i => i.id === productId);
+                if (item) {
+                    if (quantity <= 0)
+                        return this.removeItem(productId);
+                    item.quantity = quantity;
+                    item.updatedAt = Date.now();
+                    this.save(items);
+                }
+                return items;
+            }
+            /**
+             * 从购物车中移除特定商品
+             * @param {number} productId - 要移除的商品 ID
+             * @returns {CartItem[]}     - 移除某商品后的购物车数据
+             */
+            removeItem(productId) {
+                const items = this.getItems().filter(i => i.id !== productId);
+                this.save(items);
+                return items;
+            }
+            /**
+             * 将数据持久化到 LocalStorage 并触发当前页面的 UI 更新
+             * @param {CartItem[]} items - 待保存的商品数组
+             * @private - 指 save 函数是私有的
+             */
+            save(items) {
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
+                this.notifyListeners(); // 通知当前页面的订阅者
+            }
+            /**
+            * 清空购物车所有数据
+            */
+            clear() {
+                localStorage.removeItem(this.STORAGE_KEY);
+                this.notifyListeners();
+            }
+            /**
+             * 计算购物车所有数据的总价
+             * @returns {number} 总金额
+             */
+            getTotal() {
+                return this.getItems().reduce((sum, item) => 
+                    sum + (item.price * item.quantity), 0
+                );
+            }
+            /**
+             * 订阅购物车状态变化（用于UI更新）
+             * @param {OnCartChange} callback - 当数据变化时执行的回调
+             * @returns {Function} 取消订阅的函数
+             */
+            subscribe(callback) {
+                this.listeners.push(callback);
+                callback(this.getItems()); // 立即执行一次，初始化UI
+                return () => {
+                    this.listeners = this.listeners.filter(l => l !== callback);
+                };
+            }
+
+            /**
+             * 给了可以取消订阅的选择
+            // 1. 订阅并拿到那个返回的函数（即那个遥控器）
+            const unsubscribe = cart.subscribe(myCallback);
+
+            // 2. 当你不再需要监听（比如用户关闭了购物车弹窗）时：
+            unsubscribe(); // 调用这个返回的函数，监听就被取消了
+            */
+            /**
+             * 执行所有已订阅的回调函数
+             * @private
+             */
+            notifyListeners() {
+                const items = this.getItems();  // 获取最新的购物车数据
+                this.listeners.forEach(callback => {
+                    try {
+                        callback(items);  // 依次给每个订阅者“打电话”
+                    }
+                    catch (error) {
+                        console.error("回调执行出错:", error);
+                    }
+                })
+            }
+        }
+        const cart = new ShoppingCart();
+        const cartContainer = document.getElementById('cart-container');
+        const totalPriceEl = document.getElementById('total-price');
+
+        // 渲染界面的函数
+        function renderUI(items) {
+            if (items.length === 0) {
+                cartContainer.innerHTML = '<div class="empty-tip">购物车空空如也，快去选购吧~</div>';
+            } else {
+                cartContainer.innerHTML = items.map(item => `
+                    <div class="item">
+                        <div>
+                            <strong>${item.name}</strong> <br/>
+                            <span style="color: #888; font-size: 0.9em;">¥${item.price}</span>
+                        </div>
+                        <div>
+                            <button onclick="handleUpdateQty(${item.id}, ${item.quantity - 1})"> - </button>
+                            <span style="display:inline-block; width:30px; text-align:center;">
+                                ${item.quantity}
+                            </span>
+                            <button onclick="handleUpdateQty(${item.id}, ${item.quantity + 1})"> + </button>
+                            <button class="btn-danger" style="margin-left: 10px;" onclick="handleRemove(${item.id})">
+                                删除
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            // 上面 .join('') 是为了清除数组默认带入的逗号
+            // 更新总价
+            totalPriceEl.innerText = cart.getTotal();
+        }
+
+        // 核心：订阅购物车状态，只要数据变了（无论当前页还是其他页），自动更新 UI
+        cart.subscribe((items) => {
+            renderUI(items);  // 更新界面
+            console.log('购物车更新:', items);
+        });
+        window.handleAddToCart = (id, name, price) => {
+            cart.addItem({ id, name, price });
+        };
+
+        window.handleUpdateQty = (id, newQty) => {
+            cart.updateQuantity(id, newQty);
+        };
+
+        window.handleRemove = (id) => {
+            cart.removeItem(id);
+        };
+
+        window.handleClearCart = () => {
+            if (confirm('确定要清空购物车吗？')) cart.clear();
+        };
+    </script>
+</body>
+
+</html>
