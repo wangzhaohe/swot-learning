@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>e.preventDefault 演示</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .box { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+        .warning { color: red; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h3>1. 阻止链接跳转</h3>
+        <p>点击下方链接，它本该跳转到 Google，但会被拦截：</p>
+        <a href="https://www.google.com" id="myLink">点击前往 Google</a>
+    </div>
+
+    <div class="box">
+        <h3>2. 阻止表单提交 (AJAX 常用)</h3>
+        <form id="myForm">
+            <input type="text" name="myinput" placeholder="输入内容..." required>
+            <button type="submit">立即提交</button>
+        </form>
+        <p id="msg" class="warning"></p>
+    </div>
+
+    <script>
+        // --- 逻辑 1: 处理链接 ---
+        const link = document.querySelector('#myLink');
+        link.onclick = function(e) {
+            e.preventDefault(); // 核心：阻止 href 跳转
+            alert('【拦截成功】链接被禁止访问，或正等待权限校验。');
+        };
+
+
+        // --- 逻辑 2: 处理表单 ---
+        const form = document.querySelector('#myForm');
+        const msg = document.querySelector('#msg');
+
+        form.onsubmit = function(e) {
+            // e.preventDefault(); // 核心：阻止页面刷新
+            
+            // 模拟通常的操作：手动提取数据并验证
+            msg.innerText = "拦截了默认提交！现在可以通过 JavaScript (AJAX) 发送数据，而无需刷新页面。";
+            console.log("表单已通过验证，准备异步发送数据...");
+        };
+    </script>
+</body>
+</html>

@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>键盘控制方块移动</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         /* 容器样式 */
         .container {
             width: 100%;
@@ -42,19 +46,25 @@
         <div class="box"></div>
     </div>
 
+    <!-- 操作说明 -->
     <p>使用方向键 (↑ ↓ ← →) 来移动方块</p>
 
     <script>
+        let container = document.querySelector('.container');
         let box = document.querySelector('.box');
         let x = 0, y = 0;
 
-        const step = 20;  // 步长：每次移动的像素
+        const step = 10;  // 步长：每次移动的像素
 
-        // 给整个文档注册键盘事件
+        // 给整个文档注册键盘事件：键盘按键按下的事件
         document.addEventListener('keydown', function(e) {
             // 打印一下按键，方便调试
             console.log('e.key:', e.key);
             
+            // 使用 clientWidth 和 clientHeight 获取不含边框的内部空间
+            const maxWidth = container.clientWidth - box.offsetWidth;
+            const maxHeight = container.clientHeight - box.offsetHeight;
+
             switch (e.key) {
                 case 'ArrowLeft':
                 case 'Left': // 兼容旧浏览器
@@ -73,6 +83,12 @@
                     y += step;
                     break;
             }
+
+            // 统一边界限制（防止超出）
+            if (x < 0) x = 0;  // 左边
+            if (x > maxWidth) x = maxWidth;  // 右边
+            if (y < 0) y = 0;  // 上边
+            if (y > maxHeight) y = maxHeight;  // 下边
 
             // 更新 DOM 样式
             box.style.left = x + 'px';

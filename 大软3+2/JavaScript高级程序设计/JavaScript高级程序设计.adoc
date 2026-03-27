@@ -3776,9 +3776,44 @@ div.onclick = function(e) {
 
 
 ==== 1. 事件冒泡
-* **现象**：当你点击子元素时，父元素的点击事件也会触发。就像用水壶烧水，下面加热水，水泡会从下往上冒。
+* **现象**：当你点击子元素时，父元素的点击事件也会触发。就像用水壶烧水，下面加热后，水泡会从下往上冒。
 
 * **阻止冒泡**：`e.stopPropagation()`。
+
+===== @clean code/examples/stopPropagation.html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>阻止冒泡案例</title>
+</head>
+<body>
+    <div id="parent" style="padding: 50px; background-color: #f0f0f0; border: 2px solid #ccc;">
+        父元素 (大盒子)
+        <button id="child">子元素 (小按钮)</button>
+    </div>
+
+    <script>
+        const parent = document.getElementById('parent');
+        const child = document.getElementById('child');
+
+        // 父元素的点击事件
+        parent.addEventListener('click', function() {
+            alert('父元素被点击了！');
+            this.style.backgroundColor = '#ffeaa7'; // 改变背景色
+        });
+
+        // 子元素的点击事件
+        child.addEventListener('click', function(e) {
+            alert('子元素按钮被点击了！');
+            // --- 核心代码 ---
+            e.stopPropagation();
+            // 加入这行后，点击按钮就不会触发父元素的 alert 和变色了
+        });
+    </script>
+</body>
+</html>
 
 ==== 2. 阻止默认行为
 * 比如：点击链接不跳转、表单提交按钮不提交。
@@ -3797,33 +3832,97 @@ link.onclick = function(e) {
 };
 ----
 
+===== @clean code/examples/preventDefault.html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>e.preventDefault 演示</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .box { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+        .warning { color: red; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h3>1. 阻止链接跳转</h3>
+        <p>点击下方链接，它本该跳转到 Google，但会被拦截：</p>
+        <a href="https://www.google.com" id="myLink">点击前往 Google</a>
+    </div>
+
+    <div class="box">
+        <h3>2. 阻止表单提交 (AJAX 常用)</h3>
+        <form id="myForm">
+            <input type="text" name="myinput" placeholder="输入内容..." required>
+            <button type="submit">立即提交</button>
+        </form>
+        <p id="msg" class="warning"></p>
+    </div>
+
+    <script>
+        // --- 逻辑 1: 处理链接 ---
+        const link = document.querySelector('#myLink');
+        link.onclick = function(e) {
+            e.preventDefault(); // 核心：阻止 href 跳转
+            alert('【拦截成功】链接被禁止访问，或正等待权限校验。');
+        };
+
+
+        // --- 逻辑 2: 处理表单 ---
+        const form = document.querySelector('#myForm');
+        const msg = document.querySelector('#msg');
+
+        form.onsubmit = function(e) {
+            // e.preventDefault(); // 核心：阻止页面刷新
+            
+            // 模拟通常的操作：手动提取数据并验证
+            msg.innerText = "拦截了默认提交！现在可以通过 JavaScript (AJAX) 发送数据，而无需刷新页面。";
+            console.log("表单已通过验证，准备异步发送数据...");
+        };
+    </script>
+</body>
+</html>
+
 === 三：表单验证基础
 表单是收集用户数据的窗口，验证是必须的。
 因为用户输入的数据不可完全控制，且无法完全预料。
 
+通常验证分为两种情况：
+
+1. 在前端应用中进行数据的验证。
+
+2. 在后端应用中进行数据的验证。
+  * 因为前端可能会有 bug 导致验证失败。
+  * 因为有人可能会恶意绕过前端的验证。
+
 ==== 1. 表单属性
+input 标签经常会用到的属性。
+
 * `input.value`：获取输入值。
 
 * `input.disabled`：禁用输入框。
 
 ==== 2. 正则表达式入门
-* **概念**：一种用来匹配字符串的工具。
+* **概念**：一种用来匹配字符串的工具。前端应用可以用来做为验证输入的工具。
 
-* **语法**：`/规则/`。
-  ** `\d`：数字。
-  ** `^`：开头。
-  ** `$`：结尾。
-  ** `{n,m}`：长度范围。
+* **语法**：`/规则/`
+  ** `\d`：数字
+  ** `^`：开头
+  ** `$`：结尾
+  ** `{n,m}`：长度范围。n,m 是正整数，表示从第 n 位到第 m 位
+  ** `[]`：表示匹配 [] 里面的单个字符
 
 **常用案例**：
 
 [source,javascript]
 ----
-// 验证手机号：1开头，第二位3-9，总共11位
+// 验证手机号：1 开头，第二位 3-9，总共 11 位
+// 举例手机号：13812345678
 let reg = /^1[3-9]\d{9}$/;
 
-// 测试方法 test()：匹配返回true，否则false
-console.log(reg.test('13800138000')); // true
+// 使用 test() 方法进行测试：匹配返回 true，否则 false
+console.log(reg.test('13812345678')); // true
 console.log(reg.test('123456')); // false
 ----
 
@@ -3838,7 +3937,16 @@ console.log(reg.test('123456')); // false
     <meta charset="UTF-8">
     <title>完整表单验证示例</title>
     <style>
-        .form-container { width: 300px; margin: 50px auto; padding: 20px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-container {
+            width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            box-shadow:
+            0 2px 10px rgba(0,0,0,0.1);
+        }
+
         .form-item { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
         input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; transition: all 0.3s; }
@@ -3861,28 +3969,38 @@ console.log(reg.test('123456')); // false
     </style>
 </head>
 <body>
+    <!-- 模仿网站新用户注册页面 -->
     <div class="form-container">
+        <!-- 输入用户名并需要进行验证 -->
         <div class="form-item">
             <label>用户名</label>
-            <input type="text" id="username" placeholder="至少6位">
+            <input type="text" id="username" name="username" placeholder="至少 6 位长度">
             <span id="usernameMsg" class="msg"></span>
         </div>
 
+        <!-- 输入手机号进行验证 -->
         <div class="form-item">
             <label>手机号</label>
-            <input type="text" id="phone" placeholder="11位手机号">
+            <input type="text" id="phone" name="phone" placeholder="长度必须是 11 位">
             <span id="phoneMsg" class="msg"></span>
         </div>
 
-        <button id="submitBtn">立即注册</button>
+        <button id="submitBtn">
+            立即注册
+        </button>
     </div>
     <script>
         const usernameInput = document.querySelector('#username');
+        const usernameMsg = document.querySelector('#usernameMsg');
+
         const phoneInput = document.querySelector('#phone');
+        const phoneMsg = document.querySelector('#phoneMsg');
+
         const submitBtn = document.querySelector('#submitBtn');
 
         // 状态更新工具函数
         function validateField(inputEl, msgEl, condition, errorMsg) {
+
             const val = inputEl.value.trim();
             const isValid = condition(val);
 
@@ -3901,16 +4019,16 @@ console.log(reg.test('123456')); // false
         // 定义具体的验证规则
         const checkUsername = () => validateField(
             usernameInput,
-            document.querySelector('#usernameMsg'),
-            val => val.length >= 6,
-            '用户名至少需要6位'
+            usernameMsg,
+            val => val.length >= 6,  // 正则表达式
+            '用户名至少需要 6 位'
         );
 
         const checkPhone = () => validateField(
             phoneInput,
-            document.querySelector('#phoneMsg'),
-            val => /^1[3-9]\d{9}$/.test(val),
-            '请输入正确的11位手机号'
+            phoneMsg,
+            val => /^1[3-9]\d{9}$/.test(val),  // 正则表达式
+            '请输入正确的 11 位手机号'
         );
         // 提交按钮点击事件
         submitBtn.onclick = function() {
@@ -3948,6 +4066,10 @@ console.log(reg.test('123456')); // false
     <meta charset="UTF-8">
     <title>键盘控制方块移动</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         /* 容器样式 */
         .container {
             width: 100%;
@@ -3986,19 +4108,25 @@ console.log(reg.test('123456')); // false
         <div class="box"></div>
     </div>
 
+    <!-- 操作说明 -->
     <p>使用方向键 (↑ ↓ ← →) 来移动方块</p>
 
     <script>
+        let container = document.querySelector('.container');
         let box = document.querySelector('.box');
         let x = 0, y = 0;
 
-        const step = 20;  // 步长：每次移动的像素
+        const step = 10;  // 步长：每次移动的像素
 
-        // 给整个文档注册键盘事件
+        // 给整个文档注册键盘事件：键盘按键按下的事件
         document.addEventListener('keydown', function(e) {
             // 打印一下按键，方便调试
             console.log('e.key:', e.key);
             
+            // 使用 clientWidth 和 clientHeight 获取不含边框的内部空间
+            const maxWidth = container.clientWidth - box.offsetWidth;
+            const maxHeight = container.clientHeight - box.offsetHeight;
+
             switch (e.key) {
                 case 'ArrowLeft':
                 case 'Left': // 兼容旧浏览器
@@ -4017,6 +4145,12 @@ console.log(reg.test('123456')); // false
                     y += step;
                     break;
             }
+
+            // 统一边界限制（防止超出）
+            if (x < 0) x = 0;  // 左边
+            if (x > maxWidth) x = maxWidth;  // 右边
+            if (y < 0) y = 0;  // 上边
+            if (y > maxHeight) y = maxHeight;  // 下边
 
             // 更新 DOM 样式
             box.style.left = x + 'px';

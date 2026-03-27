@@ -1108,8 +1108,16 @@
 </v>
 </v>
 <v t="swot.20260313114540.185"><vh>二：事件流与阻止默认行为</vh>
-<v t="swot.20260313114540.186"><vh>1. 事件冒泡</vh></v>
-<v t="swot.20260323092335.1"><vh>2. 阻止默认行为</vh></v>
+<v t="swot.20260313114540.186"><vh>1. 事件冒泡</vh>
+<v t="swot.20260326090111.1"><vh>@clean code/examples/stopPropagation.html</vh>
+<v t="swot.20260326090406.1"><vh>&lt;&lt; myscript &gt;&gt;</vh></v>
+</v>
+</v>
+<v t="swot.20260323092335.1"><vh>2. 阻止默认行为</vh>
+<v t="swot.20260326091122.1"><vh>@clean code/examples/preventDefault.html</vh>
+<v t="swot.20260326091326.1"><vh>&lt;&lt; myscript &gt;&gt;</vh></v>
+</v>
+</v>
 </v>
 <v t="swot.20260313114540.188"><vh>三：表单验证基础</vh>
 <v t="swot.20260313114540.189"><vh>1. 表单属性</vh></v>
@@ -1175,7 +1183,20 @@
 <v t="swot.20260326081204.1"><vh>&lt;&lt; mystyle &gt;&gt;</vh></v>
 <v t="swot.20260326081234.1"><vh>&lt;&lt; mybody &gt;&gt;</vh></v>
 <v t="swot.20260326081507.1"><vh>&lt;&lt; myscript &gt;&gt;</vh>
-<v t="swot.20260326081922.1"><vh>1. 核心业务逻辑：ShoppingCart 类</vh></v>
+<v t="swot.20260326081922.1"><vh>1. 核心业务逻辑：ShoppingCart 类</vh>
+<v t="swot.20260326103912.1"><vh>constructor</vh></v>
+<v t="swot.20260326104007.1"><vh>getItems</vh></v>
+<v t="swot.20260326104026.1"><vh>addItem</vh></v>
+<v t="swot.20260326104037.1"><vh>updateQuantity</vh></v>
+<v t="swot.20260326104052.1"><vh>removeItem</vh></v>
+<v t="swot.20260326104118.1"><vh>clear</vh></v>
+<v t="swot.20260326104134.1"><vh>getTotal</vh></v>
+<v t="swot.20260326104200.1"><vh>save</vh></v>
+<v t="swot.20260326104213.1"><vh>subscribe</vh></v>
+<v t="swot.20260326104224.1"><vh>notifyListeners</vh></v>
+</v>
+<v t="swot.20260326102529.1"><vh>2. 视图与控制器层：连接类与 DOM 界面</vh></v>
+<v t="swot.20260326102602.1"><vh>3. 全局事件绑定 (供 HTML 中的 onclick 调用)</vh></v>
 </v>
 </v>
 </v>
@@ -24407,41 +24428,53 @@ console.log(intro);
 </t>
 <t tx="swot.20260313114540.185">
 </t>
-<t tx="swot.20260313114540.186">* **现象**：当你点击子元素时，父元素的点击事件也会触发。就像用水壶烧水，下面加热水，水泡会从下往上冒。
+<t tx="swot.20260313114540.186">* **现象**：当你点击子元素时，父元素的点击事件也会触发。就像用水壶烧水，下面加热后，水泡会从下往上冒。
 
 * **阻止冒泡**：`e.stopPropagation()`。
+
 </t>
 <t tx="swot.20260313114540.188">表单是收集用户数据的窗口，验证是必须的。
 因为用户输入的数据不可完全控制，且无法完全预料。
+
+通常验证分为两种情况：
+
+1. 在前端应用中进行数据的验证。
+
+2. 在后端应用中进行数据的验证。
+  * 因为前端可能会有 bug 导致验证失败。
+  * 因为有人可能会恶意绕过前端的验证。
 </t>
-<t tx="swot.20260313114540.189">* `input.value`：获取输入值。
+<t tx="swot.20260313114540.189">input 标签经常会用到的属性。
+
+* `input.value`：获取输入值。
 
 * `input.disabled`：禁用输入框。
 </t>
 <t tx="swot.20260313114540.19">
 </t>
-<t tx="swot.20260313114540.190">* **概念**：一种用来匹配字符串的工具。
+<t tx="swot.20260313114540.190">* **概念**：一种用来匹配字符串的工具。前端应用可以用来做为验证输入的工具。
 
-* **语法**：`/规则/`。
-  ** `\d`：数字。
-  ** `^`：开头。
-  ** `$`：结尾。
-  ** `{n,m}`：长度范围。
+* **语法**：`/规则/`
+  ** `\d`：数字
+  ** `^`：开头
+  ** `$`：结尾
+  ** `{n,m}`：长度范围。n,m 是正整数，表示从第 n 位到第 m 位
+  ** `[]`：表示匹配 [] 里面的单个字符
 
 **常用案例**：
 
 [source,javascript]
 ----
 @language javascript
-// 验证手机号：1开头，第二位3-9，总共11位
+// 验证手机号：1 开头，第二位 3-9，总共 11 位
+// 举例手机号：13812345678
 let reg = /^1[3-9]\d{9}$/;
 
-// 测试方法 test()：匹配返回true，否则false
-console.log(reg.test('13800138000')); // true
+// 使用 test() 方法进行测试：匹配返回 true，否则 false
+console.log(reg.test('13812345678')); // true
 console.log(reg.test('123456')); // false
 ----</t>
-<t tx="swot.20260313114540.192">
-</t>
+<t tx="swot.20260313114540.192"></t>
 <t tx="swot.20260313114540.196">**场景**：完善 Ch 9 的发布商品功能，加入严格的验证逻辑。
 
 **步骤 1：HTML 表单结构**
@@ -30148,7 +30181,7 @@ link.onclick = function(e) {
 @others
 ----
 </t>
-<t tx="swot.20260323093314.1" _mod_time="4741da7027572906782e">@language html
+<t tx="swot.20260323093314.1" _mod_time="4741da7175e281c0b02e">@language html
 &lt;!DOCTYPE html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
@@ -30166,7 +30199,16 @@ link.onclick = function(e) {
 &lt;/body&gt;
 &lt;/html&gt;</t>
 <t tx="swot.20260323093432.1">@language css
-.form-container { width: 300px; margin: 50px auto; padding: 20px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.form-container {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow:
+    0 2px 10px rgba(0,0,0,0.1);
+}
+
 .form-item { margin-bottom: 15px; }
 label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
 input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; transition: all 0.3s; }
@@ -30187,25 +30229,34 @@ button { width: 100%; padding: 10px; background-color: #1890ff; color: white; bo
 button:hover { background-color: #40a9ff; }
 button:disabled { background-color: #ccc; cursor: not-allowed; }
 </t>
-<t tx="swot.20260323093537.1">&lt;div class="form-container"&gt;
+<t tx="swot.20260323093537.1">&lt;!-- 模仿网站新用户注册页面 --&gt;
+&lt;div class="form-container"&gt;
+    &lt;!-- 输入用户名并需要进行验证 --&gt;
     &lt;div class="form-item"&gt;
         &lt;label&gt;用户名&lt;/label&gt;
-        &lt;input type="text" id="username" placeholder="至少6位"&gt;
+        &lt;input type="text" id="username" name="username" placeholder="至少 6 位长度"&gt;
         &lt;span id="usernameMsg" class="msg"&gt;&lt;/span&gt;
     &lt;/div&gt;
 
+    &lt;!-- 输入手机号进行验证 --&gt;
     &lt;div class="form-item"&gt;
         &lt;label&gt;手机号&lt;/label&gt;
-        &lt;input type="text" id="phone" placeholder="11位手机号"&gt;
+        &lt;input type="text" id="phone" name="phone" placeholder="长度必须是 11 位"&gt;
         &lt;span id="phoneMsg" class="msg"&gt;&lt;/span&gt;
     &lt;/div&gt;
 
-    &lt;button id="submitBtn"&gt;立即注册&lt;/button&gt;
+    &lt;button id="submitBtn"&gt;
+        立即注册
+    &lt;/button&gt;
 &lt;/div&gt;
 </t>
 <t tx="swot.20260323093613.1">@language javascript
 const usernameInput = document.querySelector('#username');
+const usernameMsg = document.querySelector('#usernameMsg');
+
 const phoneInput = document.querySelector('#phone');
+const phoneMsg = document.querySelector('#phoneMsg');
+
 const submitBtn = document.querySelector('#submitBtn');
 
 @others
@@ -30231,14 +30282,15 @@ submitBtn.onclick = function() {
 <t tx="swot.20260323094955.1">// 定义具体的验证规则
 const checkUsername = () =&gt; validateField(
     usernameInput,
-    document.querySelector('#usernameMsg'),
-    val =&gt; val.length &gt;= 6,
-    '用户名至少需要6位'
+    usernameMsg,
+    val =&gt; val.length &gt;= 6,  // 正则表达式
+    '用户名至少需要 6 位'
 );
 
 </t>
 <t tx="swot.20260323095309.1">// 状态更新工具函数
 function validateField(inputEl, msgEl, condition, errorMsg) {
+
     const val = inputEl.value.trim();
     const isValid = condition(val);
 
@@ -30257,9 +30309,9 @@ function validateField(inputEl, msgEl, condition, errorMsg) {
 </t>
 <t tx="swot.20260323095750.1">const checkPhone = () =&gt; validateField(
     phoneInput,
-    document.querySelector('#phoneMsg'),
-    val =&gt; /^1[3-9]\d{9}$/.test(val),
-    '请输入正确的11位手机号'
+    phoneMsg,
+    val =&gt; /^1[3-9]\d{9}$/.test(val),  // 正则表达式
+    '请输入正确的 11 位手机号'
 );
 </t>
 <t tx="swot.20260323095926.1">*需求*：按上下左右键，页面上的方块跟着移动。
@@ -30294,7 +30346,7 @@ cft
     console.log(son.nextElementSibling); // &lt;div class="daughter"&gt;...
 &lt;/script&gt;
 </t>
-<t tx="swot.20260325112100.1" _mod_time="4741da70d60e5b55f02e">@language html
+<t tx="swot.20260325112100.1" _mod_time="4741da717cc8d81cbd2e">@language html
 &lt;!DOCTYPE html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
@@ -30309,6 +30361,7 @@ cft
         &lt;div class="box"&gt;&lt;/div&gt;
     &lt;/div&gt;
 
+    &lt;!-- 操作说明 --&gt;
     &lt;p&gt;使用方向键 (↑ ↓ ← →) 来移动方块&lt;/p&gt;
 
     &lt;script&gt;
@@ -30317,16 +30370,21 @@ cft
 &lt;/body&gt;
 &lt;/html&gt;</t>
 <t tx="swot.20260325112104.1">@language javascript
+let container = document.querySelector('.container');
 let box = document.querySelector('.box');
 let x = 0, y = 0;
 
-const step = 20;  // 步长：每次移动的像素
+const step = 10;  // 步长：每次移动的像素
 
-// 给整个文档注册键盘事件
+// 给整个文档注册键盘事件：键盘按键按下的事件
 document.addEventListener('keydown', function(e) {
     // 打印一下按键，方便调试
     console.log('e.key:', e.key);
     
+    // 使用 clientWidth 和 clientHeight 获取不含边框的内部空间
+    const maxWidth = container.clientWidth - box.offsetWidth;
+    const maxHeight = container.clientHeight - box.offsetHeight;
+
     switch (e.key) {
         case 'ArrowLeft':
         case 'Left': // 兼容旧浏览器
@@ -30346,12 +30404,22 @@ document.addEventListener('keydown', function(e) {
             break;
     }
 
+    // 统一边界限制（防止超出）
+    if (x &lt; 0) x = 0;  // 左边
+    if (x &gt; maxWidth) x = maxWidth;  // 右边
+    if (y &lt; 0) y = 0;  // 上边
+    if (y &gt; maxHeight) y = maxHeight;  // 下边
+
     // 更新 DOM 样式
     box.style.left = x + 'px';
     box.style.top = y + 'px';
 });
 </t>
 <t tx="swot.20260325112555.1">@language css
+* {
+    box-sizing: border-box;
+}
+
 /* 容器样式 */
 .container {
     width: 100%;
@@ -30946,144 +31014,10 @@ button {
     white-space: pre-wrap;
 }
 </t>
-<t tx="swot.20260326075931.1">下面案例使用 发布-订阅模式 (Pub-Sub) ，结合 BOM 的 storage 事件，解决了“本地状态管理”与“跨标签页同步”的问题。
+<t tx="swot.20260326075931.1">下面案例使用 *发布-订阅模式 (Pub-Sub)* ，结合 BOM 的 storage 事件，解决了“本地状态管理”与“跨标签页同步”的问题。
 
-// 使用示例
-const cart = new ShoppingCart();
-
-// React/Vue组件中订阅
-cart.subscribe((items) =&gt; {
-  console.log('购物车更新:', items);
-  updateUI(items); // 更新界面
-});
-
-// 添加商品
-cart.addItem({ id: 1, name: 'iPhone 15', price: 5999, quantity: 1 });
-
-// 在另一个标签页执行同样代码，两个页面会自动同步
-
-
-[source,javascript]
-----
-/**
- * 购物车状态管理 - 支持多标签页同步
- */
-class ShoppingCart {
-  constructor() {
-    this.STORAGE_KEY = 'cart_data';
-    this.listeners = [];
-
-    // 监听其他标签页的修改（BOM特性）
-    window.addEventListener('storage', (e) =&gt; {
-      if (e.key === this.STORAGE_KEY) {
-        console.log('其他标签页修改了购物车:', e.newValue);
-        this.notifyListeners();
-      }
-    });
-  }
-
-  /**
-   * 获取购物车数据
-   */
-  getItems() {
-    const data = localStorage.getItem(this.STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
-  }
-
-  /**
-   * 添加商品
-   */
-  addItem(product) {
-    const items = this.getItems();
-    const existing = items.find(item =&gt; item.id === product.id);
-    
-    if (existing) {
-      existing.quantity += product.quantity || 1;
-      existing.updatedAt = Date.now();
-    } else {
-      items.push({
-        ...product,
-        quantity: product.quantity || 1,
-        addedAt: Date.now()
-      });
-    }
-    
-    this.save(items);
-    return items;
-  }
-
-  /**
-   * 更新数量
-   */
-  updateQuantity(productId, quantity) {
-    const items = this.getItems();
-    const item = items.find(i =&gt; i.id === productId);
-    
-    if (item) {
-      if (quantity &lt;= 0) {
-        return this.removeItem(productId);
-      }
-      item.quantity = quantity;
-      item.updatedAt = Date.now();
-      this.save(items);
-    }
-    return items;
-  }
-
-  /**
-   * 删除商品
-   */
-  removeItem(productId) {
-    const items = this.getItems().filter(i =&gt; i.id !== productId);
-    this.save(items);
-    return items;
-  }
-
-  /**
-   * 清空购物车
-   */
-  clear() {
-    localStorage.removeItem(this.STORAGE_KEY);
-    this.notifyListeners();
-  }
-
-  /**
-   * 计算总价
-   */
-  getTotal() {
-    return this.getItems().reduce((sum, item) =&gt; 
-      sum + (item.price * item.quantity), 0
-    );
-  }
-
-  /**
-   * 保存并通知
-   */
-  save(items) {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
-    this.notifyListeners();
-  }
-
-  /**
-   * 订阅变化（用于UI更新）
-   */
-  subscribe(callback) {
-    this.listeners.push(callback);
-    // 立即执行一次，获取初始值
-    callback(this.getItems());
-    
-    // 返回取消订阅函数
-    return () =&gt; {
-      this.listeners = this.listeners.filter(l =&gt; l !== callback);
-    };
-  }
-
-  notifyListeners() {
-    const items = this.getItems();
-    this.listeners.forEach(cb =&gt; cb(items));
-  }
-}</t>
-<t tx="swot.20260326080805.1" _mod_time="4741da711ef995644c2e">@language html
+</t>
+<t tx="swot.20260326080805.1" _mod_time="4741da717854fff84d2e">@language html
 &lt;!DOCTYPE html&gt;
 &lt;html lang="zh-CN"&gt;
 
@@ -31162,7 +31096,11 @@ button:hover {
 }</t>
 <t tx="swot.20260326081234.1">&lt;h1&gt;跨标签同步购物车&lt;/h1&gt;
 
-&lt;p&gt;&lt;strong&gt;测试方法：&lt;/strong&gt;请复制当前页面的 URL，在浏览器中&lt;strong&gt;打开一个新标签页&lt;/strong&gt;。在任意一个页面点击添加/删除商品，观察另一个页面的实时变化。&lt;/p&gt;
+&lt;p&gt;
+    &lt;strong&gt;测试方法：&lt;/strong&gt;请复制当前页面的 URL，在浏览器中
+    &lt;strong&gt;打开一个新标签页&lt;/strong&gt;。
+    在任意一个页面点击添加/删除商品，观察另一个页面的实时变化。
+&lt;/p&gt;
 
 &lt;div class="card"&gt;
     &lt;h2&gt;商品列表&lt;/h2&gt;
@@ -31186,139 +31124,24 @@ button:hover {
         &lt;button class="btn-danger" onclick="handleClearCart()"&gt;清空全部&lt;/button&gt;
     &lt;/div&gt;
 
-    &lt;div id="cart-container"&gt;
-    &lt;/div&gt;
+    &lt;div id="cart-container"&gt;&lt;/div&gt;
 
     &lt;h3 style="text-align: right; border-top: 2px solid #eee; padding-top: 15px;"&gt;
-        总价: &lt;span style="color: #e4393c;"&gt;¥&lt;span id="total-price"&gt;0&lt;/span&gt;&lt;/span&gt;
+        总价:
+        &lt;span style="color: #e4393c;"&gt;¥
+            &lt;span id="total-price"&gt;0&lt;/span&gt;
+        &lt;/span&gt;
     &lt;/h3&gt;
-&lt;/div&gt;</t>
-<t tx="swot.20260326081507.1">@language javascript
-@others
-// 2. 视图与控制器层：连接类与 DOM 界面
-const cart = new ShoppingCart();
-const cartContainer = document.getElementById('cart-container');
-const totalPriceEl = document.getElementById('total-price');
-
-// 渲染界面的函数
-function renderUI(items) {
-    if (items.length === 0) {
-        cartContainer.innerHTML = '&lt;div class="empty-tip"&gt;购物车空空如也，快去选购吧~&lt;/div&gt;';
-    } else {
-        cartContainer.innerHTML = items.map(item =&gt; `
-  &lt;div class="item"&gt;
-    &lt;div&gt;
-      &lt;strong&gt;${item.name}&lt;/strong&gt; &lt;br/&gt;
-      &lt;span style="color: #888; font-size: 0.9em;"&gt;¥${item.price}&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div&gt;
-      &lt;button onclick="handleUpdateQty(${item.id}, ${item.quantity - 1})"&gt; - &lt;/button&gt;
-      &lt;span style="display:inline-block; width:30px; text-align:center;"&gt;${item.quantity}&lt;/span&gt;
-      &lt;button onclick="handleUpdateQty(${item.id}, ${item.quantity + 1})"&gt; + &lt;/button&gt;
-      &lt;button class="btn-danger" style="margin-left: 10px;" onclick="handleRemove(${item.id})"&gt;删除&lt;/button&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-`).join('');
-    }
-    // 更新总价
-    totalPriceEl.innerText = cart.getTotal();
-}
-
-// 核心：订阅购物车状态，只要数据变了（无论当前页还是其他页），自动更新 UI
-cart.subscribe((items) =&gt; {
-    renderUI(items);
-});
-
-// ==========================================
-// 3. 全局事件绑定 (供 HTML 中的 onclick 调用)
-// ==========================================
-window.handleAddToCart = (id, name, price) =&gt; {
-    cart.addItem({ id, name, price });
-};
-window.handleUpdateQty = (id, newQty) =&gt; {
-    cart.updateQuantity(id, newQty);
-};
-window.handleRemove = (id) =&gt; {
-    cart.removeItem(id);
-};
-window.handleClearCart = () =&gt; {
-    if (confirm('确定要清空购物车吗？')) cart.clear();
-};</t>
+&lt;/div&gt;
+</t>
+<t tx="swot.20260326081507.1">@others
+</t>
 <t tx="swot.20260326081922.1">@language javascript
+/**
+ * 购物车状态管理 - 支持多标签页同步
+ */
 class ShoppingCart {
-    constructor() {
-        this.STORAGE_KEY = 'cart_data';
-        this.listeners = [];
-
-        // 监听其他标签页的修改（BOM特性）
-        window.addEventListener('storage', (e) =&gt; {
-            if (e.key === this.STORAGE_KEY) {
-                console.log('♻️ 监听到其他标签页数据变化');
-                this.notifyListeners();
-            }
-        });
-    }
-
-    getItems() {
-        const data = localStorage.getItem(this.STORAGE_KEY);
-        return data ? JSON.parse(data) : [];
-    }
-
-    addItem(product) {
-        const items = this.getItems();
-        const existing = items.find(item =&gt; item.id === product.id);
-        if (existing) {
-            existing.quantity += product.quantity || 1;
-            existing.updatedAt = Date.now();
-        } else {
-            items.push({ ...product, quantity: product.quantity || 1, addedAt: Date.now() });
-        }
-        this.save(items);
-        return items;
-    }
-
-    updateQuantity(productId, quantity) {
-        const items = this.getItems();
-        const item = items.find(i =&gt; i.id === productId);
-        if (item) {
-            if (quantity &lt;= 0) return this.removeItem(productId);
-            item.quantity = quantity;
-            item.updatedAt = Date.now();
-            this.save(items);
-        }
-        return items;
-    }
-
-    removeItem(productId) {
-        const items = this.getItems().filter(i =&gt; i.id !== productId);
-        this.save(items);
-        return items;
-    }
-
-    clear() {
-        localStorage.removeItem(this.STORAGE_KEY);
-        this.notifyListeners();
-    }
-
-    getTotal() {
-        return this.getItems().reduce((sum, item) =&gt; sum + (item.price * item.quantity), 0);
-    }
-
-    save(items) {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
-        this.notifyListeners(); // 通知当前页面的订阅者
-    }
-
-    subscribe(callback) {
-        this.listeners.push(callback);
-        callback(this.getItems()); // 立即执行一次，初始化UI
-        return () =&gt; { this.listeners = this.listeners.filter(l =&gt; l !== callback); };
-    }
-
-    notifyListeners() {
-        const items = this.getItems();
-        this.listeners.forEach(cb =&gt; cb(items));
-    }
+    @others
 }
 </t>
 <t tx="swot.20260326084355.1" _mod_time="4741da712083ab9a652e">@language xml
@@ -31344,6 +31167,258 @@ class ShoppingCart {
     &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
+</t>
+<t tx="swot.20260326090111.1" _mod_time="4741da7121befbe1162e">@language html
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width" /&gt;
+    &lt;title&gt;阻止冒泡案例&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="parent" style="padding: 50px; background-color: #f0f0f0; border: 2px solid #ccc;"&gt;
+        父元素 (大盒子)
+        &lt;button id="child"&gt;子元素 (小按钮)&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        &lt;&lt; myscript &gt;&gt;
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</t>
+<t tx="swot.20260326090406.1">@language javascript
+const parent = document.getElementById('parent');
+const child = document.getElementById('child');
+
+// 父元素的点击事件
+parent.addEventListener('click', function() {
+    alert('父元素被点击了！');
+    this.style.backgroundColor = '#ffeaa7'; // 改变背景色
+});
+
+// 子元素的点击事件
+child.addEventListener('click', function(e) {
+    alert('子元素按钮被点击了！');
+    // --- 核心代码 ---
+    e.stopPropagation();
+    // 加入这行后，点击按钮就不会触发父元素的 alert 和变色了
+});
+</t>
+<t tx="swot.20260326091122.1" _mod_time="4741da7123a787daaa2e">@language html
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;e.preventDefault 演示&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .box { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+        .warning { color: red; font-size: 0.9em; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="box"&gt;
+        &lt;h3&gt;1. 阻止链接跳转&lt;/h3&gt;
+        &lt;p&gt;点击下方链接，它本该跳转到 Google，但会被拦截：&lt;/p&gt;
+        &lt;a href="https://www.google.com" id="myLink"&gt;点击前往 Google&lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;div class="box"&gt;
+        &lt;h3&gt;2. 阻止表单提交 (AJAX 常用)&lt;/h3&gt;
+        &lt;form id="myForm"&gt;
+            &lt;input type="text" name="myinput" placeholder="输入内容..." required&gt;
+            &lt;button type="submit"&gt;立即提交&lt;/button&gt;
+        &lt;/form&gt;
+        &lt;p id="msg" class="warning"&gt;&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        &lt;&lt; myscript &gt;&gt;
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</t>
+<t tx="swot.20260326091326.1">@language javascript
+// --- 逻辑 1: 处理链接 ---
+const link = document.querySelector('#myLink');
+link.onclick = function(e) {
+    e.preventDefault(); // 核心：阻止 href 跳转
+    alert('【拦截成功】链接被禁止访问，或正等待权限校验。');
+};
+
+
+// --- 逻辑 2: 处理表单 ---
+const form = document.querySelector('#myForm');
+const msg = document.querySelector('#msg');
+
+form.onsubmit = function(e) {
+    // e.preventDefault(); // 核心：阻止页面刷新
+    
+    // 模拟通常的操作：手动提取数据并验证
+    msg.innerText = "拦截了默认提交！现在可以通过 JavaScript (AJAX) 发送数据，而无需刷新页面。";
+    console.log("表单已通过验证，准备异步发送数据...");
+};
+</t>
+<t tx="swot.20260326102529.1">@language javascript
+const cart = new ShoppingCart();
+const cartContainer = document.getElementById('cart-container');
+const totalPriceEl = document.getElementById('total-price');
+
+// 渲染界面的函数
+function renderUI(items) {
+    if (items.length === 0) {
+        cartContainer.innerHTML = '&lt;div class="empty-tip"&gt;购物车空空如也，快去选购吧~&lt;/div&gt;';
+    } else {
+        cartContainer.innerHTML = items.map(item =&gt; `
+  &lt;div class="item"&gt;
+    &lt;div&gt;
+      &lt;strong&gt;${item.name}&lt;/strong&gt; &lt;br/&gt;
+      &lt;span style="color: #888; font-size: 0.9em;"&gt;¥${item.price}&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+      &lt;button onclick="handleUpdateQty(${item.id}, ${item.quantity - 1})"&gt; - &lt;/button&gt;
+      &lt;span style="display:inline-block; width:30px; text-align:center;"&gt;${item.quantity}&lt;/span&gt;
+      &lt;button onclick="handleUpdateQty(${item.id}, ${item.quantity + 1})"&gt; + &lt;/button&gt;
+      &lt;button class="btn-danger" style="margin-left: 10px;" onclick="handleRemove(${item.id})"&gt;删除&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+`).join('');
+    }
+    // 上面 .join('') 是为了清除数组默认带入的逗号
+    // 更新总价
+    totalPriceEl.innerText = cart.getTotal();
+}
+
+// 核心：订阅购物车状态，只要数据变了（无论当前页还是其他页），自动更新 UI
+cart.subscribe((items) =&gt; {
+    renderUI(items);  // 更新界面
+    console.log('购物车更新:', items);
+});
+</t>
+<t tx="swot.20260326102602.1">@language javascript
+window.handleAddToCart = (id, name, price) =&gt; {
+    cart.addItem({ id, name, price });
+};
+
+window.handleUpdateQty = (id, newQty) =&gt; {
+    cart.updateQuantity(id, newQty);
+};
+
+window.handleRemove = (id) =&gt; {
+    cart.removeItem(id);
+};
+
+window.handleClearCart = () =&gt; {
+    if (confirm('确定要清空购物车吗？')) cart.clear();
+};
+</t>
+<t tx="swot.20260326103912.1">constructor() {
+    this.STORAGE_KEY = 'cart_data';
+    this.listeners = [];
+
+    // 监听其他标签页的修改（BOM特性）
+    window.addEventListener('storage', (e) =&gt; {
+        if (e.key === this.STORAGE_KEY) {
+            console.log('监听到其他标签页数据变化');
+            this.notifyListeners();
+        }
+    });
+}
+</t>
+<t tx="swot.20260326104007.1">/**
+* 获取购物车数据
+*/
+getItems() {
+    const data = localStorage.getItem(this.STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+}
+</t>
+<t tx="swot.20260326104026.1">/**
+* 添加商品
+*/
+addItem(product) {
+    const items = this.getItems();
+    const existing = items.find(item =&gt; item.id === product.id);
+    if (existing) {
+        existing.quantity += product.quantity || 1;
+        existing.updatedAt = Date.now();
+    } else {
+        items.push({
+            ...product,
+            quantity: product.quantity || 1,
+            addedAt: Date.now()
+        });
+    }
+    this.save(items);
+    return items;
+}
+</t>
+<t tx="swot.20260326104037.1">/**
+* 更新数量
+*/
+updateQuantity(productId, quantity) {
+    const items = this.getItems();
+    const item = items.find(i =&gt; i.id === productId);
+    if (item) {
+        if (quantity &lt;= 0)
+            return this.removeItem(productId);
+        item.quantity = quantity;
+        item.updatedAt = Date.now();
+        this.save(items);
+    }
+    return items;
+}
+</t>
+<t tx="swot.20260326104052.1">/**
+* 删除商品
+*/
+removeItem(productId) {
+    const items = this.getItems().filter(i =&gt; i.id !== productId);
+    this.save(items);
+    return items;
+}
+</t>
+<t tx="swot.20260326104118.1">/**
+* 清空购物车
+*/
+clear() {
+    localStorage.removeItem(this.STORAGE_KEY);
+    this.notifyListeners();
+}
+</t>
+<t tx="swot.20260326104134.1">/**
+* 计算总价
+*/
+getTotal() {
+    return this.getItems().reduce((sum, item) =&gt; 
+        sum + (item.price * item.quantity), 0
+    );
+}
+</t>
+<t tx="swot.20260326104200.1">/**
+* 保存并通知
+*/
+save(items) {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
+    this.notifyListeners(); // 通知当前页面的订阅者
+}
+</t>
+<t tx="swot.20260326104213.1">/**
+* 订阅变化（用于UI更新）
+*/
+subscribe(callback) {
+    this.listeners.push(callback);
+    callback(this.getItems()); // 立即执行一次，初始化UI
+    // 返回取消订阅函数
+    return () =&gt; {
+        this.listeners = this.listeners.filter(l =&gt; l !== callback);
+    };
+}
+</t>
+<t tx="swot.20260326104224.1">notifyListeners() {
+    const items = this.getItems();
+    this.listeners.forEach(cb =&gt; cb(items));
+}
 </t>
 </tnodes>
 </leo_file>

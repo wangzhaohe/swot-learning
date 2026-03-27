@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>阻止冒泡案例</title>
+</head>
+<body>
+    <div id="parent" style="padding: 50px; background-color: #f0f0f0; border: 2px solid #ccc;">
+        父元素 (大盒子)
+        <button id="child">子元素 (小按钮)</button>
+    </div>
+
+    <script>
+        const parent = document.getElementById('parent');
+        const child = document.getElementById('child');
+
+        // 父元素的点击事件
+        parent.addEventListener('click', function() {
+            alert('父元素被点击了！');
+            this.style.backgroundColor = '#ffeaa7'; // 改变背景色
+        });
+
+        // 子元素的点击事件
+        child.addEventListener('click', function(e) {
+            alert('子元素按钮被点击了！');
+            // --- 核心代码 ---
+            e.stopPropagation();
+            // 加入这行后，点击按钮就不会触发父元素的 alert 和变色了
+        });
+    </script>
+</body>
+</html>

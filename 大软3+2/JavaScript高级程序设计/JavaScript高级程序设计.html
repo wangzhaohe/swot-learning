@@ -5945,12 +5945,59 @@ toggleButton.addEventListener('click', () => {
 <div class="ulist">
 <ul>
 <li>
-<p><strong>现象</strong>：当你点击子元素时，父元素的点击事件也会触发。就像用水壶烧水，下面加热水，水泡会从下往上冒。</p>
+<p><strong>现象</strong>：当你点击子元素时，父元素的点击事件也会触发。就像用水壶烧水，下面加热后，水泡会从下往上冒。</p>
 </li>
 <li>
 <p><strong>阻止冒泡</strong>：<code>e.stopPropagation()</code>。</p>
 </li>
 </ul>
+</div>
+<div class="sect4">
+<h5 id="_clean_codeexamplesstoppropagation_html">@clean code/examples/stopPropagation.html</h5>
+<div class="paragraph">
+<p>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width" /&gt;
+    &lt;title&gt;阻止冒泡案例&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="parent" style="padding: 50px; background-color: #f0f0f0; border: 2px solid #ccc;"&gt;
+        父元素 (大盒子)
+        &lt;button id="child"&gt;子元素 (小按钮)&lt;/button&gt;
+    &lt;/div&gt;</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;script&gt;
+    const parent = document.getElementById('parent');
+    const child = document.getElementById('child');</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 父元素的点击事件
+parent.addEventListener('click', function() {
+    alert('父元素被点击了！');
+    this.style.backgroundColor = '#ffeaa7'; // 改变背景色
+});</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>        // 子元素的点击事件
+        child.addEventListener('click', function(e) {
+            alert('子元素按钮被点击了！');
+            // --- 核心代码 ---
+            e.stopPropagation();
+            // 加入这行后，点击按钮就不会触发父元素的 alert 和变色了
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -5978,6 +6025,75 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-p">};</span></code></pre>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_clean_codeexamplespreventdefault_html">@clean code/examples/preventDefault.html</h5>
+<div class="paragraph">
+<p>&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;e.preventDefault 演示&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .box { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+        .warning { color: red; font-size: 0.9em; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="box"&gt;
+        &lt;h3&gt;1. 阻止链接跳转&lt;/h3&gt;
+        &lt;p&gt;点击下方链接，它本该跳转到 Google，但会被拦截：&lt;/p&gt;
+        &lt;a href="https://www.google.com" id="myLink"&gt;点击前往 Google&lt;/a&gt;
+    &lt;/div&gt;</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;div class="box"&gt;
+    &lt;h3&gt;2. 阻止表单提交 (AJAX 常用)&lt;/h3&gt;
+    &lt;form id="myForm"&gt;
+        &lt;input type="text" name="myinput" placeholder="输入内容..." required&gt;
+        &lt;button type="submit"&gt;立即提交&lt;/button&gt;
+    &lt;/form&gt;
+    &lt;p id="msg" class="warning"&gt;&lt;/p&gt;
+&lt;/div&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;script&gt;
+    // --- 逻辑 1: 处理链接 ---
+    const link = document.querySelector('#myLink');
+    link.onclick = function(e) {
+        e.preventDefault(); // 核心：阻止 href 跳转
+        alert('【拦截成功】链接被禁止访问，或正等待权限校验。');
+    };</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// --- 逻辑 2: 处理表单 ---
+const form = document.querySelector('#myForm');
+const msg = document.querySelector('#msg');</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>form.onsubmit = function(e) {
+    // e.preventDefault(); // 核心：阻止页面刷新</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>            // 模拟通常的操作：手动提取数据并验证
+            msg.innerText = "拦截了默认提交！现在可以通过 JavaScript (AJAX) 发送数据，而无需刷新页面。";
+            console.log("表单已通过验证，准备异步发送数据...");
+        };
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -5986,8 +6102,34 @@ toggleButton.addEventListener('click', () => {
 <p>表单是收集用户数据的窗口，验证是必须的。
 因为用户输入的数据不可完全控制，且无法完全预料。</p>
 </div>
+<div class="paragraph">
+<p>通常验证分为两种情况：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>在前端应用中进行数据的验证。</p>
+</li>
+<li>
+<p>在后端应用中进行数据的验证。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>因为前端可能会有 bug 导致验证失败。</p>
+</li>
+<li>
+<p>因为有人可能会恶意绕过前端的验证。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
 <div class="sect3">
 <h4 id="_1_表单属性">1. 表单属性</h4>
+<div class="paragraph">
+<p>input 标签经常会用到的属性。</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -6004,23 +6146,26 @@ toggleButton.addEventListener('click', () => {
 <div class="ulist">
 <ul>
 <li>
-<p><strong>概念</strong>：一种用来匹配字符串的工具。</p>
+<p><strong>概念</strong>：一种用来匹配字符串的工具。前端应用可以用来做为验证输入的工具。</p>
 </li>
 <li>
-<p><strong>语法</strong>：<code>/规则/</code>。</p>
+<p><strong>语法</strong>：<code>/规则/</code></p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>\d</code>：数字。</p>
+<p><code>\d</code>：数字</p>
 </li>
 <li>
-<p><code>^</code>：开头。</p>
+<p><code>^</code>：开头</p>
 </li>
 <li>
-<p><code>$</code>：结尾。</p>
+<p><code>$</code>：结尾</p>
 </li>
 <li>
-<p><code>{n,m}</code>：长度范围。</p>
+<p><code>{n,m}</code>：长度范围。n,m 是正整数，表示从第 n 位到第 m 位</p>
+</li>
+<li>
+<p><code>[]</code>：表示匹配 [] 里面的单个字符</p>
 </li>
 </ul>
 </div>
@@ -6032,11 +6177,12 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 验证手机号：1开头，第二位3-9，总共11位</span>
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 验证手机号：1 开头，第二位 3-9，总共 11 位</span>
+<span class="tok-c1">// 举例手机号：13812345678</span>
 <span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">reg</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sr">/^1[3-9]\d{9}$/</span><span class="tok-p">;</span>
 
-<span class="tok-c1">// 测试方法 test()：匹配返回true，否则false</span>
-<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">reg</span><span class="tok-p">.</span><span class="tok-nx">test</span><span class="tok-p">(</span><span class="tok-s1">&#39;13800138000&#39;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// true</span>
+<span class="tok-c1">// 使用 test() 方法进行测试：匹配返回 true，否则 false</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">reg</span><span class="tok-p">.</span><span class="tok-nx">test</span><span class="tok-p">(</span><span class="tok-s1">&#39;13812345678&#39;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// true</span>
 <span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">reg</span><span class="tok-p">.</span><span class="tok-nx">test</span><span class="tok-p">(</span><span class="tok-s1">&#39;123456&#39;</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">// false</span></code></pre>
 </div>
 </div>
@@ -6055,7 +6201,16 @@ toggleButton.addEventListener('click', () => {
     <span class="tok-p">&lt;</span><span class="tok-nt">meta</span> <span class="tok-na">charset</span><span class="tok-o">=</span><span class="tok-s">&quot;UTF-8&quot;</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>完整表单验证示例<span class="tok-p">&lt;/</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
-<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">form-container</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">width</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">300</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">margin</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">50</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">auto</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">20</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">border</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">solid</span><span class="tok-w"> </span><span class="tok-mh">#eee</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">box-shadow</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-nb">rgba</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mf">0.1</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">form-container</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">width</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">300</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">margin</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">50</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">auto</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">20</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">border</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">solid</span><span class="tok-w"> </span><span class="tok-mh">#eee</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-kt">px</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-k">box-shadow</span><span class="tok-p">:</span>
+<span class="tok-w">            </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-nb">rgba</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mf">0.1</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
 <span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">form-item</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">margin-bottom</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">15</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span>
 <span class="tok-w">        </span><span class="tok-nt">label</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">display</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">block</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">margin-bottom</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">font-weight</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">bold</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">font-size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">14</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span>
 <span class="tok-w">        </span><span class="tok-nt">input</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">width</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">100</span><span class="tok-kt">%</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">padding</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">border</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">solid</span><span class="tok-w"> </span><span class="tok-mh">#ccc</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">border-radius</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-kt">px</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">box-sizing</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">border-box</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-k">transition</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">all</span><span class="tok-w"> </span><span class="tok-mf">0.3</span><span class="tok-kt">s</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span>
@@ -6078,28 +6233,38 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">    </span><span class="tok-p">&lt;/</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
 <span class="tok-p">&lt;/</span><span class="tok-nt">head</span><span class="tok-p">&gt;</span>
 <span class="tok-p">&lt;</span><span class="tok-nt">body</span><span class="tok-p">&gt;</span>
+    <span class="tok-cm">&lt;!-- 模仿网站新用户注册页面 --&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;form-container&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-cm">&lt;!-- 输入用户名并需要进行验证 --&gt;</span>
         <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;form-item&quot;</span><span class="tok-p">&gt;</span>
             <span class="tok-p">&lt;</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>用户名<span class="tok-p">&lt;/</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>
-            <span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;username&quot;</span> <span class="tok-na">placeholder</span><span class="tok-o">=</span><span class="tok-s">&quot;至少6位&quot;</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;username&quot;</span> <span class="tok-na">name</span><span class="tok-o">=</span><span class="tok-s">&quot;username&quot;</span> <span class="tok-na">placeholder</span><span class="tok-o">=</span><span class="tok-s">&quot;至少 6 位长度&quot;</span><span class="tok-p">&gt;</span>
             <span class="tok-p">&lt;</span><span class="tok-nt">span</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;usernameMsg&quot;</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;msg&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
         <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
 
+        <span class="tok-cm">&lt;!-- 输入手机号进行验证 --&gt;</span>
         <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;form-item&quot;</span><span class="tok-p">&gt;</span>
             <span class="tok-p">&lt;</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>手机号<span class="tok-p">&lt;/</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>
-            <span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;phone&quot;</span> <span class="tok-na">placeholder</span><span class="tok-o">=</span><span class="tok-s">&quot;11位手机号&quot;</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;phone&quot;</span> <span class="tok-na">name</span><span class="tok-o">=</span><span class="tok-s">&quot;phone&quot;</span> <span class="tok-na">placeholder</span><span class="tok-o">=</span><span class="tok-s">&quot;长度必须是 11 位&quot;</span><span class="tok-p">&gt;</span>
             <span class="tok-p">&lt;</span><span class="tok-nt">span</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;phoneMsg&quot;</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;msg&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
         <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
 
-        <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;submitBtn&quot;</span><span class="tok-p">&gt;</span>立即注册<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;submitBtn&quot;</span><span class="tok-p">&gt;</span>
+            立即注册
+        <span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
 <span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">usernameInput</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#username&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">usernameMsg</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#usernameMsg&#39;</span><span class="tok-p">);</span>
+
 <span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">phoneInput</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#phone&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">phoneMsg</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#phoneMsg&#39;</span><span class="tok-p">);</span>
+
 <span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">submitBtn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#submitBtn&#39;</span><span class="tok-p">);</span>
 
 <span class="tok-w">        </span><span class="tok-c1">// 状态更新工具函数</span>
 <span class="tok-w">        </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">validateField</span><span class="tok-p">(</span><span class="tok-nx">inputEl</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">msgEl</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">condition</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">errorMsg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
 <span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">val</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">inputEl</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">.</span><span class="tok-nx">trim</span><span class="tok-p">();</span>
 <span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">isValid</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">condition</span><span class="tok-p">(</span><span class="tok-nx">val</span><span class="tok-p">);</span>
 
@@ -6118,16 +6283,16 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">        </span><span class="tok-c1">// 定义具体的验证规则</span>
 <span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">checkUsername</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">validateField</span><span class="tok-p">(</span>
 <span class="tok-w">            </span><span class="tok-nx">usernameInput</span><span class="tok-p">,</span>
-<span class="tok-w">            </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#usernameMsg&#39;</span><span class="tok-p">),</span>
-<span class="tok-w">            </span><span class="tok-nx">val</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">val</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">&gt;=</span><span class="tok-w"> </span><span class="tok-mf">6</span><span class="tok-p">,</span>
-<span class="tok-w">            </span><span class="tok-s1">&#39;用户名至少需要6位&#39;</span>
+<span class="tok-w">            </span><span class="tok-nx">usernameMsg</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">val</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">val</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">&gt;=</span><span class="tok-w"> </span><span class="tok-mf">6</span><span class="tok-p">,</span><span class="tok-w">  </span><span class="tok-c1">// 正则表达式</span>
+<span class="tok-w">            </span><span class="tok-s1">&#39;用户名至少需要 6 位&#39;</span>
 <span class="tok-w">        </span><span class="tok-p">);</span>
 
 <span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">checkPhone</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">validateField</span><span class="tok-p">(</span>
 <span class="tok-w">            </span><span class="tok-nx">phoneInput</span><span class="tok-p">,</span>
-<span class="tok-w">            </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;#phoneMsg&#39;</span><span class="tok-p">),</span>
-<span class="tok-w">            </span><span class="tok-nx">val</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-o">/^</span><span class="tok-mf">1</span><span class="tok-p">[</span><span class="tok-mf">3</span><span class="tok-o">-</span><span class="tok-mf">9</span><span class="tok-p">]</span><span class="tok-err">\</span><span class="tok-nx">d</span><span class="tok-p">{</span><span class="tok-mf">9</span><span class="tok-p">}</span><span class="tok-nx">$</span><span class="tok-o">/</span><span class="tok-p">.</span><span class="tok-nx">test</span><span class="tok-p">(</span><span class="tok-nx">val</span><span class="tok-p">),</span>
-<span class="tok-w">            </span><span class="tok-s1">&#39;请输入正确的11位手机号&#39;</span>
+<span class="tok-w">            </span><span class="tok-nx">phoneMsg</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">val</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-o">/^</span><span class="tok-mf">1</span><span class="tok-p">[</span><span class="tok-mf">3</span><span class="tok-o">-</span><span class="tok-mf">9</span><span class="tok-p">]</span><span class="tok-err">\</span><span class="tok-nx">d</span><span class="tok-p">{</span><span class="tok-mf">9</span><span class="tok-p">}</span><span class="tok-nx">$</span><span class="tok-o">/</span><span class="tok-p">.</span><span class="tok-nx">test</span><span class="tok-p">(</span><span class="tok-nx">val</span><span class="tok-p">),</span><span class="tok-w">  </span><span class="tok-c1">// 正则表达式</span>
+<span class="tok-w">            </span><span class="tok-s1">&#39;请输入正确的 11 位手机号&#39;</span>
 <span class="tok-w">        </span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-c1">// 提交按钮点击事件</span>
 <span class="tok-w">        </span><span class="tok-nx">submitBtn</span><span class="tok-p">.</span><span class="tok-nx">onclick</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -6167,6 +6332,10 @@ toggleButton.addEventListener('click', () => {
     <span class="tok-p">&lt;</span><span class="tok-nt">meta</span> <span class="tok-na">charset</span><span class="tok-o">=</span><span class="tok-s">&quot;UTF-8&quot;</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>键盘控制方块移动<span class="tok-p">&lt;/</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">box-sizing</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">border-box</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
 <span class="tok-w">        </span><span class="tok-c">/* 容器样式 */</span>
 <span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-nc">container</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-k">width</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">100</span><span class="tok-kt">%</span><span class="tok-p">;</span>
@@ -6205,18 +6374,24 @@ toggleButton.addEventListener('click', () => {
         <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;box&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
 
+    <span class="tok-cm">&lt;!-- 操作说明 --&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>使用方向键 (↑ ↓ ← →) 来移动方块<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
 
     <span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">container</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;.container&#39;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">box</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">querySelector</span><span class="tok-p">(</span><span class="tok-s1">&#39;.box&#39;</span><span class="tok-p">);</span>
 <span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">;</span>
 
-<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">step</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">20</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 步长：每次移动的像素</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">step</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">10</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 步长：每次移动的像素</span>
 
-<span class="tok-w">        </span><span class="tok-c1">// 给整个文档注册键盘事件</span>
+<span class="tok-w">        </span><span class="tok-c1">// 给整个文档注册键盘事件：键盘按键按下的事件</span>
 <span class="tok-w">        </span><span class="tok-nb">document</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;keydown&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">            </span><span class="tok-c1">// 打印一下按键，方便调试</span>
 <span class="tok-w">            </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;e.key:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-p">);</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 使用 clientWidth 和 clientHeight 获取不含边框的内部空间</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">maxWidth</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">container</span><span class="tok-p">.</span><span class="tok-nx">clientWidth</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">offsetWidth</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">maxHeight</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">container</span><span class="tok-p">.</span><span class="tok-nx">clientHeight</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">offsetHeight</span><span class="tok-p">;</span>
 
 <span class="tok-w">            </span><span class="tok-k">switch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">e</span><span class="tok-p">.</span><span class="tok-nx">key</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">                </span><span class="tok-k">case</span><span class="tok-w"> </span><span class="tok-s1">&#39;ArrowLeft&#39;</span><span class="tok-o">:</span>
@@ -6236,6 +6411,12 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-w">                    </span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-nx">step</span><span class="tok-p">;</span>
 <span class="tok-w">                    </span><span class="tok-k">break</span><span class="tok-p">;</span>
 <span class="tok-w">            </span><span class="tok-p">}</span>
+
+<span class="tok-w">            </span><span class="tok-c1">// 统一边界限制（防止超出）</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 左边</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nx">maxWidth</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">maxWidth</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 右边</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 上边</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nx">maxHeight</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">maxHeight</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 下边</span>
 
 <span class="tok-w">            </span><span class="tok-c1">// 更新 DOM 样式</span>
 <span class="tok-w">            </span><span class="tok-nx">box</span><span class="tok-p">.</span><span class="tok-nx">style</span><span class="tok-p">.</span><span class="tok-nx">left</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s1">&#39;px&#39;</span><span class="tok-p">;</span>
@@ -6329,7 +6510,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-26 08:55:13 +0800
+Last updated 2026-03-27 11:09:22 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
