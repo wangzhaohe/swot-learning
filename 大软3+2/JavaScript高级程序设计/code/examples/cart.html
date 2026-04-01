@@ -225,6 +225,7 @@
              * 将数据持久化到 LocalStorage 并触发当前页面的 UI 更新
              * @param {CartItem[]} items - 待保存的商品数组
              * @private - 指 save 函数是私有的
+             * @fires ShoppingCart#change  标注它会触发变更事件
              */
             save(items) {
                 localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
@@ -269,6 +270,7 @@
             */
             /**
              * 执行所有已订阅的回调函数
+             * @description 遍历监听者列表，将最新的数据分发出去
              * @private
              */
             notifyListeners() {
@@ -283,8 +285,19 @@
                 })
             }
         }
+        /** * 购物车实例
+         * @type {ShoppingCart}
+         */
         const cart = new ShoppingCart();
+
+        /** * 购物车列表渲染容器
+         * @type {HTMLElement|null}
+         */
         const cartContainer = document.getElementById('cart-container');
+
+        /** * 总价显示元素
+         * @type {HTMLElement|null}
+         */
         const totalPriceEl = document.getElementById('total-price');
 
         // 渲染界面的函数
@@ -316,10 +329,19 @@
             totalPriceEl.innerText = cart.getTotal();
         }
 
-        // 核心：订阅购物车状态，只要数据变了（无论当前页还是其他页），自动更新 UI
+        /**
+         * 核心逻辑：订阅购物车状态变更
+         * * @description
+         * 实现“数据驱动 UI”的响应式更新：
+         * 1. 初始化：订阅时立即执行一次回调以同步当前 LocalStorage 数据。
+         * 2. 同页同步：本页面调用 addItem/removeItem 时自动触发。
+         * 3. 跨页同步：通过监听 window 'storage' 事件，捕获其他标签页的修改。
+         * * @listens ShoppingCart#change
+         * @see {@link ShoppingCart#subscribe} 了解订阅机制详情
+         */
         cart.subscribe((items) => {
-            renderUI(items);  // 更新界面
-            console.log('购物车更新:', items);
+            renderUI(items);  // 调用全局渲染函数更新 DOM
+            console.log('购物车状态已同步:', items);
         });
         window.handleAddToCart = (id, name, price) => {
             cart.addItem({ id, name, price });
