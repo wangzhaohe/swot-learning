@@ -1185,6 +1185,10 @@ ex;;=Express
 
 re;;=require("&lt;||&gt;");
 ed;;=export default 
+
+/**;;=/**
+\: *
+\: */
 </t>
 <t tx="swot.20220220162739.1">img;;=&lt;img src="img/&lt;|name|&gt;.png" width="100%" /&gt;
 font;;=&lt;font color="red"&gt;&lt;|str|&gt;&lt;/font&gt;
