@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
+<meta name="author" content="https://github.com/wangzhaohe/swot-learning">
 <title>Git</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -454,6 +455,12 @@ body.toc2.toc-right {
     padding-left: 0;
     padding-right: 0em;
 }
+
+/* 设置整个 HTML 文档的滚动留白 */
+html {
+    scroll-padding-top: 10px; /* 这个数值就是跳转后标题距离屏幕顶部的像素 */
+    scroll-behavior: smooth;  /* 顺便加上平滑滚动效果，跳转不突兀 */
+}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -532,9 +539,13 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <body class="article toc2 toc-right">
 <div id="header">
 <h1>Git</h1>
+<div class="details">
+<span id="author" class="author">https://github.com/wangzhaohe/swot-learning</span><br>
+</div>
 <div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
+<div id="toctitle">目录</div>
 <ul class="sectlevel1">
+<li><a href="#_git_commit_message_convention">git commit message convention</a></li>
 <li><a href="#_git_worktree">git worktree</a></li>
 <li><a href="#_git_subtree">git subtree</a></li>
 <li><a href="#_git_rm_cached">git rm --cached</a></li>
@@ -545,12 +556,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<button id="toggleButton">Table of Contents</button>
+<button id="toggleButton">目录开关</button>
 <script>
     // 获取按钮和 div 元素
     const toggleButton = document.getElementById('toggleButton');
     const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
 
     // 添加点击事件监听器
     toggleButton.addEventListener('click', () => {
@@ -566,6 +577,57 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
+<h2 id="_git_commit_message_convention">git commit message convention</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">类型 (Type)</th>
+<th class="tableblock halign-left valign-top">描述 (Description)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">feat</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">引入新功能。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fix</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">修复 Bug。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">docs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">仅修改文档（如 README, API 文档等）。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">style</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">仅调整代码格式（如空格、分号、缩进等），不涉及业务逻辑修改。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">refactor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">代码重构。既不修复 Bug 也不新增功能的代码更改。删除废弃的代码文件。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">perf</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">提升性能的代码修改。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">添加缺失的测试或修改现有测试。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">chore</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">对构建过程或辅助工具和库（如文档生成、依赖管理）的更改。</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_git_worktree">git worktree</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -575,7 +637,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-important" title="Important"></i>
+<i class="fa icon-important" title="❗"></i>
 </td>
 <td class="content">
 会用于测试多个不同的 nuxt3 功能模块。之前使用了 leo-editor，但是容易出现问题，比如 @file 文件被错误覆盖等等。
@@ -609,7 +671,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-important" title="Important"></i>
+<i class="fa icon-important" title="❗"></i>
 </td>
 <td class="content">
 注意这里的 <code>../</code> 很重要，即不和当前的代码在同一个目录下，因为会把当前的目录弄乱。
@@ -706,7 +768,7 @@ git worktree add ../v2.0-release v2.0</pre>
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-important" title="Important"></i>
+<i class="fa icon-important" title="❗"></i>
 </td>
 <td class="content">
 用来在一个 leo 文件中管理多个小的项目案例。
@@ -769,7 +831,7 @@ git worktree add ../v2.0-release v2.0</pre>
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
+<i class="fa icon-tip" title="⚡"></i>
 </td>
 <td class="content">
 <div class="title">使用 squash 的意义</div>
@@ -855,7 +917,7 @@ git<span class="tok-w"> </span>commit<span class="tok-w"> </span>-m<span class="
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
+<i class="fa icon-tip" title="⚡"></i>
 </td>
 <td class="content">
 <div class="title">小提示</div>
@@ -950,8 +1012,32 @@ git<span class="tok-w"> </span>push<span class="tok-w"> </span>--force<span clas
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-01 08:37:12 +0800
+Last updated 2026-04-02 09:41:08 +0800
 </div>
 </div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>
