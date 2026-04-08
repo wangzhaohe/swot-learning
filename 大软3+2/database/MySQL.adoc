@@ -776,7 +776,7 @@ DROP TABLE ContentCategory;
 === 9.4 记录操作
 
 
-==== 9.4.1 1. LOAD DATA LOCAL INFILE -- 批量导入数据 -- 了解
+==== 9.4.1 LOAD DATA LOCAL INFILE -- 批量导入数据 -- 了解
 文档网址: https://dev.mysql.com/doc/refman/8.3/en/loading-tables.html
 
 一般用于数据的初始化，这种方式比较麻烦，因为有一些条件：
@@ -791,7 +791,7 @@ https://dev.mysql.com/doc/refman/8.3/en/load-data-local-security.html
 
 NOTE: 了解此方式即可，知道有这样的功能就行。
 
-==== 9.4.2 2. INSERT INTO       -- 按位置插入记录
+==== 9.4.2 INSERT INTO       -- 按位置插入记录
 用于在表格中插入一条记录。##字段位置与字段内容必须一一对应##，#包括自增的 id 字段#。
 
 NOTE: 可以更改字段内容的顺序，测试字段位置与字段内容不同报错的现象。
@@ -833,7 +833,7 @@ Query OK, 1 row affected (0.00 sec)
 
 答：参考下面指定字段名的方式来插入记录。
 
-==== 9.4.3 3. INSERT INTO       -- 按字段插入记录
+==== 9.4.3 INSERT INTO       -- 按字段插入记录
 使用字段与位置对应的方式插入记录，这样表中的 id 就会自增长。
 
 .运行命令
@@ -869,7 +869,7 @@ VALUES (
 * 在表名后给出要插入的列名，其他没有指定的列等同于插入 null 值。一次插入一行
 * 在 values 后给出列值，值的顺序和个数必须与前面指定的列对应
 
-==== 9.4.4 4. SELECT FROM WHERE -- 获取记录语法说明
+==== 9.4.4 SELECT FROM WHERE -- 获取记录语法说明
 语法格式：
 
     SELECT what_to_select
@@ -890,7 +890,7 @@ conditions_to_satisfy 满足的条件::
     The WHERE clause is optional. If it is present, conditions_to_satisfy specifies one or more conditions that rows must satisfy to qualify for retrieval. +
     WHERE 是可选的。如果存在，行数据必须满足这个条件才能取出来。
 
-==== 9.4.5 5. SELECT * FROM     -- 获取所有列
+==== 9.4.5 SELECT * FROM     -- 获取所有列
 .运行命令
 [source,python,]
 ----
@@ -919,7 +919,7 @@ For more information, see Section 15.1.20.10, “Invisible Columns”. +
 https://dev.mysql.com/doc/refman/8.3/en/invisible-columns.html
 ====
 
-==== 9.4.6 6. SELECT * FROM WHERE  -- 条件选择
+==== 9.4.6 SELECT * FROM WHERE  -- 条件选择
 选择特定条件的行
 
 .运行命令
@@ -955,7 +955,7 @@ SELECT * FROM ContentCategory WHERE createDate >= '2024-02-01';
 
 IMPORTANT: 在实际开发中，如果数据量比较大，就不要一次性把 #所有行# 的数据都取出来。应该使用条件选择，来实现分页或者过滤功能。
 
-==== 9.4.7 7. SELECT * FROM WHERE AND/OR -- 条件选择
+==== 9.4.7 SELECT * FROM WHERE AND/OR -- 条件选择
 .运行命令
 [source,python,]
 ----
@@ -989,7 +989,7 @@ SELECT * FROM ContentCategory WHERE useFlag='N' OR createDate <= '2024-01-31';
 
 TIP: AND 和 OR 混用时，记得加小括号。案例省略。
 
-==== 9.4.8 8. SELECT column FROM   -- 选择指定列
+==== 9.4.8 SELECT column FROM   -- 选择指定列
 选择指定的列进行显示，列名之间用逗号分隔。
 
 .运行命令
@@ -1032,7 +1032,7 @@ NOTE: DISTINCT 排除 owner 列相同的记录。
 IMPORTANT: You can use a WHERE clause to combine row selection with column selection. +
 案例省略
 
-==== 9.4.9 9. SELECT FROM ORDER BY -- 排序 重要内容!
+==== 9.4.9 SELECT FROM ORDER BY -- 排序 重要内容!
 对行进行排序
 
 .运行命令
@@ -1077,7 +1077,7 @@ SELECT title, useFlag, createDate
        FROM ContentCategory ORDER BY useFlag, createDate DESC;
 ----
 
-==== 9.4.10 10. SELECT * FROM LIMIT  -- 分页 重要内容!
+==== 9.4.10 SELECT * FROM LIMIT  -- 分页 重要内容!
 LIMIT
 子句常用于计算分页。在网页中的分页设计中，通常浏览器传递两个参数来控制分页：
 
@@ -1104,7 +1104,7 @@ NOTE: 如果想做测试，请加入更多的测试记录。
 
 // 学生自行做测试即可
 
-==== 9.4.11 11. SELECT UNION ALL SELECT  -- 不去除重复行 了解内容
+==== 9.4.11 SELECT UNION ALL SELECT  -- 不去除重复行 了解内容
 
 
 ===== 9.4.11.1 create 2 tables
@@ -1217,7 +1217,7 @@ FROM EnglishCourses;
 
 这样，我们就将两个表格的数据合并成了一个结果集，并且保留了每个表格的数据行之间的关系。
 
-==== 9.4.12 12. 计算日期
+==== 9.4.12 计算日期
 https://dev.mysql.com/doc/refman/8.3/en/date-calculations.html
 
 ===== 9.4.12.1 计算时间长度
@@ -1395,7 +1395,7 @@ SELECT MOD(MONTH(CURDATE()), 12) + 1;
 
 总结：这段 SQL 代码是用来计算当前月份的下一个月，并且在 12 月后返回 1 月。
 
-==== 9.4.13 13. NULL 值处理
+==== 9.4.13 NULL 值处理
 参考文档: https://dev.mysql.com/doc/refman/8.3/en/working-with-null.html
 
 .运行命令
@@ -1433,7 +1433,7 @@ SELECT 1 = NULL, 1 <> NULL, 1 < NULL, 1 > NULL;
 +----------+-----------+----------+----------+
 ....
 
-==== 9.4.14 14. MySQL 自带模式匹配语法 Pattern Matching
+==== 9.4.14 MySQL 自带模式匹配语法 Pattern Matching
 https://dev.mysql.com/doc/refman/8.3/en/pattern-matching.html
 
 模式匹配语法
@@ -1448,7 +1448,7 @@ https://dev.mysql.com/doc/refman/8.3/en/pattern-matching.html
 
 * `%` 匹配任意数量的字符（包括 0 个字符）
 
-===== 9.4.14.1 举例查找 owner 字段以 S 开头的记录
+===== 9.4.14.1 举例查找 owner 字段以 S 开头的任意记录
 .运行命令
 [source,python,]
 ----
@@ -1469,24 +1469,49 @@ SELECT title, owner FROM ContentCategory
 NOTE: 第一个字符 S，后面可以为任意数量的字符。
 
 ===== 9.4.14.2 举例查找 owner 字段以 S 开头的记录 -- 区分大小写
-.运行命令 -- COLLATE utf8mb4_bin 表示区分大小写
-[source,python,]
+* 默认情况下，MySQL 的 `LIKE` 操作不区分大小写。
+
+* 使用 `COLLATE utf8mb4++_++0900++_++as++_++cs` 可以启用**区分大小写**匹配。
+
+* `utf8mb4++_++bin` 也区分大小写，但更严格（按二进制值比较）。
+
+示例查询
+
+[source,sql]
 ----
-SELECT title, owner FROM ContentCategory
-       WHERE owner COLLATE utf8mb4_0900_as_cs LIKE 'S%';
+SELECT title, owner 
+FROM ContentCategory
+WHERE owner COLLATE utf8mb4_0900_as_cs LIKE 'S%';
 ----
 
-.运行结果
-....
-+----------+-------+
-| title    | owner |
-+----------+-------+
-| 解决方案 | Swot  |
-| 一级分类 | Swot  |
-+----------+-------+
-....
+查询结果
 
-NOTE: 将 LIKE 'S%' 换成 LIKE 's%'，则会查询匹配小写字母 s 的记录。
+.只返回 `owner` 以**大写 S 开头**的记录
+[cols=",",options="header",]
+|===
+|title |owner
+|解决方案 |Swot
+|一级分类 |Swot
+|===
+
+对比说明
+
+[width="100%",cols="61%,39%",options="header",]
+|===
+|LIKE 写法 |匹配结果
+|`LIKE 'S%'` （使用区分大小写的 collation） |只匹配 `S` 开头（如 Swot）
+|`LIKE 's%'` （使用区分大小写的 collation） |只匹配 `s` 开头（如 sword）
+|===
+
+TIP: 如果去掉 `COLLATE` 或使用 `utf8mb4++_++general++_++ci`（默认，`ci` 表示
+case-insensitive），则 `'S%'` 和 `'s%'` 结果相同，都不区分大小写。
+
+
+快速记忆
+
+* `++_++cs` = case-sensitive（区分大小写）
+* `++_++ci` = case-insensitive（不区分大小写）
+* `++_++bin` = 二进制比较（也区分，但更严格）
 
 ===== 9.4.14.3 举例查找 owner 字段以 ver 结尾的记录
 .运行命令
@@ -1548,10 +1573,7 @@ sSELECT title, owner FROM ContentCategory
 .运行命令
 [source,python,]
 ----
-
-sql = """
 SELECT title, owner from ContentCategory WHERE owner LIKE '\_\_\_\_\_';
-"""
 ----
 
 .运行结果
@@ -1563,7 +1585,7 @@ SELECT title, owner from ContentCategory WHERE owner LIKE '\_\_\_\_\_';
 +----------+-------+
 ....
 
-==== 9.4.15 15. MySQL 扩展正则表达式语法 Regular Expression
+==== 9.4.15 MySQL 扩展正则表达式语法 Regular Expression 个人最喜欢模式
 https://dev.mysql.com/doc/refman/8.3/en/pattern-matching.html
 
 正则表达式是一种用于匹配和操作文本的强大工具，它是由一系列字符和特殊字符组成的模式，用于描述要匹配的文本模式。
@@ -1672,7 +1694,7 @@ SELECT title, owner FROM ContentCategory
 +----------+-------+
 ....
 
-==== 9.4.16 16. 计算行 Counting Rows
+==== 9.4.16 计算行 Counting Rows
 https://dev.mysql.com/doc/refman/8.3/en/counting-rows.html
 
 COUNT(*) 的使用
@@ -1697,7 +1719,7 @@ SELECT COUNT(*) FROM ContentCategory;
 .运行命令
 [source,python,]
 ----
-sql = """SELECT owner, COUNT(*) FROM ContentCategory GROUP BY owner;"""
+SELECT owner, COUNT(*) FROM ContentCategory GROUP BY owner;
 ----
 
 .运行结果
@@ -1712,7 +1734,7 @@ sql = """SELECT owner, COUNT(*) FROM ContentCategory GROUP BY owner;"""
 
 TIP: 可以使用多种组合来查询数据。
 
-==== 9.4.17 17. 多表操作: 两个表 INNER JOIN
+==== 9.4.17 多表操作: 两个表 INNER JOIN
 有了内容分类 ContentCategory 表之后，就可以在每一篇要发布的内容信息中使用了，
 我们可以定义表 ContentInfo 来保存所有要发布的内容信息。字段如下：
 
@@ -1738,7 +1760,7 @@ NOTE: 需要先增加一些 ContentInfo 记录
 
 ===== 9.4.17.1 CREATE TABLE ContentInfo
 .运行命令
-[source,python,]
+[source,sql]
 ----
 CREATE TABLE ContentInfo (
     id           INT AUTO_INCREMENT PRIMARY KEY,
@@ -1749,7 +1771,7 @@ CREATE TABLE ContentInfo (
     author       VARCHAR(20),
     view_count   INT,
     content      LONGTEXT,
-    del          BOOLEAN);'''
+    del          BOOLEAN);
 ----
 
 *问题: 在 MySQL 中，布尔类型的字段可以接受哪些值？*
@@ -1762,10 +1784,12 @@ CREATE TABLE ContentInfo (
 
 * TRUE 或 FALSE：MySQL 也允许使用 TRUE 或 FALSE 关键字直接赋值。
 
+NOTE: 在 MySQL 中，TRUE 和 FALSE 关键字不要求必须大写，MySQL 对关键字是大小写不敏感的。
+
 ===== 9.4.17.2 INSERT INTO  ContentInfo
 .运行命令
 [source,sql]
---
+----
 INSERT INTO ContentInfo (
     category, title, description, publish_date,
     author, view_count, content, del)
@@ -1804,16 +1828,7 @@ VALUES (
     0,
     'xyz',
     "0");
---
-
-////
-.运行结果
-....
-
-....
-
-*问题: ？*
-////
+----
 
 ===== 9.4.17.3 两个表 INNER JOIN
 .运行命令
@@ -1832,20 +1847,16 @@ FROM ContentInfo INNER JOIN ContentCategory
 
 .运行结果
 ....
-+----------+----------------------------------------------+---------------------+------+------------+-----+---------+
-| category | title                                        | publish_date        | days | view_count | del | useFlag |
-+----------+----------------------------------------------+---------------------+------+------------+-----+---------+
-| 解决方案 | 红枫视觉：利用数字孪生技术                      | 2023-10-27 20:18:04 |  154 |          0 |   0 | Y       |
-| 成功案例 | 数据科技园                                   | 2023-08-25 14:00:31 |  217 |          0 |   1 | N       |
-| 模型资源 | 建筑｜房间                                   | 2023-08-25 14:01:04 |  217 |          0 |   0 | Y       |
-+----------+----------------------------------------------+---------------------+------+------------+-----+---------+
++----------+---------------------------+---------------------+------+------------+-----+---------+
+| category | title                     | publish_date        | days | view_count | del | useFlag |
++----------+---------------------------+---------------------+------+------------+-----+---------+
+| 解决方案 | 红枫视觉：利用数字孪生技术      | 2023-10-27 20:18:04 |  154 |          0 |   0 | Y       |
+| 成功案例 | 数据科技园                   | 2023-08-25 14:00:31 |  217 |          0 |   1 | N       |
+| 模型资源 | 建筑｜房间                   | 2023-08-25 14:01:04 |  217 |          0 |   0 | Y       |
++----------+---------------------------+---------------------+------+------------+-----+---------+
 ....
 
-////
-*问题: ？*
-////
-
-==== 9.4.18 18. 多表操作: 单个表 INNER JOIN
+==== 9.4.18 多表操作: 单个表 INNER JOIN
 
 
 ===== 9.4.18.1 ADD COLUMN parent_id
@@ -2069,7 +2080,7 @@ SELECT * FROM CategoryCTE;
 
 TIP: UNION ALL 不去除重复行; UNION，去除重复行。
 
-==== 9.4.19 19. UPDATE SET WHERE  -- 更新记录
+==== 9.4.19 UPDATE SET WHERE  -- 更新记录
 只更新需要更新的记录。
 
 .运行命令
@@ -2080,7 +2091,7 @@ UPDATE ContentCategory SET
        WHERE title = '解决方案';"""
 ----
 
-==== 9.4.20 20. DELETE FROM       -- 删除所有记录
+==== 9.4.20 DELETE FROM       -- 删除所有记录
 删除某个表中所有记录
 
 .运行命令
@@ -3319,8 +3330,42 @@ GRANT ALL ON OfficialWebsite.* TO 'lisi'@'%';
 
 
 ==== 10.5.1 #file dbase.mjs
-# [source,javascript,linenums]
+import * as mysql from 'mysql2/promise'
+
+const access = {
+    host: '182.92.131.108',
+    user: 'lisi',
+    database: 'OfficialWebsite',
+    password: 'Password1='
+}
+
+const conn = mysql.createPool(access);
+
+// 定义并导出函数
+export const sql = async ({ query, values }) => {
+    const [rows] = await conn.query(query, values)
+    return rows
+}
 # ----
+#
+# Question: createPool 是什么? ::
+#
+# `createPool` 是 MySQL2 中创建数据库连接池的方法。
+# 连接池是一种管理数据库连接的机制，它会在需要时创建连接，然后在不需要时释放连接，以提高数据库访问的性能和效率。
+# 使用连接池可以有效地管理大量的并发数据库连接请求，并且可以重复利用已经建立的连接，减少了连接和断开连接的开销。
+#
+#
+# Question: 为什么定义的参数写成对象的形式 { query, values } ? ::
+#
+# 写成对象的形式 `{ query, values }` 是为了方便在函数调用时传递多个参数，同时保持参数的语义清晰。这种写法利用了 JavaScript 对象的解构赋值特性，可以方便地从传入的参数对象中获取指定的属性。
+# +
+# 当调用 `sql` 函数时，传入的参数可以直接包含 `query` 和 `values` 属性，例如：
+# +
+# ```javascript
+# const result = await sql({ query: 'SELECT * FROM users WHERE id = ?', values: [userId] });
+# ```
+# +
+# 这样写的好处是在调用函数时可以清晰地指定参数的含义，不容易混淆。同时，如果需要传递更多的参数，可以直接在对象中添加新的属性，而不需要改变函数的参数列表。
 
 ==== 10.5.2 #file model.mjs
 # [source,javascript]
