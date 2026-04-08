@@ -1500,7 +1500,7 @@
 <v t="swot.20260401110116.85"><vh>9.5.5 查看用户权限</vh></v>
 <v t="swot.20260401110116.86"><vh>9.5.6 撤销授权 revoke</vh></v>
 <v t="swot.20260401110116.87"><vh>9.5.7 删除用户</vh></v>
-<v t="swot.20260401110116.88"><vh>9.5.8 更改密码</vh></v>
+<v t="swot.20260408164836.1"><vh>9.5.8 更改密码</vh></v>
 </v>
 <v t="swot.20260401110116.89" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032342d30342d303271077573732e"><vh>9.6 外键关联一对多</vh>
 <v t="swot.20260401110116.90"><vh>9.6.1 一对多关系在创建新表时生成</vh></v>
@@ -34675,19 +34675,18 @@ TIP: UNION ALL 不去除重复行; UNION，去除重复行。
 ----
 UPDATE ContentCategory SET 
        description = '为企业提供数字孪生的解决方案'
-       WHERE title = '解决方案';"""
+       WHERE title = '解决方案';
 ----
 </t>
 <t tx="swot.20260401110116.79">删除某个表中所有记录
 
 .运行命令
-[source,sql,]
+[source,sql]
 ----
-DELETE FROM ContentCategory;"""
+DELETE FROM ContentCategory;
 ----
 
 WARNING: 谨慎操作!!!
-
 
 ***
 删除特定条件的记录
@@ -34740,7 +34739,10 @@ https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-active-language.html
 </t>
 <t tx="swot.20260401110116.80" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032342d30342d30327103752e">DCL 是数据库控制语言（Data Control Language），用于管理数据库对象的访问权限和安全性。
 
+常规做法如下：
+
 * 一个项目创建一个用户！一个项目对应的数据库只有一个！
+
 * 这个用户只能对这个数据库有权限，其他数据库你就操作不了了！
 
 </t>
@@ -34768,9 +34770,10 @@ NOTE: user 表在 mysql 数据库中，所以需要 `USE mysql`。
 
 *问题: % 表示什么 ？* +
 在 MySQL 中，`%` 表示任何主机，这意味着与该用户相关联的权限适用于任何连接源。当用户使用任何主机尝试连接时，将会匹配到这条记录。这是一个通配符，表示用户可以从任何主机连接到 MySQL 服务器。
+
+CAUTION: 实际上这是不安全的设置。在生产中应该指定固定的 ip 去操作数据库。
 </t>
-<t tx="swot.20260401110116.82">@doc
-MySQL 8 引入了更严格的密码策略，默认情况下要求密码必须符合一定的复杂度和安全性标准。
+<t tx="swot.20260401110116.82">MySQL 8 引入了更严格的密码策略，默认情况下要求密码必须符合一定的复杂度和安全性标准。
 
 MySQL 8 默认的密码策略包括以下要求：
 
@@ -34781,40 +34784,30 @@ MySQL 8 默认的密码策略包括以下要求：
 * 包含至少一个特殊字符（例如 !@#$%^&amp;*）。
 
 ***
+
 创建##只能在本地登录的用户##，密码为 'Password1='
 
 .运行命令
 [source,sql,]
 ----
-
-sql = """CREATE USER 'zhangsan'@localhost
-         IDENTIFIED BY 'Password1=';
-"""
-@doc
+CREATE USER 'zhangsan'@localhost IDENTIFIED BY 'Password1=';
 ----
 
-IMPORTANT: 只能在 MySQL 服务器安装的本地机器上登录。
-
+IMPORTANT: localhost 指只能在 MySQL 服务器安装的本地机器上登录。
 
 ***
+
 创建能在任意 IP 上登录的用户
 
 .运行命令
 [source,sql,]
 ----
-
-sql = """CREATE USER 'lisi'@'%'
-         IDENTIFIED BY 'Password1=';
-"""
-@doc
+CREATE USER 'lisi'@'%' IDENTIFIED BY 'Password1=';
 ----</t>
-<t tx="swot.20260401110116.83">@doc
-.运行命令
+<t tx="swot.20260401110116.83">.运行命令
 [source,sql,]
 ----
-
-sql = """SELECT CURRENT_USER();"""
-@doc
+SELECT CURRENT_USER();
 ----
 
 .运行结果
@@ -34826,34 +34819,28 @@ sql = """SELECT CURRENT_USER();"""
 +----------------+
 ....
 </t>
-<t tx="swot.20260401110116.84">@doc
-给帐号 lisi 分配在任意 ip 上登录数据库，并使用数据库 OfficialWebsite 的权限。
+<t tx="swot.20260401110116.84">给帐号 lisi 分配在任意 ip 上登录数据库，并使用数据库 OfficialWebsite 的权限。
 
 .运行命令
 [source,sql,]
 ----
+GRANT ALL ON OfficialWebsite.* TO 'lisi'@'%';
 
-sql = """
-    GRANT ALL ON OfficialWebsite.* TO 'lisi'@'%';
-"""
-
-如果不生效，执行:
+-- 如果不生效，执行
 FLUSH PRIVILEGES;
-@doc
 ----
 
 使用 lisi 登录 MySQL 数据库，并检查能否看到 OfficialWebsite 数据库。
 
 ```console
 mysqlsh -ulisi -p
+mysql -ulisi -P 3307 -h 127.0.0.1 -p
 ```
 
 .运行命令
 [source,sql,]
 ----
-
-sql = """SHOW DATABASES;"""
-@doc
+SHOW DATABASES;
 ----
 
 .运行结果
@@ -34877,17 +34864,12 @@ sql = """SHOW DATABASES;"""
 / drop
 / delete
 </t>
-<t tx="swot.20260401110116.85">@doc
-用 root 或者 lisi 都可以查看权限。
+<t tx="swot.20260401110116.85">用 root 或者 lisi 都可以查看权限。
 
 .运行命令
 [source,sql,]
 ----
-
-sql = """
-    SHOW GRANTS FOR 'lisi'@'%';
-"""
-@doc
+SHOW GRANTS FOR 'lisi'@'%';
 ----
 
 .运行结果
@@ -34899,17 +34881,22 @@ sql = """
 | GRANT ALL PRIVILEGES ON `OfficialWebsite`.* TO `lisi`@`%` |
 +-----------------------------------------------------------+
 ....
+
+
+[NOTE]
+====
+对 OfficialWebsite 数据库 → lisi 拥有 ALL PRIVILEGES（所有权限）
+
+对其他数据库（如 mysql、performance_schema 等） → lisi 没有任何权限（USAGE 只是表示能连接，没有增删改查权限）
+====
 </t>
-<t tx="swot.20260401110116.86">@doc
-撤销 lisi 在数据库 OfficialWebsite 的 delete 权限。
+<t tx="swot.20260401110116.86">撤销 lisi 在数据库 OfficialWebsite 的 delete 权限。
 
 .运行命令
-[source,sql,]
+[source,sql]
 ----
-
-sql = """revoke delete on OfficialWebsite.* from 'lisi'@'%';"""
-sql = """revoke all on OfficialWebsite.* from 'lisi'@'%';"""   删除 lisi 的所有权限
-@doc
+revoke delete on OfficialWebsite.* from 'lisi'@'%';  -- 只去掉 lisi 的删除权限
+revoke all on OfficialWebsite.* from 'lisi'@'%';  -- 去掉 lisi 的所有权限
 ----
 
 
@@ -34922,12 +34909,8 @@ NOTE: 只有 lisi 重新登录以后再会生效。
 .运行命令
 [source,sql,]
 ----
-
-sql = """
-    USE OfficialWebsite;
-    DELETE FROM ContentCategory WHERE id=1';
-"""
-@doc
+USE OfficialWebsite;
+DELETE FROM ContentCategory WHERE id=1';
 ----
 
 .运行结果
@@ -34935,29 +34918,17 @@ sql = """
 ERROR: 1142 (42000): DELETE command denied to user 'lisi'@'111.31.210.7' for table 'ContentCategory'
 ....
 </t>
-<t tx="swot.20260401110116.87">@doc
-使用 root 帐号登录数据库。
+<t tx="swot.20260401110116.87">使用 root 帐号登录数据库。
 
 .运行命令
 [source,sql,]
 ----
-
-sql = """
-    USE mysql;
-    DROP USER 'lisi'@'%';
-    SELECT user,host from user;
-"""
-@doc
+USE mysql;
+DROP USER 'lisi'@'%';
+SELECT user,host from user;
 ----
 
 运行结果中没有用户 lisi 了。
-</t>
-<t tx="swot.20260401110116.88">@language asciidoc
-```sql
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'new_root_password';
-
-ALTER USER 'root'@'%' IDENTIFIED BY 'new_root_password';
-```
 </t>
 <t tx="swot.20260401110116.89" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032342d30342d30327103752e"></t>
 <t tx="swot.20260401110116.9">@language asciidoc
@@ -35231,7 +35202,8 @@ systemctl start mysql
 .在终端输入以下命令并输入密码登录：
 [source,console]
 ----
-mysql -u root -p
+-- mysql 命令要加 -h,否则不让登录
+mysql -u root -P 3307 -h 127.0.0.1 -p
 ----
 
 . 执行权限变更 SQL
@@ -35541,6 +35513,13 @@ case-insensitive），则 `'S%'` 和 `'s%'` 结果相同，都不区分大小写
 * `++_++cs` = case-sensitive（区分大小写）
 * `++_++ci` = case-insensitive（不区分大小写）
 * `++_++bin` = 二进制比较（也区分，但更严格）
+</t>
+<t tx="swot.20260408164836.1">[source,sql]
+----
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'new_root_password';
+
+ALTER USER 'root'@'%' IDENTIFIED BY 'new_root_password';
+----
 </t>
 </tnodes>
 </leo_file>
