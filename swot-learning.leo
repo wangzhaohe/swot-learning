@@ -34947,13 +34947,9 @@ SELECT user,host from user;
 文档网址::
 https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-interactive-code-execution.html
 </t>
-<t tx="swot.20260401110116.90">@language asciidoc
-@doc
-.运行命令
+<t tx="swot.20260401110116.90">.运行命令
 [source,python,]
 ----
-
-sql = '''
 CREATE TABLE ContentInfo (
     id           INT AUTO_INCREMENT PRIMARY KEY,
     title        VARCHAR(50),
@@ -34965,38 +34961,29 @@ CREATE TABLE ContentInfo (
     del          BOOLEAN,
     category_id  INT,
     FOREIGN KEY (category_id) REFERENCES ContentCategory(id));
-'''
-@doc
 ----
 
 之前已经存在表 ContentCategory，下面语句创建了一对多外键。我们就称 category_id 字段是 ContentCategory 表的外键。
-
-`FOREIGN KEY (category_id) REFERENCES ContentCategory(id));` +
 </t>
-<t tx="swot.20260401110116.91">@language asciidoc
-@doc
-.运行命令
+<t tx="swot.20260401110116.91">.运行命令
 [source,python,]
---
-sql = '''
-    ALTER TABLE ContentInfo
-        ADD COLUMN category_id INT;
+----
+ALTER TABLE ContentInfo
+    ADD COLUMN category_id INT;
 
-    ALTER TABLE ContentInfo
-        ADD CONSTRAINT fk_category_id_id
-        FOREIGN KEY (category_id)
-        REFERENCES ContentCategory(id);
-'''
-@doc
---
-</t>
-<t tx="swot.20260401110116.92">@doc
-.运行命令
-[source,sql,]
+ALTER TABLE ContentInfo
+    ADD CONSTRAINT fk_category_id_id
+    FOREIGN KEY (category_id)
+    REFERENCES ContentCategory(id);
 ----
 
-sql = """show create TABLE ContentInfo;"""
-@doc
+NOTE: fk_category_id_id 名称可以自己定义。
+
+</t>
+<t tx="swot.20260401110116.92">.运行命令
+[source,sql,]
+----
+show create TABLE ContentInfo;
 ----
 
 .运行结果
@@ -35018,13 +35005,11 @@ ContentInfo | CREATE TABLE `ContentInfo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 ....
 
-可以查看到创建的外键信息。</t>
-<t tx="swot.20260401110116.93">@doc
-.运行命令
+可以查看到创建的外键信息。
+</t>
+<t tx="swot.20260401110116.93">.运行命令
 [source,python,]
 ----
-
-sql = """
 SELECT category,
        ContentInfo.title,
        publish_date,
@@ -35033,26 +35018,20 @@ SELECT category,
        del,
        ContentCategory.useFlag
 FROM ContentInfo INNER JOIN ContentCategory
-  ON ContentInfo.category_id = ContentCategory.id
-;"""
-@doc
+  ON ContentInfo.category_id = ContentCategory.id;
 ----
 
 .运行结果
 ....
-+----------+----------------------------------------------+---------------------+------+------------+-----+---------+
-| category | title                                        | publish_date        | days | view_count | del | useFlag |
-+----------+----------------------------------------------+---------------------+------+------------+-----+---------+
-| 解决方案 | 红枫视觉：利用数字孪生技术                      | 2023-10-27 20:18:04 |  154 |          0 |   0 | Y       |
-| 成功案例 | 数据科技园                                   | 2023-08-25 14:00:31 |  217 |          0 |   1 | N       |
-| 模型资源 | 建筑｜房间                                   | 2023-08-25 14:01:04 |  217 |          0 |   0 | Y       |
-+----------+----------------------------------------------+---------------------+------+------------+-----+---------+
++----------+---------------------------+---------------------+------+------------+-----+---------+
+| category | title                     | publish_date        | days | view_count | del | useFlag |
++----------+---------------------------+---------------------+------+------------+-----+---------+
+| 解决方案 | 红枫视觉：利用数字孪生技术      | 2023-10-27 20:18:04 |  154 |          0 |   0 | Y       |
+| 成功案例 | 数据科技园                   | 2023-08-25 14:00:31 |  217 |          0 |   1 | N       |
+| 模型资源 | 建筑｜房间                   | 2023-08-25 14:01:04 |  217 |          0 |   0 | Y       |
++----------+---------------------------+---------------------+------+------------+-----+---------+
 ....
-
-
-////
-*问题: ？*
-////</t>
+</t>
 <t tx="swot.20260401110116.94" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032342d30342d30327103752e"></t>
 <t tx="swot.20260401110116.95">@doc
 @language asciidoc

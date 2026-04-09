@@ -2338,106 +2338,92 @@ ALTER USER 'root'@'%' IDENTIFIED BY 'new_root_password';
 
 
 ==== 9.6.1 一对多关系在创建新表时生成
-# .运行命令
-# [source,python,]
-# ----
-#
-# sql = '''
-# CREATE TABLE ContentInfo (
-#     id           INT AUTO_INCREMENT PRIMARY KEY,
-#     title        VARCHAR(50),
-#     description  VARCHAR(200),
-#     publish_date DATETIME,
-#     author       VARCHAR(20),
-#     view_count   INT,
-#     content      LONGTEXT,
-#     del          BOOLEAN,
-#     category_id  INT,
-#     FOREIGN KEY (category_id) REFERENCES ContentCategory(id));
-# '''
-# ----
-#
-# 之前已经存在表 ContentCategory，下面语句创建了一对多外键。我们就称 category_id 字段是 ContentCategory 表的外键。
-#
-# `FOREIGN KEY (category_id) REFERENCES ContentCategory(id));` +
+.运行命令
+[source,python,]
+----
+CREATE TABLE ContentInfo (
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    title        VARCHAR(50),
+    description  VARCHAR(200),
+    publish_date DATETIME,
+    author       VARCHAR(20),
+    view_count   INT,
+    content      LONGTEXT,
+    del          BOOLEAN,
+    category_id  INT,
+    FOREIGN KEY (category_id) REFERENCES ContentCategory(id));
+----
+
+之前已经存在表 ContentCategory，下面语句创建了一对多外键。我们就称 category_id 字段是 ContentCategory 表的外键。
 
 ==== 9.6.2 一对多关系在创建新表后生成
-# .运行命令
-# [source,python,]
-# --
-# sql = '''
-#     ALTER TABLE ContentInfo
-#         ADD COLUMN category_id INT;
-#
-#     ALTER TABLE ContentInfo
-#         ADD CONSTRAINT fk_category_id_id
-#         FOREIGN KEY (category_id)
-#         REFERENCES ContentCategory(id);
-# '''
-# --
+.运行命令
+[source,python,]
+----
+ALTER TABLE ContentInfo
+    ADD COLUMN category_id INT;
+
+ALTER TABLE ContentInfo
+    ADD CONSTRAINT fk_category_id_id
+    FOREIGN KEY (category_id)
+    REFERENCES ContentCategory(id);
+----
+
+NOTE: fk_category_id_id 名称可以自己定义。
 
 ==== 9.6.3 查看表的创建语句
-# .运行命令
-# [source,sql,]
-# ----
-#
-# sql = """show create TABLE ContentInfo;"""
-# ----
-#
-# .运行结果
-# ....
-# ContentInfo | CREATE TABLE `ContentInfo` (
-#   `id` int NOT NULL AUTO_INCREMENT,
-#   `category` varchar(20) DEFAULT NULL,
-#   `title` varchar(50) DEFAULT NULL,
-#   `description` varchar(200) DEFAULT NULL,
-#   `publish_date` datetime DEFAULT NULL,
-#   `author` varchar(20) DEFAULT NULL,
-#   `view_count` int DEFAULT NULL,
-#   `content` longtext,
-#   `del` tinyint(1) DEFAULT NULL,
-#   `category_id` int DEFAULT NULL,
-#   PRIMARY KEY (`id`),
-#   KEY `fk_category_id_id` (`category_id`),
-#   CONSTRAINT `fk_category_id_id` FOREIGN KEY (`category_id`) REFERENCES `ContentCategory` (`id`)
-# ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-# ....
-#
-# 可以查看到创建的外键信息。
+.运行命令
+[source,sql,]
+----
+show create TABLE ContentInfo;
+----
+
+.运行结果
+....
+ContentInfo | CREATE TABLE `ContentInfo` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category` varchar(20) DEFAULT NULL,
+  `title` varchar(50) DEFAULT NULL,
+  `description` varchar(200) DEFAULT NULL,
+  `publish_date` datetime DEFAULT NULL,
+  `author` varchar(20) DEFAULT NULL,
+  `view_count` int DEFAULT NULL,
+  `content` longtext,
+  `del` tinyint(1) DEFAULT NULL,
+  `category_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_category_id_id` (`category_id`),
+  CONSTRAINT `fk_category_id_id` FOREIGN KEY (`category_id`) REFERENCES `ContentCategory` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+....
+
+可以查看到创建的外键信息。
 
 ==== 9.6.4 两个表 INNER JOIN
-# .运行命令
-# [source,python,]
-# ----
-#
-# sql = """
-# SELECT category,
-#        ContentInfo.title,
-#        publish_date,
-#        TIMESTAMPDIFF(DAY, publish_date, CURDATE()) as days,
-#        view_count,
-#        del,
-#        ContentCategory.useFlag
-# FROM ContentInfo INNER JOIN ContentCategory
-#   ON ContentInfo.category_id = ContentCategory.id
-# ;"""
-# ----
-#
-# .运行结果
-# ....
-# +----------+----------------------------------------------+---------------------+------+------------+-----+---------+
-# | category | title                                        | publish_date        | days | view_count | del | useFlag |
-# +----------+----------------------------------------------+---------------------+------+------------+-----+---------+
-# | 解决方案 | 红枫视觉：利用数字孪生技术                      | 2023-10-27 20:18:04 |  154 |          0 |   0 | Y       |
-# | 成功案例 | 数据科技园                                   | 2023-08-25 14:00:31 |  217 |          0 |   1 | N       |
-# | 模型资源 | 建筑｜房间                                   | 2023-08-25 14:01:04 |  217 |          0 |   0 | Y       |
-# +----------+----------------------------------------------+---------------------+------+------------+-----+---------+
-# ....
-#
-#
-# ////
-# *问题: ？*
-# ////
+.运行命令
+[source,python,]
+----
+SELECT category,
+       ContentInfo.title,
+       publish_date,
+       TIMESTAMPDIFF(DAY, publish_date, CURDATE()) as days,
+       view_count,
+       del,
+       ContentCategory.useFlag
+FROM ContentInfo INNER JOIN ContentCategory
+  ON ContentInfo.category_id = ContentCategory.id;
+----
+
+.运行结果
+....
++----------+---------------------------+---------------------+------+------------+-----+---------+
+| category | title                     | publish_date        | days | view_count | del | useFlag |
++----------+---------------------------+---------------------+------+------------+-----+---------+
+| 解决方案 | 红枫视觉：利用数字孪生技术      | 2023-10-27 20:18:04 |  154 |          0 |   0 | Y       |
+| 成功案例 | 数据科技园                   | 2023-08-25 14:00:31 |  217 |          0 |   1 | N       |
+| 模型资源 | 建筑｜房间                   | 2023-08-25 14:01:04 |  217 |          0 |   0 | Y       |
++----------+---------------------------+---------------------+------+------------+-----+---------+
+....
 
 === 9.7 外键关联一对一
 
