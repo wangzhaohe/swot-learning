@@ -1512,16 +1512,24 @@
 <v t="swot.20260401110116.95"><vh>9.7.1 一对一关系举例</vh></v>
 <v t="swot.20260401110116.96"><vh>9.7.2 一对一关系实现</vh></v>
 <v t="swot.20260401110116.97"><vh>9.7.3 一对一关系数据</vh></v>
-<v t="swot.20260401110116.98"><vh>9.7.4 一对一关系查询</vh></v>
+<v t="swot.20260409114410.1"><vh>9.7.4 一对一关系查询</vh></v>
 </v>
 <v t="swot.20260401110116.99" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032342d30342d303271077573732e"><vh>9.8 外键关联多对多</vh>
-<v t="swot.20260401110116.100"><vh>9.8.1 1. 多对多关系举例</vh></v>
-<v t="swot.20260401110116.101"><vh>9.8.2 2. 多对多关系实现</vh></v>
+<v t="swot.20260410080934.1"><vh>9.8.1 1. 多对多关系举例</vh></v>
+<v t="swot.20260410082534.1"><vh>9.8.2 2. 多对多关系实现</vh></v>
 <v t="swot.20260401110116.102"><vh>9.8.3 3. 多对多关系数据</vh></v>
 <v t="swot.20260401110116.103"><vh>9.8.4 4. 多对多关系查询</vh></v>
 </v>
-<v t="swot.20260401110116.104"><vh>9.9 主键约束</vh></v>
-<v t="swot.20260401110116.105"><vh>9.10 主键约束测试</vh></v>
+<v t="swot.20260410091622.1"><vh>9.9 主键约束</vh></v>
+<v t="swot.20260401110116.105"><vh>9.10 主键约束测试</vh>
+<v t="swot.20260410112238.1"><vh>9.10.1 未更改时的表结构</vh></v>
+<v t="swot.20260410112632.1"><vh>9.10.2 删除被引用外键 -- DROP FOREIGN KEY ContentInfo_ibfk_1</vh></v>
+<v t="swot.20260410113053.1"><vh>9.10.3 删除 id 自增 -- MODIFY COLUMN id INT NOT NULL</vh></v>
+<v t="swot.20260410113356.1"><vh>9.10.4 删除主键 -- DROP PRIMARY KEY</vh></v>
+<v t="swot.20260410113622.1"><vh>9.10.5 增加主键 -- ADD PRIMARY KEY(id)</vh></v>
+<v t="swot.20260410113743.1"><vh>9.10.6 增加 id 自增 -- MODIFY COLUMN id INT AUTO_INCREMENT</vh></v>
+<v t="swot.20260410114452.1"><vh>9.10.7 增加被引用的外键</vh></v>
+</v>
 <v t="swot.20260401110116.106" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032342d30342d303671077573732e"><vh>9.11 使用索引</vh>
 <v t="swot.20260401110116.107" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032342d30342d303671077573732e"><vh>9.11.1 创建索引</vh></v>
 <v t="swot.20260401110116.108"><vh>9.11.2 查看索引</vh></v>
@@ -31893,123 +31901,30 @@ https://www.runoob.com/mysql/mysql-data-types.html
 
 https://www.w3cschool.cn/mysql/mysql-data-types.html
 </t>
-<t tx="swot.20260401110116.100">@language asciidoc
-@doc
-一个常见的多对多关系的例子是学生和课程之间的关系。*一个学生可以选修多门课程，而一门课程也可以被多名学生选修。*
-
-我们可以使用三个表来表示这种关系：学生表（Students）、课程表（Courses）和关联表（StudentCourses）。
-
-学生表存储学生的基本信息，如学号和姓名：
-
-```plaintext
-Students:
---------------------------------
-| id | student_id | name | ...
---------------------------------
-```
-
-课程表存储课程的基本信息，如课程编号和名称：
-
-```plaintext
-Courses:
--------------------------------
-| id | course_id | name | ...
--------------------------------
-```
-
-关联表存储学生和课程之间的关系，以及额外的信息（如成绩）：
-
-```plaintext
-StudentCourses:
-------------------------------
-| id | student_id | course_id | ...
-------------------------------
-```
-
-在关联表中，`student_id` 和 `course_id` 列分别引用学生表和课程表中的主键，表示学生选修了哪些课程，而每一行表示一个学生选修了一门课程的记录。
-
-这样，学生和课程之间就形成了多对多的关系，*一个学生可以选修多门课程，而一门课程也可以被多名学生选修。*</t>
-<t tx="swot.20260401110116.101">@doc
-@language asciidoc
-以下是使用 SQL 创建上述示例中的三个表的语句：
-
-创建学生表
-```sql
-sql = '''
-    CREATE TABLE Students (
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        student_id INT UNIQUE,
-        name VARCHAR(100)
-    );
-'''
-@doc
-```
-创建课程表
-```sql
-sql = '''
-    CREATE TABLE Courses (
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        course_id INT UNIQUE,
-        name VARCHAR(100)
-    );
-'''
-@doc
-```
-创建关联表
-
-```sql
-
-sql = '''
-    CREATE TABLE StudentCourses (
-        student_id INT,
-        course_id INT,
-        grade VARCHAR(10),
-        PRIMARY KEY (student_id, course_id),
-        FOREIGN KEY (student_id) REFERENCES Students(student_id),
-        FOREIGN KEY (course_id)  REFERENCES Courses(course_id)
-    );
-'''
-@doc
-```
-
-在关联表 `StudentCourses` 中，`student_id` 和 `course_id` 列分别引用 `Students` 表和 `Courses` 表中的主键，并且还定义了一个复合主键，以确保每个学生只能选修一门课程一次。
-</t>
-<t tx="swot.20260401110116.102">@doc
-以下是向示例表中插入一些示例数据的 SQL 语句：
-
-[source,sql,]
---
-sql = '''
-    INSERT INTO Students (student_id, name) VALUES
-        (1, 'Alice'),
-        (2, 'Bob'),
-        (3, 'Charlie');
-
-    INSERT INTO Courses (course_id, name) VALUES
-        (101, 'Math'),
-        (102, 'English'),
-        (103, 'History');
-'''
-@doc
---
+<t tx="swot.20260401110116.102">以下是向示例表中插入一些示例数据的 SQL 语句：
 
 [source,sql,]
 ----
+INSERT INTO Students (student_id, name) VALUES
+    (1, 'Alice'),
+    (2, 'Bob'),
+    (3, 'Charlie');
 
-sql = '''
-    INSERT INTO StudentCourses (student_id, course_id, grade) VALUES
-        (1, 101, 'A'),
-        (1, 102, 'B'),
-        (2, 101, 'B'),
-        (2, 103, 'A'),
-        (3, 102, 'C');
-'''
-@doc
+INSERT INTO Courses (course_id, name) VALUES
+    (101, 'Math'),
+    (102, 'English'),
+    (103, 'History');
+
+INSERT INTO StudentCourses (student_id, course_id, grade) VALUES
+    (1, 101, 'A'),
+    (1, 102, 'B'),
+    (2, 101, 'B'),
+    (2, 103, 'A'),
+    (3, 102, 'C');
 ----
 
 这些 SQL 语句将会向三个表中分别插入一些示例数据，包括学生的基本信息、课程的基本信息以及学生选修课程的记录。</t>
-<t tx="swot.20260401110116.103">@doc
-以下是一些 SQL 查询示例，用于演示如何从示例表中检索数据：
+<t tx="swot.20260401110116.103">以下是一些 SQL 查询示例，用于演示如何从示例表中检索数据：
 
 1. 检索所有学生的基本信息：
 +
@@ -32031,14 +31946,16 @@ SELECT * FROM Students WHERE name = 'Alice';
 
 4. 检索所有学生选修的课程及成绩：
 +
-```sql
+[source,sql]
+----
 SELECT Students.name AS student_name,
        Courses.name  AS course_name,
-       StudentCourses.grade
+       StudentsCourses.grade
 FROM Students
-JOIN StudentCourses ON Students.student_id = StudentCourses.student_id
-JOIN Courses        ON StudentCourses.course_id = Courses.course_id;
-```
+JOIN StudentsCourses ON Students.student_id = StudentsCourses.student_id
+JOIN Courses        ON StudentsCourses.course_id = Courses.course_id;
+----
+
 +
 ....
 +--------------+-------------+-------+
@@ -32055,10 +31972,10 @@ JOIN Courses        ON StudentCourses.course_id = Courses.course_id;
 5. 检索学生 Bob 选修的课程及成绩：
 +
 ```sql
-SELECT Courses.name AS course_name, StudentCourses.grade
+SELECT Courses.name AS course_name, StudentsCourses.grade
 FROM Students
-JOIN StudentCourses ON Students.student_id = StudentCourses.student_id
-JOIN Courses ON StudentCourses.course_id = Courses.course_id
+JOIN StudentsCourses ON Students.student_id = StudentsCourses.student_id
+JOIN Courses ON StudentsCourses.course_id = Courses.course_id
 WHERE Students.name = 'Bob';
 ```
 +
@@ -32072,167 +31989,7 @@ WHERE Students.name = 'Bob';
 ....
 
 这些查询演示了如何使用 SQL 语句从示例表中检索学生、课程和学生选修的课程信息。</t>
-<t tx="swot.20260401110116.104">@doc
-@language asciidoc
-主键约束是一种用于确保表中每行数据都有唯一标识的约束。在关系型数据库中，主键通常用于唯一标识表中的每一行数据，并且可以用来进行数据的快速检索。
-
-在 MySQL 中，你可以通过在表定义中指定主键来创建主键约束。主键可以包含一个或多个列，但每个表只能有一个主键。主键约束提供了以下几点特性：
-
-1. **唯一性**：主键列的值在整个表中必须是唯一的，即每行数据都必须具有唯一的主键值。
-
-2. **非空性**：主键列的值不能为 NULL，因为主键用于唯一标识每一行数据。
-
-3. **索引**：主键列会自动创建索引，这样可以加快数据检索的速度。
-
-在创建表时指定主键约束的一般语法如下：
-
-```sql
-CREATE TABLE table_name (
-    column1 datatype PRIMARY KEY,
-    column2 datatype,
-    ...
-);
-```
-
-在上面的语法中，`column1` 是主键列，`datatype` 是该列的数据类型。你还可以在 `PRIMARY KEY` 关键字后面指定多个列，以创建复合主键。例如：
-
-```sql
-CREATE TABLE table_name (
-    column1 datatype,
-    column2 datatype,
-    PRIMARY KEY (column1, column2)
-);
-```
-
-这样的话，`(column1, column2)` 组合将作为主键。</t>
-<t tx="swot.20260401110116.105">@language asciidoc
-@doc
-////
-.这些命令会分步讲解，可以先看下都有哪些命令
-[source,sql,]
---
-
-sql = """
-    USE OfficialWebsite;
-    DESC ContentCategory;
-
-    ALTER TABLE ContentInfo DROP FOREIGN KEY ContentInfo_ibfk_1;
-
-    ALTER TABLE ContentCategory MODIFY COLUMN id INT NOT NULL;
-    DESC ContentCategory;
-
-    ALTER TABLE ContentCategory DROP PRIMARY KEY;
-    DESC ContentCategory;
-
-    ALTER TABLE ContentCategory ADD PRIMARY KEY(id);
-    DESC ContentCategory;
-
-    ALTER TABLE ContentCategory MODIFY COLUMN id INT AUTO_INCREMENT;
-    DESC ContentCategory;
-"""
-////
-@doc
---
-
-.未更改时的表结构
-```sql
-DESC ContentCategory;
-```
-....
-+-------------+--------------+------+-----+---------+----------------+
-| Field       | Type         | Null | Key | Default | Extra          |
-+-------------+--------------+------+-----+---------+----------------+
-| id          | int          | NO   | PRI | NULL    | auto_increment |
-| title       | varchar(20)  | YES  |     | NULL    |                |
-| description | varchar(200) | YES  |     | NULL    |                |
-| useFlag     | char(1)      | YES  |     | NULL    |                |
-| owner       | varchar(20)  | YES  |     | NULL    |                |
-| createDate  | date         | YES  |     | NULL    |                |
-+-------------+--------------+------+-----+---------+----------------+
-....
-
-
-.删除被引用外键
-```sql
-ALTER TABLE ContentInfo DROP FOREIGN KEY ContentInfo_ibfk_1;
-```
-....
-如果 id 字段被别的表做为外键使用，请先删除该外键。
-假设被 ContentInfo 使用了，且名称为`ContentInfo_ibfk_1`，要删除名为 `ContentInfo_ibfk_1` 的外键约束，您可以使用以下 SQL 语句：
-
-这条语句将从 `ContentInfo` 表中删除名为 `ContentInfo_ibfk_1` 的外键约束。
-....
-
-
-.删除 id 自增
-```sql
-ALTER TABLE ContentCategory MODIFY COLUMN id INT NOT NULL;
-```
-....
-即删除 auto_increment（因为不删除的话不让删除主键）
-+-------------+--------------+------+-----+---------+-------+
-| Field       | Type         | Null | Key | Default | Extra |
-+-------------+--------------+------+-----+---------+-------+
-| id          | int          | NO   | PRI | NULL    |       |
-| title       | varchar(20)  | YES  |     | NULL    |       |
-| description | varchar(200) | YES  |     | NULL    |       |
-| useFlag     | char(1)      | YES  |     | NULL    |       |
-| owner       | varchar(20)  | YES  |     | NULL    |       |
-| createDate  | date         | YES  |     | NULL    |       |
-+-------------+--------------+------+-----+---------+-------+
-....
-
-.删除主键
-```sql
-ALTER TABLE ContentCategory DROP PRIMARY KEY;
-```
-....
-+-------------+--------------+------+-----+---------+-------+
-| Field       | Type         | Null | Key | Default | Extra |
-+-------------+--------------+------+-----+---------+-------+
-| id          | int          | NO   |     | NULL    |       |
-| title       | varchar(20)  | YES  |     | NULL    |       |
-| description | varchar(200) | YES  |     | NULL    |       |
-| useFlag     | char(1)      | YES  |     | NULL    |       |
-| owner       | varchar(20)  | YES  |     | NULL    |       |
-| createDate  | date         | YES  |     | NULL    |       |
-+-------------+--------------+------+-----+---------+-------+
-....
-
-.增加主键
-```sql
-ALTER TABLE ContentCategory ADD PRIMARY KEY(id);
-```
-....
-+-------------+--------------+------+-----+---------+-------+
-| Field       | Type         | Null | Key | Default | Extra |
-+-------------+--------------+------+-----+---------+-------+
-| id          | int          | NO   | PRI | NULL    |       |
-| title       | varchar(20)  | YES  |     | NULL    |       |
-| description | varchar(200) | YES  |     | NULL    |       |
-| useFlag     | char(1)      | YES  |     | NULL    |       |
-| owner       | varchar(20)  | YES  |     | NULL    |       |
-| createDate  | date         | YES  |     | NULL    |       |
-+-------------+--------------+------+-----+---------+-------+
-....
-
-
-.增加 id 自增
-```sql
-ALTER TABLE ContentCategory MODIFY COLUMN id INT AUTO_INCREMENT;
-```
-....
-+-------------+--------------+------+-----+---------+----------------+
-| Field       | Type         | Null | Key | Default | Extra          |
-+-------------+--------------+------+-----+---------+----------------+
-| id          | int          | NO   | PRI | NULL    | auto_increment |
-| title       | varchar(20)  | YES  |     | NULL    |                |
-| description | varchar(200) | YES  |     | NULL    |                |
-| useFlag     | char(1)      | YES  |     | NULL    |                |
-| owner       | varchar(20)  | YES  |     | NULL    |                |
-| createDate  | date         | YES  |     | NULL    |                |
-+-------------+--------------+------+-----+---------+----------------+
-....</t>
+<t tx="swot.20260401110116.105"></t>
 <t tx="swot.20260401110116.106"></t>
 <t tx="swot.20260401110116.107" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032342d30342d30367103752e">@language asciidoc
 在 SQL 中，创建索引可以提高查询性能，特别是在经常用于检索的列上。以下是在常见的关系型数据库（如 MySQL、PostgreSQL、SQLite 等）中创建索引的通用语法：
@@ -33097,8 +32854,8 @@ DROP DATABASE old_database_name;
 ```
 
 通过上述步骤，就可以实现修改 MySQL 数据库名称的操作。但是请确保在执行删除操作之前，已经确认新数据库中的数据已经完整，并且没有丢失任何重要的数据。</t>
-<t tx="swot.20260401110116.145">@language asciidoc
-每个同学计划一个自己在毕业设计时要写的项目。通过所学的数据库 MySQL 知识为毕设项目设计数据库表。
+<t tx="swot.20260401110116.145">每个同学计划一个自己在毕业设计时要写的项目。通过所学的数据库 MySQL 知识为毕设项目设计数据库表。
+
 举例如设计一个公司的官网项目如下：
 
 1. 60分：官网会定期更新新闻、文章、产品等等内容，所以需要设计一个内容的`分类表`。
@@ -33108,8 +32865,9 @@ DROP DATABASE old_database_name;
 3. +10分：再设计要发的`内容表`。内容属于某个分类，所以需要设计`内容表`与`分类表`的关系。
 
 4. +10分：在网站的顶部一般都有导航菜单。导航菜单一般由三种数据组构：
+
 * 各分类下的内容列表，因为每个分类都可能有自己要发布的内容。
-** 『各分类下的内容列表』，是指某个导航链接点击后会跳转到一个页面，该页面显示指定的分类下的所有内容（文章、商品等）。
+  ** 『各分类下的内容列表』，是指某个导航链接点击后会跳转到一个页面，该页面显示指定的分类下的所有内容（文章、商品等）。
 * 某个发布内容的链接地址。
 * 外网的某个链接地址。
 
@@ -33131,9 +32889,6 @@ DROP DATABASE old_database_name;
 
 1. markdown 或者 txt 文件描述自己项目的设计。
 2. 数据库表设计完成后导出的 sql 文件。
-3. 发送到邮箱 27129782.qq.com
-
-IMPORTANT: 不要忘记在邮件中写上自己的名字。
 </t>
 <t tx="swot.20260401110116.15">一个数据库服务器可以拥有多个数据库。
 
@@ -35033,9 +34788,7 @@ FROM ContentInfo INNER JOIN ContentCategory
 ....
 </t>
 <t tx="swot.20260401110116.94" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032342d30342d30327103752e"></t>
-<t tx="swot.20260401110116.95">@doc
-@language asciidoc
-一个常见的例子是用户信息表（User）和用户详细信息表（UserDetails）之间的关系。
+<t tx="swot.20260401110116.95">一个常见的例子是用户信息表（User）和用户详细信息表（UserDetails）之间的关系。
 
 假设有一个用户信息表存储用户的基本信息，如用户名、密码等，结构如下：
 
@@ -35056,38 +34809,29 @@ UserDetails:
 ```
 
 在这个例子中，`UserDetails` 表中的每一行都与 `User` 表中的一行相关联，通过 `user_id` 外键列进行关联。这样，可以将用户的详细信息与基本信息分离开来，使数据库结构更加清晰，并且只有在需要时才会访问用户详细信息，从而提高了查询性能。</t>
-<t tx="swot.20260401110116.96">@doc
-以下是使用 SQL 创建上述示例中的两个表的语句：
+<t tx="swot.20260401110116.96">以下是使用 SQL 创建上述示例中的两个表的语句：
 
 .创建用户信息表
 [source,sql,]
 ----
-
-sql = '''
-    CREATE TABLE User (
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        username VARCHAR(50) NOT NULL,
-        password VARCHAR(50) NOT NULL
-    );
-'''
-@doc
+CREATE TABLE User (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL
+);
 ----
 
 
 .创建用户详细信息表
 [source,sql,]
 ----
-
-sql = '''
-    CREATE TABLE UserDetails (
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        user_id INT UNIQUE,
-        full_name VARCHAR(100),
-        address VARCHAR(100),
-        FOREIGN KEY (user_id) REFERENCES User(id)
-    );
-'''
-@doc
+CREATE TABLE UserDetails (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT UNIQUE,
+    full_name VARCHAR(100),
+    address VARCHAR(100),
+    FOREIGN KEY (user_id) REFERENCES User(id)
+);
 ----
 
 这里的 `UserDetails` 表中的 `user_id` 列是一个外键，它与 `User` 表中的 `id` 列关联起来，确保了每个 `UserDetails` 行都与一个 `User` 行相关联。
@@ -35104,39 +34848,19 @@ sql = '''
 下面是填充一对一关系的 `User` 和 `UserDetails` 表的示例测试数据：
 
 [source,sql,linenums]
---
+----
+INSERT INTO User (username, password) VALUES
+    ('user1', '123456'),
+    ('user2', '123456'),
+    ('user3', '123456');
 
-sql = '''
-    INSERT INTO User (username, password) VALUES
-        ('user1', '123456'),
-        ('user2', '123456'),
-        ('user3', '123456');
-
-    INSERT INTO UserDetails (user_id, full_name, address) VALUES
-        (1, 'User One',   '123 Main St, City1'),
-        (2, 'User Two',   '456 Elm St,  City2'),
-        (3, 'User Three', '789 Oak St,  City3');
-'''
-@doc
---
+INSERT INTO UserDetails (user_id, full_name, address) VALUES
+    (1, 'User One',   '123 Main St, City1'),
+    (2, 'User Two',   '456 Elm St,  City2'),
+    (3, 'User Three', '789 Oak St,  City3');
+----
 
 这些 SQL 语句将向 `User` 表和 `UserDetails` 表中插入一些示例数据，以填充一对一关系的测试数据。每个用户在 `User` 表中具有一个唯一的 `user_id`，并且在 `UserDetails` 表中有相应的详细信息，通过 `user_id` 来关联。
-</t>
-<t tx="swot.20260401110116.98">@language asciidoc
-@doc
-以下是一个演示如何查询一对一关系的示例查询：
-
-```sql
-
-sql = '''
-    SELECT User.username, UserDetails.full_name, UserDetails.address
-    FROM User JOIN UserDetails 
-    ON User.id = UserDetails.user_id;
-'''
-@doc
-```
-
-这个查询将从 `User` 表和 `UserDetails` 表中检索数据，并将它们连接起来以获取完整的用户信息。
 </t>
 <t tx="swot.20260401110116.99" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032342d30342d30327103752e"></t>
 <t tx="swot.20260401134421.1">@language asciidoc
@@ -35498,6 +35222,236 @@ case-insensitive），则 `'S%'` 和 `'s%'` 结果相同，都不区分大小写
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'new_root_password';
 
 ALTER USER 'root'@'%' IDENTIFIED BY 'new_root_password';
+----
+</t>
+<t tx="swot.20260409114410.1">以下是一个演示如何查询一对一关系的示例查询：
+
+[source,sql]
+----
+SELECT User.username, UserDetails.full_name, UserDetails.address
+FROM User JOIN UserDetails 
+ON User.id = UserDetails.user_id;
+----
+
+这个查询将从 `User` 表和 `UserDetails`
+表中检索数据，并将它们连接起来以获取完整的用户信息。
+</t>
+<t tx="swot.20260410080934.1">一个常见的多对多关系的例子是「学生和课程」之间的关系。_一个学生可以选修多门课程，而一门课程也可以被多名学生选修。_
+
+我们可以使用三个表来表示这种关系：学生表（Students）、课程表（Courses）和关联表（StudentCourses）。
+
+学生表 Students 存储学生的基本信息，如学号和姓名等等：
+
+[source,plaintext]
+----
+Students:
+--------------------------------
+| id | student_id | name | ...
+--------------------------------
+----
+
+课程表 Courses 存储课程的基本信息，如课程编号和名称等等：
+
+[source,plaintext]
+----
+Courses:
+-------------------------------
+| id | course_id | name | ...
+-------------------------------
+----
+
+关联表 StudentCourses 存储学生和课程之间的关系，以及额外的信息（如成绩等等）：
+
+[source,plaintext]
+----
+StudentCourses:
+------------------------------
+| id | student_id | course_id | ...
+------------------------------
+----
+
+在关联表中，`student_id` 和 `course_id`
+列分别引用学生表和课程表中的主键，表示学生选修了哪些课程，而每一行表示一个学生选修了一门课程的记录。
+
+这样，学生和课程之间就形成了多对多的关系，_一个学生可以选修多门课程，而一门课程也可以被多名学生选修。_
+</t>
+<t tx="swot.20260410082534.1">以下是使用 SQL 创建上述示例中的三个表的语句：
+
+.创建学生表
+[source,sql]
+----
+CREATE TABLE Students (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    student_id INT UNIQUE,
+    name VARCHAR(100)
+);
+----
+
+.创建课程表
+[source,sql]
+----
+CREATE TABLE Courses (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    course_id INT UNIQUE,
+    name VARCHAR(100)
+);
+----
+
+.创建关联表
+[source,sql]
+----
+CREATE TABLE StudentsCourses (
+    student_id INT,
+    course_id INT,
+    grade VARCHAR(10),  -- 分数 
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (course_id)  REFERENCES Courses(course_id)
+);
+----
+
+在关联表 `StudentsCourses` 中，`student_id` 和 `course_id` 列分别引用 `Students` 表和 `Courses` 表中的主键，并且还定义了一个复合主键，以确保每个学生只能选修一门课程一次。即表示 (student_id, course_id) 这个组合在整个表中必须是唯一的。
+
+具体含义：
+
+* 单独某一列可以重复：同一个 student_id 可以出现多次（一个学生选多门课），同一个 course_id 也可以出现多次（一门课被多个学生选）
+* 但组合必须唯一：同一个学生不能以相同的 (student_id, course_id) 组合插入两次
+</t>
+<t tx="swot.20260410091622.1">主键约束是一种用于确保表中每行数据都有唯一标识的约束。在关系型数据库中，主键通常用于唯一标识表中的每一行数据，并且可以用来进行数据的快速检索。
+
+在 MySQL 中，可以通过在表定义中指定主键来创建主键约束。主键可以包含一个或多个列，但每个表只能有一个主键。主键约束提供了以下几点特性：
+
+[arabic]
+. *唯一性*：主键列的值在整个表中必须是唯一的，即每行数据都必须具有唯一的主键值。
+. *非空性*：主键列的值不能为 NULL，因为主键用于唯一标识每一行数据。
+. *索引*： 主键列会自动创建索引，这样可以加快数据检索的速度。
+
+在创建表时指定主键约束的一般语法如下：
+
+[source,sql]
+----
+CREATE TABLE table_name (
+    column1 datatype PRIMARY KEY,
+    column2 datatype,
+    ...
+);
+----
+
+在上面的语法中，`column1` 是主键列，`datatype` 是该列的数据类型。还可以在 `PRIMARY KEY` 关键字后面指定多个列，以创建复合主键。例如：
+
+[source,sql]
+----
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    PRIMARY KEY (column1, column2)
+);
+----
+
+这样的话，`(column1, column2)` 组合将作为主键。
+</t>
+<t tx="swot.20260410112238.1">[source,sql]
+----
+USE OfficialWebsite;
+DESC ContentCategory;
+----
+
+....
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | int          | NO   | PRI | NULL    | auto_increment |
+| title       | varchar(20)  | YES  |     | NULL    |                |
+| description | varchar(200) | YES  |     | NULL    |                |
+| useFlag     | char(1)      | YES  |     | NULL    |                |
+| owner       | varchar(20)  | YES  |     | NULL    |                |
+| createDate  | date         | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+....
+</t>
+<t tx="swot.20260410112632.1">```sql
+ALTER TABLE ContentInfo DROP FOREIGN KEY ContentInfo_ibfk_1;
+```
+....
+如果 id 字段被别的表做为外键使用，请先删除该外键，比如此例子。
+假设被 ContentInfo 使用了，且名称为`ContentInfo_ibfk_1`，要删除名为 `ContentInfo_ibfk_1` 的外键约束，可以使用上面的 SQL 语句，这条语句将从 `ContentInfo` 表中删除名为 `ContentInfo_ibfk_1` 的外键约束。
+....
+</t>
+<t tx="swot.20260410113053.1">```sql
+ALTER TABLE ContentCategory MODIFY COLUMN id INT NOT NULL;
+DESC ContentCategory;
+```
+....
+即删除 auto_increment （因为不删除的话不让删除主键）
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| id          | int          | NO   | PRI | NULL    |       |
+| title       | varchar(20)  | YES  |     | NULL    |       |
+| description | varchar(200) | YES  |     | NULL    |       |
+| useFlag     | char(1)      | YES  |     | NULL    |       |
+| owner       | varchar(20)  | YES  |     | NULL    |       |
+| createDate  | date         | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+....
+</t>
+<t tx="swot.20260410113356.1">```sql
+ALTER TABLE ContentCategory DROP PRIMARY KEY;
+DESC ContentCategory;
+```
+....
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| id          | int          | NO   |     | NULL    |       |
+| title       | varchar(20)  | YES  |     | NULL    |       |
+| description | varchar(200) | YES  |     | NULL    |       |
+| useFlag     | char(1)      | YES  |     | NULL    |       |
+| owner       | varchar(20)  | YES  |     | NULL    |       |
+| createDate  | date         | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+....
+</t>
+<t tx="swot.20260410113622.1">```sql
+ALTER TABLE ContentCategory ADD PRIMARY KEY(id);
+DESC ContentCategory;
+```
+....
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| id          | int          | NO   | PRI | NULL    |       |
+| title       | varchar(20)  | YES  |     | NULL    |       |
+| description | varchar(200) | YES  |     | NULL    |       |
+| useFlag     | char(1)      | YES  |     | NULL    |       |
+| owner       | varchar(20)  | YES  |     | NULL    |       |
+| createDate  | date         | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+....
+</t>
+<t tx="swot.20260410113743.1">```sql
+ALTER TABLE ContentCategory MODIFY COLUMN id INT AUTO_INCREMENT;
+DESC ContentCategory;
+```
+....
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | int          | NO   | PRI | NULL    | auto_increment |
+| title       | varchar(20)  | YES  |     | NULL    |                |
+| description | varchar(200) | YES  |     | NULL    |                |
+| useFlag     | char(1)      | YES  |     | NULL    |                |
+| owner       | varchar(20)  | YES  |     | NULL    |                |
+| createDate  | date         | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+....
+</t>
+<t tx="swot.20260410114452.1">.重新添加外键约束
+[source,sql]
+----
+ALTER TABLE ContentInfo 
+ADD CONSTRAINT fk_category_id_id 
+FOREIGN KEY (category_id) REFERENCES ContentCategory(id);
 ----
 </t>
 </tnodes>
