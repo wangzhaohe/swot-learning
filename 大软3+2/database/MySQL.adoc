@@ -2487,22 +2487,22 @@ CREATE TABLE UserDetails (
 在 `UserDetails` 表的创建语句中，`user_id` 列被定义为 UNIQUE，这意味着每个 `user_id` 值在表中都是唯一的。这样一来，每个 `UserDetails` 行都与 `User` 表中的唯一一行相关联，从而实现了一对一的关系。
 
 ==== 9.7.3 一对一关系数据
-# 下面是填充一对一关系的 `User` 和 `UserDetails` 表的示例测试数据：
-#
-# [source,sql,linenums]
-# ----
-# INSERT INTO User (username, password) VALUES
-#     ('user1', '123456'),
-#     ('user2', '123456'),
-#     ('user3', '123456');
-#
-# INSERT INTO UserDetails (user_id, full_name, address) VALUES
-#     (1, 'User One',   '123 Main St, City1'),
-#     (2, 'User Two',   '456 Elm St,  City2'),
-#     (3, 'User Three', '789 Oak St,  City3');
-# ----
-#
-# 这些 SQL 语句将向 `User` 表和 `UserDetails` 表中插入一些示例数据，以填充一对一关系的测试数据。每个用户在 `User` 表中具有一个唯一的 `user_id`，并且在 `UserDetails` 表中有相应的详细信息，通过 `user_id` 来关联。
+下面是填充一对一关系的 `User` 和 `UserDetails` 表的示例测试数据：
+
+[source,sql,linenums]
+----
+INSERT INTO User (username, password) VALUES
+    ('user1', '123456'),
+    ('user2', '123456'),
+    ('user3', '123456');
+
+INSERT INTO UserDetails (user_id, full_name, address) VALUES
+    (1, 'User One',   '123 Main St, City1'),
+    (2, 'User Two',   '456 Elm St,  City2'),
+    (3, 'User Three', '789 Oak St,  City3');
+----
+
+这些 SQL 语句将向 `User` 表和 `UserDetails` 表中插入一些示例数据，以填充一对一关系的测试数据。每个用户在 `User` 表中具有一个唯一的 `user_id`，并且在 `UserDetails` 表中有相应的详细信息，通过 `user_id` 来关联。
 
 ==== 9.7.4 一对一关系查询
 以下是一个演示如何查询一对一关系的示例查询：
@@ -2847,15 +2847,17 @@ FOREIGN KEY (category_id) REFERENCES ContentCategory(id);
 
 
 ==== 9.11.1 创建索引
-在 SQL 中，创建索引可以提高查询性能，特别是在经常用于检索的列上。以下是在常见的关系型数据库（如 MySQL、PostgreSQL、SQLite 等）中创建索引的通用语法：
+在 SQL 中，创建索引可以提高查询性能，特别是在经常用于检索的列上。
+以下是在常见的关系型数据库（如 MySQL、PostgreSQL、SQLite 等）中创建索引的通用语法：
 
-```sql
+[source,sql]
+----
 -- 在单个列上创建索引
 CREATE INDEX index_name ON table_name (column_name);
 
 -- 在多个列上创建联合索引
 CREATE INDEX index_name ON table_name (column1_name, column2_name, ...);
-```
+----
 
 在上面的语法中：
 
@@ -2865,29 +2867,36 @@ CREATE INDEX index_name ON table_name (column1_name, column2_name, ...);
 
 例如，在名为 `ContentCategory` 的表上创建一个名为 `idx_title` 的索引，以提高对 `title` 列的查询性能，可以执行以下 SQL 语句：
 
-```sql
+.Example
+[source,sql]
+----
+-- 如果 title 字段是 UNIQUE 约束，数据库管理系统会自动创建索引，就不需要再手工创建索引了。
 CREATE INDEX idx_title ON ContentCategory (title);
-```
+----
 
-在实际使用中，应该根据具体的查询需求和性能优化的目标来选择合适的列创建索引。需要注意的是，虽然索引可以提高查询性能，但也会增加数据库##写操作##的成本，因为每次对索引列进行插入、更新或删除操作时，都需要更新索引。因此，应该谨慎地选择需要创建索引的列，避免过度索引导致性能下降。
+在实际使用中，应该根据具体的查询需求和性能优化的目标来选择合适的列创建索引。
+需要注意的是，虽然索引可以提高查询性能，但也会增加数据库##写操作##的成本，因为每次对索引列进行插入、更新或删除操作时，都需要更新索引。
+因此，应该谨慎地选择需要创建索引的列，避免过度索引导致性能下降。
 
 
 TIP: idx 表示 index
 
 
-*问题：创建索引后，在用 sql 操作数据库时，需要写什么特殊的语句吗？*
+问题：创建索引后，在用 sql 操作数据库时，需要写什么特殊的语句吗？
 
-在使用 SQL 操作数据库时，一般不需要编写特殊的语句来使用已创建的索引。索引是由数据库管理系统自动使用的，它会根据查询语句的条件和连接来选择合适的索引进行优化查询。因此，在正常的 SQL 查询中，不需要额外的操作来使用索引。
+* 在使用 SQL 操作数据库时，一般不需要编写特殊的语句来使用已创建的索引。索引是由数据库管理系统自动使用的，它会根据查询语句的条件和连接来选择合适的索引进行优化查询。因此，在正常的 SQL 查询中，不需要额外的操作来使用索引。
 
-当编写 SQL 查询时，可以通过在 `WHERE` 子句中指定索引列的条件，或者在连接操作中使用索引列，来利用已创建的索引。数据库管理系统会根据查询条件和连接方式，自动选择合适的索引来优化查询性能。
+* 当编写 SQL 查询时，可以通过在 `WHERE` 子句中指定索引列的条件，或者在连接操作中使用索引列，来利用已创建的索引。
+数据库管理系统会根据查询条件和连接方式，自动选择合适的索引来优化查询性能。
 
-例如，如果在 `ContentCategory` 表上创建了一个名为 `idx_title` 的索引，用于优化对 `title` 列的查询，那么查询该表中 `title` 为「解决方案」的内容分类记录时，可以写如下的 SQL 查询语句：
-
-```sql
+* 例如，如果在 `ContentCategory` 表上创建了一个名为 `idx_title` 的索引，用于优化对 `title` 列的查询，那么查询该表中 `title` 为「解决方案」的内容分类记录时，可以写如下的 SQL 查询语句：
++
+[source,sql]
+----
 SELECT * FROM ContentCategory WHERE title = '解决方案';
-```
+----
 
-数据库管理系统会自动选择并使用 `idx_title` 索引来优化此查询，加快检索速度。
+* 数据库管理系统会自动选择并使用 `idx_title` 索引来优化此查询，加快检索速度。
 
 总之，一般情况下，在使用 SQL 操作数据库时，不需要额外的特殊语句来使用已创建的索引，数据库管理系统会自动根据查询条件和连接来优化查询性能。
 
@@ -2913,54 +2922,65 @@ SHOW INDEX FROM ContentCategory;
 ==== 9.11.3 删除索引
 要删除索引，可以使用以下 SQL 查询：
 
-```sql
+[source,sql]
+----
 DROP INDEX index_name ON table_name;
-```
+----
 
-其中，`index_name` 是要删除的索引的名称，`table_name` 是索引所属的表的名称。
+其中，`index++_++name` 是要删除的索引的名称，`table++_++name`
+是索引所属的表的名称。
 
 === 9.12 创建视图
-视图（View）是数据库中一个虚拟的表，它是由一个或多个表的行和列组合而成的，可以像表一样被查询。视图本身并不存储数据，而是基于存储在数据库中的表的数据而动态生成的结果集。视图可以简化复杂的查询操作，隐藏表的结构细节，提高数据的安全性，并且可以在不改变表结构的情况下提供不同的数据访问方式。
+视图（View）是数据库中一个虚拟的表，它是由一个或多个表的行和列组合而成的，可以像表一样被查询。视图本身并不存储数据，而是基于存储在数据库中的表的数据而动态生成的结果集。
+视图可以简化复杂的查询操作，隐藏表的结构细节，提高数据的安全性，并且可以在不改变表结构的情况下提供不同的数据访问方式。
 
 创建视图后，可以像操作表一样对视图进行查询、更新、删除等操作，但实际上是对基础表进行了相应的操作。视图可以包含来自一个或多个表的列，并且可以对列进行计算、重命名或过滤，以满足特定的查询需求。
 
 视图的优点包括：
 
-1. 简化复杂的查询：通过视图，可以将复杂的查询逻辑封装在一个简单的视图中，便于使用和维护。
-2. 数据安全性：可以限制用户只能访问视图中的特定列或特定行，隐藏敏感数据。
-3. 逻辑数据独立性：通过视图，可以将应用程序与底层表的结构分离，使得应用程序可以独立于底层表的变化而不受影响。
-4. 重用性：可以重复使用视图，避免重复编写相同的查询逻辑。
+[upperalpha]
+. 简化复杂的查询：通过视图，可以将复杂的查询逻辑封装在一个简单的视图中，便于使用和维护。
+. 数据安全性：可以限制用户只能访问视图中的特定列或特定行，隐藏敏感数据。
+. 逻辑数据独立性：通过视图，可以将应用程序与底层表的结构分离，使得应用程序可以独立于底层表的变化而不受影响。
+. 重用性：可以重复使用视图，避免重复编写相同的查询逻辑。
 
 创建视图的语法通常类似于以下形式：
 
-```sql
+[source,sql]
+----
 CREATE VIEW view_name AS
 SELECT column1, column2, ...
 FROM table_name
 WHERE condition;
-```
+----
 
-其中，`view_name` 是视图的名称，`table_name` 是视图所基于的表，`condition` 是可选的筛选条件。视图创建后，可以像查询表一样使用该视图，例如：
+* `view_name` 是视图的名称
+* `table_name` 是视图所基于的表
+* `condition` 是可选的筛选条件
 
-```sql
+视图创建后，可以像查询表一样使用该视图，例如：
+
+[source,sql]
+----
 SELECT * FROM view_name;
-```
+----
 
 IMPORTANT: 需要注意的是，视图的查询结果是动态生成的，即每次查询视图时都会重新执行视图的查询逻辑生成结果集，因此视图的数据是实时的，反映了基础表的最新状态。
 
 ==== 9.12.1 视图举例
 视图是一个虚拟的表，它是由 SELECT 查询语句定义的结果集合。你可以像操作表一样，对视图进行查询，这样可以简化复杂查询或者用于提供对特定数据的预定义视图。
 
-要创建一个视图，你可以使用类似以下的 SQL 语句：
+下面以网站「导航菜单表」，配合「内容分类表」和「页面模板表」创建一个视图，你可以使用类似以下的 SQL 语句：
 
-```sql
+[source,javascript]
+----
 CREATE VIEW view_name AS
-SELECT nav_column2.categoryId, content_category.* ,pagha_shablono.prefikso
-FROM nav_column2
-JOIN content_category ON nav_column2.categoryId = content_category.id
-JOIN pagha_shablono ON content_category.shablono_id = pagha_shablono.id
-WHERE nav_column2.del=0;
-```
+SELECT nav_column.categoryId, content_category.* ,templates.prefikso
+FROM nav_column
+JOIN content_category ON nav_column.categoryId = content_category.id
+JOIN templates ON content_category.shablono_id = templates.id
+WHERE nav_column.del=0;
+----
 
 然后，你就可以像查询表一样查询这个视图了，例如：
 
@@ -2971,29 +2991,38 @@ SELECT * FROM view_name;
 这将会返回根据你提供的 SELECT 查询语句所定义的结果集。
 
 === 9.13 事务操作
-假设你有一个银行应用程序，需要执行转账操作。转账涉及两个步骤：从一个账户扣款，然后将相同金额存入另一个账户。这个过程应该是一个原子操作，要么成功完成，要么完全失败。
+假设你有一个银行应用程序，需要执行转账操作。
+转账涉及两个步骤：从一个账户扣款，然后将相同金额存入另一个账户。
+这个过程应该是一个原子操作，要么成功完成，要么完全失败。
 
 以下是一个简单的 MySQL 事务示例，演示了如何执行转账操作：
 
-```sql
+[source,sql]
+----
 START TRANSACTION;
 
 -- 扣款
-UPDATE accounts SET balance = balance - 100 WHERE account_id = 123;
+UPDATE accounts SET balance = balance - 100
+       WHERE account_id = 123;
 
 -- 存款
-UPDATE accounts SET balance = balance + 100 WHERE account_id = 456;
+UPDATE accounts SET balance = balance + 100
+       WHERE account_id = 456;
 
 COMMIT;
-```
+----
 
-在这个例子中，`START TRANSACTION` 开始了一个新的事务。然后，两个 `UPDATE` 被执行，一个用于从账户 123 扣除 100，另一个用于向账户 456 存入 100。最后，`COMMIT` 语句将事务提交，表示操作成功完成。
+[loweralpha]
+. 在这个例子中，`START TRANSACTION` 开始了一个新的事务。
+. 然后，两个 `UPDATE` 被执行，一个用于从账户 123 扣除 100，另一个用于向账户 456 存入 100。
+. 最后，`COMMIT` 语句将事务提交，表示操作成功完成。
 
 如果任何一个 `UPDATE` 失败（例如，由于账户余额不足），你可以使用 `ROLLBACK` 语句来回滚事务，以确保数据库的一致性。
 
-```sql
+[source,sql]
+----
 ROLLBACK;
-```
+----
 
 这样，如果任何一个操作失败，整个转账操作就会被撤销，保持了数据库的一致性。
 
@@ -3001,223 +3030,322 @@ ROLLBACK;
 
 
 ==== 9.14.1 数据导入导出 -> DBeaver
-# 演示 DBeaver 软件对数据的导入和导出功能。
-#
+演示使用客户端软件 DBeaver/Antares/WorkBench/mysql/mysqlsh 对数据的导入和导出功能。
 
 ==== 9.14.2 数据导出 -> 命令行 mysqldump
-# `mysqldump` 是 MySQL 提供的一个命令行工具，用于备份 MySQL 数据库或生成 SQL 转储文件。以下是一些常见的 `mysqldump` 使用示例：
-#
-# * **备份整个数据库**：
-#
-# ```bash
-# mysqldump -u username -p dbname > backup.sql
-# ```
-#
-# 这会备份名为 `dbname` 的整个数据库，并将备份内容保存到 `backup.sql` 文件中。执行此命令时会提示输入密码。
-#
-# * **备份特定表**：
-#
-# ```bash
-# mysqldump -u username -p dbname table1 table2 > backup.sql
-# ```
-#
-# 这会备份名为 `dbname` 的数据库中的 `table1` 和 `table2` 表，并将备份内容保存到 `backup.sql` 文件中。
-#
-# * **备份数据库结构**：
-#
-# ```bash
-# mysqldump -u username -p --no-data dbname > structure_backup.sql
-# ```
-#
-# 这会备份名为 `dbname` 的数据库的结构，但不包含数据，并将备份内容保存到 `structure_backup.sql` 文件中。
-#
-# * **备份特定表的结构**：
-#
-# ```bash
-# mysqldump -u username -p --no-data dbname table1 > structure_backup.sql
-# ```
-#
-# 这会备份名为 `dbname` 的数据库中 `table1` 表的结构，但不包含数据，并将备份内容保存到 `structure_backup.sql` 文件中。
-#
-# * **指定远程主机**：
-#
-# ```bash
-# mysqldump -h remotehost -u username -p dbname > backup.sql
-# ```
-#
-# 这会备份远程主机上的名为 `dbname` 的数据库，并将备份内容保存到 `backup.sql` 文件中。
-#
-# NOTE: 我们备份的其实是数据库里的内容，而不是数据库，我们打开.sql 发现没有 create database 语句，所以我们在导入前，一定要先创建一个空的数据库，然后再导入到空数据库中。
+`mysqldump` 是 MySQL 提供的一个命令行工具，用于备份 MySQL 数据库或生成 SQL 转储文件。
+以下是一些常见的 `mysqldump` 使用示例：
 
-==== 9.14.3 数据导出导入 -> 命令行 mysqlsh -> util.dumpSchemas()
-# https://www.percona.com/blog/backup-and-restore-using-mysql-shell/
-#
-# 备份: 会在 swizer_master_dump 下生成好多备份文件：
-#
-#     mysql JS >
-#     util.dumpSchemas(["OfficialWebsite"], "OfficialWebsite_dump", {"compression":"none", "threads":6, chunking:false})
-#
-#
-# ***
-# 恢复：默认恢复到##原来的数据库上##。如果要恢复到新建的数据库上，如 `test_restore`，则需要专门指定，如下所示：
-#
-#     MySQL localhost SQL > create database test_restore;
-#     Query OK, 1 row affected (0.3658 sec)
-#
-#     MySQL localhost SQL > js
-#     Switching to JavaScript mode...
-#
-#     MySQL localhost JS >
-#     util.loadDump("/Users/swot/OfficialWebsite_dump", {schema:"test_restore", progressFile: "progress.json", threads: 8, showProgress:true, resetProgress:true})
-#
-#     util.loadDump("/Users/swot/OfficialWebsite_dump", {schema:"OfficialWebsite", progressFile: "progress.json", threads: 8, showProgress:true, resetProgress:true})
+* *备份整个数据库*：
 
-===== 9.14.3.1 util.loadDump 报错
-# ....
-# ERROR: The 'local_infile' global system variable must be set to ON in the target server, after the server is verified to be trusted.
-# Util.loadDump: local_infile disabled in server (MYSQLSH 53025)
-# ....
-#
-#
-# [source,sql,]
-# ----
-#
-# sql = """
-#     SHOW GLOBAL VARIABLES LIKE 'local_infile';
-# """
-# ----
-#
-# ....
-# +---------------+-------+
-# | Variable_name | Value |
-# +---------------+-------+
-# | local_infile  | OFF   |
-# +---------------+-------+
-# ....
-#
-#
-# [source,sql,]
-# ----
-# sql = """
-#     SET GLOBAL local_infile=1;
-#     SHOW GLOBAL VARIABLES LIKE 'local_infile';
-# """
-# ----
-#
-# ....
-# +---------------+-------+
-# | Variable_name | Value |
-# +---------------+-------+
-# | local_infile  | ON    |
-# +---------------+-------+
-# ....
-#
-# 好了，可以导入了。
+[source,console]
+----
+mysqldump -u username -p dbname > backup.sql
+----
+
+这会备份名为 `dbname` 的整个数据库，并将备份内容保存到 `backup.sql` 文件中。
+执行此命令时会提示输入密码。
+
+* *备份特定表*：
+
+[source,bash]
+----
+mysqldump -u username -p dbname table1 table2 > backup.sql
+----
+
+这会备份名为 `dbname` 的数据库中的 `table1` 和 `table2`
+表，并将备份内容保存到 `backup.sql` 文件中。
+
+* *备份数据库结构*：
+
+[source,bash]
+----
+mysqldump -u username -p --no-data dbname > structure_backup.sql
+----
+
+这会备份名为 `dbname` 的数据库的结构，但不包含数据，并将备份内容保存到
+`structure++_++backup.sql` 文件中。
+
+* *备份特定表的结构*：
+
+[source,bash]
+----
+mysqldump -u username -p --no-data dbname table1 > structure_backup.sql
+----
+
+这会备份名为 `dbname` 的数据库中 `table1`
+表的结构，但不包含数据，并将备份内容保存到 `structure++_++backup.sql`
+文件中。
+
+* *指定远程主机*：
+
+[source,bash]
+----
+mysqldump -h remotehost -u username -p dbname > backup.sql
+----
+
+这会备份远程主机上的名为 `dbname` 的数据库，并将备份内容保存到
+`backup.sql` 文件中。
+
+NOTE: 我们备份的其实是数据库里的内容，而不是数据库，我们打开.sql
+发现没有 create database
+语句，所以我们在导入前，一定要先创建一个空的数据库，然后再导入到空数据库中。
+
+==== 9.14.3 数据导出导入 -> 命令行 mysqlsh
+https://www.percona.com/blog/backup-and-restore-using-mysql-shell/
+
+===== 9.14.3.1 备份数据库 util.dumpSchemas
+使用 `util.dumpSchemas` 命令可以备份一个或多个数据库。
+
+[source,console]
+----
+util.dumpSchemas(
+    ["OfficialWebsite"], 
+    "OfficialWebsite_dump",
+    {
+        "compression":"none",
+        "threads":6,
+        "chunking":false
+    }
+)
+----
+
+参数说明
+
+* `["OfficialWebsite"]`：要备份的数据库名称列表（支持多个）。
+* `"OfficialWebsite_dump"`：存储备份文件的目录名称。如果目录不存在，工具会自动创建。
+* `"compression":"none"`：设置压缩方式为“无”。可选值通常为 `"none"`、`"gzip"` 或 `"zstd"`。
+* `"threads":6`：启用 6 个并行线程执行备份，可提高速度。
+* `"chunking":false`：禁用分块功能。禁用后，每个表的数据会存储为单个文件（默认为 `.tsv` 格式）；若启用，则大表会按大小拆分为多个文件。
+
+备份输出文件
+
+备份目录下会生成多种文件，包括：
+
+* `@.json`：备份元信息（服务器版本、用户名、binlog 位置等）。
+* `@.sql` / `@.post.sql`：服务器版本与转储版本详情。
+* `<database>.json`：数据库及其中表的整体信息。
+* `<database>@<table>.json`：特定表的列、索引、触发器、字符集等详情。
+* `<database>.sql`：创建该数据库的 SQL 语句。
+* `<database>@<table>.sql`：创建该表的 SQL 语句。
+* `<database>@<table>.csv`（或 `.tsv`）：实际表数据文件。
+* `@.done.json`：备份完成时间及总大小。
+
+===== 9.14.3.2 恢复数据库 util.loadDump
+使用 `util.loadDump` 命令将备份恢复到目标数据库。
+
+====== 9.14.3.2.1 恢复至原数据库
+默认情况下，恢复操作会将数据写回**原来备份时的数据库**。
++
+[source,console]
+----
+util.loadDump(
+    "/Users/swot/OfficialWebsite_dump",
+    {
+        progressFile: "progress.json",
+        threads: 8,
+        showProgress:true,
+        resetProgress:true
+    }
+)
+----
+
+====== 9.14.3.2.2 恢复至新的数据库
+如果需要将备份恢复到**另一个数据库**（例如 `test_restore`），必须显式指定 `schema` 选项。
+
+[upperalpha]
+. 步骤 1：在目标 MySQL 实例中创建新数据库
+[source,sql]
+----
+CREATE DATABASE test_restore;
+----
+
+. 步骤 2：执行恢复并指定 `schema` 参数
+[source,console]
+----
+util.loadDump(
+    "/Users/swot/OfficialWebsite_dump",
+    {
+        schema:"test_restore",
+        progressFile: "progress.json",
+        threads: 8,
+        showProgress:true,
+        resetProgress:true
+    }
+)
+----
+
+恢复参数说明
+
+* `"/Users/swot/OfficialWebsite_dump"`：备份文件所在的路径。
+* `{schema:"test_restore"}`：**关键参数**，指定恢复的目标数据库名。若不提供此参数，默认恢复到原库（如 `OfficialWebsite`）。
+* `{progressFile: "progress.json"}`：记录恢复进度的文件。如果恢复中断，可基于该文件继续。
+* `{threads: 8}`：使用 8 个并行线程恢复数据。
+* `{showProgress:true}`：在控制台实时显示恢复进度条。
+* `{resetProgress:true}`：重置之前的进度信息，强制从头开始恢复。
+
+=== 注意事项
+
+* 执行恢复前，必须确保目标数据库已存在（若恢复至新库）。
+* 需要启用 `local_infile` 系统变量才能正常加载数据文件。
+* MySQL Shell 的备份工具相比传统 `mysqldump` 具有并行和多文件优势，但逻辑备份仍适用于中等规模数据集；
+超大规模场景建议考虑物理备份工具（如 Percona XtraBackup）。
+
+====== 9.14.3.2.2.1 需要启用 `local_infile` 系统变量
+原因解释：
+
+`util.loadDump` 在恢复数据时，底层使用的是 MySQL 的 `LOAD DATA LOCAL INFILE` 语句。这个命令会从客户端（MySQL Shell所在机器）读取备份文件（如 `.tsv` 或 `.csv`），并将数据发送到数据库服务器进行插入。
+
+*   安全机制：出于安全考虑，MySQL 默认关闭了 `LOCAL` 数据加载功能，以防止恶意读取客户端机器上的文件或进行其他攻击。
+
+*   具体操作：因此，在执行恢复命令前，您需要在 MySQL Shell 中或服务器配置中启用该变量。
+    *   临时启用（推荐）：在 MySQL Shell 中执行：
+        ```sql
+        SET GLOBAL local_infile = 1;
+        ```
+    *   永久启用：在 MySQL 配置文件（`my.cnf` 或 `my.ini`）的 `[mysqld]` 和 `[client]` 部分添加：
+        ```ini
+        local_infile=1
+        ```
+NOTE: 如果不启用，恢复过程会报错，类似 `ERROR 1148 (42000): The used command is not allowed with this MySQL version`。
+
+====== 9.14.3.2.2.2 逻辑备份 vs 物理备份的适用场景
+这段对比解释了为什么 MySQL Shell 的逻辑备份（`util.dumpSchemas`）适合中等数据集，而超大场景要换用物理备份（如 Percona XtraBackup）。
+
+[width="100%",cols="1,4,5",options="header",]
+|===
+|特性 |逻辑备份 (MySQL Shell) |物理备份 (Percona XtraBackup)
+|*工作原理* |将数据库结构（`CREATE TABLE`）和数据（`INSERT` 或 `LOAD DATA`）导出为文本文件。恢复时逐条执行SQL语句。
+|直接复制数据库的底层物理文件（如 `.ibd` 数据文件）。恢复时直接拷贝文件回原位置。
+
+|*速度*
+|*较慢*。尤其恢复时，需要重建索引、逐行插入、检查约束。对于数百GB以上的数据，耗时可能是数小时甚至数天。
+|*非常快*。主要是文件复制操作，不涉及SQL解析和逐行插入。数GB的数据可能在几分钟内完成。
+
+|*适用规模* |*中等规模*（通常建议 ++<++ 100-200 GB）。适合数据量不大、表结构复杂或需要跨MySQL版本迁移的场景。
+|*超大规模*（TB级别）。适合生产环境中需要快速恢复、最小化停机时间的场景。
+
+|*额外优势* |备份文件是纯文本，可读性强；支持跨平台、跨版本（如 MySQL 5.7 到 8.0）；可以选择性备份表或数据。
+|备份期间对数据库的阻塞影响极小（非阻塞）；支持增量备份（只备份自上次备份以来更改的数据页）；恢复速度快。
+
+|*缺点*
+|备份和恢复速度随数据量增大显著下降；大表分块文件管理复杂；恢复时可能产生大量日志和I/O压力。
+|备份文件是二进制格式，不可读；通常只能恢复到相同或兼容的MySQL版本；需要额外的工具和文件系统权限。
+|===
+
+结论：
+
+* 小到中等数据量（++<++ 200GB）、需要跨版本迁移、需要查看或编辑备份文件 → 使用 #MySQL Shell 逻辑备份（`util.dumpSchemas`）#。
+* 超大数据量（TB级）、生产环境要求快速恢复、需要最小化备份期间性能影响 → 使用 #物理备份工具（如 Percona XtraBackup，或 MySQL 企业备份）#。
 
 ==== 9.14.4 数据导入 -> 命令行 mysql
-# 方式一
-#
-# .直接在终端执行命令
-# [source,console,]
-# ----
-# mysql -u username -p databasename < /path/to/your/file.sql
-# ----
-#
-#
-# 方式二
-#
-# . 使用 `mysql` 命令连接到 MySQL 服务器：
-# +
-# ```bash
-# mysql -u username -p
-# ```
-# +
-# 在这里，`username` 是你连接到 MySQL 服务器时使用的用户名。连接成功后，会提示输入密码。
-#
-# . 选择要导入数据的数据库（可选）：
-# +
-# ```sql
-# USE databasename;
-# ```
-# +
-# 这里的 `databasename` 是你要导入数据的数据库名称。如果不想切换数据库，可以跳过这一步。
-#
-# . 使用 `source` 命令来执行 `.sql` 文件：
-# +
-# ```sql
-# source /path/to/your/file.sql;
-# ```
-# +
-# 这里的 `/path/to/your/file.sql` 是包含要导入的 SQL 命令的文件的路径。执行此命令后，MySQL 将执行文件中的 SQL 命令，并将数据导入到选定的数据库中。
-#
-# 请确保你有足够的权限来导入数据，并且导入的 SQL 文件是正确的，并且与数据库的结构兼容。
+方式一（简单适用）
+
+.直接在终端执行命令
+[source,console,]
+----
+mysql -u username -p databasename < /path/to/your/file.sql
+----
+
+
+方式二（步骤多）
+
+. 使用 `mysql` 命令连接到 MySQL 服务器：
++
+```bash
+mysql -u username -p
+```
++
+在这里，`username` 是你连接到 MySQL 服务器时使用的用户名。连接成功后，会提示输入密码。
+
+. 选择要导入数据的数据库（可选）：
++
+```sql
+USE databasename;
+```
++
+这里的 `databasename` 是你要导入数据的数据库名称。如果不想切换数据库，可以跳过这一步。
+
+. 使用 `source` 命令来执行 `.sql` 文件：
++
+```sql
+source /path/to/your/file.sql;
+```
++
+这里的 `/path/to/your/file.sql` 是包含要导入的 SQL 命令的文件的路径。执行此命令后，MySQL 将执行文件中的 SQL 命令，并将数据导入到选定的数据库中。
+
+请确保你有足够的权限来导入数据，并且导入的 SQL 文件是正确的，并且与数据库的结构兼容。
 
 ==== 9.14.5 数据导入 -> 命令行 mysqlsh -> \source
-# 在 MySQL Shell 中导入数据库通常通过执行 SQL 文件来实现。你可以使用 MySQL Shell 的内置 JavaScript 功能来执行系统命令，例如 `source` 命令来执行 SQL 文件。
-#
-# 以下是在 MySQL Shell 中导入数据库的一般步骤：
-#
-# 1. 打开 MySQL Shell。
-#
-# 2. 连接到 MySQL 服务器：
-# +
-# ```bash
-# mysqlsh -u username -p
-# ```
-# +
-# 在这里，`username` 是你连接到 MySQL 服务器时使用的用户名。连接成功后，会提示输入密码。
-#
-# 3. 选择要导入数据的数据库：
-# +
-# ```bash
-# \use dbname
-# ```
-# +
-# 这里的 `dbname` 是你要导入数据的数据库名称。
-#
-# 4. 执行 `source` 命令来导入 SQL 文件：
-# +
-# ```bash
-# \source path/to/your/file.sql
-# ```
-# +
-# 这里的 `path/to/your/file.sql` 是包含要导入的 SQL 命令的文件的路径。执行此命令后，MySQL Shell 将执行文件中的 SQL 命令，并将数据导入到选定的数据库中。
-#
-# 5. 导入完成后，你可以执行其他 SQL 查询来确认数据已经成功导入。
-#
-# 请确保你有足够的权限来导入数据，并且导入的 SQL 文件是正确的，并且与数据库的结构兼容。
+在 MySQL Shell 中导入数据库通常通过执行 SQL 文件来实现。
+你可以使用 MySQL Shell 的内置 JavaScript 功能来执行系统命令，例如 `source` 命令来执行 SQL 文件。
+
+以下是在 MySQL Shell 中导入数据库的一般步骤：
+
+[upperalpha]
+. 打开 MySQL Shell。
+
+
+. 连接到 MySQL 服务器：
++
+```bash
+mysqlsh -u username -p
+```
++
+在这里，`username` 是你连接到 MySQL 服务器时使用的用户名。连接成功后，会提示输入密码。
+
+
+. 选择要导入数据的数据库：
++
+```bash
+\use dbname
+```
++
+这里的 `dbname` 是你要导入数据的数据库名称。
+
+. 执行 `source` 命令来导入 SQL 文件：
++
+```bash
+\source path/to/your/file.sql
+```
++
+这里的 `path/to/your/file.sql` 是包含要导入的 SQL 命令的文件的路径。执行此命令后，MySQL Shell 将执行文件中的 SQL 命令，并将数据导入到选定的数据库中。
+
+. 导入完成后，你可以执行其他 SQL 查询来确认数据已经成功导入。
+
+请确保你有足够的权限来导入数据，并且导入的 SQL 文件是正确的，并且与数据库的结构兼容。
 
 === 9.15 编码问题
-# [source,console,]
-# ----
-# MySQL  182.92.131.108:3306 ssl  JS > \status
-# ----
-#
-# ....
-# MySQL Shell version 8.0.36
-#
-# Connection Id:                5380
-# Current schema:
-# Current user:                 root@60.25.179.7
-# SSL:                          Cipher in use: TLS_AES_256_GCM_SHA384 TLSv1.3
-# Using delimiter:              ;
-# Server version:               8.0.34-0ubuntu0.20.04.1 (Ubuntu)
-# Protocol version:             Classic 10
-# Client library:               8.0.36
-# Connection:                   182.92.131.108 via TCP/IP
-# TCP port:                     3306
-# Server characterset:          utf8mb4
-# Schema characterset:          utf8mb4
-# Client characterset:          utf8mb4
-# Conn. characterset:           utf8mb4
-# Result characterset:          utf8mb4
-# Compression:                  Disabled
-# Uptime:                       6 days 10 hours 48 min 10.0000 sec
-#
-# Threads: 35  Questions: 595724  Slow queries: 90  Opens: 1470  Flush tables: 3  Open tables: 1201  Queries per second avg: 1.068
-# ....
-#
-# NOTE: 建议使用 MySQL Shell，从上面输出结果可以看到服务端和客户端的编码是一致的。
+[source,console]
+----
+MySQL  182.92.131.108:3306 ssl  JS > \status
+----
+
+....
+MySQL Shell version 8.0.36
+
+Connection Id:                5380
+Current schema:
+Current user:                 root@60.25.179.7
+SSL:                          Cipher in use: TLS_AES_256_GCM_SHA384 TLSv1.3
+Using delimiter:              ;
+Server version:               8.0.34-0ubuntu0.20.04.1 (Ubuntu)
+Protocol version:             Classic 10
+Client library:               8.0.36
+Connection:                   182.92.131.108 via TCP/IP
+TCP port:                     3306
+Server characterset:          utf8mb4
+Schema characterset:          utf8mb4
+Client characterset:          utf8mb4
+Conn. characterset:           utf8mb4
+Result characterset:          utf8mb4
+Compression:                  Disabled
+Uptime:                       6 days 10 hours 48 min 10.0000 sec
+
+Threads: 35  Questions: 595724  Slow queries: 90  Opens: 1470  Flush tables: 3  Open tables: 1201  Queries per second avg: 1.068
+....
+
+NOTE: 建议使用 MySQL Shell，从上面输出结果可以看到服务端和客户端的编码是一致的。
 
 == 10. JS 操作数据库案例
 我们知道 MySQL 是运行在服务器上的软件，在浏览器端是无法访问的。这样就需要一个环境能够提供访问 MySQL 的功能。我们可以使用 Node.js 来链接数据库 MySQL。
@@ -3291,42 +3419,8 @@ GRANT ALL ON OfficialWebsite.* TO 'lisi'@'%';
 
 
 ==== 10.5.1 #file dbase.mjs
-import * as mysql from 'mysql2/promise'
-
-const access = {
-    host: '182.92.131.108',
-    user: 'lisi',
-    database: 'OfficialWebsite',
-    password: 'Password1='
-}
-
-const conn = mysql.createPool(access);
-
-// 定义并导出函数
-export const sql = async ({ query, values }) => {
-    const [rows] = await conn.query(query, values)
-    return rows
-}
+# [source,javascript,linenums]
 # ----
-#
-# Question: createPool 是什么? ::
-#
-# `createPool` 是 MySQL2 中创建数据库连接池的方法。
-# 连接池是一种管理数据库连接的机制，它会在需要时创建连接，然后在不需要时释放连接，以提高数据库访问的性能和效率。
-# 使用连接池可以有效地管理大量的并发数据库连接请求，并且可以重复利用已经建立的连接，减少了连接和断开连接的开销。
-#
-#
-# Question: 为什么定义的参数写成对象的形式 { query, values } ? ::
-#
-# 写成对象的形式 `{ query, values }` 是为了方便在函数调用时传递多个参数，同时保持参数的语义清晰。这种写法利用了 JavaScript 对象的解构赋值特性，可以方便地从传入的参数对象中获取指定的属性。
-# +
-# 当调用 `sql` 函数时，传入的参数可以直接包含 `query` 和 `values` 属性，例如：
-# +
-# ```javascript
-# const result = await sql({ query: 'SELECT * FROM users WHERE id = ?', values: [userId] });
-# ```
-# +
-# 这样写的好处是在调用函数时可以清晰地指定参数的含义，不容易混淆。同时，如果需要传递更多的参数，可以直接在对象中添加新的属性，而不需要改变函数的参数列表。
 
 ==== 10.5.2 #file model.mjs
 # [source,javascript]
