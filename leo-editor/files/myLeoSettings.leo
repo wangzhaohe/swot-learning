@@ -165,6 +165,7 @@
 <v t="swot.20240314073153.1"><vh>java</vh></v>
 <v t="swot.20221124162354.1"><vh>asciidoc</vh>
 <v t="swot.20260316223014.1"><vh>sidebar</vh></v>
+<v t="swot.20260413122406.1"><vh>sidebar</vh></v>
 <v t="swot.20230101091320.1"><vh>temp</vh></v>
 <v t="swot.20221230220909.1"><vh>toc</vh></v>
 <v t="swot.20221213173218.1"><vh>Admonitions</vh></v>
@@ -1781,6 +1782,7 @@ bclick;;=$("button").click(function(){
 \::author: https://github.com/wangzhaohe/swot-learning
 \::source-highlighter: pygments
 \::icons: font
+\::font-size: 16px
 \::scripts: cjk
 \::stem: latexmath
 \::experimental:
@@ -1794,6 +1796,12 @@ bclick;;=$("button").click(function(){
 \::warning-caption: ‼️
 \::caution-caption: ⚠️
 \:
+\:// 如果是 PDF 后端，强制将目录改为宏模式，并关闭 HTML 专用的 right 定位
+\:ifdef::backend-pdf[]
+\::toc: macro
+\::toc-placement: macro
+\:endif::[]
+
 // https://pygments.org/styles/
 // :pygments-style: monokai
 </t>
@@ -2922,6 +2930,89 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 @others
 @doc
 &lt;|文件描述|&gt;
+</t>
+<t tx="swot.20260413122406.1">dir;;=
+\:// 只有当后端不是 pdf 时才包含以下内容
+\:ifndef::backend-pdf[]
+\:++++
+\:&lt;style&gt;
+\:/* 1. 默认状态：初始就是隐藏的 */
+\:#toc {
+\:    max-width: 0 !important;
+\:    opacity: 0 !important;
+\:    padding-left: 0 !important;
+\:    padding-right: 0 !important;
+\:    border: none !important;
+\:    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+\:    white-space: nowrap !important;
+\:    
+\:    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+\:    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+\:                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+\:                opacity 0.3s ease;
+\:}
+\:
+\:/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+\:#toc.active {
+\:    max-width: 530px !important;
+\:    opacity: 1 !important;
+\:    padding: 10px !important; /* 根据需要恢复 padding */
+\:    overflow-y: auto !important;
+\:}
+\:
+\:/* 3. 列表样式保持不变 */
+\:#toc ul, #toc li {
+\:    margin-bottom: 8px !important;
+\:    line-height: 1.4 !important;
+\:}
+\:&lt;/style&gt;
+\:
+\:&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
+\:&lt;div id="toc"&gt;
+\:    &lt;/div&gt;
+\:
+\:&lt;script&gt;
+\:const toggleButton = document.getElementById('toggleButton');
+\:const contentDiv = document.getElementById('toc');
+\:
+\:toggleButton.addEventListener('click', () =&gt; {
+\:    // 切换 active 类
+\:    const isExpanded = contentDiv.classList.toggle('active');
+\:    
+\:    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+\:    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+\:});
+\:&lt;/script&gt;
+\:++++
+\:endif::[]
+\:
+
+
+\:////
+\:对应于 ~/.rvm/gems/ruby-2.7.2/gems/asciidoctor-2.0.23/data/stylesheets/asciidoctor-default.css
+\:
+\:/* 自定义输出 HTML 样式 */
+\:/* 固定按钮在左上角 */
+\:#toggleButton {
+\:    position: fixed;
+\:    top: 10px;
+\:    left: 10px;
+\:    z-index: 1000;
+\:    /*background-color: lightgrey;*/
+\:    color: #AB2C21;
+\:    border: none;
+\:    /*padding: 6px 10px;*/
+\:    cursor: pointer;
+\:}
+\:#toc.toc2{width:40em}
+\:#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:85em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+\:
+\:body.toc2.toc-right {
+\:    padding-left: 0;
+\:    padding-right: 0em;
+\:}
+\:////
+\:
 </t>
 </tnodes>
 </leo_file>

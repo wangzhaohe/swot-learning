@@ -118,6 +118,11 @@
 </v>
 <v t="swot.20250509171442.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30322d303271077573732e"><vh>asciidoctor-kroki server drawing</vh></v>
 <v t="swot.20260213153402.1"><vh>github 条件判断渲染图片</vh></v>
+<v t="swot.20260413112205.1"><vh>生成 pdf 文件</vh>
+<v t="swot.20260413111958.1"><vh>安装字体 font-noto-serif-sc</vh></v>
+<v t="swot.20260413111953.1"><vh>vim my-theme.yml</vh></v>
+<v t="swot.20260413112200.1"><vh>run asciidoctor-pdf</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -35941,5 +35946,54 @@ NOTE: 如果不启用，恢复过程会报错，类似 `ERROR 1148 (42000): The 
 * 小到中等数据量（++&lt;++ 200GB）、需要跨版本迁移、需要查看或编辑备份文件 → 使用 #MySQL Shell 逻辑备份（`util.dumpSchemas`）#。
 * 超大数据量（TB级）、生产环境要求快速恢复、需要最小化备份期间性能影响 → 使用 #物理备份工具（如 Percona XtraBackup，或 MySQL 企业备份）#。
 </t>
+<t tx="swot.20260413111953.1">@language yaml
+extends: default
+font:
+  catalog:
+    # 注册你刚刚安装的这个可变字体
+    Noto Serif SC:
+      normal: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
+      bold: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
+      italic: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
+      bold_italic: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
+    # 解决 M+ 1mn 报错
+    M+ 1mn:
+      normal: /System/Library/Fonts/Monaco.ttf
+  fallbacks:
+    - Noto Serif SC
+base:
+  font_family: Noto Serif SC
+  # 1. 稍微调大正文，11pt 在打印件上很清楚
+  font_size: 11
+  line_height: 1.6
+  font_color: #333333
+
+heading:
+  font_family: Noto Serif SC
+  font_color: #222222
+  # 2. 核心：大幅调低一、二级标题的字号
+  # h1 是文档大标题
+  h1_font_size: 22
+  # h2 是章节标题 (==)
+  h2_font_size: 16
+  # h3 是小节标题 (===)
+  h3_font_size: 13
+  # 3. 降低标题的厚重感
+  font_style: bold
+
+code:
+  font_family: M+ 1mn
+  font_size: 9
+</t>
+<t tx="swot.20260413111958.1">&gt; brew install --cask font-noto-serif-sc
+==&gt; Fetching downloads for: font-noto-serif-sc
+✔︎ Cask font-noto-serif-sc (latest)                                                                                                        Verifying    25.1MB/ 25.1MB
+==&gt; Installing Cask font-noto-serif-sc
+==&gt; Moving Font 'NotoSerifSC[wght].ttf' to '/Users/swot/Library/Fonts/NotoSerifSC[wght].ttf'
+font-noto-serif-sc was successfully installed!
+</t>
+<t tx="swot.20260413112200.1">asciidoctor-pdf -a pdf-theme=my-theme.yml -a scripts=cjk "数据库开发技术大作业要求-学生版本.adoc"
+</t>
+<t tx="swot.20260413112205.1"></t>
 </tnodes>
 </leo_file>
