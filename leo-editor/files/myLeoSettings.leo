@@ -89,7 +89,7 @@
 <v t="swot.20200916152454.1"><vh>@enabled-plugins</vh></v>
 <v t="swot.20210129110804.1"><vh>@string headline-time-format-string = %Y-%m-%d</vh></v>
 <v t="swot.20210129110742.1"><vh>@string body-time-format-string = %Y-%m-%d %H:%M:%S</vh></v>
-<v t="swot.20250529213001.1"><vh>@string target-language = python</vh></v>
+<v t="swot.20250529213001.1"><vh>@string target-language = javascript</vh></v>
 <v t="swot.20201004091246.1"><vh>vr3 settings</vh>
 <v t="swot.20201004073914.1"><vh>@int qweb-view-font-size = 18</vh></v>
 <v t="swot.20201004082022.1"><vh>@bool vr3-md-math-output = True </vh></v>
