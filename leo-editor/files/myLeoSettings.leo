@@ -247,8 +247,9 @@
 </v>
 <v t="swot.20260321214912.1"><vh>sv;;</vh>
 <v t="swot.20260321222934.1"><vh>#file .svelte</vh>
-<v t="swot.20260321221726.1"><vh>import</vh></v>
+<v t="swot.20260415161705.1"><vh>script</vh></v>
 <v t="swot.20260321221759.1"><vh>template</vh></v>
+<v t="swot.20260415161751.1"><vh>style</vh></v>
 </v>
 </v>
 </v>
@@ -2918,15 +2919,8 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 #\:    &lt;script src="./main.js"&gt;&lt;/script&gt;
 </t>
 <t tx="swot.20260321214912.1"></t>
-<t tx="swot.20260321221726.1"></t>
-<t tx="swot.20260321221759.1">@language html
-@delims &lt;!-- --&gt;
-&lt;/script&gt;
-
-&lt;|your html|&gt;
-</t>
-<t tx="swot.20260321222934.1">@first &lt;script&gt;
-@language javascript
+<t tx="swot.20260321221759.1"></t>
+<t tx="swot.20260321222934.1">@language html
 @others
 @doc
 &lt;|文件描述|&gt;
@@ -3013,6 +3007,18 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 \:}
 \:////
 \:
+</t>
+<t tx="swot.20260415161705.1">@delims //
+&lt;script lang="ts"&gt;
+@others
+@delims &lt;!-- --&gt;
+&lt;/script&gt;
+</t>
+<t tx="swot.20260415161751.1">&lt;style&gt;
+@delims /* */
+@others
+@delims &lt;!-- --&gt;
+&lt;/style&gt;
 </t>
 </tnodes>
 </leo_file>
