@@ -1610,6 +1610,37 @@
 </v>
 </v>
 </v>
+<v t="swot.20260414105946.1"><vh>@path nodejs</vh>
+<v t="swot.20260415085034.1"><vh>@adoc Nodejs.adoc</vh>
+<v t="swot.20260415085109.1"><vh>Node.js Learning</vh>
+<v t="swot.20260415085323.1"><vh>基于 Node.js 技术的后端框架介绍</vh>
+<v t="swot.20260415085354.1"><vh>NestJS：中大型业务的首选（企业级）</vh></v>
+<v t="swot.20260415085445.1"><vh>Nitro (Nuxt 4 的核心)：极致的 DX 与 Serverless 专家</vh></v>
+<v t="swot.20260415085525.1"><vh>Express &amp; Koa：极简主义与遗留系统</vh></v>
+<v t="swot.20260415085556.1"><vh>2026 年值得关注的“黑马”：Hono &amp; Fastify</vh></v>
+<v t="swot.20260415085642.1"><vh>总结建议：我该选哪个？</vh></v>
+</v>
+<v t="swot.20260415103132.1"><vh>基于 Bun 技术的后端框架介绍 -- 了解</vh></v>
+<v t="swot.20260415104328.1"><vh>Node.js 简介</vh>
+<v t="swot.20260415104328.2"><vh>什么是 Node.js</vh></v>
+<v t="swot.20260415104328.3"><vh>Node.js 的特点</vh></v>
+<v t="swot.20260415104328.4"><vh>Node.js 的应用场合</vh></v>
+</v>
+<v t="swot.20260415140618.1"><vh>部署 Node.js 开发环境</vh>
+<v t="swot.20260415140618.4"><vh>安装 nvm 管理 Node.js 版本</vh></v>
+<v t="swot.20260415142626.1"><vh>使用 nvm 管理 Node.js 版本</vh>
+<v t="swot.20260415142725.1"><vh>核心命令速查表</vh></v>
+<v t="swot.20260415142830.1"><vh>进阶实用技巧</vh></v>
+<v t="swot.20260415142901.1"><vh>配置国内镜像源</vh></v>
+<v t="swot.20260415145308.1"><vh>nrm 管理镜像源</vh></v>
+</v>
+<v t="swot.20260415142034.1"><vh>fnm 使用 rust 写的最新管理工具 -- 了解</vh></v>
+<v t="swot.20260415140618.5"><vh>交互式运行环境</vh></v>
+<v t="swot.20260415140618.6"><vh>Node.js 程序开发工具 -- 建议 安装 Visual Studio Code</vh></v>
+</v>
+</v>
+</v>
+</v>
 <v t="swot.20260413155153.1"><vh>网络安全教育 2026-04-15</vh></v>
 </v>
 <v t="swot.20251210103828.1"><vh>@path js</vh>
@@ -35885,7 +35916,12 @@ npm install -g pnpm   全局安装
   }
 }
 </t>
-<t tx="swot.20260413155153.1">锁定4.15！国家安全 有你有我！2026年4月15日，是第十一个全民国家安全教育日
+<t tx="swot.20260413155153.1">是的，今天是 **第十一个全民国家安全教育日**。
+
+这个日子的全称是“全民国家安全教育日”，设立于2015年7月1日，旨在增强全民国家安全意识，共同维护国家安全。今年的活动主题是 **“统筹发展和安全，护航‘十五五’新征程”** 。
+
+
+锁定4.15！国家安全 有你有我！2026年4月15日，是第十一个全民国家安全教育日
 https://www.bilibili.com/video/BV1K5QwBVEpy/?spm_id_from=333.337.search-card.all.click&amp;vd_source=392e2829ea8e40de989be86888026747
 
 415全民国家安全教育日 | 10个实用的网络安全小常识
@@ -35974,6 +36010,437 @@ JavaScript 对象的解构赋值特性，是它将“参数的物理位置”解
 * **3NF**: 消除对非主键的依赖 (No Transitive Dependency)
 
 TIP: 在实际工程中，通常达到 *3NF* 即可平衡查询性能与数据一致性。
+</t>
+<t tx="swot.20260414105946.1"></t>
+<t tx="swot.20260415085034.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+
+// 如果是 PDF 后端，强制将目录改为宏模式，并关闭 HTML 专用的 right 定位
+ifdef::backend-pdf[]
+:toc: macro
+:toc-placement: macro
+endif::[]</t>
+<t tx="swot.20260415085109.1">
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+&lt;/script&gt;
+++++
+endif::[]
+</t>
+<t tx="swot.20260415085323.1">在 2026 年的 JavaScript 后端生态中，选择框架时不再仅仅看“流行度”，更多是看你的**业务复杂度**、**团队对 TypeScript 的依赖**以及*部署环境*。
+
+以下是针对你提到的几个候选框架的深度对比建议：
+
+</t>
+<t tx="swot.20260415085354.1">如果你在做一个**逻辑复杂、需要长期维护**的后端业务，NestJS
+是目前的行业标准。
+
+* *架构风格*：深受 Angular 影响，强制使用 *依赖注入 (DI)* 和 *模块化 (Modules)*。
+
+* *优势*：
+  ** *架构统一*：团队协作时，代码风格高度一致，新人上手后一眼就能找到 Controller 和 Service。
+  ** *TypeScript 原生支持*：提供了最完美的装饰器（Decorators）支持，开发体验极佳。
+  ** *生态全面*：内置了对微服务、WebSocket、GraphQL、各种数据库 ORM（如 Prisma/TypeORM）的深度集成。
+
+* *缺点*：学习曲线较陡，代码量（Boilerplate）相对较多。
+</t>
+<t tx="swot.20260415085445.1">Nitro 是 Nuxt 后端的引擎，现在越来越多的人将其作为**独立后端框架**使用。
+
+* *架构风格*：基于 Web Standard，零配置，支持**文件路由**。
+
+* *优势*：
+  ** *跨平台部署*：代码写一份，可以无缝部署到 Node.js、Cloudflare Workers、Vercel、Deno 等任何环境。
+  ** *极速启动*：热更新（HMR）飞快，包体积极小，非常适合 *Serverless* 架构。
+  ** *现代特性*：自动导入（Auto-imports）、内置的缓存系统和存储层抽象。
+
+* *缺点*：对于复杂的传统大型单体应用（Monolith），其结构可能显得过于轻量。
+</t>
+<t tx="swot.20260415085525.1">* *Express*：虽然老旧，但它依然是“JS 后端的底座”。如果你只是写一个几百行代码的小工具，或者需要极高的自由度，它依然可行。
+但在 2026 年，它的异步处理和 TS 支持已落后于时代。
+
+* *Koa*：比 Express 更现代一点（利用 async/await），但社区活跃度已不如 NestJS 和新兴框架。
+</t>
+<t tx="swot.20260415085556.1">除了你提到的，这两个框架在当前非常火爆：
+
+* *Hono*：被称为“Node.js 界的极致性能王者”。它极小、极快，且 API 极其简洁。如果你追求性能和 Edge Computing（边缘计算），选它。
+
+* *Fastify*：NestJS 默认的底层引擎之一。它提供极高的吞吐量和强大的插件系统，适合对性能有硬性要求的业务。
+</t>
+<t tx="swot.20260415085642.1">[width="100%",cols="&lt;34%,&lt;33%,&lt;33%",options="header",]
+|===
+|场景 |推荐框架 |原因
+|*企业级、多人协作、长期迭代* |*NestJS* |架构严谨，可维护性最高。
+
+|*全栈开发 (Nuxt)、Serverless、边缘计算* |*Nitro*
+|部署最简单，开发体验（DX）最好。
+
+|*极致性能、微服务、小型 API* |*Hono / Fastify* |速度最快，开销最小。
+
+|*快速原型、简单脚本* |*Express* |简单直观，但不再建议用于复杂业务。
+|===
+
+*如果你追求稳健和职业发展，首选
+NestJS；如果你希望在开发效率和跨平台能力上找突破，尝试 Nitro。*
+
+https://www.youtube.com/watch?v=HhzHoJOtKOc[NestJS vs Express 深度对比]
+这个视频详细对比了 2026 年主流后端框架的性能和 AI
+辅助开发的友好度，能帮你更直观地看到各框架的代码风格差异。
+</t>
+<t tx="swot.20260415103132.1">在 2026 年，基于 Bun 构建后端，最大的优势就是 **原生性能**（极快的启动速度和 HTTP 吞吐量）以及 **开箱即用**（内置了打包、测试、SQLite、WebSocket 等工具）。
+
+目前在 Bun 生态中，最值得关注的三个打桩（或核心构建）框架如下：
+
+[upperalpha]
+. ElysiaJS：Bun 的“亲儿子”
++
+ElysiaJS 是专门为 Bun 量身定制的框架，它的设计哲学和 Bun 完美契合。
+
+* **性能极限**：在多个 Benchmark 测试中，Elysia + Bun 的组合通常是 JS 领域中最快的，性能接近 Go 或 Rust。
+* **端到端类型安全 (Eden)**：这是它最大的杀手锏。如果你前端也用 TS，Elysia 的 `Eden` 插件可以让前端像调用本地函数一样调用后端 API，共享所有的类型定义。
+* **架构风格**：借鉴了 Fastify 和 Express 的简洁，但通过链式调用实现了极佳的开发体验。
+
+. Hono：全能型选手
++
+Hono（日语意为“火”）最初是为边缘计算设计的，但在 Bun 社区中极受欢迎。
+
+* **极度轻量**：体积非常小，没有繁琐的依赖。
+* **运行时无关**：虽然它在 Bun 上跑得飞快，但如果哪天你需要把代码迁移到 Node.js 或 Cloudflare Workers，几乎不需要修改代码。
+* **内置功能丰富**：虽然轻量，但中间件非常全（Validator, Auth, CORS, Logger 等）。
+
+. NestJS (配合 Bun 运行)
++
+虽然 NestJS 不是专门为 Bun 设计的，但从 2025 年起，NestJS 对 Bun 的兼容性已经非常成熟。
+
+* **适用场景**：如果你需要 Bun 的性能，但业务逻辑极其复杂，需要 NestJS 那套严谨的“依赖注入”和“面向对象”架构。
+* **优势**：利用 Bun 极速的 `install` 和 `test` 命令，大幅缩短 NestJS 项目的 CI/CD 时间。
+
+
+.核心对比表：基于 Bun 的选择
+[caption=]
+[cols="1,1,1,1",options="header",stripes=even]
+|===
+| 特性 | **ElysiaJS** | **Hono** | **NestJS (on Bun)** 
+
+| **设计初衷** | 为 Bun 极致优化 | 跨运行时、轻量 | 企业级架构
+| **类型支持** | 顶级 (Eden Connector) | 优秀 (TS First) | 优秀 (Decorators)
+| **学习曲线** | 中等 | 极低 | 较高
+| **性能** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ 
+| **最佳用途** | 高性能 API、全栈项目 | 边缘计算、中型 API | 大型复杂业务、企业后端
+|===
+
+
+为什么选择 Bun 框架而不是传统 Node.js 框架？
+
+[upperalpha]
+.  **原生 HTTP 性能**：Bun 实现了 `Bun.serve`，比 Node.js 的 `http` 模块快得多，上述框架都针对此进行了优化。
+.  **内置工具链**：在使用 Elysia 或 Hono 时，你不再需要 `ts-node` 或 `nodemon`，Bun 自带的热重载（`bun --watch`）和测试工具（`bun test`）会让开发体验丝滑无比。
+.  **零配置 TypeScript**：Bun 原生支持 `.ts` 文件，你不需要配置复杂的 `tsconfig` 或编译步骤。
+
+总结建议
+
+* 如果你追求 **最极致的性能** 和 **前后端类型同步**：选 **ElysiaJS**。
+* 如果你追求 **轻量、灵活** 且可能考虑 **多平台部署**：选 **Hono**。
+* 如果你在写 **传统的复杂业务**：用 Bun 跑 **NestJS**。
+</t>
+<t tx="swot.20260415104328.1"></t>
+<t tx="swot.20260415104328.2">Node.js 简称 Node，是一个可以使 JavaScript 运行在服务器端的开发平台。
+
+JavaScript 本是一种 Web 前端语言，Node.js 让 JavaScript 成为服务器端脚本语言。
+
+Node.js 选择 JavaScript 作为实现语言的原因：
+
+- JavaScript 满足 ES/CommonJS 标准，符合事件驱动，用户较多且门槛较低；
+- Chrome 的 V8 引擎具有出色的性能。
+
+Node.js 将 V8 引擎封装起来，作为服务器运行平台，以执行 JavasScript 编写的后端脚本程序。 
+
+***
+
+- Node.js 运行时环境包含执行 JavaScript 程序所需的一切条件。该引擎会将 JavaScript 代码转换为更快的机器码。
++
+.Node.js 与 Java 运行时环境对比
+image::img/nodejs_vs_java.png[,500,role=thumb]
+
+- Node.js 进一步提升 JavaScript 的能力，使 JavaScript 可以访问文件、读取数据库、访问进程，从而胜任后端任务。
+- Node.js 的最大优点是开发人员可以在客户端和服务器端编写 JavaScript，打通了前后端开发语言。
+- Node.js 发展迅速，目前已成为 JavaScript 服务器端运行平台的事实标准。
+- Node.js 是跨平台的，能运行在 Windows、macOS 和 Linux 平台上。
+- Node.js 除了自己的标准类库之外，还可使用大量的第三方模块系统来实现代码的分享和重用。
+- 与其他后端脚本语言不同的是，Node.js 内置了处理网络请求和响应的函数库，也就是自备了 HTTP 服务器，#所以不需要额外部署 HTTP 服务器#。
++
+.Node.js 与 PHP 对 HTTP 请求的处理
+image::img/nodejs_vs_php.png[,400,role=thumb]
+
+</t>
+<t tx="swot.20260415104328.3">[discrete]
+===== 非阻塞I/O
+
+.Node.js 的非阻塞 I/O
+image::img/nodejs_io.png[,240,role="thumb right"]
+
+* 非阻塞I/O 又称异步式 I/O，是 Node.js 的重要特点。
+* 阻塞I/O是指线程在执行过程中遇到I/O操作时，操作系统会撤销该线程的CPU控制权，使其暂停执行，处于等待状态，同时将资源转让给其他线程。
+* 非阻塞I/O是指当线程遇到I/O操作时，不会以阻塞方式等待I/O操作完成或数据返回，而只是将I/O请求转发给操作系统，继续执行下一条指令。
+
+---
+
+[discrete]
+===== 事件驱动
+
+image::img/event_drive.png[,270,role="thumb right"]
+
+- 非阻塞I/O是一种异步方式的I/O，与事件驱动密不可分。
+- 事件驱动以事件为中心，Node.js将每一个任务都当成事件来处理。Node.js在执行过程中会维护一个事件队列，需执行的每个任务都会加入事件队列并提供一个包含处理结果的回调函数。
+- 在事件驱动模型中，会生成一个事件循环线程来监听事件，不断地检查是否有未处理的事件。
+- Node.js 的异步机制是基于事件的，所有磁盘I/O、网络通信、数据库查询事件都以非阻塞的方式请求，返回的结果由事件循环线程来处理。
+
+---
+[discrete]
+===== 单线程
+
+* Node.js的应用程序是单进程、单线程的，但是通过事件和回调支持并发，性能变得非常高。
+* 在阻塞模式下，一个线程只能处理一项任务，要想提高吞吐量必须使用多线程。
+* 在非阻塞模式下，线程不会被I/O操作阻塞，该线程所使用的CPU核心利用率永远是100%，I/O操作以事件的方式通知操作系统。
+* Node.js在主线程中维护一个事件队列，当接收到请求后，就将该请求作为一个事件放入该队列中，然后继续接收其他请求。
+* Node.js内部通过线程池来完成非阻塞I/O操作，Node.js的单线程是指对JavaScript层面的任务处理是单线程的，而Node.js本身是一个多线程平台。
+
+NOTE: Node.js采用非阻塞I/O与事件驱动相结合的编程模式，与传统同步I/O线性编程思维有很大的不同，Node.js程序的控制很大程度要依靠事件和回调函数，这不符合开发人员的常规线性思路，需要将一个完整的逻辑拆分为若干单元（事件），从而增加了开发和调试的难度。
+</t>
+<t tx="swot.20260415104328.4">[discrete]
+===== 适合用Node.js的场合
+
+* REST API：REST API是一种前后端分离的应用程序架构。
+* 单页Web应用：加载单个HTML页面，并在用户与应用程序交互时动态更新该页面的Web应用程序。
+* 统一 Web 应用的UI层：Node.js是面向服务的架构，其能够更好地实现前后端的依赖分离，可以将所有的关键业务逻辑都封装成REST API，UI层只需要考虑如何用这些API构建具体的应用。
+* 准实时系统：如聊天系统、微博系统、博客系统的准实时社交系统，特点是轻量级、高流量，没有复杂的计算逻辑。
+* 游戏服务器：程序员不必使用C语言就能开发游戏的服务器程序。
+* 微服务架构：Node.js 也可用于实现基于微服务架构的应用。
+
+[discrete]
+===== 不适合用Node.js的场合
+
+* 数据加密和解密。
+* 数据压缩和解压。
+* 模板渲染。
+
+[discrete]
+===== 弥补Node.js不足的解决方案
+
+[caption=]
+[cols="55,45",options="header"]
+|===
+|存在问题  |解决方案
+
+|CPU密集型任务偏向于CPU计算操作，需要Node.js直接处理，在事件队列中，如果前面的CPU计算任务没有完成，那么后面的任务就会被阻塞，出现响应慢的情况，使得后续I/O操作无法发起
+|将大型运算任务分解为多个小任务，适时释放CPU计算空间资源，以免阻塞I/O调用的发起
+
+|单线程无法利用多核CPU。多CPU或多核CPU的服务器当Node.js被CPU密集型任务占用，导致其他任务被阻塞时，其他CPU核心处于闲置状态，从而造成资源浪费；Node.js程序一旦在某个环节崩溃，整个系统都会崩溃，这会影响其可靠性
+a|
+1. 部署Nginx反向代理和负载均衡，开启多个进程，绑定多个端口
+2. 使用cluster模块构建应用集群，启动多个Node.js实例，开启多个进程以监听同一个端口
+|===</t>
+<t tx="swot.20260415140618.1">下载地址：
+https://nodejs.org/en/download/
+
+NOTE: 建议使用 LTS 长期支持的版本即可。</t>
+<t tx="swot.20260415140618.4">nvm 支持全平台的 Node.js 版本管理
+https://github.com/nvm-sh/nvm
+
+Windows system:
+https://github.com/coreybutler/nvm-windows
+
+nvm 常用命令
+
+* nvm ls
+
+
+nvm 未下载相应 Node.js 对应 npm 的解决方法
+https://blog.csdn.net/touzhu11/article/details/126847877
++
+1. nvm uninstall your_node_version
+2. nvm npm_mirror https://npm.taobao.org/mirrors/npm/
+3. nvm install your_node_version
+4. 重新使用npm 查看node以及npm版本是否存在
+.. node -v
+.. npm -v
+</t>
+<t tx="swot.20260415140618.5">进入命令行界面，执行 #node# 命令即可启动 Node 终端，出现 “&gt;” 提示符表示进入 REPL 命令行交互界面。
+
+举例输入 2 * 6 查看结果为 12
+
+输入 .exit 退出命令行工具。
+</t>
+<t tx="swot.20260415140618.6">Download Visual Studio Code:
+https://code.visualstudio.com/download
+
+// 自行下载安装
+// 自行学习如何使用 vscode
+</t>
+<t tx="swot.20260415142034.1"></t>
+<t tx="swot.20260415142626.1"></t>
+<t tx="swot.20260415142725.1">[width="100%",cols="3,4,3",options="header"]
+|===
+| 命令 | 说明 | 示例
+| `nvm install &lt;version&gt;` | 安装指定版本的 Node | `nvm install 20.11.0`
+| `nvm use &lt;version&gt;` | 切换到指定版本 | `nvm use 18.19.0`
+| `nvm ls` | 查看本地已安装的所有版本 | `nvm ls`
+| `nvm ls-remote` | 查看远程可供安装的所有版本 | `nvm ls-remote`
+| `nvm uninstall &lt;version&gt;` | 卸载指定版本 | `nvm uninstall 14.17.0`
+| `nvm alias default &lt;version&gt;` | 设置默认版本 | `nvm alias default 20`
+|===
+
+</t>
+<t tx="swot.20260415142830.1">查看当前正在使用的版本
+
+[source,bash]
+----
+nvm current
+----
+
+快速安装最新版本
+
+* **最新稳定版 (LTS)**: `nvm install --lts`
+* **最新发布版 (Current)**: `nvm install node`
+
+项目自动切换（最佳实践）
+
+在项目根目录创建 `.nvmrc` 文件，内容仅需写上版本号（例如 `20.11.0`）。
+
+.项目根目录下的 .nvmrc 文件内容
+[source,text]
+----
+20.11.0
+----
+
+.之后进入该目录只需执行
+[source,bash]
+----
+nvm use
+----
+
+`nvm` 会自动读取该文件并切换到对应的 Node 环境。
+</t>
+<t tx="swot.20260415142901.1">建议使用淘宝镜像安装源，以加快安装速度：
+
+....
+# 查看使用的安装源
+npm config get registry
+// 返回 https://registry.npm.taobao.org/，则说明当前使用的是旧的淘宝镜像源
+
+// 配置安装源为淘宝镜像源，下面 npm 或者 pnpm 二选一
+npm config set registry http://registry.npm.taobao.org  // 已经弃用
+npm config set registry https://registry.npmmirror.com
+....
+
+.切换回官方的源
+[source,javascript]
+----
+npm config set registry https://registry.npmjs.org/
+----
+
+.安装 pnpm (可选)
+....
+npm install -g pnpm   全局安装
+....
+</t>
+<t tx="swot.20260415145308.1">nrm (npm registry manager) 是一个简单、高效的 npm 源管理器。
+
+[upperalpha]
+. 安装
++
+.在终端执行以下命令进行全局安装：
+[source,bash]
+----
+npm install -g nrm
+----
+
+. 常用命令
++
+.查看源列表，列出所有内置及自定义的镜像源（带 `*` 的为当前使用源）
+[source,bash]
+----
+nrm ls
+----
++
+.切换源，切换到指定的镜像源（如切换到阿里云镜像）
+[source,bash]
+----
+nrm use taobao
+----
++
+.测试延迟，测试你的网络环境到各个镜像源的响应速度：
+[source,bash]
+----
+nrm test
+----
+
+
+. 常见问题
++
+如果在 Windows 下运行报错，请确保已将 npm 的全局安装路径（通常是 `C:\Users\&lt;用户名&gt;\AppData\Roaming\npm`）添加到系统的 **PATH** 环境变量中。
 </t>
 </tnodes>
 </leo_file>

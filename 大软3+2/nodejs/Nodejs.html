@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<meta name="author" content="https://github.com/wangzhaohe/swot-learning">
+<title>Node.js Learning</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:35em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+/* table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7} */
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#9e9e9e}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+
+/* 自定义输出 HTML 样式 */
+/* 固定按钮在左上角 */
+#toggleButton {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    /*background-color: lightgrey;*/
+    color: #AB2C21;
+    border: none;
+    /*padding: 6px 10px;*/
+    cursor: pointer;
+}
+/*#toc.toc2{width:40em}*/
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:85em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+
+body.toc2.toc-right {
+    padding-left: 0;
+    padding-right: 0em;
+}
+
+/* 设置整个 HTML 文档的滚动留白 */
+html {
+    scroll-padding-top: 10px; /* 这个数值就是跳转后标题距离屏幕顶部的像素 */
+    scroll-behavior: smooth;  /* 顺便加上平滑滚动效果，跳转不突兀 */
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+pre.pygments .hll { background-color: #ffffcc }
+pre.pygments { background: #f8f8f8; }
+pre.pygments .tok-c { color: #3D7B7B; font-style: italic } /* Comment */
+pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
+pre.pygments .tok-k { color: #008000; font-weight: bold } /* Keyword */
+pre.pygments .tok-o { color: #666666 } /* Operator */
+pre.pygments .tok-ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+pre.pygments .tok-cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+pre.pygments .tok-cp { color: #9C6500 } /* Comment.Preproc */
+pre.pygments .tok-cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+pre.pygments .tok-c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+pre.pygments .tok-cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
+pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
+pre.pygments .tok-ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+pre.pygments .tok-gr { color: #E40000 } /* Generic.Error */
+pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
+pre.pygments .tok-gi { color: #008400 } /* Generic.Inserted */
+pre.pygments .tok-go { color: #717171 } /* Generic.Output */
+pre.pygments .tok-gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
+pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+pre.pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
+pre.pygments .tok-kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+pre.pygments .tok-kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+pre.pygments .tok-kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+pre.pygments .tok-kp { color: #008000 } /* Keyword.Pseudo */
+pre.pygments .tok-kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+pre.pygments .tok-kt { color: #B00040 } /* Keyword.Type */
+pre.pygments .tok-m { color: #666666 } /* Literal.Number */
+pre.pygments .tok-s { color: #BA2121 } /* Literal.String */
+pre.pygments .tok-na { color: #687822 } /* Name.Attribute */
+pre.pygments .tok-nb { color: #008000 } /* Name.Builtin */
+pre.pygments .tok-nc { color: #0000FF; font-weight: bold } /* Name.Class */
+pre.pygments .tok-no { color: #880000 } /* Name.Constant */
+pre.pygments .tok-nd { color: #AA22FF } /* Name.Decorator */
+pre.pygments .tok-ni { color: #717171; font-weight: bold } /* Name.Entity */
+pre.pygments .tok-ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+pre.pygments .tok-nf { color: #0000FF } /* Name.Function */
+pre.pygments .tok-nl { color: #767600 } /* Name.Label */
+pre.pygments .tok-nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+pre.pygments .tok-nt { color: #008000; font-weight: bold } /* Name.Tag */
+pre.pygments .tok-nv { color: #19177C } /* Name.Variable */
+pre.pygments .tok-ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+pre.pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
+pre.pygments .tok-mb { color: #666666 } /* Literal.Number.Bin */
+pre.pygments .tok-mf { color: #666666 } /* Literal.Number.Float */
+pre.pygments .tok-mh { color: #666666 } /* Literal.Number.Hex */
+pre.pygments .tok-mi { color: #666666 } /* Literal.Number.Integer */
+pre.pygments .tok-mo { color: #666666 } /* Literal.Number.Oct */
+pre.pygments .tok-sa { color: #BA2121 } /* Literal.String.Affix */
+pre.pygments .tok-sb { color: #BA2121 } /* Literal.String.Backtick */
+pre.pygments .tok-sc { color: #BA2121 } /* Literal.String.Char */
+pre.pygments .tok-dl { color: #BA2121 } /* Literal.String.Delimiter */
+pre.pygments .tok-sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+pre.pygments .tok-s2 { color: #BA2121 } /* Literal.String.Double */
+pre.pygments .tok-se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+pre.pygments .tok-sh { color: #BA2121 } /* Literal.String.Heredoc */
+pre.pygments .tok-si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+pre.pygments .tok-sx { color: #008000 } /* Literal.String.Other */
+pre.pygments .tok-sr { color: #A45A77 } /* Literal.String.Regex */
+pre.pygments .tok-s1 { color: #BA2121 } /* Literal.String.Single */
+pre.pygments .tok-ss { color: #19177C } /* Literal.String.Symbol */
+pre.pygments .tok-bp { color: #008000 } /* Name.Builtin.Pseudo */
+pre.pygments .tok-fm { color: #0000FF } /* Name.Function.Magic */
+pre.pygments .tok-vc { color: #19177C } /* Name.Variable.Class */
+pre.pygments .tok-vg { color: #19177C } /* Name.Variable.Global */
+pre.pygments .tok-vi { color: #19177C } /* Name.Variable.Instance */
+pre.pygments .tok-vm { color: #19177C } /* Name.Variable.Magic */
+pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body class="article toc2 toc-right">
+<div id="header">
+<h1>Node.js Learning</h1>
+<div class="details">
+<span id="author" class="author">https://github.com/wangzhaohe/swot-learning</span><br>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">目录</div>
+<ul class="sectlevel1">
+<li><a href="#_基于_node_js_技术的后端框架介绍">基于 Node.js 技术的后端框架介绍</a>
+<ul class="sectlevel2">
+<li><a href="#_nestjs中大型业务的首选企业级">NestJS：中大型业务的首选（企业级）</a></li>
+<li><a href="#_nitro_nuxt_4_的核心极致的_dx_与_serverless_专家">Nitro (Nuxt 4 的核心)：极致的 DX 与 Serverless 专家</a></li>
+<li><a href="#_express_koa极简主义与遗留系统">Express &amp; Koa：极简主义与遗留系统</a></li>
+<li><a href="#_2026_年值得关注的黑马hono_fastify">2026 年值得关注的“黑马”：Hono &amp; Fastify</a></li>
+<li><a href="#_总结建议我该选哪个">总结建议：我该选哪个？</a></li>
+</ul>
+</li>
+<li><a href="#_基于_bun_技术的后端框架介绍了解">基于 Bun 技术的后端框架介绍&#8201;&#8212;&#8201;了解</a></li>
+<li><a href="#_node_js_简介">Node.js 简介</a>
+<ul class="sectlevel2">
+<li><a href="#_什么是_node_js">什么是 Node.js</a></li>
+<li><a href="#_node_js_的特点">Node.js 的特点</a></li>
+<li><a href="#_node_js_的应用场合">Node.js 的应用场合</a></li>
+</ul>
+</li>
+<li><a href="#_部署_node_js_开发环境">部署 Node.js 开发环境</a>
+<ul class="sectlevel2">
+<li><a href="#_安装_nvm_管理_node_js_版本">安装 nvm 管理 Node.js 版本</a></li>
+<li><a href="#_使用_nvm_管理_node_js_版本">使用 nvm 管理 Node.js 版本</a>
+<ul class="sectlevel3">
+<li><a href="#_核心命令速查表">核心命令速查表</a></li>
+<li><a href="#_进阶实用技巧">进阶实用技巧</a></li>
+<li><a href="#_配置国内镜像源">配置国内镜像源</a></li>
+<li><a href="#_nrm_管理镜像源">nrm 管理镜像源</a></li>
+</ul>
+</li>
+<li><a href="#_fnm_使用_rust_写的最新管理工具了解">fnm 使用 rust 写的最新管理工具&#8201;&#8212;&#8201;了解</a></li>
+<li><a href="#_交互式运行环境">交互式运行环境</a></li>
+<li><a href="#_node_js_程序开发工具建议_安装_visual_studio_code">Node.js 程序开发工具&#8201;&#8212;&#8201;建议 安装 Visual Studio Code</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+</script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_基于_node_js_技术的后端框架介绍">基于 Node.js 技术的后端框架介绍</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>在 2026 年的 JavaScript 后端生态中，选择框架时不再仅仅看“流行度”，更多是看你的<strong>业务复杂度</strong>、<strong>团队对 TypeScript 的依赖</strong>以及*部署环境*。</p>
+</div>
+<div class="paragraph">
+<p>以下是针对你提到的几个候选框架的深度对比建议：</p>
+</div>
+<div class="sect2">
+<h3 id="_nestjs中大型业务的首选企业级">NestJS：中大型业务的首选（企业级）</h3>
+<div class="paragraph">
+<p>如果你在做一个<strong>逻辑复杂、需要长期维护</strong>的后端业务，NestJS
+是目前的行业标准。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>架构风格</strong>：深受 Angular 影响，强制使用 <strong>依赖注入 (DI)</strong> 和 <strong>模块化 (Modules)</strong>。</p>
+</li>
+<li>
+<p><strong>优势</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>架构统一</strong>：团队协作时，代码风格高度一致，新人上手后一眼就能找到 Controller 和 Service。</p>
+</li>
+<li>
+<p><strong>TypeScript 原生支持</strong>：提供了最完美的装饰器（Decorators）支持，开发体验极佳。</p>
+</li>
+<li>
+<p><strong>生态全面</strong>：内置了对微服务、WebSocket、GraphQL、各种数据库 ORM（如 Prisma/TypeORM）的深度集成。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>缺点</strong>：学习曲线较陡，代码量（Boilerplate）相对较多。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_nitro_nuxt_4_的核心极致的_dx_与_serverless_专家">Nitro (Nuxt 4 的核心)：极致的 DX 与 Serverless 专家</h3>
+<div class="paragraph">
+<p>Nitro 是 Nuxt 后端的引擎，现在越来越多的人将其作为<strong>独立后端框架</strong>使用。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>架构风格</strong>：基于 Web Standard，零配置，支持<strong>文件路由</strong>。</p>
+</li>
+<li>
+<p><strong>优势</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>跨平台部署</strong>：代码写一份，可以无缝部署到 Node.js、Cloudflare Workers、Vercel、Deno 等任何环境。</p>
+</li>
+<li>
+<p><strong>极速启动</strong>：热更新（HMR）飞快，包体积极小，非常适合 <strong>Serverless</strong> 架构。</p>
+</li>
+<li>
+<p><strong>现代特性</strong>：自动导入（Auto-imports）、内置的缓存系统和存储层抽象。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>缺点</strong>：对于复杂的传统大型单体应用（Monolith），其结构可能显得过于轻量。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_express_koa极简主义与遗留系统">Express &amp; Koa：极简主义与遗留系统</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Express</strong>：虽然老旧，但它依然是“JS 后端的底座”。如果你只是写一个几百行代码的小工具，或者需要极高的自由度，它依然可行。
+但在 2026 年，它的异步处理和 TS 支持已落后于时代。</p>
+</li>
+<li>
+<p><strong>Koa</strong>：比 Express 更现代一点（利用 async/await），但社区活跃度已不如 NestJS 和新兴框架。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2026_年值得关注的黑马hono_fastify">2026 年值得关注的“黑马”：Hono &amp; Fastify</h3>
+<div class="paragraph">
+<p>除了你提到的，这两个框架在当前非常火爆：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Hono</strong>：被称为“Node.js 界的极致性能王者”。它极小、极快，且 API 极其简洁。如果你追求性能和 Edge Computing（边缘计算），选它。</p>
+</li>
+<li>
+<p><strong>Fastify</strong>：NestJS 默认的底层引擎之一。它提供极高的吞吐量和强大的插件系统，适合对性能有硬性要求的业务。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_总结建议我该选哪个">总结建议：我该选哪个？</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 34%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">场景</th>
+<th class="tableblock halign-left valign-top">推荐框架</th>
+<th class="tableblock halign-left valign-top">原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>企业级、多人协作、长期迭代</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>NestJS</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">架构严谨，可维护性最高。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>全栈开发 (Nuxt)、Serverless、边缘计算</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Nitro</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">部署最简单，开发体验（DX）最好。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>极致性能、微服务、小型 API</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Hono / Fastify</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">速度最快，开销最小。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>快速原型、简单脚本</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Express</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">简单直观，但不再建议用于复杂业务。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>如果你追求稳健和职业发展，首选
+NestJS；如果你希望在开发效率和跨平台能力上找突破，尝试 Nitro。</strong></p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.youtube.com/watch?v=HhzHoJOtKOc">NestJS vs Express 深度对比</a>
+这个视频详细对比了 2026 年主流后端框架的性能和 AI
+辅助开发的友好度，能帮你更直观地看到各框架的代码风格差异。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_基于_bun_技术的后端框架介绍了解">基于 Bun 技术的后端框架介绍&#8201;&#8212;&#8201;了解</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>在 2026 年，基于 Bun 构建后端，最大的优势就是 <strong>原生性能</strong>（极快的启动速度和 HTTP 吞吐量）以及 <strong>开箱即用</strong>（内置了打包、测试、SQLite、WebSocket 等工具）。</p>
+</div>
+<div class="paragraph">
+<p>目前在 Bun 生态中，最值得关注的三个打桩（或核心构建）框架如下：</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>ElysiaJS：Bun 的“亲儿子”</p>
+<div class="paragraph">
+<p>ElysiaJS 是专门为 Bun 量身定制的框架，它的设计哲学和 Bun 完美契合。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>性能极限</strong>：在多个 Benchmark 测试中，Elysia + Bun 的组合通常是 JS 领域中最快的，性能接近 Go 或 Rust。</p>
+</li>
+<li>
+<p><strong>端到端类型安全 (Eden)</strong>：这是它最大的杀手锏。如果你前端也用 TS，Elysia 的 <code>Eden</code> 插件可以让前端像调用本地函数一样调用后端 API，共享所有的类型定义。</p>
+</li>
+<li>
+<p><strong>架构风格</strong>：借鉴了 Fastify 和 Express 的简洁，但通过链式调用实现了极佳的开发体验。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Hono：全能型选手</p>
+<div class="paragraph">
+<p>Hono（日语意为“火”）最初是为边缘计算设计的，但在 Bun 社区中极受欢迎。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>极度轻量</strong>：体积非常小，没有繁琐的依赖。</p>
+</li>
+<li>
+<p><strong>运行时无关</strong>：虽然它在 Bun 上跑得飞快，但如果哪天你需要把代码迁移到 Node.js 或 Cloudflare Workers，几乎不需要修改代码。</p>
+</li>
+<li>
+<p><strong>内置功能丰富</strong>：虽然轻量，但中间件非常全（Validator, Auth, CORS, Logger 等）。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>NestJS (配合 Bun 运行)</p>
+<div class="paragraph">
+<p>虽然 NestJS 不是专门为 Bun 设计的，但从 2025 年起，NestJS 对 Bun 的兼容性已经非常成熟。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>适用场景</strong>：如果你需要 Bun 的性能，但业务逻辑极其复杂，需要 NestJS 那套严谨的“依赖注入”和“面向对象”架构。</p>
+</li>
+<li>
+<p><strong>优势</strong>：利用 Bun 极速的 <code>install</code> 和 <code>test</code> 命令，大幅缩短 NestJS 项目的 CI/CD 时间。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<caption class="title">核心对比表：基于 Bun 的选择</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">特性</th>
+<th class="tableblock halign-left valign-top"><strong>ElysiaJS</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Hono</strong></th>
+<th class="tableblock halign-left valign-top"><strong>NestJS (on Bun)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>设计初衷</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">为 Bun 极致优化</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">跨运行时、轻量</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">企业级架构</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>类型支持</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">顶级 (Eden Connector)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">优秀 (TS First)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">优秀 (Decorators)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>学习曲线</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">中等</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">极低</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">较高</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>性能</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">⭐⭐⭐⭐⭐</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">⭐⭐⭐⭐</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">⭐⭐⭐</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>最佳用途</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">高性能 API、全栈项目</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">边缘计算、中型 API</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">大型复杂业务、企业后端</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>为什么选择 Bun 框架而不是传统 Node.js 框架？</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p><strong>原生 HTTP 性能</strong>：Bun 实现了 <code>Bun.serve</code>，比 Node.js 的 <code>http</code> 模块快得多，上述框架都针对此进行了优化。</p>
+</li>
+<li>
+<p><strong>内置工具链</strong>：在使用 Elysia 或 Hono 时，你不再需要 <code>ts-node</code> 或 <code>nodemon</code>，Bun 自带的热重载（<code>bun --watch</code>）和测试工具（<code>bun test</code>）会让开发体验丝滑无比。</p>
+</li>
+<li>
+<p><strong>零配置 TypeScript</strong>：Bun 原生支持 <code>.ts</code> 文件，你不需要配置复杂的 <code>tsconfig</code> 或编译步骤。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>总结建议</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>如果你追求 <strong>最极致的性能</strong> 和 <strong>前后端类型同步</strong>：选 <strong>ElysiaJS</strong>。</p>
+</li>
+<li>
+<p>如果你追求 <strong>轻量、灵活</strong> 且可能考虑 <strong>多平台部署</strong>：选 <strong>Hono</strong>。</p>
+</li>
+<li>
+<p>如果你在写 <strong>传统的复杂业务</strong>：用 Bun 跑 <strong>NestJS</strong>。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_node_js_简介">Node.js 简介</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_什么是_node_js">什么是 Node.js</h3>
+<div class="paragraph">
+<p>Node.js 简称 Node，是一个可以使 JavaScript 运行在服务器端的开发平台。</p>
+</div>
+<div class="paragraph">
+<p>JavaScript 本是一种 Web 前端语言，Node.js 让 JavaScript 成为服务器端脚本语言。</p>
+</div>
+<div class="paragraph">
+<p>Node.js 选择 JavaScript 作为实现语言的原因：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>JavaScript 满足 ES/CommonJS 标准，符合事件驱动，用户较多且门槛较低；</p>
+</li>
+<li>
+<p>Chrome 的 V8 引擎具有出色的性能。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Node.js 将 V8 引擎封装起来，作为服务器运行平台，以执行 JavasScript 编写的后端脚本程序。</p>
+</div>
+<hr>
+<div class="ulist">
+<ul>
+<li>
+<p>Node.js 运行时环境包含执行 JavaScript 程序所需的一切条件。该引擎会将 JavaScript 代码转换为更快的机器码。</p>
+<div class="imageblock thumb">
+<div class="content">
+<img src="img/nodejs_vs_java.png" alt="nodejs vs java" width="500">
+</div>
+<div class="title">Figure 1. Node.js 与 Java 运行时环境对比</div>
+</div>
+</li>
+<li>
+<p>Node.js 进一步提升 JavaScript 的能力，使 JavaScript 可以访问文件、读取数据库、访问进程，从而胜任后端任务。</p>
+</li>
+<li>
+<p>Node.js 的最大优点是开发人员可以在客户端和服务器端编写 JavaScript，打通了前后端开发语言。</p>
+</li>
+<li>
+<p>Node.js 发展迅速，目前已成为 JavaScript 服务器端运行平台的事实标准。</p>
+</li>
+<li>
+<p>Node.js 是跨平台的，能运行在 Windows、macOS 和 Linux 平台上。</p>
+</li>
+<li>
+<p>Node.js 除了自己的标准类库之外，还可使用大量的第三方模块系统来实现代码的分享和重用。</p>
+</li>
+<li>
+<p>与其他后端脚本语言不同的是，Node.js 内置了处理网络请求和响应的函数库，也就是自备了 HTTP 服务器，<mark>所以不需要额外部署 HTTP 服务器</mark>。</p>
+<div class="imageblock thumb">
+<div class="content">
+<img src="img/nodejs_vs_php.png" alt="nodejs vs php" width="400">
+</div>
+<div class="title">Figure 2. Node.js 与 PHP 对 HTTP 请求的处理</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_node_js_的特点">Node.js 的特点</h3>
+<h5 id="_非阻塞io" class="discrete">非阻塞I/O</h5>
+<div class="imageblock thumb right">
+<div class="content">
+<img src="img/nodejs_io.png" alt="nodejs io" width="240">
+</div>
+<div class="title">Figure 3. Node.js 的非阻塞 I/O</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>非阻塞I/O 又称异步式 I/O，是 Node.js 的重要特点。</p>
+</li>
+<li>
+<p>阻塞I/O是指线程在执行过程中遇到I/O操作时，操作系统会撤销该线程的CPU控制权，使其暂停执行，处于等待状态，同时将资源转让给其他线程。</p>
+</li>
+<li>
+<p>非阻塞I/O是指当线程遇到I/O操作时，不会以阻塞方式等待I/O操作完成或数据返回，而只是将I/O请求转发给操作系统，继续执行下一条指令。</p>
+</li>
+</ul>
+</div>
+<hr>
+<h5 id="_事件驱动" class="discrete">事件驱动</h5>
+<div class="imageblock thumb right">
+<div class="content">
+<img src="img/event_drive.png" alt="event drive" width="270">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>非阻塞I/O是一种异步方式的I/O，与事件驱动密不可分。</p>
+</li>
+<li>
+<p>事件驱动以事件为中心，Node.js将每一个任务都当成事件来处理。Node.js在执行过程中会维护一个事件队列，需执行的每个任务都会加入事件队列并提供一个包含处理结果的回调函数。</p>
+</li>
+<li>
+<p>在事件驱动模型中，会生成一个事件循环线程来监听事件，不断地检查是否有未处理的事件。</p>
+</li>
+<li>
+<p>Node.js 的异步机制是基于事件的，所有磁盘I/O、网络通信、数据库查询事件都以非阻塞的方式请求，返回的结果由事件循环线程来处理。</p>
+</li>
+</ul>
+</div>
+<hr>
+<h5 id="_单线程" class="discrete">单线程</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Node.js的应用程序是单进程、单线程的，但是通过事件和回调支持并发，性能变得非常高。</p>
+</li>
+<li>
+<p>在阻塞模式下，一个线程只能处理一项任务，要想提高吞吐量必须使用多线程。</p>
+</li>
+<li>
+<p>在非阻塞模式下，线程不会被I/O操作阻塞，该线程所使用的CPU核心利用率永远是100%，I/O操作以事件的方式通知操作系统。</p>
+</li>
+<li>
+<p>Node.js在主线程中维护一个事件队列，当接收到请求后，就将该请求作为一个事件放入该队列中，然后继续接收其他请求。</p>
+</li>
+<li>
+<p>Node.js内部通过线程池来完成非阻塞I/O操作，Node.js的单线程是指对JavaScript层面的任务处理是单线程的，而Node.js本身是一个多线程平台。</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+Node.js采用非阻塞I/O与事件驱动相结合的编程模式，与传统同步I/O线性编程思维有很大的不同，Node.js程序的控制很大程度要依靠事件和回调函数，这不符合开发人员的常规线性思路，需要将一个完整的逻辑拆分为若干单元（事件），从而增加了开发和调试的难度。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_node_js_的应用场合">Node.js 的应用场合</h3>
+<h5 id="_适合用node_js的场合" class="discrete">适合用Node.js的场合</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>REST API：REST API是一种前后端分离的应用程序架构。</p>
+</li>
+<li>
+<p>单页Web应用：加载单个HTML页面，并在用户与应用程序交互时动态更新该页面的Web应用程序。</p>
+</li>
+<li>
+<p>统一 Web 应用的UI层：Node.js是面向服务的架构，其能够更好地实现前后端的依赖分离，可以将所有的关键业务逻辑都封装成REST API，UI层只需要考虑如何用这些API构建具体的应用。</p>
+</li>
+<li>
+<p>准实时系统：如聊天系统、微博系统、博客系统的准实时社交系统，特点是轻量级、高流量，没有复杂的计算逻辑。</p>
+</li>
+<li>
+<p>游戏服务器：程序员不必使用C语言就能开发游戏的服务器程序。</p>
+</li>
+<li>
+<p>微服务架构：Node.js 也可用于实现基于微服务架构的应用。</p>
+</li>
+</ul>
+</div>
+<h5 id="_不适合用node_js的场合" class="discrete">不适合用Node.js的场合</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>数据加密和解密。</p>
+</li>
+<li>
+<p>数据压缩和解压。</p>
+</li>
+<li>
+<p>模板渲染。</p>
+</li>
+</ul>
+</div>
+<h5 id="_弥补node_js不足的解决方案" class="discrete">弥补Node.js不足的解决方案</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 55%;">
+<col style="width: 45%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">存在问题</th>
+<th class="tableblock halign-left valign-top">解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CPU密集型任务偏向于CPU计算操作，需要Node.js直接处理，在事件队列中，如果前面的CPU计算任务没有完成，那么后面的任务就会被阻塞，出现响应慢的情况，使得后续I/O操作无法发起</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">将大型运算任务分解为多个小任务，适时释放CPU计算空间资源，以免阻塞I/O调用的发起</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">单线程无法利用多核CPU。多CPU或多核CPU的服务器当Node.js被CPU密集型任务占用，导致其他任务被阻塞时，其他CPU核心处于闲置状态，从而造成资源浪费；Node.js程序一旦在某个环节崩溃，整个系统都会崩溃，这会影响其可靠性</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>部署Nginx反向代理和负载均衡，开启多个进程，绑定多个端口</p>
+</li>
+<li>
+<p>使用cluster模块构建应用集群，启动多个Node.js实例，开启多个进程以监听同一个端口</p>
+</li>
+</ol>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_部署_node_js_开发环境">部署 Node.js 开发环境</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>下载地址：
+<a href="https://nodejs.org/en/download/" class="bare">https://nodejs.org/en/download/</a></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+建议使用 LTS 长期支持的版本即可。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_安装_nvm_管理_node_js_版本">安装 nvm 管理 Node.js 版本</h3>
+<div class="paragraph">
+<p>nvm 支持全平台的 Node.js 版本管理
+<a href="https://github.com/nvm-sh/nvm" class="bare">https://github.com/nvm-sh/nvm</a></p>
+</div>
+<div class="paragraph">
+<p>Windows system:
+<a href="https://github.com/coreybutler/nvm-windows" class="bare">https://github.com/coreybutler/nvm-windows</a></p>
+</div>
+<div class="paragraph">
+<p>nvm 常用命令</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>nvm ls</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>nvm 未下载相应 Node.js 对应 npm 的解决方法
+<a href="https://blog.csdn.net/touzhu11/article/details/126847877" class="bare">https://blog.csdn.net/touzhu11/article/details/126847877</a></p>
+</div>
+<div class="paragraph">
+<p>+
+1. nvm uninstall your_node_version
+2. nvm npm_mirror <a href="https://npm.taobao.org/mirrors/npm/" class="bare">https://npm.taobao.org/mirrors/npm/</a>
+3. nvm install your_node_version
+4. 重新使用npm 查看node以及npm版本是否存在
+.. node -v
+.. npm -v</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_使用_nvm_管理_node_js_版本">使用 nvm 管理 Node.js 版本</h3>
+<div class="sect3">
+<h4 id="_核心命令速查表">核心命令速查表</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 30%;">
+<col style="width: 40%;">
+<col style="width: 30%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">命令</th>
+<th class="tableblock halign-left valign-top">说明</th>
+<th class="tableblock halign-left valign-top">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm install &lt;version&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">安装指定版本的 Node</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm install 20.11.0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm use &lt;version&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">切换到指定版本</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm use 18.19.0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm ls</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">查看本地已安装的所有版本</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm ls</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm ls-remote</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">查看远程可供安装的所有版本</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm ls-remote</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm uninstall &lt;version&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">卸载指定版本</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm uninstall 14.17.0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm alias default &lt;version&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">设置默认版本</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nvm alias default 20</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_进阶实用技巧">进阶实用技巧</h4>
+<div class="paragraph">
+<p>查看当前正在使用的版本</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>nvm<span class="tok-w"> </span>current</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>快速安装最新版本</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>最新稳定版 (LTS)</strong>: <code>nvm install --lts</code></p>
+</li>
+<li>
+<p><strong>最新发布版 (Current)</strong>: <code>nvm install node</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>项目自动切换（最佳实践）</p>
+</div>
+<div class="paragraph">
+<p>在项目根目录创建 <code>.nvmrc</code> 文件，内容仅需写上版本号（例如 <code>20.11.0</code>）。</p>
+</div>
+<div class="listingblock">
+<div class="title">项目根目录下的 .nvmrc 文件内容</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>20.11.0</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">之后进入该目录只需执行</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>nvm<span class="tok-w"> </span>use</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>nvm</code> 会自动读取该文件并切换到对应的 Node 环境。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_配置国内镜像源">配置国内镜像源</h4>
+<div class="paragraph">
+<p>建议使用淘宝镜像安装源，以加快安装速度：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre># 查看使用的安装源
+npm config get registry
+// 返回 https://registry.npm.taobao.org/，则说明当前使用的是旧的淘宝镜像源
+
+// 配置安装源为淘宝镜像源，下面 npm 或者 pnpm 二选一
+npm config set registry http://registry.npm.taobao.org  // 已经弃用
+npm config set registry https://registry.npmmirror.com</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">切换回官方的源</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nx">npm</span><span class="tok-w"> </span><span class="tok-nx">config</span><span class="tok-w"> </span><span class="tok-nx">set</span><span class="tok-w"> </span><span class="tok-nx">registry</span><span class="tok-w"> </span><span class="tok-nx">https</span><span class="tok-o">:</span><span class="tok-c1">//registry.npmjs.org/</span></code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">安装 pnpm (可选)</div>
+<div class="content">
+<pre>npm install -g pnpm   全局安装</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_nrm_管理镜像源">nrm 管理镜像源</h4>
+<div class="paragraph">
+<p>nrm (npm registry manager) 是一个简单、高效的 npm 源管理器。</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>安装</p>
+<div class="listingblock">
+<div class="title">在终端执行以下命令进行全局安装：</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>npm<span class="tok-w"> </span>install<span class="tok-w"> </span>-g<span class="tok-w"> </span>nrm</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>常用命令</p>
+<div class="listingblock">
+<div class="title">查看源列表，列出所有内置及自定义的镜像源（带 <code>*</code> 的为当前使用源）</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>nrm<span class="tok-w"> </span>ls</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">切换源，切换到指定的镜像源（如切换到阿里云镜像）</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>nrm<span class="tok-w"> </span>use<span class="tok-w"> </span>taobao</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">测试延迟，测试你的网络环境到各个镜像源的响应速度：</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>nrm<span class="tok-w"> </span><span class="tok-nb">test</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>常见问题</p>
+<div class="paragraph">
+<p>如果在 Windows 下运行报错，请确保已将 npm 的全局安装路径（通常是 <code>C:\Users\&lt;用户名&gt;\AppData\Roaming\npm</code>）添加到系统的 <strong>PATH</strong> 环境变量中。</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fnm_使用_rust_写的最新管理工具了解">fnm 使用 rust 写的最新管理工具&#8201;&#8212;&#8201;了解</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_交互式运行环境">交互式运行环境</h3>
+<div class="paragraph">
+<p>进入命令行界面，执行 <mark>node</mark> 命令即可启动 Node 终端，出现 “&gt;” 提示符表示进入 REPL 命令行交互界面。</p>
+</div>
+<div class="paragraph">
+<p>举例输入 2 * 6 查看结果为 12</p>
+</div>
+<div class="paragraph">
+<p>输入 .exit 退出命令行工具。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_node_js_程序开发工具建议_安装_visual_studio_code">Node.js 程序开发工具&#8201;&#8212;&#8201;建议 安装 Visual Studio Code</h3>
+<div class="paragraph">
+<p>Download Visual Studio Code:
+<a href="https://code.visualstudio.com/download" class="bare">https://code.visualstudio.com/download</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2026-04-15 15:09:18 +0800
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>
