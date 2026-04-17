@@ -1,0 +1,135 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+
+// 如果是 PDF 后端，强制将目录改为宏模式，并关闭 HTML 专用的 right 定位
+ifdef::backend-pdf[]
+:toc: macro
+:toc-placement: macro
+endif::[]
+
+= Express Learning
+
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+</script>
+++++
+endif::[]
+
+== express 安装和运行
+.安装 express 4 的最新版本
+[source,console]
+----
+pnpm add express@4
+----
+
+
+.查看已安装的 express 版本
+[source,console]
+----
+pnpm list express
+----
+
+
+.运行 express 写的程序
+[source,console]
+----
+# 直接运行
+node app.js
+
+# 或使用 nodemon（自动重启，开发时推荐）
+pnpm add -D nodemon
+
+# 当前项目的 node_modules/.bin/（本地依赖）
+# 全局安装的模块（如果没找到本地版本）
+# 如果都没找到，会临时下载并执行（然后自动删除）
+npx nodemon app.js
+----
+
+NOTE: app.js 是你的应用程序
+
+== express 入门代码
+[source,javascript]
+----
+import express from 'express';
+const app = express();
+
+app.get('/', (req, res) => {
+    res.send("Hello World!");  // Express 自动处理 Content-Type 和状态码
+});
+
+app.listen(8081, () => {
+    console.log('服务器正在 8081 端口上监听');
+});
+----
+
+运行 express 程序
+
+[source,console]
+----
+npx nodemon helloworld_express.js
+----
+
+打开浏览器测试: http://127.0.0.1:8081
+
