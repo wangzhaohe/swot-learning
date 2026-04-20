@@ -1643,6 +1643,24 @@
 <v t="swot.20260416105130.1"><vh>@clean code/helloworld.js</vh></v>
 </v>
 <v t="swot.20260416111205.1"><vh>测试程序</vh></v>
+<v t="swot.20260420091430.1"><vh>运行 Node.js 程序</vh>
+<v t="swot.20260420091922.1"><vh>使用 node 命令运行程序</vh></v>
+<v t="swot.20260420091941.1"><vh>使用 npm 命令运行程序 -- 实际开发常用</vh>
+<v t="swot.20260420091430.2"><vh>@edit code/package.json</vh></v>
+</v>
+<v t="swot.20260420091952.1"><vh>使用 nodemon 监视文件改动并自动重启程序</vh></v>
+<v t="swot.20260420092842.1"><vh>在 Visual Studio Code 中运行程序</vh></v>
+</v>
+<v t="swot.20260420140643.1"><vh>调试 Node.js 程序</vh>
+<v t="swot.20260420140731.1"><vh>使用日志工具进行调试 -- 很常用的调试方式</vh>
+<v t="swot.20260420140643.2"><vh>@clean code/debug_demo_console.js</vh></v>
+</v>
+<v t="swot.20260420144257.1"><vh>使用 Node.js 内置调试器 debugger --  命令行调试</vh>
+<v t="swot.20260420144926.1"><vh>@clean code/debug_demo_debugger.js</vh></v>
+</v>
+<v t="swot.20260420145227.1"><vh>debugger 调试操作</vh></v>
+<v t="swot.20260420150412.1"><vh>在 Visual Studio Code 中调试 -- 或者使用 codebuddy 调试</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -36483,7 +36501,14 @@ http.createServer() 方法返回一个 HTTP 服务器对象，它使用 listen()
 
 &lt;6&gt; 向终端输出信息
 </t>
-<t tx="swot.20260416105130.1" _mod_time="4741da787c383468f02e">@language javascript
+<t tx="swot.20260416105130.1" _mod_time="4741da795e4e7313bb2e">@language javascript
+/**
+ * @fileoverview Hello World 服务器示例
+ * @description 使用 Node.js 原生 http 模块创建简单的 HTTP 服务器
+ * @author swot
+ * @version 1.0.0
+ */
+
 import http from 'http';  // &lt;1&gt;
 
 const httpServer = http.createServer(function (req, res) {  // &lt;2&gt;
@@ -36491,6 +36516,11 @@ const httpServer = http.createServer(function (req, res) {  // &lt;2&gt;
     res.end("Hello World!");  // &lt;4&gt;
 });
 
+/**
+ * 启动服务器并监听指定端口
+ * @param {number} port - 监听端口号
+ * @param {function} [callback] - 服务器启动后的回调函数
+ */
 httpServer.listen(8081, function(){  // &lt;5&gt;
     console.log(
         '服务器正在 8081 端口上监听!\n',
@@ -36538,7 +36568,14 @@ ifdef::backend-pdf[]
 :toc: macro
 :toc-placement: macro
 endif::[]</t>
-<t tx="swot.20260417084616.1" _mod_time="4741da787c671123782e">@language javascript
+<t tx="swot.20260417084616.1" _mod_time="4741da795e75e0c6b62e">@language javascript
+/**
+ * @fileoverview Hello World 服务器示例 (Express)
+ * @description 使用 Express 框架创建简单的 HTTP 服务器
+ * @author swot
+ * @version 1.0.0
+ */
+
 import express from 'express';
 const app = express();
 
@@ -36546,6 +36583,11 @@ app.get('/', (req, res) =&gt; {
     res.send("Hello World!");  // Express 自动处理 Content-Type 和状态码
 });
 
+/**
+ * 启动服务器并监听指定端口
+ * @param {number} port - 监听端口号
+ * @param {function} [callback] - 服务器启动后的回调函数
+ */
 app.listen(8081, () =&gt; {
     console.log('服务器正在 8081 端口上监听');
 });
@@ -36649,6 +36691,204 @@ npx nodemon app.js
 ----
 
 NOTE: app.js 是你的应用程序
+</t>
+<t tx="swot.20260420091430.1"></t>
+<t tx="swot.20260420091922.1">[source,console,]
+----
+node xxx.js
+----
+
+* 运行当前目录下的 index.js 脚本文件，可以使用点号代替
++
+[source,console,]
+----
+node .
+----
+
+* 选项-e（--eval）表示直接执行某语句：
+[source,console,]
+----
+node -e "console.log('Hello World!');"
+----
+</t>
+<t tx="swot.20260420091941.1">应该先使用 `npm init -y` 生成 package.json 文件（使用框架会自动执行初始化）。
+
+这需要依赖当前目录下的配置文件 `package.json`。它是 CommonJS 规定的用于描述包的文件。
+例如，当前目录下的 package.json 包含如下内容:
++
+[source,json,]
+----
+@others
+----
++
+其中 scripts 属性定义要执行的脚本
+
+- 在当前目录下执行 `npm start` 命令就相当于执行 `node helloworld.js` 命令;
+- 执行 `npm test` 命令就相当于执行 `node test.js` 命令。
++
+这种方式可以为不同的环境 (如测试、生产) 指定不同的 Node.js 程序。
+</t>
+<t tx="swot.20260420091952.1">[source,console,]
+----
+$ npm i nodemon -g
+$ nodemon xxx.js
+----
+</t>
+<t tx="swot.20260420092842.1">在 vscode 中打开一个终端窗口，运行命令
+
+[source,console,]
+----
+$ node xxx.js
+----
+</t>
+<t tx="swot.20260420140643.1"></t>
+<t tx="swot.20260420140643.2" _mod_time="4741da79732c8faf0c2e">@language javascript
+global.x = 5;
+
+// setTimeout 是异步函数，后打印
+//此处用到的回调函数的形式是箭头函数，() =&gt; 相当于 function()
+setTimeout(() =&gt; {
+  console.log('world');
+}, 1000);
+
+// 同步代码先打印
+console.log('hello');
+
+/* 打印结果
+hello
+world
+*/
+</t>
+<t tx="swot.20260420140731.1">* 使用 console.log() 方法检查变量或字符串的值，记录脚本调用的函数，或记录来自第三方服务的响应。
+
+* 使用 console.warn() 方法记录警告。
+
+* 使用 console.error() 方法记录错误信息。
+
+[source,javascript]
+----
+@others
+----
+
+
+CAUTION: 在生产项目中不要写太多的打印，如果使用 PM2 部署应用，则可能会占用太多的硬盘空间。
+
+
+.pm2 对打印占用硬盘空间的解决方法
+****
+[source,javascript]
+----
+module.exports = {
+  apps: [{
+    name: 'your-app',
+    script: './app.js',
+    
+    // 日志配置
+    output: './logs/out.log',     // 标准输出日志
+    error: './logs/err.log',      // 错误日志
+    log_date_format: 'YYYY-MM-DD HH:mm:ss',
+    
+    // 关键：日志轮转限制
+    max_size: '10M',              // 单个日志文件最大 10MB
+    retain: 7,                    // 保留 7 个历史文件
+    compress: true,               // 压缩旧日志
+    
+    // 或者合并日志到统一文件
+    merge_logs: true,
+  }]
+}
+----
+****
+</t>
+<t tx="swot.20260420144257.1">Node.js 内置一个进程外的调试实用程序，可通过 V8 检查器和内置调试客户端访问。
+
+. 调试之前先将 debugger; 语句插入到脚本的源代码，以在代码中的该位置启用断点。
++
+[source,javascript,]
+----
+@others
+----
++
+&lt;1&gt; 插入 debugger 语句
+
+. 执行 node 命令时加上 `inspect` 参数，指定要调试的脚本的路径。
++
+[source,console,]
+----
+node inspect debugdemo.js
+----
+
+</t>
+<t tx="swot.20260420144926.1" _mod_time="4741da79732c901b6e2e">@language javascript
+global.x = 5;
+
+// setTimeout 是异步函数，后打印
+//此处用到的回调函数的形式是箭头函数，() =&gt; 相当于 function()
+setTimeout(() =&gt; {
+  debugger;
+  console.log('world');
+}, 1000);
+
+// 同步代码先打印
+console.log('hello');
+
+/* 打印结果
+hello
+world
+*/
+</t>
+<t tx="swot.20260420145227.1">[%collapsible]
+====
+....
+&lt; Debugger listening on ws://127.0.0.1:9229/bf92c68e-26b6-44cb-bc75-f5f812fb4c0b
+&lt; For help, see: https://nodejs.org/en/docs/inspector
+&lt;
+&lt; Debugger attached.
+&lt;
+ ok
+Break on start in debugdemo.js:1
+&gt; 1 global.x = 5;
+  2 setTimeout(() =&gt; {   //此处用到的回调函数的形式是箭头函数，() =&gt;相当于function()
+  3   debugger;
+debug&gt; cont // &lt;1&gt;
+&lt; hello
+&lt;
+break in debugdemo.js:3
+  1 global.x = 5;
+  2 setTimeout(() =&gt; {   //此处用到的回调函数的形式是箭头函数，() =&gt;相当于function()
+&gt; 3   debugger;
+  4   console.log('world');
+  5 }, 1000);
+debug&gt; next  // &lt;2&gt;
+break in debugdemo.js:4
+  2 setTimeout(() =&gt; {   //此处用到的回调函数的形式是箭头函数，() =&gt;相当于function()
+  3   debugger;
+&gt; 4   console.log('world');
+  5 }, 1000);
+  6 console.log('hello');
+debug&gt; repl  // &lt;3&gt;
+Press Ctrl+C to leave debug repl
+&gt; x
+5
+&gt; .exit  // &lt;4&gt;
+....
+&lt;1&gt; cont 继续执行后面代码直到断点
+&lt;2&gt; next 下一步
+&lt;3&gt; repl 交互模式，比如输入 x 可以查看 x 的值，输入 1+1 能得到 2
+&lt;4&gt; exit 退出调试
+
+NOTE: 其中代码行号前面的 &gt; 符号表示程序暂停的位置。
+====
+</t>
+<t tx="swot.20260420150412.1">.执行调试
+image::img/vscode_debug.png[]
+
+.调试界面
+image::img/vscode_debug2.png[]
+
+// https://blog.csdn.net/weixin_47978760/article/details/125956108?[VSCode如何调试Nodejs]
+// https://blog.csdn.net/guoqiankunmiss/article/details/121820579?[NodeJS Debug &amp; VSCode Debugger]
+// https://www.bilibili.com/read/cv16911146?[vscode nodejs断点调试]
 </t>
 </tnodes>
 </leo_file>

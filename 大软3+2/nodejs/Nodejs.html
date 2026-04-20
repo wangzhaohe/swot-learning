@@ -582,6 +582,22 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel2">
 <li><a href="#_实战演练构建第一个_node_js_原生_http_服务应用学习原理">实战演练&#8201;&#8212;&#8201;构建第一个 Node.js 原生 http 服务应用&#8201;&#8212;&#8201;学习原理</a></li>
 <li><a href="#_测试程序">测试程序</a></li>
+<li><a href="#_运行_node_js_程序">运行 Node.js 程序</a>
+<ul class="sectlevel3">
+<li><a href="#_使用_node_命令运行程序">使用 node 命令运行程序</a></li>
+<li><a href="#_使用_npm_命令运行程序实际开发常用">使用 npm 命令运行程序&#8201;&#8212;&#8201;实际开发常用</a></li>
+<li><a href="#_使用_nodemon_监视文件改动并自动重启程序">使用 nodemon 监视文件改动并自动重启程序</a></li>
+<li><a href="#_在_visual_studio_code_中运行程序">在 Visual Studio Code 中运行程序</a></li>
+</ul>
+</li>
+<li><a href="#_调试_node_js_程序">调试 Node.js 程序</a>
+<ul class="sectlevel3">
+<li><a href="#_使用日志工具进行调试很常用的调试方式">使用日志工具进行调试&#8201;&#8212;&#8201;很常用的调试方式</a></li>
+<li><a href="#_使用_node_js_内置调试器_debugger_命令行调试">使用 Node.js 内置调试器 debugger&#8201;&#8212;&#8201; 命令行调试</a></li>
+<li><a href="#_debugger_调试操作">debugger 调试操作</a></li>
+<li><a href="#_在_visual_studio_code_中调试或者使用_codebuddy_调试">在 Visual Studio Code 中调试&#8201;&#8212;&#8201;或者使用 codebuddy 调试</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1430,13 +1446,25 @@ npm config set registry https://registry.npmmirror.com</pre>
 <h3 id="_实战演练构建第一个_node_js_原生_http_服务应用学习原理">实战演练&#8201;&#8212;&#8201;构建第一个 Node.js 原生 http 服务应用&#8201;&#8212;&#8201;学习原理</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">http</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;http&#39;</span><span class="tok-p">;</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * @fileoverview Hello World 服务器示例</span>
+<span class="tok-cm"> * @description 使用 Node.js 原生 http 模块创建简单的 HTTP 服务器</span>
+<span class="tok-cm"> * @author swot</span>
+<span class="tok-cm"> * @version 1.0.0</span>
+<span class="tok-cm"> */</span>
+
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">http</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;http&#39;</span><span class="tok-p">;</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
 
 <span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">httpServer</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">http</span><span class="tok-p">.</span><span class="tok-nx">createServer</span><span class="tok-p">(</span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">req</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">res</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
 <span class="tok-w">    </span><span class="tok-nx">res</span><span class="tok-p">.</span><span class="tok-nx">writeHead</span><span class="tok-p">(</span><span class="tok-mf">200</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-s1">&#39;Content-Type&#39;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;text/plain&#39;</span><span class="tok-p">});</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
 <span class="tok-w">    </span><span class="tok-nx">res</span><span class="tok-p">.</span><span class="tok-nx">end</span><span class="tok-p">(</span><span class="tok-s2">&quot;Hello World!&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="4"></i><b>(4)</b>
 <span class="tok-p">});</span>
 
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 启动服务器并监听指定端口</span>
+<span class="tok-cm"> * @param {number} port - 监听端口号</span>
+<span class="tok-cm"> * @param {function} [callback] - 服务器启动后的回调函数</span>
+<span class="tok-cm"> */</span>
 <span class="tok-nx">httpServer</span><span class="tok-p">.</span><span class="tok-nx">listen</span><span class="tok-p">(</span><span class="tok-mf">8081</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(){</span><span class="tok-w">  </span><i class="conum" data-value="5"></i><b>(5)</b>
 <span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span>
 <span class="tok-w">        </span><span class="tok-s1">&#39;服务器正在 8081 端口上监听!\n&#39;</span><span class="tok-p">,</span>
@@ -1505,12 +1533,335 @@ http.createServer() 方法返回一个 HTTP 服务器对象，它使用 listen()
 </ol>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_运行_node_js_程序">运行 Node.js 程序</h3>
+<div class="sect3">
+<h4 id="_使用_node_命令运行程序">使用 node 命令运行程序</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">node xxx.js</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>运行当前目录下的 index.js 脚本文件，可以使用点号代替</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">node .</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>选项-e（--eval）表示直接执行某语句：</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>node -e "console.log('Hello World!');"</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_使用_npm_命令运行程序实际开发常用">使用 npm 命令运行程序&#8201;&#8212;&#8201;实际开发常用</h4>
+<div class="paragraph">
+<p>应该先使用 <code>npm init -y</code> 生成 package.json 文件（使用框架会自动执行初始化）。</p>
+</div>
+<div class="paragraph">
+<p>这需要依赖当前目录下的配置文件 <code>package.json</code>。它是 CommonJS 规定的用于描述包的文件。
+例如，当前目录下的 package.json 包含如下内容:</p>
+</div>
+<div class="paragraph">
+<p>+</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;name&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;code&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;version&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;1.0.0&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;type&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;module&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;description&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;main&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;index.js&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;scripts&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;start&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;node helloworld.js&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;test&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</span>
+<span class="tok-w">  </span><span class="tok-p">},</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;keywords&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-p">[],</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;author&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;license&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;ISC&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;packageManager&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;pnpm@10.9.0&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;dependencies&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;express&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^4.22.1&quot;</span>
+<span class="tok-w">  </span><span class="tok-p">},</span>
+<span class="tok-w">  </span><span class="tok-nt">&quot;devDependencies&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;nodemon&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^3.1.14&quot;</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>+
+其中 scripts 属性定义要执行的脚本</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>在当前目录下执行 <code>npm start</code> 命令就相当于执行 <code>node helloworld.js</code> 命令;</p>
+</li>
+<li>
+<p>执行 <code>npm test</code> 命令就相当于执行 <code>node test.js</code> 命令。</p>
+<div class="paragraph">
+<p>这种方式可以为不同的环境 (如测试、生产) 指定不同的 Node.js 程序。</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_使用_nodemon_监视文件改动并自动重启程序">使用 nodemon 监视文件改动并自动重启程序</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp">$ </span>npm<span class="tok-w"> </span>i<span class="tok-w"> </span>nodemon<span class="tok-w"> </span>-g
+<span class="tok-gp">$ </span>nodemon<span class="tok-w"> </span>xxx.js</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_在_visual_studio_code_中运行程序">在 Visual Studio Code 中运行程序</h4>
+<div class="paragraph">
+<p>在 vscode 中打开一个终端窗口，运行命令</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp">$ </span>node<span class="tok-w"> </span>xxx.js</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_调试_node_js_程序">调试 Node.js 程序</h3>
+<div class="sect3">
+<h4 id="_使用日志工具进行调试很常用的调试方式">使用日志工具进行调试&#8201;&#8212;&#8201;很常用的调试方式</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>使用 console.log() 方法检查变量或字符串的值，记录脚本调用的函数，或记录来自第三方服务的响应。</p>
+</li>
+<li>
+<p>使用 console.warn() 方法记录警告。</p>
+</li>
+<li>
+<p>使用 console.error() 方法记录错误信息。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nb">global</span><span class="tok-p">.</span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">5</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// setTimeout 是异步函数，后打印</span>
+<span class="tok-c1">//此处用到的回调函数的形式是箭头函数，() =&gt; 相当于 function()</span>
+<span class="tok-nx">setTimeout</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;world&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-mf">1000</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// 同步代码先打印</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;hello&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-cm">/* 打印结果</span>
+<span class="tok-cm">hello</span>
+<span class="tok-cm">world</span>
+<span class="tok-cm">*/</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="⚠️"></i>
+</td>
+<td class="content">
+在生产项目中不要写太多的打印，如果使用 PM2 部署应用，则可能会占用太多的硬盘空间。
+</td>
+</tr>
+</table>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">pm2 对打印占用硬盘空间的解决方法</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nx">module</span><span class="tok-p">.</span><span class="tok-nx">exports</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-nx">apps</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">[{</span>
+<span class="tok-w">    </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;your-app&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nx">script</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;./app.js&#39;</span><span class="tok-p">,</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 日志配置</span>
+<span class="tok-w">    </span><span class="tok-nx">output</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;./logs/out.log&#39;</span><span class="tok-p">,</span><span class="tok-w">     </span><span class="tok-c1">// 标准输出日志</span>
+<span class="tok-w">    </span><span class="tok-nx">error</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;./logs/err.log&#39;</span><span class="tok-p">,</span><span class="tok-w">      </span><span class="tok-c1">// 错误日志</span>
+<span class="tok-w">    </span><span class="tok-nx">log_date_format</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;YYYY-MM-DD HH:mm:ss&#39;</span><span class="tok-p">,</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 关键：日志轮转限制</span>
+<span class="tok-w">    </span><span class="tok-nx">max_size</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;10M&#39;</span><span class="tok-p">,</span><span class="tok-w">              </span><span class="tok-c1">// 单个日志文件最大 10MB</span>
+<span class="tok-w">    </span><span class="tok-nx">retain</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">7</span><span class="tok-p">,</span><span class="tok-w">                    </span><span class="tok-c1">// 保留 7 个历史文件</span>
+<span class="tok-w">    </span><span class="tok-nx">compress</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">,</span><span class="tok-w">               </span><span class="tok-c1">// 压缩旧日志</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 或者合并日志到统一文件</span>
+<span class="tok-w">    </span><span class="tok-nx">merge_logs</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-p">}]</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_使用_node_js_内置调试器_debugger_命令行调试">使用 Node.js 内置调试器 debugger&#8201;&#8212;&#8201; 命令行调试</h4>
+<div class="paragraph">
+<p>Node.js 内置一个进程外的调试实用程序，可通过 V8 检查器和内置调试客户端访问。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>调试之前先将 debugger; 语句插入到脚本的源代码，以在代码中的该位置启用断点。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nb">global</span><span class="tok-p">.</span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">5</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// setTimeout 是异步函数，后打印</span>
+<span class="tok-c1">//此处用到的回调函数的形式是箭头函数，() =&gt; 相当于 function()</span>
+<span class="tok-nx">setTimeout</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-k">debugger</span><span class="tok-p">;</span>
+<span class="tok-w">  </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;world&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-mf">1000</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// 同步代码先打印</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;hello&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-cm">/* 打印结果</span>
+<span class="tok-cm">hello</span>
+<span class="tok-cm">world</span>
+<span class="tok-cm">*/</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>插入 debugger 语句</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>执行 node 命令时加上 <code>inspect</code> 参数，指定要调试的脚本的路径。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">node inspect debugdemo.js</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_debugger_调试操作">debugger 调试操作</h4>
+<details>
+<summary class="title">Details</summary>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre>&lt; Debugger listening on ws://127.0.0.1:9229/bf92c68e-26b6-44cb-bc75-f5f812fb4c0b
+&lt; For help, see: https://nodejs.org/en/docs/inspector
+&lt;
+&lt; Debugger attached.
+&lt;
+ ok
+Break on start in debugdemo.js:1
+&gt; 1 global.x = 5;
+  2 setTimeout(() =&gt; {   //此处用到的回调函数的形式是箭头函数，() =&gt;相当于function()
+  3   debugger;
+debug&gt; cont <i class="conum" data-value="1"></i><b>(1)</b>
+&lt; hello
+&lt;
+break in debugdemo.js:3
+  1 global.x = 5;
+  2 setTimeout(() =&gt; {   //此处用到的回调函数的形式是箭头函数，() =&gt;相当于function()
+&gt; 3   debugger;
+  4   console.log('world');
+  5 }, 1000);
+debug&gt; next  <i class="conum" data-value="2"></i><b>(2)</b>
+break in debugdemo.js:4
+  2 setTimeout(() =&gt; {   //此处用到的回调函数的形式是箭头函数，() =&gt;相当于function()
+  3   debugger;
+&gt; 4   console.log('world');
+  5 }, 1000);
+  6 console.log('hello');
+debug&gt; repl  <i class="conum" data-value="3"></i><b>(3)</b>
+Press Ctrl+C to leave debug repl
+&gt; x
+5
+&gt; .exit  <i class="conum" data-value="4"></i><b>(4)</b></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>cont 继续执行后面代码直到断点</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>next 下一步</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>repl 交互模式，比如输入 x 可以查看 x 的值，输入 1+1 能得到 2</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>exit 退出调试</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+其中代码行号前面的 &gt; 符号表示程序暂停的位置。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_在_visual_studio_code_中调试或者使用_codebuddy_调试">在 Visual Studio Code 中调试&#8201;&#8212;&#8201;或者使用 codebuddy 调试</h4>
+<div class="imageblock">
+<div class="content">
+<img src="img/vscode_debug.png" alt="vscode debug">
+</div>
+<div class="title">Figure 4. 执行调试</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/vscode_debug2.png" alt="vscode debug2">
+</div>
+<div class="title">Figure 5. 调试界面</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-04-17 16:40:51 +0800
+Last updated 2026-04-20 15:11:59 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
