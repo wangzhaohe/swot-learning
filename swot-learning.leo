@@ -1731,36 +1731,44 @@
 </v>
 <v t="swot.20260421083048.49"><vh>process 对象</vh>
 <v t="swot.20260421083048.50"><vh>进程事件</vh>
-<v t="swot.20260421083048.51"><vh>#clean src/ch02/process_exit.js</vh></v>
+<v t="swot.20260421083048.51"><vh>@clean code/node/process_exit.js</vh></v>
 </v>
 <v t="swot.20260421083048.52"><vh>退出状态码</vh></v>
 <v t="swot.20260421083048.53"><vh>process 对象的属性</vh>
-<v t="swot.20260421083048.54"><vh>#clean src/ch02/process_attr.js</vh></v>
+<v t="swot.20260421083048.54"><vh>@clean code/node/process_attr.js</vh></v>
 </v>
 <v t="swot.20260421083048.55"><vh>process 对象的方法</vh>
-<v t="swot.20260421083048.56"><vh>#clean src/ch02/process_method.js</vh></v>
+<v t="swot.20260421083048.56"><vh>@clean code/node/process_method.js</vh></v>
 </v>
 </v>
 </v>
 <v t="swot.20260421083048.57"><vh>Node.js 的定时器</vh>
-<v t="swot.20260421083048.58"><vh>设置定时器</vh></v>
+<v t="swot.20260421083048.58"><vh>设置定时器</vh>
+<v t="swot.20260427084521.1"><vh>一次性定时器</vh></v>
+<v t="swot.20260427084537.1"><vh>周期性定时器</vh></v>
+<v t="swot.20260427084556.1"><vh>即时定时器</vh></v>
+</v>
 <v t="swot.20260421083048.59"><vh>取消定时器</vh></v>
 <v t="swot.20260421083048.60"><vh>Timeout 和 Immediate 类</vh></v>
 <v t="swot.20260421083048.61"><vh>setImmediate() 方法与 setTimeout() 方法</vh>
-<v t="swot.20260421083048.62"><vh>#clean src/ch02/timeout_vs_immediate0.js</vh></v>
-<v t="swot.20260421083048.63"><vh>#clean src/ch02/timeout_vs_immediate1.js</vh></v>
-<v t="swot.20260421083048.64"><vh>#clean src/ch02/timeout_vs_immediate2.js</vh></v>
+<v t="swot.20260427092022.1"><vh>Example 1</vh>
+<v t="swot.20260421083048.62"><vh>@clean code/node/timeout_vs_immediate0.js</vh></v>
+</v>
+<v t="swot.20260427103848.1"><vh>Example 2</vh>
+<v t="swot.20260421083048.63"><vh>@clean code/node/timeout_vs_immediate1.js</vh></v>
+</v>
+<v t="swot.20260427104845.1"><vh>Example 3</vh>
+<v t="swot.20260421083048.64"><vh>@clean code/node/timeout_vs_immediate2.js</vh></v>
+</v>
 </v>
 <v t="swot.20260421083048.65"><vh>process.nextTick() 与 setImmediate() 的对比</vh>
-<v t="swot.20260421083048.66"><vh>#clean src/ch02/nextTick_vs_setImmediate.js</vh></v>
+<v t="swot.20260421083048.66"><vh>@clean code/node/nextTick_vs_setImmediate.js</vh></v>
 </v>
 </v>
 <v t="swot.20260421083048.67"><vh>Buffer 数据类型</vh>
 <v t="swot.20260421083048.68"><vh>Buffer 实例的创建</vh></v>
 <v t="swot.20260421083048.69"><vh>Buffer 用于编码转换</vh></v>
-<v t="swot.20260421083048.70"><vh>Buffer 实例与JSON 对象互相转换</vh>
-<v t="swot.20260421083048.71"><vh>#clean src/ch02/buf_to_json.js</vh></v>
-</v>
+<v t="swot.20260428092353.1"><vh>Buffer 实例与JSON 对象互相转换</vh></v>
 <v t="swot.20260421083048.72"><vh>Buffer 实例基本操作</vh>
 <v t="swot.20260421083048.73"><vh>Buffer 写入实例</vh></v>
 <v t="swot.20260421083048.74"><vh>Buffer 读取实例</vh></v>
@@ -1772,16 +1780,39 @@
 <v t="swot.20260421083048.78"><vh>Node.js 的流操作</vh>
 <v t="swot.20260421083048.79"><vh>概述</vh></v>
 <v t="swot.20260421083048.80"><vh>可读流</vh>
-<v t="swot.20260421083048.81"><vh>#clean src/ch02/test_readablestream.js</vh></v>
+<v t="swot.20260421083048.81"><vh>@clean code/node/test_readablestream.js</vh></v>
 </v>
 <v t="swot.20260421083048.82"><vh>可写流</vh>
-<v t="swot.20260421083048.83"><vh>#clean src/ch02/test_writablestream.js</vh></v>
+<v t="swot.20260421083048.83"><vh>@clean code/node/test_writablestream.js</vh></v>
 </v>
 <v t="swot.20260421083048.84"><vh>管道读写操作</vh></v>
 </v>
-<v t="swot.20260421083048.85"><vh>实战演练 -- 提供图片浏览服务</vh></v>
-<v t="swot.20260421083048.86"><vh>本章小结</vh></v>
-<v t="swot.20260421083048.87"><vh>习题</vh></v>
+<v t="swot.20260429104414.2"><vh>实战演练 -- 提供图片浏览服务</vh>
+<v t="swot.20260429104414.3"><vh>实现思路</vh>
+<v t="swot.20260429104510.1"><vh>1. 搭建 B/S 架构</vh></v>
+<v t="swot.20260429104515.1"><vh>2. 解析资源文件路径</vh></v>
+<v t="swot.20260429104523.1"><vh>3. 处理不同类型的资源文件</vh></v>
+<v t="swot.20260429104529.1"><vh>4. 文件读取</vh></v>
+</v>
+<v t="swot.20260429104414.4"><vh>编写代码</vh>
+<v t="swot.20260429104414.5"><vh>@clean code/node/static_server.cjs</vh>
+<v t="swot.20260429104414.6"><vh>1. 加载模块</vh></v>
+<v t="swot.20260429104414.7"><vh>2. 定义变量</vh></v>
+<v t="swot.20260429104414.8"><vh>3. 创建HTTP服务</vh>
+<v t="swot.20260429104414.9"><vh>3.1 定义mime对象</vh></v>
+<v t="swot.20260429104414.10"><vh>3.2 文件路径及扩展名</vh></v>
+<v t="swot.20260429104414.11"><vh>3.3 读取文件状态</vh>
+<v t="swot.20260429104414.12"><vh>3.3.1 未找到404</vh></v>
+<v t="swot.20260429104414.13"><vh>3.3.2 路径是文件</vh></v>
+<v t="swot.20260429104414.14"><vh>3.3.3 路径是目录</vh></v>
+<v t="swot.20260429104414.15"><vh>3.3.4 function readFile()</vh></v>
+</v>
+</v>
+<v t="swot.20260429104414.16"><vh>4. 监听服务</vh></v>
+</v>
+</v>
+<v t="swot.20260429104414.17"><vh>运行程序</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -38058,9 +38089,9 @@ logger.error(new Error("错误信息"));  // &lt;.&gt;
 const name = "Swot";
 logger.warn(`Danger ${name}! Danger!`);  // &lt;.&gt;
 </t>
-<t tx="swot.20260421083048.49">process 对象是一个全局变量，其提供有关当前 Node.js 进程的信息井对其进行控制。作为一个全局变量，它始终可供 Node.Js 应用程序使用，无须加载 process 模块。它通常用于编写本地命令行程序。
+<t tx="swot.20260421083048.49">process 对象是一个全局变量，其提供有关当前 Node.js 进程的信息井对其进行控制。作为一个全局变量，它始终可供 Node.Js 应用程序使用，无须加载 process 模块。
 
-
+它通常用于编写本地命令行程序，也可以用于做程序运行环境的判断，如判断是否为开发环境，是否为生产环境。
 </t>
 <t tx="swot.20260421083048.5">JavaScript 语法的基本规则与 Java 语言类似，严格区分大小写。JS 是解释型语言，程序(脚本)由 JS 引擎解释执行。
 
@@ -38102,36 +38133,39 @@ exit 当 Node.js 进程准备退出时触发。此时无法阻止事件循环退
 
 beforeExit: 当 Node.js 清空其事件循环并且没有其他工作要调度时，会触发此事件。通常, Node.js 进程将在没有调度工作时退出，但是在 beforeExit 事件上注册的监听器可以进行异步调用，从而导致 Node.js 进程继续。调用监听器回调函数时会将 process.exitCode (退出码) 值作为唯一参数传入。
 
-uncaughtException: 未捕获的 JavaScript 异常一直处于冒泡状态，返回事件循环时，会触发此事件。默认情况下，Node.js 通过将堆栈跟踪打印到标准错误流并返回退出码1来处理此类异常,从而覆盖任何先前设置的 process.exitCode。为 uncaughtException 事件添处理程序会覆盖此默认行为。
+uncaughtException: 未捕获的 JavaScript 异常一直处于冒泡状态，返回事件循环时，会触发此事件。默认情况下，Node.js 通过将堆栈跟踪打印到标准错误流并返回退出码 1 来处理此类异常，从而覆盖任何先前设置的 process.exitCode。为 uncaughtException 事件添加处理程序会覆盖此默认行为。
 
-信号(Signal)事件:当Node.is进程接收到一个信号时，会触发信号事件。信号名称可对照标准 POSIX 的信号名称列表，例如 SIGINT、SIGHUP。每个事件名称均以信号名称的大写表示。
-</t>
-<t tx="swot.20260421083048.51">@doc
-[source,javascript,]
+信号(Signal)事件: 当 Node.is 进程接收到一个信号时，会触发信号事件。信号名称可对照标准 POSIX 的信号名称列表，例如 SIGINT、SIGHUP。每个事件名称均以信号名称的大写表示。
+
+.code/node/process_exit.js
+[source,javascript]
 ----
-@c
-@language javascript
-console.log("程序开始执行");
-process.on('exit', function(code) {
-  // 以下代码永远不会执行
-  setTimeout(function(){
-    console.log("该代码不会执行");
-  }, 0);
-  console.log('退出码为:',code);
-});
-console.log("程序执行结束");
-@doc
-@language asciidoc
+@others
 ----
 
 运行结果：
 ....
-程序开始执行
+程序执行开始
 程序执行结束
 退出码为: 0
 ....
 
 IMPORTANT: exit 当 Node.js 进程准备退出时触发。所以 “退出码为: 0” 在最后打印。
+</t>
+<t tx="swot.20260421083048.51" _mod_time="4741da7bac11e0f18e2e">@language javascript
+console.log("程序执行开始");  // 1. 立即执行
+
+process.on('exit', function(code) {
+  // 3. exit 事件触发，事件循环已停止
+  setTimeout(function(){
+      // 5. 永远不会执行（exit 事件中的 setTimeout 回调不会执行，因为事件循环已经停止）
+      console.log("该代码不会执行");
+  }, 0);
+  // 4. 这个会执行（同步代码）
+  console.log('退出码为:', code);
+});
+
+console.log("程序执行结束");  // 2. 立即执行
 </t>
 <t tx="swot.20260421083048.52">如果没有异步操作任务正在等待执行，则 Node.js 会以状态码 0 正常退出，其他情形使用的状态码如下表：
 
@@ -38176,12 +38210,35 @@ IMPORTANT: exit 当 Node.js 进程准备退出时触发。所以 “退出码为
 | 15   | **platform** 运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
 | 16   | **mainModule** require.main 的备选方法。不同点，如果主模块在运行时改变，require.main可能会继续返回老的模块。可以认为，这两者引用了同一个模块。
 |===
-</t>
-<t tx="swot.20260421083048.54">@doc
+
+.code/node/process_attr.js
 [source,javascript,]
 ----
-@c
-@language javascript
+@others
+----
+
+.执行 node process_attr.js 输出如下：
+....
+Hello World!
+0: /Users/swot/.nvm/versions/node/v22.21.1/bin/node
+1: /Users/swot/swot-learning/大软3+2/nodejs/code/node/process_attr.js
+/Users/swot/.nvm/versions/node/v22.21.1/bin/node
+darwin
+....
+
+.执行 node process_attr.js a b c 输出如下：
+....
+Hello World!
+0: /Users/swot/.nvm/versions/node/v22.21.1/bin/node
+1: /Users/swot/swot-learning/大软3+2/nodejs/code/node/process_attr.js
+2: a
+3: b
+4: c
+/Users/swot/.nvm/versions/node/v22.21.1/bin/node
+darwin
+....
+</t>
+<t tx="swot.20260421083048.54" _mod_time="4741da7bb46900b7e02e">@language javascript
 process.stdout.write("Hello World!" + "\n");  // 输出到终端
 
 process.argv.forEach(function(val, index, array) {  // 通过参数读取
@@ -38190,30 +38247,6 @@ process.argv.forEach(function(val, index, array) {  // 通过参数读取
 
 console.log(process.execPath);  // 获取执行路径
 console.log(process.platform);  // 平台信息
-@doc
-@language asciidoc
-----
-
-.执行 node process_attr.js 输出如下：
-....
-Hello World!
-0: /usr/local/Cellar/nvm/0.39.0/versions/node/v17.9.0/bin/node
-1: /Users/swot/learning/nodejs/src/ch02/process_attr.js
-/usr/local/Cellar/nvm/0.39.0/versions/node/v17.9.0/bin/node
-darwin
-....
-
-.执行 node process_attr.js a b c 输出如下：
-....
-Hello World!
-0: /usr/local/Cellar/nvm/0.39.0/versions/node/v17.9.0/bin/node
-1: /Users/swot/learning/nodejs/src/ch02/process_attr.js
-2: a
-3: b
-4: c
-/usr/local/Cellar/nvm/0.39.0/versions/node/v17.9.0/bin/node
-darwin
-....
 </t>
 <t tx="swot.20260421083048.55">Process 提供了很多有用的方法，便于我们更好的控制系统的交互：
 
@@ -38239,135 +38272,49 @@ darwin
 | 16   | **uptime()** 返回 Node 已经运行的秒数。
 | 17   | **hrtime()** 返回当前进程的高分辨时间，形式为 [seconds, nanoseconds]数组。它是相对于过去的任意事件。该值与日期无关，因此不受时钟漂移的影响。主要用途是可以通过精确的时间间隔，来衡量程序的性能。 你可以将之前的结果传递给当前的 process.hrtime() ，会返回两者间的时间差，用来基准和测量时间间隔。
 |===
-</t>
-<t tx="swot.20260421083048.56">@doc
+
+
 [source,javascript,]
 ----
-@c
-@language javascript
+@others
+----
+
+
+.执行 node process_method.js 输出如下：
+....
+当前目录: /Users/swot/swot-learning/大软3+2/nodejs/code
+当前版本: v22.21.1
+{
+  rss: 32591872,
+  heapTotal: 5611520,
+  heapUsed: 4502848,
+  external: 1668093,
+  arrayBuffers: 10515
+}
+....
+</t>
+<t tx="swot.20260421083048.56" _mod_time="4741da7bb4f7e02ba72e">@language javascript
 console.log('当前目录: ' + process.cwd());  // 输出当前目录
 
 console.log('当前版本: ' + process.version);  // 输出当前版本
 
 console.log(process.memoryUsage());  // 输出内存使用情况
-@doc
-@language asciidoc
-----
-
-.执行 node process_method.js 输出如下：
-....
-当前目录: /Users/swot/learning/nodejs/src/ch02
-当前版本: v17.9.0
-{
-  rss: 25812992,
-  heapTotal: 5283840,
-  heapUsed: 4542016,
-  external: 459236,
-  arrayBuffers: 11166
-}
-....
 </t>
-<t tx="swot.20260421083048.57">定时器 timers 模块对外暴露一个全局的 API,用于调度在某个时段调用的函数。
+<t tx="swot.20260421083048.57">定时器 timers 模块对外暴露一个全局的 API，用于调度在某个时段调用的函数。
 
 因为定时器函数是全局变量，所以不需要加载 timers 模块来使用它。
 
-Node.js 的定时器函数实现了与 Web 浏览器提供的定时器 API 类似的 API,但是它们使用了不同的内部实现机制，Node.js 的定时器函数是基于 Node.js 事件循环构建的。
+Node.js 的定时器函数实现了与 Web 浏览器提供的定时器 API 类似的 API，但是它们使用了不同的内部实现机制，Node.js 的定时器函数是基于 Node.js 事件循环构建的。
 
 // 参考资料 https://segmentfault.com/a/1190000023315304
 </t>
 <t tx="swot.20260421083048.58">Node.js 中的定时器在一段时间后会调用给定的函数。何时调用定时器函数取决于用来创建定时器的方法及 Node.js 事件循环正在执行的其他工作。
-
-[discrete]
-===== 一次性定时器
-基本用法 `setTimeout(callback, delay[, ...args])`
-////
-这个方法用于延迟一个函数的执行时间，在到达指定的时间点执行该函数，并且只执行一次。
-
-** 其中参数 callback 用于指定要调用的回调函数
-** delay 设置调用回调函数之前等待的毫秒数
-** args 设置调用回调函数时传入的可选参数。
-** 它返回 Timeout 对象的 ID, 该 ID 可以传递给 clearTimeOut() 以取消该定时器。
-////
-
-例如，下面的代码将在 1 秒后输出提示信息，之后定时器就不再起作用。
-
-[source,javascript,]
-----
-setTimeout(function () {
-  console.log("我是一个一次性定时器");
-}, 1000);
-----
-
-CAUTION: 定时器可能不会精确地在指定的时刻调用回调函数。Node.js 不保证回调被触发的确切时间，也不保证它们的顺序。回调函数会尽可能接近指定的时间，并在该时间点被调用。
-// 为什么会这样？因为定时时间点可能正好有耗时的同步任务没有完成。
-// https://segmentfault.com/a/1190000023315304?[参考定时器不准部分]
-
-[discrete]
-===== 周期性定时器
-基本用法 `setInterval(callback, delay[, ...args])`
-// 这个方法用于以指定的时间间隔周期性地执行回调函数，其参数和返回值同上述 setTimeout() 方法的参数和返回值。
-
-例如，下面的代码将在 1 秒之后输出提示信息，之后定时器每隔 1 秒就重复输出提示信息，除非使用 clearlnterval() 方法取消该定时器或者终止程序。
-
-[source,javascript,]
-----
-setInterval(function () {
-  console.log("我是一个周期性的定时器");
-},1000);
-----
-
-[discrete]
-===== 即时定时器
-基本用法 `setImmediate(callback[, ...args])`
-////
-https://blog.csdn.net/weixin_47450807/article/details/124098448?[参考]
-setImmediate 表示立即执行，它是宏任务，回调函数会被放置到事件循环的 check 阶段。
-在应用中如果有大量的计算型任务，它是不适合放在主线程中执行的，因为计算任务会阻塞主线程，主线程一旦被阻塞，其他任务就需要等待，所以这种类型的任务最好交给C++维护线程去执行。
-可以通过 setImmediate 方法将任务放入事件循环中的 check 阶段，因为代码在这一个阶段执行不会阻塞主线程，也不会阻塞事件循环。
-////
-
-[caption=]
-[cols="1,1"]
-|===
-a|
-[source,javascript,]
---
-function sleep(delay) {
-  var start = new Date().getTime()
-  while(new Date().getTime() - start &lt; delay) {
-    continue
-  }
-  console.log('ok')
-}
-console.log('start')
-sleep(2000)
-console.log('end')
---
-先打印出 start，然后等待 2000ms 后再打印 ok 和 end
-a|
-[source,javascript,]
---
-function sleep(delay) {
-  var start = new Date().getTime()
-  while(new Date().getTime() - start &lt; delay) {
-    continue
-  }
-  console.log('ok')
-}
-console.log('start')
-setImmediate(sleep, 2000)  // &lt;1&gt;
-console.log('end')
---
-先打印 start，再打印 end, 最后等待 2000ms 后打印 end
-|===
-
-&lt;1&gt; 出现这种情况的原因是：setImmediate 将其中的函数作为宏任务，放到 C++ 一个线程中去执行，然后将其放入任务队列中。所以不会影响主线程的执行。
 </t>
 <t tx="swot.20260421083048.59">分别用 clearTimeout()、clearInterval() 和 clearImmediate() 方法取消相应定时器，防止该定时器触发。
 
 [source,javascript,]
 ----
-var testInterval = setInterval(testFunc,2000);
+var testInterval = setInterval(testFunc, 2000);
 ...
 clearInterval(testInterval);
 ----
@@ -38467,7 +38414,7 @@ const PI = 3.1415;
 
 - Immediate 对象也在内部创建，并由 setImmediate() 方法返回。它可以传递给 clearImmediate() 以取消即时定时器。
 
-NOTE: 需要注意的是，setTimeout() 或 setInterval() 方法中的 this 关键字在 JavaScript 中均指向 Window 对象，而在 Node.js 中, 则都指向 Timeout 对象。
+NOTE: 需要注意的是，setTimeout() 或 setInterval() 方法中的 this 关键字在浏览器 JS 中均指向 Window 对象，而在 Node.js 中, 则都指向 Timeout 对象。
 </t>
 <t tx="swot.20260421083048.61">setImmediate() 和 setTimeout() 类似，但由于它们的调用时机不同，所以行为也不相同。
 
@@ -38476,62 +38423,24 @@ NOTE: 需要注意的是，setTimeout() 或 setInterval() 方法中的 this 关�
 
 // 请看下面的案例
 </t>
-<t tx="swot.20260421083048.62">@doc
-// https://segmentfault.com/a/1190000023315304?[setImmediate和setTimeout]
-上面的这个流程说简单点就是在一个异步流程里，setImmediate 会比定时器先执行，我们写点代码来试试：
-
-[source,javascript,linenums]
-----
-@c
-@language javascript
-console.log('outer');
+<t tx="swot.20260421083048.62" _mod_time="4741da7bb2bd72b9f72e">@language javascript
+console.log('outer');  // 先执行
 
 // EventLoop: timers
-setTimeout(() =&gt; {  // &lt;1&gt;&lt;7&gt;
-  setTimeout(() =&gt; {  // &lt;2&gt;
-    console.log('setTimeout');
-  }, 0);
-  setImmediate(() =&gt; {  // &lt;3&gt;
-    console.log('setImmediate');
-  });
-}, 0);  // &lt;4&gt;
-// EventLoop: pending callbacks
-// EventLoop: idle, prepare
-// EventLoop: poll
-// EventLoop: check   &lt;5&gt;
-// EventLoop: close callbacks &lt;6&gt;
-@language asciidoc
-@doc
-----
-运行命令: `$ node timeout_vs_immediate0.js`
+setTimeout(() =&gt; {
 
-.运行结果
-....
-outer
-setImmediate
-setTimeout
-....
+    setTimeout(() =&gt; {
+        console.log('setTimeout');
+    }, 0);
 
-代码分析 ：
+    setImmediate(() =&gt; {
+        console.log('setImmediate');
+    });
 
-&lt;1&gt; 外层是一个 `set Timeout` ，所以执行他的回调的时候已经在 `timers` 阶段了
-&lt;2&gt; 处理里面的 `setTimeout`，因为本次循环的 `timers` 正在执行，所以他的回调其实加到了下个 `timers` 阶段
-&lt;3&gt; 处理里面的 `setImmediate`，将它的回调加入 `check` 阶段的队列
-&lt;4&gt; 外层 `timers` 阶段执行完，进入 `pending callbacks`，`idle, prepare`，`poll`，这几个队列都是空的，所以继续往下
-&lt;5&gt; 到了 `check` 阶段，发现了 `setImmediate` 的回调，拿出来执行
-&lt;6&gt; 然后是 `close callbacks`，队列是空的，跳过
-&lt;7&gt; 又是 `timers` 阶段，执行 `console.log('setTimeout');`
+}, 0);
+
 </t>
-<t tx="swot.20260421083048.63">@doc
-定时器执行的顺序根据调用它们的上下文有所不同。如果定时器在主模块内被调用，则计时将受进程性能的约束，比如可能会受到计算机上运行的其他应用程序的影响。
-
-举例如下：
-// https://segmentfault.com/a/1190000023315304?[参考内容 setImmediate 和 setTimeout]
-
-[source,javascript,linenums]
-----
-@code
-@language javascript
+<t tx="swot.20260421083048.63" _mod_time="4741da7bb3297699e72e">@language javascript
 console.log("outer");  // &lt;.&gt;
 
 setTimeout(() =&gt; {
@@ -38542,130 +38451,44 @@ setImmediate(() =&gt; {  // &lt;.&gt;
   console.log('setImmediate');
 });
 // &lt;.&gt;
-@doc
-@language asciidoc
-----
-
-运行命令: `$ node timeout_vs_immediate1.js`
-[caption=]
-.运行结果不确定（可能出现如下两种情况）
-[cols="1,1"]
-|===
-a|
-....
-outer
-setTimeout
-setImmediate
-....
-a|
-....
-outer
-setImmediate
-setTimeout
-....
-|===
-
-分析如下：
-
-&lt;1&gt; 外层同步代码一次性全部执行完，遇到异步API就塞到对应的阶段
-
-&lt;2&gt; node.js 里面 `setTimeout(fn, 0)` 会被强制改为 `setTimeout(fn, 1)`, https://nodejs.org/api/timers.html#timers_settimeout_callback_delay_args?[这在官方文档中有说明]。
-// (说到这里顺便提下，HTML5 里面 setTimeout 最小的时间限制是 4ms)。
-+
-所以遇到 `setTimeout`，虽然设置的是0毫秒触发，但是被node.js强制改为1毫秒，塞入 `times` 阶段
-
-&lt;3&gt; 遇到 `setImmediate` 塞入 `check` 阶段
-
-&lt;4&gt; 同步代码执行完毕，进入 Event Loop
-* 先进入 `times` 阶段，检查当前时间过去了 1 毫秒没有，如果过了 1 毫秒，满足 `setTimeout` 条件，执行回调，如果没过 1 毫秒，跳过。
-* 跳过空的阶段，进入 check 阶段，执行 `setImmediate` 回调
-
-////
-分析：
-通过上述流程的梳理，我们发现关键就在这个 1 毫秒，
-- 如果同步代码执行时间较长，进入 Event Loop 的时候 1 毫秒已经过了，就执行 setTimeout
-- 如果 1 毫秒还没到，就先执行了 setImmediate。
-- 每次我们运行脚本时，机器状态可能不一样，导致运行时有 1 毫秒的差距，一会儿 setTimeout 先执行，一会儿 setImmediate 先执行。
-
-但是这种情况只会发生在还没进入 timers 阶段的时候。
-像我们 timeout_vs_immediate0.js 例子那样，因为已经在 timers 阶段，所以里面的 setTimeout 只能等下个循环了，所以 setImmediate 肯定先执行。同理的还有其他 poll 阶段的 API 也是这样的，如下面 timeout_vs_immediate2.js 例子
-////
-@c
 </t>
-<t tx="swot.20260421083048.64">@doc
-[source,javascript,linenums]
-----
-@c
-@language javascript
-var fs = require('fs')
+<t tx="swot.20260421083048.64" _mod_time="4741da7bb400cca85f2e">@language javascript
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// 获取当前文件的路径（ESM 中需要手动获取 __filename 和 __dirname）
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // EventLoop: timers
 // EventLoop: pending callbacks
 // EventLoop: idle, prepare
 // EventLoop: poll
 fs.readFile(__filename, () =&gt; {  // &lt;1&gt;
-  setTimeout(() =&gt; {  // &lt;2&gt;
-    console.log('setTimeout');
-  }, 0);
-  setImmediate(() =&gt; {  // &lt;3&gt;
-    console.log('setImmediate');
-  });
-});
-// EventLoop: check
-// EventLoop: close callbacks
-@language asciidoc
-@doc
-----
 
-运行命令: `$ node timeout_vs_immediate2.js`
+    setTimeout(() =&gt; {  // &lt;2&gt;
+        console.log('setTimeout');
+    }, 0);
 
-.运行结果
-....
-setImmediate
-setTimeout
-....
-
-代码分析：
-
-&lt;1&gt; 这里 setTimeout 和 setImmediate 在 readFile 的回调里面，由于 readFile 回调是 I/O 操作，他本身就在 poll 阶段。
-&lt;2&gt; 所以他里面的定时器只能进入下个 timers 阶段。
-&lt;3&gt; 但是 setImmediate 却可以在接下来的 check 阶段运行，所以 setImmediate 肯定先运行，他运行完后，去检查 timers，才会运行 setTimeout。
-
-</t>
-<t tx="swot.20260421083048.65">process.nextTick() 是一个特殊的异步 API，他不属于任何的 Event Loop 阶段。事实上 Node 在遇到这个 API 时，Event Loop 根本就不会继续进行，会马上停下来执行 process.nextTick()，这个执行完后才会继续 Event Loop。我们写个例子来看下：
-</t>
-<t tx="swot.20260421083048.66">@doc
-[source,javascript,linenums]
-----
-@c
-@language javascript
-var fs = require('fs')
-
-// EventLoop: timers
-// EventLoop: pending callbacks
-// EventLoop: idle, prepare
-// EventLoop: poll
-fs.readFile(__filename, () =&gt; {  // &lt;1&gt;
-  setTimeout(() =&gt; {  // &lt;2&gt;
-    console.log('setTimeout');  // &lt;7&gt;
-  }, 0);
-  setImmediate(() =&gt; {  // &lt;3&gt;
-    console.log('setImmediate');  // &lt;5&gt;
-    process.nextTick(() =&gt; {
-      console.log('nextTick 2');  // &lt;6&gt;
+    setImmediate(() =&gt; {  // &lt;3&gt;
+        console.log('setImmediate');
     });
-  });
-  process.nextTick(() =&gt; {  // &lt;4&gt;
-    console.log('nextTick 1');
-  });
+});
 // EventLoop: check
 // EventLoop: close callbacks
-});
-@language asciidoc
-@doc
+</t>
+<t tx="swot.20260421083048.65">process.nextTick() 是一个特殊的异步 API，他不属于任何的 Event Loop 阶段。
+事实上 Node 在遇到这个 API 时，Event Loop 根本就不会继续进行，会马上停下来执行 process.nextTick()，这个执行完后才会继续 Event Loop。
+
+我们写个例子来看下：
+
+[source,javascript,linenums]
+----
+@others
 ----
 
-运行命令: `$ node nextTick_vs_setImmediate.js`
+运行命令: `node nextTick_vs_setImmediate.js`
 
 .运行结果
 ....
@@ -38685,12 +38508,45 @@ setTimeout
 &lt;6&gt; 又遇到个 `nextTick`,立马输出 'nextTick 2'
 &lt;7&gt; 到了下个 `timers` 阶段，输出 'setTimeout'
 </t>
-<t tx="swot.20260421083048.67">https://nodejs.dev/en/api/v19/buffer/</t>
+<t tx="swot.20260421083048.66" _mod_time="4741da7c017960a0b82e">@language javascript
+import { readFile } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// EventLoop: timers
+// EventLoop: pending callbacks
+// EventLoop: idle, prepare
+// EventLoop: poll
+readFile(__filename, () =&gt; {  // &lt;1&gt;
+
+    setTimeout(() =&gt; {  // &lt;2&gt;
+        console.log('setTimeout');  // &lt;7&gt;
+    }, 0);
+
+    setImmediate(() =&gt; {  // to check &lt;3&gt;
+        console.log('setImmediate');  // &lt;5&gt;
+        process.nextTick(() =&gt; {
+          console.log('nextTick 2');  // &lt;6&gt;
+        });
+    });
+
+    process.nextTick(() =&gt; {  // &lt;4&gt;
+        console.log('nextTick 1');
+    });
+// EventLoop: check
+// EventLoop: close callbacks
+});
+</t>
+<t tx="swot.20260421083048.67">https://nodejs.org/docs/latest-v22.x/api/buffer.html
+</t>
 <t tx="swot.20260421083048.68">- 可以将 Buffer 视为一种用来处理二进制数据的数据类型。
 
 - Buffer 类的实例（即对象）类似于整数数组，但实例对应于固定大小的原始内存分配，其大小在创建时被确定且无法更改。
 
-- Buffer 类位于全局作用域中，因此无须使用 require() 方法加载相应的模块。
+- Buffer 类位于全局作用域中，因此无须使用 import 导入相应的模块。
 
 Buffer实例创建使用 Buffer.from()、Buffer.alloc() 或 Buffer.allocUnsafe() 方法。
 
@@ -38710,7 +38566,7 @@ Buffer实例创建使用 Buffer.from()、Buffer.alloc() 或 Buffer.allocUnsafe()
 创建一个长度为 10、且用 0x1 填充的 Buffer实例::
 `const buf5 = Buffer.alloc(10, 1);`
 
-创建一个长度为 10、且未初始化的 Buffer实例::
+创建一个长度为 10、且未初始化的 Buffer 实例::
   `const buf6 = Buffer.allocUnsafe(10);`
 
 TIP: 这个方法比调用 Buffer.alloc()更快，但返回的 Buffer 实例可能包含旧数据，因此需要使用 fill() 或 write() 重写。
@@ -38730,9 +38586,9 @@ TIP: 这个方法比调用 Buffer.alloc()更快，但返回的 Buffer 实例可�
 ////
 这个方法根据参数 encoding 指定的字符编码将 buf 对象解码成字符串。
 
-- 其中参数 encoding 指定所用的字符编码，默认值为utf8;
-- start 指定开始解码的字节偏移量，默认值为0; 
-- end 指定结束解码的字节偏移量，默认值为buf.length。
+- 其中参数 encoding 指定所用的字符编码，默认值为 utf8;
+- start 指定开始解码的字节偏移量，默认值为 0; 
+- end 指定结束解码的字节偏移量，默认值为 buf.length。
 - 返回的结果是字符串。
 ////
 
@@ -38741,7 +38597,7 @@ TIP: 这个方法比调用 Buffer.alloc()更快，但返回的 Buffer 实例可�
 ----
 const buf = Buffer.from('tést');
 console.log(buf.toString('hex'));         // 输出结果: 74c3a97374
-console.log(buf.toString('utf8', 0, 3));  // 输出结果：té
+console.log(buf.toString('utf8', 0, 3));  // 输出结果：té -- 到字节索引 3 之前 结束（即只取字节 0、1、2）
 ----
 
 Node.js 目前支持的字符编码如下：
@@ -38751,49 +38607,11 @@ Node.js 目前支持的字符编码如下：
 - utf16le: 2个或4个字节，小字节序编码的 Unicode 字符。支持代理对(U+10000 至 U+10FFFF)。
   ucs2是它的别名。
 
-- base64: Base6编码。
+- base64: Base6 编码。
 - latin1: 一种将 Buffer 编码成单字节编码字符串的方法。binary 是 latin1 的别名。
 - hex: 将每个字节编码成两个十六进制的字符。
 </t>
 <t tx="swot.20260421083048.7"></t>
-<t tx="swot.20260421083048.70"></t>
-<t tx="swot.20260421083048.71">@doc
-使用 buf.toJSON() 方法将 Buffer 实例转换为 JSON 对象，适用于将二进制数据转换为 JSON 格式。
-
-.示例
-[source,javascript,linenums]
-----
-@c
-@language javascript
-const buf = Buffer.from([0x1, 0x2, 0x3, 0x4, 0x5]);
-const json = JSON.stringify(buf);
-console.log(json);  // &lt;1&gt;
-
-const copy = JSON.parse (json, (key, value) =&gt; {
-  console.log('key:', key)
-  console.log('value:', value)
-  console.log('value.type:', value.type)
-  console.log('value.data:', value.data)
-  return value &amp;&amp; value.type === 'Buffer'
-      ? Buffer.from(value.data)
-      : value;
-});
-console.log(copy);  // &lt;2&gt;
-@language asciidoc
-@doc
-----
-&lt;1&gt; json 是一个字符串 '{"type":"Buffer","data":[1,2,3,4,5]}'
-&lt;2&gt; &lt;Buffer 01 02 03 04 05&gt;
-
-.JSON.parse 里的 4 个 console 打印结果
-....
-... 前面的输出内容都没用，省略
-key: 
-value: {type: 'Buffer', data: Array(5)}
-value.type: Buffer
-value.data: (5) [1, 2, 3, 4, 5]
-....
-</t>
 <t tx="swot.20260421083048.72"></t>
 <t tx="swot.20260421083048.73">使用 buf.write() 方法将字符串写入 Buffer 实例
 
@@ -38812,15 +38630,18 @@ console.log(`${len} 个字节: ${buf.toString('utf8', 0, len)}`);
 ----
 
 .references
+
 buf.write::
-https://nodejs.dev/en/api/v19/buffer/#bufwritestring-offset-length-encoding
+https://nodejs.org/docs/latest-v22.x/api/buffer.html#bufwritestring-offset-length-encoding
+
 buf.toString::
-https://nodejs.dev/en/api/v19/buffer/#buftostringencoding-start-end
+https://nodejs.org/docs/latest-v22.x/api/buffer.html#buftostringencoding-start-end
 </t>
 <t tx="swot.20260421083048.74">- 使用 buf.toString() 方法从 Buffer 实例读取字符串
+  **  如上面例子
 
-- 使用其他专用方法从Buffer实例读取其他类型的数据
-
+- 使用其他专用方法从 Buffer 实例读取其他类型的数据
++
 [source,javascript,]
 ----
 const buf = Buffer.from([-1, 5]);
@@ -38829,12 +38650,13 @@ console.log(buf.readInt8(1));// 输出结果: 5
 console.log(buf.readInt8(2));// 抛出异常 ERR_OUT_OF_RANGE（超出范围）
 ----
 
-.references
-buf.toString:: https://nodejs.dev/en/api/v19/buffer/#buftostringencoding-start-end
-buf.readInt8:: https://nodejs.dev/en/api/v19/buffer/#bufreadint8offset
 
+.references
+
+buf.readInt8:: https://nodejs.org/docs/latest-v22.x/api/buffer.html#bufwriteint8value-offset
 </t>
-<t tx="swot.20260421083048.75">可以使用 Buffer.concat()方 法将多个 Bufer 实例拼接合并组成一个新的 Bufer 实例。该方法语法格式如下:
+<t tx="swot.20260421083048.75">可以使用 Buffer.concat()方 法将多个 Bufer 实例拼接合并组成一个新的 Bufer 实例。
+该方法语法格式如下:
 
   Buffer.concat (list[, totalLength])
 
@@ -38862,10 +38684,12 @@ console.log(bufA);  // &lt;Buffer 00 00 00 00 00 00 00 00 00 00 00 00&gt;
 - 参数 target 指定目标对象，可以是 Buffer 或 Uint8Array 类型;
 - targetStart 指定开始写入目标对象的偏移量，默认值为 0;
 - sourceStart 指定源对象 buf 开始复制的偏移量，默认值为 0;
-- sourceEnd 指定源对象 buf 结束复制的偏移量，默认值为 buf.lenath
+- sourceEnd   指定源对象 buf 结束复制的偏移量，默认值为 buf.lenath
 
+https://nodejs.org/docs/latest-v22.x/api/buffer.html#bufcopytarget-targetstart-sourcestart-sourceend
 </t>
-<t tx="swot.20260421083048.77">可以使用 buf.slice() 方法创建一个裁剪过的新 Buffer 实例。该方法语法格式如下:
+<t tx="swot.20260421083048.77">可以使用 buf.slice() 方法创建一个裁剪过的新 Buffer 实例。
+该方法语法格式如下:
 
   buf.slice(start[, end]])
 
@@ -38873,17 +38697,31 @@ console.log(bufA);  // &lt;Buffer 00 00 00 00 00 00 00 00 00 00 00 00&gt;
 - end 指定结束切片的偏移量，默认值为 buf.length
 - 该方法返回一个指向与源 Buffer 实例同一内存区域的新 Buffer 实例，但对新 Buffer 实例进行了裁剪。
 - 修改新建的 Buffer 切片实例，也会同时修改源 Buffer 实例，因为两个对象所分配的内存区域是重叠的。
+
+
+如果源 buf 在后面还被用到，则需要进行备份。 示例如下：
+
+[source,javascript]
+----
+const backup = Buffer.from(buf);              // 方法1
+const backup = Buffer.alloc(buf.length, buf); // 方法2
+const backup = Buffer.copyBytesFrom(buf);     // 方法3 (Node.js 19.8+)
+----
 </t>
 <t tx="swot.20260421083048.78"></t>
 <t tx="swot.20260421083048.79">// 概念性内容，了解一下
-
-流可以看作是某段时间内从一个点移动到另一个点的数据序列，就像水从一根管子的一端流到另-端。Node.js 中的流用于管理和处理数据，可以使用流完成对大量数据的操作以及逐段处理的操作。在 Node.js 异步处理数据的基础上，流将要传输的数据处理成“块”(chunk) 连续传输，这样就可使用较低的内存消耗获得较高的性能提升。
+流可以看作是某段时间内从一个点移动到另一个点的数据序列，就像水从一根管子的一端流到另一端。
+Node.js 中的流用于管理和处理数据，可以使用流完成对大量数据的操作以及逐段处理的操作。
+在 Node.js 异步处理数据的基础上，流将要传输的数据处理成“块”(chunk) 连续传输，这样就可使用较低的内存消耗获得较高的性能提升。
 
 流是 Node.js 中处理流式数据的抽象接口。Node.js 提供了多种流对象，例如 HTTP 服务器的请求和 process.stdout 都是流的实例。流可以是可读的、可写的，或者可读可写的。所有流都是 EventEmitter 类的实例。stream 模块用于构建实现了流接口的对象，使用时需要导入，方法如下:
 
-  const stream = require('stream');
+  import stream from 'stream';  // 导出整个模块
+  import { Readable, Writable, Transform, Duplex } from 'stream';  // 特定导出
 
-stream 模块主要用于开发人员创建新类型的流实例。几乎所有的 Node.js 应用程序都在某种程度上使用了流。应用程序只需写入数据到流，或者从流消费数据，并不需要直接实现流的接口，通常也不需要直接加载 stream 模块。本节给出的示例代码没有直接实现流的接口，而是直接利用 fs 模块内置的文件操作流接口。
+stream 模块主要用于开发人员创建新类型的流实例。几乎所有的 Node.js 应用程序都在某种程度上使用了流。
+应用程序只需写入数据到流，或者从流消费数据，并不需要直接实现流的接口，通常也不需要直接加载 stream 模块。
+本节给出的示例代码没有直接实现流的接口，而是直接利用 fs 模块内置的文件操作流接口。
 
 流的基本类型：
 
@@ -38914,7 +38752,7 @@ stream 模块主要用于开发人员创建新类型的流实例。几乎所有�
 // Node.js 中流的 API,特别是 stream.pipe() 方法的主要目标就是将数据的缓冲限制到可接受的程度,也就是读写速度不一致的源与目标不会超出可用内存。
 
 双工流和转换流都是可读又可写的，各自维护着两个相互独立的内部缓冲器用于读取和写入。在维护数据流时，读取和写入两端可以各自独立地工作。
-// 例如, net.Socket 实例是双工流，它的可读端可以消费从 Socket 接收的数据，而可写端则可以将数据写入 Socket。因为数据写入 Socket 的速度可能与接收数据的速度不-致(较快或较慢), 所以在读写两端独立地进行操作或缓冲就显得很重要。
+例如, net.Socket 实例是双工流，它的可读端可以消费从 Socket 接收的数据，而可写端则可以将数据写入 Socket。因为数据写入 Socket 的速度可能与接收数据的速度不一致(较快或较慢), 所以在读写两端独立地进行操作或缓冲就显得很重要。
 </t>
 <t tx="swot.20260421083048.8">* 不区分整数和浮点数，统一用数值表示。
 * [[number,进制表示]]十六进制数使用 0x 作为前缀。二进制和八进制数值分别使用前缀 0b（或0B）和 0o（或0O）。
@@ -38931,9 +38769,9 @@ stream 模块主要用于开发人员创建新类型的流实例。几乎所有�
 ====
 </t>
 <t tx="swot.20260421083048.80">// 概念性内容，了解一下
-
 可读流是对提供数据的来源的一种抽象。所有可读流都实现了 stream.Readable 类定义的接口。
-// 可读流的例子包括客户端的 HTTP 响应、服务器的 HTTP 请求、fs的读取流、zlib流、crypto流、TCP Socket、子进程 stdout 与 stderr、process.stdin 等。
+
+可读流的例子包括客户端的 HTTP 响应、服务器的 HTTP 请求、fs 的读取流、zlib流、crypto 流、TCP Socket、子进程 stdout 与 stderr、process.stdin 等。
 
 ***
 可读流有两种模式：流动（Flowing）和暂停（Paused）。
@@ -38959,64 +38797,66 @@ stream.Readable 类定义的主要##事件##
 - data：当有数据可读时被触发。
 - end：没有更多的数据可读时被触发。
 - error：当接收过程中发生错误时被触发。
-- readable：当流中有数据可供读取时被触发。当到达流数据的尽头时，readable 事件也会被触发,但是在 end 事件之前被触发。
+- readable：当流中有数据可供读取时被触发。当到达流数据的尽头时，readable 事件也会被触发，但是在 end 事件之前被触发。
 - close: 当流或其底层资源被关闭时被触发。这表明不会再触发其他事件，也不会再发生操作。
-// 注意不是所有可读流都会触发close事件。
+// 注意不是所有可读流都会触发 close 事件。
 
 ***
 stream.Readable 类定义的主要方法
 
 - readable.read([size])：从内部缓冲区拉取并返回数据（默认返回是 Buffer 对象），size 指定要读取的数据的字节数。如果没在可读的数据，则返回 null。它只对处于暂停模式的可读流调用。
-- readable.pause()：使流动模式的流停止触发data事件，并切换出流动模式。任何可用的数据都会保留在内部缓存中。
+- readable.pause()：使流动模式的流停止触发 data 事件，并切换出流动模式。任何可用的数据都会保留在内部缓存中。
 - readable.resume()：将被暂停的可读流恢复触发 data 事件，并将流切换到流动模式。
 - readable.setEncoding(encoding)：为从可读流读取的数据设置字符编码。
 // 默认情况下不设置字符编码，流数据返回的是 Buffer 对象。
 // 如果设置了字符编码，则流数据返回指定编码的字符串。
 
 下面是可读流操作的例子
-</t>
-<t tx="swot.20260421083048.81">@doc
+
 [source,javascript,]
 ----
-@c
-@language javascript
-const fs = require('fs')
-
-var readStream=fs.createReadStream('demo.txt');  // &lt;1&gt;
-
-var str='';
-readStream.on('data',function(chunk){  // &lt;2&gt;
-    str+=chunk;
-})
-readStream.on('end',function(chunk){  // &lt;3&gt;
-    console.log(str);
-})
-readStream.on('error',function(err){  // &lt;4&gt;
-    console.log(err);
-})
-@language asciidoc
-@doc
+@others
 ----
+
 &lt;1&gt; 以流的方式读取文件
 &lt;2&gt; 保存数据
 &lt;3&gt; 读取完成
 &lt;4&gt; 读取失败
 
-.运行 $ node test_readablestream.js 输出如下：
+.运行 node test_readablestream.js 输出如下：
 ....
 周董好久没有发新歌了，左盼右盼，终于等来了《说好不哭》
 ....
 </t>
-<t tx="swot.20260421083048.82">// 概念性内容，了解一下
+<t tx="swot.20260421083048.81" _mod_time="4741da7c560f8e76792e">@language javascript
+import fs from 'node:fs';
 
+const readStream = fs.createReadStream('node/demo.txt');  // &lt;1&gt;
+
+let str = '';
+
+readStream.on('data', (chunk) =&gt; {  // &lt;2&gt;
+    str += chunk;
+});
+
+readStream.on('end', () =&gt; {  // &lt;3&gt;
+    console.log(str);
+});
+
+readStream.on('error', (err) =&gt; {  // &lt;4&gt;
+    console.log(err);
+});
+</t>
+<t tx="swot.20260421083048.82">// 概念性内容，了解一下
 可写流是对数据被写入的目的地的一种抽象。所有可写流都实现了 stream.Writable 类定义的接口。
-// 可写流的例子包括客户端的 HTTP 请求、服务器的 HTTP 响应、fs 的写入流、zlib流、crypto流、TCP Socket、 子进程 stdin、process.stdout、process.stderr等。这些例子也都是实现了可写流接口的双工流。
+
+可写流的例子包括客户端的 HTTP 请求、服务器的 HTTP 响应、fs 的写入流、zlib流、crypto流、TCP Socket、 子进程 stdin、process.stdout、process.stderr等。这些例子也都是实现了可写流接口的双工流。
 
 ////
 尽管可写流的具体实例可能略有差别，但所有可写流都遵循同一基本的使用模式，下面用一个示例解释这种模式:
 ```
 const myStream = getWritableStreamSomehow();
-nyStream.write('一些数据');
+myStream.write('一些数据');
 myStream.write('更多数据');
 myStream.end("完成写入数据");
 ```
@@ -39026,7 +38866,7 @@ myStream.end("完成写入数据");
 stream.Writable 类定义的主要事件如下：
 
 - close: 当流或其底层资源被关闭时被触发。不是所有可写流都会触发该事件。
-- drain: 如果调用stream.wite(chunk)方法返回false,则当可以继续写入数据到流时会触发该事件。
+- drain: 如果调用 stream.wite(chunk) 方法返回 false，则当可以继续写入数据到流时会触发该事件。
 - error: 写入数据发生错误时被触发。当触发该事件时，流还未被关闭。
 - finish: 调用 stream.end() 方法且缓冲数据都已传给底层系统之后被触发。
 - pipe:  当在可读流上调用 stream.pipe() 方法时被触发。
@@ -39034,48 +38874,30 @@ stream.Writable 类定义的主要事件如下：
 // 当可读流通过管道流向可写流发生错误时，也会触发该事件。
 
 ***
-stream.Witable类定义的主要方法是
+stream.Witable 类定义的主要方法是
 
 - writable.write(chunk[, encoding][, callback])。这个方法写入数据到流，并在数据被完全处理之后调用回调函数。
 // 参数 chunk 指定要写入的数据块;
-// 如 chunk 是字符串,则可通过 encoding 指定字符编码; 
+// 如 chunk 是字符串，则可通过 encoding 指定字符编码; 
 // callback 设置数据块被输出到目标后的回函数。
 
 ////
-如果发生错误，则回调函数可能被调用，也可能不被调用。为可靠地检测错误，可以为error事件添加监听器。
+如果发生错误，则回调函数可能被调用，也可能不被调用。为可靠地检测错误，可以为 error 事件添加监听器。
 
-接收了数据块后，如果内部的缓冲区小于创建流时配置的 highWaterMark,则返回true。
-如果返回 false,则应该停止向流写入数据，直到 drain 事件被触发。
+接收了数据块后，如果内部的缓冲区小于创建流时配置的 highWaterMark,则返回 true。
+如果返回 false，则应该停止向流写入数据，直到 drain 事件被触发。
 
-当流还未被排空时，调用write()方法会缓冲数据块，并返回false. 一旦当前所有缓冲的数据块都排空(被操作系统接收并传输),则触发 drain 事件。
-建议当write()方法返回false,就不再写入任何据块，直到drain事件被触发。
+当流还未被排空时，调用 write() 方法会缓冲数据块，并返回 false。一旦当前所有缓冲的数据块都排空(被操作系统接收并传输)，则触发 drain 事件。
+建议当 write() 方法返回 false，就不再写入任何据块，直到 drain 事件被触发。
 ////
 
 下面给出一个可写流操作的例子。
-</t>
-<t tx="swot.20260421083048.83">@doc
+
 [source,javascript,]
 ----
-@c
-@language javascript
-const fs = require('fs')
-
-var str = '这是测试可写流的数据，保存起来';
-var writerStream = fs.createWriteStream('output.txt');  // &lt;1&gt;
-
-writerStream.write(str,'UTF8');  // &lt;2&gt;
-writerStream.end();  // &lt;3&gt;
-
-// 处理流事件
-writerStream.on('finish', function() {
-    console.log('写入完成!');
-});
-writerStream.on('error', function(err){
-    console.log('写入失败');
-});
-@language asciidoc
-@doc
+@others
 ----
+
 &lt;1&gt; 创建一个可以写入的流，写入到文件output.txt 中
 &lt;2&gt; 使用 utf8 编码写入数据
 &lt;3&gt; 标记文件末尾
@@ -39091,12 +38913,33 @@ writerStream.on('error', function(err){
 这是测试可写流的数据，保存起来
 ....
 </t>
-<t tx="swot.20260421083048.84">通常要将从一个流中获取的数据传递到另外一个流中，这可以通过管道操作机制实现。可读流提供的 readable.pipe() 方法在可读流与可写流之间架起桥梁，使数据可以通过管道由可读流进入可写流。该方法的语法如下:
+<t tx="swot.20260421083048.83" _mod_time="4741da7c569358636f2e">@language javascript
+import fs from "node:fs";
+
+const str = '这是测试可写流的数据，保存起来';
+const writerStream = fs.createWriteStream('node/output.txt');  // &lt;1&gt;
+
+writerStream.write(str, 'UTF8');  // &lt;2&gt;
+
+writerStream.end();  // &lt;3&gt;
+
+// 处理流事件
+writerStream.on('finish', function() {
+    console.log('写入完成!');
+});
+
+writerStream.on('error', function(err) {
+    console.log('写入失败');
+});
+</t>
+<t tx="swot.20260421083048.84">通常要从一个流中获取的数据传递到另外一个流中，这可以通过管道操作机制实现。
+可读流提供的 readable.pipe() 方法在可读流与可写流之间架起桥梁，使数据可以通过管道由可读流进入可写流。
+该方法的语法如下:
 
   readable.pipe (destination[, options])
 
 - 参数 destination 指定数据写入的目标
-- options 用于设选项，其中 end 指定当读取结束时是否终止写入，默认为 true。
+- options 用于设置选项，其中 end 指定当读取结束时是否终止写入，默认为 true。
 - 该方法返回目标可写流，如果该方法返回的目标可写流是双工流或转换流，则可以形成管道链。
 
 // readable.pipe() 方法将可写流绑定到可读流，将可读流自动切换到流动模式，并将可读流的所有数据推送到绑定的可写流。数据流会被自动管理，因此即使可读流非常快，目标可写流也不会超负荷。
@@ -39104,6 +38947,7 @@ writerStream.on('error', function(err){
 ***
 下面的代码将可读流的所有数据通过管道推送到 file.txt 文件:
 
+.伪代码
 [source,javascript]
 ----
 const readable = getReadableStreamSomehow();       // 创建一个可读流
@@ -39111,19 +38955,22 @@ const writable = fs.createWriteStream('file.txt'); // 创建一个可写流
 readable.pipe(writable); //管道读写操作，将 readable 的所有数据都推送到文件 file.txt
 ----
 
-可以在单个可读流上绑定多个可写流。readable.pipe() 会返回目标流的引用，这样就可以对流进行链式管道操作。下面给出一段示例代码:
+可以在单个可读流上绑定多个可写流。readable.pipe() 会返回目标流的引用，这样就可以对流进行链式管道操作。
+下面给出一段示例代码:
 
 [source,javascript,]
 ----
-const fs = require('fs');
+import fs from "node:fs";
+
 const r = fs.createReadStream('file.txt');
 const z = zlib.createGzip();
 const w = fs.createWriteStream('file.txt.gz');
-r.pipe(z).pipe(w);// 链式管道操作两个可写流
+r.pipe(z).pipe(w);  // 链式管道操作两个可写流
 ----
 // 这是将输出流连接到另外一个流并创建多个流操作链的一种机制。
 
-默认情况下，当来源可读流触发 end 事件时，目标可写流也会调用 stream.end() 结束写入。如果禁用这种默认行为，end 选项应设为 false，这样目标流就会保持打开状态，例如:
+默认情况下，当来源可读流触发 end 事件时，目标可写流也会调用 stream.end() 结束写入。
+如果禁用这种默认行为，end 选项应设为 false，这样目标流就会保持打开状态，例如:
 
 [source,javascript,]
 ----
@@ -39141,10 +38988,6 @@ reader.on('end', () =&gt; {
 - 如果没有指定该参数，则解绑所有管道。
 - 如果指定 destination 参数，但它并没有建立管道，则不起作用。
 </t>
-<t tx="swot.20260421083048.85">xref:实战演练_提供图片浏览服务.adoc[]
-</t>
-<t tx="swot.20260421083048.86"></t>
-<t tx="swot.20260421083048.87"></t>
 <t tx="swot.20260421083048.9">- 字符串是用单引号“'”或双引号“"”括起来的任意文本。
 - ES6 提供模板字符串，可使用反引号包括整个模板字符串，使用 ${} 将变量括起来。
 +
@@ -39191,6 +39034,449 @@ Node程序已经执行结束!
 可以发现，由于使用异步读取操作，所以在读取文件时，不管文件是否读取并输出完毕，脚本都会继续执行下面的代码。
 因此就会先显示 `console.log("Node程序已经执行结束!")` 语句的执行结果，然后才显示输出的文件内容。
 一旦文件读取完毕，读取的文件内容就作为回调函数的参数 data 返回，这样在执行代码时就没有了阻塞，不需要等待文件 I/O 操作了。
+</t>
+<t tx="swot.20260427084521.1">基本用法 `setTimeout(callback, delay[, ...args])`
+
+这个方法用于延迟一个函数的执行时间，在到达指定的时间点执行该函数，并且只执行一次。
+
+* 其中参数 callback 用于指定要调用的回调函数
+* delay 设置调用回调函数之前等待的毫秒数
+* args 设置调用回调函数时传入的可选参数。
+* 它返回 Timeout 对象的 ID, 该 ID 可以传递给 clearTimeOut() 以取消该定时器。
+
+
+例如，下面的代码将在 1 秒后输出提示信息，之后定时器就不再起作用。
+
+[source,javascript,]
+----
+@language javascript
+setTimeout(function () {
+  console.log("我是一个一次性定时器");
+}, 1000);
+----
+
+CAUTION: 定时器可能不会精确地在指定的时刻调用回调函数。Node.js 不保证回调被触发的确切时间，也不保证它们的顺序。回调函数会尽可能接近指定的时间，并在该时间点被调用。
+// 为什么会这样？因为定时时间点可能正好有耗时的同步任务没有完成。
+// https://segmentfault.com/a/1190000023315304?[参考定时器不准部分]
+</t>
+<t tx="swot.20260427084537.1">基本用法 `setInterval(callback, delay[, ...args])`
+
+这个方法用于以指定的时间间隔周期性地执行回调函数，其参数和返回值同上述 setTimeout() 方法的参数和返回值。
+
+例如，下面的代码将在 1 秒之后输出提示信息，之后定时器每隔 1 秒就重复输出提示信息，除非使用 clearlnterval() 方法取消该定时器或者终止程序。
+
+[source,javascript,]
+----
+@language javascript
+setInterval(function () {
+  console.log("我是一个周期性的定时器");
+}, 1000);
+----
+</t>
+<t tx="swot.20260427084556.1">基本用法 `setImmediate(callback[, ...args])`
+
+https://blog.csdn.net/weixin_47450807/article/details/124098448?[参考]
+setImmediate 表示立即执行，它是宏任务，回调函数会被放置到事件循环的 check 阶段。
+在应用中如果有大量的计算型任务，它是不适合放在主线程中执行的，因为计算任务会阻塞主线程，主线程一旦被阻塞，其他任务就需要等待，所以这种类型的任务最好交给 C++ 维护线程去执行。
+
+可以通过 setImmediate 方法将任务放入事件循环中的 check 阶段，因为代码在这一个阶段执行不会阻塞主线程，也不会阻塞事件循环。
+
+[caption=]
+[cols="1,1"]
+|===
+a|
+[source,javascript]
+----
+function sleep(delay) {
+  var start = new Date().getTime()
+  while(new Date().getTime() - start &lt; delay) {
+    continue
+  }
+  console.log('ok')
+}
+console.log('start')
+sleep(2000)
+console.log('end')
+----
+先打印出 start，然后等待 2000ms 后再打印 ok 和 end
+a|
+[source,javascript]
+----
+function sleep(delay) {
+  var start = new Date().getTime()
+  while(new Date().getTime() - start &lt; delay) {
+    continue
+  }
+  console.log('ok')
+}
+console.log('start')
+setImmediate(sleep, 2000)  // &lt;1&gt;
+console.log('end')
+----
+先打印 start，再打印 end, 最后等待 2000ms 后打印 ok
+|===
+
+&lt;1&gt; 出现这种情况的原因是：setImmediate 将其中的函数作为宏任务，放到 C++ 一个线程中去执行，然后将其放入任务队列中。所以不会影响主线程的执行。
+</t>
+<t tx="swot.20260427092022.1">// https://segmentfault.com/a/1190000023315304?[setImmediate和setTimeout]
+上面的这个流程说简单点就是在一个异步流程里，setImmediate 会比定时器先执行，我们写点代码来试试：
+
+[source,javascript,linenums]
+----
+@others
+----
+
+运行命令: `node timeout_vs_immediate0.js`
+
+.运行结果
+....
+outer
+setImmediate
+setTimeout
+....
+
+为什么 setImmediate 比 setTimeout 先执行？
+
+想象事件循环是一列**环形火车**，它会不停地绕圈，每一圈都会按顺序停靠几个站台：
+
+1. timers 站（处理 setTimeout / setInterval 回调）
+2. pending callbacks 站
+3. idle, prepare 站
+4. poll 站
+5. check 站（处理 setImmediate 回调）
+6. close callbacks 站
+
+代码开始执行时，火车还没有出发。`console.log('outer')` 会马上执行，所以最先打印 `outer`。
+
+接着，最外层的 `setTimeout` 相当于买了一张票，告诉火车：“等你到了 **timers 站**，就叫我上车（执行我的回调）”。然后火车出发。
+
+当火车第一次到达 **timers 站**，它把外层 `setTimeout` 的回调请上车执行。在这个回调里，我们又做了两件事：
+
+* 又买了一张 `setTimeout` 的票 —— 但此时火车**已经停在 timers 站了**，这张票只能等**下一圈**再停靠 timers 站时才能上车。
+* 买了一张 `setImmediate` 的票 —— 它的上车地点是前方的 **check 站**。
+
+由于当前这一圈还没有结束，火车从 timers 站离开后，会继续经过 pending callbacks、idle、poll 等站台，很快就到达 **check 站**。于是 `setImmediate` 的回调在这一圈就被执行，打印 `setImmediate`。
+
+之后火车跑完这一圈，开始新的一圈，再次到达 **timers 站**，这时内层的 `setTimeout` 回调才被请上车，打印 `setTimeout`。
+
+**一句话总结：**
+
+在执行 setTimeout 回调时（已经在 timers 站），新安排的 setTimeout 必须等下一圈的 timers 站，而新安排的 setImmediate 会在本圈后面的 check 站立刻执行，所以 setImmediate 先输出。
+</t>
+<t tx="swot.20260427103848.1">定时器执行的顺序根据调用它们的上下文有所不同。如果定时器在主模块内被调用，则计时将受进程性能的约束，比如可能会受到计算机上运行的其他应用程序的影响。
+
+举例如下：
+// https://segmentfault.com/a/1190000023315304?[参考内容 setImmediate 和 setTimeout]
+
+[source,javascript,linenums]
+----
+@others
+----
+
+运行命令: `node timeout_vs_immediate1.js`
+
+[caption=]
+.运行结果不确定（可能出现如下两种情况）
+[cols="1,1"]
+|===
+a|
+....
+outer
+setTimeout
+setImmediate
+....
+a|
+....
+outer
+setImmediate
+setTimeout
+....
+|===
+
+分析如下：
+
+&lt;1&gt; 外层同步代码一次性全部执行完，遇到异步 API 就塞到对应的阶段。
+
+&lt;2&gt; node.js 里面 `setTimeout(fn, 0)` 会被强制改为 `setTimeout(fn, 1)`, https://nodejs.org/api/timers.html#timers_settimeout_callback_delay_args?[这在官方文档中有说明]。
+// (说到这里顺便提下，HTML5 里面 setTimeout 最小的时间限制是 4ms)。
++
+所以遇到 `setTimeout`，虽然设置的是0毫秒触发，但是被node.js强制改为1毫秒，塞入 `times` 阶段
+
+&lt;3&gt; 遇到 `setImmediate` 塞入 `check` 阶段
+
+&lt;4&gt; 同步代码执行完毕，进入 Event Loop
+* 先进入 `times` 阶段，检查当前时间过去了 1 毫秒没有，如果过了 1 毫秒，满足 `setTimeout` 条件，执行回调，如果没过 1 毫秒，跳过。
+* 跳过空的阶段，进入 check 阶段，执行 `setImmediate` 回调
+
+分析：通过上述流程的梳理，我们发现关键就在这个 1 毫秒，
+
+- 如果同步代码执行时间较长，进入 Event Loop 的时候 1 毫秒已经过了，就执行 setTimeout
+- 如果 1 毫秒还没到，就先执行了 setImmediate。
+- 每次我们运行脚本时，机器状态可能不一样，导致运行时有 1 毫秒的差距，一会儿 setTimeout 先执行，一会儿 setImmediate 先执行。
+
+但是这种情况只会发生在还没进入 timers 阶段的时候。
+像我们 timeout_vs_immediate0.js 例子那样，因为已经在 timers 阶段，所以里面的 setTimeout 只能等下个循环了，所以 setImmediate 肯定先执行。同理的还有其他 poll 阶段的 API 也是这样的，如下面 timeout_vs_immediate2.js 例子。
+</t>
+<t tx="swot.20260427104845.1">[source,javascript,linenums]
+----
+@others
+----
+
+运行命令: `node timeout_vs_immediate2.js`
+
+.运行结果
+....
+setImmediate
+setTimeout
+....
+
+代码分析：
+
+&lt;1&gt; 这里 setTimeout 和 setImmediate 在 readFile 的回调里面，由于 readFile 回调是 I/O 操作，他本身就在 poll 阶段。
+
+&lt;2&gt; 所以他里面的定时器只能进入下个 timers 阶段。
+
+&lt;3&gt; 但是 setImmediate 却可以在接下来的 check 阶段运行，所以 setImmediate 肯定先运行，他运行完后，去检查 timers，才会运行 setTimeout。
+</t>
+<t tx="swot.20260428092353.1">使用 buf.toJSON() 方法可以将 Buffer 实例转换为 JSON 对象。
+当把 Buffer 实例传递给 JSON.stringify() 时，Node.js 会隐式调用该方法，将 buf 转换成对象，再转换成字符串。
+
+[source,javascript]
+----
+@language javascript
+const buf = Buffer.from([1, 2, 3, 4, 5]);
+
+// 1. 显式调用 toJSON()
+const jsonObj = buf.toJSON();
+console.log(jsonObj); 
+// 输出对象: { type: 'Buffer', data: [ 1, 2, 3, 4, 5 ] }
+
+// 2. 隐式调用：使用 JSON.stringify()
+const jsonStr = JSON.stringify(buf);
+console.log(jsonStr); 
+// 输出字符串: '{"type":"Buffer","data":[1,2,3,4,5]}'
+----
+</t>
+<t tx="swot.20260429104414.10">@language javascript
+//获取请求URL并转换请求路径
+var pathName = url.parse(req.url).pathname;
+
+//对路径进行解码以防中文乱码
+var pathName = decodeURI(pathName);
+
+//获取资源文件的绝对路径，这里用到全局变量__dirname
+var filePath = path.resolve(__dirname + pathName);
+console.log(filePath); //控制台显示绝对路径
+
+//获取文件的扩展名
+var extName = path.extname(pathName);
+
+//为简化处理，没有扩展名的或未知类型使用text/plain表示
+var contentType = mime[extName] || "text/plain";
+</t>
+<t tx="swot.20260429104414.11">@language javascript
+//通过读取文件状态来决定如何读取静态文件
+fs.stat(filePath, function (err, stats) {
+    @others
+});
+</t>
+<t tx="swot.20260429104414.12">@language javascript
+if (err) {
+    res.writeHead(404, { "content-type": "text/html" });
+    res.end("&lt;h1&gt;404 没有找到&lt;/h1&gt;");
+}
+</t>
+<t tx="swot.20260429104414.13">@language javascript
+//文件存在且没有错误
+if (!err &amp;&amp; stats.isFile()) {
+  readFile(filePath, contentType);
+}
+</t>
+<t tx="swot.20260429104414.14">@language javascript
+//如果路径是目录
+if (!err &amp;&amp; stats.isDirectory()) {
+
+    var html = "&lt;head&gt;&lt;meta charset = 'utf-8'/&gt;&lt;/head&gt;&lt;body&gt;&lt;ul&gt;";
+    curDir = path.basename(path.relative(__dirname, filePath)); //获取当前目录名
+    //console.log(curDir);
+
+    //读取该路径下的文件
+    fs.readdir(filePath, (err, files) =&gt; {
+        if (err) {
+            console.log("读取路径失败！");
+        } else {
+            for (var file of files) {
+                //这里用到了ES6模板字符串
+                var curPath = path.join(curDir, file);
+                html += `&lt;li&gt;&lt;a href='${curPath}'&gt;${file}&lt;/a&gt;&lt;/li&gt;`;
+            }
+            html += "&lt;/ul&gt;&lt;/body&gt;";
+            res.writeHead(200, { "content-type": "text/html" });
+            res.end(html);
+        }
+    });
+}
+</t>
+<t tx="swot.20260429104414.15">@language javascript
+//声明函数流式读取文件
+function readFile(filePath, contentType) {
+    //设置HTTP消息头
+    res.writeHead(200, {
+        "content-type": `${contentType}; charset=utf-8`,  // &lt;1&gt;
+        "content-encoding": "gzip",
+    });
+    //创建流对象读取文件
+    var stream = fs.createReadStream(filePath);
+    //流式读取错误处理
+    stream.on("error", function () {
+        res.writeHead(500, { "content-type": contentType});
+        res.end("&lt;h1&gt;500 服务器错误&lt;/h1&gt;");
+    });
+    //链式管道操作将文件内容流到客户端
+    stream.pipe(zlib.createGzip()).pipe(res);
+}
+
+// &lt;1&gt; charset=utf-8 是为了识别中文字符
+// 参考 https://blog.csdn.net/qq_34817440/article/details/105825141
+</t>
+<t tx="swot.20260429104414.16">@language javascript
+var port = 8000; //指定服务器监听的接口
+
+server.listen(port, function () {
+    console.log(`图片服务器正运行在端口:${port}`);
+    console.log(`访问网址: http://localhost:${port}`);
+});
+</t>
+<t tx="swot.20260429104414.17">.运行程序 node static_server.js 控制台显示如下：
+....
+图片服务器正运行在端口:8000
+访问网址: http://localhost:8000
+....
+
+在浏览器中访问 http://localhost:8000/ 网址，列出资源文件目录，单击其中某个文件，就会显示内容(没有指定类型的文件将会提示下载)。
+
+在浏览器中打开控制台，切换到"Network" 视图，访问一个文件，再查看当前网页的头部 "Header" 信息,可以发现获取的响应内容已经使用 gzip 编码,如图所示。
+
+image::img/static_server.png[]
+</t>
+<t tx="swot.20260429104414.2">我们尝试开发一个简单的应用程序，用原生 Node.js 实现一个静态文件服务器来提供图片浏览服务，让用户可以下载、浏览服务器上的各种图片。
+
+Apache、nginx 等 Web 服务器软件都提供静态文件服务。
+Node.js 的文件系统和网络等核心模块提供了流接口，从而大大简化了输入输出的流处理过程，可以基于这些模块实现自己的静态文件服务器，基于 Web 提供资源文件访问服务。
+</t>
+<t tx="swot.20260429104414.3"></t>
+<t tx="swot.20260429104414.4">.code/node/static_server.mjs
+[source,javascript]
+----
+@others
+----
+</t>
+<t tx="swot.20260429104414.5" _mod_time="4741da7c5d6d8821572e">@language javascript
+@others
+// 静态文件服务器
+</t>
+<t tx="swot.20260429104414.6">@language javascript
+const http = require("http");  // 加载http模块
+const fs = require("fs");      // 加载fs模块
+const path = require("path"); // 加载path模块
+const url = require("url");   // 加载url模块
+const zlib = require("zlib"); // 加载zlib模块
+</t>
+<t tx="swot.20260429104414.7">var curDir = ""; //当前目录名
+</t>
+<t tx="swot.20260429104414.8">@language javascript
+const server = http.createServer(function (req, res) {
+    @others
+});
+</t>
+<t tx="swot.20260429104414.9">@language javascript
+//定义mime对象设置相应的响应头类型，这里仅列出少量的扩展名用于测试
+var mime = {
+  ".jpeg": "image/jpeg",
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".tiff": "image/tiff",
+  ".pdf": "application/pdf",
+};
+</t>
+<t tx="swot.20260429104510.1">整个应用程序基于 B/S 架构，由 Node.js 内置的核心模块 http 提供 Web 服务。
+// 通过该模块创建服务器，并设置监听端口。当有请求到来，执行参数中的请求处理函数。
+
+[source,javascript]
+----
+const server = http.createServer(function (req, res) {
+  //请求处理并返回结果
+});
+server.listen(8000);
+----
+
+</t>
+<t tx="swot.20260429104515.1">服务器收到来自客端的请求后，需要获取输入的 URL 解析后的对象并进行转换，从而得到资源文件的绝对路径和文件类型，这需要用到 Node.js 内置的 url 模块和 path 模块。
+
+[source,javascript]
+----
+var pathName = url.parse(req.url).pathname;         // &lt;1&gt;
+var filePath = path.resolve(__dirname + pathName);  // &lt;2&gt;
+----
+
+&lt;1&gt; 获取请求的 URL 并返回文件路径名
+&lt;2&gt; 从文件路径名取得资源文件的绝对路径，需要用到全局变量 __dirname
+// __dirname 表示当前文件所在的目录的绝对路径
+// 还可以通过 path.extname 属性来获取文件的扩展名来确定文件类型。
+</t>
+<t tx="swot.20260429104523.1">在 HTTP 消息头中，使用 Content-Type 表示请求和响应中的媒体类型信息，通知服务器如何处理请求的数据，客户端(浏览器)如何解析响应的数据，如显示图片、解析并展示 HTML 等。
+Content-Type 的格式: `#Content-Type: type/subtype; parameter#`
+
+////
+- type 指定主类型，可以是任意字符串，如 text，可用通配符 “*” 代表所有主类型
+- subtype 表示子类型，可以是任意字符串，如 html，可用通配符 “*” 代表所有子类型
+- 子类型与主类型之间用符号 “/” 分隔
+- parameter 定义可选参数，如 charset (字符集)
+////
+
+.示例如下
+[source,javascript]
+----
+Content-Type: text/html;   // 网页类型
+Content-Tvpe: image/jpeg;  // 图片类型
+----
+
+// 可以根据文件扩展名对不同类型的资源文件指定不同的 Content-Type 类型，使服务器响应各种类型的文件请求，例如 .png 文件对应 image/png，.js 文件对应text/javasvript。
+因此可以定义一个对象，由一个键值对集合来指定不同扩展名与 Content-Type 类型之间的对应关系。
+
+[source,javascript]
+----
+var mime = {
+  ".jpeg": "image/jpeg",
+  ".jpg": "image/jpeg",
+}
+----
+</t>
+<t tx="swot.20260429104529.1">访问资源文件最终要落实到文件的读取，这可利用 Node.js 内置的核心模块 fs 来实现。
+
+在读取文件之前可通过以下方法来读取文件的状态，以决定如何读取文件。
+
+  fs.stat(path, callback)
+
+////
+- path 指定文件路径
+- callback 指定回调函数，它又有两个参数 err 和 stats
+  * stats 是一个 fs.Stats 对象
+
+使用 fs.stat() 方法可判断文件是否存在，以及是否为目录，这样便于进一步针对目录下的文件进行处理。
+////
+
+资源文件可以使用 fs.createReadStream() 方法打开。
+// 这将建立一个到客户端的流，可以通过管道来处理结果数据。这样数据可以通过管道的方式从一个文件输出到 HTTP 请求响应中。
+
+静态文件服务器通常使用 gzip 压缩文件以提高传输效率，Node.js 内置模块 zlib 提供 gzip 压缩功能。
+// 可以在文件流发送到 HTTP 响应之前增加一个压缩文件的管道操作，这样就实现了两个管道的链式操作。关键代码如下:
+
+  stream.pipe(zlib.createGzip()).pipe(res);
+
+还应让浏览器知道已经开启了 gzip 压缩，这需要在 HTTP 消息头中提供相应的内容编码信息
+
+  res.writeHead(200, {"content-encoding": 'gzip'});
 </t>
 </tnodes>
 </leo_file>

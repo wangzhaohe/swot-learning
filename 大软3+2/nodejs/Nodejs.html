@@ -659,9 +659,13 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_管道读写操作">管道读写操作</a></li>
 </ul>
 </li>
-<li><a href="#_实战演练提供图片浏览服务">实战演练&#8201;&#8212;&#8201;提供图片浏览服务</a></li>
-<li><a href="#_本章小结">本章小结</a></li>
-<li><a href="#_习题">习题</a></li>
+<li><a href="#_实战演练提供图片浏览服务">实战演练&#8201;&#8212;&#8201;提供图片浏览服务</a>
+<ul class="sectlevel3">
+<li><a href="#_实现思路">实现思路</a></li>
+<li><a href="#_编写代码">编写代码</a></li>
+<li><a href="#_运行程序">运行程序</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -4146,7 +4150,10 @@ Danger Swot! Danger!</pre>
 <div class="sect3">
 <h4 id="_process_对象">process 对象</h4>
 <div class="paragraph">
-<p>process 对象是一个全局变量，其提供有关当前 Node.js 进程的信息井对其进行控制。作为一个全局变量，它始终可供 Node.Js 应用程序使用，无须加载 process 模块。它通常用于编写本地命令行程序。</p>
+<p>process 对象是一个全局变量，其提供有关当前 Node.js 进程的信息井对其进行控制。作为一个全局变量，它始终可供 Node.Js 应用程序使用，无须加载 process 模块。</p>
+</div>
+<div class="paragraph">
+<p>它通常用于编写本地命令行程序，也可以用于做程序运行环境的判断，如判断是否为开发环境，是否为生产环境。</p>
 </div>
 <div class="sect4">
 <h5 id="_进程事件">进程事件</h5>
@@ -4163,24 +4170,50 @@ Danger Swot! Danger!</pre>
 <p>beforeExit: 当 Node.js 清空其事件循环并且没有其他工作要调度时，会触发此事件。通常, Node.js 进程将在没有调度工作时退出，但是在 beforeExit 事件上注册的监听器可以进行异步调用，从而导致 Node.js 进程继续。调用监听器回调函数时会将 process.exitCode (退出码) 值作为唯一参数传入。</p>
 </div>
 <div class="paragraph">
-<p>uncaughtException: 未捕获的 JavaScript 异常一直处于冒泡状态，返回事件循环时，会触发此事件。默认情况下，Node.js 通过将堆栈跟踪打印到标准错误流并返回退出码1来处理此类异常,从而覆盖任何先前设置的 process.exitCode。为 uncaughtException 事件添处理程序会覆盖此默认行为。</p>
+<p>uncaughtException: 未捕获的 JavaScript 异常一直处于冒泡状态，返回事件循环时，会触发此事件。默认情况下，Node.js 通过将堆栈跟踪打印到标准错误流并返回退出码 1 来处理此类异常，从而覆盖任何先前设置的 process.exitCode。为 uncaughtException 事件添加处理程序会覆盖此默认行为。</p>
 </div>
 <div class="paragraph">
-<p>信号(Signal)事件:当Node.is进程接收到一个信号时，会触发信号事件。信号名称可对照标准 POSIX 的信号名称列表，例如 SIGINT、SIGHUP。每个事件名称均以信号名称的大写表示。</p>
+<p>信号(Signal)事件: 当 Node.is 进程接收到一个信号时，会触发信号事件。信号名称可对照标准 POSIX 的信号名称列表，例如 SIGINT、SIGHUP。每个事件名称均以信号名称的大写表示。</p>
 </div>
-<div class="sect5">
-<h6 id="_clean_srcch02process_exit_js">#clean src/ch02/process_exit.js</h6>
+<div class="listingblock">
+<div class="title">code/node/process_exit.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;程序执行开始&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 1. 立即执行</span>
+
+<span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-s1">&#39;exit&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">code</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-c1">// 3. exit 事件触发，事件循环已停止</span>
+<span class="tok-w">  </span><span class="tok-nx">setTimeout</span><span class="tok-p">(</span><span class="tok-kd">function</span><span class="tok-p">(){</span>
+<span class="tok-w">      </span><span class="tok-c1">// 5. 永远不会执行（exit 事件中的 setTimeout 回调不会执行，因为事件循环已经停止）</span>
+<span class="tok-w">      </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;该代码不会执行&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">  </span><span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span>
+<span class="tok-w">  </span><span class="tok-c1">// 4. 这个会执行（同步代码）</span>
+<span class="tok-w">  </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;退出码为:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">code</span><span class="tok-p">);</span>
+<span class="tok-p">});</span>
+
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;程序执行结束&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 2. 立即执行</span></code></pre>
+</div>
+</div>
 <div class="paragraph">
-<p>console.log("程序开始执行");
-process.on('exit', function(code) {
-  // 以下代码永远不会执行
-  setTimeout(function(){
-    console.log("该代码不会执行");
-  }, 0);
-  console.log('退出码为:',code);
-});
-console.log("程序执行结束");</p>
+<p>运行结果：</p>
 </div>
+<div class="literalblock">
+<div class="content">
+<pre>程序执行开始
+程序执行结束
+退出码为: 0</pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+exit 当 Node.js 进程准备退出时触发。所以 “退出码为: 0” 在最后打印。
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect4">
@@ -4334,19 +4367,40 @@ console.log("程序执行结束");</p>
 </tr>
 </tbody>
 </table>
-<div class="sect5">
-<h6 id="_clean_srcch02process_attr_js">#clean src/ch02/process_attr.js</h6>
-<div class="paragraph">
-<p>process.stdout.write("Hello World!" + "\n");  // 输出到终端</p>
+<div class="listingblock">
+<div class="title">code/node/process_attr.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">stdout</span><span class="tok-p">.</span><span class="tok-nx">write</span><span class="tok-p">(</span><span class="tok-s2">&quot;Hello World!&quot;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s2">&quot;\n&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 输出到终端</span>
+
+<span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">argv</span><span class="tok-p">.</span><span class="tok-nx">forEach</span><span class="tok-p">(</span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">val</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">index</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">array</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// 通过参数读取</span>
+<span class="tok-w">   </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">index</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s1">&#39;: &#39;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nx">val</span><span class="tok-p">);</span>
+<span class="tok-p">});</span>
+
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">execPath</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 获取执行路径</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">platform</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 平台信息</span></code></pre>
 </div>
-<div class="paragraph">
-<p>process.argv.forEach(function(val, index, array) {  // 通过参数读取
-   console.log(index + ': ' + val);
-});</p>
 </div>
-<div class="paragraph">
-<p>console.log(process.execPath);  // 获取执行路径
-console.log(process.platform);  // 平台信息</p>
+<div class="literalblock">
+<div class="title">执行 node process_attr.js 输出如下：</div>
+<div class="content">
+<pre>Hello World!
+0: /Users/swot/.nvm/versions/node/v22.21.1/bin/node
+1: /Users/swot/swot-learning/大软3+2/nodejs/code/node/process_attr.js
+/Users/swot/.nvm/versions/node/v22.21.1/bin/node
+darwin</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">执行 node process_attr.js a b c 输出如下：</div>
+<div class="content">
+<pre>Hello World!
+0: /Users/swot/.nvm/versions/node/v22.21.1/bin/node
+1: /Users/swot/swot-learning/大软3+2/nodejs/code/node/process_attr.js
+2: a
+3: b
+4: c
+/Users/swot/.nvm/versions/node/v22.21.1/bin/node
+darwin</pre>
 </div>
 </div>
 </div>
@@ -4437,16 +4491,27 @@ console.log(process.platform);  // 平台信息</p>
 </tr>
 </tbody>
 </table>
-<div class="sect5">
-<h6 id="_clean_srcch02process_method_js">#clean src/ch02/process_method.js</h6>
-<div class="paragraph">
-<p>console.log('当前目录: ' + process.cwd());  // 输出当前目录</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;当前目录: &#39;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">cwd</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// 输出当前目录</span>
+
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;当前版本: &#39;</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">version</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 输出当前版本</span>
+
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">memoryUsage</span><span class="tok-p">());</span><span class="tok-w">  </span><span class="tok-c1">// 输出内存使用情况</span></code></pre>
 </div>
-<div class="paragraph">
-<p>console.log('当前版本: ' + process.version);  // 输出当前版本</p>
 </div>
-<div class="paragraph">
-<p>console.log(process.memoryUsage());  // 输出内存使用情况</p>
+<div class="literalblock">
+<div class="title">执行 node process_method.js 输出如下：</div>
+<div class="content">
+<pre>当前目录: /Users/swot/swot-learning/大软3+2/nodejs/code
+当前版本: v22.21.1
+{
+  rss: 32591872,
+  heapTotal: 5611520,
+  heapUsed: 4502848,
+  external: 1668093,
+  arrayBuffers: 10515
+}</pre>
 </div>
 </div>
 </div>
@@ -4455,22 +4520,42 @@ console.log(process.platform);  // 平台信息</p>
 <div class="sect2">
 <h3 id="_node_js_的定时器">Node.js 的定时器</h3>
 <div class="paragraph">
-<p>定时器 timers 模块对外暴露一个全局的 API,用于调度在某个时段调用的函数。</p>
+<p>定时器 timers 模块对外暴露一个全局的 API，用于调度在某个时段调用的函数。</p>
 </div>
 <div class="paragraph">
 <p>因为定时器函数是全局变量，所以不需要加载 timers 模块来使用它。</p>
 </div>
 <div class="paragraph">
-<p>Node.js 的定时器函数实现了与 Web 浏览器提供的定时器 API 类似的 API,但是它们使用了不同的内部实现机制，Node.js 的定时器函数是基于 Node.js 事件循环构建的。</p>
+<p>Node.js 的定时器函数实现了与 Web 浏览器提供的定时器 API 类似的 API，但是它们使用了不同的内部实现机制，Node.js 的定时器函数是基于 Node.js 事件循环构建的。</p>
 </div>
 <div class="sect3">
 <h4 id="_设置定时器">设置定时器</h4>
 <div class="paragraph">
 <p>Node.js 中的定时器在一段时间后会调用给定的函数。何时调用定时器函数取决于用来创建定时器的方法及 Node.js 事件循环正在执行的其他工作。</p>
 </div>
-<h5 id="_一次性定时器" class="discrete">一次性定时器</h5>
+<div class="sect4">
+<h5 id="_一次性定时器">一次性定时器</h5>
 <div class="paragraph">
 <p>基本用法 <code>setTimeout(callback, delay[, &#8230;&#8203;args])</code></p>
+</div>
+<div class="paragraph">
+<p>这个方法用于延迟一个函数的执行时间，在到达指定的时间点执行该函数，并且只执行一次。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>其中参数 callback 用于指定要调用的回调函数</p>
+</li>
+<li>
+<p>delay 设置调用回调函数之前等待的毫秒数</p>
+</li>
+<li>
+<p>args 设置调用回调函数时传入的可选参数。</p>
+</li>
+<li>
+<p>它返回 Timeout 对象的 ID, 该 ID 可以传递给 clearTimeOut() 以取消该定时器。</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>例如，下面的代码将在 1 秒后输出提示信息，之后定时器就不再起作用。</p>
@@ -4494,9 +4579,14 @@ console.log(process.platform);  // 平台信息</p>
 </tr>
 </table>
 </div>
-<h5 id="_周期性定时器" class="discrete">周期性定时器</h5>
+</div>
+<div class="sect4">
+<h5 id="_周期性定时器">周期性定时器</h5>
 <div class="paragraph">
 <p>基本用法 <code>setInterval(callback, delay[, &#8230;&#8203;args])</code></p>
+</div>
+<div class="paragraph">
+<p>这个方法用于以指定的时间间隔周期性地执行回调函数，其参数和返回值同上述 setTimeout() 方法的参数和返回值。</p>
 </div>
 <div class="paragraph">
 <p>例如，下面的代码将在 1 秒之后输出提示信息，之后定时器每隔 1 秒就重复输出提示信息，除非使用 clearlnterval() 方法取消该定时器或者终止程序。</p>
@@ -4505,12 +4595,22 @@ console.log(process.platform);  // 平台信息</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nx">setInterval</span><span class="tok-p">(</span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">  </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;我是一个周期性的定时器&quot;</span><span class="tok-p">);</span>
-<span class="tok-p">},</span><span class="tok-mf">1000</span><span class="tok-p">);</span></code></pre>
+<span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-mf">1000</span><span class="tok-p">);</span></code></pre>
 </div>
 </div>
-<h5 id="_即时定时器" class="discrete">即时定时器</h5>
+</div>
+<div class="sect4">
+<h5 id="_即时定时器">即时定时器</h5>
 <div class="paragraph">
 <p>基本用法 <code>setImmediate(callback[, &#8230;&#8203;args])</code></p>
+</div>
+<div class="paragraph">
+<p><a href="https://blog.csdn.net/weixin_47450807/article/details/124098448?">参考</a>
+setImmediate 表示立即执行，它是宏任务，回调函数会被放置到事件循环的 check 阶段。
+在应用中如果有大量的计算型任务，它是不适合放在主线程中执行的，因为计算任务会阻塞主线程，主线程一旦被阻塞，其他任务就需要等待，所以这种类型的任务最好交给 C++ 维护线程去执行。</p>
+</div>
+<div class="paragraph">
+<p>可以通过 setImmediate 方法将任务放入事件循环中的 check 阶段，因为代码在这一个阶段执行不会阻塞主线程，也不会阻塞事件循环。</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -4551,7 +4651,7 @@ console.log(process.platform);  // 平台信息</p>
 </div>
 </div>
 <div class="paragraph">
-<p>先打印 start，再打印 end, 最后等待 2000ms 后打印 end</p>
+<p>先打印 start，再打印 end, 最后等待 2000ms 后打印 ok</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -4565,6 +4665,7 @@ console.log(process.platform);  // 平台信息</p>
 </table>
 </div>
 </div>
+</div>
 <div class="sect3">
 <h4 id="_取消定时器">取消定时器</h4>
 <div class="paragraph">
@@ -4572,7 +4673,7 @@ console.log(process.platform);  // 平台信息</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">testInterval</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">setInterval</span><span class="tok-p">(</span><span class="tok-nx">testFunc</span><span class="tok-p">,</span><span class="tok-mf">2000</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">testInterval</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">setInterval</span><span class="tok-p">(</span><span class="tok-nx">testFunc</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">2000</span><span class="tok-p">);</span>
 <span class="tok-p">...</span>
 <span class="tok-nx">clearInterval</span><span class="tok-p">(</span><span class="tok-nx">testInterval</span><span class="tok-p">);</span></code></pre>
 </div>
@@ -4600,7 +4701,7 @@ console.log(process.platform);  // 平台信息</p>
 <i class="fa icon-note" title="❕"></i>
 </td>
 <td class="content">
-需要注意的是，setTimeout() 或 setInterval() 方法中的 this 关键字在 JavaScript 中均指向 Window 对象，而在 Node.js 中, 则都指向 Timeout 对象。
+需要注意的是，setTimeout() 或 setInterval() 方法中的 this 关键字在浏览器 JS 中均指向 Window 对象，而在 Node.js 中, 则都指向 Timeout 对象。
 </td>
 </tr>
 </table>
@@ -4622,87 +4723,441 @@ console.log(process.platform);  // 平台信息</p>
 </ul>
 </div>
 <div class="sect4">
-<h5 id="_clean_srcch02timeout_vs_immediate0_js">#clean src/ch02/timeout_vs_immediate0.js</h5>
+<h5 id="_example_1">Example 1</h5>
 <div class="paragraph">
-<p>console.log('outer');</p>
+<p>上面的这个流程说简单点就是在一个异步流程里，setImmediate 会比定时器先执行，我们写点代码来试试：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;outer&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 先执行</span>
+
+<span class="tok-c1">// EventLoop: timers</span>
+<span class="tok-nx">setTimeout</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-nx">setTimeout</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;setTimeout&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-nx">setImmediate</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;setImmediate&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+
+<span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>setTimeout(() &#8658; {  // &lt;1&gt;&lt;7&gt;
-  setTimeout(() &#8658; {  // &lt;2&gt;
-    console.log('setTimeout');
-  }, 0);
-  setImmediate(() &#8658; {  // &lt;3&gt;
-    console.log('setImmediate');
-  });
-}, 0);  // &lt;4&gt;</p>
+<p>运行命令: <code>node timeout_vs_immediate0.js</code></p>
+</div>
+<div class="literalblock">
+<div class="title">运行结果</div>
+<div class="content">
+<pre>outer
+setImmediate
+setTimeout</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>为什么 setImmediate 比 setTimeout 先执行？</p>
+</div>
+<div class="paragraph">
+<p>想象事件循环是一列<strong>环形火车</strong>，它会不停地绕圈，每一圈都会按顺序停靠几个站台：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>timers 站（处理 setTimeout / setInterval 回调）</p>
+</li>
+<li>
+<p>pending callbacks 站</p>
+</li>
+<li>
+<p>idle, prepare 站</p>
+</li>
+<li>
+<p>poll 站</p>
+</li>
+<li>
+<p>check 站（处理 setImmediate 回调）</p>
+</li>
+<li>
+<p>close callbacks 站</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>代码开始执行时，火车还没有出发。<code>console.log('outer')</code> 会马上执行，所以最先打印 <code>outer</code>。</p>
+</div>
+<div class="paragraph">
+<p>接着，最外层的 <code>setTimeout</code> 相当于买了一张票，告诉火车：“等你到了 <strong>timers 站</strong>，就叫我上车（执行我的回调）”。然后火车出发。</p>
+</div>
+<div class="paragraph">
+<p>当火车第一次到达 <strong>timers 站</strong>，它把外层 <code>setTimeout</code> 的回调请上车执行。在这个回调里，我们又做了两件事：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>又买了一张 <code>setTimeout</code> 的票 —— 但此时火车<strong>已经停在 timers 站了</strong>，这张票只能等<strong>下一圈</strong>再停靠 timers 站时才能上车。</p>
+</li>
+<li>
+<p>买了一张 <code>setImmediate</code> 的票 —— 它的上车地点是前方的 <strong>check 站</strong>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>由于当前这一圈还没有结束，火车从 timers 站离开后，会继续经过 pending callbacks、idle、poll 等站台，很快就到达 <strong>check 站</strong>。于是 <code>setImmediate</code> 的回调在这一圈就被执行，打印 <code>setImmediate</code>。</p>
+</div>
+<div class="paragraph">
+<p>之后火车跑完这一圈，开始新的一圈，再次到达 <strong>timers 站</strong>，这时内层的 <code>setTimeout</code> 回调才被请上车，打印 <code>setTimeout</code>。</p>
+</div>
+<div class="paragraph">
+<p><strong>一句话总结：</strong></p>
+</div>
+<div class="paragraph">
+<p>在执行 setTimeout 回调时（已经在 timers 站），新安排的 setTimeout 必须等下一圈的 timers 站，而新安排的 setImmediate 会在本圈后面的 check 站立刻执行，所以 setImmediate 先输出。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_clean_srcch02timeout_vs_immediate1_js">#clean src/ch02/timeout_vs_immediate1.js</h5>
+<h5 id="_example_2">Example 2</h5>
 <div class="paragraph">
-<p>console.log("outer");  // &lt;.&gt;</p>
+<p>定时器执行的顺序根据调用它们的上下文有所不同。如果定时器在主模块内被调用，则计时将受进程性能的约束，比如可能会受到计算机上运行的其他应用程序的影响。</p>
 </div>
 <div class="paragraph">
-<p>setTimeout(() &#8658; {
-  console.log('setTimeout');
-}, 0);  // &lt;.&gt;</p>
+<p>举例如下：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;outer&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+
+<span class="tok-nx">setTimeout</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;setTimeout&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+
+<span class="tok-nx">setImmediate</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">  </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;setImmediate&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">});</span>
+<i class="conum" data-value="4"></i><b>(4)</b>
+</pre></div></td></tr></table></div></code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>setImmediate(() &#8658; {  // &lt;.&gt;
-  console.log('setImmediate');
-});</p>
+<p>运行命令: <code>node timeout_vs_immediate1.js</code></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">运行结果不确定（可能出现如下两种情况）</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre>outer
+setTimeout
+setImmediate</pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre>outer
+setImmediate
+setTimeout</pre>
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>分析如下：</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>外层同步代码一次性全部执行完，遇到异步 API 就塞到对应的阶段。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>node.js 里面 <code>setTimeout(fn, 0)</code> 会被强制改为 <code>setTimeout(fn, 1)</code>, <a href="https://nodejs.org/api/timers.html#timers_settimeout_callback_delay_args?">这在官方文档中有说明</a>。
+<div class="paragraph">
+<p>所以遇到 <code>setTimeout</code>，虽然设置的是0毫秒触发，但是被node.js强制改为1毫秒，塞入 <code>times</code> 阶段</p>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>遇到 <code>setImmediate</code> 塞入 <code>check</code> 阶段</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>同步代码执行完毕，进入 Event Loop
+<div class="ulist">
+<ul>
+<li>
+<p>先进入 <code>times</code> 阶段，检查当前时间过去了 1 毫秒没有，如果过了 1 毫秒，满足 <code>setTimeout</code> 条件，执行回调，如果没过 1 毫秒，跳过。</p>
+</li>
+<li>
+<p>跳过空的阶段，进入 check 阶段，执行 <code>setImmediate</code> 回调</p>
+</li>
+</ul>
+</div></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>分析：通过上述流程的梳理，我们发现关键就在这个 1 毫秒，</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>如果同步代码执行时间较长，进入 Event Loop 的时候 1 毫秒已经过了，就执行 setTimeout</p>
+</li>
+<li>
+<p>如果 1 毫秒还没到，就先执行了 setImmediate。</p>
+</li>
+<li>
+<p>每次我们运行脚本时，机器状态可能不一样，导致运行时有 1 毫秒的差距，一会儿 setTimeout 先执行，一会儿 setImmediate 先执行。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>但是这种情况只会发生在还没进入 timers 阶段的时候。
+像我们 timeout_vs_immediate0.js 例子那样，因为已经在 timers 阶段，所以里面的 setTimeout 只能等下个循环了，所以 setImmediate 肯定先执行。同理的还有其他 poll 阶段的 API 也是这样的，如下面 timeout_vs_immediate2.js 例子。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_clean_srcch02timeout_vs_immediate2_js">#clean src/ch02/timeout_vs_immediate2.js</h5>
-<div class="paragraph">
-<p>var fs = require('fs')</p>
+<h5 id="_example_3">Example 3</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;fs&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">fileURLToPath</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;url&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">dirname</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;path&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 获取当前文件的路径（ESM 中需要手动获取 __filename 和 __dirname）</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">__filename</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">fileURLToPath</span><span class="tok-p">(</span><span class="tok-k">import</span><span class="tok-p">.</span><span class="tok-nx">meta</span><span class="tok-p">.</span><span class="tok-nx">url</span><span class="tok-p">);</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">__dirname</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">dirname</span><span class="tok-p">(</span><span class="tok-nx">__filename</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// EventLoop: timers</span>
+<span class="tok-c1">// EventLoop: pending callbacks</span>
+<span class="tok-c1">// EventLoop: idle, prepare</span>
+<span class="tok-c1">// EventLoop: poll</span>
+<span class="tok-nx">fs</span><span class="tok-p">.</span><span class="tok-nx">readFile</span><span class="tok-p">(</span><span class="tok-nx">__filename</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+
+<span class="tok-w">    </span><span class="tok-nx">setTimeout</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;setTimeout&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-nx">setImmediate</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;setImmediate&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-p">});</span>
+<span class="tok-c1">// EventLoop: check</span>
+<span class="tok-c1">// EventLoop: close callbacks</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>fs.readFile(__filename, () &#8658; {  // &lt;1&gt;
-  setTimeout(() &#8658; {  // &lt;2&gt;
-    console.log('setTimeout');
-  }, 0);
-  setImmediate(() &#8658; {  // &lt;3&gt;
-    console.log('setImmediate');
-  });
-});</p>
+<p>运行命令: <code>node timeout_vs_immediate2.js</code></p>
+</div>
+<div class="literalblock">
+<div class="title">运行结果</div>
+<div class="content">
+<pre>setImmediate
+setTimeout</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>代码分析：</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>这里 setTimeout 和 setImmediate 在 readFile 的回调里面，由于 readFile 回调是 I/O 操作，他本身就在 poll 阶段。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>所以他里面的定时器只能进入下个 timers 阶段。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>但是 setImmediate 却可以在接下来的 check 阶段运行，所以 setImmediate 肯定先运行，他运行完后，去检查 timers，才会运行 setTimeout。</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_process_nexttick_与_setimmediate_的对比">process.nextTick() 与 setImmediate() 的对比</h4>
 <div class="paragraph">
-<p>process.nextTick() 是一个特殊的异步 API，他不属于任何的 Event Loop 阶段。事实上 Node 在遇到这个 API 时，Event Loop 根本就不会继续进行，会马上停下来执行 process.nextTick()，这个执行完后才会继续 Event Loop。我们写个例子来看下：</p>
-</div>
-<div class="sect4">
-<h5 id="_clean_srcch02nexttick_vs_setimmediate_js">#clean src/ch02/nextTick_vs_setImmediate.js</h5>
-<div class="paragraph">
-<p>var fs = require('fs')</p>
+<p>process.nextTick() 是一个特殊的异步 API，他不属于任何的 Event Loop 阶段。
+事实上 Node 在遇到这个 API 时，Event Loop 根本就不会继续进行，会马上停下来执行 process.nextTick()，这个执行完后才会继续 Event Loop。</p>
 </div>
 <div class="paragraph">
-<p>fs.readFile(__filename, () &#8658; {  // &lt;1&gt;
-  setTimeout(() &#8658; {  // &lt;2&gt;
-    console.log('setTimeout');  // &lt;7&gt;
-  }, 0);
-  setImmediate(() &#8658; {  // &lt;3&gt;
-    console.log('setImmediate');  // &lt;5&gt;
-    process.nextTick(() &#8658; {
-      console.log('nextTick 2');  // &lt;6&gt;
-    });
-  });
-  process.nextTick(() &#8658; {  // &lt;4&gt;
-    console.log('nextTick 1');
-  });
-});</p>
+<p>我们写个例子来看下：</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">readFile</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;fs&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">fileURLToPath</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;url&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">dirname</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;path&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">__filename</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">fileURLToPath</span><span class="tok-p">(</span><span class="tok-k">import</span><span class="tok-p">.</span><span class="tok-nx">meta</span><span class="tok-p">.</span><span class="tok-nx">url</span><span class="tok-p">);</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">__dirname</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">dirname</span><span class="tok-p">(</span><span class="tok-nx">__filename</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// EventLoop: timers</span>
+<span class="tok-c1">// EventLoop: pending callbacks</span>
+<span class="tok-c1">// EventLoop: idle, prepare</span>
+<span class="tok-c1">// EventLoop: poll</span>
+<span class="tok-nx">readFile</span><span class="tok-p">(</span><span class="tok-nx">__filename</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+
+<span class="tok-w">    </span><span class="tok-nx">setTimeout</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;setTimeout&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="7"></i><b>(7)</b>
+<span class="tok-w">    </span><span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-nx">setImmediate</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><span class="tok-c1">// to check </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;setImmediate&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="5"></i><b>(5)</b>
+<span class="tok-w">        </span><span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">nextTick</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">          </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;nextTick 2&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="6"></i><b>(6)</b>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+
+<span class="tok-w">    </span><span class="tok-nx">process</span><span class="tok-p">.</span><span class="tok-nx">nextTick</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="4"></i><b>(4)</b>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;nextTick 1&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-c1">// EventLoop: check</span>
+<span class="tok-c1">// EventLoop: close callbacks</span>
+<span class="tok-p">});</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>运行命令: <code>node nextTick_vs_setImmediate.js</code></p>
+</div>
+<div class="literalblock">
+<div class="title">运行结果</div>
+<div class="content">
+<pre>nextTick 1
+setImmediate
+nextTick 2
+setTimeout</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>代码分析：</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>代码都在 <code>readFile</code> 回调里面，他自己执行时，已经在 <code>poll</code> 阶段</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>遇到 <code>setTimeout(fn, 0)</code>，其实是 <a href="https://nodejs.org/api/timers.html#settimeoutcallback-delay-args?">setTimeout(fn, 1)</a> 塞入后面的 <code>timers</code> 阶段。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>遇到 <code>setImmediate</code>，塞入后面的 <code>check</code> 阶段</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>遇到 <code>nextTick</code>，立马执行，输出 'nextTick 1'</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>到了 <code>check</code> 阶段，输出 'setImmediate'</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>又遇到个 <code>nextTick</code>,立马输出 'nextTick 2'</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>到了下个 <code>timers</code> 阶段，输出 'setTimeout'</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_buffer_数据类型">Buffer 数据类型</h3>
 <div class="paragraph">
-<p><a href="https://nodejs.dev/en/api/v19/buffer/" class="bare">https://nodejs.dev/en/api/v19/buffer/</a></p>
+<p><a href="https://nodejs.org/docs/latest-v22.x/api/buffer.html" class="bare">https://nodejs.org/docs/latest-v22.x/api/buffer.html</a></p>
 </div>
 <div class="sect3">
 <h4 id="_buffer_实例的创建">Buffer 实例的创建</h4>
@@ -4715,7 +5170,7 @@ console.log(process.platform);  // 平台信息</p>
 <p>Buffer 类的实例（即对象）类似于整数数组，但实例对应于固定大小的原始内存分配，其大小在创建时被确定且无法更改。</p>
 </li>
 <li>
-<p>Buffer 类位于全局作用域中，因此无须使用 require() 方法加载相应的模块。</p>
+<p>Buffer 类位于全局作用域中，因此无须使用 import 导入相应的模块。</p>
 </li>
 </ul>
 </div>
@@ -4745,7 +5200,7 @@ console.log(process.platform);  // 平台信息</p>
 <dd>
 <p><code>const buf5 = Buffer.alloc(10, 1);</code></p>
 </dd>
-<dt class="hdlist1">创建一个长度为 10、且未初始化的 Buffer实例</dt>
+<dt class="hdlist1">创建一个长度为 10、且未初始化的 Buffer 实例</dt>
 <dd>
 <p><code>const buf6 = Buffer.allocUnsafe(10);</code></p>
 </dd>
@@ -4806,7 +5261,7 @@ console.log(process.platform);  // 平台信息</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">buf</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">Buffer</span><span class="tok-p">.</span><span class="tok-kr">from</span><span class="tok-p">(</span><span class="tok-s1">&#39;tést&#39;</span><span class="tok-p">);</span>
 <span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">buf</span><span class="tok-p">.</span><span class="tok-nx">toString</span><span class="tok-p">(</span><span class="tok-s1">&#39;hex&#39;</span><span class="tok-p">));</span><span class="tok-w">         </span><span class="tok-c1">// 输出结果: 74c3a97374</span>
-<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">buf</span><span class="tok-p">.</span><span class="tok-nx">toString</span><span class="tok-p">(</span><span class="tok-s1">&#39;utf8&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">3</span><span class="tok-p">));</span><span class="tok-w">  </span><span class="tok-c1">// 输出结果：té</span></code></pre>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">buf</span><span class="tok-p">.</span><span class="tok-nx">toString</span><span class="tok-p">(</span><span class="tok-s1">&#39;utf8&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">3</span><span class="tok-p">));</span><span class="tok-w">  </span><span class="tok-c1">// 输出结果：té -- 到字节索引 3 之前 结束（即只取字节 0、1、2）</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4825,7 +5280,7 @@ console.log(process.platform);  // 平台信息</p>
 ucs2是它的别名。</p>
 </li>
 <li>
-<p>base64: Base6编码。</p>
+<p>base64: Base6 编码。</p>
 </li>
 <li>
 <p>latin1: 一种将 Buffer 编码成单字节编码字符串的方法。binary 是 latin1 的别名。</p>
@@ -4838,24 +5293,23 @@ ucs2是它的别名。</p>
 </div>
 <div class="sect3">
 <h4 id="_buffer_实例与json_对象互相转换">Buffer 实例与JSON 对象互相转换</h4>
-<div class="sect4">
-<h5 id="_clean_srcch02buf_to_json_js">#clean src/ch02/buf_to_json.js</h5>
 <div class="paragraph">
-<p>const buf = Buffer.from([0x1, 0x2, 0x3, 0x4, 0x5]);
-const json = JSON.stringify(buf);
-console.log(json);  // &lt;1&gt;</p>
+<p>使用 buf.toJSON() 方法可以将 Buffer 实例转换为 JSON 对象。
+当把 Buffer 实例传递给 JSON.stringify() 时，Node.js 会隐式调用该方法，将 buf 转换成对象，再转换成字符串。</p>
 </div>
-<div class="paragraph">
-<p>const copy = JSON.parse (json, (key, value) &#8658; {
-  console.log('key:', key)
-  console.log('value:', value)
-  console.log('value.type:', value.type)
-  console.log('value.data:', value.data)
-  return value &amp;&amp; value.type === 'Buffer'
-      ? Buffer.from(value.data)
-      : value;
-});
-console.log(copy);  // &lt;2&gt;</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">buf</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">Buffer</span><span class="tok-p">.</span><span class="tok-kr">from</span><span class="tok-p">([</span><span class="tok-mf">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">4</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">5</span><span class="tok-p">]);</span>
+
+<span class="tok-c1">// 1. 显式调用 toJSON()</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">jsonObj</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">buf</span><span class="tok-p">.</span><span class="tok-nx">toJSON</span><span class="tok-p">();</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">jsonObj</span><span class="tok-p">);</span>
+<span class="tok-c1">// 输出对象: { type: &#39;Buffer&#39;, data: [ 1, 2, 3, 4, 5 ] }</span>
+
+<span class="tok-c1">// 2. 隐式调用：使用 JSON.stringify()</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">jsonStr</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">JSON</span><span class="tok-p">.</span><span class="tok-nx">stringify</span><span class="tok-p">(</span><span class="tok-nx">buf</span><span class="tok-p">);</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">jsonStr</span><span class="tok-p">);</span>
+<span class="tok-c1">// 输出字符串: &#39;{&quot;type&quot;:&quot;Buffer&quot;,&quot;data&quot;:[1,2,3,4,5]}&#39;</span></code></pre>
 </div>
 </div>
 </div>
@@ -4885,11 +5339,11 @@ console.log(copy);  // &lt;2&gt;</p>
 <dl>
 <dt class="hdlist1">buf.write</dt>
 <dd>
-<p><a href="https://nodejs.dev/en/api/v19/buffer/#bufwritestring-offset-length-encoding" class="bare">https://nodejs.dev/en/api/v19/buffer/#bufwritestring-offset-length-encoding</a></p>
+<p><a href="https://nodejs.org/docs/latest-v22.x/api/buffer.html#bufwritestring-offset-length-encoding" class="bare">https://nodejs.org/docs/latest-v22.x/api/buffer.html#bufwritestring-offset-length-encoding</a></p>
 </dd>
 <dt class="hdlist1">buf.toString</dt>
 <dd>
-<p><a href="https://nodejs.dev/en/api/v19/buffer/#buftostringencoding-start-end" class="bare">https://nodejs.dev/en/api/v19/buffer/#buftostringencoding-start-end</a></p>
+<p><a href="https://nodejs.org/docs/latest-v22.x/api/buffer.html#buftostringencoding-start-end" class="bare">https://nodejs.org/docs/latest-v22.x/api/buffer.html#buftostringencoding-start-end</a></p>
 </dd>
 </dl>
 </div>
@@ -4900,12 +5354,16 @@ console.log(copy);  // &lt;2&gt;</p>
 <ul>
 <li>
 <p>使用 buf.toString() 方法从 Buffer 实例读取字符串</p>
-</li>
+<div class="ulist">
+<ul>
 <li>
-<p>使用其他专用方法从Buffer实例读取其他类型的数据</p>
+<p>如上面例子</p>
 </li>
 </ul>
 </div>
+</li>
+<li>
+<p>使用其他专用方法从 Buffer 实例读取其他类型的数据</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">buf</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">Buffer</span><span class="tok-p">.</span><span class="tok-kr">from</span><span class="tok-p">([</span><span class="tok-o">-</span><span class="tok-mf">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">5</span><span class="tok-p">]);</span>
@@ -4914,16 +5372,15 @@ console.log(copy);  // &lt;2&gt;</p>
 <span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">buf</span><span class="tok-p">.</span><span class="tok-nx">readInt8</span><span class="tok-p">(</span><span class="tok-mf">2</span><span class="tok-p">));</span><span class="tok-c1">// 抛出异常 ERR_OUT_OF_RANGE（超出范围）</span></code></pre>
 </div>
 </div>
+</li>
+</ul>
+</div>
 <div class="dlist">
 <div class="title">references</div>
 <dl>
-<dt class="hdlist1">buf.toString</dt>
-<dd>
-<p><a href="https://nodejs.dev/en/api/v19/buffer/#buftostringencoding-start-end" class="bare">https://nodejs.dev/en/api/v19/buffer/#buftostringencoding-start-end</a></p>
-</dd>
 <dt class="hdlist1">buf.readInt8</dt>
 <dd>
-<p><a href="https://nodejs.dev/en/api/v19/buffer/#bufreadint8offset" class="bare">https://nodejs.dev/en/api/v19/buffer/#bufreadint8offset</a></p>
+<p><a href="https://nodejs.org/docs/latest-v22.x/api/buffer.html#bufwriteint8value-offset" class="bare">https://nodejs.org/docs/latest-v22.x/api/buffer.html#bufwriteint8value-offset</a></p>
 </dd>
 </dl>
 </div>
@@ -4931,7 +5388,8 @@ console.log(copy);  // &lt;2&gt;</p>
 <div class="sect4">
 <h5 id="_buffer_实例合并">Buffer 实例合并</h5>
 <div class="paragraph">
-<p>可以使用 Buffer.concat()方 法将多个 Bufer 实例拼接合并组成一个新的 Bufer 实例。该方法语法格式如下:</p>
+<p>可以使用 Buffer.concat()方 法将多个 Bufer 实例拼接合并组成一个新的 Bufer 实例。
+该方法语法格式如下:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -4992,15 +5450,19 @@ console.log(copy);  // &lt;2&gt;</p>
 <p>sourceStart 指定源对象 buf 开始复制的偏移量，默认值为 0;</p>
 </li>
 <li>
-<p>sourceEnd 指定源对象 buf 结束复制的偏移量，默认值为 buf.lenath</p>
+<p>sourceEnd   指定源对象 buf 结束复制的偏移量，默认值为 buf.lenath</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p><a href="https://nodejs.org/docs/latest-v22.x/api/buffer.html#bufcopytarget-targetstart-sourcestart-sourceend" class="bare">https://nodejs.org/docs/latest-v22.x/api/buffer.html#bufcopytarget-targetstart-sourcestart-sourceend</a></p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_buffer_实例切片">Buffer 实例切片</h5>
 <div class="paragraph">
-<p>可以使用 buf.slice() 方法创建一个裁剪过的新 Buffer 实例。该方法语法格式如下:</p>
+<p>可以使用 buf.slice() 方法创建一个裁剪过的新 Buffer 实例。
+该方法语法格式如下:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -5023,6 +5485,16 @@ console.log(copy);  // &lt;2&gt;</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>如果源 buf 在后面还被用到，则需要进行备份。 示例如下：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">backup</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">Buffer</span><span class="tok-p">.</span><span class="tok-kr">from</span><span class="tok-p">(</span><span class="tok-nx">buf</span><span class="tok-p">);</span><span class="tok-w">              </span><span class="tok-c1">// 方法1</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">backup</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">Buffer</span><span class="tok-p">.</span><span class="tok-nx">alloc</span><span class="tok-p">(</span><span class="tok-nx">buf</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">buf</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 方法2</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">backup</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">Buffer</span><span class="tok-p">.</span><span class="tok-nx">copyBytesFrom</span><span class="tok-p">(</span><span class="tok-nx">buf</span><span class="tok-p">);</span><span class="tok-w">     </span><span class="tok-c1">// 方法3 (Node.js 19.8+)</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -5031,18 +5503,23 @@ console.log(copy);  // &lt;2&gt;</p>
 <div class="sect3">
 <h4 id="_概述">概述</h4>
 <div class="paragraph">
-<p>流可以看作是某段时间内从一个点移动到另一个点的数据序列，就像水从一根管子的一端流到另-端。Node.js 中的流用于管理和处理数据，可以使用流完成对大量数据的操作以及逐段处理的操作。在 Node.js 异步处理数据的基础上，流将要传输的数据处理成“块”(chunk) 连续传输，这样就可使用较低的内存消耗获得较高的性能提升。</p>
+<p>流可以看作是某段时间内从一个点移动到另一个点的数据序列，就像水从一根管子的一端流到另一端。
+Node.js 中的流用于管理和处理数据，可以使用流完成对大量数据的操作以及逐段处理的操作。
+在 Node.js 异步处理数据的基础上，流将要传输的数据处理成“块”(chunk) 连续传输，这样就可使用较低的内存消耗获得较高的性能提升。</p>
 </div>
 <div class="paragraph">
 <p>流是 Node.js 中处理流式数据的抽象接口。Node.js 提供了多种流对象，例如 HTTP 服务器的请求和 process.stdout 都是流的实例。流可以是可读的、可写的，或者可读可写的。所有流都是 EventEmitter 类的实例。stream 模块用于构建实现了流接口的对象，使用时需要导入，方法如下:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>const stream = require('stream');</pre>
+<pre>import stream from 'stream';  // 导出整个模块
+import { Readable, Writable, Transform, Duplex } from 'stream';  // 特定导出</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>stream 模块主要用于开发人员创建新类型的流实例。几乎所有的 Node.js 应用程序都在某种程度上使用了流。应用程序只需写入数据到流，或者从流消费数据，并不需要直接实现流的接口，通常也不需要直接加载 stream 模块。本节给出的示例代码没有直接实现流的接口，而是直接利用 fs 模块内置的文件操作流接口。</p>
+<p>stream 模块主要用于开发人员创建新类型的流实例。几乎所有的 Node.js 应用程序都在某种程度上使用了流。
+应用程序只需写入数据到流，或者从流消费数据，并不需要直接实现流的接口，通常也不需要直接加载 stream 模块。
+本节给出的示例代码没有直接实现流的接口，而是直接利用 fs 模块内置的文件操作流接口。</p>
 </div>
 <div class="paragraph">
 <p>流的基本类型：</p>
@@ -5081,13 +5558,17 @@ console.log(copy);  // &lt;2&gt;</p>
 可缓冲的数据大小取决于传入流构造函数的 highWaterMark 选项（相当于水位线）。</p>
 </div>
 <div class="paragraph">
-<p>双工流和转换流都是可读又可写的，各自维护着两个相互独立的内部缓冲器用于读取和写入。在维护数据流时，读取和写入两端可以各自独立地工作。</p>
+<p>双工流和转换流都是可读又可写的，各自维护着两个相互独立的内部缓冲器用于读取和写入。在维护数据流时，读取和写入两端可以各自独立地工作。
+例如, net.Socket 实例是双工流，它的可读端可以消费从 Socket 接收的数据，而可写端则可以将数据写入 Socket。因为数据写入 Socket 的速度可能与接收数据的速度不一致(较快或较慢), 所以在读写两端独立地进行操作或缓冲就显得很重要。</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_可读流">可读流</h4>
 <div class="paragraph">
 <p>可读流是对提供数据的来源的一种抽象。所有可读流都实现了 stream.Readable 类定义的接口。</p>
+</div>
+<div class="paragraph">
+<p>可读流的例子包括客户端的 HTTP 响应、服务器的 HTTP 请求、fs 的读取流、zlib流、crypto 流、TCP Socket、子进程 stdout 与 stderr、process.stdin 等。</p>
 </div>
 <hr>
 <div class="paragraph">
@@ -5138,7 +5619,7 @@ console.log(copy);  // &lt;2&gt;</p>
 <p>error：当接收过程中发生错误时被触发。</p>
 </li>
 <li>
-<p>readable：当流中有数据可供读取时被触发。当到达流数据的尽头时，readable 事件也会被触发,但是在 end 事件之前被触发。</p>
+<p>readable：当流中有数据可供读取时被触发。当到达流数据的尽头时，readable 事件也会被触发，但是在 end 事件之前被触发。</p>
 </li>
 <li>
 <p>close: 当流或其底层资源被关闭时被触发。这表明不会再触发其他事件，也不会再发生操作。</p>
@@ -5155,7 +5636,7 @@ console.log(copy);  // &lt;2&gt;</p>
 <p>readable.read([size])：从内部缓冲区拉取并返回数据（默认返回是 Buffer 对象），size 指定要读取的数据的字节数。如果没在可读的数据，则返回 null。它只对处于暂停模式的可读流调用。</p>
 </li>
 <li>
-<p>readable.pause()：使流动模式的流停止触发data事件，并切换出流动模式。任何可用的数据都会保留在内部缓存中。</p>
+<p>readable.pause()：使流动模式的流停止触发 data 事件，并切换出流动模式。任何可用的数据都会保留在内部缓存中。</p>
 </li>
 <li>
 <p>readable.resume()：将被暂停的可读流恢复触发 data 事件，并将流切换到流动模式。</p>
@@ -5168,25 +5649,51 @@ console.log(copy);  // &lt;2&gt;</p>
 <div class="paragraph">
 <p>下面是可读流操作的例子</p>
 </div>
-<div class="sect4">
-<h5 id="_clean_srcch02test_readablestream_js">#clean src/ch02/test_readablestream.js</h5>
-<div class="paragraph">
-<p>const fs = require('fs')</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;node:fs&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">readStream</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-p">.</span><span class="tok-nx">createReadStream</span><span class="tok-p">(</span><span class="tok-s1">&#39;node/demo.txt&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">str</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-nx">readStream</span><span class="tok-p">.</span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-s1">&#39;data&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">chunk</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-w">    </span><span class="tok-nx">str</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-nx">chunk</span><span class="tok-p">;</span>
+<span class="tok-p">});</span>
+
+<span class="tok-nx">readStream</span><span class="tok-p">.</span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-s1">&#39;end&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">str</span><span class="tok-p">);</span>
+<span class="tok-p">});</span>
+
+<span class="tok-nx">readStream</span><span class="tok-p">.</span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-s1">&#39;error&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">err</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w">  </span><i class="conum" data-value="4"></i><b>(4)</b>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">err</span><span class="tok-p">);</span>
+<span class="tok-p">});</span></code></pre>
 </div>
-<div class="paragraph">
-<p>var readStream=fs.createReadStream('demo.txt');  // &lt;1&gt;</p>
 </div>
-<div class="paragraph">
-<p>var str='';
-readStream.on('data',function(chunk){  // &lt;2&gt;
-    str+=chunk;
-})
-readStream.on('end',function(chunk){  // &lt;3&gt;
-    console.log(str);
-})
-readStream.on('error',function(err){  // &lt;4&gt;
-    console.log(err);
-})</p>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>以流的方式读取文件</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>保存数据</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>读取完成</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>读取失败</td>
+</tr>
+</table>
+</div>
+<div class="literalblock">
+<div class="title">运行 node test_readablestream.js 输出如下：</div>
+<div class="content">
+<pre>周董好久没有发新歌了，左盼右盼，终于等来了《说好不哭》</pre>
 </div>
 </div>
 </div>
@@ -5194,6 +5701,9 @@ readStream.on('error',function(err){  // &lt;4&gt;
 <h4 id="_可写流">可写流</h4>
 <div class="paragraph">
 <p>可写流是对数据被写入的目的地的一种抽象。所有可写流都实现了 stream.Writable 类定义的接口。</p>
+</div>
+<div class="paragraph">
+<p>可写流的例子包括客户端的 HTTP 请求、服务器的 HTTP 响应、fs 的写入流、zlib流、crypto流、TCP Socket、 子进程 stdin、process.stdout、process.stderr等。这些例子也都是实现了可写流接口的双工流。</p>
 </div>
 <hr>
 <div class="paragraph">
@@ -5205,7 +5715,7 @@ readStream.on('error',function(err){  // &lt;4&gt;
 <p>close: 当流或其底层资源被关闭时被触发。不是所有可写流都会触发该事件。</p>
 </li>
 <li>
-<p>drain: 如果调用stream.wite(chunk)方法返回false,则当可以继续写入数据到流时会触发该事件。</p>
+<p>drain: 如果调用 stream.wite(chunk) 方法返回 false，则当可以继续写入数据到流时会触发该事件。</p>
 </li>
 <li>
 <p>error: 写入数据发生错误时被触发。当触发该事件时，流还未被关闭。</p>
@@ -5223,7 +5733,7 @@ readStream.on('error',function(err){  // &lt;4&gt;
 </div>
 <hr>
 <div class="paragraph">
-<p>stream.Witable类定义的主要方法是</p>
+<p>stream.Witable 类定义的主要方法是</p>
 </div>
 <div class="ulist">
 <ul>
@@ -5235,33 +5745,65 @@ readStream.on('error',function(err){  // &lt;4&gt;
 <div class="paragraph">
 <p>下面给出一个可写流操作的例子。</p>
 </div>
-<div class="sect4">
-<h5 id="_clean_srcch02test_writablestream_js">#clean src/ch02/test_writablestream.js</h5>
-<div class="paragraph">
-<p>const fs = require('fs')</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s2">&quot;node:fs&quot;</span><span class="tok-p">;</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">str</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;这是测试可写流的数据，保存起来&#39;</span><span class="tok-p">;</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">writerStream</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-p">.</span><span class="tok-nx">createWriteStream</span><span class="tok-p">(</span><span class="tok-s1">&#39;node/output.txt&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+
+<span class="tok-nx">writerStream</span><span class="tok-p">.</span><span class="tok-nx">write</span><span class="tok-p">(</span><span class="tok-nx">str</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;UTF8&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+
+<span class="tok-nx">writerStream</span><span class="tok-p">.</span><span class="tok-nx">end</span><span class="tok-p">();</span><span class="tok-w">  </span><i class="conum" data-value="3"></i><b>(3)</b>
+
+<span class="tok-c1">// 处理流事件</span>
+<span class="tok-nx">writerStream</span><span class="tok-p">.</span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-s1">&#39;finish&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;写入完成!&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">});</span>
+
+<span class="tok-nx">writerStream</span><span class="tok-p">.</span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-s1">&#39;error&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-p">(</span><span class="tok-nx">err</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;写入失败&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>创建一个可以写入的流，写入到文件output.txt 中</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>使用 utf8 编码写入数据</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>标记文件末尾</td>
+</tr>
+</table>
+</div>
+<hr>
+<div class="literalblock">
+<div class="title">运行 node test_writablestream.js 终端打印如下</div>
+<div class="content">
+<pre>写入完成!</pre>
+</div>
 </div>
 <div class="paragraph">
-<p>var str = '这是测试可写流的数据，保存起来';
-var writerStream = fs.createWriteStream('output.txt');  // &lt;1&gt;</p>
+<p>查看 output.txt，内容如下：</p>
 </div>
-<div class="paragraph">
-<p>writerStream.write(str,'UTF8');  // &lt;2&gt;
-writerStream.end();  // &lt;3&gt;</p>
-</div>
-<div class="paragraph">
-<p>writerStream.on('finish', function() {
-    console.log('写入完成!');
-});
-writerStream.on('error', function(err){
-    console.log('写入失败');
-});</p>
+<div class="literalblock">
+<div class="content">
+<pre>这是测试可写流的数据，保存起来</pre>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_管道读写操作">管道读写操作</h4>
 <div class="paragraph">
-<p>通常要将从一个流中获取的数据传递到另外一个流中，这可以通过管道操作机制实现。可读流提供的 readable.pipe() 方法在可读流与可写流之间架起桥梁，使数据可以通过管道由可读流进入可写流。该方法的语法如下:</p>
+<p>通常要从一个流中获取的数据传递到另外一个流中，这可以通过管道操作机制实现。
+可读流提供的 readable.pipe() 方法在可读流与可写流之间架起桥梁，使数据可以通过管道由可读流进入可写流。
+该方法的语法如下:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -5274,7 +5816,7 @@ writerStream.on('error', function(err){
 <p>参数 destination 指定数据写入的目标</p>
 </li>
 <li>
-<p>options 用于设选项，其中 end 指定当读取结束时是否终止写入，默认为 true。</p>
+<p>options 用于设置选项，其中 end 指定当读取结束时是否终止写入，默认为 true。</p>
 </li>
 <li>
 <p>该方法返回目标可写流，如果该方法返回的目标可写流是双工流或转换流，则可以形成管道链。</p>
@@ -5286,6 +5828,7 @@ writerStream.on('error', function(err){
 <p>下面的代码将可读流的所有数据通过管道推送到 file.txt 文件:</p>
 </div>
 <div class="listingblock">
+<div class="title">伪代码</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">readable</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">getReadableStreamSomehow</span><span class="tok-p">();</span><span class="tok-w">       </span><span class="tok-c1">// 创建一个可读流</span>
 <span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">writable</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-p">.</span><span class="tok-nx">createWriteStream</span><span class="tok-p">(</span><span class="tok-s1">&#39;file.txt&#39;</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 创建一个可写流</span>
@@ -5293,19 +5836,22 @@ writerStream.on('error', function(err){
 </div>
 </div>
 <div class="paragraph">
-<p>可以在单个可读流上绑定多个可写流。readable.pipe() 会返回目标流的引用，这样就可以对流进行链式管道操作。下面给出一段示例代码:</p>
+<p>可以在单个可读流上绑定多个可写流。readable.pipe() 会返回目标流的引用，这样就可以对流进行链式管道操作。
+下面给出一段示例代码:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">require</span><span class="tok-p">(</span><span class="tok-s1">&#39;fs&#39;</span><span class="tok-p">);</span>
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s2">&quot;node:fs&quot;</span><span class="tok-p">;</span>
+
 <span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">r</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-p">.</span><span class="tok-nx">createReadStream</span><span class="tok-p">(</span><span class="tok-s1">&#39;file.txt&#39;</span><span class="tok-p">);</span>
 <span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">z</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">zlib</span><span class="tok-p">.</span><span class="tok-nx">createGzip</span><span class="tok-p">();</span>
 <span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">w</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-p">.</span><span class="tok-nx">createWriteStream</span><span class="tok-p">(</span><span class="tok-s1">&#39;file.txt.gz&#39;</span><span class="tok-p">);</span>
-<span class="tok-nx">r</span><span class="tok-p">.</span><span class="tok-nx">pipe</span><span class="tok-p">(</span><span class="tok-nx">z</span><span class="tok-p">).</span><span class="tok-nx">pipe</span><span class="tok-p">(</span><span class="tok-nx">w</span><span class="tok-p">);</span><span class="tok-c1">// 链式管道操作两个可写流</span></code></pre>
+<span class="tok-nx">r</span><span class="tok-p">.</span><span class="tok-nx">pipe</span><span class="tok-p">(</span><span class="tok-nx">z</span><span class="tok-p">).</span><span class="tok-nx">pipe</span><span class="tok-p">(</span><span class="tok-nx">w</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 链式管道操作两个可写流</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>默认情况下，当来源可读流触发 end 事件时，目标可写流也会调用 stream.end() 结束写入。如果禁用这种默认行为，end 选项应设为 false，这样目标流就会保持打开状态，例如:</p>
+<p>默认情况下，当来源可读流触发 end 事件时，目标可写流也会调用 stream.end() 结束写入。
+如果禁用这种默认行为，end 选项应设为 false，这样目标流就会保持打开状态，例如:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5337,23 +5883,239 @@ writerStream.on('error', function(err){
 <div class="sect2">
 <h3 id="_实战演练提供图片浏览服务">实战演练&#8201;&#8212;&#8201;提供图片浏览服务</h3>
 <div class="paragraph">
-<p><a href="实战演练_提供图片浏览服务.html">实战演练_提供图片浏览服务.html</a></p>
+<p>我们尝试开发一个简单的应用程序，用原生 Node.js 实现一个静态文件服务器来提供图片浏览服务，让用户可以下载、浏览服务器上的各种图片。</p>
+</div>
+<div class="paragraph">
+<p>Apache、nginx 等 Web 服务器软件都提供静态文件服务。
+Node.js 的文件系统和网络等核心模块提供了流接口，从而大大简化了输入输出的流处理过程，可以基于这些模块实现自己的静态文件服务器，基于 Web 提供资源文件访问服务。</p>
+</div>
+<div class="sect3">
+<h4 id="_实现思路">实现思路</h4>
+<div class="sect4">
+<h5 id="_1_搭建_bs_架构">1. 搭建 B/S 架构</h5>
+<div class="paragraph">
+<p>整个应用程序基于 B/S 架构，由 Node.js 内置的核心模块 http 提供 Web 服务。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">server</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">http</span><span class="tok-p">.</span><span class="tok-nx">createServer</span><span class="tok-p">(</span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">req</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">res</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-c1">//请求处理并返回结果</span>
+<span class="tok-p">});</span>
+<span class="tok-nx">server</span><span class="tok-p">.</span><span class="tok-nx">listen</span><span class="tok-p">(</span><span class="tok-mf">8000</span><span class="tok-p">);</span></code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_本章小结">本章小结</h3>
+</div>
+<div class="sect4">
+<h5 id="_2_解析资源文件路径">2. 解析资源文件路径</h5>
+<div class="paragraph">
+<p>服务器收到来自客端的请求后，需要获取输入的 URL 解析后的对象并进行转换，从而得到资源文件的绝对路径和文件类型，这需要用到 Node.js 内置的 url 模块和 path 模块。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">pathName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">url</span><span class="tok-p">.</span><span class="tok-nx">parse</span><span class="tok-p">(</span><span class="tok-nx">req</span><span class="tok-p">.</span><span class="tok-nx">url</span><span class="tok-p">).</span><span class="tok-nx">pathname</span><span class="tok-p">;</span><span class="tok-w">         </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">filePath</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">path</span><span class="tok-p">.</span><span class="tok-nx">resolve</span><span class="tok-p">(</span><span class="tok-nx">__dirname</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nx">pathName</span><span class="tok-p">);</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>获取请求的 URL 并返回文件路径名</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>从文件路径名取得资源文件的绝对路径，需要用到全局变量 __dirname</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_3_处理不同类型的资源文件">3. 处理不同类型的资源文件</h5>
+<div class="paragraph">
+<p>在 HTTP 消息头中，使用 Content-Type 表示请求和响应中的媒体类型信息，通知服务器如何处理请求的数据，客户端(浏览器)如何解析响应的数据，如显示图片、解析并展示 HTML 等。
+Content-Type 的格式: <code><mark>Content-Type: type/subtype; parameter</mark></code></p>
+</div>
+<div class="listingblock">
+<div class="title">示例如下</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nx">Content</span><span class="tok-o">-</span><span class="tok-nx">Type</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">text</span><span class="tok-o">/</span><span class="tok-nx">html</span><span class="tok-p">;</span><span class="tok-w">   </span><span class="tok-c1">// 网页类型</span>
+<span class="tok-nx">Content</span><span class="tok-o">-</span><span class="tok-nx">Tvpe</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">image</span><span class="tok-o">/</span><span class="tok-nx">jpeg</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 图片类型</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>因此可以定义一个对象，由一个键值对集合来指定不同扩展名与 Content-Type 类型之间的对应关系。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">mime</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-s2">&quot;.jpeg&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;image/jpeg&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-s2">&quot;.jpg&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;image/jpeg&quot;</span><span class="tok-p">,</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_4_文件读取">4. 文件读取</h5>
+<div class="paragraph">
+<p>访问资源文件最终要落实到文件的读取，这可利用 Node.js 内置的核心模块 fs 来实现。</p>
+</div>
+<div class="paragraph">
+<p>在读取文件之前可通过以下方法来读取文件的状态，以决定如何读取文件。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>fs.stat(path, callback)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>资源文件可以使用 fs.createReadStream() 方法打开。</p>
+</div>
+<div class="paragraph">
+<p>静态文件服务器通常使用 gzip 压缩文件以提高传输效率，Node.js 内置模块 zlib 提供 gzip 压缩功能。</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>stream.pipe(zlib.createGzip()).pipe(res);</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>还应让浏览器知道已经开启了 gzip 压缩，这需要在 HTTP 消息头中提供相应的内容编码信息</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>res.writeHead(200, {"content-encoding": 'gzip'});</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_编写代码">编写代码</h4>
+<div class="listingblock">
+<div class="title">code/node/static_server.mjs</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">http</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">require</span><span class="tok-p">(</span><span class="tok-s2">&quot;http&quot;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 加载http模块</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">require</span><span class="tok-p">(</span><span class="tok-s2">&quot;fs&quot;</span><span class="tok-p">);</span><span class="tok-w">      </span><span class="tok-c1">// 加载fs模块</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">path</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">require</span><span class="tok-p">(</span><span class="tok-s2">&quot;path&quot;</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 加载path模块</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">url</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">require</span><span class="tok-p">(</span><span class="tok-s2">&quot;url&quot;</span><span class="tok-p">);</span><span class="tok-w">   </span><span class="tok-c1">// 加载url模块</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">zlib</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">require</span><span class="tok-p">(</span><span class="tok-s2">&quot;zlib&quot;</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 加载zlib模块</span>
+<span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">curDir</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;&quot;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">//当前目录名</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">server</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">http</span><span class="tok-p">.</span><span class="tok-nx">createServer</span><span class="tok-p">(</span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">req</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">res</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">//定义mime对象设置相应的响应头类型，这里仅列出少量的扩展名用于测试</span>
+<span class="tok-w">    </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">mime</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-s2">&quot;.jpeg&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;image/jpeg&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-s2">&quot;.jpg&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;image/jpeg&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-s2">&quot;.png&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;image/png&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-s2">&quot;.tiff&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;image/tiff&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">      </span><span class="tok-s2">&quot;.pdf&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;application/pdf&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-p">};</span>
+<span class="tok-w">    </span><span class="tok-c1">//获取请求URL并转换请求路径</span>
+<span class="tok-w">    </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">pathName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">url</span><span class="tok-p">.</span><span class="tok-nx">parse</span><span class="tok-p">(</span><span class="tok-nx">req</span><span class="tok-p">.</span><span class="tok-nx">url</span><span class="tok-p">).</span><span class="tok-nx">pathname</span><span class="tok-p">;</span>
 
-</div>
-<div class="sect2">
-<h3 id="_习题">习题</h3>
+<span class="tok-w">    </span><span class="tok-c1">//对路径进行解码以防中文乱码</span>
+<span class="tok-w">    </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">pathName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">decodeURI</span><span class="tok-p">(</span><span class="tok-nx">pathName</span><span class="tok-p">);</span>
 
+<span class="tok-w">    </span><span class="tok-c1">//获取资源文件的绝对路径，这里用到全局变量__dirname</span>
+<span class="tok-w">    </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">filePath</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">path</span><span class="tok-p">.</span><span class="tok-nx">resolve</span><span class="tok-p">(</span><span class="tok-nx">__dirname</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nx">pathName</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">filePath</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">//控制台显示绝对路径</span>
+
+<span class="tok-w">    </span><span class="tok-c1">//获取文件的扩展名</span>
+<span class="tok-w">    </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">extName</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">path</span><span class="tok-p">.</span><span class="tok-nx">extname</span><span class="tok-p">(</span><span class="tok-nx">pathName</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">//为简化处理，没有扩展名的或未知类型使用text/plain表示</span>
+<span class="tok-w">    </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">contentType</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">mime</span><span class="tok-p">[</span><span class="tok-nx">extName</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-s2">&quot;text/plain&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-c1">//通过读取文件状态来决定如何读取静态文件</span>
+<span class="tok-w">    </span><span class="tok-nx">fs</span><span class="tok-p">.</span><span class="tok-nx">stat</span><span class="tok-p">(</span><span class="tok-nx">filePath</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">err</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">stats</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">err</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">res</span><span class="tok-p">.</span><span class="tok-nx">writeHead</span><span class="tok-p">(</span><span class="tok-mf">404</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-s2">&quot;content-type&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;text/html&quot;</span><span class="tok-w"> </span><span class="tok-p">});</span>
+<span class="tok-w">            </span><span class="tok-nx">res</span><span class="tok-p">.</span><span class="tok-nx">end</span><span class="tok-p">(</span><span class="tok-s2">&quot;&lt;h1&gt;404 没有找到&lt;/h1&gt;&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-c1">//文件存在且没有错误</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">err</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">stats</span><span class="tok-p">.</span><span class="tok-nx">isFile</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">          </span><span class="tok-nx">readFile</span><span class="tok-p">(</span><span class="tok-nx">filePath</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">contentType</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-c1">//如果路径是目录</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">err</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">stats</span><span class="tok-p">.</span><span class="tok-nx">isDirectory</span><span class="tok-p">())</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">            </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">html</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s2">&quot;&lt;head&gt;&lt;meta charset = &#39;utf-8&#39;/&gt;&lt;/head&gt;&lt;body&gt;&lt;ul&gt;&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-nx">curDir</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">path</span><span class="tok-p">.</span><span class="tok-nx">basename</span><span class="tok-p">(</span><span class="tok-nx">path</span><span class="tok-p">.</span><span class="tok-nx">relative</span><span class="tok-p">(</span><span class="tok-nx">__dirname</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">filePath</span><span class="tok-p">));</span><span class="tok-w"> </span><span class="tok-c1">//获取当前目录名</span>
+<span class="tok-w">            </span><span class="tok-c1">//console.log(curDir);</span>
+
+<span class="tok-w">            </span><span class="tok-c1">//读取该路径下的文件</span>
+<span class="tok-w">            </span><span class="tok-nx">fs</span><span class="tok-p">.</span><span class="tok-nx">readdir</span><span class="tok-p">(</span><span class="tok-nx">filePath</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">err</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">files</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">err</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;读取路径失败！&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">file</span><span class="tok-w"> </span><span class="tok-k">of</span><span class="tok-w"> </span><span class="tok-nx">files</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                        </span><span class="tok-c1">//这里用到了ES6模板字符串</span>
+<span class="tok-w">                        </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">curPath</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">path</span><span class="tok-p">.</span><span class="tok-nx">join</span><span class="tok-p">(</span><span class="tok-nx">curDir</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">file</span><span class="tok-p">);</span>
+<span class="tok-w">                        </span><span class="tok-nx">html</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-sb">`&lt;li&gt;&lt;a href=&#39;</span><span class="tok-si">${</span><span class="tok-nx">curPath</span><span class="tok-si">}</span><span class="tok-sb">&#39;&gt;</span><span class="tok-si">${</span><span class="tok-nx">file</span><span class="tok-si">}</span><span class="tok-sb">&lt;/a&gt;&lt;/li&gt;`</span><span class="tok-p">;</span>
+<span class="tok-w">                    </span><span class="tok-p">}</span>
+<span class="tok-w">                    </span><span class="tok-nx">html</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-s2">&quot;&lt;/ul&gt;&lt;/body&gt;&quot;</span><span class="tok-p">;</span>
+<span class="tok-w">                    </span><span class="tok-nx">res</span><span class="tok-p">.</span><span class="tok-nx">writeHead</span><span class="tok-p">(</span><span class="tok-mf">200</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-s2">&quot;content-type&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;text/html&quot;</span><span class="tok-w"> </span><span class="tok-p">});</span>
+<span class="tok-w">                    </span><span class="tok-nx">res</span><span class="tok-p">.</span><span class="tok-nx">end</span><span class="tok-p">(</span><span class="tok-nx">html</span><span class="tok-p">);</span>
+<span class="tok-w">                </span><span class="tok-p">}</span>
+<span class="tok-w">            </span><span class="tok-p">});</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-c1">//声明函数流式读取文件</span>
+<span class="tok-w">        </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">readFile</span><span class="tok-p">(</span><span class="tok-nx">filePath</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">contentType</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">//设置HTTP消息头</span>
+<span class="tok-w">            </span><span class="tok-nx">res</span><span class="tok-p">.</span><span class="tok-nx">writeHead</span><span class="tok-p">(</span><span class="tok-mf">200</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-s2">&quot;content-type&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">contentType</span><span class="tok-si">}</span><span class="tok-sb">; charset=utf-8`</span><span class="tok-p">,</span><span class="tok-w">  </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">                </span><span class="tok-s2">&quot;content-encoding&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;gzip&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-p">});</span>
+<span class="tok-w">            </span><span class="tok-c1">//创建流对象读取文件</span>
+<span class="tok-w">            </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">stream</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">fs</span><span class="tok-p">.</span><span class="tok-nx">createReadStream</span><span class="tok-p">(</span><span class="tok-nx">filePath</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-c1">//流式读取错误处理</span>
+<span class="tok-w">            </span><span class="tok-nx">stream</span><span class="tok-p">.</span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-s2">&quot;error&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">res</span><span class="tok-p">.</span><span class="tok-nx">writeHead</span><span class="tok-p">(</span><span class="tok-mf">500</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-s2">&quot;content-type&quot;</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">contentType</span><span class="tok-p">});</span>
+<span class="tok-w">                </span><span class="tok-nx">res</span><span class="tok-p">.</span><span class="tok-nx">end</span><span class="tok-p">(</span><span class="tok-s2">&quot;&lt;h1&gt;500 服务器错误&lt;/h1&gt;&quot;</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">});</span>
+<span class="tok-w">            </span><span class="tok-c1">//链式管道操作将文件内容流到客户端</span>
+<span class="tok-w">            </span><span class="tok-nx">stream</span><span class="tok-p">.</span><span class="tok-nx">pipe</span><span class="tok-p">(</span><span class="tok-nx">zlib</span><span class="tok-p">.</span><span class="tok-nx">createGzip</span><span class="tok-p">()).</span><span class="tok-nx">pipe</span><span class="tok-p">(</span><span class="tok-nx">res</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// &lt;1&gt; charset=utf-8 是为了识别中文字符</span>
+<span class="tok-w">        </span><span class="tok-c1">// 参考 https://blog.csdn.net/qq_34817440/article/details/105825141</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-p">});</span>
+<span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">port</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">8000</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">//指定服务器监听的接口</span>
+
+<span class="tok-nx">server</span><span class="tok-p">.</span><span class="tok-nx">listen</span><span class="tok-p">(</span><span class="tok-nx">port</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`图片服务器正运行在端口:</span><span class="tok-si">${</span><span class="tok-nx">port</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-sb">`访问网址: http://localhost:</span><span class="tok-si">${</span><span class="tok-nx">port</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">);</span>
+<span class="tok-p">});</span>
+<span class="tok-c1">// 静态文件服务器</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_运行程序">运行程序</h4>
+<div class="literalblock">
+<div class="title">运行程序 node static_server.js 控制台显示如下：</div>
+<div class="content">
+<pre>图片服务器正运行在端口:8000
+访问网址: http://localhost:8000</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在浏览器中访问 <a href="http://localhost:8000/" class="bare">http://localhost:8000/</a> 网址，列出资源文件目录，单击其中某个文件，就会显示内容(没有指定类型的文件将会提示下载)。</p>
+</div>
+<div class="paragraph">
+<p>在浏览器中打开控制台，切换到"Network" 视图，访问一个文件，再查看当前网页的头部 "Header" 信息,可以发现获取的响应内容已经使用 gzip 编码,如图所示。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/static_server.png" alt="static server">
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-04-24 16:52:29 +0800
+Last updated 2026-04-29 11:01:22 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
