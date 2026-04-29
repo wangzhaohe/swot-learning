@@ -208,21 +208,7 @@
 <v t="swot.20230516162423.4"><vh>&lt;&lt; style &gt;&gt;</vh></v>
 </v>
 </v>
-<v t="swot.20230811101728.1"><vh>vue-old;;</vh>
-<v t="swot.20230811101728.2"><vh>#file .vue</vh>
-<v t="swot.20230811101728.4"><vh>&lt;&lt; script &gt;&gt;</vh></v>
-<v t="swot.20230811101728.3"><vh>&lt;&lt; template &gt;&gt;</vh></v>
-<v t="swot.20230811101728.5"><vh>&lt;&lt; style &gt;&gt;</vh></v>
-</v>
-</v>
-<v t="swot.20250217202826.1"><vh>vue;;</vh>
-<v t="swot.20250217202941.1"><vh>#file .vue</vh>
-<v t="swot.20250217203054.1"><vh>template</vh></v>
-<v t="swot.20250217203116.1"><vh>script</vh></v>
-<v t="swot.20250217203119.1"><vh>style</vh></v>
-</v>
-</v>
-<v t="swot.20230828152445.1"><vh>vc3js;;</vh>
+<v t="swot.20230828152445.1"><vh>vue;;</vh>
 <v t="swot.20230828152445.2"><vh>#file .vue</vh>
 <v t="swot.20230828152445.3"><vh>&lt;&lt; script &gt;&gt;</vh></v>
 <v t="swot.20230828152445.4"><vh>&lt;&lt; template &gt;&gt;</vh></v>
@@ -651,8 +637,8 @@ modelm;;
 getpost;;
 
 vc2;;
-vc3js;;
 vue;;
+
 sv;;
 </t>
 <t tx="swot.20190507115152.1"></t>
@@ -2042,44 +2028,23 @@ export default {
 </t>
 <t tx="swot.20230715163332.1">view;;=&lt;view class="&lt;||&gt;"&gt;&lt;/view&gt;
 </t>
-<t tx="swot.20230811101728.1"></t>
-<t tx="swot.20230811101728.2">@language javascript
-&lt;script setup lang="ts"&gt;
-&lt;&lt; script &gt;&gt;
-&lt;/script&gt;
-
-@delims &lt;!-- --&gt;
-&lt;template&gt;
-&lt;&lt; template &gt;&gt;
-@delims /* */
-&lt;/template&gt;
-
-&lt;style lang="scss" scoped&gt;
-&lt;&lt; style &gt;&gt;
-&lt;/style&gt;
-</t>
-<t tx="swot.20230811101728.3">@language xml
-</t>
-<t tx="swot.20230811101728.4">@language typescript
-</t>
-<t tx="swot.20230811101728.5"></t>
 <t tx="swot.20230816100435.1">bgc;;=background-color: &lt;||&gt;;
 
 </t>
 <t tx="swot.20230824225611.1"></t>
 <t tx="swot.20230828152445.1"></t>
-<t tx="swot.20230828152445.2">@language javascript
-&lt;script setup&gt;
+<t tx="swot.20230828152445.2">@language typescript
+&lt;script setup lang="ts"&gt;
     &lt;&lt; script &gt;&gt;
 &lt;/script&gt;
 
 @delims  &lt;!-- --&gt;
-&lt;template&gt;
+&lt;template lang="pug"&gt;
     &lt;&lt; template &gt;&gt;
 @delims /* */
 &lt;/template&gt;
 
-&lt;style scoped&gt;
+&lt;style scoped lang="scss"&gt;
     &lt;&lt; style &gt;&gt;
 &lt;/style&gt;
 </t>
@@ -2266,25 +2231,6 @@ hd;;=hdfs dfs
 \:@enduml
 \:....
 \:
-</t>
-<t tx="swot.20250217202826.1">
-</t>
-<t tx="swot.20250217202941.1">@doc
-@c
-@others
-@language typescript
-</t>
-<t tx="swot.20250217203054.1">&lt;template lang="pug"&gt;
-
-&lt;/template&gt;
-</t>
-<t tx="swot.20250217203116.1">&lt;script setup lang="ts"&gt;
-
-&lt;/script&gt;
-</t>
-<t tx="swot.20250217203119.1">&lt;style lang="scss" scoped&gt;
-
-&lt;/style&gt;
 </t>
 <t tx="swot.20250425114922.1">graphviz;;=[graphviz, target="img/graphviz-&lt;||&gt;", format=svg]
 \:....
