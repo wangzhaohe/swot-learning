@@ -168,6 +168,9 @@
 <v t="swot.20260314212831.1"><vh>@leo files/themes/SwotMoknokai.leo</vh></v>
 <v t="swot.20260218100631.1"><vh>复制 leo 主题文件</vh></v>
 </v>
+<v t="swot.20260501210757.1"><vh>language</vh>
+<v t="swot.20260501212006.1"><vh>@file /Users/swot/app/leo-editor/leo/modes/pug.py</vh></v>
+</v>
 <v t="swot.20260308160609.1"><vh>Setting leo-editor</vh>
 <v t="swot.20260308160626.1"><vh>@@leo files/myLeoSettings.leo</vh></v>
 </v>
@@ -1787,7 +1790,7 @@
 </v>
 <v t="swot.20260421083048.84"><vh>管道读写操作</vh></v>
 </v>
-<v t="swot.20260429104414.2"><vh>实战演练 -- 提供图片浏览服务</vh>
+<v t="swot.20260429104414.2"><vh>实战演练 -- 提供图片或文件浏览服务</vh>
 <v t="swot.20260429104414.3"><vh>实现思路</vh>
 <v t="swot.20260429104510.1"><vh>1. 搭建 B/S 架构</vh></v>
 <v t="swot.20260429104515.1"><vh>2. 解析资源文件路径</vh></v>
@@ -39359,9 +39362,10 @@ server.listen(port, function () {
 
 image::img/static_server.png[]
 </t>
-<t tx="swot.20260429104414.2">我们尝试开发一个简单的应用程序，用原生 Node.js 实现一个静态文件服务器来提供图片浏览服务，让用户可以下载、浏览服务器上的各种图片。
+<t tx="swot.20260429104414.2">我们尝试开发一个简单的应用程序，用原生 Node.js 实现一个静态文件服务器来提供图片浏览服务，让用户可以下载、浏览服务器上的各种图片或文件。
 
-Apache、nginx 等 Web 服务器软件都提供静态文件服务。
+实际上，在生产级别的 web 服务器上，例如 Apache、nginx 等都提供静态文件服务。
+
 Node.js 的文件系统和网络等核心模块提供了流接口，从而大大简化了输入输出的流处理过程，可以基于这些模块实现自己的静态文件服务器，基于 Web 提供资源文件访问服务。
 </t>
 <t tx="swot.20260429104414.3"></t>
@@ -39371,7 +39375,7 @@ Node.js 的文件系统和网络等核心模块提供了流接口，从而大大
 @others
 ----
 </t>
-<t tx="swot.20260429104414.5" _mod_time="4741da7c5d6d8821572e">@language javascript
+<t tx="swot.20260429104414.5" _mod_time="4741da7c707947df5c2e">@language javascript
 @others
 // 静态文件服务器
 </t>
@@ -39409,7 +39413,6 @@ const server = http.createServer(function (req, res) {
 });
 server.listen(8000);
 ----
-
 </t>
 <t tx="swot.20260429104515.1">服务器收到来自客端的请求后，需要获取输入的 URL 解析后的对象并进行转换，从而得到资源文件的绝对路径和文件类型，这需要用到 Node.js 内置的 url 模块和 path 模块。
 
@@ -39441,7 +39444,8 @@ Content-Type: text/html;   // 网页类型
 Content-Tvpe: image/jpeg;  // 图片类型
 ----
 
-// 可以根据文件扩展名对不同类型的资源文件指定不同的 Content-Type 类型，使服务器响应各种类型的文件请求，例如 .png 文件对应 image/png，.js 文件对应text/javasvript。
+可以根据文件扩展名对不同类型的资源文件指定不同的 Content-Type 类型，使服务器响应各种类型的文件请求，例如 .png 文件对应 image/png，.js 文件对应text/javasvript。
+
 因此可以定义一个对象，由一个键值对集合来指定不同扩展名与 Content-Type 类型之间的对应关系。
 
 [source,javascript]
@@ -39470,13 +39474,15 @@ var mime = {
 // 这将建立一个到客户端的流，可以通过管道来处理结果数据。这样数据可以通过管道的方式从一个文件输出到 HTTP 请求响应中。
 
 静态文件服务器通常使用 gzip 压缩文件以提高传输效率，Node.js 内置模块 zlib 提供 gzip 压缩功能。
-// 可以在文件流发送到 HTTP 响应之前增加一个压缩文件的管道操作，这样就实现了两个管道的链式操作。关键代码如下:
 
-  stream.pipe(zlib.createGzip()).pipe(res);
+可以在文件流发送到 HTTP 响应之前增加一个压缩文件的管道操作，这样就实现了两个管道的链式操作。关键代码如下:
+
+    stream.pipe(zlib.createGzip()).pipe(res);
 
 还应让浏览器知道已经开启了 gzip 压缩，这需要在 HTTP 消息头中提供相应的内容编码信息
 
   res.writeHead(200, {"content-encoding": 'gzip'});
 </t>
+<t tx="swot.20260501210757.1"></t>
 </tnodes>
 </leo_file>
