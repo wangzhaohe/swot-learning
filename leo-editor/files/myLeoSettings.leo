@@ -85,11 +85,10 @@
 <v t="swot.20200908084141.65"><vh>@string status-font-style = @font-style</vh></v>
 </v>
 </v>
-<v t="swot.20181202012654.205" descendentVnodeUnknownAttributes="7d7100580a000000302e32382e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@settings</vh>
+<v t="swot.20181202012654.205" descendentVnodeUnknownAttributes="7d7100580a000000302e32382e322e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@settings</vh>
 <v t="swot.20200916152454.1"><vh>@enabled-plugins</vh></v>
 <v t="swot.20210129110804.1"><vh>@string headline-time-format-string = %Y-%m-%d</vh></v>
 <v t="swot.20210129110742.1"><vh>@string body-time-format-string = %Y-%m-%d %H:%M:%S</vh></v>
-<v t="swot.20250529213001.1"><vh>@string target-language = javascript</vh></v>
 <v t="swot.20201004091246.1"><vh>vr3 settings</vh>
 <v t="swot.20201004073914.1"><vh>@int qweb-view-font-size = 18</vh></v>
 <v t="swot.20201004082022.1"><vh>@bool vr3-md-math-output = True </vh></v>
@@ -112,6 +111,7 @@
 <v t="swot.20260313211116.1"><vh>@button html @key=Alt+Shift+H</vh></v>
 <v t="swot.20260313220645.1"><vh>@button kLive</vh></v>
 <v t="swot.20260314203832.1"><vh>@button sumSub</vh></v>
+<v t="swot.20260502170833.1"><vh>@button format</vh></v>
 </v>
 <v t="swot.20181207204040.1"><vh>@commands</vh>
 <v t="swot.20260313164643.1"><vh>@@command open-with-nodejs @key=Alt+Shift+J</vh></v>
@@ -141,6 +141,12 @@
 <v t="swot.20200226234553.4"><vh>@string vim-mode-visual-border = border: 2px solid gray</vh></v>
 <v t="swot.20200226234553.5"><vh>@@string vim-mode-unfocused-border = border: 3px dashed white</vh></v>
 <v t="swot.20200226234611.1"><vh>@string vim-mode-unfocused-border = border: 2px white</vh></v>
+</v>
+<v t="swot.20260501210109.1"><vh>language</vh>
+<v t="swot.20250529213001.1"><vh>@string target-language = javascript</vh></v>
+<v t="swot.20260501210124.1"><vh>pug</vh>
+<v t="swot.20260501144128.1"><vh>@color pug.keyword1 = #FFA500</vh></v>
+</v>
 </v>
 <v t="swot.20181207204231.1"><vh>@bool vim-crosses-lines = True</vh></v>
 <v t="swot.20181207203812.1"><vh>@bool autocomplete-brackets = True</vh></v>
@@ -199,7 +205,7 @@
 <v t="swot.20230715163332.1"><vh>uni</vh></v>
 </v>
 <v t="swot.20260222181758.1"><vh>@data body-style-settings</vh></v>
-<v t="swot.20190506212541.1" descendentVnodeUnknownAttributes="7d71005807000000302e312e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@outline-data tree-abbreviations</vh>
+<v t="swot.20190506212541.1" descendentVnodeUnknownAttributes="7d71005807000000302e322e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>@outline-data tree-abbreviations</vh>
 <v t="swot.20221127234708.1"><vh>vue</vh>
 <v t="swot.20230426072719.1"><vh>vc2;;</vh>
 <v t="swot.20230516162423.1"><vh>#file .vue</vh>
@@ -216,6 +222,13 @@
 </v>
 </v>
 </v>
+<v t="swot.20260321214912.1"><vh>sv;;</vh>
+<v t="swot.20260321222934.1"><vh>#file .svelte</vh>
+<v t="swot.20260415161705.1"><vh>script</vh></v>
+<v t="swot.20260321221759.1"><vh>template</vh></v>
+<v t="swot.20260415161751.1"><vh>style</vh></v>
+</v>
+</v>
 <v t="swot.20190507115152.1" descendentVnodeUnknownAttributes="7d71005805000000302e302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>adminm;;</vh>
 <v t="swot.20190507134142.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>if False</vh>
 <v t="swot.20190507134225.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323031392d30352d303471077573732e"><vh>def get_readonly_fields</vh></v>
@@ -230,13 +243,6 @@
 <v t="swot.20190507134758.1"><vh>getpost;;</vh>
 <v t="swot.20190507134809.1"><vh>def get</vh></v>
 <v t="swot.20190507134814.1"><vh>def post</vh></v>
-</v>
-<v t="swot.20260321214912.1"><vh>sv;;</vh>
-<v t="swot.20260321222934.1"><vh>#file .svelte</vh>
-<v t="swot.20260415161705.1"><vh>script</vh></v>
-<v t="swot.20260321221759.1"><vh>template</vh></v>
-<v t="swot.20260415161751.1"><vh>style</vh></v>
-</v>
 </v>
 </v>
 <v t="swot.20200206155945.1"><vh>@@string central-dock-widget = outline</vh></v>
@@ -2033,19 +2039,19 @@ export default {
 </t>
 <t tx="swot.20230824225611.1"></t>
 <t tx="swot.20230828152445.1"></t>
-<t tx="swot.20230828152445.2">@language typescript
+<t tx="swot.20230828152445.2">@language javascript
 &lt;script setup lang="ts"&gt;
-    &lt;&lt; script &gt;&gt;
+&lt;&lt; script &gt;&gt;
+@delims  &lt;!-- --&gt;
 &lt;/script&gt;
 
-@delims  &lt;!-- --&gt;
 &lt;template lang="pug"&gt;
-    &lt;&lt; template &gt;&gt;
+&lt;&lt; template &gt;&gt;
 @delims /* */
 &lt;/template&gt;
 
 &lt;style scoped lang="scss"&gt;
-    &lt;&lt; style &gt;&gt;
+&lt;&lt; style &gt;&gt;
 &lt;/style&gt;
 </t>
 <t tx="swot.20230828152445.3">@language typescript
@@ -2636,7 +2642,8 @@ finally:
     if os.path.exists(path):
         os.remove(path)</t>
 <t tx="swot.20260313193128.1"></t>
-<t tx="swot.20260313211116.1">import subprocess
+<t tx="swot.20260313211116.1">@language python
+import subprocess
 import os
 import atexit
 
@@ -2965,6 +2972,120 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 @others
 @delims &lt;!-- --&gt;
 &lt;/style&gt;
+</t>
+<t tx="swot.20260501144128.1"></t>
+<t tx="swot.20260501210109.1"></t>
+<t tx="swot.20260501210124.1"></t>
+<t tx="swot.20260502170833.1">@language python
+"""
+使用 Prettier 格式化当前节点或选中的代码片段。
+
+【依赖安装】
+为了支持所有配置的语言，推荐使用 pnpm 进行全局安装（节省空间）：
+pnpm add -g prettier @prettier/plugin-pug prettier-plugin-java @prettier/plugin-clang-format
+
+注意：格式化 C/C++ 需要系统环境变量中已安装并配置好 clang-format 工具。
+"""
+import subprocess
+import shutil
+import re
+
+prettier_bin = shutil.which('prettier')
+
+if not prettier_bin:
+    g.es("未找到 prettier，请查阅顶部的【依赖安装】说明进行全局安装", color='red')
+else:
+    # 1. 获取节点默认语言
+    d = g.get_directives_dict(p)
+    node_lang = d.get('language')
+
+    # 2. 语言映射表
+    parser_map = {
+        'html': 'html',
+        'javascript': 'babel',
+        'typescript': 'typescript',
+        'css': 'css',
+        'scss': 'scss',
+        'pug': 'pug',
+        'java': 'java',
+        'cplusplus': 'clang-format',
+        'cpp': 'clang-format',
+        'c': 'clang-format',
+    }
+
+    w = c.frame.body.wrapper
+    has_sel = w.hasSelection()
+
+    # 3. 确定最终使用的 parser
+    parser = None
+
+    if has_sel:
+        i, j = w.getSelectionRange()
+        raw_text = w.getSelectedText()
+        target_desc = "选中的片段"
+
+        # 正则嗅探选中文本中的 @language xxx
+        match = re.search(r'@language\s+([a-zA-Z0-9_-]+)', raw_text, re.IGNORECASE)
+        if match:
+            fragment_lang = match.group(1).lower()
+            parser = parser_map.get(fragment_lang, fragment_lang)
+            g.es(f"智能识别到片段语言: {fragment_lang}", color='purple')
+        else:
+            parser = parser_map.get(node_lang)
+    else:
+        raw_text = p.b
+        target_desc = "整个 Body"
+        parser = parser_map.get(node_lang)
+
+    # ----------------------------------------------------------------
+    # 【核心修正】：剥离 Leo 的 @language 指令，防止 Prettier 报错
+    # ----------------------------------------------------------------
+    directives = []
+
+    def extract_directive(m):
+        directives.append(m.group(0))
+        return ""  # 从送给 Prettier 的文本中移除该行
+
+    # 匹配以 @language 开头的整行（支持多行模式和前导空格）
+    text_to_format = re.sub(r'^[ \t]*@language\s+[a-zA-Z0-9_-]+[ \t]*\n?', extract_directive, raw_text, flags=re.IGNORECASE | re.MULTILINE)
+
+    if not parser:
+        g.es(f"跳过: 无法确定 parser，节点语言为 '{node_lang}'。", color='orange')
+    elif not text_to_format.strip():
+        g.es(f"{target_desc} 为空或仅包含指令，无需格式化。")
+    else:
+        try:
+            # 4. 执行格式化（严格执行 4 个空格缩进的排版规范）
+            proc = subprocess.Popen(
+                [prettier_bin, '--parser', parser, '--tab-width', '4'],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                shell=False
+            )
+            stdout, stderr = proc.communicate(input=text_to_format)
+
+            # 5. 根据返回状态处理结果
+            if proc.returncode == 0:
+                # 【核心修正】：把剥离出来的指令重新拼接回格式化后的代码顶部
+                final_text = "".join(directives) + stdout
+
+                if raw_text != final_text:
+                    if has_sel:
+                        p.b = p.b[:i] + final_text + p.b[j:]
+                        w.setSelectionRange(i, i + len(final_text))
+                    else:
+                        p.b = final_text
+
+                    c.redraw()
+                    g.es(f"已格式化{target_desc} (Prettier - {parser})", color='green')
+                else:
+                    g.es(f"{target_desc}已是标准格式 (Prettier - {parser})", color='blue')
+            else:
+                g.es(f"格式化失败: {stderr.strip()}", color='red')
+        except Exception as e:
+            g.es(f"执行出错: {e}", color='red')
 </t>
 </tnodes>
 </leo_file>
