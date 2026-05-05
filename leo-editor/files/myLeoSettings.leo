@@ -112,6 +112,7 @@
 <v t="swot.20260313220645.1"><vh>@button kLive</vh></v>
 <v t="swot.20260314203832.1"><vh>@button sumSub</vh></v>
 <v t="swot.20260504093708.1"><vh>@button format</vh></v>
+<v t="swot.20260505183146.1"><vh>@button md2ascii</vh></v>
 </v>
 <v t="swot.20181207204040.1"><vh>@commands</vh>
 <v t="swot.20260313164643.1"><vh>@@command open-with-nodejs @key=Alt+Shift+J</vh></v>
@@ -3022,6 +3023,54 @@ else:
                 g.es(f"Formatting failed: {stderr.strip()}", color='red')
         except Exception as e:
             g.es(f"Execution error: {e}", color='red')
+</t>
+<t tx="swot.20260505183146.1">import subprocess
+import os
+
+# 获取当前节点的内容
+p = c.p
+markdown_text = p.b
+
+# 定义临时文件路径
+temp_md = "temp_input.md"
+temp_adoc = "temp_output.adoc"
+
+try:
+    # 将当前正文写入临时文件
+    with open(temp_md, "w", encoding="utf-8") as f:
+        f.write(markdown_text)
+
+    # 调用系统安装的 pandoc
+    # 优化点 1: 尝试将目标格式从 "asciidoc" 改为现代的 "asciidoctor"
+    subprocess.run(["pandoc", "-f", "markdown", "-t", "asciidoctor", temp_md, "-o", temp_adoc], check=True)
+
+    # 读取转换后的内容
+    with open(temp_adoc, "r", encoding="utf-8") as f:
+        adoc_content = f.read()
+
+    # 优化点 2: 字符串后处理，手动清洗 Pandoc 的过度转义
+    # 针对 +=, *= 等符号被转义成 AsciiDoc 占位符的问题
+    adoc_content = adoc_content.replace("{plus}=", "+=")
+    adoc_content = adoc_content.replace("{plus}", "+")   # 兜底替换其他孤立的 +
+    adoc_content = adoc_content.replace("++*++=", "*=")
+    adoc_content = adoc_content.replace("++*++", "*")    # 兜底替换其他孤立的 *
+
+    # 创建一个子节点存放结果，或者直接替换当前内容
+    new_p = p.insertAfter()
+    new_p.h = f"Converted: {p.h}"
+    new_p.b = adoc_content
+
+    c.redraw()
+    g.es("转换成功！已生成新节点并清洗了转义符号。")
+
+except subprocess.CalledProcessError as e:
+    g.es(f"Pandoc 转换失败: {e}")
+except Exception as e:
+    g.es(f"发生错误: {e}")
+finally:
+    # 清理临时文件
+    if os.path.exists(temp_md): os.remove(temp_md)
+    if os.path.exists(temp_adoc): os.remove(temp_adoc)
 </t>
 </tnodes>
 </leo_file>
