@@ -148,6 +148,13 @@
 <v t="swot.20250508161032.1"><vh>git-filter-repo -&gt; delete file from all git commit</vh></v>
 </v>
 </v>
+<v t="swot.20260504210834.1"><vh>@adoc github.adoc</vh>
+<v t="swot.20260504210900.1"><vh>Use GitHub</vh>
+<v t="swot.20260504210933.1"><vh>搜索 awesome xxx</vh></v>
+<v t="swot.20260504211324.1"><vh>搜索特定内容</vh></v>
+<v t="swot.20260504211913.1"><vh>HelloGitHub 优秀项目推荐</vh></v>
+</v>
+</v>
 </v>
 <v t="swot.20260116203800.1"><vh>@path html</vh>
 <v t="swot.20260116203055.1"><vh>2026-01-16 html &amp; css</vh>
@@ -167,9 +174,6 @@
 <v t="swot.20260218100553.1"><vh>复制 leo 自定义配置文件</vh></v>
 <v t="swot.20260314212831.1"><vh>@leo files/themes/SwotMoknokai.leo</vh></v>
 <v t="swot.20260218100631.1"><vh>复制 leo 主题文件</vh></v>
-</v>
-<v t="swot.20260501210757.1"><vh>language</vh>
-<v t="swot.20260501212006.1"><vh>@file /Users/swot/app/leo-editor/leo/modes/pug.py</vh></v>
 </v>
 <v t="swot.20260308160609.1"><vh>Setting leo-editor</vh>
 <v t="swot.20260308160626.1"><vh>@@leo files/myLeoSettings.leo</vh></v>
@@ -39483,6 +39487,89 @@ var mime = {
 
   res.writeHead(200, {"content-encoding": 'gzip'});
 </t>
-<t tx="swot.20260501210757.1"></t>
+<t tx="swot.20260504210834.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+
+// 如果是 PDF 后端，强制将目录改为宏模式，并关闭 HTML 专用的 right 定位
+ifdef::backend-pdf[]
+:toc: macro
+:toc-placement: macro
+endif::[]</t>
+<t tx="swot.20260504210900.1">
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+&lt;/script&gt;
+++++
+endif::[]
+</t>
+<t tx="swot.20260504210933.1">会搜到优质资源，搜索 awesome svelte
+</t>
+<t tx="swot.20260504211324.1">想搜索什么直接去问 ai 吧，各种各样的搜索技巧。
+</t>
+<t tx="swot.20260504211913.1">https://github.com/521xueweihan/HelloGitHub
+</t>
 </tnodes>
 </leo_file>
