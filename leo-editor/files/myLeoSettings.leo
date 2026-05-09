@@ -1721,9 +1721,9 @@ bclick;;=$("button").click(function(){
 \::tip-caption: ⚡
 \::note-caption: ❕
 \::important-caption: ❗
-\::warning-caption: ‼️
 \::caution-caption: ⚠️
-\:
+\::warning-caption: ‼️
+
 \:// 如果是 PDF 后端，强制将目录改为宏模式，并关闭 HTML 专用的 right 定位
 \:ifdef::backend-pdf[]
 \::toc: macro
@@ -2903,8 +2903,8 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 @delims &lt;!-- --&gt;
 &lt;/script&gt;
 </t>
-<t tx="swot.20260415161751.1">&lt;style&gt;
-@delims /* */
+<t tx="swot.20260415161751.1">@delims /* */
+&lt;style&gt;
 @others
 @delims &lt;!-- --&gt;
 &lt;/style&gt;
