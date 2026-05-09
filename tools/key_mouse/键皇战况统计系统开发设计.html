@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
+<meta name="author" content="https://github.com/wangzhaohe/swot-learning">
 <title>键皇战况统计系统开发设计</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -538,6 +539,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <body class="article toc2 toc-right">
 <div id="header">
 <h1>键皇战况统计系统开发设计</h1>
+<div class="details">
+<span id="author" class="author">https://github.com/wangzhaohe/swot-learning</span><br>
+</div>
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
 <ul class="sectlevel1">
@@ -556,6 +560,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_4_3_可视化分析维度">4.3 可视化分析维度</a></li>
 </ul>
 </li>
+<li><a href="#_5_核心今日专注时长代码设计">5. 核心今日专注时长代码设计</a></li>
 <li><a href="#_5_项目启动设计">5. 项目启动设计</a>
 <ul class="sectlevel2">
 <li><a href="#_5_1_服务与监控网页分离设计问题">5.1 服务与监控网页分离设计问题</a></li>
@@ -569,23 +574,53 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<button id="toggleButton">目录开关</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
 </script>
 </div>
 </div>
@@ -599,7 +634,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p>项目采用 <strong>Leo Editor</strong> 进行文学化编程（Literate Programming），代码组织结构清晰，逻辑与文档高度统一。</p>
 </div>
 <div class="paragraph">
-<p>惠普机械键盘定制化网址: <a href="https://hub.hpgthub.com/" class="bare">https://hub.hpgthub.com/</a></p>
+<p>为纪念惠普机械键盘：定制化网址: <a href="https://hub.hpgthub.com/" class="bare">https://hub.hpgthub.com/</a></p>
 </div>
 </div>
 </div>
@@ -676,7 +711,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p><strong>打点 (Heartbeat)</strong>: 证明用户当前处于活跃状态。</p>
 </li>
 <li>
-<p><strong>阈值 (Threshold)</strong>: 系统设定 <code>HEARTBEAT_THRESHOLD = 300</code>（5分钟）。若两次操作间隔超过此值，系统认为用户进入了“非工作状态”。</p>
+<p><strong>阈值 (Threshold)</strong>: 系统设定 <code>HEARTBEAT_THRESHOLD = 300s</code>（5分钟）。若两次操作间隔超过此值，系统认为用户进入了“非工作状态”。</p>
 </li>
 </ul>
 </div>
@@ -1024,6 +1059,16 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div class="sect1">
+<h2 id="_5_核心今日专注时长代码设计">5. 核心今日专注时长代码设计</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-2026-05-09-113208.svg" alt="mermaid 2026 05 09 113208" width="1456" height="2100">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_5_项目启动设计">5. 项目启动设计</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -1178,7 +1223,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-21 19:58:41 +0800
+Last updated 2026-05-09 11:33:40 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

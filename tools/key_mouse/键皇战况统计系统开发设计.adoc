@@ -1,7 +1,10 @@
+:author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
 :icons: font
+:font-size: 16px
 :scripts: cjk
 :stem: latexmath
+:experimental:
 :toc:
 :toc: right
 :toc-title: 目录
@@ -9,38 +12,76 @@
 :tip-caption: ⚡
 :note-caption: ❕
 :important-caption: ❗
-:warning-caption: ‼️
 :caution-caption: ⚠️
+:warning-caption: ‼️
+// 如果是 PDF 后端，强制将目录改为宏模式，并关闭 HTML 专用的 right 定位
+ifdef::backend-pdf[]
+:toc: macro
+:toc-placement: macro
+endif::[]
 
 = 键皇战况统计系统开发设计
 
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
 ++++
-<button id="toggleButton">目录开关</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'none';
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
 </script>
 ++++
+endif::[]
 
 == 1. 项目概述
 本项目名为“键皇战况统计系统”（Keystroke Dashboard），旨在通过后台静默监听键盘与鼠标动作，实时分析用户的生产力状态。系统不仅统计点击总数，还通过“心跳算法”估算用户的**今日专注时长**，并以可视化大屏的方式进行展示。
 
 项目采用 **Leo Editor** 进行文学化编程（Literate Programming），代码组织结构清晰，逻辑与文档高度统一。
 
-惠普机械键盘定制化网址: https://hub.hpgthub.com/
+为纪念惠普机械键盘：定制化网址: https://hub.hpgthub.com/
 
 == 2. 开发环境与工具
 * **编辑器**:
@@ -77,7 +118,7 @@
 系统将每一次键盘敲击或鼠标点击视为一次**心跳 (Heartbeat)**。系统根据连续两次心跳之间的时间差 stem:[\Delta t] 来决定这段时间是否为“专注贡献值”。
 
 * **打点 (Heartbeat)**: 证明用户当前处于活跃状态。
-* **阈值 (Threshold)**: 系统设定 `HEARTBEAT_THRESHOLD = 300`（5分钟）。若两次操作间隔超过此值，系统认为用户进入了“非工作状态”。
+* **阈值 (Threshold)**: 系统设定 `HEARTBEAT_THRESHOLD = 300s`（5分钟）。若两次操作间隔超过此值，系统认为用户进入了“非工作状态”。
 
 [discrete]
 ==== 2. 数学模型对比：代码实现 vs. 理想公式
@@ -356,6 +397,66 @@ const formatDuration = (seconds) => {
 }
 
 ----
+
+== 5. 核心今日专注时长代码设计
+[mermaid, target=img/mermaid-2026-05-09-113208, format=svg]
+....
+sequenceDiagram
+    participant User as 👤 用户(键盘/鼠标)
+    participant Backend as 🔧 key_mouse.py (后端)
+    participant JSON as 📄 2026-05-09.json (磁盘)
+    participant Frontend as 🖥️ index.html (前端)
+
+    rect rgb(70, 130, 180)
+        Note over User,Backend: === 后端写入链路 (每次按键/鼠标事件) ===
+
+        loop 每次键盘按键 / 鼠标操作
+            User->>Backend: log_event(is_keyboard, key_name)
+            Backend->>Backend: now_ts = time.time()
+            Backend->>Backend: 计算 focus_seconds 累加
+
+            Backend->>Backend: daily_data["last_event_timestamp"] = now_ts<br/>写入内存
+
+            Note over Backend: 防抖等待 (数秒~数十秒)
+            Backend->>JSON: _atomic_save(daily_data)<br/>① 先写 .tmp<br/>② os.replace() 原子替换<br/>持久化到磁盘
+        end
+    end
+
+    rect rgb(205, 133, 63)
+        Note over Frontend,JSON: === 前端读取链路 ===
+
+        Frontend->>Frontend: onMounted() 启动
+
+        par 定时轮询 (每60秒)
+            loop 每 60s
+                Frontend->>JSON: fetch("key_stats/2026-05-09.json?t=timestamp")
+                JSON-->>Frontend: 返回完整 JSON 数据
+                Frontend->>Frontend: if date === 今天则更新 lastEventTimestamp.value
+            end
+        and 实时心跳 (每1秒)
+            loop 每 1s (永不停止)
+                Frontend->>Frontend: now.value = Date.now() / 1000
+                Frontend->>Frontend: liveFocusSeconds computed 重算<br/>每秒读 lastEventTimestamp
+                Frontend->>Frontend: isDormant computed 重算<br/>每秒读 lastEventTimestamp
+                Frontend->>Frontend: watch(isDormant) 切换背景色<br/>页面显示实时专注时长
+            end
+        end
+    end
+
+    rect rgb(60, 179, 113)
+        Note over User,Frontend: === 典型场景示例 ===
+
+        User->>Backend: T=10:00:00 按下 A 键
+        Backend->>JSON: 写入 last_event_timestamp = 1715265600.0
+
+        Note over Frontend: T=10:01:00 轮询触发 fetch
+        Frontend-->>Frontend: 更新 lastEventTimestamp.value
+
+        Note over Frontend: T=10:00:01 ~ 10:04:59<br/>每秒 liveFocusSeconds +1
+
+        Note over Frontend: T=10:05:00 delta >= 300<br/>isDormant=true 背景变灰
+    end
+....
 
 == 5. 项目启动设计
 
