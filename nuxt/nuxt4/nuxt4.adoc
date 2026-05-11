@@ -1,0 +1,123 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️
+
+= Nuxt4 Learning
+
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+</script>
+++++
+endif::[]
+
+== 创建新项目
+https://nuxt.com/docs/4.x/getting-started/installation
+
+Prepare Directory
+
+    mkdir -p nuxt/nuxt4
+    cd nuxt/nuxt4
+    pnpm create nuxt@latest nuxt4-basic
+
+.命令执行结果
+....
+┌  Welcome to Nuxt!
+│
+◇  Templates loaded from cache
+│
+◇  Which template would you like to use?
+│  minimal – Minimal setup for Nuxt 4
+│
+◇  Creating project in nuxt4-basic
+│
+◇  Downloaded minimal template
+│
+◇  Which package manager would you like to use?
+│  pnpm
+│
+◇  Initialize git repository?
+│  No
+│
+◇  Dependencies installed
+│
+◇  Would you like to browse and install modules?
+│  No
+│
+└  ✨ Nuxt project has been created with the minimal template.
+
+╭── 👉 Next steps ─────╮
+│                      │
+│   › cd nuxt4-basic   │
+│   › pnpm run dev     │
+│                      │
+╰──────────────────────╯
+....
+
+.下载模板直接使用项目
+****
+如果您在执行命令 `pnpm create nuxt@latest nuxt4-basic` 时报 raw.github.com 超时或者无法访问，可以去 gitee.com 上下载一个已经生成的模板项目。
+
+下载后进入模板项目后，执行 pnpm install 即可。
+****
+
