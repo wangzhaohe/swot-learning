@@ -1899,10 +1899,81 @@
 </v>
 <v t="swot.20250511104537.1" descendentVnodeUnknownAttributes="7d710028580b000000302e312e312e302e392e3671017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30342d323771077573580b000000302e312e312e302e392e3871087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30342d3237710e7573580c000000302e312e312e302e31302e33710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30342d323771157573580c000000302e312e312e302e31302e3671167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30352d3031711c7573580c000000302e312e312e302e31302e39711d7d711e5808000000616e6e6f74617465711f7d71202858080000007072696f7269747971214d0f27580a000000707269736574646174657122580a000000323032352d30342d323771237573580e000000302e312e312e302e31332e352e3071247d71255808000000616e6e6f7461746571267d71272858080000007072696f7269747971284d0f27580a000000707269736574646174657129580a000000323032352d30352d3330712a7573580e000000302e312e312e302e31332e362e32712b7d712c5808000000616e6e6f74617465712d7d712e2858080000007072696f72697479712f4d0f27580a000000707269736574646174657130580a000000323032352d30352d333071317573580e000000302e312e312e302e31332e372e3071327d71335808000000616e6e6f7461746571347d71352858080000007072696f7269747971364d0f27580a000000707269736574646174657137580a000000323032352d30352d333071387573580e000000302e312e312e302e31332e382e3171397d713a5808000000616e6e6f74617465713b7d713c2858080000007072696f72697479713d4d0f27580a00000070726973657464617465713e580a000000323032352d30352d3330713f7573752e"><vh>@path nuxt</vh>
 <v t="swot.20260509145220.1"><vh>@path nuxt4</vh>
-<v t="swot.20260511092421.1"><vh>@adoc nuxt4.adoc</vh>
+<v t="swot.20260511103007.1"><vh>@path nuxt4-basic</vh>
+<v t="swot.20260511092421.1"><vh>@adoc nuxt4-basic.adoc</vh>
 <v t="swot.20260511092435.1"><vh>Nuxt4 Learning</vh>
-<v t="swot.20260509145424.1"><vh>创建新项目</vh></v>
-<v t="swot.20260511092923.1"><vh>安装项目开发需要的依赖</vh></v>
+<v t="swot.20260511142737.1"><vh>1. 参考资料</vh>
+<v t="swot.20260512090947.1"><vh>水哥vue3视频内容备注 -- vue3可以转化为nuxt3</vh></v>
+<v t="swot.20260511142737.3"><vh>@ignore-tree 相关内容</vh>
+<v t="swot.20260511142737.4"><vh>后台服务 nginx</vh>
+<v t="swot.20260511142737.5"><vh>配置 https</vh>
+<v t="swot.20260511142737.6"><vh>default</vh></v>
+</v>
+</v>
+<v t="swot.20260511142737.7"><vh>Bug</vh></v>
+<v t="swot.20260511142737.8"><vh>web pages</vh></v>
+<v t="swot.20260511142737.9"><vh>How to?</vh>
+<v t="swot.20260511142737.10"><vh>如何调试 nuxt3 server 后端代码，比如打断点不管用的问题</vh></v>
+</v>
+<v t="swot.20260511142737.11"><vh>directory-structure</vh>
+<v t="swot.20260511142737.12"><vh>.env 如何使用变量</vh>
+<v t="swot.20260511142737.13"><vh>在项目根目录新建 .env 文件</vh></v>
+</v>
+</v>
+<v t="swot.20260511142737.14"><vh>proxy</vh></v>
+<v t="swot.20260511142737.15"><vh>use mongoose</vh></v>
+<v t="swot.20260511142737.16"><vh>pm2</vh>
+<v t="swot.20260511142737.17"><vh>参考视频</vh></v>
+<v t="swot.20260511142737.18"><vh>直接运行存在问题</vh></v>
+<v t="swot.20260511142737.19"><vh>安装 pm2</vh></v>
+<v t="swot.20260511142737.20"><vh>管理 nuxt3 打包后的文件</vh></v>
+<v t="swot.20260511142737.21"><vh>管理 express 未打包的项目文件</vh></v>
+<v t="swot.20260511142737.22"><vh>pm2 常用命令</vh></v>
+<v t="swot.20260511142737.23"><vh>pm2 常见问题</vh></v>
+</v>
+<v t="swot.20260511142737.24"><vh>internationalization</vh></v>
+<v t="swot.20260511142737.25"><vh>strapi 低代码</vh></v>
+<v t="swot.20260511142737.26"><vh>404 500 如何设置</vh></v>
+</v>
+</v>
+<v t="swot.20260511142909.1"><vh>2. 创建项目</vh>
+<v t="swot.20260509145424.1"><vh>命令安装方式1 直接命令安装-- 推荐 *****</vh></v>
+<v t="swot.20260511142909.3"><vh>命令安装方式2 指定模板的安装方式</vh></v>
+<v t="swot.20260511142909.4"><vh>命令安装方式3 集成到现有项目</vh></v>
+</v>
+<v t="swot.20260511092923.1"><vh>3. 安装项目开发需要的依赖</vh>
+<v t="swot.20260511102918.1"><vh>@edit package.json</vh></v>
+</v>
+<v t="swot.20260511103414.1"><vh>4. 配置文件 nuxt.config.ts</vh></v>
+<v t="swot.20260511145724.1"><vh>5. 根组件入口 app.vue</vh></v>
+<v t="swot.20260511150547.1"><vh>6. 配置全局 scss</vh>
+<v t="swot.20260511150547.3"><vh>css 配置全局scss</vh></v>
+<v t="swot.20260511152359.1"><vh>&lt;&lt; 测试全局 main.scss &gt;&gt;</vh></v>
+<v t="swot.20260512090015.1"><vh>&lt;&lt; body &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260512091435.1"><vh>7. 配置全局 elementUI plus</vh>
+<v t="swot.20260512093331.1"><vh>&lt;&lt; 测试 element plus &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260512103112.1"><vh>8. 配置路由 pages</vh>
+<v t="swot.20260512103752.1"><vh>单文件路由</vh>
+<v t="swot.20260512104546.1"><vh>&lt;&lt; template index &gt;&gt;</vh></v>
+<v t="swot.20260512105109.1"><vh>&lt;&lt; template about &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260512105521.1"><vh>子目录路由</vh>
+<v t="swot.20260512110114.1"><vh>&lt;&lt; template example1 &gt;&gt;</vh></v>
+<v t="swot.20260512110308.1"><vh>&lt;&lt; template example1/sub-page &gt;&gt;</vh></v>
+</v>
+</v>
+</v>
+</v>
+<v t="swot.20260511151718.1"><vh>code</vh>
+<v t="swot.20260511145756.1"><vh>@file app/app.vue</vh></v>
+<v t="swot.20260511103438.1"><vh>@file nuxt.config.ts</vh></v>
+<v t="swot.20260511152156.1"><vh>@file app/assets/main.scss</vh></v>
+<v t="swot.20260512104512.1"><vh>@file app/pages/index.vue</vh></v>
+<v t="swot.20260512105052.1"><vh>@file app/pages/about.vue</vh></v>
+<v t="swot.20260512105953.1"><vh>@file app/pages/example1/index.vue</vh></v>
+<v t="swot.20260512110202.1"><vh>@file app/pages/example1/sub-page/index.vue</vh></v>
 </v>
 </v>
 </v>
@@ -39636,6 +39707,595 @@ endif::[]
 <t tx="swot.20260511092923.1">比如安装写 html 代码的 pug 依赖
 
     pnpm add pug
+
+.package.json
+[source,json]
+----
+@others
+----
 </t>
+<t tx="swot.20260511103007.1"></t>
+<t tx="swot.20260511103414.1">.默认配置
+[source,javascript]
+----
+export default defineNuxtConfig({
+    compatibilityDate: '2025-07-15',
+    devtools: { enabled: true },
+})
+----
+</t>
+<t tx="swot.20260511142737.1">1. 官方网站
+https://nuxt.com/[Nuxt官方文档]
+
+2. CodewithGuillaume 是个 next 高手，下面是他的 nuxt3 视频
+https://www.youtube.com/watch?v=hj3NNlTqIJg&amp;list=PL8HkCX2C5h0XT3xWYn71TlsAAo0kizmVc&amp;index=1&amp;t=65s&amp;ab_channel=CodewithGuillaume[Nuxt3教程 - CodewithGuillaume]
+
+3. Nuxt3 基础入门 -- 水哥澎湃
+https://space.bilibili.com/482016706/channel/collectiondetail?sid=864032[Nuxt3基础入门合集]
+
+4. Vue3项目-后台课程管理系统 -- 水哥澎湃
+https://space.bilibili.com/482016706/channel/collectiondetail?sid=1078022[Vue3后台课程管理系统合集]
+</t>
+<t tx="swot.20260511142737.10">目前还没有找到解决方法，看看这里的讨论
+
+https://github.com/nuxt/nuxt/issues/21312
+
+https://nuxt.com/docs/guide/going-further/debugging#debugging-in-your-ide
+
+先用这个命令试试：
+
+    node --inspect node_modules/.bin/nuxt dev
+</t>
+<t tx="swot.20260511142737.11">https://vueschool.io/articles/vuejs-tutorials/understanding-the-directory-structure-in-nuxt-3/
+</t>
+<t tx="swot.20260511142737.12">还是看官网吧 https://nuxt.com/docs/guide/going-further/runtime-config#environment-variables
+
+因为我感觉下面的文档有点老了，不过需要运行来核实一下的：
+
+介绍了 publicRuntimeConfig &amp; privateRuntimeConfig
+https://serversideup.net/using-environment-variables-in-nuxt-3/
+
+
+***
+这个文档应该是可以的
+https://javokhirbekkhaydarov.medium.com/e-env-using-environment-variables-in-nuxt-3-options-api-168633d202a8
+
+上面 link 的注释：现在要看 nuxt.com 官网文档了，应该是已经不再这么玩了。看我的项目吧，如 swizer.leo 集团官网中的使用方式。
+
+nuxt3 变化太快人了，烦人呀，跟不上。一直学都不行。2024-01-16 21:40:27
+
+</t>
+<t tx="swot.20260511142737.13">.env 文件注释使用 #
+
+</t>
+<t tx="swot.20260511142737.14">先参考一下
+https://blog.csdn.net/CXW1014/article/details/128916835
+
+
+</t>
+<t tx="swot.20260511142737.15">https://jahid.dev/blog/nuxt-mongodb
+
+使用 nuxt-server-utils 好，集成了好多有用的方法
+https://nuxt-server-utils.jahid.dev/
+</t>
+<t tx="swot.20260511142737.16"></t>
+<t tx="swot.20260511142737.17">水哥澎湃 Nuxt3 基础入门
+https://www.bilibili.com/video/BV1N3411o7nm/?spm_id_from=333.999.0.0
+</t>
+<t tx="swot.20260511142737.18">直接运行：
+
+    node server/index.mjs
+
+CAUTION: 这样只是在命令行下运行，不好用于部署在服务器上。下面介绍使用 pm2 运行构建好的项目。
+
+</t>
+<t tx="swot.20260511142737.19">[source,console,]
+----
+npm i pm2 -g
+pm2 -v
+----
+</t>
+<t tx="swot.20260511142737.20">@language asciidoc
+编辑 pm2 配置文件：
+
+    vim ecosystem.config.js
+
+    module.exports = {
+        apps: [
+            {
+                name: 'RedMapleVisual',
+                port: '3001',
+                exec_mode: 'cluster',
+                instances: 'max',
+                script: './.output/server/index.mjs'
+            }
+        ]
+    }
+
+运行 pm2 (在会当前目录下查找 ecosystem.config.js)
+
+    pm2 start
+</t>
+<t tx="swot.20260511142737.21">@language asciidoc
+[source,console,]
+----
+cd "your express project"
+pm2 start app.js --name "express-app"
+pm2 save  // 将当前进程保存
+----
+
+--name 后面为在 pm2 中看到的名称
+</t>
+<t tx="swot.20260511142737.22">. 停止运行的项目
+
+    pm2 stop id
+    pm2 stop RedMapleVisual
+
+. 重新启动项目
+
+    pm2 restart id
+    pm2 restart RedMapleVisual
+
+. 删除项目管理
+
+    pm2 delete id
+    pm2 delete RedMapleVisual
+
+. 设置自动将应用加入列表，应该就不用执行 pm2 save 了
+
+    pm2 set pm2:autodump true</t>
+<t tx="swot.20260511142737.23">@language asciidoc
+https://github.com/Unitech/pm2/issues/4556
+
+ubuntu 重启后，报错为
+
+....
+"Current process list running is not in sync with saved list. npm differs. Type 'pm2 save' to synchronize."
+It does not start over at boot and sometimes gives different errors.
+....
+
+处理方式：
+
+* 手工执行 pm2 update 可以恢复运行列表，即用 pm2 list 可以查看到应用列表。但是再重启系统又不管用了
+
+* 设置成自动的方式
+....
+make sure you specify the user after the startup option
+
+    pm2 startup -u nodeuser
+
+for me I used root and reboot server, and voila !
+
+    pm2 startup -u root  我用的这个命令
+....
+
+</t>
+<t tx="swot.20260511142737.24">https://www.bilibili.com/video/BV1Y44y1w7KN/?spm_id_from=333.337.search-card.all.click&amp;vd_source=392e2829ea8e40de989be86888026747</t>
+<t tx="swot.20260511142737.25"></t>
+<t tx="swot.20260511142737.26">调试时发现，如果 nitro 后台报错，会直接返回默认的 404 页面。
+</t>
+<t tx="swot.20260511142737.3"></t>
+<t tx="swot.20260511142737.4">安装 nginx
+https://blog.csdn.net/m0_52985087/article/details/132063280
+
+</t>
+<t tx="swot.20260511142737.5">ubuntu 配置 nginx https
+https://blog.csdn.net/daitianjun/article/details/129328986
+
+aliyun 配置示例
+https://help.aliyun.com/zh/ssl-certificate/user-guide/install-ssl-certificates-on-nginx-servers-or-tengine-servers
+
+</t>
+<t tx="swot.20260511142737.6"># 配置 80端口
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    
+    index index.html index.htm index.nginx-debian.html;
+    # 服务名
+    server_name xxx;
+
+    # 重定向到https
+    location / {
+        return 301 https://$host$request_uri;
+    } 
+}
+ 
+# 配置443端口
+server {
+     listen 443 ssl; 
+     # 上传的两个证书文件的路径
+     ssl_certificate /etc/nginx/xxx.crt; 
+     ssl_certificate_key /etc/nginx/xxx.key; 
+     ssl_session_timeout 5m;
+     ssl_protocols TLSv1.2 TLSv1.3; 
+     ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE; 
+     ssl_prefer_server_ciphers on;
+     # 配置https服务默认路径  此处根据自己的服务而定
+     location / {
+        proxy_pass http://127.0.0.1:8069;
+     }
+ }
+ </t>
+<t tx="swot.20260511142737.7"></t>
+<t tx="swot.20260511142737.8">element-plus
+https://element-plus.org/zh-CN/component/table.html#%E5%B8%A6%E8%BE%B9%E6%A1%86%E8%A1%A8%E6%A0%BC
+
+google searchnuxt3 crud
+https://www.google.com/search?q=nuxt+3+crud+example&amp;newwindow=1&amp;sca_esv=558569235&amp;sxsrf=AB5stBiFO0FWfu3tM6dqE5CKncaT288RUQ%3A1692544639980&amp;source=hp&amp;ei=fy7iZPz3OfWExc8PweCM0As&amp;iflsig=AD69kcEAAAAAZOI8j2Matv5zPpt73kBiUUJ0hg9fOugd&amp;oq=nuxt3+crud&amp;gs_lp=Egdnd3Mtd2l6IgpudXh0MyBjcnVkKgIIATIJEAAYExiABBgKMgkQABgTGIAEGApIySlQAFiYGnACeACQAQGYAZ4FoAHoH6oBBzMtNC4yLjO4AQPIAQD4AQHCAgUQABiABMICBxAAGIAEGArCAgYQABgeGAo&amp;sclient=gws-wiz
+
+nuxt.com
+https://nuxt.com/docs/api/composables/use-router#userouter
+
+深入理解css中position属性及z-index属性
+https://www.cnblogs.com/zhuzhenwei918/p/6112034.html
+
+nuxt3 i18n
+https://juejin.cn/post/7220259003980447802
+https://element-plus.org/zh-CN/guide/i18n.html
+
+Nuxt3 服务端接口与客户端接口请求最佳实践
+https://juejin.cn/post/7199250953333522491
+
+Nuxt Server Utils
+https://nuxt-server-utils.jahid.dev/
+https://nuxt-server-utils.jahid.dev/introduction/authorization
+https://stackoverflow.com/questions/73735155/call-a-server-utilities-in-nuxt3
+
+Create API with Nuxt 3
+https://medium.com/@shahriarrahi/create-api-with-nuxt3-adcb7b6a17dd
+
+Global State Management with Pinia In Nuxt 3
+https://vueschool.io/articles/vuejs-tutorials/global-state-management-with-pinia-in-nuxt-3/
+https://dev.to/codybontecou/nuxt-3-and-pinia-473k
+
+Nuxt-Auth
+https://nuxt.com/modules/nuxt-auth
+https://github.com/damien-hl/nuxt3-auth-example
+https://dev.to/rafaelmagalhaes/authentication-in-nuxt-3-375o
+
+Auth in Nuxt 3: Protecting Routes in Nuxt 3 (3 of 4)
+https://masteringnuxt.com/blog/protecting-routes-in-nuxt-3
+
+爱五笔
+https://www.iwubi.net/
+
+Nuxt 3 for beginner
+https://www.youtube.com/watch?v=Bh5hLei0CF0&amp;ab_channel=Kh%C3%A1nhMinh
+
+nuxt3中如何进行网络api接口请求
+https://blog.csdn.net/CXW1014/article/details/128916835
+
+NuxtJS CRUD 2: How to fetch data using API in Nuxt JS | get data from API with axios in Nuxt 3 Tuts
+https://www.youtube.com/watch?v=opzuyo7Fbuc&amp;list=PLRheCL1cXHrtEvJOJ2T5p_fAFxdIT2kwi&amp;index=3&amp;ab_channel=FundaOfWebIT
+
+NuxtJS CRUD 3: How to edit &amp; update data using API in Nuxt JS | edit update data using api in Nuxt 3
+https://www.youtube.com/watch?v=iqcFjvzwyII&amp;list=PLRheCL1cXHrtEvJOJ2T5p_fAFxdIT2kwi&amp;index=4&amp;ab_channel=FundaOfWebIT
+
+NuxtJS CRUD 4: How to confirm &amp; delete data using API in Nuxt JS | delete data using api in Nuxt 3
+https://www.youtube.com/watch?v=3ffttZmXNR4&amp;list=PLRheCL1cXHrtEvJOJ2T5p_fAFxdIT2kwi&amp;index=5&amp;ab_channel=FundaOfWebIT
+
+https://gitee.com/samuelsx/hongfeng_web
+https://docs.qq.com/desktop/
+https://study.163.com/my?from=study#/
+
+咸虾米_ / 咸虾米大商城
+https://gitcode.net/qq_18798149/xxmBigMall/-/issues?spm=1033.2243.3001.5874
+
+</t>
+<t tx="swot.20260511142737.9"></t>
+<t tx="swot.20260511142909.1"></t>
+<t tx="swot.20260511142909.3">https://github.com/nuxt/starter
+
+下载 nuxt3 模板
+
+    $ npx nuxi init -t v4 nuxt-app  // nuxt-app 是自己起的项目名称
+
+. cd nuxt-app 安装相应的包
+
+    $ pnpm install
+
+. 启动开发服务器
+
+    $ pnpm run dev
+</t>
+<t tx="swot.20260511142909.4">@language asciidoc
+进入现有项目：
+
+    cd 项目
+
+初始化 package.json
+
+    npm init -y
+
+安装 nuxt
+
+    npm install nuxt
+
+创建 nuxt.config.ts
+
+    import { defineNuxtConfig } from "nuxt/config"
+    export default defineNuxtConfig({})
+
+创建 tsconfig.json
+
+    {
+        "extends": "./.nuxt/tsconfig.json"
+    }
+
+添加启动开发命令 - 编辑 package.json
+
+    "scripts": {
+        "dev": "nuxi dev",
+    },
+
+启动项目
+
+    npm run dev
+
+NOTE: 启动项目后会自动生成 "./.nuxt/tsconfig.json"
+
+手工创建 app.vue
+
+    &lt;template&gt;
+        &lt;h1&gt;Hello World!&lt;/h1&gt;
+    &lt;/template&gt;
+</t>
+<t tx="swot.20260511145724.1">.默认入口文件
+[source,xml]
+----
+&lt;template lang="pug"&gt;
+div
+    NuxtRouteAnnouncer
+    NuxtWelcome
+&lt;/template&gt;
+----
+</t>
+<t tx="swot.20260511150547.1">创建目录
+
+    mkdir assets
+
+.nuxt.config.ts
+[source,javascript]
+----
+@others
+----
+
+.app/app.vue
+[source,javascript]
+----
+&lt;&lt; 测试全局 main.scss &gt;&gt;
+----
+
+.app/assets/main.scss
+[source,html]
+----
+&lt;&lt; body &gt;&gt;
+----
+</t>
+<t tx="swot.20260511150547.3">// https://nuxt.com/docs/getting-started/styling#the-css-property
+css: ["~/assets/main.scss"],
+</t>
+<t tx="swot.20260511151718.1"></t>
+<t tx="swot.20260511152359.1">@language xml
+div Hello Nuxt 3
+
+</t>
+<t tx="swot.20260512090015.1">body {
+    color: red;
+}
+</t>
+<t tx="swot.20260512090947.1">* 选择树 el-tree，check 复选框
+https://www.bilibili.com/video/BV1jo4y1h7hw/[查看视频]
+
+* 表格列加图片（例子中是头像）
+https://www.bilibili.com/video/BV1JM41137ZY/[查看视频]
+
+* 列表加开关按钮 switch
+https://www.bilibili.com/video/BV1Qs4y1X7gj/[查看视频]
+
+    ** 课程秒杀开关
+    https://www.bilibili.com/video/BV188411f7d8/[查看视频]
+
+* 列表加开关按钮 switch -- 不成功可以自己弹回去
+https://www.bilibili.com/video/BV1qX4y1C7ju/[查看视频]
+
+* 日期时间
+https://www.bilibili.com/video/BV1bg4y157SU/[查看视频]
+
+    ** 日期时间范围
+    https://www.bilibili.com/video/BV188411f7d8/[查看视频]
+
+* 多选框 el-select multiple
+https://www.bilibili.com/video/BV1EV4y1C72g/[查看视频]
+
+* vscode plugin: json to ts
+https://www.bilibili.com/video/BV1vg4y1V7eB/[查看视频]
+
+* 页头 el-page-header
+https://www.bilibili.com/video/BV13z4y1B7NH/[查看视频]
+https://www.bilibili.com/video/BV1Wu41187NN/[查看视频]
+
+* Steps 步骤条
+https://www.bilibili.com/video/BV1n24y1N7LL/[查看视频]
+
+    ** 实现步骤
+    https://www.bilibili.com/video/BV1gg4y1c7UT/[查看视频]
+
+* 小技巧：form 每次都是新值，不会受到 ref 或 reactive 的影响。之前这个功能让我好纠结了一阵。
+https://www.bilibili.com/video/BV1N24y1j7Ws/[查看视频]
+
+    const initData = () =&gt; ({
+        name: "",
+        categoryId: "",
+        url: "",
+    });
+
+    const form1 = ref(initData());
+    form1.value = initData();       //清空表单数据
+
+    const form2 = reactive(initData());
+    Object.assign(form2, initData());  //清空表单数据
+
+* 数字输入框 &lt;el-input-number&gt;
+https://www.bilibili.com/video/BV17z4y1B7dL/[查看视频]
+
+* 上传图片
+https://www.bilibili.com/video/BV1Ah4y1Z7LR/[查看视频]
+
+* vscode插件 Iconify IntelliSense 如何设置禁止将 el 转化为图标显示
+https://www.bilibili.com/video/BV1Ah4y1Z7LR/?p=97[查看视频]
+
+* 上传图片进度条
+https://www.bilibili.com/video/BV1LV4y1z74F/[查看视频]
+
+* vscode json to ts 插件 可以快速从 json 对象生成类型声明
+
+* 树形控件 el-tree
+https://www.bilibili.com/video/BV1Wu41187NN/?p=109[查看视频]
+
+* 结果组件 Result
+https://www.bilibili.com/video/BV1Ch411P7eF/[查看视频]
+</t>
+<t tx="swot.20260512091435.1">@language asciidoc
+https://www.bilibili.com/video/BV1G14y1z7KF/?spm_id_from=333.337.search-card.all.click&amp;vd_source=392e2829ea8e40de989be86888026747[视频课：安装和使用Element Plus组件库] | 
+https://www.bilibili.com/video/BV1pd4y1W7eX/?spm_id_from=333.788&amp;vd_source=392e2829ea8e40de989be86888026747[水哥澎湃]
+
+https://nuxt.com/modules/element-plus/?[官网安装说明]
+
+在命令行安装：
+
+    pnpm add dayjs
+    pnpm i element-plus @element-plus/nuxt -D
+    
+
+配置：nuxt.config.ts
+[source,javascript,linenums]
+----
+export default defineNuxtConfig({
+    modules: [
+        '@element-plus/nuxt'
+    ],
+    elementPlus: { /** Options */ }
+})
+----
+
+
+使用：app.vue
+[source,html,linenums]
+----
+&lt;&lt; 测试 element plus &gt;&gt;
+----
+
+
+////
+[TIP]
+====
+最新版本不用再写下面的 css 配置:
+
+    css: [
+        'element-plus/dist/index.css',
+        'element-plus/theme-chalk/display.css'
+    ]
+====
+////
+</t>
+<t tx="swot.20260512093331.1">@language pug
+div
+    el-button(@click="ElMessage('hello')") button
+
+    ElButton(:icon="ElIconEditPen" type="success") button
+
+    LazyElButton(type="warning") lazy button
+
+    el-icon
+        ElIconDeleteFilled
+
+    el-icon
+        ElIconBell
+</t>
+<t tx="swot.20260512103112.1">.更改 app.vue 文件
+[source,xml]
+----
+&lt;template&gt;
+&lt;div&gt;
+    &lt;NuxtPage /&gt;
+&lt;/div&gt;
+&lt;/template&gt;
+----
+
+.创建目录 pages
+[source,console]
+----
+mkdir pages
+----
+</t>
+<t tx="swot.20260512103752.1">[upperalpha]
+. 创建 app/pages/index.vue，会作为根路由 -&gt; /
++
+[source,html]
+----
+&lt;&lt; template index &gt;&gt;
+----
+
+. 创建其它路由 app/pages/about.vue -&gt; /about
++
+[source,html]
+----
+&lt;&lt; template about &gt;&gt;
+----
+</t>
+<t tx="swot.20260512104546.1">&lt;template&gt;
+&lt;div&gt;
+    index pages
+&lt;/div&gt;
+&lt;/template&gt;</t>
+<t tx="swot.20260512105109.1">&lt;template&gt;
+    &lt;div&gt;
+        about pages
+    &lt;/div&gt;
+&lt;/template&gt;</t>
+<t tx="swot.20260512105521.1">[upperalpha]
+. 路由：/example1
++
+[source,console]
+----
+mkdir example1
+touch example1/index.vue
+----
++
+.example1/index.vue
+[source,html]
+----
+&lt;&lt; template example1 &gt;&gt;
+----
+
+
+. 路由：/example1/sub-page
++
+[source,console]
+----
+touch example1/sub-page.vue
+----
++
+.example1/sub-page.vue
+[source,html]
+----
+&lt;&lt; template example1/sub-page &gt;&gt;
+----
+
+NOTE: 子目录可以嵌套多层，实际开发中不建议，因为太深了，不利于 SEO 时爬虫的爬取。
+</t>
+<t tx="swot.20260512110114.1">&lt;template&gt;
+&lt;div&gt;
+    I am Example1
+&lt;/div&gt;
+&lt;/template&gt;</t>
+<t tx="swot.20260512110308.1">&lt;template&gt;
+&lt;div&gt;
+    I am example1/sub-page
+&lt;/div&gt;
+&lt;/template&gt;</t>
 </tnodes>
 </leo_file>
