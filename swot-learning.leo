@@ -1991,10 +1991,23 @@
 </v>
 <v t="swot.20260513142924.2"><vh>子目录组件</vh></v>
 </v>
+<v t="swot.20260513161859.1"><vh>10. 布局 layouts</vh>
+<v t="swot.20260513163635.1"><vh>默认布局</vh>
+<v t="swot.20260513162131.1"><vh>&lt;&lt; template DefaultLayout &gt;&gt;</vh></v>
+<v t="swot.20260513163345.1"><vh>&lt;&lt; template app.vue &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260513161859.2"><vh>定制布局</vh>
+<v t="swot.20260513163945.1"><vh>&lt;&lt; template Custom layout &gt;&gt;</vh></v>
+<v t="swot.20260513164252.1"><vh>&lt;&lt; script layout &gt;&gt;</vh></v>
+</v>
+</v>
 </v>
 </v>
 <v t="swot.20260511151718.1"><vh>code</vh>
-<v t="swot.20260511145756.1"><vh>@file app/app.vue</vh></v>
+<v t="swot.20260511145756.1"><vh>#file app/app.vue 第一个版本</vh>
+<v t="swot.20260511152359.1"></v>
+<v t="swot.20260512093331.1"></v>
+</v>
 <v t="swot.20260511103438.1"><vh>@file nuxt.config.ts</vh></v>
 <v t="swot.20260511152156.1"><vh>@file app/assets/main.scss</vh></v>
 <v t="swot.20260513143325.1"><vh>pages</vh>
@@ -2012,6 +2025,12 @@
 <v t="swot.20260513143336.1"><vh>components</vh>
 <v t="swot.20260513143454.1"><vh>@file app/components/ExampleComponent1.vue</vh></v>
 <v t="swot.20260513143723.1"><vh>@file app/pages/UseExampleComponent1.vue</vh></v>
+</v>
+<v t="swot.20260513162048.1"><vh>layout</vh>
+<v t="swot.20260513162101.1"><vh>@file app/layouts/default.vue</vh></v>
+<v t="swot.20260513162721.1"><vh>@file app/app.vue</vh></v>
+<v t="swot.20260513163928.1"><vh>@file app/layouts/custom.vue</vh></v>
+<v t="swot.20260513164232.1"><vh>@file app/pages/UseCustomLayout.vue</vh></v>
 </v>
 </v>
 </v>
@@ -40091,6 +40110,18 @@ div
 &lt;/template&gt;
 ----
 </t>
+<t tx="swot.20260511145756.1">@language javascript
+&lt;template lang="pug"&gt;
+div
+    NuxtRouteAnnouncer
+    //- NuxtWelcome
+    //-
+        &lt;&lt; 测试全局 main.scss &gt;&gt;
+        &lt;&lt; 测试 element plus &gt;&gt;
+    div
+        NuxtPage
+&lt;/template&gt;
+</t>
 <t tx="swot.20260511150547.1">创建目录
 
     mkdir assets
@@ -40621,5 +40652,82 @@ NOTE: 组件 components 与 页面 pages 中的 .vue 文件区别：组件不会
 
 详情参: https://nuxt.com/docs/guide/directory-structure/components
 </t>
+<t tx="swot.20260513161859.1"></t>
+<t tx="swot.20260513161859.2">[upperalpha]
+. 创建定制布局文件
++
+.app/layouts/custom.vue
+[source,xml]
+----
+&lt;&lt; template Custom layout &gt;&gt;
+----
+
+
+. 使用方式之一：可以在 pages 中的页面 .vue 文件中使用定制布局文件
++
+.pages/UseCustomLayout.vue
+[source,javascript]
+----
+&lt;&lt; script layout &gt;&gt;
+----
+</t>
+<t tx="swot.20260513162048.1"></t>
+<t tx="swot.20260513162131.1">&lt;template&gt;
+&lt;div class="DefaultLayout"&gt;
+    &lt;p&gt;Default layout&lt;/p&gt;
+    &lt;slot /&gt;
+&lt;/div&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260513163345.1">&lt;template lang="pug"&gt;
+    NuxtRouteAnnouncer
+    //- 启用默认布局
+    NuxtLayout
+        NuxtPage
+&lt;/template&gt;
+</t>
+<t tx="swot.20260513163635.1">https://nuxt.com/docs/guide/directory-structure/layouts#enabling-the-default-layout
+
+[upperalpha]
+. 创建布局目录
++
+[source,console]
+----
+mkdir app/layouts
+----
+
+
+. 创建布局文件
++
+.touch app/layouts/default.vue 默认的布局文件
+[source,xml]
+----
+&lt;&lt; template DefaultLayout &gt;&gt;
+----
++
+NOTE: &lt;slot /&gt; 用于接收页面信息。
+
+
+. 使用默认布局
++
+.app/app.vue
+[source,xml]
+----
+&lt;&lt; template app.vue &gt;&gt;
+----
+
+IMPORTANT: 如果没有 App.vue 文件，则会找 layouts/default.vue 文件。即 app.vue 文件不是必须存在的。
+</t>
+<t tx="swot.20260513163945.1">&lt;template&gt;
+&lt;div class="CustomLayout"&gt;
+    &lt;p&gt;Custom layout&lt;/p&gt;
+    &lt;slot /&gt;
+&lt;/div&gt;
+&lt;/template&gt;</t>
+<t tx="swot.20260513164252.1">&lt;script setup&gt;
+    definePageMeta({
+      layout: 'custom',
+    })
+&lt;/script&gt;</t>
 </tnodes>
 </leo_file>

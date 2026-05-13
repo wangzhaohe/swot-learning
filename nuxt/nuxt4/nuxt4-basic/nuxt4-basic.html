@@ -585,6 +585,12 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_子目录组件">子目录组件</a></li>
 </ul>
 </li>
+<li><a href="#_10_布局_layouts">10. 布局 layouts</a>
+<ul class="sectlevel2">
+<li><a href="#_默认布局">默认布局</a></li>
+<li><a href="#_定制布局">定制布局</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1729,10 +1735,119 @@ touch components/Header/Left/index.vue
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_10_布局_layouts">10. 布局 layouts</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_默认布局">默认布局</h3>
+<div class="paragraph">
+<p><a href="https://nuxt.com/docs/guide/directory-structure/layouts#enabling-the-default-layout" class="bare">https://nuxt.com/docs/guide/directory-structure/layouts#enabling-the-default-layout</a></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>创建布局目录</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">mkdir app/layouts</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>创建布局文件</p>
+<div class="listingblock">
+<div class="title">touch app/layouts/default.vue 默认的布局文件</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;template&gt;</span>
+<span class="tok-nt">&lt;div</span><span class="tok-w"> </span><span class="tok-na">class=</span><span class="tok-s">&quot;DefaultLayout&quot;</span><span class="tok-nt">&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;p&gt;</span>Default<span class="tok-w"> </span>layout<span class="tok-nt">&lt;/p&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;slot</span><span class="tok-w"> </span><span class="tok-nt">/&gt;</span>
+<span class="tok-nt">&lt;/div&gt;</span>
+<span class="tok-nt">&lt;/template&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+&lt;slot /&gt; 用于接收页面信息。
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>使用默认布局</p>
+<div class="listingblock">
+<div class="title">app/app.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;template</span><span class="tok-w"> </span><span class="tok-na">lang=</span><span class="tok-s">&quot;pug&quot;</span><span class="tok-nt">&gt;</span>
+<span class="tok-w">    </span>NuxtRouteAnnouncer
+<span class="tok-w">    </span>//-<span class="tok-w"> </span>启用默认布局
+<span class="tok-w">    </span>NuxtLayout
+<span class="tok-w">        </span>NuxtPage
+<span class="tok-nt">&lt;/template&gt;</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+如果没有 App.vue 文件，则会找 layouts/default.vue 文件。即 app.vue 文件不是必须存在的。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_定制布局">定制布局</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>创建定制布局文件</p>
+<div class="listingblock">
+<div class="title">app/layouts/custom.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;template&gt;</span>
+<span class="tok-nt">&lt;div</span><span class="tok-w"> </span><span class="tok-na">class=</span><span class="tok-s">&quot;CustomLayout&quot;</span><span class="tok-nt">&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;p&gt;</span>Custom<span class="tok-w"> </span>layout<span class="tok-nt">&lt;/p&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;slot</span><span class="tok-w"> </span><span class="tok-nt">/&gt;</span>
+<span class="tok-nt">&lt;/div&gt;</span>
+<span class="tok-nt">&lt;/template&gt;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>使用方式之一：可以在 pages 中的页面 .vue 文件中使用定制布局文件</p>
+<div class="listingblock">
+<div class="title">pages/UseCustomLayout.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-w"> </span><span class="tok-nx">setup</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-nx">definePageMeta</span><span class="tok-p">({</span>
+<span class="tok-w">      </span><span class="tok-nx">layout</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;custom&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-p">})</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-05-13 14:49:49 +0800
+Last updated 2026-05-13 16:45:17 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

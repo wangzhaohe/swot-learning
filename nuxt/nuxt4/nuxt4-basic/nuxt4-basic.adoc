@@ -757,3 +757,77 @@ NOTE: 如果不是 index.vue，则直接组合文件名即可。
 
 IMPORTANT: 请记住，不要把组件设置的太深，这样文件名会很长。
 
+== 10. 布局 layouts
+
+
+=== 默认布局
+https://nuxt.com/docs/guide/directory-structure/layouts#enabling-the-default-layout
+
+[upperalpha]
+. 创建布局目录
++
+[source,console]
+----
+mkdir app/layouts
+----
+
+
+. 创建布局文件
++
+.touch app/layouts/default.vue 默认的布局文件
+[source,xml]
+----
+<template>
+<div class="DefaultLayout">
+    <p>Default layout</p>
+    <slot />
+</div>
+</template>
+----
++
+NOTE: <slot /> 用于接收页面信息。
+
+
+. 使用默认布局
++
+.app/app.vue
+[source,xml]
+----
+<template lang="pug">
+    NuxtRouteAnnouncer
+    //- 启用默认布局
+    NuxtLayout
+        NuxtPage
+</template>
+----
+
+IMPORTANT: 如果没有 App.vue 文件，则会找 layouts/default.vue 文件。即 app.vue 文件不是必须存在的。
+
+=== 定制布局
+[upperalpha]
+. 创建定制布局文件
++
+.app/layouts/custom.vue
+[source,xml]
+----
+<template>
+<div class="CustomLayout">
+    <p>Custom layout</p>
+    <slot />
+</div>
+</template>
+----
+
+
+. 使用方式之一：可以在 pages 中的页面 .vue 文件中使用定制布局文件
++
+.pages/UseCustomLayout.vue
+[source,javascript]
+----
+<script setup>
+    definePageMeta({
+      layout: 'custom',
+    })
+</script>
+----
+
