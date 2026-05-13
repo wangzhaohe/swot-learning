@@ -420,7 +420,7 @@ div
 mkdir pages
 ----
 
-=== 单文件路由
+=== 8.1 单文件路由
 [upperalpha]
 . 创建 app/pages/index.vue，会作为根路由 -> /
 +
@@ -444,7 +444,7 @@ mkdir pages
 </template>
 ----
 
-=== 子目录路由
+=== 8.2 子目录路由
 [upperalpha]
 . 路由：/example1
 +
@@ -483,4 +483,217 @@ touch example1/sub-page.vue
 ----
 
 NOTE: 子目录可以嵌套多层，实际开发中不建议，因为太深了，不利于 SEO 时爬虫的爬取。
+
+=== 8.3 父子包含路由(嵌套)
+[upperalpha]
+. 创建文件 roles.vue，路由为 /roles
++
+.touch pages/roles.vue
+[source,xml]
+----
+<template>
+    <div>
+        <h1>角色信息汇总</h1>
+
+        <!-- 给子路由留下显示区域 -->
+        <nuxt-page />
+    </div>
+</template>
+----
+
+. 创建目录
++
+[source,console]
+----
+mkdir pages/roles
+----
+
+
+. 创建文件:
++
+.touch pages/roles/admin.vue
+[source,xml]
+----
+<template>
+    <div>
+        <h2>管理员</h2>
+    </div>
+</template>
+----
++
+.touch pages/roles/normal.vue
+[source,xml]
+----
+<template>
+    <div>
+        <h2>普通用户</h2>
+    </div>
+</template>
+----
+
+在访问路由时，<nuxt-page> 位置会被相应 admin.vue 或者 normal.vue 内容填充。
+
+=== 8.4 有参数路由
+有动态参数的路由，如: `/example1/1234`，其中 1234 为动态变化的参数
+
+[upperalpha]
+. 创建文件: `touch example1/[id].vue`，其中 id 为动态变化的参数
++
+[source,xml]
+----
+<template>
+<div>
+    example id: {{ $route.params.id }}
+</div>
+</template>
+----
+
+. 在 <srcipt> 中使用:
++
+[source,javascript,]
+----
+<script setup>
+const route = useRoute()
+console.log("route.params.id:", route.params.id)  // 在js中捕获参数
+</script>
+----
+
+
+关于路由的引入使用，nuxt3/4 和 vue3 是一样的
+====
+. 下面两个实例只能用在 <template> 中
+* $route  当前页的路由实例
+* $router 全局路由实例
+
+. 如果想要用在 <script> 中，需要这样引入
+* [gray line-through]*import { useRoute, useRouter } from 'vue-router'* 不用写这行
+* const route = useRoute()
+* const router = useRouter()
+
+. 当前路由实例两种路由参数的获取：
+* useRoute().params / $route.params -> url 路径中的参数
+* useRoute().query  / $route.query  -> ? 后的参数
+====
+
+参考链接：
+
+. https://nuxt.com/docs/getting-started/routing#route-parameters
+
+. https://nuxt.com/docs/api/composables/use-route
+
+. https://nuxt.com/docs/api/composables/use-router
+
+=== 8.5 路由跳转 Nuxt-link
+https://nuxt.com/docs/getting-started/routing#navigation
+
+在 template 中的路由跳转语法：
+
+    <NuxtLink to="路由">链接描述</NuxtLink>
+
+.app/pages/nuxtlink.vue
+[source,xml]
+----
+<template lang="pug">
+header
+    nav
+        ul
+            li
+                NuxtLink(to="/roles") roles
+            li
+                NuxtLink(to="/roles/admin") admin
+            li
+                NuxtLink(to="/roles/normal") normal
+</template>
+----
+
+[NOTE]
+====
+* 不要使用 <a> 标签，因为会使整个页面重新渲染，属于服务端渲染。
+* Nuxtlink 不会刷新整个页面，属于客户端渲染
+====
+
+=== 8.6 Catch-all Route
+https://nuxt.com/docs/guide/directory-structure/pages/#catch-all-route
+
+.app/pages/[...slug].vue
+[source,xml]
+----
+<template>
+    <p>catch-all Example:</p>
+    <p>{{ $route.params.slug }}</p>
+</template>
+----
+
+在浏览器中测试路由 /a/b/c，得到结果：[ "a", "b", "c" ]
+
+=== 8.7 CRUD 增删改查
+前端：可以部分参考 RESTful 风格的资源路径 + 描述性视图动作（/new, /edit, /detail）
+
+TIP: 因为前端页面不能写 POST/PUT/PATCH/DELETE，所以应该部分参考。
+
+Example:
+
+    /users           → 列表
+    /users/new       → 新建页面
+    /users/123       → 详情
+    /users/123/edit  → 编辑
+
+
+NOTE: 后端：严格 RESTful（方法 + 资源）
+
+=== 8.8 高级 -- 自定义路由
+
+
+==== typescript 方式
+创建文件：
+
+    mkdir app
+    touch app/router.options.ts
+
+
+编辑 router.options.ts
+
+    import type { RouterConfig } from '@nuxt/schema';
+
+    // https://router.vuejs.org/api/interfaces/routeroptions,html
+    export default <RouterConfig> {
+        routes: (_routes) => [
+            ...routes,
+            {
+                name: 'home'
+                path:'/',
+                component; () => import('~/pages/home.vue')
+            }
+        ]
+    }
+
+==== javascript 方式
+创建文件：
+
+    mkdir app
+    touch app/router.options.js
+
+
+编辑 router.options.js
+
+    const customRoutes = [
+        {
+            path: '/xxx',
+            name: 'xxx',
+            component: () => import('@/pages/user/index.vue')
+        },
+        {
+            path: '/yyy',
+            name: 'yyy',
+            component: () => import('@/pages/user/create-or-edit.vue')
+        },
+        {
+            path: '/zzz',
+            redirect: '/user'
+        }
+    ]
+
+    export default {
+        routes: (_routes) => _routes.contact(cestomRoutes)
+    }
 

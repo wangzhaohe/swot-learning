@@ -564,8 +564,19 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_7_配置全局_elementui_plus">7. 配置全局 elementUI plus</a></li>
 <li><a href="#_8_配置路由_pages">8. 配置路由 pages</a>
 <ul class="sectlevel2">
-<li><a href="#_单文件路由">单文件路由</a></li>
-<li><a href="#_子目录路由">子目录路由</a></li>
+<li><a href="#_8_1_单文件路由">8.1 单文件路由</a></li>
+<li><a href="#_8_2_子目录路由">8.2 子目录路由</a></li>
+<li><a href="#_8_3_父子包含路由嵌套">8.3 父子包含路由(嵌套)</a></li>
+<li><a href="#_8_4_有参数路由">8.4 有参数路由</a></li>
+<li><a href="#_8_5_路由跳转_nuxt_link">8.5 路由跳转 Nuxt-link</a></li>
+<li><a href="#_8_6_catch_all_route">8.6 Catch-all Route</a></li>
+<li><a href="#_8_7_crud_增删改查">8.7 CRUD 增删改查</a></li>
+<li><a href="#_8_8_高级自定义路由">8.8 高级&#8201;&#8212;&#8201;自定义路由</a>
+<ul class="sectlevel3">
+<li><a href="#_typescript_方式">typescript 方式</a></li>
+<li><a href="#_javascript_方式">javascript 方式</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1152,7 +1163,7 @@ pnpm i element-plus @element-plus/nuxt -D</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_单文件路由">单文件路由</h3>
+<h3 id="_8_1_单文件路由">8.1 单文件路由</h3>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
@@ -1183,7 +1194,7 @@ pnpm i element-plus @element-plus/nuxt -D</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_子目录路由">子目录路由</h3>
+<h3 id="_8_2_子目录路由">8.2 子目录路由</h3>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
@@ -1238,12 +1249,361 @@ pnpm i element-plus @element-plus/nuxt -D</pre>
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_8_3_父子包含路由嵌套">8.3 父子包含路由(嵌套)</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>创建文件 roles.vue，路由为 /roles</p>
+<div class="listingblock">
+<div class="title">touch pages/roles.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;template&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;div&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;h1&gt;</span>角色信息汇总<span class="tok-nt">&lt;/h1&gt;</span>
+
+<span class="tok-w">        </span><span class="tok-cm">&lt;!-- 给子路由留下显示区域 --&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;nuxt-page</span><span class="tok-w"> </span><span class="tok-nt">/&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/div&gt;</span>
+<span class="tok-nt">&lt;/template&gt;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>创建目录</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">mkdir pages/roles</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>创建文件:</p>
+<div class="listingblock">
+<div class="title">touch pages/roles/admin.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;template&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;div&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;h2&gt;</span>管理员<span class="tok-nt">&lt;/h2&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/div&gt;</span>
+<span class="tok-nt">&lt;/template&gt;</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">touch pages/roles/normal.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;template&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;div&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;h2&gt;</span>普通用户<span class="tok-nt">&lt;/h2&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/div&gt;</span>
+<span class="tok-nt">&lt;/template&gt;</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>在访问路由时，&lt;nuxt-page&gt; 位置会被相应 admin.vue 或者 normal.vue 内容填充。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_4_有参数路由">8.4 有参数路由</h3>
+<div class="paragraph">
+<p>有动态参数的路由，如: <code>/example1/1234</code>，其中 1234 为动态变化的参数</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>创建文件: <code>touch example1/[id].vue</code>，其中 id 为动态变化的参数</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;template&gt;</span>
+<span class="tok-nt">&lt;div&gt;</span>
+<span class="tok-w">    </span>example<span class="tok-w"> </span>id:<span class="tok-w"> </span>{{<span class="tok-w"> </span>$route.params.id<span class="tok-w"> </span>}}
+<span class="tok-nt">&lt;/div&gt;</span>
+<span class="tok-nt">&lt;/template&gt;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>在 &lt;srcipt&gt; 中使用:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-w"> </span><span class="tok-nx">setup</span><span class="tok-o">&gt;</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">route</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useRoute</span><span class="tok-p">()</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;route.params.id:&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">route</span><span class="tok-p">.</span><span class="tok-nx">params</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 在js中捕获参数</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>关于路由的引入使用，nuxt3/4 和 vue3 是一样的</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>下面两个实例只能用在 &lt;template&gt; 中</p>
+<div class="ulist">
+<ul>
+<li>
+<p>$route  当前页的路由实例</p>
+</li>
+<li>
+<p>$router 全局路由实例</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>如果想要用在 &lt;script&gt; 中，需要这样引入</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong class="gray line-through">import { useRoute, useRouter } from 'vue-router'</strong> 不用写这行</p>
+</li>
+<li>
+<p>const route = useRoute()</p>
+</li>
+<li>
+<p>const router = useRouter()</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>当前路由实例两种路由参数的获取：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>useRoute().params / $route.params &#8594; url 路径中的参数</p>
+</li>
+<li>
+<p>useRoute().query  / $route.query  &#8594; ? 后的参数</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>参考链接：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="https://nuxt.com/docs/getting-started/routing#route-parameters" class="bare">https://nuxt.com/docs/getting-started/routing#route-parameters</a></p>
+</li>
+<li>
+<p><a href="https://nuxt.com/docs/api/composables/use-route" class="bare">https://nuxt.com/docs/api/composables/use-route</a></p>
+</li>
+<li>
+<p><a href="https://nuxt.com/docs/api/composables/use-router" class="bare">https://nuxt.com/docs/api/composables/use-router</a></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_5_路由跳转_nuxt_link">8.5 路由跳转 Nuxt-link</h3>
+<div class="paragraph">
+<p><a href="https://nuxt.com/docs/getting-started/routing#navigation" class="bare">https://nuxt.com/docs/getting-started/routing#navigation</a></p>
+</div>
+<div class="paragraph">
+<p>在 template 中的路由跳转语法：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;NuxtLink to="路由"&gt;链接描述&lt;/NuxtLink&gt;</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">app/pages/nuxtlink.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;template</span><span class="tok-w"> </span><span class="tok-na">lang=</span><span class="tok-s">&quot;pug&quot;</span><span class="tok-nt">&gt;</span>
+header
+<span class="tok-w">    </span>nav
+<span class="tok-w">        </span>ul
+<span class="tok-w">            </span>li
+<span class="tok-w">                </span>NuxtLink(to=&quot;/roles&quot;)<span class="tok-w"> </span>roles
+<span class="tok-w">            </span>li
+<span class="tok-w">                </span>NuxtLink(to=&quot;/roles/admin&quot;)<span class="tok-w"> </span>admin
+<span class="tok-w">            </span>li
+<span class="tok-w">                </span>NuxtLink(to=&quot;/roles/normal&quot;)<span class="tok-w"> </span>normal
+<span class="tok-nt">&lt;/template&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>不要使用 &lt;a&gt; 标签，因为会使整个页面重新渲染，属于服务端渲染。</p>
+</li>
+<li>
+<p>Nuxtlink 不会刷新整个页面，属于客户端渲染</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_6_catch_all_route">8.6 Catch-all Route</h3>
+<div class="paragraph">
+<p><a href="https://nuxt.com/docs/guide/directory-structure/pages/#catch-all-route" class="bare">https://nuxt.com/docs/guide/directory-structure/pages/#catch-all-route</a></p>
+</div>
+<div class="listingblock">
+<div class="title">app/pages/[&#8230;&#8203;slug].vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;template&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;p&gt;</span>catch-all<span class="tok-w"> </span>Example:<span class="tok-nt">&lt;/p&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;p&gt;</span>{{<span class="tok-w"> </span>$route.params.slug<span class="tok-w"> </span>}}<span class="tok-nt">&lt;/p&gt;</span>
+<span class="tok-nt">&lt;/template&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在浏览器中测试路由 /a/b/c，得到结果：[ "a", "b", "c" ]</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_7_crud_增删改查">8.7 CRUD 增删改查</h3>
+<div class="paragraph">
+<p>前端：可以部分参考 RESTful 风格的资源路径 + 描述性视图动作（/new, /edit, /detail）</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+因为前端页面不能写 POST/PUT/PATCH/DELETE，所以应该部分参考。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/users           → 列表
+/users/new       → 新建页面
+/users/123       → 详情
+/users/123/edit  → 编辑</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+后端：严格 RESTful（方法 + 资源）
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_8_高级自定义路由">8.8 高级&#8201;&#8212;&#8201;自定义路由</h3>
+<div class="sect3">
+<h4 id="_typescript_方式">typescript 方式</h4>
+<div class="paragraph">
+<p>创建文件：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir app
+touch app/router.options.ts</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>编辑 router.options.ts</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>import type { RouterConfig } from '@nuxt/schema';</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// https://router.vuejs.org/api/interfaces/routeroptions,html
+export default &lt;RouterConfig&gt; {
+    routes: (_routes) =&gt; [
+        ...routes,
+        {
+            name: 'home'
+            path:'/',
+            component; () =&gt; import('~/pages/home.vue')
+        }
+    ]
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_javascript_方式">javascript 方式</h4>
+<div class="paragraph">
+<p>创建文件：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir app
+touch app/router.options.js</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>编辑 router.options.js</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const customRoutes = [
+    {
+        path: '/xxx',
+        name: 'xxx',
+        component: () =&gt; import('@/pages/user/index.vue')
+    },
+    {
+        path: '/yyy',
+        name: 'yyy',
+        component: () =&gt; import('@/pages/user/create-or-edit.vue')
+    },
+    {
+        path: '/zzz',
+        redirect: '/user'
+    }
+]</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>export default {
+    routes: (_routes) =&gt; _routes.contact(cestomRoutes)
+}</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-05-12 11:06:47 +0800
+Last updated 2026-05-13 10:55:05 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

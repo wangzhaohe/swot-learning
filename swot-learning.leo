@@ -1955,13 +1955,33 @@
 <v t="swot.20260512093331.1"><vh>&lt;&lt; 测试 element plus &gt;&gt;</vh></v>
 </v>
 <v t="swot.20260512103112.1"><vh>8. 配置路由 pages</vh>
-<v t="swot.20260512103752.1"><vh>单文件路由</vh>
+<v t="swot.20260512103752.1"><vh>8.1 单文件路由</vh>
 <v t="swot.20260512104546.1"><vh>&lt;&lt; template index &gt;&gt;</vh></v>
 <v t="swot.20260512105109.1"><vh>&lt;&lt; template about &gt;&gt;</vh></v>
 </v>
-<v t="swot.20260512105521.1"><vh>子目录路由</vh>
+<v t="swot.20260512105521.1"><vh>8.2 子目录路由</vh>
 <v t="swot.20260512110114.1"><vh>&lt;&lt; template example1 &gt;&gt;</vh></v>
 <v t="swot.20260512110308.1"><vh>&lt;&lt; template example1/sub-page &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260513082620.1"><vh>8.3 父子包含路由(嵌套)</vh>
+<v t="swot.20260513082924.1"><vh>&lt;&lt; template roles &gt;&gt;</vh></v>
+<v t="swot.20260513083415.1"><vh>&lt;&lt; template admin &gt;&gt;</vh></v>
+<v t="swot.20260513083613.1"><vh>&lt;&lt; template normal &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260513084452.1"><vh>8.4 有参数路由</vh>
+<v t="swot.20260513085035.1"><vh>&lt;&lt; template [id] &gt;&gt;</vh></v>
+<v t="swot.20260513085643.1"><vh>&lt;&lt; script [id] &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260513091003.1"><vh>8.5 路由跳转 Nuxt-link</vh>
+<v t="swot.20260513091553.1"><vh>&lt;&lt; template nuxtlink &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260513102653.1"><vh>8.6 Catch-all Route</vh>
+<v t="swot.20260513103035.1"><vh>&lt;&lt; template catch-all &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260513104409.1"><vh>8.7 CRUD 增删改查</vh></v>
+<v t="swot.20260513105224.1"><vh>8.8 高级 -- 自定义路由</vh>
+<v t="swot.20260513105247.1"><vh>typescript 方式</vh></v>
+<v t="swot.20260513105315.1"><vh>javascript 方式</vh></v>
 </v>
 </v>
 </v>
@@ -1974,6 +1994,12 @@
 <v t="swot.20260512105052.1"><vh>@file app/pages/about.vue</vh></v>
 <v t="swot.20260512105953.1"><vh>@file app/pages/example1/index.vue</vh></v>
 <v t="swot.20260512110202.1"><vh>@file app/pages/example1/sub-page/index.vue</vh></v>
+<v t="swot.20260513084833.1"><vh>@file app/pages/example1/[id].vue</vh></v>
+<v t="swot.20260513082825.1"><vh>@file app/pages/roles.vue</vh></v>
+<v t="swot.20260513083335.1"><vh>@file app/pages/roles/admin.vue</vh></v>
+<v t="swot.20260513083546.1"><vh>@file app/pages/roles/normal.vue</vh></v>
+<v t="swot.20260513091455.1"><vh>@file app/pages/nuxtlink.vue</vh></v>
+<v t="swot.20260513103007.1"><vh>@file app/pages/[...slug].vue</vh></v>
 </v>
 </v>
 </v>
@@ -40250,12 +40276,14 @@ mkdir pages
 &lt;div&gt;
     index pages
 &lt;/div&gt;
-&lt;/template&gt;</t>
+&lt;/template&gt;
+</t>
 <t tx="swot.20260512105109.1">&lt;template&gt;
     &lt;div&gt;
         about pages
     &lt;/div&gt;
-&lt;/template&gt;</t>
+&lt;/template&gt;
+</t>
 <t tx="swot.20260512105521.1">[upperalpha]
 . 路由：/example1
 +
@@ -40291,11 +40319,234 @@ NOTE: 子目录可以嵌套多层，实际开发中不建议，因为太深了�
 &lt;div&gt;
     I am Example1
 &lt;/div&gt;
-&lt;/template&gt;</t>
+&lt;/template&gt;
+</t>
 <t tx="swot.20260512110308.1">&lt;template&gt;
 &lt;div&gt;
     I am example1/sub-page
 &lt;/div&gt;
-&lt;/template&gt;</t>
+&lt;/template&gt;
+</t>
+<t tx="swot.20260513082620.1">[upperalpha]
+. 创建文件 roles.vue，路由为 /roles
++
+.touch pages/roles.vue
+[source,xml]
+----
+&lt;&lt; template roles &gt;&gt;
+----
+
+. 创建目录
++
+[source,console]
+----
+mkdir pages/roles
+----
+
+
+. 创建文件:
++
+.touch pages/roles/admin.vue
+[source,xml]
+----
+&lt;&lt; template admin &gt;&gt;
+----
++
+.touch pages/roles/normal.vue
+[source,xml]
+----
+&lt;&lt; template normal &gt;&gt;
+----
+
+在访问路由时，&lt;nuxt-page&gt; 位置会被相应 admin.vue 或者 normal.vue 内容填充。
+</t>
+<t tx="swot.20260513082924.1">@language html
+&lt;template&gt;
+    &lt;div&gt;
+        &lt;h1&gt;角色信息汇总&lt;/h1&gt;
+
+        &lt;!-- 给子路由留下显示区域 --&gt;
+        &lt;nuxt-page /&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260513083415.1">&lt;template&gt;
+    &lt;div&gt;
+        &lt;h2&gt;管理员&lt;/h2&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260513083613.1">&lt;template&gt;
+    &lt;div&gt;
+        &lt;h2&gt;普通用户&lt;/h2&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260513084452.1">有动态参数的路由，如: `/example1/1234`，其中 1234 为动态变化的参数
+
+[upperalpha]
+. 创建文件: `touch example1/[id].vue`，其中 id 为动态变化的参数
++
+[source,xml]
+----
+&lt;&lt; template [id] &gt;&gt;
+----
+
+. 在 &lt;srcipt&gt; 中使用:
++
+[source,javascript,]
+----
+&lt;&lt; script [id] &gt;&gt;
+----
+
+
+关于路由的引入使用，nuxt3/4 和 vue3 是一样的
+====
+. 下面两个实例只能用在 &lt;template&gt; 中
+* $route  当前页的路由实例
+* $router 全局路由实例
+
+. 如果想要用在 &lt;script&gt; 中，需要这样引入
+* [gray line-through]*import { useRoute, useRouter } from 'vue-router'* 不用写这行
+* const route = useRoute()
+* const router = useRouter()
+
+. 当前路由实例两种路由参数的获取：
+* useRoute().params / $route.params -&gt; url 路径中的参数
+* useRoute().query  / $route.query  -&gt; ? 后的参数
+====
+
+参考链接：
+
+. https://nuxt.com/docs/getting-started/routing#route-parameters
+
+. https://nuxt.com/docs/api/composables/use-route
+
+. https://nuxt.com/docs/api/composables/use-router
+</t>
+<t tx="swot.20260513085035.1">&lt;template&gt;
+&lt;div&gt;
+    example id: {{ $route.params.id }}
+&lt;/div&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260513085643.1">&lt;script setup&gt;
+const route = useRoute()
+console.log("route.params.id:", route.params.id)  // 在js中捕获参数
+&lt;/script&gt;
+</t>
+<t tx="swot.20260513091003.1">https://nuxt.com/docs/getting-started/routing#navigation
+
+在 template 中的路由跳转语法：
+
+    &lt;NuxtLink to="路由"&gt;链接描述&lt;/NuxtLink&gt;
+
+.app/pages/nuxtlink.vue
+[source,xml]
+----
+&lt;&lt; template nuxtlink &gt;&gt;
+----
+
+[NOTE]
+====
+* 不要使用 &lt;a&gt; 标签，因为会使整个页面重新渲染，属于服务端渲染。
+* Nuxtlink 不会刷新整个页面，属于客户端渲染
+====
+</t>
+<t tx="swot.20260513091553.1">@language pug
+&lt;template lang="pug"&gt;
+header
+    nav
+        ul
+            li
+                NuxtLink(to="/roles") roles
+            li
+                NuxtLink(to="/roles/admin") admin
+            li
+                NuxtLink(to="/roles/normal") normal
+&lt;/template&gt;
+</t>
+<t tx="swot.20260513102653.1">https://nuxt.com/docs/guide/directory-structure/pages/#catch-all-route
+
+.app/pages/[...slug].vue
+[source,xml]
+----
+&lt;&lt; template catch-all &gt;&gt;
+----
+
+在浏览器中测试路由 /a/b/c，得到结果：[ "a", "b", "c" ]
+</t>
+<t tx="swot.20260513103035.1">&lt;template&gt;
+    &lt;p&gt;catch-all Example:&lt;/p&gt;
+    &lt;p&gt;{{ $route.params.slug }}&lt;/p&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260513104409.1">前端：可以部分参考 RESTful 风格的资源路径 + 描述性视图动作（/new, /edit, /detail）
+
+TIP: 因为前端页面不能写 POST/PUT/PATCH/DELETE，所以应该部分参考。
+
+Example:
+
+    /users           → 列表
+    /users/new       → 新建页面
+    /users/123       → 详情
+    /users/123/edit  → 编辑
+
+
+NOTE: 后端：严格 RESTful（方法 + 资源）
+</t>
+<t tx="swot.20260513105224.1"></t>
+<t tx="swot.20260513105247.1">创建文件：
+
+    mkdir app
+    touch app/router.options.ts
+
+
+编辑 router.options.ts
+
+    import type { RouterConfig } from '@nuxt/schema';
+
+    // https://router.vuejs.org/api/interfaces/routeroptions,html
+    export default &lt;RouterConfig&gt; {
+        routes: (_routes) =&gt; [
+            ...routes,
+            {
+                name: 'home'
+                path:'/',
+                component; () =&gt; import('~/pages/home.vue')
+            }
+        ]
+    }
+
+</t>
+<t tx="swot.20260513105315.1">创建文件：
+
+    mkdir app
+    touch app/router.options.js
+
+
+编辑 router.options.js
+
+    const customRoutes = [
+        {
+            path: '/xxx',
+            name: 'xxx',
+            component: () =&gt; import('@/pages/user/index.vue')
+        },
+        {
+            path: '/yyy',
+            name: 'yyy',
+            component: () =&gt; import('@/pages/user/create-or-edit.vue')
+        },
+        {
+            path: '/zzz',
+            redirect: '/user'
+        }
+    ]
+
+    export default {
+        routes: (_routes) =&gt; _routes.contact(cestomRoutes)
+    }
+</t>
 </tnodes>
 </leo_file>
