@@ -697,3 +697,63 @@ NOTE: 后端：严格 RESTful（方法 + 资源）
         routes: (_routes) => _routes.contact(cestomRoutes)
     }
 
+== 9. 组件 components -- 是自动导入的全局组件
+
+
+=== 常用组件结构
+[upperalpha]
+. 创建组件目录 app/components
++
+[source,console]
+----
+mkdir app/components
+----
+
+. 创建组件
++
+.app/components/ExampleComponent1.vue
+[source,xml]
+----
+<template>
+    <div>
+        This is  an Example Component1
+    </div>
+</template>
+----
+
+. 使用组件：在页面文件 app/pages/UseExampleComponent1.vue 中使用组件
++
+[source,xml]
+----
+<template>
+    <div>
+        <!--直接使用即可，不用导入-->
+        <ExampleComponent1 />
+    </div>
+</template>
+----
+
+NOTE: 组件 components 与 页面 pages 中的 .vue 文件区别：组件不会自动生成路由。
+
+详情参: https://nuxt.com/docs/guide/directory-structure/components
+
+=== 子目录组件
+在 components 目录创建子目录：
+
+    mkdir components/Header
+    touch components/Header/index.vue
+    使用组件方式：<Header />
+
+NOTE: 可以如此再创建子目录，形成更多层级。如下：
+
+    mkdir components/Header/Left
+    touch components/Header/Left/index.vue
+    使用组件：<HeaderLeft />
+
+NOTE: 如果不是 index.vue，则直接组合文件名即可。
+
+    touch components/Header/Left/Avatar.vue
+    使用组件：<HeaderLeftAvatar />
+
+IMPORTANT: 请记住，不要把组件设置的太深，这样文件名会很长。
+

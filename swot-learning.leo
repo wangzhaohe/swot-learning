@@ -1984,12 +1984,20 @@
 <v t="swot.20260513105315.1"><vh>javascript 方式</vh></v>
 </v>
 </v>
+<v t="swot.20260513142924.1"><vh>9. 组件 components -- 是自动导入的全局组件</vh>
+<v t="swot.20260513144934.1"><vh>常用组件结构</vh>
+<v t="swot.20260513143523.1"><vh>&lt;&lt; template Component1 &gt;&gt;</vh></v>
+<v t="swot.20260513143729.1"><vh>&lt;&lt; template use ExampleComponent1 &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260513142924.2"><vh>子目录组件</vh></v>
+</v>
 </v>
 </v>
 <v t="swot.20260511151718.1"><vh>code</vh>
 <v t="swot.20260511145756.1"><vh>@file app/app.vue</vh></v>
 <v t="swot.20260511103438.1"><vh>@file nuxt.config.ts</vh></v>
 <v t="swot.20260511152156.1"><vh>@file app/assets/main.scss</vh></v>
+<v t="swot.20260513143325.1"><vh>pages</vh>
 <v t="swot.20260512104512.1"><vh>@file app/pages/index.vue</vh></v>
 <v t="swot.20260512105052.1"><vh>@file app/pages/about.vue</vh></v>
 <v t="swot.20260512105953.1"><vh>@file app/pages/example1/index.vue</vh></v>
@@ -2000,6 +2008,11 @@
 <v t="swot.20260513083546.1"><vh>@file app/pages/roles/normal.vue</vh></v>
 <v t="swot.20260513091455.1"><vh>@file app/pages/nuxtlink.vue</vh></v>
 <v t="swot.20260513103007.1"><vh>@file app/pages/[...slug].vue</vh></v>
+</v>
+<v t="swot.20260513143336.1"><vh>components</vh>
+<v t="swot.20260513143454.1"><vh>@file app/components/ExampleComponent1.vue</vh></v>
+<v t="swot.20260513143723.1"><vh>@file app/pages/UseExampleComponent1.vue</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -40547,6 +40560,66 @@ NOTE: 后端：严格 RESTful（方法 + 资源）
     export default {
         routes: (_routes) =&gt; _routes.contact(cestomRoutes)
     }
+</t>
+<t tx="swot.20260513142924.1"></t>
+<t tx="swot.20260513142924.2">在 components 目录创建子目录：
+
+    mkdir components/Header
+    touch components/Header/index.vue
+    使用组件方式：&lt;Header /&gt;
+
+NOTE: 可以如此再创建子目录，形成更多层级。如下：
+
+    mkdir components/Header/Left
+    touch components/Header/Left/index.vue
+    使用组件：&lt;HeaderLeft /&gt;
+
+NOTE: 如果不是 index.vue，则直接组合文件名即可。
+
+    touch components/Header/Left/Avatar.vue
+    使用组件：&lt;HeaderLeftAvatar /&gt;
+
+IMPORTANT: 请记住，不要把组件设置的太深，这样文件名会很长。
+</t>
+<t tx="swot.20260513143325.1"></t>
+<t tx="swot.20260513143336.1"></t>
+<t tx="swot.20260513143523.1">&lt;template&gt;
+    &lt;div&gt;
+        This is  an Example Component1
+    &lt;/div&gt;
+&lt;/template&gt;</t>
+<t tx="swot.20260513143729.1">&lt;template&gt;
+    &lt;div&gt;
+        &lt;!--直接使用即可，不用导入--&gt;
+        &lt;ExampleComponent1 /&gt;
+    &lt;/div&gt;
+&lt;/template&gt;</t>
+<t tx="swot.20260513144934.1">[upperalpha]
+. 创建组件目录 app/components
++
+[source,console]
+----
+mkdir app/components
+----
+
+. 创建组件
++
+.app/components/ExampleComponent1.vue
+[source,xml]
+----
+&lt;&lt; template Component1 &gt;&gt;
+----
+
+. 使用组件：在页面文件 app/pages/UseExampleComponent1.vue 中使用组件
++
+[source,xml]
+----
+&lt;&lt; template use ExampleComponent1 &gt;&gt;
+----
+
+NOTE: 组件 components 与 页面 pages 中的 .vue 文件区别：组件不会自动生成路由。
+
+详情参: https://nuxt.com/docs/guide/directory-structure/components
 </t>
 </tnodes>
 </leo_file>
