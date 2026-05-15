@@ -581,7 +581,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_9_组件_components是自动导入的全局组件">9. 组件 components&#8201;&#8212;&#8201;是自动导入的全局组件</a>
 <ul class="sectlevel2">
-<li><a href="#_常用组件结构">常用组件结构</a></li>
+<li><a href="#_普通组件结构">普通组件结构</a></li>
 <li><a href="#_子目录组件">子目录组件</a></li>
 </ul>
 </li>
@@ -591,6 +591,21 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_定制布局">定制布局</a></li>
 </ul>
 </li>
+<li><a href="#_11_静态目录_assets_public">11. 静态目录 assets &amp; public</a>
+<ul class="sectlevel2">
+<li><a href="#_rename_assets_directory_特殊需求才会改">rename assets directory &#8594; 特殊需求才会改</a></li>
+<li><a href="#_rename_public_directory_特殊需求才会改">rename public directory &#8594; 特殊需求才会改</a></li>
+<li><a href="#_svg_图片">SVG 图片</a>
+<ul class="sectlevel3">
+<li><a href="#_vite_svg_loader未测试">Vite SVG loader&#8201;&#8212;&#8201;未测试</a></li>
+<li><a href="#_svg_组件比较快捷">SVG 组件&#8201;&#8212;&#8201;比较快捷</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_12_组合_composables">12. 组合 composables</a></li>
+<li><a href="#_13_插件_plugins">13. 插件 plugins</a></li>
+<li><a href="#_14_工具_utils">14. 工具 utils</a></li>
 </ul>
 </div>
 </div>
@@ -1616,7 +1631,7 @@ touch app/router.options.js</pre>
 <h2 id="_9_组件_components是自动导入的全局组件">9. 组件 components&#8201;&#8212;&#8201;是自动导入的全局组件</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_常用组件结构">常用组件结构</h3>
+<h3 id="_普通组件结构">普通组件结构</h3>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
 <li>
@@ -1662,7 +1677,16 @@ touch app/router.options.js</pre>
 <i class="fa icon-note" title="❕"></i>
 </td>
 <td class="content">
-组件 components 与 页面 pages 中的 .vue 文件区别：组件不会自动生成路由。
+<div class="ulist">
+<ul>
+<li>
+<p>组件 components 与 页面 pages 中的 .vue 文件区别：组件不会自动生成路由。</p>
+</li>
+<li>
+<p>组件是自动导入的全局组件，无需手工导入</p>
+</li>
+</ul>
+</div>
 </td>
 </tr>
 </table>
@@ -1844,10 +1868,430 @@ touch components/Header/Left/index.vue
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_11_静态目录_assets_public">11. 静态目录 assets &amp; public</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://nuxt.com/docs/getting-started/assets" class="bare">https://nuxt.com/docs/getting-started/assets</a></p>
+</div>
+<div class="paragraph">
+<p>assets: 一般用该目录来存放在 <mark>构建阶段</mark> 需要使用的静态文件，还会做一些特殊处理，比如压缩 js 文件。</p>
+</div>
+<div class="paragraph">
+<p>引用 assets 文件的方式：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;img src="~/assets/1.jpeg" alt="pinia" /&gt;</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>public: 该目录下的内容不会被作压缩等处理，目录下内容相当于在服务器中的静态资源。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>public 下的文件直接被从根目录访问</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>浏览器访问：http://localhost:3000/2.jpeg</p>
+</li>
+<li>
+<p>网页代码访问：&lt;img src="/2.jpeg" alt="" /&gt;</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+实际上任何目录都可以，如何更改参下面节点说明。
+</td>
+</tr>
+</table>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>media: 在实际开发中经常需要网站管理员上传一些资源，比如商品的图片等。一般会创建 media 目录，用户将资源上传。
+通常在服务器端进行处理，比如使用 nginx web 服务器提供静态资源服务。
+但是现代静态资源的部署，通常会使用 OSS 文件服务器进行托管。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rename_assets_directory_特殊需求才会改">rename assets directory &#8594; 特殊需求才会改</h3>
+<div class="paragraph">
+<p>To rename the assets directory in Nuxt 4, you need to update the appropriate
+configuration file: <mark>nuxt.config.ts</mark>. Specifically, you need to update the
+<mark>dir.assets</mark> property to reflect the new directory name.</p>
+</div>
+<div class="listingblock">
+<div class="title">nuxt.config.ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineNuxtConfig</span><span class="tok-p">({</span>
+<span class="tok-w">  </span><span class="tok-nx">dir</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">assets</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;new-assets-directory-name&#39;</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+<span class="tok-p">})</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, the <code>dir.assets</code> property is set to <code>'new-assets-directory-name'</code>.
+Replace <code>'new-assets-directory-name'</code> with the desired name for your assets directory.</p>
+</div>
+<div class="paragraph">
+<p>After updating the <code>nuxt.config.ts</code> file, make sure to restart your Nuxt development
+server for the changes to take effect.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rename_public_directory_特殊需求才会改">rename public directory &#8594; 特殊需求才会改</h3>
+<div class="paragraph">
+<p>To rename the public directory in Nuxt 4, update the <mark>dir.public</mark> property
+in <mark>nuxt.config.ts</mark>.</p>
+</div>
+<div class="listingblock">
+<div class="title">nuxt.config.ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="typescript"><div class="lineno"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineNuxtConfig</span><span class="tok-p">({</span>
+<span class="tok-w">  </span><span class="tok-nx">dir</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">public</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;new-public-directory-name&#39;</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+<span class="tok-p">})</span>
+</pre></div></td></tr></table></div></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replace <code>'new-public-directory-name'</code> with the desired name for your public directory.
+After updating the configuration, move your existing <code>public/</code> directory to the new
+location and restart your Nuxt development server for the changes to take effect.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_svg_图片">SVG 图片</h3>
+<div class="paragraph">
+<p>SVG 可缩放矢量图形
+<a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG" class="bare">https://developer.mozilla.org/zh-CN/docs/Web/SVG</a></p>
+</div>
+<div class="sect3">
+<h4 id="_vite_svg_loader未测试">Vite SVG loader&#8201;&#8212;&#8201;未测试</h4>
+<div class="paragraph">
+<p><a href="https://www.npmjs.com/package/vite-svg-loader" class="bare">https://www.npmjs.com/package/vite-svg-loader</a></p>
+</div>
+<div class="paragraph">
+<p>Vite SVG loader</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>npm install vite-svg-loader --save-dev</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Usage: 如在页面中使用 svg 图片如下</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;template&gt;
+    &lt;MyIcon /&gt;
+&lt;/template&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;script setup&gt;
+    import MyIcon from './my-icon.svg'
+&lt;/script&gt;</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_svg_组件比较快捷">SVG 组件&#8201;&#8212;&#8201;比较快捷</h4>
+<div class="paragraph">
+<p><a href="https://icones.js.org/">SVG资源</a></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+可以把 SVG 图片作为组件使用
+</td>
+</tr>
+</table>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir components/icons
+touch components/icons/Bell.vue</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="tok-nt">&lt;template&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;svg</span><span class="tok-w"> </span><span class="tok-na">xmlns=</span><span class="tok-s">&quot;http://www.w3.org/2000/svg&quot;</span><span class="tok-w"> </span><span class="tok-na">width=</span><span class="tok-s">&quot;1em&quot;</span><span class="tok-w"> </span><span class="tok-na">height=</span><span class="tok-s">&quot;1em&quot;</span><span class="tok-w"> </span><span class="tok-na">viewBox=</span><span class="tok-s">&quot;0 0 24 24&quot;</span><span class="tok-nt">&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;path</span><span class="tok-w"> </span><span class="tok-na">fill=</span><span class="tok-s">&quot;currentColor&quot;</span><span class="tok-w"> </span><span class="tok-na">d=</span><span class="tok-s">&quot;M11 15h2v-2h2v-2h-2V9h-2v2H9v2h2v2Zm-7 4v-2h2v-7q0-2.075 1.25-3.688T10.5 4.2v-.7q0-.625.438-1.063T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2H4Zm8-7.5ZM12 22q-.825 0-1.413-.588T10 20h4q0 .825-.588 1.413T12 22Zm-4-5h8v-7q0-1.65-1.175-2.825T12 6q-1.65 0-2.825 1.175T8 10v7Z&quot;</span><span class="tok-nt">&gt;</span>
+<span class="tok-w">        </span><span class="tok-nt">&lt;/path&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">&lt;/svg&gt;</span>
+<span class="tok-nt">&lt;/template&gt;</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-w"> </span><span class="tok-nx">lang</span><span class="tok-o">=</span><span class="tok-s2">&quot;ts&quot;</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">      </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;MaterialSymbolsAddAlertOutline&#39;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_12_组合_composables">12. 组合 composables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>创建目录</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir composables</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+按照惯例一般 composables 目录里的文件是以 use 开头，如文件名 useFoo.ts
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">app/composables/useFoo.ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">useFoo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">useState</span><span class="tok-p">(</span><span class="tok-s1">&#39;foo&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-s1">&#39;bar&#39;</span><span class="tok-p">)</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>使用组合函数：在 pages or components 中使用</p>
+</div>
+<div class="listingblock">
+<div class="title">app/pages/use-foo.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;ts&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">foo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useFoo</span><span class="tok-p">()</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+  <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    {{ foo }}
+  <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>NOTE：只有在使用 <mark>默认导出</mark> 时才与文件名有关系，因为此时没有函数名，就从文件名进行推断。
+<a href="https://nuxt.com/docs/guide/directory-structure/composables#usage" class="bare">https://nuxt.com/docs/guide/directory-structure/composables#usage</a></p>
+</div>
+<div class="paragraph">
+<p>建议更多地去使用 vueuse：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://vueuse.org/" class="bare">https://vueuse.org/</a></p>
+</li>
+<li>
+<p><a href="https://www.vueusejs.com/" class="bare">https://www.vueusejs.com/</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_13_插件_plugins">13. 插件 plugins</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://nuxt.com/docs/guide/directory-structure/plugins" class="bare">https://nuxt.com/docs/guide/directory-structure/plugins</a></p>
+</div>
+<div class="paragraph">
+<p>创建插件目录</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir plugins</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>书写插件：</p>
+</div>
+<div class="listingblock">
+<div class="title">app/plugins/myPlugin.ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineNuxtPlugin</span><span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-nx">nuxtApp</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;nuxtApp&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">nuxtApp</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// Automatically Providing Helpers</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">provide</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">hello</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">msg</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">string</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-sb">`Hello </span><span class="tok-si">${</span><span class="tok-nx">msg</span><span class="tok-si">}</span><span class="tok-sb">`</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-c1">// 具体使用参下面 test-plugins.vue</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在页面中使用插件</p>
+</div>
+<div class="listingblock">
+<div class="title">app/pages/test-myPlugins.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">template</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;pug&quot;</span><span class="tok-p">&gt;</span>
+//- 模板中可以直接使用 $hello
+div
+    h2 test-myPlugins.vue
+    div {{ $hello(&#39;world&#39;) }}
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span><span class="tok-p">&gt;</span>
+<span class="tok-c1">// 也可以在 script 中使用 $hello</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">$hello</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useNuxtApp</span><span class="tok-p">();</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">$hello</span><span class="tok-p">(</span><span class="tok-s1">&#39;world&#39;</span><span class="tok-p">));</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_14_工具_utils">14. 工具 utils</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://nuxt.com/docs/4.x/directory-structure/app/utils" class="bare">https://nuxt.com/docs/4.x/directory-structure/app/utils</a></p>
+</div>
+<div class="paragraph">
+<p>专门用来存放 <mark>前端</mark> 工具类的目录，会被 nuxt3/4 自动导出。</p>
+</div>
+<div class="paragraph">
+<p>The utils/ directory helps you semantically separate different types of auto-imported functions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Composables (composables/) → Vue-reactive logic (refs, lifecycle, Vue-specific features)</p>
+</li>
+<li>
+<p>Utils (utils/) → Pure utility functions (formatting, calculations, helpers <mark>with no Vue reactivity</mark>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>创建插件目录</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir utils</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>创建工具函数文件 app/utils/format.js</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 格式化日期</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">formatDate</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">date</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">d</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nb">Date</span><span class="tok-p">(</span><span class="tok-nx">date</span><span class="tok-p">)</span>
+<span class="tok-w">  </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-sb">`</span><span class="tok-si">${</span><span class="tok-nx">d</span><span class="tok-p">.</span><span class="tok-nx">getFullYear</span><span class="tok-p">()</span><span class="tok-si">}</span><span class="tok-sb">-</span><span class="tok-si">${</span><span class="tok-nx">d</span><span class="tok-p">.</span><span class="tok-nx">getMonth</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-si">}</span><span class="tok-sb">-</span><span class="tok-si">${</span><span class="tok-nx">d</span><span class="tok-p">.</span><span class="tok-nx">getDate</span><span class="tok-p">()</span><span class="tok-si">}</span><span class="tok-sb">`</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c1">// 首字母大写</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">capitalize</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">str</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">str</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span>
+<span class="tok-w">  </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">str</span><span class="tok-p">.</span><span class="tok-nx">charAt</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">).</span><span class="tok-nx">toUpperCase</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-nx">str</span><span class="tok-p">.</span><span class="tok-nx">slice</span><span class="tok-p">(</span><span class="tok-mf">1</span><span class="tok-p">).</span><span class="tok-nx">toLowerCase</span><span class="tok-p">()</span>
+<span class="tok-p">}</span>
+
+<span class="tok-c1">// 截断文本</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">truncate</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">str</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">20</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">str</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span>
+<span class="tok-w">  </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">str</span><span class="tok-p">.</span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">?</span><span class="tok-w"> </span><span class="tok-nx">str</span><span class="tok-p">.</span><span class="tok-nx">slice</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">length</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-s1">&#39;...&#39;</span><span class="tok-w"> </span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">str</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>使用工具函数</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+  <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">style</span><span class="tok-o">=</span><span class="tok-s">&quot;padding: 20px;&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>Utils 自动导入示例<span class="tok-p">&lt;/</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">style</span><span class="tok-o">=</span><span class="tok-s">&quot;margin: 20px 0;&quot;</span><span class="tok-p">&gt;</span>
+      <span class="tok-p">&lt;</span><span class="tok-nt">h3</span><span class="tok-p">&gt;</span>日期格式化：<span class="tok-p">&lt;/</span><span class="tok-nt">h3</span><span class="tok-p">&gt;</span>
+      <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{{ formatDate(&#39;2024-12-25&#39;) }}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+      <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{{ formatDate(new Date()) }}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">style</span><span class="tok-o">=</span><span class="tok-s">&quot;margin: 20px 0;&quot;</span><span class="tok-p">&gt;</span>
+      <span class="tok-p">&lt;</span><span class="tok-nt">h3</span><span class="tok-p">&gt;</span>首字母大写：<span class="tok-p">&lt;/</span><span class="tok-nt">h3</span><span class="tok-p">&gt;</span>
+      <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{{ capitalize(&#39;hello world&#39;) }}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+      <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{{ capitalize(&#39;VUE&#39;) }}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+      <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{{ capitalize(&#39;nUXt&#39;) }}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">style</span><span class="tok-o">=</span><span class="tok-s">&quot;margin: 20px 0;&quot;</span><span class="tok-p">&gt;</span>
+      <span class="tok-p">&lt;</span><span class="tok-nt">h3</span><span class="tok-p">&gt;</span>文本截断：<span class="tok-p">&lt;/</span><span class="tok-nt">h3</span><span class="tok-p">&gt;</span>
+      <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{{ truncate(&#39;这是一段很长的文本内容，超过20个字符就会被截断&#39;, 20) }}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+      <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{{ truncate(&#39;短文本&#39;, 20) }}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+  <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span><span class="tok-p">&gt;</span>
+<span class="tok-c1">// 注意：这里没有任何 import 语句！</span>
+<span class="tok-c1">// formatDate、capitalize、truncate 可以直接使用</span>
+
+<span class="tok-c1">// 也可以在逻辑中直接调用</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">capitalize</span><span class="tok-p">(</span><span class="tok-s1">&#39;auto-import works!&#39;</span><span class="tok-p">)</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">message</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-c1">// &quot;Auto-import works!&quot;  // 不够 20 个字符全部输出</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-05-13 16:45:17 +0800
+Last updated 2026-05-15 16:24:37 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
