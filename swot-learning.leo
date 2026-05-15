@@ -1985,7 +1985,7 @@
 </v>
 </v>
 <v t="swot.20260513142924.1"><vh>9. 组件 components -- 是自动导入的全局组件</vh>
-<v t="swot.20260513144934.1"><vh>常用组件结构</vh>
+<v t="swot.20260513144934.1"><vh>普通组件结构</vh>
 <v t="swot.20260513143523.1"><vh>&lt;&lt; template Component1 &gt;&gt;</vh></v>
 <v t="swot.20260513143729.1"><vh>&lt;&lt; template use ExampleComponent1 &gt;&gt;</vh></v>
 </v>
@@ -2000,6 +2000,26 @@
 <v t="swot.20260513163945.1"><vh>&lt;&lt; template Custom layout &gt;&gt;</vh></v>
 <v t="swot.20260513164252.1"><vh>&lt;&lt; script layout &gt;&gt;</vh></v>
 </v>
+</v>
+<v t="swot.20260514080708.1"><vh>11. 静态目录 assets &amp; public</vh>
+<v t="swot.20260514080708.2"><vh>rename assets directory -&gt; 特殊需求才会改</vh></v>
+<v t="swot.20260514080708.3"><vh>rename public directory -&gt; 特殊需求才会改</vh></v>
+<v t="swot.20260514080708.4"><vh>SVG 图片</vh>
+<v t="swot.20260514080708.5"><vh>Vite SVG loader -- 未测试</vh></v>
+<v t="swot.20260514080708.6"><vh>SVG 组件 -- 比较快捷</vh></v>
+</v>
+</v>
+<v t="swot.20260515082710.1"><vh>12. 组合 composables</vh>
+<v t="swot.20260515103821.1"><vh>&lt;&lt; composables useFoo &gt;&gt;</vh></v>
+<v t="swot.20260515104330.1"><vh>&lt;&lt; page use-foo &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260515140851.1"><vh>13. 插件 plugins</vh>
+<v t="swot.20260515143229.2"><vh>&lt;&lt; defineNuxtPlugin &gt;&gt;</vh></v>
+<v t="swot.20260515143729.1"><vh>&lt;&lt; pages test-myPlugins &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260515160945.1"><vh>14. 工具 utils</vh>
+<v t="swot.20260515161303.1"><vh>&lt;&lt; utils format &gt;&gt;</vh></v>
+<v t="swot.20260515161731.1"><vh>&lt;&lt; pages test-format &gt;&gt;</vh></v>
 </v>
 </v>
 </v>
@@ -2031,6 +2051,18 @@
 <v t="swot.20260513162721.1"><vh>@file app/app.vue</vh></v>
 <v t="swot.20260513163928.1"><vh>@file app/layouts/custom.vue</vh></v>
 <v t="swot.20260513164232.1"><vh>@file app/pages/UseCustomLayout.vue</vh></v>
+</v>
+<v t="swot.20260515103652.1"><vh>composables</vh>
+<v t="swot.20260515103756.1"><vh>@file app/composables/useFoo.ts</vh></v>
+<v t="swot.20260515104136.1"><vh>@file app/pages/use-foo.vue</vh></v>
+</v>
+<v t="swot.20260515143218.1"><vh>plugins</vh>
+<v t="swot.20260515143229.1"><vh>@file app/plugins/myPlugin.ts</vh></v>
+<v t="swot.20260515143609.1"><vh>@file app/pages/test-myPlugins.vue</vh></v>
+</v>
+<v t="swot.20260515161221.1"><vh>utils</vh>
+<v t="swot.20260515161247.1"><vh>@file app/utils/format.js</vh></v>
+<v t="swot.20260515161701.1"><vh>@file app/pages/test-format.vue</vh></v>
 </v>
 </v>
 </v>
@@ -17354,11 +17386,11 @@ arg: "/Users/swot/app/nvim-macos-x86_64/bin/nvim"
 <t tx="swot.20260224073142.1">前端通过状态驱动（Reactive）来治理复杂的交互逻辑。
 
 [horizontal]
-**V (View)** :: **组件 (+page.svelte)**。像“顾客”，只负责绑定数据和触发事件。它是“愚笨”的，不关心后端细节。
+V (View) :: 展示端：组件 (+page.svelte/*.vue)。像“顾客”，只负责绑定数据和触发事件。它是“愚笨”的，不关心后端细节。
 
-**VM (ViewModel)** :: **状态管理 (store.svelte.ts)**。像“大堂经理”，持有 `$state`，封装前端处理逻辑，并通过 fetch 调用  API
+VM (ViewModel) :: 状态管理 (store.svelte.ts/composables函数)。像“大堂经理”，持有 `$state`，封装前端处理逻辑，并通过 fetch 调用  API
 
-**M (Model)** :: **数据源代理 (operations.ts)**。像“快递员”，定义 TS 接口，负责发起真正的 fetch/axios 请求。
+M (Model) :: 获取数据：数据源代理 (operations.ts)。像“快递员”，定义 TS 接口，负责发起真正的 fetch/axios 请求。
 
 </t>
 <t tx="swot.20260224073211.1">深入后端代码，拆解“主厨”与“前台”的配合。
@@ -40618,13 +40650,15 @@ IMPORTANT: 请记住，不要把组件设置的太深，这样文件名会很长
     &lt;div&gt;
         This is  an Example Component1
     &lt;/div&gt;
-&lt;/template&gt;</t>
+&lt;/template&gt;
+</t>
 <t tx="swot.20260513143729.1">&lt;template&gt;
     &lt;div&gt;
         &lt;!--直接使用即可，不用导入--&gt;
         &lt;ExampleComponent1 /&gt;
     &lt;/div&gt;
-&lt;/template&gt;</t>
+&lt;/template&gt;
+</t>
 <t tx="swot.20260513144934.1">[upperalpha]
 . 创建组件目录 app/components
 +
@@ -40648,7 +40682,11 @@ mkdir app/components
 &lt;&lt; template use ExampleComponent1 &gt;&gt;
 ----
 
-NOTE: 组件 components 与 页面 pages 中的 .vue 文件区别：组件不会自动生成路由。
+[NOTE]
+====
+* 组件 components 与 页面 pages 中的 .vue 文件区别：组件不会自动生成路由。
+* 组件是自动导入的全局组件，无需手工导入
+====
 
 详情参: https://nuxt.com/docs/guide/directory-structure/components
 </t>
@@ -40723,11 +40761,309 @@ IMPORTANT: 如果没有 App.vue 文件，则会找 layouts/default.vue 文件。
     &lt;p&gt;Custom layout&lt;/p&gt;
     &lt;slot /&gt;
 &lt;/div&gt;
-&lt;/template&gt;</t>
+&lt;/template&gt;
+</t>
 <t tx="swot.20260513164252.1">&lt;script setup&gt;
     definePageMeta({
       layout: 'custom',
     })
+&lt;/script&gt;
+</t>
+<t tx="swot.20260514080708.1">https://nuxt.com/docs/getting-started/assets
+
+assets: 一般用该目录来存放在 #构建阶段# 需要使用的静态文件，还会做一些特殊处理，比如压缩 js 文件。
+
+引用 assets 文件的方式：
+
+    &lt;img src="~/assets/1.jpeg" alt="pinia" /&gt;
+
+
+***
+public: 该目录下的内容不会被作压缩等处理，目录下内容相当于在服务器中的静态资源。
+
+* public 下的文件直接被从根目录访问
+. 浏览器访问：http://localhost:3000/2.jpeg
+. 网页代码访问：&lt;img src="/2.jpeg" alt="" /&gt;
+
+
+TIP: 实际上任何目录都可以，如何更改参下面节点说明。
+
+
+
+****
+media: 在实际开发中经常需要网站管理员上传一些资源，比如商品的图片等。一般会创建 media 目录，用户将资源上传。
+通常在服务器端进行处理，比如使用 nginx web 服务器提供静态资源服务。
+但是现代静态资源的部署，通常会使用 OSS 文件服务器进行托管。
+****
+</t>
+<t tx="swot.20260514080708.2">To rename the assets directory in Nuxt 4, you need to update the appropriate
+configuration file: #nuxt.config.ts#. Specifically, you need to update the
+#dir.assets# property to reflect the new directory name.
+
+.nuxt.config.ts
+[source,typescript,linenums]
+----
+export default defineNuxtConfig({
+  dir: {
+    assets: 'new-assets-directory-name'
+  }
+})
+----
+
+In this example, the `dir.assets` property is set to `'new-assets-directory-name'`.
+Replace `'new-assets-directory-name'` with the desired name for your assets directory.
+
+After updating the `nuxt.config.ts` file, make sure to restart your Nuxt development
+server for the changes to take effect.
+
+</t>
+<t tx="swot.20260514080708.3">To rename the public directory in Nuxt 4, update the #dir.public# property
+in #nuxt.config.ts#.
+
+.nuxt.config.ts
+[source,typescript,linenums]
+----
+export default defineNuxtConfig({
+  dir: {
+    public: 'new-public-directory-name'
+  }
+})
+----
+
+Replace `'new-public-directory-name'` with the desired name for your public directory.
+After updating the configuration, move your existing `public/` directory to the new
+location and restart your Nuxt development server for the changes to take effect.
+</t>
+<t tx="swot.20260514080708.4">SVG 可缩放矢量图形
+https://developer.mozilla.org/zh-CN/docs/Web/SVG
+</t>
+<t tx="swot.20260514080708.5">@language asciidoc
+https://www.npmjs.com/package/vite-svg-loader
+
+Vite SVG loader
+
+    npm install vite-svg-loader --save-dev
+
+Usage: 如在页面中使用 svg 图片如下
+
+    &lt;template&gt;
+        &lt;MyIcon /&gt;
+    &lt;/template&gt;
+
+    &lt;script setup&gt;
+        import MyIcon from './my-icon.svg'
+    &lt;/script&gt;
+
+</t>
+<t tx="swot.20260514080708.6">@language asciidoc
+https://icones.js.org/[SVG资源]
+
+IMPORTANT: 可以把 SVG 图片作为组件使用
+
+    mkdir components/icons
+    touch components/icons/Bell.vue
+
+[source,xml]
+----
+&lt;template&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"&gt;
+        &lt;path fill="currentColor" d="M11 15h2v-2h2v-2h-2V9h-2v2H9v2h2v2Zm-7 4v-2h2v-7q0-2.075 1.25-3.688T10.5 4.2v-.7q0-.625.438-1.063T12 2q.625 0 1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2H4Zm8-7.5ZM12 22q-.825 0-1.413-.588T10 20h4q0 .825-.588 1.413T12 22Zm-4-5h8v-7q0-1.65-1.175-2.825T12 6q-1.65 0-2.825 1.175T8 10v7Z"&gt;
+        &lt;/path&gt;
+    &lt;/svg&gt;
+&lt;/template&gt;
+----
+
+
+[source,javascript]
+----
+&lt;script lang="ts"&gt;
+    export default {
+      name: 'MaterialSymbolsAddAlertOutline'
+    }
+&lt;/script&gt;
+----</t>
+<t tx="swot.20260515082710.1">创建目录
+
+    mkdir composables
+
+NOTE: 按照惯例一般 composables 目录里的文件是以 use 开头，如文件名 useFoo.ts
+
+.app/composables/useFoo.ts
+[source,javascript]
+----
+&lt;&lt; composables useFoo &gt;&gt;
+----
+
+
+使用组合函数：在 pages or components 中使用
+
+.app/pages/use-foo.vue
+[source,html]
+----
+&lt;&lt; page use-foo &gt;&gt;
+----
+
+
+NOTE：只有在使用 #默认导出# 时才与文件名有关系，因为此时没有函数名，就从文件名进行推断。
+https://nuxt.com/docs/guide/directory-structure/composables#usage
+
+
+建议更多地去使用 vueuse：
+
+* https://vueuse.org/
+* https://www.vueusejs.com/
+</t>
+<t tx="swot.20260515103652.1"></t>
+<t tx="swot.20260515103821.1">export const useFoo = () =&gt; {
+  return useState('foo', () =&gt; 'bar')
+}
+</t>
+<t tx="swot.20260515104330.1">@language html
+&lt;script setup lang="ts"&gt;
+const foo = useFoo()
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;div&gt;
+    {{ foo }}
+  &lt;/div&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260515140851.1">@language asciidoc
+https://nuxt.com/docs/guide/directory-structure/plugins
+
+创建插件目录
+
+    mkdir plugins
+
+书写插件：
+
+.app/plugins/myPlugin.ts
+[source,javascript]
+----
+&lt;&lt; defineNuxtPlugin &gt;&gt;
+----
+
+在页面中使用插件
+
+.app/pages/test-myPlugins.vue
+[source,html]
+----
+&lt;&lt; pages test-myPlugins &gt;&gt;
+----
+
+</t>
+<t tx="swot.20260515143218.1"></t>
+<t tx="swot.20260515143229.2">@language javascript
+export default defineNuxtPlugin(
+    nuxtApp =&gt; {
+        console.log("nuxtApp", nuxtApp);
+
+        // Automatically Providing Helpers
+        return {
+            provide: {
+                hello: (msg: string) =&gt; `Hello ${msg}`
+            }
+        }
+        // 具体使用参下面 test-plugins.vue
+    }
+);
+</t>
+<t tx="swot.20260515143729.1">@language pug
+&lt;template lang="pug"&gt;
+//- 模板中可以直接使用 $hello
+div
+    h2 test-myPlugins.vue
+    div {{ $hello('world') }}
+&lt;/template&gt;
+
+@language typescript
+&lt;script setup&gt;
+// 也可以在 script 中使用 $hello
+const { $hello } = useNuxtApp();
+console.log($hello('world'));
+&lt;/script&gt;
+</t>
+<t tx="swot.20260515160945.1">https://nuxt.com/docs/4.x/directory-structure/app/utils
+
+专门用来存放 #前端# 工具类的目录，会被 nuxt3/4 自动导出。
+
+The utils/ directory helps you semantically separate different types of auto-imported functions:
+
+* Composables (composables/) → Vue-reactive logic (refs, lifecycle, Vue-specific features)
+* Utils (utils/) → Pure utility functions (formatting, calculations, helpers #with no Vue reactivity#)
+
+
+创建插件目录
+
+    mkdir utils
+
+创建工具函数文件 app/utils/format.js
+
+[source,javascript]
+----
+&lt;&lt; utils format &gt;&gt;
+----
+
+使用工具函数
+
+[source,html]
+----
+&lt;&lt; pages test-format &gt;&gt;
+----
+</t>
+<t tx="swot.20260515161221.1"></t>
+<t tx="swot.20260515161303.1">@language javascript
+// 格式化日期
+export const formatDate = (date) =&gt; {
+  const d = new Date(date)
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
+}
+
+// 首字母大写
+export const capitalize = (str) =&gt; {
+  if (!str) return ''
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}
+
+// 截断文本
+export const truncate = (str, length = 20) =&gt; {
+  if (!str) return ''
+  return str.length &gt; length ? str.slice(0, length) + '...' : str
+}
+</t>
+<t tx="swot.20260515161731.1">&lt;template&gt;
+  &lt;div style="padding: 20px;"&gt;
+    &lt;h1&gt;Utils 自动导入示例&lt;/h1&gt;
+    
+    &lt;div style="margin: 20px 0;"&gt;
+      &lt;h3&gt;日期格式化：&lt;/h3&gt;
+      &lt;p&gt;{{ formatDate('2024-12-25') }}&lt;/p&gt;
+      &lt;p&gt;{{ formatDate(new Date()) }}&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div style="margin: 20px 0;"&gt;
+      &lt;h3&gt;首字母大写：&lt;/h3&gt;
+      &lt;p&gt;{{ capitalize('hello world') }}&lt;/p&gt;
+      &lt;p&gt;{{ capitalize('VUE') }}&lt;/p&gt;
+      &lt;p&gt;{{ capitalize('nUXt') }}&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div style="margin: 20px 0;"&gt;
+      &lt;h3&gt;文本截断：&lt;/h3&gt;
+      &lt;p&gt;{{ truncate('这是一段很长的文本内容，超过20个字符就会被截断', 20) }}&lt;/p&gt;
+      &lt;p&gt;{{ truncate('短文本', 20) }}&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+// 注意：这里没有任何 import 语句！
+// formatDate、capitalize、truncate 可以直接使用
+
+// 也可以在逻辑中直接调用
+const message = capitalize('auto-import works!')
+console.log(message) // "Auto-import works!"  // 不够 20 个字符全部输出
 &lt;/script&gt;</t>
 </tnodes>
 </leo_file>
