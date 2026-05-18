@@ -2897,7 +2897,8 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 \:////
 \:
 </t>
-<t tx="swot.20260415161705.1">@delims //
+<t tx="swot.20260415161705.1">@language javascript
+@delims //
 &lt;script lang="ts"&gt;
 @others
 @delims &lt;!-- --&gt;
