@@ -606,6 +606,13 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_12_组合_composables">12. 组合 composables</a></li>
 <li><a href="#_13_插件_plugins">13. 插件 plugins</a></li>
 <li><a href="#_14_工具_utils">14. 工具 utils</a></li>
+<li><a href="#_15_中间件_middleware用于路由_pages_切换时执行">15. 中间件 middleware&#8201;&#8212;&#8201;用于路由 pages 切换时执行</a>
+<ul class="sectlevel2">
+<li><a href="#_局部中间件auth_ts">局部中间件&#8201;&#8212;&#8201;auth.ts</a></li>
+<li><a href="#_全局中间件auth_global_ts_这是反例我设计的不好当作反例教学">全局中间件&#8201;&#8212;&#8201;auth.global.ts &#8594; 这是反例(我设计的不好,当作反例教学)</a></li>
+<li><a href="#_auth_middleware_global_tsbug_如果登录不成功会在地址栏中追加多个redirect">auth-middleware.global.ts&#8201;&#8212;&#8201;BUG: 如果登录不成功会在地址栏中追加多个redirect</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -2288,10 +2295,127 @@ div
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_15_中间件_middleware用于路由_pages_切换时执行">15. 中间件 middleware&#8201;&#8212;&#8201;用于路由 pages 切换时执行</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>创建中间件目录</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir middleware</pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_局部中间件auth_ts">局部中间件&#8201;&#8212;&#8201;auth.ts</h3>
+<div class="listingblock">
+<div class="title">app/middleware/auth.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineNuxtRouteMiddleware</span><span class="tok-p">((</span><span class="tok-nx">to</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;hello from middleware auth.ts&quot;</span><span class="tok-p">);</span>
+<span class="tok-p">})</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">app/pages/test-auth-middleware.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span><span class="tok-p">&gt;</span>
+<span class="tok-c1">// 在页面页面中使用局部中间件</span>
+<span class="tok-nx">definePageMeta</span><span class="tok-p">({</span>
+<span class="tok-w">    </span><span class="tok-nx">middleware</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">[</span><span class="tok-s1">&#39;auth&#39;</span><span class="tok-p">],</span>
+<span class="tok-p">})</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">h3</span><span class="tok-p">&gt;</span>Test 局部中间件<span class="tok-p">&lt;/</span><span class="tok-nt">h3</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_全局中间件auth_global_ts_这是反例我设计的不好当作反例教学">全局中间件&#8201;&#8212;&#8201;auth.global.ts &#8594; 这是反例(我设计的不好,当作反例教学)</h3>
+<div class="listingblock">
+<div class="title">auth.global.ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 此例是反例，不能用于实际开发中……</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineNuxtRouteMiddleware</span><span class="tok-p">((</span><span class="tok-nx">to</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// console.log(from.path);</span>
+<span class="tok-w">    </span><span class="tok-c1">// console.log(to.path);</span>
+
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">isLoggedIn</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 假设已经登录成功，按常理不应该这样设计</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 如果登录成功且路由不是去 /login</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">isLoggedIn</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">to</span><span class="tok-p">.</span><span class="tok-nx">path</span><span class="tok-w"> </span><span class="tok-o">!==</span><span class="tok-w"> </span><span class="tok-s1">&#39;/login&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 想去哪就去哪儿吧</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">navigateTo</span><span class="tok-p">(</span><span class="tok-nx">to</span><span class="tok-p">.</span><span class="tok-nx">fullPath</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 完蛋了，又会进入此 if 语句，造成死循环</span>
+<span class="tok-w">        </span><span class="tok-c1">// 请参考 auth-middleware.global.ts 国外大佬的逻辑</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">navigateTo</span><span class="tok-p">(</span><span class="tok-s1">&#39;/login&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 省略 else</span>
+<span class="tok-p">})</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_auth_middleware_global_tsbug_如果登录不成功会在地址栏中追加多个redirect">auth-middleware.global.ts&#8201;&#8212;&#8201;BUG: 如果登录不成功会在地址栏中追加多个redirect</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 路由全局中间件</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineNuxtRouteMiddleware</span><span class="tok-p">((</span><span class="tok-nx">to</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 用 storeToRefs 解构出响应式变量</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">authenticated</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">token</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">storeToRefs</span><span class="tok-p">(</span><span class="tok-nx">useAuthStore</span><span class="tok-p">())</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 通过有无 token 来判断是否登录</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">token</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">authenticated</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">true</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 有 token，但目标是登录页面，则跳转到主页</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">token</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">to</span><span class="tok-o">?</span><span class="tok-p">.</span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;login&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">abortNavigation</span><span class="tok-p">()</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">navigateTo</span><span class="tok-p">(</span><span class="tok-s1">&#39;/&#39;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 无 token，但目标不是登录页面，则跳转到登录页面</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-nx">token</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">to</span><span class="tok-o">?</span><span class="tok-p">.</span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-o">!==</span><span class="tok-w"> </span><span class="tok-s1">&#39;login&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">abortNavigation</span><span class="tok-p">()</span>
+<span class="tok-w">        </span><span class="tok-c1">// 存疑：</span>
+<span class="tok-w">        </span><span class="tok-c1">// 此处应该判断是否有 redirect</span>
+<span class="tok-w">        </span><span class="tok-c1">// 有则不加，没有则加 redirect</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">navigateTo</span><span class="tok-p">({</span>
+<span class="tok-w">            </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;login&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">query</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">redirect</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">to</span><span class="tok-p">.</span><span class="tok-nx">fullPath</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w">  </span><span class="tok-c1">// 登录后的重定向url </span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-w">        </span><span class="tok-p">})</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">})</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>这里暗含了一个逻辑：即已登录成功，访问路由不是 login，则直接通行。
+所以 nuxt3 不用 next() 挺香，可以不用处理这样的逻辑。</p>
+</li>
+<li>
+<p>还有一个逻辑，即无 token，目标是登录页面，则直接放行。</p>
+</li>
+</ul>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Bug: 如果登录不成功可能会在地址栏中追加多个 redirect
+<a href="http://localhost:3000/login?redirect=/login?redirect=/" class="bare">http://localhost:3000/login?redirect=/login?redirect=/</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-05-15 16:24:37 +0800
+Last updated 2026-05-18 11:00:22 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

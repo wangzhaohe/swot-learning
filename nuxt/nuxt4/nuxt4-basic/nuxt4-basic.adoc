@@ -1116,3 +1116,95 @@ console.log(message) // "Auto-import works!"  // 不够 20 个字符全部输出
 </script>
 ----
 
+== 15. 中间件 middleware -- 用于路由 pages 切换时执行
+创建中间件目录
+
+    mkdir middleware
+
+=== 局部中间件 -- auth.ts
+.app/middleware/auth.js
+[source,javascript]
+----
+export default defineNuxtRouteMiddleware((to, from) => {
+    console.log("hello from middleware auth.ts");
+})
+----
+
+.app/pages/test-auth-middleware.vue
+[source,html]
+----
+<script setup>
+// 在页面页面中使用局部中间件
+definePageMeta({
+    middleware: ['auth'],
+})
+</script>
+
+<template>
+<h3>Test 局部中间件</h3>
+</template>
+----
+
+=== 全局中间件 -- auth.global.ts -> 这是反例(我设计的不好,当作反例教学)
+.auth.global.ts
+[source,javascript]
+----
+// 此例是反例，不能用于实际开发中……
+export default defineNuxtRouteMiddleware((to, from) => {
+    // console.log(from.path);
+    // console.log(to.path);
+
+    let isLoggedIn = true;  // 假设已经登录成功，按常理不应该这样设计
+
+    // 如果登录成功且路由不是去 /login
+    if (isLoggedIn && to.path !== '/login') {
+        // 想去哪就去哪儿吧
+        return navigateTo(to.fullPath);  // 完蛋了，又会进入此 if 语句，造成死循环
+        // 请参考 auth-middleware.global.ts 国外大佬的逻辑
+    }
+    return navigateTo('/login');  // 省略 else
+})
+----
+
+=== auth-middleware.global.ts -- BUG: 如果登录不成功会在地址栏中追加多个redirect
+[source,javascript]
+----
+// 路由全局中间件
+export default defineNuxtRouteMiddleware((to, from) => {
+    // 用 storeToRefs 解构出响应式变量
+    const { authenticated, token } = storeToRefs(useAuthStore())
+
+    // 通过有无 token 来判断是否登录
+    if (token.value) {
+        authenticated.value = true
+    }
+
+    // 有 token，但目标是登录页面，则跳转到主页
+    if (token.value && to?.name === 'login') {
+        abortNavigation()
+        return navigateTo('/')
+    }
+
+    // 无 token，但目标不是登录页面，则跳转到登录页面
+    if (!token.value && to?.name !== 'login') {
+        abortNavigation()
+        // 存疑：
+        // 此处应该判断是否有 redirect
+        // 有则不加，没有则加 redirect
+        return navigateTo({
+            name: 'login',
+            query: { redirect: to.fullPath }  // 登录后的重定向url <1>
+        })
+    }
+})
+----
+
+
+* 这里暗含了一个逻辑：即已登录成功，访问路由不是 login，则直接通行。
+所以 nuxt3 不用 next() 挺香，可以不用处理这样的逻辑。
+
+* 还有一个逻辑，即无 token，目标是登录页面，则直接放行。
+
+<1> Bug: 如果登录不成功可能会在地址栏中追加多个 redirect
+http://localhost:3000/login?redirect=/login?redirect=/
+
