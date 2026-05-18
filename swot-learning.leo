@@ -1897,11 +1897,11 @@
 </v>
 <v t="swot.20260218173307.1"><vh>item2 启动 lazyvim 后切换标签会导致编辑器当前行下面变灰，按键会跳到别的行的问题</vh></v>
 </v>
-<v t="swot.20250511104537.1" descendentVnodeUnknownAttributes="7d710028580e000000302e302e302e302e302e31342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30352d313871077573580b000000302e312e312e302e392e3671087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032352d30342d3237710e7573580b000000302e312e312e302e392e38710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30342d323771157573580c000000302e312e312e302e31302e3371167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30342d3237711c7573580c000000302e312e312e302e31302e36711d7d711e5808000000616e6e6f74617465711f7d71202858080000007072696f7269747971214d0f27580a000000707269736574646174657122580a000000323032352d30352d303171237573580c000000302e312e312e302e31302e3971247d71255808000000616e6e6f7461746571267d71272858080000007072696f7269747971284d0f27580a000000707269736574646174657129580a000000323032352d30342d3237712a7573580e000000302e312e312e302e31332e352e30712b7d712c5808000000616e6e6f74617465712d7d712e2858080000007072696f72697479712f4d0f27580a000000707269736574646174657130580a000000323032352d30352d333071317573580e000000302e312e312e302e31332e362e3271327d71335808000000616e6e6f7461746571347d71352858080000007072696f7269747971364d0f27580a000000707269736574646174657137580a000000323032352d30352d333071387573580e000000302e312e312e302e31332e372e3071397d713a5808000000616e6e6f74617465713b7d713c2858080000007072696f72697479713d4d0f27580a00000070726973657464617465713e580a000000323032352d30352d3330713f7573580e000000302e312e312e302e31332e382e3171407d71415808000000616e6e6f7461746571427d71432858080000007072696f7269747971444d0f27580a000000707269736574646174657145580a000000323032352d30352d333071467573752e"><vh>@path nuxt</vh>
-<v t="swot.20260509145220.1" descendentVnodeUnknownAttributes="7d7100580c000000302e302e302e302e31342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30352d313871077573732e"><vh>@path nuxt4</vh>
-<v t="swot.20260511103007.1" descendentVnodeUnknownAttributes="7d7100580a000000302e302e302e31342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30352d313871077573732e"><vh>@path nuxt4-basic</vh>
-<v t="swot.20260511092421.1" descendentVnodeUnknownAttributes="7d71005808000000302e302e31342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30352d313871077573732e"><vh>@adoc nuxt4-basic.adoc</vh>
-<v t="swot.20260511092435.1" descendentVnodeUnknownAttributes="7d71005806000000302e31342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30352d313871077573732e"><vh>Nuxt4 Learning</vh>
+<v t="swot.20250511104537.1" descendentVnodeUnknownAttributes="7d710028580e000000302e302e302e302e302e31342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30352d313871077573580c000000302e302e302e302e302e313671087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032332d30392d3237710e7573580b000000302e312e312e302e392e36710f7d71105808000000616e6e6f7461746571117d71122858080000007072696f7269747971134d0f27580a000000707269736574646174657114580a000000323032352d30342d323771157573580b000000302e312e312e302e392e3871167d71175808000000616e6e6f7461746571187d71192858080000007072696f72697479711a4d0f27580a00000070726973657464617465711b580a000000323032352d30342d3237711c7573580c000000302e312e312e302e31302e33711d7d711e5808000000616e6e6f74617465711f7d71202858080000007072696f7269747971214d0f27580a000000707269736574646174657122580a000000323032352d30342d323771237573580c000000302e312e312e302e31302e3671247d71255808000000616e6e6f7461746571267d71272858080000007072696f7269747971284d0f27580a000000707269736574646174657129580a000000323032352d30352d3031712a7573580c000000302e312e312e302e31302e39712b7d712c5808000000616e6e6f74617465712d7d712e2858080000007072696f72697479712f4d0f27580a000000707269736574646174657130580a000000323032352d30342d323771317573580e000000302e312e312e302e31332e352e3071327d71335808000000616e6e6f7461746571347d71352858080000007072696f7269747971364d0f27580a000000707269736574646174657137580a000000323032352d30352d333071387573580e000000302e312e312e302e31332e362e3271397d713a5808000000616e6e6f74617465713b7d713c2858080000007072696f72697479713d4d0f27580a00000070726973657464617465713e580a000000323032352d30352d3330713f7573580e000000302e312e312e302e31332e372e3071407d71415808000000616e6e6f7461746571427d71432858080000007072696f7269747971444d0f27580a000000707269736574646174657145580a000000323032352d30352d333071467573580e000000302e312e312e302e31332e382e3171477d71485808000000616e6e6f7461746571497d714a2858080000007072696f72697479714b4d0f27580a00000070726973657464617465714c580a000000323032352d30352d3330714d7573752e"><vh>@path nuxt</vh>
+<v t="swot.20260509145220.1" descendentVnodeUnknownAttributes="7d710028580c000000302e302e302e302e31342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30352d313871077573580a000000302e302e302e302e313671087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032332d30392d3237710e7573752e"><vh>@path nuxt4</vh>
+<v t="swot.20260511103007.1" descendentVnodeUnknownAttributes="7d710028580a000000302e302e302e31342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30352d3138710775735808000000302e302e302e313671087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032332d30392d3237710e7573752e"><vh>@path nuxt4-basic</vh>
+<v t="swot.20260511092421.1" descendentVnodeUnknownAttributes="7d7100285808000000302e302e31342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30352d3138710775735806000000302e302e313671087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032332d30392d3237710e7573752e"><vh>@adoc nuxt4-basic.adoc</vh>
+<v t="swot.20260511092435.1" descendentVnodeUnknownAttributes="7d7100285806000000302e31342e3071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032362d30352d3138710775735804000000302e313671087d71095808000000616e6e6f74617465710a7d710b2858080000007072696f72697479710c4d0f27580a00000070726973657464617465710d580a000000323032332d30392d3237710e7573752e"><vh>Nuxt4 Learning</vh>
 <v t="swot.20260511142737.1"><vh>1. 参考资料</vh>
 <v t="swot.20260512090947.1"><vh>水哥vue3视频内容备注 -- vue3可以转化为nuxt3</vh></v>
 <v t="swot.20260511142737.3"><vh>@ignore-tree 相关内容</vh>
@@ -2029,6 +2029,30 @@
 <v t="swot.20260518082611.2"><vh>全局中间件 -- auth.global.ts -&gt; 这是反例(我设计的不好,当作反例教学)</vh></v>
 <v t="swot.20260518105629.1"><vh>auth-middleware.global.ts -- BUG: 如果登录不成功会在地址栏中追加多个redirect</vh></v>
 </v>
+<v t="swot.20260518141020.1"><vh>16. 模块 modules -- 可以在官网模块库中找现成模块来解决实际问题</vh>
+<v t="swot.20260518141020.2"><vh>@nuxt/content 模块适用于管理和展示动态内容</vh></v>
+<v t="swot.20260518141020.3"><vh>@nuxt-themes/docus 模块适用于构建文档网站</vh></v>
+<v t="swot.20260518142645.1"><vh>@nuxt/image 提供很多&lt;img&gt;无法轻松实现的功能</vh></v>
+</v>
+<v t="swot.20260518160505.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032332d30392d323771077573732e"><vh>17. 状态管理 useState &amp; pinia</vh>
+<v t="swot.20260518160505.2"><vh>方式一 nuxt3 内置 useState composable</vh>
+<v t="swot.20260518160505.3"><vh>&lt;&lt; useState &gt;&gt;</vh></v>
+<v t="swot.20260518161645.1"><vh>&lt;&lt; components Counter &gt;&gt;</vh></v>
+<v t="swot.20260518162448.1"><vh>&lt;&lt; pages test-useState &gt;&gt;</vh></v>
+<v t="swot.20260518163855.2"><vh>&lt;&lt; pages test-useState2 &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260518160505.8"><vh>方式二 使用模块 pinia module -- 推荐方式</vh>
+<v t="swot.20260518160505.9"><vh>基本使用</vh>
+<v t="swot.20260518160505.10"><vh>&lt;&lt; 配置模块 pinia &gt;&gt;</vh></v>
+<v t="swot.20260518160505.11"><vh>defineStore 组合式</vh></v>
+<v t="swot.20260518160505.12"><vh>use pinia store</vh></v>
+</v>
+<v t="swot.20260518160505.13"><vh>持久化插件</vh></v>
+<v t="swot.20260518160505.14"><vh>一些设置的技巧</vh>
+<v t="swot.20260518160505.15"><vh>pinia</vh></v>
+</v>
+</v>
+</v>
 </v>
 </v>
 <v t="swot.20260511151718.1"><vh>code</vh>
@@ -2075,6 +2099,12 @@
 <v t="swot.20260518091551.1"><vh>middleware</vh>
 <v t="swot.20260518091607.1"><vh>@file app/middleware/auth.js</vh></v>
 <v t="swot.20260518091741.1"><vh>@file app/pages/test-auth-middleware.vue</vh></v>
+</v>
+<v t="swot.20260518160818.1"><vh>状态管理</vh>
+<v t="swot.20260518160846.1"><vh>@file app/composables/states.ts</vh></v>
+<v t="swot.20260518161615.1"><vh>@file app/components/Counter.vue</vh></v>
+<v t="swot.20260518162335.1"><vh>@file app/pages/test-useState.vue</vh></v>
+<v t="swot.20260518163855.1"><vh>@file app/pages/test-useState2.vue</vh></v>
 </v>
 </v>
 </v>
@@ -41173,6 +41203,241 @@ export default defineNuxtRouteMiddleware((to, from) =&gt; {
 
 &lt;1&gt; Bug: 如果登录不成功可能会在地址栏中追加多个 redirect
 http://localhost:3000/login?redirect=/login?redirect=/
+</t>
+<t tx="swot.20260518141020.1">https://nuxt.com/modules
+</t>
+<t tx="swot.20260518141020.2">@language asciidoc
+content 是另一个 Nuxt 3 的模块，用于管理和展示动态内容。它提供了一个易于使用的 API，可以方便地从各种数据源（如 Markdown 文件、JSON 文件、API 等）获取内容，并将其渲染到页面上。你可以使用 content 模块来构建博客、新闻网站、产品目录等需要动态内容的应用。
+
+https://content.nuxtjs.org/get-started
+
+// 直接看上面的网站就行:
+// https://nuxt.com/modules/content
+
+安装：
+
+    pnpm add -D @nuxt/content
+
+配置：nuxt.config.ts
+
+    export default defineNuxtConfig({
+      modules: [
+        '@nuxt/content'
+      ],
+      content: {
+        // https://content.nuxtjs.org/api/configuration
+      }
+    })
+
+创建目录：
+
+    mkdir content
+
+创建内容：
+
+    touch content/index.md
+
+
+使用内容：在 pages 下的 .vue 文件中
+
+    &lt;main&gt;
+        &lt;ContentDoc /&gt;
+    &lt;/main&gt;
+
+IMPORTANT: content 中的目录与 pages 中的路由是一一对应的。
+
+***
+直接生成 markdown 的内容站点
+https://www.youtube.com/watch?v=5mTQLWyyVNM&amp;list=PL8HkCX2C5h0XT3xWYn71TlsAAo0kizmVc&amp;index=19&amp;pp=iAQB
+</t>
+<t tx="swot.20260518141020.3">docus 是一个用于创建文档网站的模块。它提供了一组工具和功能，可以方便地创建、组织和展示文档内容。你可以使用 Markdown 或 Vue 组件编写文档，并使用 docus 的主题和布局来美化和自定义文档网站的外观。
+
+值得一学：用 markdown 建站
+https://docus.dev/
+
+</t>
+<t tx="swot.20260518142645.1"></t>
+<t tx="swot.20260518160505.1" annotate="7d71002858080000007072696f7269747971014d0f27580a000000707269736574646174657102580a000000323032332d30392d32377103752e">pinia vs useState 两者对比
+https://www.vuemastery.com/blog/nuxt-3-state-mangement-pinia-vs-usestate
+
+1. 简单项目使用 useState
+2. 复杂项目使用 pinia
+
+IMPORTANT: 推荐 pinia
+</t>
+<t tx="swot.20260518160505.10">@language javascript
+
+'@pinia/nuxt',
+'@pinia-plugin-persistedstate/nuxt',
+</t>
+<t tx="swot.20260518160505.11">@language javascript
+export const useCounterStore = defineStore(
+    'mycounter', () =&gt; {
+        const count = ref(0)
+        const name = ref('Swot')
+        const doubleCount = computed(
+            () =&gt; count.value * 2
+        )
+        function increment() {
+            count.value++
+        }
+        return { count, name, doubleCount, increment }
+    }
+)
+</t>
+<t tx="swot.20260518160505.12">@language typescript
+import { useCounterStore } from '@/stores';
+
+const store = useCounterStore();
+</t>
+<t tx="swot.20260518160505.13">* https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt-3.html
+
+* 安装
+
+    pnpm i -D @pinia-plugin-persistedstate/nuxt
+
+* 配置 nuxt.config.ts
+
+    export default defineNuxtConfig({
+        modules: [
+            '@pinia/nuxt',
+            '@pinia-plugin-persistedstate/nuxt'  // 新增内容
+        ]
+    })
+
+* 使用（在自己定义的 store 中使用）
+
+    import { defineStore } from 'pinia'
+    export const useStore = defineStore(
+        'main',
+        () =&gt; {
+            const someState = ref('hello pinia')
+            return { someState }  // &lt;1&gt;
+        },
+        {
+            persist: true  // 新增内容
+        }
+    )
+
++
+&lt;1&gt; 后面在任何地方使用 return 后的变量 someState，就会是持久化的值了。
+
+IMPORTANT: return 的函数不行，只能是变量才会是持久化。
+</t>
+<t tx="swot.20260518160505.14">@language asciidoc
+@tabwidth -2
+
+https://blog.csdn.net/qq_41581588/article/details/130052819
+
+* autoImports 自动导入 defineStore:
++
+需要在 nuxt.config.ts 文件中配置一下，这样就不用在每个定义 store 的文件里再写下面的导入了
+
+  import { defineStore } from 'pinia'
+
+</t>
+<t tx="swot.20260518160505.15">pinia: {
+  autoImports: [
+    'defineStore',  // import { defineStore } from 'pinia'
+    'storeToRefs',  // import { storeToRefs } from 'pinia'
+  ]
+},
+</t>
+<t tx="swot.20260518160505.2">https://nuxt.com/docs/getting-started/state-management#state-management
+
+[upperalpha]
+. 创建状态文件
++
+.app/composables/states.ts
+[source,javascript]
+----
+&lt;&lt; useState &gt;&gt;
+----
++
+NOTE: 在 nuxt3/4 中 useCounter &amp; useColor 可以全局使用。
+
+
+. 创建计数组件
++
+.app/components/Counter.vue
+[source,html]
+----
+&lt;&lt; components Counter &gt;&gt;
+----
+
+
+. 创建页面使用计数组件
++
+.app/pages/test-useState.vue
+[source,html]
+----
+&lt;&lt; pages test-useState &gt;&gt;
+----
+
+. 创建页面2使用计数组件
++
+.app/pages/test-useState.vue
+[source,html]
+----
+&lt;&lt; pages test-useState2 &gt;&gt;
+----</t>
+<t tx="swot.20260518160505.3">@language typescript
+export const useCounter = () =&gt; useState&lt;number&gt;(
+    "counter", () =&gt; 0);
+
+export const useColor = () =&gt; useState&lt;string&gt;(
+    "color", () =&gt; "pink");
+</t>
+<t tx="swot.20260518160505.8">@language asciidoc
+</t>
+<t tx="swot.20260518160505.9">@language asciidoc
+* https://nuxt.com/modules/pinia
+
+* https://pinia.vuejs.org/ssr/nuxt.html#nuxt-js
+
+* 安装配置使用
+
+    npm  install pinia @pinia/nuxt
+    pnpm install pinia @pinia/nuxt
+    &lt;&lt; 配置模块 pinia &gt;&gt;
+    mkdir stores
+    touch stores/myStore.ts -- use defineStore
+
+</t>
+<t tx="swot.20260518160818.1"></t>
+<t tx="swot.20260518161645.1">&lt;template&gt;
+    &lt;div&gt;
+        Counter: {{ counter }}
+        &lt;button @click="counter++"&gt;Increment&lt;/button&gt;
+        &lt;button @click="counter--"&gt;Decrement&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+    const counter = useCounter();
+&lt;/script&gt;
+</t>
+<t tx="swot.20260518162448.1">&lt;template&gt;
+    &lt;div&gt;使用前面定义好的 Counter 组件&lt;/div&gt;
+    &lt;Counter /&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+// 在此处也可以直接使用 useState 定义状态变量，如下。
+const counter = useCounter();
+console.log("counter:", counter);
+&lt;/script&gt;
+</t>
+<t tx="swot.20260518163855.2">&lt;template&gt;
+    &lt;div&gt;使用前面定义好的 Counter 组件&lt;/div&gt;
+    &lt;Counter /&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+// 在此处也可以直接使用 useState 定义状态变量，如下。
+const counter = useCounter();
+console.log("counter:", counter);
+&lt;/script&gt;
 </t>
 </tnodes>
 </leo_file>

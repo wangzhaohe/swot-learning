@@ -1199,7 +1199,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
 })
 ----
 
-
 * 这里暗含了一个逻辑：即已登录成功，访问路由不是 login，则直接通行。
 所以 nuxt3 不用 next() 挺香，可以不用处理这样的逻辑。
 
@@ -1207,4 +1206,232 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
 <1> Bug: 如果登录不成功可能会在地址栏中追加多个 redirect
 http://localhost:3000/login?redirect=/login?redirect=/
+
+== 16. 模块 modules -- 可以在官网模块库中找现成模块来解决实际问题
+https://nuxt.com/modules
+
+=== @nuxt/content 模块适用于管理和展示动态内容
+content 是另一个 Nuxt 3 的模块，用于管理和展示动态内容。它提供了一个易于使用的 API，可以方便地从各种数据源（如 Markdown 文件、JSON 文件、API 等）获取内容，并将其渲染到页面上。你可以使用 content 模块来构建博客、新闻网站、产品目录等需要动态内容的应用。
+
+https://content.nuxtjs.org/get-started
+
+// 直接看上面的网站就行:
+// https://nuxt.com/modules/content
+
+安装：
+
+    pnpm add -D @nuxt/content
+
+配置：nuxt.config.ts
+
+    export default defineNuxtConfig({
+      modules: [
+        '@nuxt/content'
+      ],
+      content: {
+        // https://content.nuxtjs.org/api/configuration
+      }
+    })
+
+创建目录：
+
+    mkdir content
+
+创建内容：
+
+    touch content/index.md
+
+
+使用内容：在 pages 下的 .vue 文件中
+
+    <main>
+        <ContentDoc />
+    </main>
+
+IMPORTANT: content 中的目录与 pages 中的路由是一一对应的。
+
+***
+直接生成 markdown 的内容站点
+https://www.youtube.com/watch?v=5mTQLWyyVNM&list=PL8HkCX2C5h0XT3xWYn71TlsAAo0kizmVc&index=19&pp=iAQB
+
+=== @nuxt-themes/docus 模块适用于构建文档网站
+docus 是一个用于创建文档网站的模块。它提供了一组工具和功能，可以方便地创建、组织和展示文档内容。你可以使用 Markdown 或 Vue 组件编写文档，并使用 docus 的主题和布局来美化和自定义文档网站的外观。
+
+值得一学：用 markdown 建站
+https://docus.dev/
+
+=== @nuxt/image 提供很多<img>无法轻松实现的功能
+
+
+== 17. 状态管理 useState & pinia
+pinia vs useState 两者对比
+https://www.vuemastery.com/blog/nuxt-3-state-mangement-pinia-vs-usestate
+
+1. 简单项目使用 useState
+2. 复杂项目使用 pinia
+
+IMPORTANT: 推荐 pinia
+
+=== 方式一 nuxt3 内置 useState composable
+https://nuxt.com/docs/getting-started/state-management#state-management
+
+[upperalpha]
+. 创建状态文件
++
+.app/composables/states.ts
+[source,javascript]
+----
+export const useCounter = () => useState<number>(
+    "counter", () => 0);
+
+export const useColor = () => useState<string>(
+    "color", () => "pink");
+----
++
+NOTE: 在 nuxt3/4 中 useCounter & useColor 可以全局使用。
+
+
+. 创建计数组件
++
+.app/components/Counter.vue
+[source,html]
+----
+<template>
+    <div>
+        Counter: {{ counter }}
+        <button @click="counter++">Increment</button>
+        <button @click="counter--">Decrement</button>
+    </div>
+</template>
+
+<script setup>
+    const counter = useCounter();
+</script>
+----
+
+
+. 创建页面使用计数组件
++
+.app/pages/test-useState.vue
+[source,html]
+----
+<template>
+    <div>使用前面定义好的 Counter 组件</div>
+    <Counter />
+</template>
+
+<script setup>
+// 在此处也可以直接使用 useState 定义状态变量，如下。
+const counter = useCounter();
+console.log("counter:", counter);
+</script>
+----
+
+. 创建页面2使用计数组件
++
+.app/pages/test-useState.vue
+[source,html]
+----
+<template>
+    <div>使用前面定义好的 Counter 组件</div>
+    <Counter />
+</template>
+
+<script setup>
+// 在此处也可以直接使用 useState 定义状态变量，如下。
+const counter = useCounter();
+console.log("counter:", counter);
+</script>
+----
+
+=== 方式二 使用模块 pinia module -- 推荐方式
+
+
+==== 基本使用
+* https://nuxt.com/modules/pinia
+
+* https://pinia.vuejs.org/ssr/nuxt.html#nuxt-js
+
+* 安装配置使用
+
+    npm  install pinia @pinia/nuxt
+    pnpm install pinia @pinia/nuxt
+
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
+    mkdir stores
+    touch stores/myStore.ts -- use defineStore
+
+===== defineStore 组合式
+export const useCounterStore = defineStore(
+    'mycounter', () => {
+        const count = ref(0)
+        const name = ref('Swot')
+        const doubleCount = computed(
+            () => count.value * 2
+        )
+        function increment() {
+            count.value++
+        }
+        return { count, name, doubleCount, increment }
+    }
+)
+
+===== use pinia store
+import { useCounterStore } from '@/stores';
+
+const store = useCounterStore();
+
+==== 持久化插件
+* https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt-3.html
+
+* 安装
+
+    pnpm i -D @pinia-plugin-persistedstate/nuxt
+
+* 配置 nuxt.config.ts
+
+    export default defineNuxtConfig({
+        modules: [
+            '@pinia/nuxt',
+            '@pinia-plugin-persistedstate/nuxt'  // 新增内容
+        ]
+    })
+
+* 使用（在自己定义的 store 中使用）
+
+    import { defineStore } from 'pinia'
+    export const useStore = defineStore(
+        'main',
+        () => {
+            const someState = ref('hello pinia')
+            return { someState }  // <1>
+        },
+        {
+            persist: true  // 新增内容
+        }
+    )
+
++
+<1> 后面在任何地方使用 return 后的变量 someState，就会是持久化的值了。
+
+IMPORTANT: return 的函数不行，只能是变量才会是持久化。
+
+==== 一些设置的技巧
+
+https://blog.csdn.net/qq_41581588/article/details/130052819
+
+* autoImports 自动导入 defineStore:
++
+需要在 nuxt.config.ts 文件中配置一下，这样就不用在每个定义 store 的文件里再写下面的导入了
+
+  import { defineStore } from 'pinia'
+
+===== pinia
+pinia: {
+  autoImports: [
+    'defineStore',  // import { defineStore } from 'pinia'
+    'storeToRefs',  // import { storeToRefs } from 'pinia'
+  ]
+},
 

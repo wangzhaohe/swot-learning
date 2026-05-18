@@ -613,6 +613,25 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_auth_middleware_global_tsbug_如果登录不成功会在地址栏中追加多个redirect">auth-middleware.global.ts&#8201;&#8212;&#8201;BUG: 如果登录不成功会在地址栏中追加多个redirect</a></li>
 </ul>
 </li>
+<li><a href="#_16_模块_modules可以在官网模块库中找现成模块来解决实际问题">16. 模块 modules&#8201;&#8212;&#8201;可以在官网模块库中找现成模块来解决实际问题</a>
+<ul class="sectlevel2">
+<li><a href="#_nuxtcontent_模块适用于管理和展示动态内容">@nuxt/content 模块适用于管理和展示动态内容</a></li>
+<li><a href="#_nuxt_themesdocus_模块适用于构建文档网站">@nuxt-themes/docus 模块适用于构建文档网站</a></li>
+<li><a href="#_nuxtimage_提供很多img无法轻松实现的功能">@nuxt/image 提供很多&lt;img&gt;无法轻松实现的功能</a></li>
+</ul>
+</li>
+<li><a href="#_17_状态管理_usestate_pinia">17. 状态管理 useState &amp; pinia</a>
+<ul class="sectlevel2">
+<li><a href="#_方式一_nuxt3_内置_usestate_composable">方式一 nuxt3 内置 useState composable</a></li>
+<li><a href="#_方式二_使用模块_pinia_module推荐方式">方式二 使用模块 pinia module&#8201;&#8212;&#8201;推荐方式</a>
+<ul class="sectlevel3">
+<li><a href="#_基本使用">基本使用</a></li>
+<li><a href="#_持久化插件">持久化插件</a></li>
+<li><a href="#_一些设置的技巧">一些设置的技巧</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -2412,10 +2431,389 @@ div
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_16_模块_modules可以在官网模块库中找现成模块来解决实际问题">16. 模块 modules&#8201;&#8212;&#8201;可以在官网模块库中找现成模块来解决实际问题</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://nuxt.com/modules" class="bare">https://nuxt.com/modules</a></p>
+</div>
+<div class="sect2">
+<h3 id="_nuxtcontent_模块适用于管理和展示动态内容">@nuxt/content 模块适用于管理和展示动态内容</h3>
+<div class="paragraph">
+<p>content 是另一个 Nuxt 3 的模块，用于管理和展示动态内容。它提供了一个易于使用的 API，可以方便地从各种数据源（如 Markdown 文件、JSON 文件、API 等）获取内容，并将其渲染到页面上。你可以使用 content 模块来构建博客、新闻网站、产品目录等需要动态内容的应用。</p>
+</div>
+<div class="paragraph">
+<p><a href="https://content.nuxtjs.org/get-started" class="bare">https://content.nuxtjs.org/get-started</a></p>
+</div>
+<div class="paragraph">
+<p>安装：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>pnpm add -D @nuxt/content</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>配置：nuxt.config.ts</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>export default defineNuxtConfig({
+  modules: [
+    '@nuxt/content'
+  ],
+  content: {
+    // https://content.nuxtjs.org/api/configuration
+  }
+})</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>创建目录：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir content</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>创建内容：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>touch content/index.md</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>使用内容：在 pages 下的 .vue 文件中</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;main&gt;
+    &lt;ContentDoc /&gt;
+&lt;/main&gt;</pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+content 中的目录与 pages 中的路由是一一对应的。
+</td>
+</tr>
+</table>
+</div>
+<hr>
+<div class="paragraph">
+<p>直接生成 markdown 的内容站点
+<a href="https://www.youtube.com/watch?v=5mTQLWyyVNM&amp;list=PL8HkCX2C5h0XT3xWYn71TlsAAo0kizmVc&amp;index=19&amp;pp=iAQB" class="bare">https://www.youtube.com/watch?v=5mTQLWyyVNM&amp;list=PL8HkCX2C5h0XT3xWYn71TlsAAo0kizmVc&amp;index=19&amp;pp=iAQB</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_nuxt_themesdocus_模块适用于构建文档网站">@nuxt-themes/docus 模块适用于构建文档网站</h3>
+<div class="paragraph">
+<p>docus 是一个用于创建文档网站的模块。它提供了一组工具和功能，可以方便地创建、组织和展示文档内容。你可以使用 Markdown 或 Vue 组件编写文档，并使用 docus 的主题和布局来美化和自定义文档网站的外观。</p>
+</div>
+<div class="paragraph">
+<p>值得一学：用 markdown 建站
+<a href="https://docus.dev/" class="bare">https://docus.dev/</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_nuxtimage_提供很多img无法轻松实现的功能">@nuxt/image 提供很多&lt;img&gt;无法轻松实现的功能</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_17_状态管理_usestate_pinia">17. 状态管理 useState &amp; pinia</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>pinia vs useState 两者对比
+<a href="https://www.vuemastery.com/blog/nuxt-3-state-mangement-pinia-vs-usestate" class="bare">https://www.vuemastery.com/blog/nuxt-3-state-mangement-pinia-vs-usestate</a></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>简单项目使用 useState</p>
+</li>
+<li>
+<p>复杂项目使用 pinia</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+推荐 pinia
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_方式一_nuxt3_内置_usestate_composable">方式一 nuxt3 内置 useState composable</h3>
+<div class="paragraph">
+<p><a href="https://nuxt.com/docs/getting-started/state-management#state-management" class="bare">https://nuxt.com/docs/getting-started/state-management#state-management</a></p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>创建状态文件</p>
+<div class="listingblock">
+<div class="title">app/composables/states.ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">useCounter</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">useState</span><span class="tok-o">&lt;</span><span class="tok-nx">number</span><span class="tok-o">&gt;</span><span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-s2">&quot;counter&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">useColor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">useState</span><span class="tok-o">&lt;</span><span class="tok-nx">string</span><span class="tok-o">&gt;</span><span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-s2">&quot;color&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-s2">&quot;pink&quot;</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+在 nuxt3/4 中 useCounter &amp; useColor 可以全局使用。
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>创建计数组件</p>
+<div class="listingblock">
+<div class="title">app/components/Counter.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+        Counter: {{ counter }}
+        <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-err">@</span><span class="tok-na">click</span><span class="tok-o">=</span><span class="tok-s">&quot;counter++&quot;</span><span class="tok-p">&gt;</span>Increment<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-err">@</span><span class="tok-na">click</span><span class="tok-o">=</span><span class="tok-s">&quot;counter--&quot;</span><span class="tok-p">&gt;</span>Decrement<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">counter</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useCounter</span><span class="tok-p">();</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>创建页面使用计数组件</p>
+<div class="listingblock">
+<div class="title">app/pages/test-useState.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>使用前面定义好的 Counter 组件<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">Counter</span> <span class="tok-p">/&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span><span class="tok-p">&gt;</span>
+<span class="tok-c1">// 在此处也可以直接使用 useState 定义状态变量，如下。</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">counter</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useCounter</span><span class="tok-p">();</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;counter:&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">counter</span><span class="tok-p">);</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>创建页面2使用计数组件</p>
+<div class="listingblock">
+<div class="title">app/pages/test-useState.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>使用前面定义好的 Counter 组件<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">Counter</span> <span class="tok-p">/&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span><span class="tok-p">&gt;</span>
+<span class="tok-c1">// 在此处也可以直接使用 useState 定义状态变量，如下。</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">counter</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useCounter</span><span class="tok-p">();</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;counter:&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">counter</span><span class="tok-p">);</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_方式二_使用模块_pinia_module推荐方式">方式二 使用模块 pinia module&#8201;&#8212;&#8201;推荐方式</h3>
+<div class="sect3">
+<h4 id="_基本使用">基本使用</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://nuxt.com/modules/pinia" class="bare">https://nuxt.com/modules/pinia</a></p>
+</li>
+<li>
+<p><a href="https://pinia.vuejs.org/ssr/nuxt.html#nuxt-js" class="bare">https://pinia.vuejs.org/ssr/nuxt.html#nuxt-js</a></p>
+</li>
+<li>
+<p>安装配置使用</p>
+<div class="literalblock">
+<div class="content">
+<pre>npm  install pinia @pinia/nuxt
+pnpm install pinia @pinia/nuxt</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>'@pinia/nuxt',
+'@pinia-plugin-persistedstate/nuxt',
+mkdir stores
+touch stores/myStore.ts -- use defineStore</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_definestore_组合式">defineStore 组合式</h5>
+<div class="paragraph">
+<p>export const useCounterStore = defineStore(
+    'mycounter', () &#8658; {
+        const count = ref(0)
+        const name = ref('Swot')
+        const doubleCount = computed(
+            () &#8658; count.value * 2
+        )
+        function increment() {
+            count.value++
+        }
+        return { count, name, doubleCount, increment }
+    }
+)</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_use_pinia_store">use pinia store</h5>
+<div class="paragraph">
+<p>import { useCounterStore } from '@/stores';</p>
+</div>
+<div class="paragraph">
+<p>const store = useCounterStore();</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_持久化插件">持久化插件</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt-3.html" class="bare">https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt-3.html</a></p>
+</li>
+<li>
+<p>安装</p>
+<div class="literalblock">
+<div class="content">
+<pre>pnpm i -D @pinia-plugin-persistedstate/nuxt</pre>
+</div>
+</div>
+</li>
+<li>
+<p>配置 nuxt.config.ts</p>
+<div class="literalblock">
+<div class="content">
+<pre>export default defineNuxtConfig({
+    modules: [
+        '@pinia/nuxt',
+        '@pinia-plugin-persistedstate/nuxt'  // 新增内容
+    ]
+})</pre>
+</div>
+</div>
+</li>
+<li>
+<p>使用（在自己定义的 store 中使用）</p>
+<div class="literalblock">
+<div class="content">
+<pre>import { defineStore } from 'pinia'
+export const useStore = defineStore(
+    'main',
+    () =&gt; {
+        const someState = ref('hello pinia')
+        return { someState }  <i class="conum" data-value="1"></i><b>(1)</b>
+    },
+    {
+        persist: true  // 新增内容
+    }
+)</pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>后面在任何地方使用 return 后的变量 someState，就会是持久化的值了。</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="❗"></i>
+</td>
+<td class="content">
+return 的函数不行，只能是变量才会是持久化。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_一些设置的技巧">一些设置的技巧</h4>
+<div class="paragraph">
+<p><a href="https://blog.csdn.net/qq_41581588/article/details/130052819" class="bare">https://blog.csdn.net/qq_41581588/article/details/130052819</a></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>autoImports 自动导入 defineStore:</p>
+<div class="paragraph">
+<p>需要在 nuxt.config.ts 文件中配置一下，这样就不用在每个定义 store 的文件里再写下面的导入了</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>import { defineStore } from 'pinia'</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_pinia">pinia</h5>
+<div class="paragraph">
+<p>pinia: {
+  autoImports: [
+    'defineStore',  // import { defineStore } from 'pinia'
+    'storeToRefs',  // import { storeToRefs } from 'pinia'
+  ]
+},</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-05-18 11:00:22 +0800
+Last updated 2026-05-18 16:56:47 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
