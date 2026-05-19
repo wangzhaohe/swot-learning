@@ -11,7 +11,13 @@ export default defineNuxtConfig({
     css: ["~/assets/main.scss"],
     //@+node:swot.20260512093120.1: ** modules
     modules: [
-        '@element-plus/nuxt'
+        '@element-plus/nuxt',
+        //@+<< 配置模块 pinia >>
+        //@+node:swot.20260518160505.10: *3* << 配置模块 pinia >>
+        // https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt
+        '@pinia/nuxt',
+        'pinia-plugin-persistedstate/nuxt',
+        //@-<< 配置模块 pinia >>
     ],
     //@+node:swot.20260512094143.1: ** elementPlus
     elementPlus: { /** Options */ },

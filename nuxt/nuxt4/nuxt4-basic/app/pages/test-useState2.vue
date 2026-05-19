@@ -4,7 +4,7 @@
 //@+<< pages test-useState2 >>
 //@+node:swot.20260518163855.2: ** << pages test-useState2 >>
 <template>
-    <div>使用前面定义好的 Counter 组件</div>
+    <div>使用定义好的 Counter 组件</div>
     <Counter />
 </template>
 

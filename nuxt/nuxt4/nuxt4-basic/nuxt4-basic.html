@@ -623,13 +623,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_17_状态管理_usestate_pinia">17. 状态管理 useState &amp; pinia</a>
 <ul class="sectlevel2">
 <li><a href="#_方式一_nuxt3_内置_usestate_composable">方式一 nuxt3 内置 useState composable</a></li>
-<li><a href="#_方式二_使用模块_pinia_module推荐方式">方式二 使用模块 pinia module&#8201;&#8212;&#8201;推荐方式</a>
-<ul class="sectlevel3">
-<li><a href="#_基本使用">基本使用</a></li>
-<li><a href="#_持久化插件">持久化插件</a></li>
-<li><a href="#_一些设置的技巧">一些设置的技巧</a></li>
-</ul>
-</li>
+<li><a href="#_方式二_使用模块_pinia_module推荐方式">方式二 使用模块 pinia module&#8201;&#8212;&#8201;推荐方式</a></li>
 </ul>
 </li>
 </ul>
@@ -1046,8 +1040,11 @@ export default defineNuxtConfig({})</pre>
 <span class="tok-w">    </span><span class="tok-nt">&quot;postinstall&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;nuxt prepare&quot;</span>
 <span class="tok-w">  </span><span class="tok-p">},</span>
 <span class="tok-w">  </span><span class="tok-nt">&quot;dependencies&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;@pinia/nuxt&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^0.11.3&quot;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-nt">&quot;dayjs&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^1.11.20&quot;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-nt">&quot;nuxt&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^4.4.5&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;pinia&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^3.0.4&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;pinia-plugin-persistedstate&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^4.7.1&quot;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-nt">&quot;pug&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^3.0.4&quot;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-nt">&quot;vue&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^3.5.33&quot;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-nt">&quot;vue-router&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^5.0.6&quot;</span>
@@ -2572,6 +2569,7 @@ content 中的目录与 pages 中的路由是一一对应的。
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">useCounter</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">useState</span><span class="tok-o">&lt;</span><span class="tok-nx">number</span><span class="tok-o">&gt;</span><span class="tok-p">(</span>
 <span class="tok-w">    </span><span class="tok-s2">&quot;counter&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span>
 
+<span class="tok-c1">// useColor 在本例子中没有用到，只是写了此代码</span>
 <span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">useColor</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">useState</span><span class="tok-o">&lt;</span><span class="tok-nx">string</span><span class="tok-o">&gt;</span><span class="tok-p">(</span>
 <span class="tok-w">    </span><span class="tok-s2">&quot;color&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-s2">&quot;pink&quot;</span><span class="tok-p">);</span></code></pre>
 </div>
@@ -2614,7 +2612,7 @@ content 中的目录与 pages 中的路由是一一对应的。
 <div class="title">app/pages/test-useState.vue</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
-    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>使用前面定义好的 Counter 组件<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>使用定义好的 Counter 组件<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">Counter</span> <span class="tok-p">/&gt;</span>
 <span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
 
@@ -2632,7 +2630,7 @@ content 中的目录与 pages 中的路由是一一对应的。
 <div class="title">app/pages/test-useState.vue</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
-    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>使用前面定义好的 Counter 组件<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>使用定义好的 Counter 组件<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">Counter</span> <span class="tok-p">/&gt;</span>
 <span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
 
@@ -2646,11 +2644,12 @@ content 中的目录与 pages 中的路由是一一对应的。
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>小结：在同一浏览器的同一个 tab 页内，状态 useCounter 是可以共享的。</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_方式二_使用模块_pinia_module推荐方式">方式二 使用模块 pinia module&#8201;&#8212;&#8201;推荐方式</h3>
-<div class="sect3">
-<h4 id="_基本使用">基本使用</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -2659,153 +2658,93 @@ content 中的目录与 pages 中的路由是一一对应的。
 <li>
 <p><a href="https://pinia.vuejs.org/ssr/nuxt.html#nuxt-js" class="bare">https://pinia.vuejs.org/ssr/nuxt.html#nuxt-js</a></p>
 </li>
-<li>
-<p>安装配置使用</p>
-<div class="literalblock">
-<div class="content">
-<pre>npm  install pinia @pinia/nuxt
-pnpm install pinia @pinia/nuxt</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>'@pinia/nuxt',
-'@pinia-plugin-persistedstate/nuxt',
-mkdir stores
-touch stores/myStore.ts -- use defineStore</pre>
-</div>
-</div>
-</li>
 </ul>
 </div>
-<div class="sect4">
-<h5 id="_definestore_组合式">defineStore 组合式</h5>
-<div class="paragraph">
-<p>export const useCounterStore = defineStore(
-    'mycounter', () &#8658; {
-        const count = ref(0)
-        const name = ref('Swot')
-        const doubleCount = computed(
-            () &#8658; count.value * 2
-        )
-        function increment() {
-            count.value++
-        }
-        return { count, name, doubleCount, increment }
-    }
-)</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_use_pinia_store">use pinia store</h5>
-<div class="paragraph">
-<p>import { useCounterStore } from '@/stores';</p>
-</div>
-<div class="paragraph">
-<p>const store = useCounterStore();</p>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_持久化插件">持久化插件</h4>
-<div class="ulist">
-<ul>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
 <li>
-<p><a href="https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt-3.html" class="bare">https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt-3.html</a></p>
-</li>
-<li>
-<p>安装</p>
-<div class="literalblock">
+<p>安装 pinia</p>
+<div class="listingblock">
 <div class="content">
-<pre>pnpm i -D @pinia-plugin-persistedstate/nuxt</pre>
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">pnpm install pinia @pinia/nuxt</span>
+<span class="tok-go">pnpm add pinia-plugin-persistedstate 安装持久化插件</span>
+<span class="tok-gp"># </span>https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt
+<span class="tok-gp"># </span>现在更推荐<span class="tok-w"> </span>pinia-plugin-unstorage</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>配置 nuxt.config.ts</p>
-<div class="literalblock">
+<p>配置 pinia</p>
+<div class="listingblock">
 <div class="content">
-<pre>export default defineNuxtConfig({
-    modules: [
-        '@pinia/nuxt',
-        '@pinia-plugin-persistedstate/nuxt'  // 新增内容
-    ]
-})</pre>
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt</span>
+<span class="tok-s1">&#39;@pinia/nuxt&#39;</span><span class="tok-p">,</span>
+<span class="tok-s1">&#39;pinia-plugin-persistedstate/nuxt&#39;</span><span class="tok-p">,</span></code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>使用（在自己定义的 store 中使用）</p>
-<div class="literalblock">
+<p>使用 pinia</p>
+<div class="listingblock">
 <div class="content">
-<pre>import { defineStore } from 'pinia'
-export const useStore = defineStore(
-    'main',
-    () =&gt; {
-        const someState = ref('hello pinia')
-        return { someState }  <i class="conum" data-value="1"></i><b>(1)</b>
-    },
-    {
-        persist: true  // 新增内容
-    }
-)</pre>
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">mkdir app/stores</span>
+<span class="tok-go">touch app/stores/myStore.ts -- use defineStore</span></code></pre>
 </div>
 </div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>后面在任何地方使用 return 后的变量 someState，就会是持久化的值了。</td>
-</tr>
-</table>
+<div class="listingblock">
+<div class="title">app/stores/myStore.ts 创建自定义 store</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// nuxt4 已经支持自动导入 defineStore、storeToRefs 等等</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">useCounterStore</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">defineStore</span><span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-s1">&#39;mycounter&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">ref</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">ref</span><span class="tok-p">(</span><span class="tok-s1">&#39;Swot&#39;</span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">doubleCount</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">computed</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mf">2</span>
+<span class="tok-w">        </span><span class="tok-p">)</span>
+<span class="tok-w">        </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">increment</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">count</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-o">++</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">count</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">name</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">doubleCount</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">increment</span><span class="tok-p">,</span><span class="tok-w">  </span><span class="tok-c1">// 函数不能持久化</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">},</span>
+<span class="tok-w">    </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 持久化插件配置</span>
+<span class="tok-w">        </span><span class="tok-c1">// IMPORTANT: return 的函数不行，只能是变量才会是持久化。</span>
+<span class="tok-w">        </span><span class="tok-nx">persist</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-p">},</span>
+<span class="tok-p">)</span></code></pre>
+</div>
 </div>
 </li>
-</ul>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="❗"></i>
-</td>
-<td class="content">
-return 的函数不行，只能是变量才会是持久化。
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_一些设置的技巧">一些设置的技巧</h4>
-<div class="paragraph">
-<p><a href="https://blog.csdn.net/qq_41581588/article/details/130052819" class="bare">https://blog.csdn.net/qq_41581588/article/details/130052819</a></p>
-</div>
-<div class="ulist">
-<ul>
 <li>
-<p>autoImports 自动导入 defineStore:</p>
-<div class="paragraph">
-<p>需要在 nuxt.config.ts 文件中配置一下，这样就不用在每个定义 store 的文件里再写下面的导入了</p>
-</div>
-<div class="literalblock">
+<p>app/pages/test-stores.vue 在页面中使用 store</p>
+<div class="listingblock">
 <div class="content">
-<pre>import { defineStore } from 'pinia'</pre>
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span><span class="tok-p">&gt;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">useCounterStore</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;~/stores/myStore&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">store</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">useCounterStore</span><span class="tok-p">();</span>
+
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>Count: {{store.count}}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-err">@</span><span class="tok-na">click</span><span class="tok-o">=</span><span class="tok-s">&quot;store.increment()&quot;</span><span class="tok-p">&gt;</span>
+        点我加1
+    <span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span></code></pre>
 </div>
 </div>
 </li>
-</ul>
-</div>
-<div class="sect4">
-<h5 id="_pinia">pinia</h5>
-<div class="paragraph">
-<p>pinia: {
-  autoImports: [
-    'defineStore',  // import { defineStore } from 'pinia'
-    'storeToRefs',  // import { storeToRefs } from 'pinia'
-  ]
-},</p>
-</div>
-</div>
+</ol>
 </div>
 </div>
 </div>
@@ -2813,7 +2752,7 @@ return 的函数不行，只能是变量才会是持久化。
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-05-18 16:56:47 +0800
+Last updated 2026-05-19 11:03:25 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

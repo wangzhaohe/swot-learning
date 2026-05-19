@@ -2042,13 +2042,10 @@
 <v t="swot.20260518163855.2"><vh>&lt;&lt; pages test-useState2 &gt;&gt;</vh></v>
 </v>
 <v t="swot.20260518160505.8"><vh>方式二 使用模块 pinia module -- 推荐方式</vh>
-<v t="swot.20260518160505.9"><vh>基本使用</vh>
 <v t="swot.20260518160505.10"><vh>&lt;&lt; 配置模块 pinia &gt;&gt;</vh></v>
-<v t="swot.20260518160505.11"><vh>defineStore 组合式</vh></v>
-<v t="swot.20260518160505.12"><vh>use pinia store</vh></v>
-</v>
-<v t="swot.20260518160505.13"><vh>持久化插件</vh></v>
-<v t="swot.20260518160505.14"><vh>一些设置的技巧</vh>
+<v t="swot.20260518160505.11"><vh>&lt;&lt; defineStore 组合式 &gt;&gt;</vh></v>
+<v t="swot.20260518160505.12"><vh>&lt;&lt; use pinia store &gt;&gt;</vh></v>
+<v t="swot.20260518160505.14"><vh>@ignore-tree 一些设置的技巧 -&gt; nuxt4 已经自动导入了</vh>
 <v t="swot.20260518160505.15"><vh>pinia</vh></v>
 </v>
 </v>
@@ -2100,11 +2097,15 @@
 <v t="swot.20260518091607.1"><vh>@file app/middleware/auth.js</vh></v>
 <v t="swot.20260518091741.1"><vh>@file app/pages/test-auth-middleware.vue</vh></v>
 </v>
-<v t="swot.20260518160818.1"><vh>状态管理</vh>
+<v t="swot.20260518160818.1"><vh>状态管理 useState</vh>
 <v t="swot.20260518160846.1"><vh>@file app/composables/states.ts</vh></v>
 <v t="swot.20260518161615.1"><vh>@file app/components/Counter.vue</vh></v>
 <v t="swot.20260518162335.1"><vh>@file app/pages/test-useState.vue</vh></v>
 <v t="swot.20260518163855.1"><vh>@file app/pages/test-useState2.vue</vh></v>
+</v>
+<v t="swot.20260519090217.1"><vh>状态管理 stores</vh>
+<v t="swot.20260519090401.1"><vh>@file app/stores/myStore.ts</vh></v>
+<v t="swot.20260519091456.1"><vh>@file app/pages/test-stores.vue</vh></v>
 </v>
 </v>
 </v>
@@ -41265,14 +41266,15 @@ https://www.vuemastery.com/blog/nuxt-3-state-mangement-pinia-vs-usestate
 
 IMPORTANT: 推荐 pinia
 </t>
-<t tx="swot.20260518160505.10">@language javascript
-
+<t tx="swot.20260518160505.10">// https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt
 '@pinia/nuxt',
-'@pinia-plugin-persistedstate/nuxt',
+'pinia-plugin-persistedstate/nuxt',
 </t>
 <t tx="swot.20260518160505.11">@language javascript
+// nuxt4 已经支持自动导入 defineStore、storeToRefs 等等
 export const useCounterStore = defineStore(
-    'mycounter', () =&gt; {
+    'mycounter',
+    () =&gt; {
         const count = ref(0)
         const name = ref('Swot')
         const doubleCount = computed(
@@ -41281,53 +41283,38 @@ export const useCounterStore = defineStore(
         function increment() {
             count.value++
         }
-        return { count, name, doubleCount, increment }
-    }
+        return {
+            count,
+            name,
+            doubleCount,
+            increment,  // 函数不能持久化
+        }
+    },
+    {
+        // 持久化插件配置
+        // IMPORTANT: return 的函数不行，只能是变量才会是持久化。
+        persist: true,
+    },
 )
 </t>
-<t tx="swot.20260518160505.12">@language typescript
-import { useCounterStore } from '@/stores';
+<t tx="swot.20260518160505.12">&lt;script setup&gt;
+@language typescript
+import { useCounterStore } from '~/stores/myStore';
 
 const store = useCounterStore();
+
+&lt;/script&gt;
+
+&lt;template&gt;
+&lt;div&gt;
+    &lt;p&gt;Count: {{store.count}}&lt;/p&gt;
+    &lt;button @click="store.increment()"&gt;
+        点我加1
+    &lt;/button&gt;
+&lt;/div&gt;
+&lt;/template&gt;
 </t>
-<t tx="swot.20260518160505.13">* https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt-3.html
-
-* 安装
-
-    pnpm i -D @pinia-plugin-persistedstate/nuxt
-
-* 配置 nuxt.config.ts
-
-    export default defineNuxtConfig({
-        modules: [
-            '@pinia/nuxt',
-            '@pinia-plugin-persistedstate/nuxt'  // 新增内容
-        ]
-    })
-
-* 使用（在自己定义的 store 中使用）
-
-    import { defineStore } from 'pinia'
-    export const useStore = defineStore(
-        'main',
-        () =&gt; {
-            const someState = ref('hello pinia')
-            return { someState }  // &lt;1&gt;
-        },
-        {
-            persist: true  // 新增内容
-        }
-    )
-
-+
-&lt;1&gt; 后面在任何地方使用 return 后的变量 someState，就会是持久化的值了。
-
-IMPORTANT: return 的函数不行，只能是变量才会是持久化。
-</t>
-<t tx="swot.20260518160505.14">@language asciidoc
-@tabwidth -2
-
-https://blog.csdn.net/qq_41581588/article/details/130052819
+<t tx="swot.20260518160505.14">https://blog.csdn.net/qq_41581588/article/details/130052819
 
 * autoImports 自动导入 defineStore:
 +
@@ -41335,6 +41322,8 @@ https://blog.csdn.net/qq_41581588/article/details/130052819
 
   import { defineStore } from 'pinia'
 
+
+IMPORTANT: Nuxt4 已经支持自动导入 defineStore、storeToRefs
 </t>
 <t tx="swot.20260518160505.15">pinia: {
   autoImports: [
@@ -41380,28 +41369,58 @@ NOTE: 在 nuxt3/4 中 useCounter &amp; useColor 可以全局使用。
 [source,html]
 ----
 &lt;&lt; pages test-useState2 &gt;&gt;
-----</t>
+----
+
+小结：在同一浏览器的同一个 tab 页内，状态 useCounter 是可以共享的。</t>
 <t tx="swot.20260518160505.3">@language typescript
 export const useCounter = () =&gt; useState&lt;number&gt;(
     "counter", () =&gt; 0);
 
+// useColor 在本例子中没有用到，只是写了此代码
 export const useColor = () =&gt; useState&lt;string&gt;(
     "color", () =&gt; "pink");
 </t>
-<t tx="swot.20260518160505.8">@language asciidoc
-</t>
-<t tx="swot.20260518160505.9">@language asciidoc
-* https://nuxt.com/modules/pinia
-
+<t tx="swot.20260518160505.8">* https://nuxt.com/modules/pinia
 * https://pinia.vuejs.org/ssr/nuxt.html#nuxt-js
 
-* 安装配置使用
+[upperalpha]
+. 安装 pinia
++
+[source,console]
+----
+pnpm install pinia @pinia/nuxt
+pnpm add pinia-plugin-persistedstate 安装持久化插件
+# https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt
+# 现在更推荐 pinia-plugin-unstorage
+----
 
-    npm  install pinia @pinia/nuxt
-    pnpm install pinia @pinia/nuxt
-    &lt;&lt; 配置模块 pinia &gt;&gt;
-    mkdir stores
-    touch stores/myStore.ts -- use defineStore
+. 配置 pinia
++
+[source,javascript]
+----
+&lt;&lt; 配置模块 pinia &gt;&gt;
+----
+
+. 使用 pinia
++
+[source,console]
+----
+mkdir app/stores
+touch app/stores/myStore.ts -- use defineStore
+----
++
+.app/stores/myStore.ts 创建自定义 store
+[source,javascript]
+----
+&lt;&lt; defineStore 组合式 &gt;&gt;
+----
+
+. app/pages/test-stores.vue 在页面中使用 store
++
+[source,html]
+----
+&lt;&lt; use pinia store &gt;&gt;
+----
 
 </t>
 <t tx="swot.20260518160818.1"></t>
@@ -41418,7 +41437,7 @@ export const useColor = () =&gt; useState&lt;string&gt;(
 &lt;/script&gt;
 </t>
 <t tx="swot.20260518162448.1">&lt;template&gt;
-    &lt;div&gt;使用前面定义好的 Counter 组件&lt;/div&gt;
+    &lt;div&gt;使用定义好的 Counter 组件&lt;/div&gt;
     &lt;Counter /&gt;
 &lt;/template&gt;
 
@@ -41429,7 +41448,7 @@ console.log("counter:", counter);
 &lt;/script&gt;
 </t>
 <t tx="swot.20260518163855.2">&lt;template&gt;
-    &lt;div&gt;使用前面定义好的 Counter 组件&lt;/div&gt;
+    &lt;div&gt;使用定义好的 Counter 组件&lt;/div&gt;
     &lt;Counter /&gt;
 &lt;/template&gt;
 
@@ -41439,5 +41458,6 @@ const counter = useCounter();
 console.log("counter:", counter);
 &lt;/script&gt;
 </t>
+<t tx="swot.20260519090217.1"></t>
 </tnodes>
 </leo_file>

@@ -7,6 +7,7 @@
 export const useCounter = () => useState<number>(
     "counter", () => 0);
 
+// useColor 在本例子中没有用到，只是写了此代码
 export const useColor = () => useState<string>(
     "color", () => "pink");
 //@-<< useState >>

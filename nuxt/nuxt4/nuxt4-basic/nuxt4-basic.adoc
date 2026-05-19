@@ -287,8 +287,11 @@ NOTE: 启动项目后会自动生成 "./.nuxt/tsconfig.json"
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.11.3",
     "dayjs": "^1.11.20",
     "nuxt": "^4.4.5",
+    "pinia": "^3.0.4",
+    "pinia-plugin-persistedstate": "^4.7.1",
     "pug": "^3.0.4",
     "vue": "^3.5.33",
     "vue-router": "^5.0.6"
@@ -1284,6 +1287,7 @@ https://nuxt.com/docs/getting-started/state-management#state-management
 export const useCounter = () => useState<number>(
     "counter", () => 0);
 
+// useColor 在本例子中没有用到，只是写了此代码
 export const useColor = () => useState<string>(
     "color", () => "pink");
 ----
@@ -1316,7 +1320,7 @@ NOTE: 在 nuxt3/4 中 useCounter & useColor 可以全局使用。
 [source,html]
 ----
 <template>
-    <div>使用前面定义好的 Counter 组件</div>
+    <div>使用定义好的 Counter 组件</div>
     <Counter />
 </template>
 
@@ -1333,7 +1337,7 @@ console.log("counter:", counter);
 [source,html]
 ----
 <template>
-    <div>使用前面定义好的 Counter 组件</div>
+    <div>使用定义好的 Counter 组件</div>
     <Counter />
 </template>
 
@@ -1344,27 +1348,47 @@ console.log("counter:", counter);
 </script>
 ----
 
+小结：在同一浏览器的同一个 tab 页内，状态 useCounter 是可以共享的。
+
 === 方式二 使用模块 pinia module -- 推荐方式
-
-
-==== 基本使用
 * https://nuxt.com/modules/pinia
-
 * https://pinia.vuejs.org/ssr/nuxt.html#nuxt-js
 
-* 安装配置使用
+[upperalpha]
+. 安装 pinia
++
+[source,console]
+----
+pnpm install pinia @pinia/nuxt
+pnpm add pinia-plugin-persistedstate 安装持久化插件
+# https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt
+# 现在更推荐 pinia-plugin-unstorage
+----
 
-    npm  install pinia @pinia/nuxt
-    pnpm install pinia @pinia/nuxt
+. 配置 pinia
++
+[source,javascript]
+----
+// https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt
+'@pinia/nuxt',
+'pinia-plugin-persistedstate/nuxt',
+----
 
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
-    mkdir stores
-    touch stores/myStore.ts -- use defineStore
-
-===== defineStore 组合式
+. 使用 pinia
++
+[source,console]
+----
+mkdir app/stores
+touch app/stores/myStore.ts -- use defineStore
+----
++
+.app/stores/myStore.ts 创建自定义 store
+[source,javascript]
+----
+// nuxt4 已经支持自动导入 defineStore、storeToRefs 等等
 export const useCounterStore = defineStore(
-    'mycounter', () => {
+    'mycounter',
+    () => {
         const count = ref(0)
         const name = ref('Swot')
         const doubleCount = computed(
@@ -1373,65 +1397,39 @@ export const useCounterStore = defineStore(
         function increment() {
             count.value++
         }
-        return { count, name, doubleCount, increment }
-    }
+        return {
+            count,
+            name,
+            doubleCount,
+            increment,  // 函数不能持久化
+        }
+    },
+    {
+        // 持久化插件配置
+        // IMPORTANT: return 的函数不行，只能是变量才会是持久化。
+        persist: true,
+    },
 )
+----
 
-===== use pinia store
-import { useCounterStore } from '@/stores';
+. app/pages/test-stores.vue 在页面中使用 store
++
+[source,html]
+----
+<script setup>
+import { useCounterStore } from '~/stores/myStore';
 
 const store = useCounterStore();
 
-==== 持久化插件
-* https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt-3.html
+</script>
 
-* 安装
-
-    pnpm i -D @pinia-plugin-persistedstate/nuxt
-
-* 配置 nuxt.config.ts
-
-    export default defineNuxtConfig({
-        modules: [
-            '@pinia/nuxt',
-            '@pinia-plugin-persistedstate/nuxt'  // 新增内容
-        ]
-    })
-
-* 使用（在自己定义的 store 中使用）
-
-    import { defineStore } from 'pinia'
-    export const useStore = defineStore(
-        'main',
-        () => {
-            const someState = ref('hello pinia')
-            return { someState }  // <1>
-        },
-        {
-            persist: true  // 新增内容
-        }
-    )
-
-+
-<1> 后面在任何地方使用 return 后的变量 someState，就会是持久化的值了。
-
-IMPORTANT: return 的函数不行，只能是变量才会是持久化。
-
-==== 一些设置的技巧
-
-https://blog.csdn.net/qq_41581588/article/details/130052819
-
-* autoImports 自动导入 defineStore:
-+
-需要在 nuxt.config.ts 文件中配置一下，这样就不用在每个定义 store 的文件里再写下面的导入了
-
-  import { defineStore } from 'pinia'
-
-===== pinia
-pinia: {
-  autoImports: [
-    'defineStore',  // import { defineStore } from 'pinia'
-    'storeToRefs',  // import { storeToRefs } from 'pinia'
-  ]
-},
+<template>
+<div>
+    <p>Count: {{store.count}}</p>
+    <button @click="store.increment()">
+        点我加1
+    </button>
+</div>
+</template>
+----
 
