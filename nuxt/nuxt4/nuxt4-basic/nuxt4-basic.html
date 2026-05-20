@@ -626,6 +626,22 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_方式二_使用模块_pinia_module推荐方式">方式二 使用模块 pinia module&#8201;&#8212;&#8201;推荐方式</a></li>
 </ul>
 </li>
+<li><a href="#_18_后台服务_server">18. 后台服务 server</a>
+<ul class="sectlevel2">
+<li><a href="#_api">api</a>
+<ul class="sectlevel3">
+<li><a href="#_简单例子">简单例子</a></li>
+<li><a href="#_动态路由">动态路由</a></li>
+<li><a href="#_查询参数">查询参数</a></li>
+<li><a href="#_方法匹配">方法匹配</a></li>
+<li><a href="#_兜底匹配">兜底匹配</a></li>
+</ul>
+</li>
+<li><a href="#_routes">routes</a></li>
+<li><a href="#_middleware">middleware</a></li>
+<li><a href="#_utils">utils</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1042,7 +1058,7 @@ export default defineNuxtConfig({})</pre>
 <span class="tok-w">  </span><span class="tok-nt">&quot;dependencies&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
 <span class="tok-w">    </span><span class="tok-nt">&quot;@pinia/nuxt&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^0.11.3&quot;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-nt">&quot;dayjs&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^1.11.20&quot;</span><span class="tok-p">,</span>
-<span class="tok-w">    </span><span class="tok-nt">&quot;nuxt&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^4.4.5&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-nt">&quot;nuxt&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^4.4.6&quot;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-nt">&quot;pinia&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^3.0.4&quot;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-nt">&quot;pinia-plugin-persistedstate&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^4.7.1&quot;</span><span class="tok-p">,</span>
 <span class="tok-w">    </span><span class="tok-nt">&quot;pug&quot;</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;^3.0.4&quot;</span><span class="tok-p">,</span>
@@ -2180,7 +2196,7 @@ touch components/icons/Bell.vue</pre>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineNuxtPlugin</span><span class="tok-p">(</span>
 <span class="tok-w">    </span><span class="tok-nx">nuxtApp</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
-<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;nuxtApp&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">nuxtApp</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// console.log(&quot;nuxtApp&quot;, nuxtApp);</span>
 
 <span class="tok-w">        </span><span class="tok-c1">// Automatically Providing Helpers</span>
 <span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span>
@@ -2749,10 +2765,217 @@ content 中的目录与 pages 中的路由是一一对应的。
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_18_后台服务_server">18. 后台服务 server</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_api">api</h3>
+<div class="sect3">
+<h4 id="_简单例子">简单例子</h4>
+<div class="listingblock">
+<div class="title">server/api/hello.ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">((</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">  </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">hello</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;world&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">  </span><span class="tok-p">}</span>
+<span class="tok-p">})</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">app/pages/test-api-hello.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;ts&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-c1">// 下面注释的条件 ssr: true</span>
+
+<span class="tok-c1">// 浏览器不会再发请求</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">useFetch</span><span class="tok-p">(</span><span class="tok-s1">&#39;/api/hello&#39;</span><span class="tok-p">)</span>
+
+<span class="tok-c1">// 浏览器会发请求，所以 $fetch 适合用在事件处理中</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">res</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">$fetch</span><span class="tok-p">(</span><span class="tok-s2">&quot;/api/hello&quot;</span><span class="tok-p">);</span>
+
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+  <span class="tok-p">&lt;</span><span class="tok-nt">pre</span><span class="tok-p">&gt;</span>{{ data }}<span class="tok-p">&lt;/</span><span class="tok-nt">pre</span><span class="tok-p">&gt;</span>
+  <span class="tok-p">&lt;</span><span class="tok-nt">pre</span><span class="tok-p">&gt;</span>{{ res }}<span class="tok-p">&lt;/</span><span class="tok-nt">pre</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_动态路由">动态路由</h4>
+<div class="paragraph">
+<p>动态取路由参数</p>
+</div>
+<div class="paragraph">
+<p><a href="https://nuxt.com/docs/4.x/directory-structure/server#route-parameters" class="bare">https://nuxt.com/docs/4.x/directory-structure/server#route-parameters</a></p>
+</div>
+<div class="paragraph">
+<p>Server routes can use dynamic parameters within brackets in the file name like /api/hello/[name].ts and be accessed via event.context.params.</p>
+</div>
+<div class="listingblock">
+<div class="title">server/api/xxx/[name].ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">((</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">getRouterParam</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;name&#39;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-sb">`Hello, </span><span class="tok-si">${</span><span class="tok-nx">name</span><span class="tok-si">}</span><span class="tok-sb">!`</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 另一种返回方式</span>
+<span class="tok-w">    </span><span class="tok-c1">// return `[name]: ${event.context.params!.name}`</span>
+<span class="tok-p">})</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">app/pages/test-api-xxx-name.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;ts&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">resxyz</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">useFetch</span><span class="tok-p">(</span><span class="tok-s2">&quot;/api/xxx/xyz&quot;</span><span class="tok-p">);</span>
+<span class="tok-c1">// console.log(&quot;resxyz&quot;, resxyz);</span>
+
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">resabc</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">useFetch</span><span class="tok-p">(</span><span class="tok-s2">&quot;/api/xxx/abc&quot;</span><span class="tok-p">);</span>
+<span class="tok-c1">// console.log(&quot;resabc&quot;, resabc);</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>{{resxyz}}<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>{{resabc}}<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+/api/xxx/后面可以跟任何字符串
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_查询参数">查询参数</h4>
+<div class="listingblock">
+<div class="title">server/api/query.ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// Example: /api/query?a=10&amp;b=20&amp;c=30</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">((</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">query</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">getQuery</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-c1">// 后端处理逻辑，已省略</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">query</span><span class="tok-p">.</span><span class="tok-nx">a</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">b</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">query</span><span class="tok-p">.</span><span class="tok-nx">b</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">c</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">query</span><span class="tok-p">.</span><span class="tok-nx">c</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-p">};</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">app/pages/test-query.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;ts&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">query</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">useFetch</span><span class="tok-p">(</span><span class="tok-s2">&quot;/api/query?a=10&amp;b=20&amp;c=30&quot;</span><span class="tok-p">)</span>
+
+<span class="tok-c1">// console.log(&quot;query&quot;, query);</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>{{query}}<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_方法匹配">方法匹配</h4>
+<div class="paragraph">
+<p>下面例子只可接收 post 类型的请求。</p>
+</div>
+<div class="listingblock">
+<div class="title">server/api/hello.post.ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">(</span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">body</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">readBody</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-c1">// console.log(&quot;body&quot;, body);</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">api</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;post_method&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">body</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">})</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">app/pages/test-method.vue</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span> <span class="tok-na">setup</span> <span class="tok-na">lang</span><span class="tok-o">=</span><span class="tok-s">&quot;ts&quot;</span><span class="tok-p">&gt;</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">post</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">useFetch</span><span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-s2">&quot;/api/method&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">    </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">method</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;post&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">body</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s2">&quot;Swot&quot;</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">age</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">48</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">)</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s2">&quot;post.data.value&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">post</span><span class="tok-p">.</span><span class="tok-nx">data</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">);</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+test-api-method
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">template</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_兜底匹配">兜底匹配</h4>
+<div class="paragraph">
+<p><a href="https://nuxt.com/docs/4.x/directory-structure/server#catch-all-route" class="bare">https://nuxt.com/docs/4.x/directory-structure/server#catch-all-route</a></p>
+</div>
+<div class="listingblock">
+<div class="title">server/api/[&#8230;&#8203;slug].ts</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-nx">defineEventHandler</span><span class="tok-p">((</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+
+<span class="tok-w"> </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;event.context.params.slug to get the route segment:&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">              </span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">params</span><span class="tok-p">.</span><span class="tok-nx">slug</span><span class="tok-p">);</span>
+
+<span class="tok-w">  </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-sb">`NotMatch`</span>
+<span class="tok-p">})</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>测试兜底匹配：路由中随便输入乱七八糟的地址，会返回 "NotMatch"，比如下面不存在的路由</p>
+</div>
+<div class="paragraph">
+<p><a href="http://127.0.0.1:3000/api/notmatchAnything" class="bare">http://127.0.0.1:3000/api/notmatchAnything</a></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_routes">routes</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_middleware">middleware</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_utils">utils</h3>
+
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-05-19 11:03:25 +0800
+Last updated 2026-05-20 15:06:32 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

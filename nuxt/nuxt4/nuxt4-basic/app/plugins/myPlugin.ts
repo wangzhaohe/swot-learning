@@ -6,7 +6,7 @@
 //@@language javascript
 export default defineNuxtPlugin(
     nuxtApp => {
-        console.log("nuxtApp", nuxtApp);
+        // console.log("nuxtApp", nuxtApp);
 
         // Automatically Providing Helpers
         return {

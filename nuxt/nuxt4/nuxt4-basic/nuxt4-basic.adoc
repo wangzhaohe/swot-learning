@@ -289,7 +289,7 @@ NOTE: 启动项目后会自动生成 "./.nuxt/tsconfig.json"
   "dependencies": {
     "@pinia/nuxt": "^0.11.3",
     "dayjs": "^1.11.20",
-    "nuxt": "^4.4.5",
+    "nuxt": "^4.4.6",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
     "pug": "^3.0.4",
@@ -1010,7 +1010,7 @@ https://nuxt.com/docs/guide/directory-structure/plugins
 ----
 export default defineNuxtPlugin(
     nuxtApp => {
-        console.log("nuxtApp", nuxtApp);
+        // console.log("nuxtApp", nuxtApp);
 
         // Automatically Providing Helpers
         return {
@@ -1432,4 +1432,179 @@ const store = useCounterStore();
 </div>
 </template>
 ----
+
+== 18. 后台服务 server
+
+
+=== api
+
+
+==== 简单例子
+.server/api/hello.ts
+[source,javascript]
+----
+export default defineEventHandler((event) => {
+  return {
+    hello: 'world',
+  }
+})
+----
+
+.app/pages/test-api-hello.vue
+[source,html]
+----
+<script setup lang="ts">
+// 下面注释的条件 ssr: true
+
+// 浏览器不会再发请求
+const { data } = await useFetch('/api/hello')
+
+// 浏览器会发请求，所以 $fetch 适合用在事件处理中
+const res = await $fetch("/api/hello");
+
+</script>
+
+<template>
+  <pre>{{ data }}</pre>
+  <pre>{{ res }}</pre>
+</template>
+----
+
+==== 动态路由
+动态取路由参数
+
+https://nuxt.com/docs/4.x/directory-structure/server#route-parameters
+
+Server routes can use dynamic parameters within brackets in the file name like /api/hello/[name].ts and be accessed via event.context.params.
+
+.server/api/xxx/[name].ts
+[source,javascript]
+----
+export default defineEventHandler((event) => {
+
+    const name = getRouterParam(event, 'name')
+    return `Hello, ${name}!`
+
+    // 另一种返回方式
+    // return `[name]: ${event.context.params!.name}`
+})
+----
+
+.app/pages/test-api-xxx-name.vue
+[source,html]
+----
+<script setup lang="ts">
+const resxyz = await useFetch("/api/xxx/xyz");
+// console.log("resxyz", resxyz);
+
+const resabc = await useFetch("/api/xxx/abc");
+// console.log("resabc", resabc);
+</script>
+
+<template>
+    <div>{{resxyz}}</div>
+    <div>{{resabc}}</div>
+</template>
+----
+
+NOTE: /api/xxx/后面可以跟任何字符串
+
+==== 查询参数
+.server/api/query.ts
+[source,javascript]
+----
+// Example: /api/query?a=10&b=20&c=30
+
+export default defineEventHandler((event) => {
+    const query = getQuery(event)
+    // 后端处理逻辑，已省略
+    return {
+        a: query.a,
+        b: query.b,
+        c: query.c,
+    };
+});
+----
+
+.app/pages/test-query.vue
+[source,html]
+----
+<script setup lang="ts">
+const query = await useFetch("/api/query?a=10&b=20&c=30")
+
+// console.log("query", query);
+</script>
+
+<template>
+    <div>{{query}}</div>
+</template>
+----
+
+==== 方法匹配
+下面例子只可接收 post 类型的请求。
+
+.server/api/hello.post.ts
+[source,javascript]
+----
+export default defineEventHandler(async (event) => {
+    const body = await readBody(event);
+    // console.log("body", body);
+    return {
+        api: "post_method",
+        body,
+    }
+})
+----
+
+.app/pages/test-method.vue
+[source,html]
+----
+<script setup lang="ts">
+const post = await useFetch(
+    "/api/method",
+    {
+        method: "post",
+        body: {
+            name: "Swot",
+            age: 48,
+        }
+    }
+)
+console.log("post.data.value", post.data.value);
+</script>
+
+<template>
+<div>
+test-api-method
+</div>
+</template>
+----
+
+==== 兜底匹配
+https://nuxt.com/docs/4.x/directory-structure/server#catch-all-route
+
+.server/api/[...slug].ts 
+[source,javascript]
+----
+export default defineEventHandler((event) => {
+    
+ console.log('event.context.params.slug to get the route segment:',
+              event.context.params.slug);
+
+  return `NotMatch`
+})
+----
+
+测试兜底匹配：路由中随便输入乱七八糟的地址，会返回 "NotMatch"，比如下面不存在的路由
+
+http://127.0.0.1:3000/api/notmatchAnything
+
+=== routes
+
+
+=== middleware
+
+
+=== utils
+
 

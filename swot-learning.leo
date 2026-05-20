@@ -2050,6 +2050,32 @@
 </v>
 </v>
 </v>
+<v t="swot.20260520082953.1"><vh>18. 后台服务 server</vh>
+<v t="swot.20260520085046.1"><vh>api</vh>
+<v t="swot.20260520103013.1"><vh>简单例子</vh>
+<v t="swot.20260520085659.1"><vh>&lt;&lt; api hello &gt;&gt;</vh></v>
+<v t="swot.20260520090215.1"><vh>&lt;&lt; test-api-hello &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260520103022.1"><vh>动态路由</vh>
+<v t="swot.20260520102808.1"><vh>&lt;&lt; api [name] &gt;&gt;</vh></v>
+<v t="swot.20260520103456.1"><vh>&lt;&lt; test-apl-xxx-[name] &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260520104310.1"><vh>查询参数</vh>
+<v t="swot.20260520104431.1"><vh>&lt;&lt; api query &gt;&gt;</vh></v>
+<v t="swot.20260520104657.2"><vh>&lt;&lt; test-api-query &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260520105503.1"><vh>方法匹配</vh>
+<v t="swot.20260520105452.1"><vh>&lt;&lt; api method &gt;&gt;</vh></v>
+<v t="swot.20260520105804.1"><vh>&lt;&lt; test-api-method &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260520145645.1"><vh>兜底匹配</vh>
+<v t="swot.20260520150003.1"><vh>&lt;&lt; catch all &gt;&gt;</vh></v>
+</v>
+</v>
+<v t="swot.20260520085056.1"><vh>routes</vh></v>
+<v t="swot.20260520085107.1"><vh>middleware</vh></v>
+<v t="swot.20260520085116.1"><vh>utils</vh></v>
+</v>
 </v>
 </v>
 <v t="swot.20260511151718.1"><vh>code</vh>
@@ -2059,6 +2085,7 @@
 </v>
 <v t="swot.20260511103438.1"><vh>@file nuxt.config.ts</vh></v>
 <v t="swot.20260511152156.1"><vh>@file app/assets/main.scss</vh></v>
+<v t="swot.20260520085600.1"><vh>app</vh>
 <v t="swot.20260513143325.1"><vh>pages</vh>
 <v t="swot.20260512104512.1"><vh>@file app/pages/index.vue</vh></v>
 <v t="swot.20260512105052.1"><vh>@file app/pages/about.vue</vh></v>
@@ -2106,6 +2133,20 @@
 <v t="swot.20260519090217.1"><vh>状态管理 stores</vh>
 <v t="swot.20260519090401.1"><vh>@file app/stores/myStore.ts</vh></v>
 <v t="swot.20260519091456.1"><vh>@file app/pages/test-stores.vue</vh></v>
+</v>
+</v>
+<v t="swot.20260520085606.1"><vh>server</vh>
+<v t="swot.20260520085621.1"><vh>api</vh>
+<v t="swot.20260520085633.1"><vh>@file server/api/hello.ts</vh></v>
+<v t="swot.20260520090126.1"><vh>@file app/pages/test-api-hello.vue</vh></v>
+<v t="swot.20260520102719.1"><vh>@file server/api/xxx/[name].ts</vh></v>
+<v t="swot.20260520103505.1"><vh>@file app/pages/test-api-xxx-name.vue</vh></v>
+<v t="swot.20260520104414.1"><vh>@file server/api/query.ts</vh></v>
+<v t="swot.20260520104657.1"><vh>@file app/pages/test-query.vue</vh></v>
+<v t="swot.20260520105436.1"><vh>@file server/api/method.post.ts</vh></v>
+<v t="swot.20260520105706.1"><vh>@file app/pages/test-method.vue</vh></v>
+<v t="swot.20260520145907.1"><vh>@file server/api/[...slug].ts </vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -41000,7 +41041,7 @@ https://nuxt.com/docs/guide/directory-structure/plugins
 <t tx="swot.20260515143229.2">@language javascript
 export default defineNuxtPlugin(
     nuxtApp =&gt; {
-        console.log("nuxtApp", nuxtApp);
+        // console.log("nuxtApp", nuxtApp);
 
         // Automatically Providing Helpers
         return {
@@ -41459,5 +41500,195 @@ console.log("counter:", counter);
 &lt;/script&gt;
 </t>
 <t tx="swot.20260519090217.1"></t>
+<t tx="swot.20260520082953.1"></t>
+<t tx="swot.20260520085046.1"></t>
+<t tx="swot.20260520085056.1"></t>
+<t tx="swot.20260520085107.1"></t>
+<t tx="swot.20260520085116.1"></t>
+<t tx="swot.20260520085600.1"></t>
+<t tx="swot.20260520085606.1"></t>
+<t tx="swot.20260520085621.1"></t>
+<t tx="swot.20260520085659.1">@language javascript
+export default defineEventHandler((event) =&gt; {
+  return {
+    hello: 'world',
+  }
+})
+</t>
+<t tx="swot.20260520090215.1">@language html
+&lt;script setup lang="ts"&gt;
+// 下面注释的条件 ssr: true
+
+// 浏览器不会再发请求
+const { data } = await useFetch('/api/hello')
+
+// 浏览器会发请求，所以 $fetch 适合用在事件处理中
+const res = await $fetch("/api/hello");
+
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;pre&gt;{{ data }}&lt;/pre&gt;
+  &lt;pre&gt;{{ res }}&lt;/pre&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260520102808.1">@language javascript
+export default defineEventHandler((event) =&gt; {
+
+    const name = getRouterParam(event, 'name')
+    return `Hello, ${name}!`
+
+    // 另一种返回方式
+    // return `[name]: ${event.context.params!.name}`
+})
+</t>
+<t tx="swot.20260520103013.1">.server/api/hello.ts
+[source,javascript]
+----
+&lt;&lt; api hello &gt;&gt;
+----
+
+.app/pages/test-api-hello.vue
+[source,html]
+----
+&lt;&lt; test-api-hello &gt;&gt;
+----
+</t>
+<t tx="swot.20260520103022.1">动态取路由参数
+
+https://nuxt.com/docs/4.x/directory-structure/server#route-parameters
+
+Server routes can use dynamic parameters within brackets in the file name like /api/hello/[name].ts and be accessed via event.context.params.
+
+.server/api/xxx/[name].ts
+[source,javascript]
+----
+&lt;&lt; api [name] &gt;&gt;
+----
+
+.app/pages/test-api-xxx-name.vue
+[source,html]
+----
+&lt;&lt; test-apl-xxx-[name] &gt;&gt;
+----
+
+NOTE: /api/xxx/后面可以跟任何字符串
+</t>
+<t tx="swot.20260520103456.1">@language typescript
+&lt;script setup lang="ts"&gt;
+const resxyz = await useFetch("/api/xxx/xyz");
+// console.log("resxyz", resxyz);
+
+const resabc = await useFetch("/api/xxx/abc");
+// console.log("resabc", resabc);
+&lt;/script&gt;
+
+&lt;template&gt;
+    &lt;div&gt;{{resxyz}}&lt;/div&gt;
+    &lt;div&gt;{{resabc}}&lt;/div&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260520104310.1">.server/api/query.ts
+[source,javascript]
+----
+&lt;&lt; api query &gt;&gt;
+----
+
+.app/pages/test-query.vue
+[source,html]
+----
+&lt;&lt; test-api-query &gt;&gt;
+----
+</t>
+<t tx="swot.20260520104431.1">@language typescript
+// Example: /api/query?a=10&amp;b=20&amp;c=30
+
+export default defineEventHandler((event) =&gt; {
+    const query = getQuery(event)
+    // 后端处理逻辑，已省略
+    return {
+        a: query.a,
+        b: query.b,
+        c: query.c,
+    };
+});
+</t>
+<t tx="swot.20260520104657.2">@language typescript
+&lt;script setup lang="ts"&gt;
+const query = await useFetch("/api/query?a=10&amp;b=20&amp;c=30")
+
+// console.log("query", query);
+&lt;/script&gt;
+
+&lt;template&gt;
+    &lt;div&gt;{{query}}&lt;/div&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260520105452.1">@language typescript
+export default defineEventHandler(async (event) =&gt; {
+    const body = await readBody(event);
+    // console.log("body", body);
+    return {
+        api: "post_method",
+        body,
+    }
+})
+</t>
+<t tx="swot.20260520105503.1">下面例子只可接收 post 类型的请求。
+
+.server/api/hello.post.ts
+[source,javascript]
+----
+&lt;&lt; api method &gt;&gt;
+----
+
+.app/pages/test-method.vue
+[source,html]
+----
+&lt;&lt; test-api-method &gt;&gt;
+----
+</t>
+<t tx="swot.20260520105804.1">&lt;script setup lang="ts"&gt;
+@language typescript
+const post = await useFetch(
+    "/api/method",
+    {
+        method: "post",
+        body: {
+            name: "Swot",
+            age: 48,
+        }
+    }
+)
+console.log("post.data.value", post.data.value);
+&lt;/script&gt;
+
+&lt;template&gt;
+&lt;div&gt;
+test-api-method
+&lt;/div&gt;
+&lt;/template&gt;
+</t>
+<t tx="swot.20260520145645.1">https://nuxt.com/docs/4.x/directory-structure/server#catch-all-route
+
+.server/api/[...slug].ts 
+[source,javascript]
+----
+&lt;&lt; catch all &gt;&gt;
+----
+
+测试兜底匹配：路由中随便输入乱七八糟的地址，会返回 "NotMatch"，比如下面不存在的路由
+
+http://127.0.0.1:3000/api/notmatchAnything
+
+</t>
+<t tx="swot.20260520150003.1">export default defineEventHandler((event) =&gt; {
+    
+ console.log('event.context.params.slug to get the route segment:',
+              event.context.params.slug);
+
+  return `NotMatch`
+})
+</t>
 </tnodes>
 </leo_file>

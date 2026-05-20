@@ -5,6 +5,7 @@
 export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
+    // ssr: false,  // nuxt 4.4.5 有bug，降级到 4.4.4 就可以设置为 false
     //@+others
     //@+node:swot.20260511150547.3: ** css 配置全局scss
     // https://nuxt.com/docs/getting-started/styling#the-css-property
