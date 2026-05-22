@@ -1436,7 +1436,7 @@ const store = useCounterStore();
 == 18. 后台服务 server
 
 
-=== api
+=== api -- /api 路由
 
 
 ==== 简单例子
@@ -1599,12 +1599,128 @@ export default defineEventHandler((event) => {
 
 http://127.0.0.1:3000/api/notmatchAnything
 
-=== routes
+=== routes -- 直接根路由下
+.server/routes/hello.ts
+[source,javascript]
+----
+export default defineEventHandler((event) => {
+    return {
+        routes: "works",
+    }
+})
+----
+
+在浏览器中直接访问: /hello 返回内容如下:
+
+.返回结果
+....
+{
+    "routes": "works"
+}
+....
+
+=== middleware -- 进入路由前执行
+https://nuxt.com/docs/4.x/directory-structure/server#server-middleware
+
+.server/middleware/logger.ts
+[source,javascript]
+----
+export default defineEventHandler((event) => {
+    // 不包含域名
+    console.log('New request1: ' + event.node.req.url);
+    // 包含域名
+    console.log('New request2: ' + getRequestURL(event));
+})
+----
+
+测试：随便请求一个后端的路由，查看终端的输出，比如 `/hello`。
+
+.http 是一个终端测试工具 httpie 的命令
+[source,javascript]
+----
+> http http://localhost:3000/hello
+HTTP/1.1 200 OK
+connection: keep-alive
+content-length: 23
+content-type: application/json
+date: Fri, 22 May 2026 00:52:18 GMT
+keep-alive: timeout=5
+
+{
+    "routes": "works"
+}
+----
+
+.服务端中间件打印的结果
+....
+New request1: /hello
+New request2: http://localhost:3000/hello
+....
+
+=== utils -- 返回相应给前端之前执行
+https://nuxt.com/docs/4.x/directory-structure/server#server-utilities
+
+You can add more helpers yourself inside the ~~/server/utils directory. +
+在该目录下，可以增加多个帮助函数。
+
+For example, you can define a custom handler utility that wraps the original handler and performs additional operations before returning the final response. +
+比如，可以定制一个包含原始处理以及附加操作的帮助函数，在该帮助函数执行后再返回响应给前端。
+
+.定义 server/utils/handler.js
+[source,javascript]
+----
+export const defineWrappedResponseHandler = (handler) =>
+    defineEventHandler(async (event) => {
+        try {
+            // do something before the route handler
+            const response = await handler(event);
+            console.log('Test server/utils');
+            // do something after the route handler
+            return { response };
+        } catch (err) {
+            // Error handling
+            return { err };
+        }
+    });
+----
+
+.使用上面的定义 server/routes/hello-utils.ts
+[source,javascript]
+----
+// 使用 defineWrappedResponseHandler，server/utils 下定义的函数才会被执行
+export default defineWrappedResponseHandler((event) => {
+    return {
+        routes: "works",
+    }
+})
+----
 
 
-=== middleware
+测试：随便请求一个后端的路由，查看终端的输出，比如 `/hello`。
 
+.http 是一个终端测试工具 httpie 的命令
+[source,javascript]
+----
+> http http://localhost:3000/hello
+HTTP/1.1 200 OK
+connection: keep-alive
+content-length: 23
+content-type: application/json
+date: Fri, 22 May 2026 01:17:37 GMT
+keep-alive: timeout=5
 
-=== utils
+{
+    "routes": "works"
+}
+----
 
+.服务端 utils 打印的结果
+....
+省略其他输出...
+Test server/utils
+....
+
+=== plugins -- 定制 Nitro 服务的行为
+参考官网文档：
+https://nuxt.com/docs/4.x/directory-structure/server#server-plugins
 
