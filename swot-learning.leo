@@ -1834,6 +1834,7 @@
 <v t="swot.20260506150220.1"><vh>@path vue</vh>
 <v t="swot.20260506150242.1"><vh>文档汇总</vh></v>
 </v>
+<v t="swot.20260522103641.1"><vh>@path </vh></v>
 <v t="swot.20260413155153.1"><vh>网络安全教育 2026-04-15</vh></v>
 </v>
 <v t="swot.20251210103828.1"><vh>@path js</vh>
@@ -2051,7 +2052,7 @@
 </v>
 </v>
 <v t="swot.20260520082953.1"><vh>18. 后台服务 server</vh>
-<v t="swot.20260520085046.1"><vh>api</vh>
+<v t="swot.20260520085046.1"><vh>api -- /api 路由</vh>
 <v t="swot.20260520103013.1"><vh>简单例子</vh>
 <v t="swot.20260520085659.1"><vh>&lt;&lt; api hello &gt;&gt;</vh></v>
 <v t="swot.20260520090215.1"><vh>&lt;&lt; test-api-hello &gt;&gt;</vh></v>
@@ -2072,9 +2073,17 @@
 <v t="swot.20260520150003.1"><vh>&lt;&lt; catch all &gt;&gt;</vh></v>
 </v>
 </v>
-<v t="swot.20260520085056.1"><vh>routes</vh></v>
-<v t="swot.20260520085107.1"><vh>middleware</vh></v>
-<v t="swot.20260520085116.1"><vh>utils</vh></v>
+<v t="swot.20260520085056.1"><vh>routes -- 直接根路由下</vh>
+<v t="swot.20260522083326.1"><vh>&lt;&lt; routes hello &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260520085107.1"><vh>middleware -- 进入路由前执行</vh>
+<v t="swot.20240101100533.1"><vh>&lt;&lt; middleware logger &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260520085116.1"><vh>utils -- 返回相应给前端之前执行</vh>
+<v t="swot.20260522091218.1"><vh>&lt;&lt; utils handler &gt;&gt;</vh></v>
+<v t="swot.20260522092909.2"><vh>&lt;&lt; routes hello utils &gt;&gt;</vh></v>
+</v>
+<v t="swot.20260522094014.1"><vh>plugins -- 定制 Nitro 服务的行为</vh></v>
 </v>
 </v>
 </v>
@@ -2146,6 +2155,16 @@
 <v t="swot.20260520105436.1"><vh>@file server/api/method.post.ts</vh></v>
 <v t="swot.20260520105706.1"><vh>@file app/pages/test-method.vue</vh></v>
 <v t="swot.20260520145907.1"><vh>@file server/api/[...slug].ts </vh></v>
+</v>
+<v t="swot.20260522083154.1"><vh>routes</vh>
+<v t="swot.20231007201320.1"><vh>@file server/routes/hello.ts</vh></v>
+</v>
+<v t="swot.20260522084422.1"><vh>middleware</vh>
+<v t="swot.20240101095322.1"><vh>@file server/middleware/logger.ts</vh></v>
+</v>
+<v t="swot.20260522091440.1"><vh>utils</vh>
+<v t="swot.20260522091448.1"><vh>@file server/utils/handler.js</vh></v>
+<v t="swot.20260522092909.1"><vh>@file server/routes/hello-utils.ts</vh></v>
 </v>
 </v>
 </v>
@@ -2714,8 +2733,8 @@
 </v>
 </v>
 <v t="swot.20260213131026.1"><vh>@path system-designer</vh>
-<v t="swot.20260213131058.1"><vh>@adoc system-designer.adoc</vh>
-<v t="swot.20260213130935.1"><vh>系统架构设计师</vh>
+<v t="swot.20260213131058.1"><vh>@adoc system-design.adoc</vh>
+<v t="swot.20260213130935.1"><vh>系统架构总结</vh>
 <v t="swot.20260213075755.1"><vh>2026-02-13 全栈架构模式：从宏观到微观的 MVC 映射及前端 MVVM</vh>
 <v t="swot.20260224073312.1"><vh>1. 宏观视角：系统级 MVC (System Level)</vh></v>
 <v t="swot.20260224073211.1"><vh>2. 后端视角：Spring Boot 内部 MVC</vh></v>
@@ -2752,6 +2771,9 @@
 <v t="swot.20260214100122.1"></v>
 </v>
 </v>
+</v>
+<v t="swot.20260522145523.1"><vh>@adoc 软考系统架构设计师.adoc</vh>
+<v t="swot.20260522145549.1"><vh>软考系统架构设计师</vh></v>
 </v>
 </v>
 <v t="swot.20250811154633.1"><vh>@path threejs</vh>
@@ -2915,6 +2937,14 @@
 <v t="swot.20260308115402.1"><vh>获取 leo 主进程派生的子进程</vh></v>
 </vnodes>
 <tnodes>
+<t tx="swot.20240101100533.1">@language javascript
+export default defineEventHandler((event) =&gt; {
+    // 不包含域名
+    console.log('New request1: ' + event.node.req.url);
+    // 包含域名
+    console.log('New request2: ' + getRequestURL(event));
+})
+</t>
 <t tx="swot.20250508105043.2"></t>
 <t tx="swot.20250508105234.1">Find it position:
 
@@ -41502,9 +41532,99 @@ console.log("counter:", counter);
 <t tx="swot.20260519090217.1"></t>
 <t tx="swot.20260520082953.1"></t>
 <t tx="swot.20260520085046.1"></t>
-<t tx="swot.20260520085056.1"></t>
-<t tx="swot.20260520085107.1"></t>
-<t tx="swot.20260520085116.1"></t>
+<t tx="swot.20260520085056.1">.server/routes/hello.ts
+[source,javascript]
+----
+&lt;&lt; routes hello &gt;&gt;
+----
+
+在浏览器中直接访问: /hello 返回内容如下:
+
+.返回结果
+....
+{
+    "routes": "works"
+}
+....
+
+</t>
+<t tx="swot.20260520085107.1">https://nuxt.com/docs/4.x/directory-structure/server#server-middleware
+
+.server/middleware/logger.ts
+[source,javascript]
+----
+&lt;&lt; middleware logger &gt;&gt;
+----
+
+测试：随便请求一个后端的路由，查看终端的输出，比如 `/hello`。
+
+.http 是一个终端测试工具 httpie 的命令
+[source,javascript]
+----
+&gt; http http://localhost:3000/hello
+HTTP/1.1 200 OK
+connection: keep-alive
+content-length: 23
+content-type: application/json
+date: Fri, 22 May 2026 00:52:18 GMT
+keep-alive: timeout=5
+
+{
+    "routes": "works"
+}
+----
+
+.服务端中间件打印的结果
+....
+New request1: /hello
+New request2: http://localhost:3000/hello
+....
+</t>
+<t tx="swot.20260520085116.1">https://nuxt.com/docs/4.x/directory-structure/server#server-utilities
+
+You can add more helpers yourself inside the ~~/server/utils directory. +
+在该目录下，可以增加多个帮助函数。
+
+For example, you can define a custom handler utility that wraps the original handler and performs additional operations before returning the final response. +
+比如，可以定制一个包含原始处理以及附加操作的帮助函数，在该帮助函数执行后再返回响应给前端。
+
+.定义 server/utils/handler.js
+[source,javascript]
+----
+&lt;&lt; utils handler &gt;&gt;
+----
+
+.使用上面的定义 server/routes/hello-utils.ts
+[source,javascript]
+----
+&lt;&lt; routes hello utils &gt;&gt;
+----
+
+
+测试：随便请求一个后端的路由，查看终端的输出，比如 `/hello`。
+
+.http 是一个终端测试工具 httpie 的命令
+[source,javascript]
+----
+&gt; http http://localhost:3000/hello
+HTTP/1.1 200 OK
+connection: keep-alive
+content-length: 23
+content-type: application/json
+date: Fri, 22 May 2026 01:17:37 GMT
+keep-alive: timeout=5
+
+{
+    "routes": "works"
+}
+----
+
+.服务端 utils 打印的结果
+....
+省略其他输出...
+Test server/utils
+....
+</t>
 <t tx="swot.20260520085600.1"></t>
 <t tx="swot.20260520085606.1"></t>
 <t tx="swot.20260520085621.1"></t>
@@ -41689,6 +41809,114 @@ http://127.0.0.1:3000/api/notmatchAnything
 
   return `NotMatch`
 })
+</t>
+<t tx="swot.20260522083154.1"></t>
+<t tx="swot.20260522083326.1">export default defineEventHandler((event) =&gt; {
+    return {
+        routes: "works",
+    }
+})
+</t>
+<t tx="swot.20260522084422.1"></t>
+<t tx="swot.20260522091218.1">@language javascript
+export const defineWrappedResponseHandler = (handler) =&gt;
+    defineEventHandler(async (event) =&gt; {
+        try {
+            // do something before the route handler
+            const response = await handler(event);
+            console.log('Test server/utils');
+            // do something after the route handler
+            return { response };
+        } catch (err) {
+            // Error handling
+            return { err };
+        }
+    });
+</t>
+<t tx="swot.20260522091440.1"></t>
+<t tx="swot.20260522092909.2">@language javascript
+// 使用 defineWrappedResponseHandler，server/utils 下定义的函数才会被执行
+export default defineWrappedResponseHandler((event) =&gt; {
+    return {
+        routes: "works",
+    }
+})
+</t>
+<t tx="swot.20260522094014.1">参考官网文档：
+https://nuxt.com/docs/4.x/directory-structure/server#server-plugins
+</t>
+<t tx="swot.20260522103641.1"></t>
+<t tx="swot.20260522145523.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
+<t tx="swot.20260522145549.1">
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+&lt;/script&gt;
+++++
+endif::[]
 </t>
 </tnodes>
 </leo_file>
