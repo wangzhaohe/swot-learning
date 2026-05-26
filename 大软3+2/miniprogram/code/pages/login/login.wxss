@@ -1,0 +1,521 @@
+/* pages/login/login.wxss */
+
+page {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  overflow: hidden;
+}
+
+.page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ===== 背景装饰 ===== */
+.bg-deco {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-deco-tl {
+  top: 0;
+  right: 0;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle at 140px 40px, rgba(22,119,255,0.06) 0%, transparent 70%);
+}
+.bg-deco-br {
+  bottom: 80px;
+  left: -30px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle at 20px 140px, rgba(10,197,255,0.05) 0%, transparent 70%);
+}
+
+/* ===== 导航栏占位 ===== */
+.nav-placeholder {
+  flex-shrink: 0;
+}
+
+/* ===== 返回按钮（绝对定位） ===== */
+.back-btn {
+  position: absolute;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  z-index: 10;
+}
+.back-btn-hover {
+  background: #F5F5F5;
+}
+.back-arrow {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-arrow-left {
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid #1A1A2E;
+  border-bottom: 2px solid #1A1A2E;
+  transform: rotate(45deg);
+  margin-left: 3px;
+}
+
+/* ===== 主体滚动区 (已修复右侧溢出截断问题) ===== */
+.body-scroll {
+  flex: 1;
+  width: 100%;
+  padding: 0 16px 40px;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+/* ===== Logo 区域 ===== */
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0 36px;
+}
+.logo-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1677FF 0%, #0AC5FF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 24px rgba(22,119,255,0.28);
+}
+.logo-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1A1A2E;
+  letter-spacing: 2px;
+}
+.logo-slogan {
+  font-size: 12px;
+  color: #9BA3B2;
+  margin-top: 5px;
+  letter-spacing: 0.5px;
+}
+
+/* ===== 3D打印机 Logo 图形 ===== */
+.logo-printer {
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+.printer-body {
+  position: absolute;
+  bottom: 0;
+  left: 4px;
+  width: 32px;
+  height: 14px;
+  border: 1.5px solid rgba(255,255,255,0.85);
+  border-radius: 3px;
+  background: rgba(255,255,255,0.15);
+}
+.printer-head {
+  position: absolute;
+  top: 3px;
+  left: 10px;
+  width: 20px;
+  height: 14px;
+  border: 1.5px solid rgba(255,255,255,0.85);
+  border-radius: 2px;
+  background: rgba(255,255,255,0.12);
+}
+.printer-nozzle {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 2px;
+  height: 6px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 1px;
+  box-shadow: 6px 0 0 0 rgba(255,255,255,0.85);
+}
+.printer-rail {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  width: 44px;
+  height: 2px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 1px;
+}
+.printer-object {
+  position: absolute;
+  bottom: 0;
+  left: 12px;
+  width: 16px;
+  height: 6px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 1px;
+}
+
+/* ===== 表单区域 ===== */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input-group {
+  position: relative;
+}
+.input-label {
+  font-size: 12px;
+  color: #9BA3B2;
+  margin-bottom: 6px;
+  font-weight: 500;
+  display: block;
+}
+.input-row {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #E4E8EF;
+  border-radius: 12px;
+  height: 50px;
+  padding: 0 14px;
+  transition: border-color 0.2s;
+  gap: 10px;
+}
+.input-row:focus-within,
+.input-row.input-focus {
+  border-color: #1677FF;
+  box-shadow: 0 0 0 3px rgba(22,119,255,0.1);
+}
+.input-row.input-error {
+  border-color: #FF4D4F !important;
+  box-shadow: 0 0 0 3px rgba(255,77,79,0.1) !important;
+}
+.input-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 手机图标 */
+.icon-phone {
+  width: 14px;
+  height: 18px;
+  border: 1.5px solid #BEC5D0;
+  border-radius: 3px;
+  position: relative;
+}
+.icon-phone::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 3px;
+  background: #BEC5D0;
+  border-radius: 50%;
+}
+/* 锁图标 */
+.icon-lock {
+  width: 14px;
+  height: 12px;
+  border: 1.5px solid #BEC5D0;
+  border-radius: 3px;
+  position: relative;
+  margin-top: 4px;
+}
+.icon-lock::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 7px;
+  border: 1.5px solid #BEC5D0;
+  border-radius: 4px 4px 0 0;
+  border-bottom: none;
+}
+/* X 图标 */
+.icon-x {
+  position: relative;
+  width: 12px;
+  height: 12px;
+}
+.icon-x::before,
+.icon-x::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11px;
+  height: 1.5px;
+  background: #fff;
+  border-radius: 1px;
+}
+.icon-x::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.icon-x::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+.input-field {
+  flex: 1;
+  height: 100%;
+  font-size: 15px;
+  color: #1A1A2E;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+.input-field::placeholder {
+  color: #BEC5D0;
+}
+
+/* 清除按钮 */
+.clear-btn {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #C8CDD6;
+}
+.clear-show {
+  display: flex;
+}
+
+/* 验证码行特殊布局 */
+.code-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.code-input-wrap {
+  flex: 1;
+}
+.code-btn {
+  flex-shrink: 0;
+  height: 50px;
+  padding: 0 14px;
+  border: 1.5px solid #1677FF;
+  border-radius: 12px;
+  background: #fff;
+  color: #1677FF;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.code-btn::after {
+  border: none;
+}
+.code-btn:active {
+  opacity: 0.85;
+}
+.code-btn-disabled {
+  border-color: #C8CDD6 !important;
+  color: #9BA3B2 !important;
+  background: #F5F6FA !important;
+}
+
+/* ===== 登录按钮 ===== */
+.login-btn {
+  width: 100%;
+  height: 52px;
+  background: linear-gradient(90deg, #1677FF 0%, #0AC5FF 100%);
+  border: none;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  box-shadow: 0 6px 20px rgba(22,119,255,0.32);
+  line-height: 52px;
+  margin-top: 6px;
+}
+.login-btn::after {
+  border: none;
+}
+.login-btn:active {
+  opacity: 0.9;
+  box-shadow: 0 4px 14px rgba(22,119,255,0.3);
+}
+
+/* ===== 协议行 ===== */
+.agree-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.custom-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid #1677FF;
+  background: #1677FF;
+  flex-shrink: 0;
+  position: relative;
+}
+.custom-checkbox.unchecked {
+  background: #fff;
+  border-color: #C8CDD6;
+}
+.custom-checkbox::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 5px;
+  height: 9px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  display: none;
+}
+.custom-checkbox:not(.unchecked)::after {
+  display: block;
+}
+.agree-text {
+  font-size: 12px;
+  color: #9BA3B2;
+  line-height: 1.6;
+}
+.agree-link {
+  color: #1677FF;
+}
+
+/* ===== 分割线 ===== */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+}
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: #F0F2F5;
+}
+.divider-text {
+  font-size: 12px;
+  color: #BEC5D0;
+  white-space: nowrap;
+}
+
+/* ===== 微信登录按钮 ===== */
+.wechat-btn {
+  width: 100%;
+  height: 52px;
+  background: #fff;
+  border: 1.5px solid #1677FF;
+  border-radius: 14px;
+  color: #1677FF;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  line-height: 52px;
+}
+.wechat-btn::after {
+  border: none;
+}
+.wechat-btn:active {
+  opacity: 0.75;
+}
+.wechat-icon {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.wc-bubble {
+  position: absolute;
+  border: 1.5px solid #07C160;
+  border-radius: 50%;
+}
+.wc-bubble1 {
+  width: 16px;
+  height: 14px;
+  left: 0;
+  top: 3px;
+  background: rgba(7,193,96,0.12);
+}
+.wc-bubble2 {
+  width: 13px;
+  height: 11px;
+  right: 0;
+  bottom: 0;
+  background: rgba(7,193,96,0.08);
+}
+.wc-eye {
+  position: absolute;
+  background: #07C160;
+  border-radius: 50%;
+}
+.wc-eye1 {
+  width: 2.5px;
+  height: 2.5px;
+  top: 4px;
+  left: 4px;
+}
+.wc-eye2 {
+  width: 2.5px;
+  height: 2.5px;
+  top: 4px;
+  right: 4px;
+}
+.wc-eye3 {
+  width: 2px;
+  height: 2px;
+  top: 3.5px;
+  left: 3px;
+}
+.wc-eye4 {
+  width: 2px;
+  height: 2px;
+  top: 3.5px;
+  right: 3px;
+}
+
+/* ===== 底部链接 ===== */
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 32px;
+  padding-bottom: 20px;
+}
+.footer-link {
+  font-size: 12px;
+  color: #BEC5D0;
+}
