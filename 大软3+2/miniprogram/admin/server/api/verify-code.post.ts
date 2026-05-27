@@ -82,6 +82,7 @@ export default defineEventHandler(async (event) => {
     message: '登录成功',
     data: {
       token,
+      loginType: 'phone',
       userInfo: {
         openid: user.openid,
         unionid: user.unionid,

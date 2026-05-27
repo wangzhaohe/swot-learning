@@ -1,4 +1,6 @@
 // pages/login/login.js
+const AuthService = require('../../utils/auth.service');
+
 Page({
 
   data: {
@@ -15,6 +17,9 @@ Page({
   },
 
   onLoad() {
+    // 兼容清理旧版分散存储
+    AuthService.migrateOldStorage();
+
     const sys = wx.getSystemInfoSync();
     const capsule = wx.getMenuButtonBoundingClientRect();
     // 占位区：从页面顶部到胶囊底部，保证内容不被遮挡
@@ -161,18 +166,14 @@ Page({
         wx.hideLoading();
         if (res.statusCode === 200 && res.data.code === 200) {
           // 验证成功
-          const { token, userInfo } = res.data.data;
-          
-          // 存储 token（用于后续 API 请求）
-          wx.setStorageSync('token', token);
-          
-          // 存储用户信息
-          wx.setStorageSync('userInfo', userInfo);
-          wx.setStorageSync('phone', phone);
-          
+          const { token, loginType, userInfo } = res.data.data || {};
+
+          // 统一存储认证信息
+          AuthService.setAuth(token, loginType, userInfo);
+
           wx.showToast({ title: '登录成功', icon: 'success' });
           this.setData({ loading: false });
-          
+
           // 跳转到首页
           setTimeout(() => {
             wx.redirectTo({ url: '/pages/index/index' });
@@ -211,10 +212,11 @@ Page({
             data: { code: res.code },
             success: (loginRes) => {
               wx.hideLoading();
-              if (loginRes.statusCode === 200 && loginRes.data) {
-                const token = loginRes.data.token || loginRes.data;
+              if (loginRes.statusCode === 200 && loginRes.data?.code === 200) {
+                const { token, loginType, userInfo } = loginRes.data.data || {};
                 if (token) {
-                  wx.setStorageSync('token', token);
+                  // 统一存储认证信息
+                  AuthService.setAuth(token, loginType, userInfo);
                   wx.showToast({ title: '登录成功', icon: 'success' });
                   setTimeout(() => {
                     wx.redirectTo({ url: '/pages/index/index' });
