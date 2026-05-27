@@ -79,16 +79,39 @@ Page({
   // ===== 发送验证码 =====
   sendCode() {
     const phone = this.data.phone;
-    const countdown = this.data.countdown;
+    const countdown = this.data.countdown;  // 0
     if (countdown > 0) return;
     if (!/^1[3-9]\d{9}$/.test(phone)) {
       wx.showToast({ title: '请输入正确的手机号', icon: 'none' });
       this.setData({ phoneError: true });
       return;
     }
-    wx.showToast({ title: '验证码已发送', icon: 'success' });
-    this.setData({ countdown: 60 });
-    this.startCountdown();
+    // 调用后台 api 获取手机号的验证码
+    wx.showLoading({ title: '发送中...' });
+    wx.request({
+      url: 'http://localhost:3000/api/send-code',
+      method: 'POST',
+      data: { phone: phone },
+      success: (res) => {
+        wx.hideLoading();
+        if (res.statusCode === 200 && res.data.code === 200) {
+          wx.showToast({ title: '验证码已发送', icon: 'success' });
+          this.setData({ countdown: 60 });
+          this.startCountdown();
+          // 开发环境下显示验证码（方便测试）
+          if (res.data.data.code) {
+            console.log('验证码:', res.data.data.code);
+          }
+        } else {
+          wx.showToast({ title: res.data.message || '发送失败', icon: 'none' });
+        }
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        console.error('发送验证码失败:', err);
+        wx.showToast({ title: '网络错误，请重试', icon: 'none' });
+      }
+    });
   },
 
   // ===== 倒计时 =====
@@ -124,11 +147,49 @@ Page({
       return;
     }
     this.setData({ loading: true });
-    wx.showToast({ title: '登录成功，跳转中...', icon: 'none', duration: 2000 });
-    setTimeout(() => {
-      this.setData({ loading: false });
-      wx.redirectTo({ url: '/pages/index/index' });
-    }, 1500);
+    wx.showLoading({ title: '验证中...' });
+    
+    // 调用后台 api 验证验证码
+    wx.request({
+      url: 'http://localhost:3000/api/verify-code',
+      method: 'POST',
+      data: { 
+        phone: phone,
+        code: code 
+      },
+      success: (res) => {
+        wx.hideLoading();
+        if (res.statusCode === 200 && res.data.code === 200) {
+          // 验证成功
+          const { token, userInfo } = res.data.data;
+          
+          // 存储 token（用于后续 API 请求）
+          wx.setStorageSync('token', token);
+          
+          // 存储用户信息
+          wx.setStorageSync('userInfo', userInfo);
+          wx.setStorageSync('phone', phone);
+          
+          wx.showToast({ title: '登录成功', icon: 'success' });
+          this.setData({ loading: false });
+          
+          // 跳转到首页
+          setTimeout(() => {
+            wx.redirectTo({ url: '/pages/index/index' });
+          }, 1500);
+        } else {
+          // 验证失败
+          this.setData({ loading: false, codeError: true });
+          wx.showToast({ title: res.data.message || '验证失败', icon: 'none' });
+        }
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        this.setData({ loading: false });
+        console.error('验证验证码失败:', err);
+        wx.showToast({ title: '网络错误，请重试', icon: 'none' });
+      }
+    });
   },
 
   // ===== 微信授权登录 =====
