@@ -142,10 +142,35 @@ Page({
       success: (res) => {
         wx.hideLoading();
         if (res.code) {
-          wx.showToast({ title: '登录成功', icon: 'success' });
-          setTimeout(() => {
-            wx.redirectTo({ url: '/pages/index/index' });
-          }, 1500);
+          // 向本地后端发送登录请求
+          wx.showLoading({ title: '正在登录...' });
+          wx.request({
+            url: 'http://localhost:3000/api/login',
+            method: 'POST',
+            data: { code: res.code },
+            success: (loginRes) => {
+              wx.hideLoading();
+              if (loginRes.statusCode === 200 && loginRes.data) {
+                const token = loginRes.data.token || loginRes.data;
+                if (token) {
+                  wx.setStorageSync('token', token);
+                  wx.showToast({ title: '登录成功', icon: 'success' });
+                  setTimeout(() => {
+                    wx.redirectTo({ url: '/pages/index/index' });
+                  }, 1500);
+                } else {
+                  wx.showToast({ title: '登录失败，请重试', icon: 'none' });
+                }
+              } else {
+                wx.showToast({ title: '登录失败，请重试', icon: 'none' });
+              }
+            },
+            fail: (err) => {
+              wx.hideLoading();
+              console.error('登录请求失败:', err);
+              wx.showToast({ title: '网络错误，请重试', icon: 'none' });
+            }
+          });
         } else {
           wx.showToast({ title: '授权失败，请重试', icon: 'none' });
         }
