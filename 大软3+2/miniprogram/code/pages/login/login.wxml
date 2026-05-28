@@ -1,104 +1,59 @@
 <view class="page">
 
-<view class="bg-deco bg-deco-tl"></view>
-<view class="bg-deco bg-deco-br"></view>
+  <view class="bg-deco bg-deco-tl"></view>
+  <view class="bg-deco bg-deco-br"></view>
 
-<view class="nav-placeholder" style="height:{{navPlaceholderHeight}}px"></view>
+  <view class="nav-placeholder" style="height:{{navPlaceholderHeight}}px"></view>
 
-<view class="back-btn" style="top:{{backBtnTop}}px" bindtap="goBack" hover-class="back-btn-hover">
-  <view class="back-arrow">
-    <view class="icon-arrow-left"></view>
-  </view>
-</view>
-
-<scroll-view class="body-scroll" scroll-y enhanced show-scrollbar="{{false}}">
-
-  <view class="logo-section">
-    <view class="logo-icon">
-      <view class="logo-printer">
-        <view class="printer-body"></view>
-        <view class="printer-head"></view>
-        <view class="printer-nozzle"></view>
-        <view class="printer-rail"></view>
-        <view class="printer-object"></view>
-      </view>
+  <view class="back-btn" style="top:{{backBtnTop}}px" bindtap="goBack" hover-class="back-btn-hover">
+    <view class="back-arrow">
+      <view class="icon-arrow-left"></view>
     </view>
-    <text class="logo-name">司维者</text>
-    <text class="logo-slogan">3D打印 · 沙盘模型 · 数字孪生</text>
   </view>
 
-  <view class="form-section">
+  <scroll-view class="body-scroll" scroll-y enhanced show-scrollbar="{{false}}">
 
-    <view class="input-group">
-      <text class="input-label">手机号码</text>
-      <view class="input-row {{phoneError ? 'input-error' : ''}}" id="phoneRow">
-        <view class="input-icon">
-          <view class="icon-phone"></view>
-        </view>
-        <input type="number" class="input-field" placeholder="请输入手机号码" maxlength="11"
-               value="{{phone}}" bindinput="onPhoneInput" bindblur="validatePhone" bindfocus="clearPhoneError"/>
-        <view class="clear-btn {{phone ? 'clear-show' : ''}}" bindtap="clearPhone">
-          <view class="icon-x"></view>
+    <view class="logo-section">
+      <view class="logo-icon">
+        <view class="logo-printer">
+          <view class="printer-body"></view>
+          <view class="printer-head"></view>
+          <view class="printer-nozzle"></view>
+          <view class="printer-rail"></view>
+          <view class="printer-object"></view>
         </view>
       </view>
+      <text class="logo-name">司维者</text>
+      <text class="logo-slogan">3D打印 · 沙盘模型 · 数字孪生</text>
     </view>
 
-    <view class="input-group">
-      <text class="input-label">验证码</text>
-      <view class="code-input-row">
-        <view class="code-input-wrap">
-          <view class="input-row {{codeError ? 'input-error' : ''}}" id="codeRow">
-            <view class="input-icon">
-              <view class="icon-lock"></view>
-            </view>
-            <input type="number" class="input-field" placeholder="请输入验证码" maxlength="6"
-                   value="{{code}}" bindinput="onCodeInput" bindfocus="clearCodeError"/>
-            <view class="clear-btn {{code ? 'clear-show' : ''}}" bindtap="clearCode">
-              <view class="icon-x"></view>
-            </view>
+    <view class="form-section">
+
+      <view class="agree-row">
+        <view class="custom-checkbox {{!agreed ? 'unchecked' : ''}}" bindtap="toggleAgree"></view>
+        <text class="agree-text">我已阅读并同意<text class="agree-link" bindtap="showAgreement">《用户协议》</text>及<text class="agree-link" bindtap="showPrivacy">《隐私政策》</text></text>
+      </view>
+
+      <button class="wechat-btn-primary" bindtap="wechatLogin">
+        <view class="wechat-icon">
+          <view class="wc-bubble wc-bubble1">
+            <view class="wc-eye wc-eye1"></view>
+            <view class="wc-eye wc-eye2"></view>
+          </view>
+          <view class="wc-bubble wc-bubble2">
+            <view class="wc-eye wc-eye3"></view>
+            <view class="wc-eye wc-eye4"></view>
           </view>
         </view>
-        <button class="code-btn {{countdown > 0 ? 'code-btn-disabled' : ''}}"
-                disabled="{{countdown > 0}}" bindtap="sendCode">
-          <text wx:if="{{countdown > 0}}">{{countdown}}s 后重发</text>
-          <text wx:else>获取验证码</text>
-        </button>
-      </view>
+        <text>微信授权登录</text>
+      </button>
+
     </view>
 
-    <button class="login-btn" bindtap="doLogin" loading="{{loading}}">登录</button>
-
-    <view class="agree-row">
-      <view class="custom-checkbox {{!agreed ? 'unchecked' : ''}}" bindtap="toggleAgree"></view>
-      <text class="agree-text">我已阅读并同意<text class="agree-link" bindtap="showAgreement">《用户协议》</text>及<text class="agree-link" bindtap="showPrivacy">《隐私政策》</text></text>
+    <view class="footer-links">
+      <text class="footer-link" bindtap="showHelp">遇到问题？</text>
+      <text class="footer-link" bindtap="showPrivacy">隐私政策</text>
     </view>
 
-  </view>
-
-  <view class="divider">
-    <view class="divider-line"></view>
-    <text class="divider-text">其他登录方式</text>
-    <view class="divider-line"></view>
-  </view>
-
-  <button class="wechat-btn" bindtap="wechatLogin">
-    <view class="wechat-icon">
-      <view class="wc-bubble wc-bubble1">
-        <view class="wc-eye wc-eye1"></view>
-        <view class="wc-eye wc-eye2"></view>
-      </view>
-      <view class="wc-bubble wc-bubble2">
-        <view class="wc-eye wc-eye3"></view>
-        <view class="wc-eye wc-eye4"></view>
-      </view>
-    </view>
-    <text>微信授权登录</text>
-  </button>
-
-  <view class="footer-links">
-    <text class="footer-link" bindtap="showHelp">遇到问题？</text>
-    <text class="footer-link" bindtap="showPrivacy">隐私政策</text>
-  </view>
-
-</scroll-view>
+  </scroll-view>
 </view>

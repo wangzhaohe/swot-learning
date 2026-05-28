@@ -17,8 +17,7 @@ Page({
   },
 
   onLoad() {
-    // 兼容清理旧版分散存储
-    AuthService.migrateOldStorage();
+    console.log('[login] onLoad 当前 auth:', JSON.stringify(AuthService.getAuth()));
 
     const sys = wx.getSystemInfoSync();
     const capsule = wx.getMenuButtonBoundingClientRect();
@@ -164,12 +163,16 @@ Page({
       },
       success: (res) => {
         wx.hideLoading();
+        console.log('[login] 验证码登录接口返回:', JSON.stringify(res.data));
         if (res.statusCode === 200 && res.data.code === 200) {
           // 验证成功
           const { token, loginType, userInfo } = res.data.data || {};
+          console.log('[login] 验证码登录解构:', { token, loginType, userInfo });
 
           // 统一存储认证信息
+          console.log('[login] 调用 setAuth 前:', JSON.stringify(AuthService.getAuth()));
           AuthService.setAuth(token, loginType, userInfo);
+          console.log('[login] 调用 setAuth 后:', JSON.stringify(AuthService.getAuth()));
 
           wx.showToast({ title: '登录成功', icon: 'success' });
           this.setData({ loading: false });
@@ -212,11 +215,15 @@ Page({
             data: { code: res.code },
             success: (loginRes) => {
               wx.hideLoading();
+              console.log('[login] 微信登录接口返回:', JSON.stringify(loginRes.data));
               if (loginRes.statusCode === 200 && loginRes.data?.code === 200) {
                 const { token, loginType, userInfo } = loginRes.data.data || {};
+                console.log('[login] 微信登录解构:', { token, loginType, userInfo });
                 if (token) {
                   // 统一存储认证信息
+                  console.log('[login] 调用 setAuth 前:', JSON.stringify(AuthService.getAuth()));
                   AuthService.setAuth(token, loginType, userInfo);
+                  console.log('[login] 调用 setAuth 后:', JSON.stringify(AuthService.getAuth()));
                   wx.showToast({ title: '登录成功', icon: 'success' });
                   setTimeout(() => {
                     wx.redirectTo({ url: '/pages/index/index' });

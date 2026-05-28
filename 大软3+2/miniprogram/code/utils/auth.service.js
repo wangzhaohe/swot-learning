@@ -27,12 +27,18 @@ class AuthService {
   static setAuth(token, loginType, userInfo, expireDays = DEFAULT_EXPIRE_DAYS) {
     const expireAt = Date.now() + expireDays * 24 * 60 * 60 * 1000;
     const authData = { token, loginType, userInfo, expireAt };
+    console.log('[AuthService] setAuth 写入:', JSON.stringify(authData));
     wx.setStorageSync(AUTH_KEY, authData);
+    // 立即读取验证
+    const verify = wx.getStorageSync(AUTH_KEY);
+    console.log('[AuthService] setAuth 验证读取:', JSON.stringify(verify));
   }
 
   /** 读取完整认证信息 */
   static getAuth() {
-    return wx.getStorageSync(AUTH_KEY) || null;
+    const auth = wx.getStorageSync(AUTH_KEY) || null;
+    console.log('[AuthService] getAuth 读取:', JSON.stringify(auth));
+    return auth;
   }
 
   /** 获取 token */
@@ -78,29 +84,6 @@ class AuthService {
     wx.removeStorageSync(AUTH_KEY);
   }
 
-  /**
-   * 兼容旧版分散存储：迁移并清理旧 key
-   * 旧 key: 'token', 'userInfo', 'phone'
-   */
-  static migrateOldStorage() {
-    // 如果已有新版 auth，直接清理旧 key，避免旧数据覆盖新数据
-    const currentAuth = wx.getStorageSync(AUTH_KEY);
-    if (currentAuth) {
-      wx.removeStorageSync('token');
-      wx.removeStorageSync('userInfo');
-      wx.removeStorageSync('phone');
-      return;
-    }
-    const oldToken = wx.getStorageSync('token');
-    const oldUserInfo = wx.getStorageSync('userInfo');
-    if (oldToken && oldUserInfo) {
-      // 旧数据无法区分登录方式，默认标记为 phone（因为旧版主要是手机号登录）
-      this.setAuth(oldToken, 'phone', oldUserInfo);
-    }
-    wx.removeStorageSync('token');
-    wx.removeStorageSync('userInfo');
-    wx.removeStorageSync('phone');
-  }
 }
 
 module.exports = AuthService;
