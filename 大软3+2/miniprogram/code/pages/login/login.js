@@ -60,7 +60,12 @@ Page({
                   console.log('[login] 调用 setAuth 后:', JSON.stringify(AuthService.getAuth()));
                   wx.showToast({ title: '登录成功', icon: 'success' });
                   setTimeout(() => {
-                    wx.redirectTo({ url: '/pages/index/index' });
+                    // 新用户（无昵称）跳转资料设置页，老用户直接进首页
+                    const isNewUser = loginRes.data.data?.userInfo?.isNewUser;
+                    const targetUrl = isNewUser
+                      ? '/pages/profile-setup/profile-setup'
+                      : '/pages/index/index';
+                    wx.redirectTo({ url: targetUrl });
                   }, 1500);
                 } else {
                   wx.showToast({ title: '登录失败，请重试', icon: 'none' });

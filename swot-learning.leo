@@ -42016,13 +42016,7 @@ INFO FOR DB;
 </t>
 <t tx="swot.20260529142337.1">我现在已经安装 了 surrealdb 数据库，给我启动一个服务，数据存放在当前目录下的 database 中。
 
-surreal start --log debug --user root --pass root rocksdb:database
-
-NOTE: rocksdb 这是老牌的引擎，注意和 surrealkv 不兼容。
-
-
-
-
+surreal start --log debug --user root --pass root surrealkv:database
 </t>
 <t tx="swot.20260529143110.1">surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns swzkj --db swzkj
 </t>

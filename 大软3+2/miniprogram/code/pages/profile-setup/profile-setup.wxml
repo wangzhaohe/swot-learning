@@ -1,0 +1,30 @@
+<!--pages/profile-setup/profile-setup.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">设置您的个人资料</text>
+    <text class="subtitle">头像和昵称将展示在您的个人主页</text>
+  </view>
+
+  <view class="avatar-section">
+    <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image class="avatar" src="{{avatarUrl}}" mode="cover"></image>
+      <view class="avatar-tip">点击更换头像</view>
+    </button>
+  </view>
+
+  <view class="nickname-section">
+    <text class="label">昵称</text>
+    <input
+      class="nickname-input"
+      type="nickname"
+      placeholder="请输入昵称"
+      value="{{nickName}}"
+      bindinput="onInputNickname"
+      maxlength="20"
+    />
+  </view>
+
+  <button class="submit-btn" disabled="{{!canSubmit || isUploading}}" bindtap="submitProfile">
+    {{isUploading ? '保存中...' : '完成'}}
+  </button>
+</view>
