@@ -16,9 +16,11 @@ export async function getSurrealDB(): Promise<Surreal> {
 
   db = new Surreal()
   try {
-    await db.connect(url)
-    await db.signin({ username: user, password: pass })
-    await db.use({ namespace, database })
+    await db.connect(url, {
+      namespace,
+      database,
+      authentication: { username: user, password: pass },
+    })
 
     // 初始化 schema（SCHEMAFULL 模式）
     await db.query(`
