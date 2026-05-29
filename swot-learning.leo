@@ -1611,8 +1611,10 @@
 </v>
 <v t="swot.20260411101307.1"><vh>@adoc SurrealDB.adoc</vh>
 <v t="swot.20260411101425.1"><vh>SurrealDB</vh>
-<v t="swot.20260411101440.1"><vh>1. 备份研发中心数据 2026-04-11</vh></v>
-<v t="swot.20260411103424.1"><vh>2. 备份研发中心数据 2026-04-11</vh></v>
+<v t="swot.20260411101440.1"><vh>1. 备份研发中心数据 2026-04-11 126行</vh></v>
+<v t="swot.20260411103424.1"><vh>2. 备份研发中心数据 2026-04-11 144行</vh></v>
+<v t="swot.20260528104346.1"><vh>在 linux 中配置 surrealDB 服务</vh></v>
+<v t="swot.20260528112753.1"><vh>导入数据库</vh></v>
 </v>
 </v>
 </v>
@@ -41956,6 +41958,59 @@ endif::[]
 
 * 仓库风格
 * 黑板风格
+</t>
+<t tx="swot.20260528104346.1">mkdir -p /var/lib/surrealdb/data
+
+sudo vim /etc/systemd/system/surreal.service
+
+[source,javascript]
+----
+[Unit]
+Description=SurrealDB Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+# 这里的启动命令请根据你的实际需求修改。下面是一个将数据持久化存储在 /var/lib/surrealdb 目录的示例：
+ExecStart=/usr/local/bin/surreal start --user root --pass your_secure_password rocksdb:/var/lib/surrealdb/data
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+----
+
+
+sudo systemctl daemon-reload
+
+sudo systemctl start surreal
+
+sudo systemctl enable surreal
+
+sudo systemctl status surreal
+
+journalctl -u surreal -f
+</t>
+<t tx="swot.20260528112753.1">1. 导入数据库：
+
+surreal import \
+  --endpoint http://127.0.0.1:8000 \
+  --user root \
+  --pass root \
+  --ns yinlife \
+  --db site \
+  /home/soft/new-connection-2026-05-28.surql
+
+
+2. 进入数据库：
+
+surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns yinlife --db site
+
+
+3. 查看数据库：
+
+INFO FOR DB;
 </t>
 </tnodes>
 </leo_file>
