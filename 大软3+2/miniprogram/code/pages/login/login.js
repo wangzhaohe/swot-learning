@@ -103,11 +103,6 @@ Page({
 
   // ===== 帮助 =====
   showHelp() {
-    wx.showModal({
-      title: '遇到问题？',
-      content: '如您在使用过程中遇到任何问题，请通过以下方式联系我们：\n\n客服电话：400-XXX-XXXX\n客服邮箱：service@siweizhe.com\n服务时间：工作日 9:00-18:00\n\n我们将竭诚为您服务。',
-      showCancel: false,
-      confirmText: '我知道了',
-    });
+    wx.navigateTo({ url: '/pages/help/help' });
   },
 });
