@@ -1615,6 +1615,8 @@
 <v t="swot.20260411103424.1"><vh>2. 备份研发中心数据 2026-04-11 144行</vh></v>
 <v t="swot.20260528104346.1"><vh>在 linux 中配置 surrealDB 服务</vh></v>
 <v t="swot.20260528112753.1"><vh>导入数据库</vh></v>
+<v t="swot.20260529142337.1"><vh>创建 surrealdb 数据库服务</vh></v>
+<v t="swot.20260529143110.1"><vh>链接 surrealdb 数据库</vh></v>
 </v>
 </v>
 </v>
@@ -42011,6 +42013,18 @@ surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns yinlif
 3. 查看数据库：
 
 INFO FOR DB;
+</t>
+<t tx="swot.20260529142337.1">我现在已经安装 了 surrealdb 数据库，给我启动一个服务，数据存放在当前目录下的 database 中。
+
+surreal start --log debug --user root --pass root rocksdb:database
+
+NOTE: rocksdb 这是老牌的引擎，注意和 surrealkv 不兼容。
+
+
+
+
+</t>
+<t tx="swot.20260529143110.1">surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns swzkj --db swzkj
 </t>
 </tnodes>
 </leo_file>
