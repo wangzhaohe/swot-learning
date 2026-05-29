@@ -91,30 +91,23 @@ Page({
     this.setData({ agreed: !this.data.agreed });
   },
 
-  // ===== 显示协议 =====
+  // ===== 显示用户协议 =====
   showAgreement() {
-    wx.showModal({
-      title: '用户协议',
-      content: '请阅读用户协议相关内容...',
-      showCancel: false,
-    });
+    wx.navigateTo({ url: '/pages/doc-display/doc-display?type=agreement' });
   },
 
   // ===== 显示隐私政策 =====
   showPrivacy() {
-    wx.showModal({
-      title: '隐私政策',
-      content: '请阅读隐私政策相关内容...',
-      showCancel: false,
-    });
+    wx.navigateTo({ url: '/pages/doc-display/doc-display?type=privacy' });
   },
 
   // ===== 帮助 =====
   showHelp() {
     wx.showModal({
-      title: '帮助',
-      content: '客服：400-xxx-xxxx',
+      title: '遇到问题？',
+      content: '如您在使用过程中遇到任何问题，请通过以下方式联系我们：\n\n客服电话：400-XXX-XXXX\n客服邮箱：service@siweizhe.com\n服务时间：工作日 9:00-18:00\n\n我们将竭诚为您服务。',
       showCancel: false,
+      confirmText: '我知道了',
     });
   },
 });
