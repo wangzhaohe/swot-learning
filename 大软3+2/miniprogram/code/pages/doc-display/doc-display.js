@@ -155,18 +155,9 @@ Page({
   data: {
     title: '',
     content: '',
-    navBarTop: 44, // 默认状态栏高度（iOS 刘海屏）
-    navContentHeight: 44,
   },
 
   onLoad(options) {
-    // 获取系统状态栏高度，确保自定义导航栏不遮挡状态栏
-    const sysInfo = wx.getSystemInfoSync();
-    const statusBarHeight = sysInfo.statusBarHeight || 44;
-    this.setData({
-      navBarTop: statusBarHeight,
-    });
-
     const { type } = options || {};
     if (type === 'agreement') {
       this.setData({
