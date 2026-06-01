@@ -10,6 +10,7 @@ export interface UserInfo {
   unionid?: string
   nickname?: string
   avatarUrl?: string
+  isValid: boolean
   createdAt: Date
 }
 
@@ -39,8 +40,8 @@ export async function findOrCreateUser(
 
   // 新用户注册（unionid 可能为空，不传则不在 CREATE 中设置该字段）
   const createQuery = unionid
-    ? `CREATE ${recordId} SET unionid = $unionid`
-    : `CREATE ${recordId}`
+    ? `CREATE ${recordId} SET unionid = $unionid, isValid = true`
+    : `CREATE ${recordId} SET isValid = true`
   const bindings = unionid ? { unionid } : undefined
   const [created] = await db.query(createQuery, bindings as any)
   const newUser = (created as any[])?.[0] as (UserInfo & { id: string }) | undefined

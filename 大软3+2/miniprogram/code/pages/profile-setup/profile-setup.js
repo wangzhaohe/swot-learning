@@ -1,7 +1,14 @@
 // pages/profile-setup/profile-setup.js
 const AuthService = require('../../utils/auth.service');
 
-const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+// 没有后端时，只讲微信小程序使用这个默认灰色头像
+// const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+
+// 有后端可以使用这个默认灰色头像
+// const defaultAvatarUrl = 'http://127.0.0.1:3000/avatars/avatar_gray.png';
+
+// 直接使用微信小程序中的头像
+const defaultAvatarUrl = '/images/avatar_gray.png';
 
 Page({
   data: {
@@ -21,6 +28,7 @@ Page({
 
   // 选择头像
   onChooseAvatar(e) {
+    console.log('onChooseAvatar', e)
     const { avatarUrl } = e.detail;
     this.setData({
       avatarUrl,
@@ -98,7 +106,7 @@ Page({
   uploadAvatar(token) {
     return new Promise((resolve, reject) => {
       wx.uploadFile({
-        url: 'http://10.1.254.117:3000/api/upload/avatar',
+        url: 'http://127.0.0.1:3000/api/upload/avatar',
         filePath: this.data.avatarUrl,
         name: 'avatar',
         header: {

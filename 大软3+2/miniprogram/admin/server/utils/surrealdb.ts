@@ -22,13 +22,9 @@ export async function getSurrealDB(): Promise<Surreal> {
       authentication: { username: user, password: pass },
     })
 
-    // 初始化 schema（SCHEMAFULL 模式）
+    // 初始化 schema（SCHEMALESS 模式，灵活存储任意字段）
     await db.query(`
-      DEFINE TABLE IF NOT EXISTS user SCHEMAFULL;
-      DEFINE FIELD IF NOT EXISTS unionid   ON user TYPE option<string>;
-      DEFINE FIELD IF NOT EXISTS nickname  ON user TYPE option<string>;
-      DEFINE FIELD IF NOT EXISTS avatarUrl ON user TYPE option<string>;
-      DEFINE FIELD IF NOT EXISTS createdAt ON user TYPE datetime DEFAULT time::now();
+      DEFINE TABLE IF NOT EXISTS user SCHEMALESS;
     `)
 
     console.log('[SurrealDB] 连接成功')

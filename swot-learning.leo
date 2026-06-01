@@ -26,6 +26,7 @@
 <v t="swot.20260213135117.1"><vh>@adoc AI.adoc</vh>
 <v t="swot.20260213135136.1"><vh>AI使用笔记</vh>
 <v t="swot.20260205181730.1"><vh>2026-02-05 aider -- install in aliyun ubuntu</vh></v>
+<v t="swot.20260530155937.1"><vh>2026-05-30 ai 写代码流程</vh></v>
 </v>
 </v>
 <v t="swot.20260215190317.1"><vh>@adoc 2026-02-15_调用_api_把人像照片生成卡通像方案研究.adoc</vh>
@@ -1615,8 +1616,10 @@
 <v t="swot.20260411103424.1"><vh>2. 备份研发中心数据 2026-04-11 144行</vh></v>
 <v t="swot.20260528104346.1"><vh>在 linux 中配置 surrealDB 服务</vh></v>
 <v t="swot.20260528112753.1"><vh>导入数据库</vh></v>
-<v t="swot.20260529142337.1"><vh>创建 surrealdb 数据库服务</vh></v>
-<v t="swot.20260529143110.1"><vh>链接 surrealdb 数据库</vh></v>
+<v t="swot.20260529142337.1"><vh>创建 surrealdb 数据库服务 -- 创建数据库服务</vh></v>
+<v t="swot.20260529143110.1"><vh>链接 surrealdb 数据库 -- 使用层面</vh></v>
+<v t="swot.20260530215147.1"><vh>问题</vh></v>
+<v t="swot.20260531215429.1"><vh>图片地址临时备份</vh></v>
 </v>
 </v>
 </v>
@@ -2949,6 +2952,9 @@
 <v t="swot.20260313114540.196"></v>
 </v>
 <v t="swot.20260308115402.1"><vh>获取 leo 主进程派生的子进程</vh></v>
+<v t="swot.20260601085742.1"><vh>临时记录</vh>
+<v t="swot.20260601085751.1"><vh>微信小程序如何把这个头像图片作成静态文件放在小程序中？</vh></v>
+</v>
 </vnodes>
 <tnodes>
 <t tx="swot.20240101100533.1">@language javascript
@@ -42018,7 +42024,41 @@ INFO FOR DB;
 
 surreal start --log debug --user root --pass root surrealkv:database
 </t>
-<t tx="swot.20260529143110.1">surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns swzkj --db swzkj
+<t tx="swot.20260529143110.1">命令行测试：
+surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns swzkj --db swzkj
 </t>
+<t tx="swot.20260530155937.1">[upperalpha]
+. *Plan（谋定而后动）*
+** 遇到复杂业务逻辑时，绝不让 AI 盲目直接写代码。
+** 先命令 AI 生成详细的执行计划（Plan），从全局审视其技术方案。
+** 人工评审计划的合理性，不合理就打回让 AI 继续修改，直到方向完全正确。
+
+. *Craft（精准化落地）*
+** 方案明确后，明确对 AI 下达指令切换到编码模式（Craft）。
+** 让 AI 针对通过评审的 Plan 进行精准、定点的代码编写，严格控制改动范围。
+
+. *Review（反省与去冗）*
+** 代码生成后，让 AI 切换为严苛的评审员身份进行代码自查。
+** 重点排查逻辑漏洞，并利用“奥卡姆剃刀”反问 AI“是否存在过度设计”，砍掉无用代码。
+
+. *Harness（测试做基座）*
+** 在人工测试之前，要求 AI 针对复杂的业务逻辑编写自动化测试用例。
+** 必须让 AI 自己把测试跑通，用机器验证机器，建立起稳固的功能防线。
+
+. *Verify（人工精细盘点）*
+** 自动化测试通过后，接入人工测试，确保业务表面上的实际效果符合预期。
+** 最终在 Git 工具中仔细比对 Diff 差异，逐行肉眼评审 AI 的实际改动。
+
+. *Commit（落袋为安）*
+** 确认过程和结果都完美掌控、绝无投毒后，才最终执行 Git Commit。
+** 形成小步快跑、频繁存档的习惯，彻底锁死每一次的胜利果实。
+</t>
+<t tx="swot.20260530215147.1">??? 虽然没有对外暴露 8000 端口，但是 nginx 有转发，用户名 root 和密码 root 也可以被使用来访问数据库吗？
+
+</t>
+<t tx="swot.20260531215429.1">/about/about_bg_3x.jpg
+</t>
+<t tx="swot.20260601085742.1"></t>
+<t tx="swot.20260601085751.1">const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'</t>
 </tnodes>
 </leo_file>
