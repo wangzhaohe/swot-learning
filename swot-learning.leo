@@ -1841,7 +1841,12 @@
 <v t="swot.20260506150220.1"><vh>@path vue</vh>
 <v t="swot.20260506150242.1"><vh>文档汇总</vh></v>
 </v>
-<v t="swot.20260522103641.1"><vh>@path </vh></v>
+<v t="swot.20260522103641.1"><vh>@path miniprogram</vh>
+<v t="swot.20260601150826.1"><vh>@path code</vh>
+<v t="swot.20260601150900.1"><vh>@file pages/posts/posts.wxml</vh></v>
+<v t="swot.20260601160439.1"><vh>@file pages/posts/posts.wxss</vh></v>
+</v>
+</v>
 <v t="swot.20260413155153.1"><vh>网络安全教育 2026-04-15</vh></v>
 </v>
 <v t="swot.20251210103828.1"><vh>@path js</vh>
@@ -2952,9 +2957,7 @@
 <v t="swot.20260313114540.196"></v>
 </v>
 <v t="swot.20260308115402.1"><vh>获取 leo 主进程派生的子进程</vh></v>
-<v t="swot.20260601085742.1"><vh>临时记录</vh>
-<v t="swot.20260601085751.1"><vh>微信小程序如何把这个头像图片作成静态文件放在小程序中？</vh></v>
-</v>
+<v t="swot.20260601085742.1"><vh>临时记录</vh></v>
 </vnodes>
 <tnodes>
 <t tx="swot.20240101100533.1">@language javascript
@@ -42059,6 +42062,6 @@ surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns swzkj 
 <t tx="swot.20260531215429.1">/about/about_bg_3x.jpg
 </t>
 <t tx="swot.20260601085742.1"></t>
-<t tx="swot.20260601085751.1">const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'</t>
+<t tx="swot.20260601150826.1"></t>
 </tnodes>
 </leo_file>
