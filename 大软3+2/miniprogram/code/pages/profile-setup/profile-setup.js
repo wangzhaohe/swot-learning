@@ -22,7 +22,7 @@ Page({
     // 如果已登录且已有昵称，直接跳转首页
     const userInfo = AuthService.getUserInfo() || {};
     if (userInfo.nickname) {
-      wx.redirectTo({ url: '/pages/index/index' });
+      wx.switchTab({ url: '/pages/index/index' });
     }
   },
 
@@ -93,7 +93,7 @@ Page({
       }
 
       setTimeout(() => {
-        wx.redirectTo({ url: '/pages/index/index' });
+        wx.switchTab({ url: '/pages/index/index' });
       }, 1500);
     } catch (err) {
       wx.hideLoading();

@@ -1,46 +1,32 @@
-// pages/posts/posts.js
-import { newsList } from "../../data/posts-data.js";
-
+// pages/testyufa/testyufa.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    
-  },
-
-  onGoToDetail(event){
-    console.log("event:", event)
-    console.log("event.currentTarget:", event.currentTarget.dataset.id)
-    const id = event.currentTarget.dataset.id;
-    wx.navigateTo({
-      url: '/pages/post-detail/post-detail?newsid=' + id
-    })
+    showme: true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    console.log("onLoad")
-    this.setData({
-      newsList
-    })
+
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
-    console.log("onReady")
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    console.log("onShow")
+
   },
 
   /**
@@ -61,14 +47,14 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    console.log("onPullDownRefresh")
+
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-    console.log("onReachBottom")
+
   },
 
   /**
