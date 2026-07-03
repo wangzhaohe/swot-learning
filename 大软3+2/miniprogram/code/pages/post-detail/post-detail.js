@@ -17,11 +17,11 @@ Page({
     };
   },
 
-  // onShareTimeline() {
-  //   return {
-  //     title: '这是分享到朋友圈的新闻标题'
-  //   };
-  // },
+  onShareTimeline() {
+    return {
+      title: '这是分享到朋友圈的新闻标题'
+    };
+  },
   /**
    * 生命周期函数--监听页面加载
    */
