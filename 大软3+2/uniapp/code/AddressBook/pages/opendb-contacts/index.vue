@@ -19,7 +19,7 @@
 			field="_id, username, gender, mobile, email, comment, create_date"
 			:where="where"
 			orderby="create_date desc"
-			:page-size="20"
+			:page-size="1"
 			loadtime="manual"
 		>
 			<!-- 加载中 -->
@@ -66,6 +66,20 @@
 						</view>
 					</uni-swipe-action-item>
 				</uni-swipe-action>
+
+				<!-- 触底加载状态 -->
+				<view class="load-more-footer">
+					<uni-load-more
+						v-if="loadMoreStatus === 'loading'"
+						status="loading"
+						contentText="加载中..."
+					/>
+					<uni-load-more
+						v-else-if="loadMoreStatus === 'noMore'"
+						status="noMore"
+						contentText="没有更多了"
+					/>
+				</view>
 			</view>
 		</unicloud-db>
 
@@ -78,11 +92,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { onPullDownRefresh, onShow } from '@dcloudio/uni-app';
+import { onPullDownRefresh, onReachBottom, onShow } from '@dcloudio/uni-app';
 import { genderText, genderClass } from './utils.js';
 
 const udb = ref(null);
 const searchText = ref('');
+const loadMoreStatus = ref('more'); // 'more' | 'loading' | 'noMore'
 
 // 服务端模糊搜索：JQL test 运算符实现 LIKE '%keyword%'
 const where = computed(() => {
@@ -108,6 +123,7 @@ onShow(() => {
 
 function loadData() {
 	if (udb.value) {
+		loadMoreStatus.value = 'more';
 		udb.value.refresh();
 	}
 }
@@ -125,6 +141,26 @@ function onClearSearch() {
 onPullDownRefresh(() => {
 	loadData();
 	uni.stopPullDownRefresh();
+});
+
+// 触底加载更多
+onReachBottom(async () => {
+	if (loadMoreStatus.value !== 'more') return;
+	if (!udb.value) return;
+	loadMoreStatus.value = 'loading';
+	try {
+		await udb.value.loadMore();
+		// loadMore 之后 unicloud-db 内部会更新 pagination，检查是否还有更多
+		const pagination = udb.value.data?.pagination;
+		if (pagination && pagination.current * pagination.size >= pagination.count) {
+			loadMoreStatus.value = 'noMore';
+		} else {
+			loadMoreStatus.value = 'more';
+		}
+	} catch (e) {
+		console.error('加载更多失败', e);
+		loadMoreStatus.value = 'more';
+	}
 });
 
 // 跳转详情
@@ -294,6 +330,10 @@ function onDelete(item) {
 	color: #888;
 	margin-top: 6rpx;
 	display: block;
+}
+
+.load-more-footer {
+	padding: 16rpx 0 100rpx 0;
 }
 
 .fab-btn {
