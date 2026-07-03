@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
+<meta name="author" content="https://github.com/wangzhaohe/swot-learning">
 <title>Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -171,7 +172,7 @@ body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-b
 body.toc2.toc-right{padding-left:0;padding-right:15em}
 body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
 @media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
-#toc.toc2{width:45em}
+#toc.toc2{width:35em}
 #toc.toc2 #toctitle{font-size:1.375em}
 #toc.toc2>ul{font-size:.95em}
 #toc.toc2 ul ul{padding-left:1.25em}
@@ -439,7 +440,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #toggleButton {
     position: fixed;
     top: 10px;
-    left: 10px;
+    right: 10px;
     z-index: 1000;
     /*background-color: lightgrey;*/
     color: #AB2C21;
@@ -453,6 +454,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 body.toc2.toc-right {
     padding-left: 0;
     padding-right: 0em;
+}
+
+/* 设置整个 HTML 文档的滚动留白 */
+html {
+    scroll-padding-top: 10px; /* 这个数值就是跳转后标题距离屏幕顶部的像素 */
+    scroll-behavior: smooth;  /* 顺便加上平滑滚动效果，跳转不突兀 */
 }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -532,6 +539,9 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <body class="article toc2 toc-right">
 <div id="header">
 <h1>Windows_制作绿色版_nodejs24_postgresql17_沙盘数据管理系统</h1>
+<div class="details">
+<span id="author" class="author">https://github.com/wangzhaohe/swot-learning</span><br>
+</div>
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
 <ul class="sectlevel1">
@@ -569,27 +579,54 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<button id="toggleButton">目录开关</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
 </script>
-<div class="paragraph">
-<p>文档整理于 2026-02-15 17:46:24 by Swot [<a href="https://github.com/wangzhaohe/swot-learning" class="bare">https://github.com/wangzhaohe/swot-learning</a>]</p>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -637,7 +674,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <p>等几秒钟容器启动后，创建 database 并导入数据</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">mysql -h 127.0.0.1 -P 3307 -u root -pmypass -e &quot;CREATE DATABASE database_name;&quot;</span>
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">mysql -h 127.0.0.1 -P 3307 -u root -pmypass -e &quot;CREATE DATABASE data_management;&quot;</span>
 <span class="tok-go">mysql -h 127.0.0.1 -P 3307 -u root -pmypass data_management &lt; export_file_name_fixed.sql</span></code></pre>
 </div>
 </div>
@@ -935,8 +972,10 @@ data_management.dump: PostgreSQL custom database dump - v1.16-0</pre>
 <h2 id="_2026_01_29_在_windows_下设置_postgresql_密码">2026-01-29 在 windows 下设置 postgresql 密码</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>在 Windows 环境下，PostgreSQL 的用户信息和密码并不像普通文件那样可以直接“查看”，因为它们是经过哈希加密存储在数据库内部表的。
-不过，我们可以通过<strong>登录尝试</strong>来判断是否有密码，并使用 SQL 命令来设置新密码。</p>
+<p>在 Windows 环境下，PostgreSQL 的用户信息和密码并不像普通文件那样可以直接“查看”，因为它们是经过哈希加密存储在数据库内部表的。</p>
+</div>
+<div class="paragraph">
+<p>不过，我们可以通过<strong>登录尝试</strong>来判断是否有密码，并使用 SQL 命令来设置新密码。</p>
 </div>
 <hr>
 <div class="olist arabic">
@@ -1076,7 +1115,7 @@ host    all             all             127.0.0.1/32            trust</code></pr
 <h2 id="_2026_01_30_在_windows_下绿色部署_node_js_postgresql">2026-01-30 在 windows 下绿色部署 node.js + postgresql</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>这份文档将为你整理出一套完整的 <strong>绿色版 Node.js + PostgreSQL + WinSW</strong> 部署方案。你可以根据这份文档直接配置并打包发给客户。</p>
+<p>这份文档整理出一套完整的 <strong>绿色版 Node.js + PostgreSQL + WinSW</strong> 部署方案。你可以根据这份文档直接配置并打包发给客户。</p>
 </div>
 <div class="paragraph">
 <p>该方案实现了：<strong>免安装、零配置（对于客户）、开机自启、崩溃自动重启、后台静默运行。</strong></p>
@@ -1175,7 +1214,7 @@ setlocal<span class="tok-w"> </span>enabledelayedexpansion
 ::<span class="tok-w"> </span>设置<span class="tok-w"> </span>CMD<span class="tok-w"> </span>窗口编码为简体中文，防止显示乱码
 chcp<span class="tok-w"> </span><span class="tok-m">936</span><span class="tok-w"> </span>&gt;nul
 
-title<span class="tok-w"> </span>红丰数据服务<span class="tok-w"> </span>-<span class="tok-w"> </span>一键部署工具
+title<span class="tok-w"> </span>红枫数据服务<span class="tok-w"> </span>-<span class="tok-w"> </span>一键部署工具
 
 <span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">==========================================</span>
 <span class="tok-nb">echo</span><span class="tok-w">    </span>正在初始化系统组件，请稍候...
@@ -1189,7 +1228,7 @@ net<span class="tok-w"> </span>session<span class="tok-w"> </span>&gt;nul<span c
 <span class="tok-w">    </span><span class="tok-nb">exit</span>
 <span class="tok-o">)</span>
 
-::<span class="tok-w"> </span><span class="tok-m">1</span>.<span class="tok-w"> </span>初始化数据库<span class="tok-w"> </span><span class="tok-o">(</span>仅在首次安装时执行<span class="tok-o">)</span>
+::<span class="tok-w"> </span><span class="tok-m">1</span>.<span class="tok-w"> </span>初始化数据库<span class="tok-w"> </span><span class="tok-o">(</span>仅在首次安装时执行，PG_VERSION<span class="tok-w"> </span>是个文件<span class="tok-o">)</span>
 <span class="tok-k">if</span><span class="tok-w"> </span>not<span class="tok-w"> </span>exist<span class="tok-w"> </span><span class="tok-s2">&quot;data\PG_VERSION&quot;</span><span class="tok-w"> </span><span class="tok-o">(</span>
 <span class="tok-w">    </span><span class="tok-nb">echo</span><span class="tok-w"> </span><span class="tok-o">[</span><span class="tok-m">1</span>/4<span class="tok-o">]</span><span class="tok-w"> </span>正在首次初始化数据库...
 <span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span>exist<span class="tok-w"> </span><span class="tok-s2">&quot;temp_pwd.txt&quot;</span><span class="tok-w"> </span><span class="tok-o">(</span>
@@ -1412,7 +1451,7 @@ title<span class="tok-w"> </span>红枫数据服务<span class="tok-w"> </span>-
 <span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">PG_DUMP_EXE</span><span class="tok-o">=</span><span class="tok-s2">&quot;%~dp0pgsql\bin\pg_dump.exe&quot;</span>
 <span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">BACKUP_DIR</span><span class="tok-o">=</span><span class="tok-s2">&quot;%~dp0backups&quot;</span>
 <span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">DB_USER</span><span class="tok-o">=</span>postgres
-<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">DB_NAME</span><span class="tok-o">=</span>postgres
+<span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">DB_NAME</span><span class="tok-o">=</span>data_management
 ::<span class="tok-w"> </span>设置导出密码的环境变量（防止弹出输入密码提示）
 <span class="tok-nb">set</span><span class="tok-w"> </span><span class="tok-nv">PGPASSWORD</span><span class="tok-o">=</span>naonao
 ::<span class="tok-w"> </span><span class="tok-o">=========================================</span>
@@ -1523,7 +1562,7 @@ pause</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-15 17:51:09 +0800
+Last updated 2026-06-22 10:44:07 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
