@@ -1847,6 +1847,7 @@
 <v t="swot.20260601160439.1"><vh>@file pages/posts/posts.wxss</vh></v>
 </v>
 </v>
+<v t="swot.20260608104545.1"><vh>@path uniapp</vh></v>
 <v t="swot.20260413155153.1"><vh>网络安全教育 2026-04-15</vh></v>
 </v>
 <v t="swot.20251210103828.1"><vh>@path js</vh>
@@ -2869,6 +2870,7 @@
 <v t="swot.20251026094301.1"><vh>五笔86字根表</vh></v>
 <v t="swot.20251026094312.1"><vh>五笔86末笔表</vh></v>
 <v t="swot.20251026094138.1"><vh>五笔86难字表</vh></v>
+<v t="swot.20260703082407.1"><vh>五笔86一级简码</vh></v>
 </v>
 </v>
 </v>
@@ -2957,7 +2959,17 @@
 <v t="swot.20260313114540.196"></v>
 </v>
 <v t="swot.20260308115402.1"><vh>获取 leo 主进程派生的子进程</vh></v>
-<v t="swot.20260601085742.1"><vh>临时记录</vh></v>
+<v t="swot.20260601085742.1"><vh>临时记录</vh>
+<v t="swot.20260621101712.1"><vh>绿色动力管理端</vh>
+<v t="swot.20260621101752.1"><vh>源代码在哪儿？ /Users/swot/project/sandbox</vh></v>
+<v t="swot.20260621101730.1"><vh>现在使用了 postgrel 数据库，找到这个数据库</vh></v>
+<v t="swot.20260621101800.1"><vh>参照哪个模型来建立三个应用</vh>
+<v t="swot.20260621101833.1"><vh>音频文件</vh></v>
+<v t="swot.20260621101845.1"><vh>视频文件</vh></v>
+<v t="swot.20260621101849.1"><vh>文本：标题+描述</vh></v>
+</v>
+</v>
+</v>
 </vnodes>
 <tnodes>
 <t tx="swot.20240101100533.1">@language javascript
@@ -12241,6 +12253,8 @@ glf 盏
 
 tak 升
 
+uhk 丫
+
 </t>
 <t tx="swot.20251026094157.1">@language asciidoc
 :source-highlighter: pygments
@@ -15097,7 +15111,7 @@ podman run --name mysql-bridge \
 +
 [source,console]
 ----
-mysql -h 127.0.0.1 -P 3307 -u root -pmypass -e "CREATE DATABASE database_name;"
+mysql -h 127.0.0.1 -P 3307 -u root -pmypass -e "CREATE DATABASE data_management;"
 mysql -h 127.0.0.1 -P 3307 -u root -pmypass data_management &lt; export_file_name_fixed.sql
 ----
 </t>
@@ -15265,10 +15279,13 @@ data_management.dump: PostgreSQL custom database dump - v1.16-0
 ----
 </t>
 <t tx="swot.20260215160552.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
 :icons: font
+:font-size: 16px
 :scripts: cjk
 :stem: latexmath
+:experimental:
 :toc:
 :toc: right
 :toc-title: 目录
@@ -15276,9 +15293,8 @@ data_management.dump: PostgreSQL custom database dump - v1.16-0
 :tip-caption: ⚡
 :note-caption: ❕
 :important-caption: ❗
-:warning-caption: ‼️
 :caution-caption: ⚠️
-</t>
+:warning-caption: ‼️</t>
 <t tx="swot.20260215162134.1">. 解压: node-v24.13.0-win-x64.zip
 
 . 移动文件夹：
@@ -15300,30 +15316,62 @@ npm install
 ----
 </t>
 <t tx="swot.20260215162708.1">
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
 ++++
-&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
-&lt;script&gt;
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () =&gt; {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
 &lt;/script&gt;
 ++++
-
-文档整理于 2026-02-15 17:46:24 by Swot [https://github.com/wangzhaohe/swot-learning]
+endif::[]
 </t>
 <t tx="swot.20260215164835.1">在 Windows 环境下，PostgreSQL 的用户信息和密码并不像普通文件那样可以直接“查看”，因为它们是经过哈希加密存储在数据库内部表的。
+
 不过，我们可以通过**登录尝试**来判断是否有密码，并使用 SQL 命令来设置新密码。
 
 ---
@@ -15401,7 +15449,7 @@ host    all             all             127.0.0.1/32            scram-sha-256
 IMPORTANT: 设置好密码后，你的项目配置文件（如 `.env`）里记得也要同步更新数据库密码。
 </t>
 <t tx="swot.20260215170749.1">@language asciidoc
-这份文档将为你整理出一套完整的 **绿色版 Node.js + PostgreSQL + WinSW** 部署方案。你可以根据这份文档直接配置并打包发给客户。
+这份文档整理出一套完整的 **绿色版 Node.js + PostgreSQL + WinSW** 部署方案。你可以根据这份文档直接配置并打包发给客户。
 
 该方案实现了：**免安装、零配置（对于客户）、开机自启、崩溃自动重启、后台静默运行。**
 </t>
@@ -15541,7 +15589,7 @@ cd /d "%~dp0"
 :: 设置 CMD 窗口编码为简体中文，防止显示乱码
 chcp 936 &gt;nul
 
-title 红丰数据服务 - 一键部署工具
+title 红枫数据服务 - 一键部署工具
 
 echo ==========================================
 echo    正在初始化系统组件，请稍候...
@@ -15555,7 +15603,7 @@ if %errorLevel% neq 0 (
     exit
 )
 
-:: 1. 初始化数据库 (仅在首次安装时执行)
+:: 1. 初始化数据库 (仅在首次安装时执行，PG_VERSION 是个文件)
 if not exist "data\PG_VERSION" (
     echo [1/4] 正在首次初始化数据库...
     if exist "temp_pwd.txt" (
@@ -15637,9 +15685,9 @@ pause
 
 2. **配置代码**：
 * 确保你的 Express(基于node.js的项目) 代码中
-** PostgreSQL 的连接字符串指向 `localhost:5432`
-** 用户名为 `postgres`
-** 密码为空（因为 `initdb` 时用了 `-A trust`，如需密码可另行配置）
+    ** PostgreSQL 的连接字符串指向 `localhost:5432`
+    ** 用户名为 `postgres`
+    ** 密码为空（因为 `initdb` 时用了 `-A trust`，如需密码可另行配置）
 
 IMPORTANT: 前面已经设置密码为 `naonao`
 
@@ -15652,10 +15700,15 @@ IMPORTANT: 前面已经设置密码为 `naonao`
 <t tx="swot.20260215170749.7">**尊敬的客户，请按以下步骤部署系统：**
 
 1. 解压压缩包到任意目录（路径请勿包含中文或空格）。
+
 2. 进入文件夹，找到 **`一键启动服务.bat`**。
+
 3. **右键点击**该文件，选择 **“以管理员身份运行”**。
+
 4. 等待黑色窗口显示“系统部署成功”后，即可关闭窗口。
+
 5. 打开浏览器，访问 `http://localhost:8019` 即可使用。
+
 6. 确认开机启动生效方法
 .. 查看操作系统服务中是否有 「hongfeng data Service」 正在运行，且启动类型为自动，说明开机自启已经注册成功。
 .. 重启电脑，浏览器能访问 `http://localhost:8019` 说明开机自启生效
@@ -15663,6 +15716,7 @@ IMPORTANT: 前面已经设置密码为 `naonao`
 <t tx="swot.20260215170749.8">如果后续需要停止服务，在命令行运行：
 
 * `hongfeng-data-service.exe stop` (停止运行)
+
 * `hongfeng-data-service.exe uninstall` (从系统中彻底删除服务)
 </t>
 <t tx="swot.20260215170749.9">[source,shell]
@@ -15681,7 +15735,7 @@ title 红枫数据服务 - 数据库备份工具
 set PG_DUMP_EXE="%~dp0pgsql\bin\pg_dump.exe"
 set BACKUP_DIR="%~dp0backups"
 set DB_USER=postgres
-set DB_NAME=postgres
+set DB_NAME=data_management
 :: 设置导出密码的环境变量（防止弹出输入密码提示）
 set PGPASSWORD=naonao
 :: =========================================
@@ -42063,5 +42117,22 @@ surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns swzkj 
 </t>
 <t tx="swot.20260601085742.1"></t>
 <t tx="swot.20260601150826.1"></t>
+<t tx="swot.20260608104545.1"></t>
+<t tx="swot.20260621101712.1"></t>
+<t tx="swot.20260621101730.1"></t>
+<t tx="swot.20260621101752.1"></t>
+<t tx="swot.20260621101800.1"></t>
+<t tx="swot.20260621101833.1">要先生成表:
+
+psql -h &lt;服务器IP&gt; -p 5432 -U postgres -d data_management -f database/migration_audio_data.sql
+
+</t>
+<t tx="swot.20260621101845.1"></t>
+<t tx="swot.20260621101849.1"></t>
+<t tx="swot.20260703082407.1">@language asciidoc
+.一级简码表
+image::img/one_level.jpeg[,600]
+
+</t>
 </tnodes>
 </leo_file>
