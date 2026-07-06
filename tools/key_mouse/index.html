@@ -349,6 +349,7 @@
                 const loading = ref(true);
                 const globalStats = ref({ total: 0, keyboard: 0, mouse: 0, key_details: {} });
                 const todayHourlyData = ref([]);
+                const todayTotal = ref(0);
                 const last7DaysData = ref({ dates: [], values: [] });
                 const top10KeysData = ref({ keys: [], values: [] });
                 const allTimeTopKeysData = ref({ keys: [], values: [] });
@@ -497,6 +498,8 @@
                                         jsonFocusSeconds.value = data.focus_seconds || 0;
                                         // 提取后端防抖存盘发来的精确时间戳，如果没有则用当前时间防错
                                         lastEventTimestamp.value = data.last_event_timestamp || (Date.now() / 1000);
+                                        // 更新今日总点击数（键盘+鼠标）
+                                        todayTotal.value = data.total || 0;
                                         // ---------------------------------------------
                                         
                                         // 提取 24 小时热度分布
@@ -569,7 +572,10 @@
                 //@+node:swot.20260220155053.1: *5* updateCharts()
                 //@@language javascript
                 const updateCharts = () => {
-                    hourlyChartInstance?.setOption({ series: [{ data: todayHourlyData.value }] });
+                    hourlyChartInstance?.setOption({
+                        title: { text: `摸鱼检测器 (今日时段分布) - 总点击: ${formatNumber(todayTotal.value)}` },
+                        series: [{ data: todayHourlyData.value }]
+                    });
                     topKeysChartInstance?.setOption({
                         yAxis: { data: top10KeysData.value.keys },
                         series: [{ data: top10KeysData.value.values }]
@@ -593,7 +599,7 @@
                         animationDuration: 1000,
                         animationDurationUpdate: 800,       // 增加平滑更新
                         animationEasingUpdate: 'cubicOut',  // 增加缓动效果
-                        title: { text: '摸鱼检测器 (今日时段分布)', left: 'center' },
+                        title: { text: `摸鱼检测器 (今日时段分布) - 总点击: ${formatNumber(todayTotal.value)}`, left: 'center' },
                         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
                         grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
                         xAxis: { type: 'category', data: Array.from({length: 24}, (_, i) => `${i}:00`), axisLine: { lineStyle: { color: '#565f89' } } },
