@@ -2765,18 +2765,7 @@
 <v t="swot.20260901103417.1"><vh>@adoc Classes验证.adoc</vh>
 <v t="swot.20260901103315.1"><vh>$state 用在 class 里的验证</vh>
 <v t="swot.20260901103641.1"><vh>1. 官方示例（要验证的写法）</vh></v>
-<v t="swot.20260901103802.1"><vh>2. 验证用的文件</vh>
-<v t="swot.20260901111327.1"><vh>@ignore-tree 下面是源文件，不放在文档里了，自己看吧</vh>
-<v t="swot.20260901104012.1"><vh>@edit src/lib/state-class/Todo.svelte.js</vh></v>
-<v t="swot.20260901104321.1"><vh>@edit src/lib/state-class/tracker.svelte.js</vh></v>
-<v t="swot.20260901104750.1"><vh>@edit src/lib/state-class/Todo.svelte.spec.js</vh></v>
-<v t="swot.20260901105111.1"><vh>@edit src/lib/state-class/edge-cases.svelte.js</vh></v>
-<v t="swot.20260901105306.1"><vh>@edit src/lib/state-class/edge-cases.svelte.spec.js</vh></v>
-<v t="swot.20260901105510.1"><vh>@edit src/lib/state-class/edge-cases.spec.js</vh></v>
-<v t="swot.20260901105805.1"><vh>@auto src/routes/state-class/+page.svelte</vh></v>
-<v t="swot.20260901110321.1"><vh>@edit src/routes/state-class/page.svelte.spec.js</vh></v>
-</v>
-</v>
+<v t="swot.20260901103802.1"><vh>2. 验证用的文件</vh></v>
 <v t="swot.20260901110445.1"><vh>3. 响应式追踪辅助</vh></v>
 <v t="swot.20260901110549.1"><vh>4. 验证结论</vh>
 <v t="swot.20260901110602.1"><vh>4.1 两种写法都生效</vh></v>
@@ -2787,6 +2776,24 @@
 <v t="swot.20260901110733.1"><vh>6. 页面可视化</vh></v>
 <v t="swot.20260901110751.1"><vh>7. 运行结果</vh></v>
 <v t="swot.20260901110849.1"><vh>8. 小结</vh></v>
+</v>
+</v>
+<v t="swot.20260901111327.1"><vh>source code</vh>
+<v t="swot.20260904135601.1"><vh>-- Todo 类 --</vh>
+<v t="swot.20260901104012.1"><vh>@edit src/lib/state-class/Todo.svelte.js</vh></v>
+<v t="swot.20260901104321.1"><vh>@edit src/lib/state-class/tracker.svelte.js</vh></v>
+<v t="swot.20260901104750.1"><vh>@file src/lib/state-class/Todo.svelte.spec.js</vh></v>
+</v>
+<v t="swot.20260903103128.1"><vh>-- 类私有属性响应测试 --</vh>
+<v t="swot.20260901105111.1"><vh>@edit src/lib/state-class/PrivateTodo.svelte.js</vh></v>
+<v t="swot.20260901105306.1"><vh>@file src/lib/state-class/PrivateTodo.svelte.spec.js</vh></v>
+</v>
+<v t="swot.20260904150658.1"><vh>-- 服务端编译测试 --</vh>
+<v t="swot.20260901105510.1"><vh>@file src/lib/state-class/placement-rules.spec.js</vh></v>
+</v>
+<v t="swot.20260903103131.1"><vh>-- Todo 页面 --</vh>
+<v t="swot.20260901145520.1"><vh>@file src/routes/state-class/+page.svelte</vh></v>
+<v t="swot.20260901110321.1"><vh>@file src/routes/state-class/page.svelte.spec.js</vh></v>
 </v>
 </v>
 </v>
@@ -42442,6 +42449,7 @@ todos[0].done = !todos[0].done;
 <t tx="swot.20260901103315.1">本篇验证 Svelte 5 官方文档 https://svelte.dev/docs/svelte/$state#Classes 中的写法：
 
 *class 实例本身不会被 proxy 代理，但可以把 `$state` 用在 class 字段声明，或构造函数里对属性的首次赋值上。*
+比如该例子中的 done 和 text 两个属性的定义就是这样的。下面我们进行测试。
 
 环境：Svelte `^5.56.1`，`vite.config.js` 已强制开启 `runes: true`，Vitest（server + client 两个项目）。
 </t>
@@ -42669,7 +42677,11 @@ expect(tracker.runs).toBe(1);
 |===
 
 </t>
-<t tx="swot.20260901110733.1">`npm run dev` 后访问 `/state-class`：勾选 checkbox、编辑输入框、`reset()`、新增待办都会实时更新 DOM。`page.svelte.spec.js` 用 Playwright 覆盖了这些行为。
+<t tx="swot.20260901110733.1">手工对网站进行测试 `npm run dev` 后访问 `/state-class`：
+
+    勾选 checkbox、编辑输入框、`reset()`、新增待办都会实时更新 DOM。
+
+使用工具自动对网站进行测试 `page.svelte.spec.js` 用 Playwright 覆盖了这些行为。
 </t>
 <t tx="swot.20260901110751.1">[source,console]
 ----
@@ -42693,5 +42705,9 @@ NOTE: 本机首次运行 `npm run test` 需要先 `npx playwright install chromi
 * 「首次赋值」由编译器强制，写错位置会直接报编译错误。
 </t>
 <t tx="swot.20260901111327.1"></t>
+<t tx="swot.20260903103128.1"></t>
+<t tx="swot.20260903103131.1"></t>
+<t tx="swot.20260904135601.1"></t>
+<t tx="swot.20260904150658.1"></t>
 </tnodes>
 </leo_file>
