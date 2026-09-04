@@ -1,0 +1,91 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️
+
+
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+</script>
+++++
+endif::[]
+
+= 创建 svelte 项目
+https://svelte.dev/docs/svelte/getting-started
+
+[source,console]
+----
+npx sv create 项目名
+cd myapp
+npm install
+npm run dev
+----
+
+= .svelte 文件
+一个 .svelte 文件的核心功能可以总结为：它是构建 Svelte 应用的基本单元，将组件的逻辑、内容和样式整合在一个文件中，形成完整的、可复用的 UI 模块。
+
+实际上就是一个项目组件。
+
+= .svelte.js / .svelte.ts
+除了具有普通的 js/ts 文件的功能外，还可以使用 svelte 的 runes 符文魔法。
+

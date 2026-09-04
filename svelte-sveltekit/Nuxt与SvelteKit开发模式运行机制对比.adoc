@@ -1,0 +1,122 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️
+
+
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+</script>
+++++
+endif::[]
+
+= Nuxt 与 SvelteKit 开发模式运行机制对比
+:author: 技术对话总结
+:date: 2026-08-17
+:keywords: Nuxt, SvelteKit, Vite, 编译机制, 开发模式, 性能对比
+:description: 总结关于 Nuxt 和 SvelteKit 在开发模式下运行机制、编译方式及首次启动速度差异的讨论。
+
+== 核心问题
+
+在 development 开发模式下，Nuxt 和 SvelteKit 是采用解释器运行，还是编译后运行？
+
+== 核心结论
+
+两者均**不是**传统的“解释器”或“全量预编译”模式，而是基于 Vite 的 **“按需即时编译（JIT Compilation）”**机制。
+
+=== 共同基础：Vite 的按需编译
+
+*   **依赖处理**：利用 `esbuild` 对第三方依赖（如 `vue`、`svelte`）进行**预打包**，提升加载速度。
+*   **源码处理**：业务源码（`.vue`、`.svelte` 文件）**不预先编译**，而是在浏览器通过 ESM（ES Module）发起请求时，由 Vite 服务器**实时、按需地**编译为浏览器可执行的 JavaScript。
+*   **热更新**：通过 HMR（Hot Module Replacement）实现修改后的极速更新，无需刷新整个页面。
+
+=== 关键差异对比
+
+[cols="1,1,1", options="header"]
+|===
+| 对比维度 | Nuxt | SvelteKit
+| 核心引擎 | Vite | Vite
+| 编译方式 | 按需即时编译 | 按需即时编译
+| 启动时行为 | **重构建启动**：启动时会预先执行一次完整的应用构建，扫描路由、解析插件、初始化模块，完成后才启动服务。 | **轻量启动**：仅启动 Vite 服务器和基础路由映射，不编译任何 `.svelte` 组件，访问时才进行编译。
+| 额外特征 | 拥有丰富的模块生态，启动时模块钩子会增加初始化时间。 | 设计更偏向按需加载，`load` 函数等逻辑仅在访问路由时执行。
+| 首次启动速度 | 较慢（需要完成全量预构建）。 | **较快**（启动成本极低）。
+| 首次页面加载速度 | 较快（页面已预编译就绪）。 | 相对较慢（存在首次访问时的即时编译耗时）。
+|===
+
+== 关于首次启动速度的观察
+
+用户观察到“dev 模式下 SvelteKit 比 Nuxt 的首次启动要快”，这一观察是**准确且符合技术逻辑**的。速度差异的深层原因包括：
+
+1.  **构建工作量不同**：Nuxt 启动时需要进行完整的构建流程；而 SvelteKit 仅在收到请求后按需编译，启动阶段几乎无编译开销。
+2.  **编译器开销差异**：Vue SFC 的编译步骤（AST 转换、响应式绑定）相对 Svelte 的纯 DOM 操作编译更复杂，在批量编译时累积差异明显。
+3.  **模块与插件加载策略**：Nuxt 的模块体系在启动时注入大量逻辑；SvelteKit 的适配器和插件体系则更轻量，按需加载。
+
+=== 补充说明
+
+如果以终端显示 `ready` 或服务启动成功的时间为准，SvelteKit 显著快于 Nuxt。但若以浏览器完整渲染首页的时间为准，Nuxt 可能因预编译而略快，SvelteKit 则需承担首次访问的即时编译成本。
+
+== 总结
+
+Nuxt 和 SvelteKit 在开发模式下均采用“按需即时编译”的模式运行，属于“解释 + 即时编译”的混合体。SvelteKit 凭借“轻启动 + 按需编译”的设计，在开发服务的**首次启动速度**上具有明显优势，这是由两者架构设计和启动策略的根本差异决定的。
+```
+

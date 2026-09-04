@@ -1,0 +1,260 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️
+
+
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+</script>
+++++
+endif::[]
+
+= $state 用在 class 里的验证
+本篇验证 Svelte 5 官方文档 https://svelte.dev/docs/svelte/$state#Classes 中的写法：
+
+*class 实例本身不会被 proxy 代理，但可以把 `$state` 用在 class 字段声明，或构造函数里对属性的首次赋值上。*
+
+环境：Svelte `^5.56.1`，`vite.config.js` 已强制开启 `runes: true`，Vitest（server + client 两个项目）。
+
+== 1. 官方示例（要验证的写法）
+[source,js]
+----
+class Todo {
+	  done = $state(false);          // 字段声明处使用 $state
+
+    constructor(text) {
+      this.text = $state(text);   // 构造函数中首次赋值处使用 $state
+    }
+
+    reset() {
+        this.text = '';
+        this.done = false;
+    }
+}
+----
+
+== 2. 验证用的文件
+为支持 runes，类定义必须放在 `.svelte.js` 后缀的模块里。共新增 7 个文件：
+
+[cols="2,3"]
+|===
+| 文件 | 作用
+
+| `src/lib/state-class/Todo.svelte.js`
+| 官方示例原样（JSDoc 注释）
+
+| `src/lib/state-class/tracker.svelte.js`
+| 用 `$effect.root` 订阅属性的辅助函数，用于证明「真的响应式」
+
+| `src/lib/state-class/Todo.svelte.spec.js`
+| 单元 + 响应式测试（6 个）
+
+| `src/lib/state-class/edge-cases.svelte.js`
+| private 字段（`#done = $state(false)`）示例
+
+| `src/lib/state-class/edge-cases.svelte.spec.js`
+| private 字段响应式 / 解构失效（2 个）
+
+| `src/lib/state-class/edge-cases.spec.js`
+| 编译期合法性与报错校验（4 个）
+
+| `src/routes/state-class/+page.svelte`
+| 可视化页面 `/state-class`
+
+| `src/routes/state-class/page.svelte.spec.js`
+| 页面交互测试（5 个）
+|===
+
+[NOTE]
+====
+1. 页面测试不能叫 `+page.svelte.spec.js` —— `+` 是 SvelteKit 保留前缀，会让 `svelte-kit sync` 直接失败。
+2. 改用同目录下的 `page.svelte.spec.js`，依然命中 client 项目的 include glob `src/**/*.svelte.{test,spec}.{js,ts}`。
+====
+
+== 3. 响应式追踪辅助
+`$effect` 在 node/SSR 编译产物里是空实现，所以响应式断言必须跑在 client（浏览器）项目。`tracker.svelte.js` 在 `$effect.root` 里订阅一个 getter：
+
+[source,js]
+----
+import { flushSync } from 'svelte';
+
+export function createTracker(getter) {
+	let value = undefined;
+	let runs = 0;
+
+	const destroy = $effect.root(() => {
+		$effect(() => {
+			value = getter();
+			runs += 1;
+		});
+	});
+
+	flushSync();
+
+	return {
+		get value() { return value; },
+		get runs() { return runs; },
+		run(mutate) { flushSync(mutate); },
+		destroy
+	};
+}
+----
+
+== 4. 验证结论
+
+
+=== 4.1 两种写法都生效
+[cols="2,3,1"]
+|===
+| 写法 | 行为 | 结论
+
+| `done = $state(false)`（字段声明）
+| 改 `todo.done` 时 effect 重跑（runs 1 → 2）
+| ✅ 响应式生效
+
+| `this.text = $state(text)`（构造函数首次赋值）
+| 改 `todo.text` 时 effect 重跑
+| ✅ 响应式生效
+
+| `#done = $state(false)`（private 字段）
+| 编译为 `$.state(false)` + `$.get/$.set`，effect 重跑
+| ✅ 也生效
+
+| 调用 `reset()` 后两个字段仍响应式
+| 两个 effect 在重置后各自再重跑
+| ✅ 生效
+|===
+
+=== 4.2 实例确实没有被 proxy
+给实例后加一个普通属性，值写进去了，但 effect **没有**重跑——这正是文档说的「只对显式包了 `$state` 的字段生效」：
+
+[source,js]
+----
+/** @type {Todo & { note?: string }} */
+const todo = new Todo('learn svelte');
+const tracker = createTracker(() => todo.note);
+
+tracker.run(() => {
+	todo.note = 'not reactive'; // 写进去了
+});
+
+expect(todo.note).toBe('not reactive');
+expect(tracker.runs).toBe(1); // effect 没重跑 => 实例不是 proxy
+----
+
+=== 4.3 解构会丢失响应式
+[source,js]
+----
+const { text } = todo;          // 只是快照
+const tracker = createTracker(() => text);
+
+tracker.run(() => { todo.text = 'changed'; });
+
+expect(todo.text).toBe('changed');
+expect(text).toBe('learn svelte'); // 局部变量不会跟着变
+expect(tracker.runs).toBe(1);
+----
+
+== 5. 首次赋值是编译期强制的
+通过 `compileModule(source, { generate: 'client' })` 直接编译源码得到验证：
+
+[cols="2,3"]
+|===
+| 写法 | 编译结果
+
+| 文档里的两种写法 / private 字段
+| 正常编译（无报错）
+
+| 构造函数里先 `this.text = text` 再 `this.text = $state(text)`
+| 报错 `Cannot assign to a state field before its declaration`
+
+| 在普通方法里 `this.note = $state('x')`
+| 报错 `state_invalid_placement`（消息要求写在构造函数顶层对字段的首次赋值）
+|===
+
+== 6. 页面可视化
+`npm run dev` 后访问 `/state-class`：勾选 checkbox、编辑输入框、`reset()`、新增待办都会实时更新 DOM。`page.svelte.spec.js` 用 Playwright 覆盖了这些行为。
+
+== 7. 运行结果
+[source,console]
+----
+$ npm run test
+Test Files  6 passed (6)
+     Tests  19 passed (19)
+----
+
+[source,console]
+----
+$ npm run build     # 通过
+$ npm run check     # 新增文件零类型错误
+----
+
+NOTE: 本机首次运行 `npm run test` 需要先 `npx playwright install chromium`（client 项目依赖浏览器；既有的 `Welcome.svelte.spec.js` 也同样需要）。
+
+== 8. 小结
+* 文档里的 `Todo` 类写法**完全正确**。
+* `$state` 可放在：class 字段声明（public 或 private）、构造函数里对属性的**首次**赋值。
+* 实例不被 proxy：只有显式用 `$state` 包装的字段才有响应式；后加属性、解构出来的变量都不具备响应式。
+* 「首次赋值」由编译器强制，写错位置会直接报编译错误。
+
