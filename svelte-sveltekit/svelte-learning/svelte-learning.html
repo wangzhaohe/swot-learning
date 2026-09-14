@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
 <meta name="author" content="https://github.com/wangzhaohe/swot-learning">
-<title>创建 svelte 项目</title>
+<title>学习 Svelte</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -538,16 +538,89 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
+<h1>学习 Svelte</h1>
+<div class="details">
+<span id="author" class="author">https://github.com/wangzhaohe/swot-learning</span><br>
+</div>
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
-<ul class="sectlevel0">
+<ul class="sectlevel1">
 <li><a href="#_创建_svelte_项目">创建 svelte 项目</a></li>
 <li><a href="#_svelte_文件">.svelte 文件</a></li>
 <li><a href="#_svelte_js_svelte_ts">.svelte.js / .svelte.ts</a></li>
+<li><a href="#_runes_魔法符文">runes 魔法符文</a>
+<ul class="sectlevel2">
+<li><a href="#_state">$state()</a>
+<ul class="sectlevel3">
+<li><a href="#_deep_state_默认是深度响应式">Deep state 默认是深度响应式</a></li>
+<li><a href="#_classes_实例没有响应式">Classes 实例没有响应式</a>
+<ul class="sectlevel4">
+<li><a href="#_state_用在_class_里的响应式验证">$state 用在 class 里的响应式验证</a></li>
+</ul>
+</li>
+<li><a href="#_内置响应式类">内置响应式类</a></li>
+<li><a href="#_state_raw_禁止深度响应式">$state.raw 禁止深度响应式</a></li>
+<li><a href="#_state_snapshot_从响应式变量中提取快照给第三方库或者api传值用">$state.snapshot 从响应式变量中提取快照，给第三方库或者api传值用</a></li>
+<li><a href="#_state_eager_乐观更新ui">$state.eager 乐观更新UI</a></li>
+<li><a href="#_passing_state_into_functions">Passing-state-into-functions</a></li>
+<li><a href="#_passing_state_across_modules">Passing state across modules</a></li>
+</ul>
+</li>
+<li><a href="#_derived_包含简单的表达式">$derived()    包含简单的表达式</a>
+<ul class="sectlevel3">
+<li><a href="#_derived_by_包含更复杂的语句">$derived.by() 包含更复杂的语句</a></li>
+<li><a href="#_overriding_derived_values_乐观更新ui">Overriding derived values 乐观更新UI</a></li>
+<li><a href="#_deriveds_and_reactivity">Deriveds and reactivity</a></li>
+<li><a href="#_destructuring">Destructuring</a></li>
+</ul>
+</li>
+<li><a href="#_effect">$effect</a>
+<ul class="sectlevel3">
+<li><a href="#_understanding_lifecycle">Understanding lifecycle</a></li>
+<li><a href="#_understanding_dependencies">Understanding dependencies</a></li>
+<li><a href="#_effect_pre">$effect.pre</a></li>
+<li><a href="#_effect_tracking">$effect.tracking</a></li>
+<li><a href="#_effect_pending">$effect.pending</a></li>
+<li><a href="#_effect_root">$effect.root</a></li>
+</ul>
+</li>
+<li><a href="#_props">$props</a>
+<ul class="sectlevel3">
+<li><a href="#_props_id">$props.id</a></li>
+</ul>
+</li>
+<li><a href="#_bindable">$bindable</a></li>
+<li><a href="#_inspect_打印监测的响应式变量">$inspect 打印监测的响应式变量</a>
+<ul class="sectlevel3">
+<li><a href="#_inspect_with_替代_console_log">$inspect(&#8230;&#8203;).with 替代 console.log</a></li>
+<li><a href="#_inspect_trace_查看哪个变量引起的副作用">$inspect.trace(&#8230;&#8203;) 查看哪个变量引起的副作用</a></li>
+</ul>
+</li>
+<li><a href="#_host">$host</a></li>
+</ul>
+</li>
+<li><a href="#_template_syntax">Template Syntax</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_markup">Basic markup</a>
+<ul class="sectlevel3">
+<li><a href="#_tag">tag</a>
+<ul class="sectlevel4">
+<li><a href="#_小写字母就是普通的_html_标签">小写字母就是普通的 html 标签</a></li>
+<li><a href="#_大写字母开头是组件定义组件">大写字母开头是组件&#8212;&#8203;定义组件</a></li>
+<li><a href="#_大写字母开头是组件使用组件">大写字母开头是组件&#8212;&#8203;使用组件</a></li>
+<li><a href="#_点号命名空间的方式">点号命名空间的方式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
 <style>
 /* 1. 默认状态：初始就是隐藏的 */
 #toc {
@@ -596,7 +669,11 @@ toggleButton.addEventListener('click', () => {
     toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
 });
 </script>
-<h1 id="_创建_svelte_项目" class="sect0">创建 svelte 项目</h1>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_创建_svelte_项目">创建 svelte 项目</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p><a href="https://svelte.dev/docs/svelte/getting-started" class="bare">https://svelte.dev/docs/svelte/getting-started</a></p>
 </div>
@@ -608,21 +685,1788 @@ toggleButton.addEventListener('click', () => {
 <span class="tok-go">npm run dev</span></code></pre>
 </div>
 </div>
-<h1 id="_svelte_文件" class="sect0">.svelte 文件</h1>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_svelte_文件">.svelte 文件</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/svelte-files" class="bare">https://svelte.dev/docs/svelte/svelte-files</a></p>
+</div>
 <div class="paragraph">
 <p>一个 .svelte 文件的核心功能可以总结为：它是构建 Svelte 应用的基本单元，将组件的逻辑、内容和样式整合在一个文件中，形成完整的、可复用的 UI 模块。</p>
 </div>
 <div class="paragraph">
 <p>实际上就是一个项目组件。</p>
 </div>
-<h1 id="_svelte_js_svelte_ts" class="sect0">.svelte.js / .svelte.ts</h1>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_svelte_js_svelte_ts">.svelte.js / .svelte.ts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/svelte-js-files" class="bare">https://svelte.dev/docs/svelte/svelte-js-files</a></p>
+</div>
 <div class="paragraph">
 <p>除了具有普通的 js/ts 文件的功能外，还可以使用 svelte 的 runes 符文魔法。</p>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_runes_魔法符文">runes 魔法符文</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>魔法符文是用在文件 .svelte and .svelte.js / .svelte.ts 中的，用来控制编译器。</p>
+</div>
+<div class="paragraph">
+<p>魔法符文是以 $ 开始关键字，像是一个函数的调用。如下：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>let message = $state('hello');</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>特点：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>自动导入，无需手动 import</p>
+</li>
+<li>
+<p>魔法符文本身不能赋值给一个变量，也不能被作为参数传递给函数。</p>
+</li>
+<li>
+<p>如果用错了，编译器会进行提示。</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_state">$state()</h3>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/$state" class="bare">https://svelte.dev/docs/svelte/$state</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://svelte.dev/tutorial/svelte/state" class="bare">https://svelte.dev/tutorial/svelte/state</a></p>
+</div>
+<div class="paragraph">
+<p>创建响应式状态，让 UI 跟着变化。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-o">&gt;</span>
+<span class="tok-w">	  </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">);</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span>
+
+<span class="tok-o">&lt;</span><span class="tok-nx">button</span><span class="tok-w"> </span><span class="tok-nx">onclick</span><span class="tok-o">=</span><span class="tok-p">{()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-o">++</span><span class="tok-p">}</span><span class="tok-o">&gt;</span>
+<span class="tok-w">	  </span><span class="tok-nx">clicks</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-nx">count</span><span class="tok-p">}</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/button&gt;</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_deep_state_默认是深度响应式">Deep state 默认是深度响应式</h4>
+<div class="paragraph">
+<p>深度状态：Deep state</p>
+</div>
+<div class="paragraph">
+<p>$state 会为数组和普通对象创建“深度响应式代理”（deeply reactive state proxy）。</p>
+</div>
+<div class="paragraph">
+<p>解构会丢失响应性：如果从响应式对象中解构出属性，解构出的变量将只是普通值，不再具有响应性。比如下面代码中的 done 和 text 都<mark>不具响应性</mark>了。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">done</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">todos</span><span class="tok-p">[</span><span class="tok-mf">0</span><span class="tok-p">];</span>
+
+<span class="tok-c1">// this will not affect the value of `done`</span>
+<span class="tok-c1">// 下面再赋值，也无法使 done 成了响应式的变量，这点要注意一下</span>
+<span class="tok-nx">todos</span><span class="tok-p">[</span><span class="tok-mf">0</span><span class="tok-p">].</span><span class="tok-nx">done</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">!</span><span class="tok-nx">todos</span><span class="tok-p">[</span><span class="tok-mf">0</span><span class="tok-p">].</span><span class="tok-nx">done</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 网页中再这样使用就不行了 &lt;p&gt;{done}&lt;/p&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_classes_实例没有响应式">Classes 实例没有响应式</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/$state#Classes" class="bare">https://svelte.dev/docs/svelte/$state#Classes</a></p>
+</div>
+<div class="paragraph">
+<p>类实例化以后的对象们不是响应式的。参考 Classes验证.adoc</p>
+</div>
+<div class="paragraph">
+<p>箭头函数的防止 this 丢失的应用</p>
+</div>
+<div class="sect4">
+<h5 id="_state_用在_class_里的响应式验证">$state 用在 class 里的响应式验证</h5>
+<div class="paragraph">
+<p>本篇验证 Svelte 5 官方文档 <a href="https://svelte.dev/docs/svelte/$state#Classes" class="bare">https://svelte.dev/docs/svelte/$state#Classes</a> 中的写法：</p>
+</div>
+<div class="paragraph">
+<p><strong>class 实例本身不会被 proxy 代理，但可以把 <code>$state</code> 用在 class 字段声明，或构造函数里对属性的首次赋值上。</strong>
+比如该例子中的 done 和 text 两个属性的定义就是这样的。下面我们进行测试。</p>
+</div>
+<div class="paragraph">
+<p>环境：Svelte <code>^5.56.1</code>，<code>vite.config.js</code> 已强制开启 <code>runes: true</code>，Vitest（server + client 两个项目）。</p>
+</div>
+<div class="sect5">
+<h6 id="_1_官方示例后面要验证_state_的写法">1. 官方示例（后面要验证 $state 的写法）</h6>
+<div class="listingblock">
+<div class="title">@edit src/lib/state-class/Todo.svelte.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/* global $state */</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 验证 https://svelte.dev/docs/svelte/$state#Classes 中的写法。</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * 官方说明：class 实例本身**不会**被 proxy 代理，但可以分别在</span>
+<span class="tok-cm"> *  1. class 字段声明处（public / private 都可）</span>
+<span class="tok-cm"> *  2. 构造函数里对某个属性的**首次**赋值处</span>
+<span class="tok-cm"> * 使用 `$state`，从而让单个属性具备响应式。</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * 注意：文件名必须是 `*.svelte.js`，模块里的 runes 才会被编译。</span>
+<span class="tok-cm"> */</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">class</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-cm">/** 字段声明处使用 $state */</span>
+<span class="tok-w">    </span><span class="tok-nx">done</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * @param {string} text</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">text</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-cm">/** 构造函数中对该属性的首次赋值处使用 $state */</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-nx">text</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/** 把两个响应式字段一起重置 */</span>
+<span class="tok-w">    </span><span class="tok-nx">reset</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_2_验证用的文件">2. 验证用的文件</h6>
+<div class="paragraph">
+<p>为支持 runes，类定义必须放在 <code>.svelte.js</code> 后缀的模块里。共新增 7 个文件：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">文件</th>
+<th class="tableblock halign-left valign-top">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/lib/state-class/Todo.svelte.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">官方示例原样（JSDoc 注释）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/lib/state-class/tracker.svelte.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">用 <code>$effect.root</code> 订阅属性的辅助函数，用于证明「真的响应式」</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/lib/state-class/Todo.svelte.spec.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">单元 + 响应式测试（6 个）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/lib/state-class/edge-cases.svelte.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">private 字段（<code>#done = $state(false)</code>）示例</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/lib/state-class/edge-cases.svelte.spec.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">private 字段响应式 / 解构失效（2 个）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/lib/state-class/edge-cases.spec.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">编译期合法性与报错校验（4 个）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/routes/state-class/+page.svelte</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">可视化页面 <code>/state-class</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/routes/state-class/page.svelte.spec.js</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">页面交互测试（5 个）</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>页面测试不能叫 <code>page.svelte.spec.js` —— `</code> 是 SvelteKit 保留前缀，会让 <code>svelte-kit sync</code> 直接失败。</p>
+</li>
+<li>
+<p>改用同目录下的 <code>page.svelte.spec.js</code>，依然命中 client 项目的 include glob <code>src/<strong>*/</strong>.svelte.{test,spec}.{js,ts}</code>。</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_监听器定义">监听器定义</h6>
+<div class="listingblock">
+<div class="title">src/lib/state-class/tracker.svelte.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * https://share.gemini.google/4Do68CR3eWIS gemini 说明该代码</span>
+<span class="tok-cm"> * `$effect` 在 node/SSR 编译产物里是空实现，所以响应式断言必须跑在 client（浏览器）项目。`tracker.svelte.js` 在 `$effect.root` 里订阅一个 getter</span>
+<span class="tok-cm"> * runes 只能在 `.svelte` / `.svelte.js` 文件里使用，所以这个辅助函数单独放在 `.svelte.js` 中。</span>
+<span class="tok-cm"> * tracker.svelte.js = 一个可挂在任意 getter 上的响应式监听器 + 计数器。</span>
+<span class="tok-cm"> * runs 计数不动,说明被观察的东西没有响应式;</span>
+<span class="tok-cm"> * runs 计数随修改增加,说明它是货真价实的 $state 响应式属性。</span>
+<span class="tok-cm"> * 它是你验证 &quot;class 里 $state 用对没有&quot; 的测试利器。</span>
+<span class="tok-cm"> */</span>
+
+<span class="tok-cm">/* global $effect */</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">flushSync</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;svelte&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/** @param {() =&gt; unknown} getter 读取待观察属性的函数 */</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-p">(</span><span class="tok-nx">getter</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-cm">/** @type {unknown} */</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">undefined</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 保存最近一次读到的值</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">runs</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">;</span><span class="tok-w">          </span><span class="tok-c1">// effect 被执行的次数</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 1. 开启一个不受组件生命周期限制的全局副作用监听</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">destroy</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$effect</span><span class="tok-p">.</span><span class="tok-nx">root</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">$effect</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">getter</span><span class="tok-p">();</span><span class="tok-w">  </span><span class="tok-c1">// 告诉 $effect 要观察的值，比如 done/text</span>
+<span class="tok-w">            </span><span class="tok-nx">runs</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">;</span><span class="tok-w">         </span><span class="tok-c1">// 只要值变了， effect 就会重跑，次数 +1</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 2. 强制立即同步执行一次，确保初始状态下的 value 和 runs 有值 (runs 变成 1)</span>
+<span class="tok-w">    </span><span class="tok-nx">flushSync</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-cm">/** effect 最近一次读到的值 */</span>
+<span class="tok-w">        </span><span class="tok-nx">get</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-cm">/** effect 被执行了多少次 */</span>
+<span class="tok-w">        </span><span class="tok-nx">get</span><span class="tok-w"> </span><span class="tok-nx">runs</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">runs</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-cm">/**</span>
+<span class="tok-cm">         * 修改状态并同步 flush，确保 effect 已经重跑</span>
+<span class="tok-cm">         * @param {() =&gt; void} mutate</span>
+<span class="tok-cm">         */</span>
+<span class="tok-w">        </span><span class="tok-nx">run</span><span class="tok-p">(</span><span class="tok-nx">mutate</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">flushSync</span><span class="tok-p">(</span><span class="tok-nx">mutate</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-nx">destroy</span>
+<span class="tok-w">    </span><span class="tok-p">};</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_todo_类测试">Todo 类测试</h6>
+<div class="listingblock">
+<div class="title">src/lib/state-class/Todo.svelte.spec.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">describe</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">it</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;vitest&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./Todo.svelte.js&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./tracker.svelte.js&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// 单元 + 响应式测试（6 个）</span>
+<span class="tok-c1">// 注意：这个文件的名字是 *.svelte.spec.js，会跑在 vitest 的 client（浏览器）项目里。</span>
+<span class="tok-c1">// 原因是 Svelte 在 node/SSR 编译产物中 $effect 不会执行，只有客户端才能真正验证响应式。</span>
+<span class="tok-c1">// 同理，Todo.svelte.js / tracker.svelte.js 必须带 .svelte.js 后缀，runes 才会被编译。</span>
+
+<span class="tok-nx">describe</span><span class="tok-p">(</span><span class="tok-s1">&#39;Todo：把 $state 用在 class 里&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;字段声明处的 $state(false) 初始值正确&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;构造函数首次赋值处的 $state(text) 初始值正确&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;修改 done（字段声明式 $state）会触发响应式更新&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">tracker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">1</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">run</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">2</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;修改 text（构造函数式 $state）会触发响应式更新&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">tracker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">run</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;learn runes&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn runes&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn runes&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">2</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;reset() 同时重置两个字段，并各自触发更新&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">doneTracker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">textTracker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">doneTracker</span><span class="tok-p">.</span><span class="tok-nx">run</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span>
+<span class="tok-w">            </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;changed&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">doneTracker</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">textTracker</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;changed&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">doneTracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">2</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">textTracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">2</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">textTracker</span><span class="tok-p">.</span><span class="tok-nx">run</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">reset</span><span class="tok-p">()</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">textTracker</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">doneTracker</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">textTracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">3</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">doneTracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">3</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;实例本身没有被 proxy：后加的普通属性不具备响应式&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-cm">/**</span>
+<span class="tok-cm">         * note 是后加的普通属性，就是为了测试它不具备响应式</span>
+<span class="tok-cm">         * @type {Todo &amp; { note?: string }}</span>
+<span class="tok-cm">         */</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">tracker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">note</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">1</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">run</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">note</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;not reactive&#39;</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 此处可以随便给字符串</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 值确实写进去了，但 effect 没有重跑 —— 说明实例不是 proxy 的响应式</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">note</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;not reactive&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">1</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 如果 note 是响应式，就会触发 $effect</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_定义类的私有属性">定义类的私有属性</h6>
+<div class="listingblock">
+<div class="title">#edit src/lib/state-class/PrivateTodo.svelte.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/* global $state */</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * private 字段（`#done = $state(false)`）示例</span>
+<span class="tok-cm"> * 文档里说 `$state` 可以用在 class 字段上，「无论是 public 还是 private」。</span>
+<span class="tok-cm"> * 这里验证 private（`#` 私有字段）的写法，并通过 getter / setter 暴露。</span>
+<span class="tok-cm"> */</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">class</span><span class="tok-w"> </span><span class="tok-nx">PrivateTodo</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-err">#</span><span class="tok-nx">done</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 私有属性</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/** @param {string} text */</span>
+<span class="tok-w">    </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">text</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-nx">text</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nx">get</span><span class="tok-w"> </span><span class="tok-nx">done</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">done</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/** @param {boolean} value */</span>
+<span class="tok-w">    </span><span class="tok-nx">set</span><span class="tok-w"> </span><span class="tok-nx">done</span><span class="tok-p">(</span><span class="tok-nx">value</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">done</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nx">reset</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_测试类私有属性响应">测试类私有属性响应</h6>
+<div class="listingblock">
+<div class="title">#file src/lib/state-class/PrivateTodo.svelte.spec.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">describe</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">it</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;vitest&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">PrivateTodo</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./placement-rules.svelte.js&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./tracker.svelte.js&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-c1">// private 字段响应式 / 解构失效（2 个）</span>
+<span class="tok-c1">// 跑在 vitest 的 client（浏览器）项目里：只有客户端编译产物中 $effect 才会真正执行。</span>
+
+<span class="tok-nx">describe</span><span class="tok-p">(</span><span class="tok-s1">&#39;边界情况&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;private 字段 #done = $state(false) 同样具备响应式&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">PrivateTodo</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">tracker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">1</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">run</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">2</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;解构出来的值只是一份快照，不再具备响应式&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">PrivateTodo</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">tracker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">text</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">text</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">run</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;changed&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// 实例上的字段变了，但之前解构出来的局部变量不会跟着变</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;changed&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">text</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">1</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_服务端编译测试">服务端编译测试</h6>
+<div class="listingblock">
+<div class="title">#file src/lib/state-class/placement-rules.spec.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 这个用例跑在 server（node）项目里：只做编译期校验，不需要 $effect，也就不需要浏览器。</span>
+<span class="tok-cm"> * 编译期合法性与报错校验（4 个）</span>
+<span class="tok-cm"> */</span>
+
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">compileModule</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;svelte/compiler&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">describe</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">it</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;vitest&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 按 client 模式编译一段源码，返回报错信息；没有报错则返回 null。</span>
+<span class="tok-cm"> * @param {string} source</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">compileError</span><span class="tok-p">(</span><span class="tok-nx">source</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">try</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">compileModule</span><span class="tok-p">(</span><span class="tok-nx">source</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">generate</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;client&#39;</span><span class="tok-p">,</span>
+<span class="tok-w">            </span><span class="tok-nx">filename</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;case.svelte.js&#39;</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-kc">null</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">catch</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">error</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-cm">/** @type {Error} */</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">error</span><span class="tok-p">).</span><span class="tok-nx">message</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+
+<span class="tok-nx">describe</span><span class="tok-p">(</span><span class="tok-s1">&#39;$state 在 class 里的合法 / 非法位置&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 两种写法：作为属性和构造方法的首次赋值都正确</span>
+<span class="tok-cm">     * 注意 $state 是作为字符串存在的</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;文档里的两种写法都能正常编译&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">compileError</span><span class="tok-p">(</span><span class="tok-sb">`</span>
+<span class="tok-sb">            export class Todo {</span>
+<span class="tok-sb">                done = $state(false);</span>
+<span class="tok-sb">                constructor(text) {</span>
+<span class="tok-sb">                    this.text = $state(text);</span>
+<span class="tok-sb">                }</span>
+<span class="tok-sb">            }</span>
+<span class="tok-sb">        `</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">message</span><span class="tok-p">).</span><span class="tok-nx">toBeNull</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-c1">// 注意 $state 是作为字符串存在的</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;private 私有字段也能正常编译&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">compileError</span><span class="tok-p">(</span><span class="tok-sb">`</span>
+<span class="tok-sb">            export class Todo {</span>
+<span class="tok-sb">                #done = $state(false);</span>
+<span class="tok-sb">            }</span>
+<span class="tok-sb">        `</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">message</span><span class="tok-p">).</span><span class="tok-nx">toBeNull</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-c1">// 注意 $state 是作为字符串存在的</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;构造函数里「非首次」赋值会编译报错&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">compileError</span><span class="tok-p">(</span><span class="tok-sb">`</span>
+<span class="tok-sb">            export class Todo {</span>
+<span class="tok-sb">                constructor(text) {</span>
+<span class="tok-sb">                    this.text = text;</span>
+<span class="tok-sb">                    this.text = $state(text);  // 这不是首次赋值</span>
+<span class="tok-sb">                }</span>
+<span class="tok-sb">            }</span>
+<span class="tok-sb">        `</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">message</span><span class="tok-p">).</span><span class="tok-nx">toContain</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-s1">&#39;Cannot assign to a state field before its declaration&#39;</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-c1">// 注意 $state 是作为字符串存在的</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;在普通方法里用 $state 赋值会编译报错&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">compileError</span><span class="tok-p">(</span><span class="tok-sb">`</span>
+<span class="tok-sb">            export class Todo {</span>
+<span class="tok-sb">                addNote() {</span>
+<span class="tok-sb">                    this.note = $state(&#39;x&#39;); // addNote 是一个普通的方法，不能用 $state</span>
+<span class="tok-sb">                }</span>
+<span class="tok-sb">            }</span>
+<span class="tok-sb">        `</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-c1">// 只能在类的构造器中使用 $state</span>
+<span class="tok-w">        </span><span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">message</span><span class="tok-p">).</span><span class="tok-nx">toContain</span><span class="tok-p">(</span>
+<span class="tok-w">            </span><span class="tok-s1">&#39;the first assignment to a class field at the top level of the constructor&#39;</span>
+<span class="tok-w">        </span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * 只有三种情况可以使用 $state:</span>
+<span class="tok-cm">     * `$state(...)` can only be used as a variable declaration initializer, a class field declaration, or the first assignment to a class field at the top level of the constructor.</span>
+<span class="tok-cm">     */</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_todo_页面定义">Todo 页面定义</h6>
+<div class="listingblock">
+<div class="title">#file src/routes/state-class/+page.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;$lib/state-class/Todo.svelte.js&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/** class 实例组成的数组：数组本身被 proxy，实例本身不会 */</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">todos</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">([</span>
+<span class="tok-w">    </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-p">(</span><span class="tok-s1">&#39;读 Svelte 文档&#39;</span><span class="tok-p">),</span>
+<span class="tok-w">    </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-p">(</span><span class="tok-s1">&#39;写验证代码&#39;</span><span class="tok-p">)</span>
+<span class="tok-p">]);</span>
+
+<span class="tok-c1">// 用一句话理解：doneCount 是一个&quot;会自动重新计算的数字&quot;，只要跟它相关的数据一变，Svelte 就会自动重算，然后模板里用到它的地方自动更新。</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">doneCount</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$derived</span><span class="tok-p">(</span>
+<span class="tok-w">    </span><span class="tok-nx">todos</span><span class="tok-p">.</span><span class="tok-nx">filter</span><span class="tok-p">((</span><span class="tok-nx">todo</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">done</span><span class="tok-p">).</span><span class="tok-nx">length</span>
+<span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 计算 todos 已完成个数</span>
+
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">draft</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 定义新增待办响应式变量</span>
+
+<span class="tok-cm">/** @param {SubmitEvent} event */</span>
+<span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">addTodo</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-cm">/* 不阻止浏览器的默认行为会发生什么</span>
+<span class="tok-cm">        浏览器的默认动作是：把表单字段序列化，然后导航到 action 指定的 URL——这里没有 action，就导航到当前页面地址（/state-class?）。</span>
+<span class="tok-cm">        结果是一次整页刷新，后果是：</span>
+<span class="tok-cm">            todos、draft 这些 $state 全部被重置，刚加的待办没了；</span>
+<span class="tok-cm">            地址栏会多出一个 ?；</span>
+<span class="tok-cm">            页面会闪一下（重新走一次 SSR/ hydration</span>
+<span class="tok-cm">    */</span>
+<span class="tok-w">    </span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">draft</span><span class="tok-p">.</span><span class="tok-nx">trim</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">)</span><span class="tok-w">  </span><span class="tok-c1">// 没有输入内容则退出函数</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nx">todos</span><span class="tok-p">.</span><span class="tok-nx">push</span><span class="tok-p">(</span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-p">(</span><span class="tok-nx">text</span><span class="tok-p">));</span>
+<span class="tok-w">    </span><span class="tok-nx">draft</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">svelte:head</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>$state in class 验证<span class="tok-p">&lt;/</span><span class="tok-nt">title</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">svelte:head</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">main</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;mx-auto max-w-xl space-y-6 p-8&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;space-y-2&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">h1</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-2xl font-bold&quot;</span><span class="tok-p">&gt;</span>$state 用在 class 里<span class="tok-p">&lt;/</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">p</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-sm text-gray-600&quot;</span><span class="tok-p">&gt;</span>
+            已完成
+            <span class="tok-p">&lt;</span><span class="tok-nt">strong</span> <span class="tok-na">data-testid</span><span class="tok-o">=</span><span class="tok-s">&quot;done-count&quot;</span><span class="tok-p">&gt;</span>
+                {doneCount} / {todos.length}
+            <span class="tok-p">&lt;/</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">form</span> <span class="tok-na">onsubmit</span><span class="tok-o">=</span><span class="tok-s">{addTodo}</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;flex gap-2&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">input</span>
+            <span class="tok-na">bind:value</span><span class="tok-o">=</span><span class="tok-s">{draft}</span>
+            <span class="tok-na">data-testid</span><span class="tok-o">=</span><span class="tok-s">&quot;draft-input&quot;</span>
+            <span class="tok-na">placeholder</span><span class="tok-o">=</span><span class="tok-s">&quot;添加一条待办&quot;</span>
+            <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;flex-1 rounded border px-3 py-2&quot;</span>
+        <span class="tok-p">/&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;submit&quot;</span>
+                <span class="tok-na">data-testid</span><span class="tok-o">=</span><span class="tok-s">&quot;add&quot;</span>
+                <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded bg-blue-600 px-4 py-2 text-white&quot;</span><span class="tok-p">&gt;</span>
+            添加
+        <span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">form</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">ul</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;space-y-2&quot;</span><span class="tok-p">&gt;</span>
+        {#each todos as todo, index (todo)}
+            <span class="tok-p">&lt;</span><span class="tok-nt">li</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;flex items-center gap-3 rounded border px-3 py-2&quot;</span><span class="tok-p">&gt;</span>
+                <span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;checkbox&quot;</span>
+                       <span class="tok-na">bind:checked</span><span class="tok-o">=</span><span class="tok-s">{todo.done}</span>
+                       <span class="tok-na">data-testid</span><span class="tok-o">=</span><span class="tok-s">&quot;todo-done-{index}&quot;</span>
+                <span class="tok-p">/&gt;</span>
+                <span class="tok-p">&lt;</span><span class="tok-nt">input</span>
+                    <span class="tok-na">bind:value</span><span class="tok-o">=</span><span class="tok-s">{todo.text}</span>
+                    <span class="tok-na">data-testid</span><span class="tok-o">=</span><span class="tok-s">&quot;todo-input-{index}&quot;</span>
+                    <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;flex-1 rounded border px-2 py-1&quot;</span>
+                <span class="tok-p">/&gt;</span>
+                <span class="tok-p">&lt;</span><span class="tok-nt">span</span>
+                    <span class="tok-na">data-testid</span><span class="tok-o">=</span><span class="tok-s">&quot;todo-text-{index}&quot;</span>
+                    <span class="tok-na">class:text-gray-400</span><span class="tok-o">=</span><span class="tok-s">{todo.done}</span>
+                    <span class="tok-na">class:line-through</span><span class="tok-o">=</span><span class="tok-s">{todo.done}</span>
+                <span class="tok-p">&gt;</span>
+                    {todo.text}
+                <span class="tok-p">&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
+                <span class="tok-p">&lt;</span><span class="tok-nt">button</span>
+                    <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;button&quot;</span>
+                    <span class="tok-na">data-testid</span><span class="tok-o">=</span><span class="tok-s">&quot;reset-{index}&quot;</span>
+                    <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{()</span> <span class="tok-err">=</span><span class="tok-p">&gt;</span> todo.reset()}
+                    class=&quot;rounded border px-2 py-1 text-sm&quot;
+                &gt;
+                    reset()
+                <span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;/</span><span class="tok-nt">li</span><span class="tok-p">&gt;</span>
+        {/each}
+    <span class="tok-p">&lt;/</span><span class="tok-nt">ul</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-sm text-gray-500&quot;</span><span class="tok-p">&gt;</span>
+        勾选 checkbox 或修改文本，上方内容立即变化，说明「字段声明处」和「构造函数里」的
+        <span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>$state<span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span> 都生效了。
+    <span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">main</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-cm">&lt;!--</span>
+<span class="tok-cm">可视化页面 `/state-class`</span>
+<span class="tok-cm">--&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_todo_页面测试">Todo 页面测试</h6>
+<div class="listingblock">
+<div class="title">#file src/routes/state-class/page.svelte.spec.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// 注意：不能叫 +page.svelte.spec.js —— SvelteKit 保留 `+` 前缀，会让 svelte-kit sync 直接失败。</span>
+<span class="tok-c1">// 去掉 + 之后依然匹配 vitest client 项目的 include：`src/**/*.svelte.{test,spec}.{js,ts}`</span>
+
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">page</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;vitest/browser&#39;</span><span class="tok-p">;</span>
+<span class="tok-c1">// describe: 分成组进行测试</span>
+<span class="tok-c1">// it: 相当于 test，是个测试单元</span>
+<span class="tok-c1">// expect: 期望的值</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">describe</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">it</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;vitest&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">render</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;vitest-browser-svelte&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">Page</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./+page.svelte&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-nx">describe</span><span class="tok-p">(</span><span class="tok-s1">&#39;/state-class 页面&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;初始渲染出两条待办&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">render</span><span class="tok-p">(</span><span class="tok-nx">Page</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;done-count&#39;</span><span class="tok-p">)).</span><span class="tok-nx">toHaveTextContent</span><span class="tok-p">(</span><span class="tok-s1">&#39;0 / 2&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-text-0&#39;</span><span class="tok-p">)).</span><span class="tok-nx">toHaveTextContent</span><span class="tok-p">(</span><span class="tok-s1">&#39;读 Svelte 文档&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-text-1&#39;</span><span class="tok-p">)).</span><span class="tok-nx">toHaveTextContent</span><span class="tok-p">(</span><span class="tok-s1">&#39;写验证代码&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;勾选 checkbox 后计数实时更新（class 字段声明处的 $state 生效）&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">render</span><span class="tok-p">(</span><span class="tok-nx">Page</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-done-0&#39;</span><span class="tok-p">).</span><span class="tok-nx">click</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;done-count&#39;</span><span class="tok-p">)).</span><span class="tok-nx">toHaveTextContent</span><span class="tok-p">(</span><span class="tok-s1">&#39;1 / 2&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;编辑输入框会同步更新展示（构造函数里的 $state 生效）&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">render</span><span class="tok-p">(</span><span class="tok-nx">Page</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-input-0&#39;</span><span class="tok-p">).</span><span class="tok-nx">fill</span><span class="tok-p">(</span><span class="tok-s1">&#39;读 Svelte 5 runes 文档&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-text-0&#39;</span><span class="tok-p">))</span>
+<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-nx">toHaveTextContent</span><span class="tok-p">(</span><span class="tok-s1">&#39;读 Svelte 5 runes 文档&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;点击 reset() 会清空文本并取消勾选&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">render</span><span class="tok-p">(</span><span class="tok-nx">Page</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-done-0&#39;</span><span class="tok-p">).</span><span class="tok-nx">click</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-input-0&#39;</span><span class="tok-p">).</span><span class="tok-nx">fill</span><span class="tok-p">(</span><span class="tok-s1">&#39;临时内容&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;done-count&#39;</span><span class="tok-p">)).</span><span class="tok-nx">toHaveTextContent</span><span class="tok-p">(</span><span class="tok-s1">&#39;1 / 2&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;reset-0&#39;</span><span class="tok-p">).</span><span class="tok-nx">click</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-input-0&#39;</span><span class="tok-p">)).</span><span class="tok-nx">toHaveValue</span><span class="tok-p">(</span><span class="tok-s1">&#39;&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-done-0&#39;</span><span class="tok-p">)).</span><span class="tok-nx">not</span><span class="tok-p">.</span><span class="tok-nx">toBeChecked</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;done-count&#39;</span><span class="tok-p">)).</span><span class="tok-nx">toHaveTextContent</span><span class="tok-p">(</span><span class="tok-s1">&#39;0 / 2&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-nx">it</span><span class="tok-p">(</span><span class="tok-s1">&#39;新增待办后仍然具备响应式&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-k">async</span><span class="tok-w"> </span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">render</span><span class="tok-p">(</span><span class="tok-nx">Page</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;draft-input&#39;</span><span class="tok-p">).</span><span class="tok-nx">fill</span><span class="tok-p">(</span><span class="tok-s1">&#39;跑一遍测试&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;add&#39;</span><span class="tok-p">).</span><span class="tok-nx">click</span><span class="tok-p">();</span>
+
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;done-count&#39;</span><span class="tok-p">)).</span><span class="tok-nx">toHaveTextContent</span><span class="tok-p">(</span><span class="tok-s1">&#39;0 / 3&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-text-2&#39;</span><span class="tok-p">)).</span><span class="tok-nx">toHaveTextContent</span><span class="tok-p">(</span><span class="tok-s1">&#39;跑一遍测试&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;todo-done-2&#39;</span><span class="tok-p">).</span><span class="tok-nx">click</span><span class="tok-p">();</span>
+
+<span class="tok-w">        </span><span class="tok-k">await</span><span class="tok-w"> </span><span class="tok-nx">expect</span><span class="tok-p">.</span><span class="tok-nx">element</span><span class="tok-p">(</span><span class="tok-nx">page</span><span class="tok-p">.</span><span class="tok-nx">getByTestId</span><span class="tok-p">(</span><span class="tok-s1">&#39;done-count&#39;</span><span class="tok-p">)).</span><span class="tok-nx">toHaveTextContent</span><span class="tok-p">(</span><span class="tok-s1">&#39;1 / 3&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_3_验证结论">3. 验证结论</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_两种写法都生效">两种写法都生效</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 50%;">
+<col style="width: 16.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">写法</th>
+<th class="tableblock halign-left valign-top">行为</th>
+<th class="tableblock halign-left valign-top">结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>done = $state(false)</code>（字段声明）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">改 <code>todo.done</code> 时 effect 重跑（runs 1 → 2）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✅ 响应式生效</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>this.text = $state(text)</code>（构造函数首次赋值）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">改 <code>todo.text</code> 时 effect 重跑</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✅ 响应式生效</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>#done = $state(false)</code>（private 字段）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">编译为 <code>$.state(false)</code> + <code>$.get/$.set</code>，effect 重跑</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✅ 也生效</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">调用 <code>reset()</code> 后两个字段仍响应式</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">两个 effect 在重置后各自再重跑</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✅ 生效</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_实例确实没有被_proxy">实例确实没有被 proxy</h6>
+<div class="paragraph">
+<p>给实例后加一个普通属性，值写进去了，但 effect <strong>没有</strong>重跑——这正是文档说的「只对显式包了 <code>$state</code> 的字段生效」：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-cm">/** @type {Todo &amp; { note?: string }} */</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Todo</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">tracker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">note</span><span class="tok-p">);</span>
+
+<span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">run</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">note</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;not reactive&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// 写进去了</span>
+<span class="tok-p">});</span>
+
+<span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">note</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;not reactive&#39;</span><span class="tok-p">);</span>
+<span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">1</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// effect 没重跑 =&gt; 实例不是 proxy</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_解构会丢失响应式">解构会丢失响应式</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">;</span><span class="tok-w">          </span><span class="tok-c1">// 只是快照</span>
+<span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">tracker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">createTracker</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">text</span><span class="tok-p">);</span>
+
+<span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">run</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;changed&#39;</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-p">});</span>
+
+<span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">todo</span><span class="tok-p">.</span><span class="tok-nx">text</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;changed&#39;</span><span class="tok-p">);</span>
+<span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">text</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-s1">&#39;learn svelte&#39;</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 局部变量不会跟着变</span>
+<span class="tok-nx">expect</span><span class="tok-p">(</span><span class="tok-nx">tracker</span><span class="tok-p">.</span><span class="tok-nx">runs</span><span class="tok-p">).</span><span class="tok-nx">toBe</span><span class="tok-p">(</span><span class="tok-mf">1</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_4_首次赋值是编译期强制的">4. 首次赋值是编译期强制的</h6>
+<div class="paragraph">
+<p>通过 <code>compileModule(source, { generate: 'client' })</code> 直接编译源码得到验证：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">写法</th>
+<th class="tableblock halign-left valign-top">编译结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">文档里的两种写法 / private 字段</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">正常编译（无报错）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">构造函数里先 <code>this.text = text</code> 再 <code>this.text = $state(text)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">报错 <code>Cannot assign to a state field before its declaration</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">在普通方法里 <code>this.note = $state('x')</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">报错 <code>state_invalid_placement</code>（消息要求写在构造函数顶层对字段的首次赋值）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_5_页面可视化">5. 页面可视化</h6>
+<div class="paragraph">
+<p>手工对网站进行测试 <code>npm run dev</code> 后访问 <code>/state-class</code>：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>勾选 checkbox、编辑输入框、`reset()`、新增待办都会实时更新 DOM。</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>使用工具自动对网站进行测试 <code>page.svelte.spec.js</code> 用 Playwright 覆盖了这些行为。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_6_运行结果">6. 运行结果</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp">$ </span>npm<span class="tok-w"> </span>run<span class="tok-w"> </span><span class="tok-nb">test</span>
+<span class="tok-go">Test Files  6 passed (6)</span>
+<span class="tok-go">     Tests  19 passed (19)</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-gp">$ </span>npm<span class="tok-w"> </span>run<span class="tok-w"> </span>build<span class="tok-w">     </span><span class="tok-c1"># 通过</span>
+<span class="tok-gp">$ </span>npm<span class="tok-w"> </span>run<span class="tok-w"> </span>check<span class="tok-w">     </span><span class="tok-c1"># 新增文件零类型错误</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="❕"></i>
+</td>
+<td class="content">
+本机首次运行 <code>npm run test</code> 需要先 <code>npx playwright install chromium</code>（client 项目依赖浏览器；既有的 <code>Welcome.svelte.spec.js</code> 也同样需要）。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_7_小结">7. 小结</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>文档里的 <code>Todo</code> 类写法<strong>完全正确</strong>。</p>
+</li>
+<li>
+<p><code>$state</code> 可放在：class 字段声明（public 或 private）、构造函数里对属性的<strong>首次</strong>赋值。</p>
+</li>
+<li>
+<p>实例不被 proxy：只有显式用 <code>$state</code> 包装的字段才有响应式；后加属性、解构出来的变量都不具备响应式。</p>
+</li>
+<li>
+<p>「首次赋值」由编译器强制，写错位置会直接报编译错误。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_内置响应式类">内置响应式类</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/$state#Built-in-classes" class="bare">https://svelte.dev/docs/svelte/$state#Built-in-classes</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_state_raw_禁止深度响应式">$state.raw 禁止深度响应式</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_state_snapshot_从响应式变量中提取快照给第三方库或者api传值用">$state.snapshot 从响应式变量中提取快照，给第三方库或者api传值用</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_state_eager_乐观更新ui">$state.eager 乐观更新UI</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_passing_state_into_functions">Passing-state-into-functions</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/$state#Passing-state-into-functions" class="bare">https://svelte.dev/docs/svelte/$state#Passing-state-into-functions</a></p>
+</div>
+<div class="listingblock">
+<div class="title">用类的方式来实现传递响应式到函数中</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">class</span><span class="tok-w"> </span><span class="tok-nx">Adder</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-err">#</span><span class="tok-nx">input</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kr">constructor</span><span class="tok-p">(</span><span class="tok-nx">input</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">input</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">input</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-nx">get</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">input</span><span class="tok-p">.</span><span class="tok-nx">a</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-k">this</span><span class="tok-p">.</span><span class="tok-err">#</span><span class="tok-nx">input</span><span class="tok-p">.</span><span class="tok-nx">b</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">}</span>
+
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">input</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">({</span><span class="tok-w"> </span><span class="tok-nx">a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">b</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">2</span><span class="tok-w"> </span><span class="tok-p">});</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">total</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">Adder</span><span class="tok-p">(</span><span class="tok-nx">input</span><span class="tok-p">);</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">total</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 3</span>
+
+<span class="tok-nx">input</span><span class="tok-p">.</span><span class="tok-nx">a</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">3</span><span class="tok-p">;</span>
+<span class="tok-nx">input</span><span class="tok-p">.</span><span class="tok-nx">b</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">4</span><span class="tok-p">;</span>
+<span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">total</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// 7</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_passing_state_across_modules">Passing state across modules</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/$state#Passing-state-across-modules" class="bare">https://svelte.dev/docs/svelte/$state#Passing-state-across-modules</a></p>
+</div>
+<div class="paragraph">
+<p>参考官网的例子，可选为</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>导出响应式的对象</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-c1">// This is allowed — since we&#39;re updating</span>
+<span class="tok-c1">// `counter.count` rather than `counter`,</span>
+<span class="tok-c1">// Svelte doesn&#39;t wrap it in `$.state`</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">counter</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">({</span>
+<span class="tok-w">	</span><span class="tok-nx">count</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">0</span>
+<span class="tok-p">});</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">increment</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">	</span><span class="tok-nx">counter</span><span class="tok-p">.</span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>只导出操作的函数，不导出响应式</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">);</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">getCount</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">	</span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">increment</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">	</span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_derived_包含简单的表达式">$derived()    包含简单的表达式</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-o">&gt;</span>
+<span class="tok-w">	</span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">);</span>
+<span class="tok-w">	</span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">doubled</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$derived</span><span class="tok-p">(</span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mf">2</span><span class="tok-p">);</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span>
+
+<span class="tok-o">&lt;</span><span class="tok-nx">button</span><span class="tok-w"> </span><span class="tok-nx">onclick</span><span class="tok-o">=</span><span class="tok-p">{()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-o">++</span><span class="tok-p">}</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-p">{</span><span class="tok-nx">doubled</span><span class="tok-p">}</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/button&gt;</span>
+
+<span class="tok-o">&lt;</span><span class="tok-nx">p</span><span class="tok-o">&gt;</span><span class="tok-p">{</span><span class="tok-nx">count</span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-nx">doubled</span><span class="tok-w"> </span><span class="tok-nx">is</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-nx">doubled</span><span class="tok-p">}</span><span class="tok-o">&lt;</span><span class="tok-err">/p&gt;</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_derived_by_包含更复杂的语句">$derived.by() 包含更复杂的语句</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_overriding_derived_values_乐观更新ui">Overriding derived values 乐观更新UI</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/$derived#Overriding-derived-values" class="bare">https://svelte.dev/docs/svelte/$derived#Overriding-derived-values</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_deriveds_and_reactivity">Deriveds and reactivity</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/$derived#Deriveds-and-reactivity" class="bare">https://svelte.dev/docs/svelte/$derived#Deriveds-and-reactivity</a></p>
+</div>
+<div class="paragraph">
+<p>需要注意 $derived() 也可能会影响 $state 定义的变量内容。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">items</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">([</span><span class="tok-w"> </span><span class="tok-cm">/*...*/</span><span class="tok-w"> </span><span class="tok-p">]);</span>
+
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">index</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">);</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">selected</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$derived</span><span class="tok-p">(</span><span class="tok-nx">items</span><span class="tok-p">[</span><span class="tok-nx">index</span><span class="tok-p">]);</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_destructuring">Destructuring</h4>
+<div class="paragraph">
+<p>$derived 被解构后，解构出来的变量，依然是响应式的。</p>
+</div>
+<div class="listingblock">
+<div class="title">这个例子更容易理解</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">100</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">quantity</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">2</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">discount</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">0.9</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">total</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">count</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">finalPrice</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$derived</span><span class="tok-p">({</span>
+<span class="tok-w">        </span><span class="tok-nx">total</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-nx">quantity</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">count</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">quantity</span><span class="tok-p">,</span>
+<span class="tok-w">        </span><span class="tok-nx">finalPrice</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">price</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-nx">quantity</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-nx">discount</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>商品数量：{count}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>原价：{total}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>折后价：{finalPrice}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{()</span> <span class="tok-err">=</span><span class="tok-p">&gt;</span> quantity++}&gt;
+    增加一个
+<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{()</span> <span class="tok-err">=</span><span class="tok-p">&gt;</span> discount -= 0.1}&gt;
+    再打九折
+<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_effect">$effect</h3>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/$effect" class="bare">https://svelte.dev/docs/svelte/$effect</a></p>
+</div>
+<div class="paragraph">
+<p>Effects are functions that run when state updates, and can be used for things like calling third-party libraries, drawing on &lt;canvas&gt; elements, or making network requests. They only run in the browser, not during server-side rendering.
+写在 $effect 中可以被监测到的响应式变量有更新时，$effect函数中的代码就会运行。可以应用到调用第三方库、画画、做网络访问请求。
+$effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。</p>
+</div>
+<div class="paragraph">
+<p>Generally speaking, you should not update state inside effects, as it will make code more convoluted and will often lead to never-ending update cycles. If you find yourself doing so, see when not to use $effect to learn about alternative approaches.
+通常来讲，在 $effect 中不要去更新被它监测的变量，因为会特别复杂，也会导致死循环。一旦你这样做了，就去看看 <a href="https://svelte.dev/docs/svelte/$effect#When-not-to-use-$effect" class="bare">https://svelte.dev/docs/svelte/$effect#When-not-to-use-$effect</a></p>
+</div>
+<div class="paragraph">
+<p>举例如下：$effect 监测了 color and size，更改 size or color，则会执行 $effect 函数中的语句</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">size</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">50</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">color</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-s1">&#39;#ff3e00&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">canvas</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nx">$effect</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">context</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">canvas</span><span class="tok-p">.</span><span class="tok-nx">getContext</span><span class="tok-p">(</span><span class="tok-s1">&#39;2d&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">clearRect</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">canvas</span><span class="tok-p">.</span><span class="tok-nx">width</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">canvas</span><span class="tok-p">.</span><span class="tok-nx">height</span><span class="tok-p">);</span>
+
+<span class="tok-w">        </span><span class="tok-c1">// this will re-run whenever `color` or `size` change</span>
+<span class="tok-w">        </span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">fillStyle</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">color</span><span class="tok-p">;</span><span class="tok-w">  </span><span class="tok-c1">// 监测 color</span>
+<span class="tok-w">        </span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">fillRect</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">size</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">size</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 监测 size</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">canvas</span> <span class="tok-na">bind:this</span><span class="tok-o">=</span><span class="tok-s">{canvas}</span> <span class="tok-na">width</span><span class="tok-o">=</span><span class="tok-s">&quot;100&quot;</span> <span class="tok-na">height</span><span class="tok-o">=</span><span class="tok-s">&quot;100&quot;</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">canvas</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>
+        大小:
+        <span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;range&quot;</span> <span class="tok-na">min</span><span class="tok-o">=</span><span class="tok-s">&quot;10&quot;</span> <span class="tok-na">max</span><span class="tok-o">=</span><span class="tok-s">&quot;100&quot;</span> <span class="tok-na">bind:value</span><span class="tok-o">=</span><span class="tok-s">{size}</span> <span class="tok-p">/&gt;</span>
+        {size}
+    <span class="tok-p">&lt;/</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>
+        颜色:
+        <span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;color&quot;</span> <span class="tok-na">bind:value</span><span class="tok-o">=</span><span class="tok-s">{color}</span> <span class="tok-p">/&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_understanding_lifecycle">Understanding lifecycle</h4>
+<div class="paragraph">
+<p>Your effects run after the component has been mounted to the DOM, and in a microtask after state changes. Re-runs are batched (i.e. changing color and size in the same moment won’t cause two separate runs), and happen after any DOM updates have been applied.</p>
+</div>
+<div class="paragraph">
+<p>$effect 函数的执行在组件挂载之后，而且是在监测的响应式变量更新以后在微任务中执行。比如同时更改了 color and size，$effect 中的代码是在 DOM 更新后批量执行的，不会分开执行。</p>
+</div>
+<div class="paragraph">
+<p>You can use $effect anywhere, not just at the top level of a component, as long as it is called while a parent effect is running.</p>
+</div>
+<div class="paragraph">
+<p>$effect 不单单是只能在组件的顶层去使用，它在一个已有的 $effect 内部调用也是可以的，但是不能独立在函数或条件分支中直接调用。</p>
+</div>
+<div class="listingblock">
+<div class="title">不能用的例子</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">	</span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">);</span>
+
+<span class="tok-w">	</span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">setupEffect</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">		</span><span class="tok-c1">// ❌ 错误！没有父级 effect 在运行</span>
+<span class="tok-w">		</span><span class="tok-nx">$effect</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">			</span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-nx">count</span><span class="tok-p">);</span>
+<span class="tok-w">		</span><span class="tok-p">});</span>
+<span class="tok-w">	</span><span class="tok-p">}</span>
+
+<span class="tok-w">	</span><span class="tok-nx">setupEffect</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// 这里调用会报错</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>了解 teardown function 函数，在清理副作用时很有用。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_understanding_dependencies">Understanding dependencies</h4>
+<div class="paragraph">
+<p>$effect automatically picks up any reactive values ($state, $derived, $props) that are <strong>synchronously</strong> read inside its function body (including indirectly, via function calls) and registers them as dependencies. When those dependencies change, the $effect schedules a re-run.</p>
+</div>
+<div class="paragraph">
+<p>$effect 监测的 <strong>同步</strong> 运行的响应式变量们，在变化时，$effect 函数中的代码会重新运行。</p>
+</div>
+<div class="paragraph">
+<p>If $state and $derived are used directly inside the $effect (for example, during creation of a reactive class), those values will not be treated as dependencies.</p>
+</div>
+<div class="paragraph">
+<p>直接在 $effect 中使用 $state and $derived 定义的变量，就不能被当作 $effect 的依赖。</p>
+</div>
+<div class="paragraph">
+<p>Values that are read asynchronously — after an await or inside a setTimeout, for example — will not be tracked. Here, the canvas will be repainted when color changes, but not when size changes (demo):</p>
+</div>
+<div class="paragraph">
+<p>异步读取的响应式变量，也不会成为依赖。如下例 color 是依赖，size 还是依赖。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-nx">$effect</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">context</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">canvas</span><span class="tok-p">.</span><span class="tok-nx">getContext</span><span class="tok-p">(</span><span class="tok-s1">&#39;2d&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">clearRect</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">canvas</span><span class="tok-p">.</span><span class="tok-nx">width</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">canvas</span><span class="tok-p">.</span><span class="tok-nx">height</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// this will re-run whenever `color` changes...</span>
+<span class="tok-w">    </span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">fillStyle</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">color</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nx">setTimeout</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// ...but not when `size` changes</span>
+<span class="tok-w">        </span><span class="tok-nx">context</span><span class="tok-p">.</span><span class="tok-nx">fillRect</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">size</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">size</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-p">);</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An effect only reruns when the object it reads changes, not when a property inside it changes. (If you want to observe changes inside an object at dev time, you can use $inspect.)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">state</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">({</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-mf">0</span><span class="tok-w"> </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">derived</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$derived</span><span class="tok-p">({</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">state</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mf">2</span><span class="tok-w"> </span><span class="tok-p">});</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// this will run once, because `state` is never reassigned (only mutated)</span>
+<span class="tok-w">    </span><span class="tok-nx">$effect</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">state</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// this will run whenever `state.value` changes...</span>
+<span class="tok-w">    </span><span class="tok-nx">$effect</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">state</span><span class="tok-p">.</span><span class="tok-nx">value</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// ...and so will this, because `derived` is a new object each time</span>
+<span class="tok-w">    </span><span class="tok-nx">$effect</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">derived</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{()</span> <span class="tok-err">=</span><span class="tok-p">&gt;</span> (state.value += 1)}&gt;
+    {state.value}
+<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{state.value} doubled is {derived.value}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An effect only depends on the values that it read the last time it ran. This has interesting implications for effects that have conditional code.</p>
+</div>
+<div class="paragraph">
+<p>注意 $effect 能够监测响应式变量并重新运行的条件是：$effect 上次运行时读取了哪些响应式变量。</p>
+</div>
+<div class="paragraph">
+<p>For instance, if condition is true in the code snippet below, the code inside the if block will run and color will be evaluated. This means that changes to either condition or color will cause the effect to re-run.</p>
+</div>
+<div class="paragraph">
+<p>例如，上一次执行 $effect 函数时，condition 是 true 时，condition 和 color 都会被监测到。</p>
+</div>
+<div class="paragraph">
+<p>Conversely, if condition is false, color will not be evaluated, and the effect will only re-run again when condition changes.</p>
+</div>
+<div class="paragraph">
+<p>相反地，如果 condition 是 false，color 就不能被监测到，只有当 condition 变化时，$effect 才会重新运行。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">confetti</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;canvas-confetti&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">condition</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-kc">true</span><span class="tok-p">);</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">color</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-s1">&#39;#ff3e00&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-nx">$effect</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">condition</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">confetti</span><span class="tok-p">({</span><span class="tok-w"> </span><span class="tok-nx">colors</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">[</span><span class="tok-nx">color</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">confetti</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_effect_pre">$effect.pre</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/$effect#$effect.pre" class="bare">https://svelte.dev/docs/svelte/$effect#$effect.pre</a></p>
+</div>
+<div class="paragraph">
+<p>$effect.pre 为你提供了在 DOM 更新流程中介入的“前置钩子”，让你有机会在变化发生前读取 DOM 旧状态，从而做出更精确的、与布局相关的操作。</p>
+</div>
+<div class="paragraph">
+<p>比如这个官方的例子展示的是可以用到聊天工具的对话中，如微信聊天时当前对话来了新的消息，滚动条在屏幕底部附近时直接滚动到最底部，若滚动条在前面看历史记录时，则滚动条不动。</p>
+</div>
+<div class="paragraph">
+<p>在绝大多数情况下，应该使用标准的 $effect，它会在 DOM 更新之后运行。只有在极少数需要在浏览器绘制新帧之前，读取或操作即将更新的 DOM 状态时，才需要使用 $effect.pre。</p>
+</div>
+<div class="listingblock">
+<div class="title">这个例子只是展示打印先后而已</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">div</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-nx">$effect</span><span class="tok-p">.</span><span class="tok-nx">pre</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;🟡 [pre] DOM 文本:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">div</span><span class="tok-o">?</span><span class="tok-p">.</span><span class="tok-nx">textContent</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-s1">&#39;未挂载&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;🟡 [pre] count 状态:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+
+<span class="tok-w">    </span><span class="tok-nx">$effect</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;🟢 [普通] DOM 文本:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">div</span><span class="tok-o">?</span><span class="tok-p">.</span><span class="tok-nx">textContent</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-s1">&#39;未挂载&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;🟢 [普通] count 状态:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span>
+
+<span class="tok-o">&lt;</span><span class="tok-nx">div</span><span class="tok-w"> </span><span class="tok-nx">bind</span><span class="tok-o">:</span><span class="tok-k">this</span><span class="tok-o">=</span><span class="tok-p">{</span><span class="tok-nx">div</span><span class="tok-p">}</span><span class="tok-o">&gt;</span><span class="tok-nx">Count</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-nx">count</span><span class="tok-p">}</span><span class="tok-o">&lt;</span><span class="tok-err">/div&gt;</span>
+<span class="tok-o">&lt;</span><span class="tok-nx">button</span><span class="tok-w"> </span><span class="tok-nx">onclick</span><span class="tok-o">=</span><span class="tok-p">{()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-o">++</span><span class="tok-p">}</span><span class="tok-o">&gt;</span><span class="tok-nx">增加</span><span class="tok-o">&lt;</span><span class="tok-err">/button&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_effect_tracking">$effect.tracking</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/$effect#$effect.tracking" class="bare">https://svelte.dev/docs/svelte/$effect#$effect.tracking</a></p>
+</div>
+<div class="paragraph">
+<p>高级工具，95% 情况用不到。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_effect_pending">$effect.pending</h4>
+<div class="paragraph">
+<p>直接在 svelte5 中集成了实现骨架屏或者加载中功能，比 vue 要使用 nuxt 的 useFetch 更加直观和方便。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_effect_root">$effect.root</h4>
+<div class="paragraph">
+<p>在这儿使用过 src/lib/state-class/tracker.svelte.js</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_props">$props</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>功能是实现父子组件之间的传值，一般都是从父组件传值给子组件。</p>
+</li>
+<li>
+<p>子组件解构时定义的 callback valus 不是响应式的。</p>
+</li>
+<li>
+<p>子组件解构变量时可以重新命名变量。</p>
+</li>
+<li>
+<p>可以使用 rest 收集剩余的参数。</p>
+</li>
+<li>
+<p>父组件传入的数据变化时，子组件接收到的数据也会跟着变化。</p>
+</li>
+<li>
+<p>子组件改变父组件传入的数据时分情况</p>
+<div class="literalblock">
+<div class="content">
+<pre>6.1 父组件传入的是普通对象，子组件的更改不会有响应式的效果。
+6.2 父组件传入的是响应式数据，子组件的更改会有响应式的效果，但是会报警告说子组件修改的数据不是子组件自己的。
+6.3 子组件接收 props 时定义的默认值 fallback 没有响应式的效果。
+6.4 除非使用了 $bindable 才可以双向绑定。</pre>
+</div>
+</div>
+</li>
+<li>
+<p>props 是可以写类型安全的。 <a href="https://svelte.dev/docs/svelte/$props#Type-safety" class="bare">https://svelte.dev/docs/svelte/$props#Type-safety</a></p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_props_id">$props.id</h4>
+<div class="paragraph">
+<p>文档：https://svelte.dev/docs/svelte/$props#$props.id()</p>
+</div>
+<div class="paragraph">
+<p>作用: 生成一个<strong>在当前组件实例内唯一且稳定</strong>的 id，主要用于表单元素的可访问性（<code>label</code> 和 <code>input</code> 的 <code>for</code>/<code>id</code> 配对）。</p>
+</div>
+<div class="paragraph">
+<p>基本用法</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">  </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">uid</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$props</span><span class="tok-p">.</span><span class="tok-nx">id</span><span class="tok-p">();</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">label</span> <span class="tok-na">for</span><span class="tok-o">=</span><span class="tok-s">&quot;{uid}-firstname&quot;</span><span class="tok-p">&gt;</span>First Name:<span class="tok-p">&lt;/</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;{uid}-firstname&quot;</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-p">/&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">label</span> <span class="tok-na">for</span><span class="tok-o">=</span><span class="tok-s">&quot;{uid}-lastname&quot;</span><span class="tok-p">&gt;</span>Last Name:<span class="tok-p">&lt;/</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">id</span><span class="tok-o">=</span><span class="tok-s">&quot;{uid}-lastname&quot;</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-p">/&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>要点：调用一次，存到变量，用后缀拼出多个 id。</strong></p>
+</div>
+<div class="paragraph">
+<p>为什么需要它</p>
+</div>
+<div class="paragraph">
+<p><strong>核心价值：同一组件被渲染多次时，避免 id 冲突。</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="svelte"><span></span>&lt;NameForm /&gt;
+&lt;NameForm /&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>写死 <code>id="firstname"</code> → 页面上出现重复 id，<code>&lt;label&gt;</code> 全指向第一个 input，可访问性坏掉</p>
+</li>
+<li>
+<p>用 <code>$props.id()</code> → 每个实例拿到不同 id（如 <code>svelte-1a2b3c</code>、<code>svelte-4d5e6f</code>），互不干扰</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>关键结论</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>组件会被多次实例化（可复用组件、表单等），有意义，刚需</p>
+</li>
+<li>
+<p>组件在整个应用中只会渲染一次，写死字符串也行</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>补充</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SSR 场景下，服务端和客户端需要生成<strong>一致的 id</strong> 才能 hydration 成功，<code>$props.id()</code> 内部会处理。</p>
+</li>
+<li>
+<p><strong>不能</strong>用 <code>Math.random()</code> 之类的代替，会破坏 hydration。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>一句话记忆: 它不是为了"在一个组件里区分多个 id"，而是为了"<strong>让同一组件的不同实例之间 id 不冲突</strong>"。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_bindable">$bindable</h3>
+<div class="paragraph">
+<p>通常父子组件之间的数据流向是从父组件到子组件。</p>
+</div>
+<div class="paragraph">
+<p>不要经常使用，会使用数据流不可预测，也会使组件难以维护。但确实可以简化代码，小心使用吧。</p>
+</div>
+<div class="paragraph">
+<p>使用了 $bindable 就可以在子组件中去更改父组件传入的响应式变量了。</p>
+</div>
+<div class="listingblock">
+<div class="title">App.svelte 父组件</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">FancyInput</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./FancyInput.svelte&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-s1">&#39;hello&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">FancyInput</span> <span class="tok-na">bind:value</span><span class="tok-o">=</span><span class="tok-s">{message}</span> <span class="tok-p">/&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{message}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">FancyInput.svelte 子组件</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$bindable</span><span class="tok-p">(),</span><span class="tok-w"> </span><span class="tok-p">...</span><span class="tok-nx">props</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$props</span><span class="tok-p">();</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+// input 处的 bind 是标签 input 自己的，和本例无关
+<span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">bind:value</span><span class="tok-o">=</span><span class="tok-s">{value}</span> <span class="tok-err">{...</span><span class="tok-na">props</span><span class="tok-err">}</span> <span class="tok-p">/&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-nt">input</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">font-family</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-s1">&#39;Comic Sans MS&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">deeppink</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_inspect_打印监测的响应式变量">$inspect 打印监测的响应式变量</h3>
+<div class="paragraph">
+<p>在开发模式使用，在生产模式下会被编译成空操作。</p>
+</div>
+<div class="listingblock">
+<div class="title">监测响应式变量</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-s1">&#39;hello&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-nx">$inspect</span><span class="tok-p">(</span><span class="tok-nx">count</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// will console.log when `count` or `message` change</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{()</span> <span class="tok-err">=</span><span class="tok-p">&gt;</span> count++}&gt;Increment<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">bind:value</span><span class="tok-o">=</span><span class="tok-s">{message}</span> <span class="tok-p">/&gt;</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_inspect_with_替代_console_log">$inspect(&#8230;&#8203;).with 替代 console.log</h4>
+<div class="paragraph">
+<p>可以自定义操作，取代 console.log()</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-nx">$inspect</span><span class="tok-p">(</span><span class="tok-nx">count</span><span class="tok-p">).</span><span class="tok-kd">with</span><span class="tok-p">((</span><span class="tok-nx">type</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">type</span><span class="tok-w"> </span><span class="tok-o">===</span><span class="tok-w"> </span><span class="tok-s1">&#39;update&#39;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-k">debugger</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// or `console.trace`, or whatever you want</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span>
+
+<span class="tok-o">&lt;</span><span class="tok-nx">button</span><span class="tok-w"> </span><span class="tok-nx">onclick</span><span class="tok-o">=</span><span class="tok-p">{()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-o">++</span><span class="tok-p">}</span><span class="tok-o">&gt;</span><span class="tok-nx">Increment</span><span class="tok-o">&lt;</span><span class="tok-err">/button&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_inspect_trace_查看哪个变量引起的副作用">$inspect.trace(&#8230;&#8203;) 查看哪个变量引起的副作用</h4>
+<div class="paragraph">
+<p>查看是哪个变量导致的 $effect 被执行了</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-o">&lt;</span><span class="tok-nx">script</span><span class="tok-o">&gt;</span>
+<span class="tok-w">    </span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">doSomeWork</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./elsewhere&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-nx">$effect</span><span class="tok-p">(()</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// $inspect.trace must be the first statement of a function body</span>
+<span class="tok-w">        </span><span class="tok-nx">$inspect</span><span class="tok-p">.</span><span class="tok-nx">trace</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-nx">doSomeWork</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-o">&lt;</span><span class="tok-err">/script&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_host">$host</h3>
+<div class="paragraph">
+<p>可以打包成 web component 组件，供其他 js 框架使用。比如让 react / vue3 / 纯js 都可以调用。</p>
+</div>
+<div class="paragraph">
+<p>$host 可以让你写的 web components 去和宿主进行事件沟通。</p>
+</div>
+<div class="paragraph">
+<p>可以参考官网的例子：https://svelte.dev/docs/svelte/$host</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_template_syntax">Template Syntax</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_markup">Basic markup</h3>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/basic-markup" class="bare">https://svelte.dev/docs/svelte/basic-markup</a></p>
+</div>
+<div class="sect3">
+<h4 id="_tag">tag</h4>
+<div class="sect4">
+<h5 id="_小写字母就是普通的_html_标签">小写字母就是普通的 html 标签</h5>
+<div class="listingblock">
+<div class="title">src/routes/template-syntax/tags/lower/+page.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>小写字母就是普通的 html 标签<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>按钮<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_大写字母开头是组件定义组件">大写字母开头是组件&#8212;&#8203;定义组件</h5>
+<div class="listingblock">
+<div class="title">src/routes/template-syntax/tags/capitalised/+page.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">Widget</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./Widget.svelte&#39;</span><span class="tok-p">;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">Widget</span> <span class="tok-p">/&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_大写字母开头是组件使用组件">大写字母开头是组件&#8212;&#8203;使用组件</h5>
+<div class="listingblock">
+<div class="title">src/routes/template-syntax/tags/capitalised/Widget.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    大写字母开头的标签会被当作组件，而不是普通的 html 标签
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_点号命名空间的方式">点号命名空间的方式</h5>
+<div class="paragraph">
+<p>以点号分隔的是组件，点号前面的一般是命名空间，后面是组件名。</p>
+</div>
+<div class="paragraph">
+<p>官方机制是<strong>命名空间导入</strong>：<code>import * as my from '&#8230;&#8203;'</code> 得到的是包含多个组件的对象，模板里 <code>&lt;my.stuff /&gt;</code> 的点号触发“组件”判定。我按这个思路在 <code>dot</code> 目录下建一套完整示例。</p>
+</div>
+<div class="paragraph">
+<p>现在运行项目自带的类型检查，验证点号组件的写法确实能被编译通过。
+示例已创建并通过编译校验。访问路径：<strong><code><a href="http://localhost:5173/template-syntax/tags/dot" class="bare">http://localhost:5173/template-syntax/tags/dot</a></code></strong></p>
+</div>
+<h5 id="_目录结构" class="discrete">目录结构</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>src/routes/template-syntax/tags/dot/
+├── +page.svelte   ← 页面（路由入口）
+├── my.js          ← 命名空间模块（关键）
+├── Stuff.svelte   ← 组件 stuff
+└── Thing.svelte   ← 组件 thing</code></pre>
+</div>
+</div>
+<h5 id="_实现思路" class="discrete">实现思路</h5>
+<div class="paragraph">
+<p><strong>1. 命名空间模块 <code>my.js</code></strong> — 用对象把多个组件聚合成一个“命名空间”：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">stuff</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./Stuff.svelte&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">thing</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./Thing.svelte&#39;</span><span class="tok-p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>2. 页面用「命名空间导入」拿到这个对象</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="src/routes/template-syntax/tags/dot/+page.svelte"><span></span>&lt;script&gt;
+	// 命名空间导入：my 是一个对象，my.stuff / my.thing 是其中的组件
+	import * as my from &#39;./my.js&#39;;
+&lt;/script&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>3. 模板里用点号访问</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="src/routes/template-syntax/tags/dot/+page.svelte"><span></span>	&lt;my.stuff /&gt;
+	&lt;my.thing /&gt;</code></pre>
+</div>
+</div>
+<h5 id="_核心原理" class="discrete">核心原理</h5>
+<div class="paragraph">
+<p>Svelte 判定一个标签是「组件」还是「HTML 元素」只看标签名：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>首字母<strong>小写</strong>且<strong>不含点号</strong>（如 <code>&lt;div&gt;</code>）→ 普通 HTML 元素；</p>
+</li>
+<li>
+<p>首字母<strong>大写</strong>（如 <code>&lt;Widget&gt;</code>）<strong>或含点号</strong>（如 <code>&lt;my.stuff&gt;</code>）→ 组件。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>所以 <code>&lt;my.stuff&gt;</code> 里的 <code>my</code> 必须是<strong>作用域内一个真实存在的对象</strong>，<code>.stuff</code> 是它的一个成员、且该成员是一个组件。<code>import * as my from './my.js'</code> 正好返回这样“命名空间对象”，点号前面的 <code>my</code> 就是命名空间，后面的 <code>stuff</code> 就是组件名——和 ES 模块的命名空间语义完全一致。</p>
+</div>
+<h5 id="_校验结果" class="discrete">校验结果</h5>
+<div class="paragraph">
+<p>运行 <code>svelte-check</code> 结果：新增的 4 个文件<strong>零错误零警告</strong>，<code>&lt;my.stuff /&gt;</code> / <code>&lt;my.thing /&gt;</code> 这种点号写法编译通过。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>备注：若你更想要单文件自包含的写法，也可以不建 <code>my.js</code>，直接在页面里 <code>import Stuff from './Stuff.svelte'; const my = { stuff: Stuff };</code>，效果一样；但“命名空间”这一概念用 <code>import * as my</code> 表达最贴切，所以我选了当前方案。</p>
+</div>
+</blockquote>
+</div>
+<div class="sect5">
+<h6 id="_点号命名空间的方式使用点号的页面">点号命名空间的方式&#8212;&#8203;使用点号的页面</h6>
+<div class="listingblock">
+<div class="title">src/routes/template-syntax/tags/dot/+page.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">	</span><span class="tok-c1">// 命名空间导入：my 是一个对象，my.stuff / my.thing 是其中的组件</span>
+<span class="tok-w">	</span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">my</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./my.js&#39;</span><span class="tok-p">;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;space-y-3&quot;</span><span class="tok-p">&gt;</span>
+	<span class="tok-p">&lt;</span><span class="tok-nt">h1</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-2xl font-bold&quot;</span><span class="tok-p">&gt;</span>点号（命名空间）组件<span class="tok-p">&lt;/</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+	<span class="tok-p">&lt;</span><span class="tok-nt">p</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-sm text-gray-600&quot;</span><span class="tok-p">&gt;</span>
+		点号写法 <span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span><span class="tok-ni">&amp;lt;</span>my.stuff /<span class="tok-ni">&amp;gt;</span><span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span> 中，点号前是命名空间，点号后是组件名。小写标签如
+		<span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span><span class="tok-ni">&amp;lt;</span>div<span class="tok-ni">&amp;gt;</span><span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span> 是普通 HTML 元素，而带点号的标签一定是组件。
+	<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+	<span class="tok-p">&lt;</span><span class="tok-nt">my.stuff</span> <span class="tok-p">/&gt;</span>
+	<span class="tok-p">&lt;</span><span class="tok-nt">my.thing</span> <span class="tok-p">/&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_点号命名空间的方式命名空间模块">点号命名空间的方式&#8212;&#8203;命名空间模块</h6>
+<div class="listingblock">
+<div class="title">src/routes/template-syntax/tags/dot/my.js</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/**</span>
+<span class="tok-cm"> * 命名空间模块。</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * 页面里写 `import * as my from &#39;./my.js&#39;` 之后，`my` 就是这个模块导出的对象。</span>
+<span class="tok-cm"> * 于是模板中可以写 `&lt;my.stuff /&gt;`、`&lt;my.thing /&gt;`：</span>
+<span class="tok-cm"> *   点号前面（my）是命名空间，点号后面（stuff / thing）是组件名。</span>
+<span class="tok-cm"> *</span>
+<span class="tok-cm"> * 关键点：只要标签里出现点号（或首字母大写），Svelte 就会把它当作“组件”而不是普通 HTML 标签。</span>
+<span class="tok-cm"> */</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">stuff</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./Stuff.svelte&#39;</span><span class="tok-p">;</span>
+<span class="tok-k">export</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-k">default</span><span class="tok-w"> </span><span class="tok-kr">as</span><span class="tok-w"> </span><span class="tok-nx">thing</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./Thing.svelte&#39;</span><span class="tok-p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_点号命名空间的方式命名空间模块下的组件_stuff">点号命名空间的方式&#8212;&#8203;命名空间模块下的组件 Stuff</h6>
+<div class="listingblock">
+<div class="title">src/routes/template-syntax/tags/dot/Stuff.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded border border-emerald-500 bg-emerald-50 px-3 py-2&quot;</span><span class="tok-p">&gt;</span>
+	我是命名空间 <span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>my<span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span> 下的组件 <span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>stuff<span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>，由 <span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span><span class="tok-ni">&amp;lt;</span>my.stuff /<span class="tok-ni">&amp;gt;</span><span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span> 渲染
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_点号命名空间的方式命名空间模块下的组件_thing">点号命名空间的方式&#8212;&#8203;命名空间模块下的组件 Thing</h6>
+<div class="listingblock">
+<div class="title">src/routes/template-syntax/tags/dot/Thing.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded border border-sky-500 bg-sky-50 px-3 py-2&quot;</span><span class="tok-p">&gt;</span>
+	我是同一个命名空间下的另一个组件 <span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>thing<span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>，由 <span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span><span class="tok-ni">&amp;lt;</span>my.thing /<span class="tok-ni">&amp;gt;</span><span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span> 渲染
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-31 15:24:34 +0800
+Last updated 2026-09-14 10:21:06 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
