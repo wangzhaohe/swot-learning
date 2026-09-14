@@ -2751,49 +2751,151 @@
 <v t="swot.20260817085952.1"><vh>Nuxt 与 SvelteKit 开发模式运行机制对比</vh></v>
 </v>
 <v t="swot.20260831150158.1"><vh>@path svelte-learning</vh>
-<v t="swot.20260831150130.1"><vh>@adoc svelte-learning.adoc</vh>
+<v t="swot.20260911092032.1"><vh>@adoc svelte-learning.adoc</vh>
+<v t="swot.20260914090814.1"><vh>学习 Svelte</vh>
 <v t="swot.20260831150240.1"><vh>创建 svelte 项目</vh></v>
 <v t="swot.20260831151858.1"><vh>.svelte 文件</vh></v>
 <v t="swot.20260831152152.1"><vh>.svelte.js / .svelte.ts</vh></v>
 <v t="swot.20260831160959.1"><vh>runes 魔法符文</vh>
-<v t="swot.20260831161658.1"><vh>$state</vh>
-<v t="swot.20260831163438.1"><vh>Deep state</vh></v>
-<v t="swot.20260901083121.1"><vh>Classes</vh></v>
-</v>
-</v>
-</v>
-<v t="swot.20260901103417.1"><vh>@adoc Classes验证.adoc</vh>
-<v t="swot.20260901103315.1"><vh>$state 用在 class 里的验证</vh>
-<v t="swot.20260901103641.1"><vh>1. 官方示例（要验证的写法）</vh></v>
-<v t="swot.20260901103802.1"><vh>2. 验证用的文件</vh></v>
-<v t="swot.20260901110445.1"><vh>3. 响应式追踪辅助</vh></v>
-<v t="swot.20260901110549.1"><vh>4. 验证结论</vh>
-<v t="swot.20260901110602.1"><vh>4.1 两种写法都生效</vh></v>
-<v t="swot.20260901110632.1"><vh>4.2 实例确实没有被 proxy</vh></v>
-<v t="swot.20260901110650.1"><vh>4.3 解构会丢失响应式</vh></v>
-</v>
-<v t="swot.20260901110708.1"><vh>5. 首次赋值是编译期强制的</vh></v>
-<v t="swot.20260901110733.1"><vh>6. 页面可视化</vh></v>
-<v t="swot.20260901110751.1"><vh>7. 运行结果</vh></v>
-<v t="swot.20260901110849.1"><vh>8. 小结</vh></v>
-</v>
-</v>
-<v t="swot.20260901111327.1"><vh>source code</vh>
-<v t="swot.20260904135601.1"><vh>-- Todo 类 --</vh>
+<v t="swot.20260831161658.1"><vh>$state()</vh>
+<v t="swot.20260831163438.1"><vh>Deep state 默认是深度响应式</vh></v>
+<v t="swot.20260901083121.1"><vh>Classes 实例没有响应式</vh>
+<v t="swot.20260901103315.1"><vh>$state 用在 class 里的响应式验证</vh>
+<v t="swot.20260901103641.1"><vh>1. 官方示例（后面要验证 $state 的写法）</vh>
 <v t="swot.20260901104012.1"><vh>@edit src/lib/state-class/Todo.svelte.js</vh></v>
-<v t="swot.20260901104321.1"><vh>@edit src/lib/state-class/tracker.svelte.js</vh></v>
-<v t="swot.20260901104750.1"><vh>@file src/lib/state-class/Todo.svelte.spec.js</vh></v>
 </v>
-<v t="swot.20260903103128.1"><vh>-- 类私有属性响应测试 --</vh>
-<v t="swot.20260901105111.1"><vh>@edit src/lib/state-class/PrivateTodo.svelte.js</vh></v>
-<v t="swot.20260901105306.1"><vh>@file src/lib/state-class/PrivateTodo.svelte.spec.js</vh></v>
+<v t="swot.20260901103802.1"><vh>2. 验证用的文件</vh>
+<v t="swot.20260904135601.1"><vh>监听器定义</vh>
+<v t="swot.20260901104321.1"><vh>#edit src/lib/state-class/tracker.svelte.js</vh></v>
 </v>
-<v t="swot.20260904150658.1"><vh>-- 服务端编译测试 --</vh>
-<v t="swot.20260901105510.1"><vh>@file src/lib/state-class/placement-rules.spec.js</vh></v>
+<v t="swot.20260909141418.1"><vh>Todo 类测试</vh>
+<v t="swot.20260901104750.1"><vh>#file src/lib/state-class/Todo.svelte.spec.js</vh>
+<v t="swot.20260903103516.1"><vh>字段声明处的 $state(false) 初始值正确</vh></v>
+<v t="swot.20260903103506.1"><vh>构造函数首次赋值处的 $state(text) 初始值正确</vh></v>
+<v t="swot.20260903103452.1"><vh>修改 done（字段声明式 $state）会触发响应式更新</vh></v>
+<v t="swot.20260903103435.1"><vh>修改 text（构造函数式 $state）会触发响应式更新</vh></v>
+<v t="swot.20260903103419.1"><vh>reset() 同时重置两个字段，并各自触发更新</vh></v>
+<v t="swot.20260903103337.1"><vh>实例本身没有被 proxy 为响应式：后加的普通属性不具备响应式</vh></v>
 </v>
-<v t="swot.20260903103131.1"><vh>-- Todo 页面 --</vh>
-<v t="swot.20260901145520.1"><vh>@file src/routes/state-class/+page.svelte</vh></v>
-<v t="swot.20260901110321.1"><vh>@file src/routes/state-class/page.svelte.spec.js</vh></v>
+</v>
+<v t="swot.20260911092347.1"><vh>定义类的私有属性</vh>
+<v t="swot.20260901105111.1"><vh>#edit src/lib/state-class/PrivateTodo.svelte.js</vh></v>
+</v>
+<v t="swot.20260903103128.1"><vh>测试类私有属性响应</vh>
+<v t="swot.20260901105306.1"><vh>#file src/lib/state-class/PrivateTodo.svelte.spec.js</vh>
+<v t="swot.20260904143046.1"><vh>private 字段 #done = $state(false) 同样具备响应式</vh></v>
+<v t="swot.20260904143100.1"><vh>解构出来的值只是一份快照，不再具备响应式</vh></v>
+</v>
+</v>
+<v t="swot.20260904150658.1"><vh>服务端编译测试</vh>
+<v t="swot.20260901105510.1"><vh>#file src/lib/state-class/placement-rules.spec.js</vh>
+<v t="swot.20260904140228.1"><vh>文档里的两种写法都能正常编译</vh></v>
+<v t="swot.20260904140211.1"><vh>private 私有字段也能正常编译</vh></v>
+<v t="swot.20260904140148.1"><vh>构造函数里「非首次」赋值会编译报错</vh></v>
+<v t="swot.20260904140130.1"><vh>在普通方法里用 $state 赋值会编译报错</vh></v>
+</v>
+</v>
+<v t="swot.20260903103131.1"><vh>Todo 页面定义</vh>
+<v t="swot.20260901145520.1"><vh>#file src/routes/state-class/+page.svelte</vh>
+<v t="swot.20260901145520.2"><vh>script</vh>
+<v t="swot.20260901145520.3"><vh>初始化待办数据</vh></v>
+<v t="swot.20260902104247.1"><vh>新增待办</vh></v>
+</v>
+<v t="swot.20260901145520.4"><vh>template</vh>
+<v t="swot.20260901170509.1"><vh>已完成计数</vh></v>
+<v t="swot.20260901170528.1"><vh>添加一条待办</vh></v>
+<v t="swot.20260901170643.1"><vh>渲染所有待办</vh>
+<v t="swot.20260901170950.1"><vh>切换是否已完成</vh></v>
+<v t="swot.20260901171004.1"><vh>更改内容</vh></v>
+<v t="swot.20260901171019.1"><vh>显示内容</vh></v>
+<v t="swot.20260901171033.1"><vh>重置内容</vh></v>
+</v>
+<v t="swot.20260901170811.1"><vh>使用说明</vh></v>
+</v>
+<v t="swot.20260901145520.5"><vh>style</vh></v>
+</v>
+</v>
+<v t="swot.20260911092648.1"><vh>Todo 页面测试</vh>
+<v t="swot.20260901110321.1"><vh>#file src/routes/state-class/page.svelte.spec.js</vh>
+<v t="swot.20260902145135.1"><vh>初始渲染出两条待办</vh></v>
+<v t="swot.20260902145127.1"><vh>勾选 checkbox 后计数实时更新（class 字段声明处的 $state 生效）</vh></v>
+<v t="swot.20260902145105.1"><vh>编辑输入框会同步更新展示（构造函数里的 $state 生效）</vh></v>
+<v t="swot.20260902145053.1"><vh>点击 reset() 会清空文本并取消勾选</vh></v>
+<v t="swot.20260902145027.1"><vh>新增待办后仍然具备响应式</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20260901110549.1"><vh>3. 验证结论</vh>
+<v t="swot.20260901110602.1"><vh>两种写法都生效</vh></v>
+<v t="swot.20260901110632.1"><vh>实例确实没有被 proxy</vh></v>
+<v t="swot.20260901110650.1"><vh>解构会丢失响应式</vh></v>
+</v>
+<v t="swot.20260901110708.1"><vh>4. 首次赋值是编译期强制的</vh></v>
+<v t="swot.20260901110733.1"><vh>5. 页面可视化</vh></v>
+<v t="swot.20260901110751.1"><vh>6. 运行结果</vh></v>
+<v t="swot.20260901110849.1"><vh>7. 小结</vh></v>
+</v>
+</v>
+<v t="swot.20260908092002.1"><vh>内置响应式类</vh></v>
+<v t="swot.20260908092149.1"><vh>$state.raw 禁止深度响应式</vh></v>
+<v t="swot.20260908092317.1"><vh>$state.snapshot 从响应式变量中提取快照，给第三方库或者api传值用</vh></v>
+<v t="swot.20260908092413.1"><vh>$state.eager 乐观更新UI</vh></v>
+<v t="swot.20260908084241.1"><vh>Passing-state-into-functions</vh></v>
+<v t="swot.20260908091500.1"><vh>Passing state across modules </vh></v>
+</v>
+<v t="swot.20260908141104.1"><vh>$derived()    包含简单的表达式</vh>
+<v t="swot.20260908142142.1"><vh>$derived.by() 包含更复杂的语句</vh></v>
+<v t="swot.20260908143705.1"><vh>Overriding derived values 乐观更新UI</vh></v>
+<v t="swot.20260908144923.1"><vh>Deriveds and reactivity</vh></v>
+<v t="swot.20260908145127.1"><vh>Destructuring</vh></v>
+</v>
+<v t="swot.20260909080648.1"><vh>$effect</vh>
+<v t="swot.20260909150024.1"><vh>Understanding lifecycle </vh></v>
+<v t="swot.20260909163341.1"><vh>Understanding dependencies </vh></v>
+<v t="swot.20260909084444.1"><vh>$effect.pre</vh></v>
+<v t="swot.20260909091024.1"><vh>$effect.tracking</vh></v>
+<v t="swot.20260909093616.1"><vh>$effect.pending</vh></v>
+<v t="swot.20260909105950.1"><vh>$effect.root</vh></v>
+</v>
+<v t="swot.20260911083735.1"><vh>$props</vh>
+<v t="swot.20260911090426.1"><vh>$props.id</vh></v>
+</v>
+<v t="swot.20260911102921.1"><vh>$bindable</vh></v>
+<v t="swot.20260911104028.1"><vh>$inspect 打印监测的响应式变量</vh>
+<v t="swot.20260911104702.1"><vh>$inspect(...).with 替代 console.log</vh></v>
+<v t="swot.20260911104943.1"><vh>$inspect.trace(...) 查看哪个变量引起的副作用</vh></v>
+</v>
+<v t="swot.20260911105240.1"><vh>$host</vh></v>
+</v>
+<v t="swot.20260913104539.1"><vh>Template Syntax</vh>
+<v t="swot.20260913104554.1"><vh>Basic markup</vh>
+<v t="swot.20260913182005.1"><vh>tag</vh>
+<v t="swot.20260914085614.1"><vh>小写字母就是普通的 html 标签</vh>
+<v t="swot.20260914084230.1"><vh>#file src/routes/template-syntax/tags/lower/+page.svelte</vh></v>
+</v>
+<v t="swot.20260914085627.1"><vh>大写字母开头是组件--定义组件</vh>
+<v t="swot.20260914084527.1"><vh>#file src/routes/template-syntax/tags/capitalised/+page.svelte</vh></v>
+</v>
+<v t="swot.20260914090207.1"><vh>大写字母开头是组件--使用组件</vh>
+<v t="swot.20260914085943.1"><vh>#file src/routes/template-syntax/tags/capitalised/Widget.svelte</vh></v>
+</v>
+<v t="swot.20260914090958.1"><vh>点号命名空间的方式</vh>
+<v t="swot.20260914093143.1"><vh>点号命名空间的方式--使用点号的页面</vh>
+<v t="swot.20260914092850.1"><vh>#file src/routes/template-syntax/tags/dot/+page.svelte</vh></v>
+</v>
+<v t="swot.20260914093236.1"><vh>点号命名空间的方式--命名空间模块</vh>
+<v t="swot.20260914092937.1"><vh>#file src/routes/template-syntax/tags/dot/my.js</vh></v>
+</v>
+<v t="swot.20260914093315.1"><vh>点号命名空间的方式--命名空间模块下的组件 Stuff</vh>
+<v t="swot.20260914092958.1"><vh>#file src/routes/template-syntax/tags/dot/Stuff.svelte</vh></v>
+</v>
+<v t="swot.20260914093343.1"><vh>点号命名空间的方式--命名空间模块下的组件 Thing</vh>
+<v t="swot.20260914093022.1"><vh>#file src/routes/template-syntax/tags/dot/Thing.svelte</vh></v>
+</v>
+</v>
+</v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -20329,14 +20431,14 @@ print(f"Leo 主进程 PID: {leo_pid}")
 try:
     # 抓取系统中所有进程的 PID, 父进程 PID (PPID) 和 执行命令
     output = subprocess.check_output(['ps', '-eo', 'pid,ppid,command'], text=True)
-    
+
     children = []
     for line in output.splitlines()[1:]:  # 跳过表头
         parts = line.split(maxsplit=2)
         # 检查该进程的父进程是否是当前的 Leo 进程
         if len(parts) &gt;= 3 and parts[1] == str(leo_pid):
             children.append(line.strip())
-    
+
     if children:
         g.es(f"发现 {len(children)} 个由 Leo 启动的外部进程！大概率是它在打印日志：", color="red")
         for c in children:
@@ -20345,7 +20447,7 @@ try:
     else:
         g.es("当前 Leo 没有派生任何子进程。")
         print("未发现子进程，可能是底层 C/C++ 扩展直接打印。")
-        
+
 except Exception as e:
     g.es(f"扫描子进程失败: {e}")
 </t>
@@ -42302,79 +42404,6 @@ toggleButton.addEventListener('click', () =&gt; {
 ++++
 endif::[]
 </t>
-<t tx="swot.20260831150130.1">@language asciidoc
-:author: https://github.com/wangzhaohe/swot-learning
-:source-highlighter: pygments
-:icons: font
-:font-size: 16px
-:scripts: cjk
-:stem: latexmath
-:experimental:
-:toc:
-:toc: right
-:toc-title: 目录
-:toclevels: 3
-:tip-caption: ⚡
-:note-caption: ❕
-:important-caption: ❗
-:caution-caption: ⚠️
-:warning-caption: ‼️
-
-
-// 只有当后端不是 pdf 时才包含以下内容
-ifndef::backend-pdf[]
-++++
-&lt;style&gt;
-/* 1. 默认状态：初始就是隐藏的 */
-#toc {
-    max-width: 0 !important;
-    opacity: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    border: none !important;
-    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
-    white-space: nowrap !important;
-    
-    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
-    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease;
-}
-
-/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
-#toc.active {
-    max-width: 530px !important;
-    opacity: 1 !important;
-    padding: 10px !important; /* 根据需要恢复 padding */
-    overflow-y: auto !important;
-}
-
-/* 3. 列表样式保持不变 */
-#toc ul, #toc li {
-    margin-bottom: 8px !important;
-    line-height: 1.4 !important;
-}
-&lt;/style&gt;
-
-&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
-&lt;div id="toc"&gt;
-    &lt;/div&gt;
-
-&lt;script&gt;
-const toggleButton = document.getElementById('toggleButton');
-const contentDiv = document.getElementById('toc');
-
-toggleButton.addEventListener('click', () =&gt; {
-    // 切换 active 类
-    const isExpanded = contentDiv.classList.toggle('active');
-    
-    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
-    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
-});
-&lt;/script&gt;
-++++
-endif::[]
-</t>
 <t tx="swot.20260831150158.1"></t>
 <t tx="swot.20260831150240.1">https://svelte.dev/docs/svelte/getting-started
 
@@ -42446,7 +42475,11 @@ todos[0].done = !todos[0].done;
 // 网页中再这样使用就不行了 &lt;p&gt;{done}&lt;/p&gt;
 ----
 </t>
-<t tx="swot.20260901083121.1">类实例化以后的对象们不是响应式的。参考 Classes验证.adoc
+<t tx="swot.20260901083121.1">https://svelte.dev/docs/svelte/$state#Classes
+
+类实例化以后的对象们不是响应式的。参考 Classes验证.adoc
+
+箭头函数的防止 this 丢失的应用
 </t>
 <t tx="swot.20260901103315.1">本篇验证 Svelte 5 官方文档 https://svelte.dev/docs/svelte/$state#Classes 中的写法：
 
@@ -42455,7 +42488,1094 @@ todos[0].done = !todos[0].done;
 
 环境：Svelte `^5.56.1`，`vite.config.js` 已强制开启 `runes: true`，Vitest（server + client 两个项目）。
 </t>
-<t tx="swot.20260901103417.1">@language asciidoc
+<t tx="swot.20260901103641.1">.@edit src/lib/state-class/Todo.svelte.js
+[source,javascript]
+----
+@others
+----</t>
+<t tx="swot.20260901103802.1">为支持 runes，类定义必须放在 `.svelte.js` 后缀的模块里。共新增 7 个文件：
+
+[cols="2,3"]
+|===
+| 文件 | 作用
+
+| `src/lib/state-class/Todo.svelte.js`
+| 官方示例原样（JSDoc 注释）
+
+| `src/lib/state-class/tracker.svelte.js`
+| 用 `$effect.root` 订阅属性的辅助函数，用于证明「真的响应式」
+
+| `src/lib/state-class/Todo.svelte.spec.js`
+| 单元 + 响应式测试（6 个）
+
+| `src/lib/state-class/edge-cases.svelte.js`
+| private 字段（`#done = $state(false)`）示例
+
+| `src/lib/state-class/edge-cases.svelte.spec.js`
+| private 字段响应式 / 解构失效（2 个）
+
+| `src/lib/state-class/edge-cases.spec.js`
+| 编译期合法性与报错校验（4 个）
+
+| `src/routes/state-class/+page.svelte`
+| 可视化页面 `/state-class`
+
+| `src/routes/state-class/page.svelte.spec.js`
+| 页面交互测试（5 个）
+|===
+
+[NOTE]
+====
+1. 页面测试不能叫 `+page.svelte.spec.js` —— `+` 是 SvelteKit 保留前缀，会让 `svelte-kit sync` 直接失败。
+2. 改用同目录下的 `page.svelte.spec.js`，依然命中 client 项目的 include glob `src/**/*.svelte.{test,spec}.{js,ts}`。
+====
+</t>
+<t tx="swot.20260901104321.1">@language javascript
+/**
+ * https://share.gemini.google/4Do68CR3eWIS gemini 说明该代码
+ * `$effect` 在 node/SSR 编译产物里是空实现，所以响应式断言必须跑在 client（浏览器）项目。`tracker.svelte.js` 在 `$effect.root` 里订阅一个 getter
+ * runes 只能在 `.svelte` / `.svelte.js` 文件里使用，所以这个辅助函数单独放在 `.svelte.js` 中。
+ * tracker.svelte.js = 一个可挂在任意 getter 上的响应式监听器 + 计数器。
+ * runs 计数不动,说明被观察的东西没有响应式;
+ * runs 计数随修改增加,说明它是货真价实的 $state 响应式属性。
+ * 它是你验证 "class 里 $state 用对没有" 的测试利器。
+ */
+
+/* global $effect */
+import { flushSync } from 'svelte';
+
+/** @param {() =&gt; unknown} getter 读取待观察属性的函数 */
+export function createTracker(getter) {
+    /** @type {unknown} */
+    let value = undefined; // 保存最近一次读到的值
+    let runs = 0;          // effect 被执行的次数
+
+    // 1. 开启一个不受组件生命周期限制的全局副作用监听
+    const destroy = $effect.root(() =&gt; {
+        $effect(() =&gt; {
+            value = getter();  // 告诉 $effect 要观察的值，比如 done/text
+            runs += 1;         // 只要值变了， effect 就会重跑，次数 +1
+        });
+    });
+
+    // 2. 强制立即同步执行一次，确保初始状态下的 value 和 runs 有值 (runs 变成 1)
+    flushSync();
+
+    return {
+        /** effect 最近一次读到的值 */
+        get value() {
+            return value;
+        },
+        /** effect 被执行了多少次 */
+        get runs() {
+            return runs;
+        },
+        /**
+         * 修改状态并同步 flush，确保 effect 已经重跑
+         * @param {() =&gt; void} mutate
+         */
+        run(mutate) {
+            flushSync(mutate);
+        },
+        destroy
+    };
+}
+</t>
+<t tx="swot.20260901104750.1">@language javascript
+import { describe, expect, it } from 'vitest';
+import { Todo } from './Todo.svelte.js';
+import { createTracker } from './tracker.svelte.js';
+
+// 单元 + 响应式测试（6 个）
+// 注意：这个文件的名字是 *.svelte.spec.js，会跑在 vitest 的 client（浏览器）项目里。
+// 原因是 Svelte 在 node/SSR 编译产物中 $effect 不会执行，只有客户端才能真正验证响应式。
+// 同理，Todo.svelte.js / tracker.svelte.js 必须带 .svelte.js 后缀，runes 才会被编译。
+
+describe('Todo：把 $state 用在 class 里', () =&gt; {
+    @others
+});
+</t>
+<t tx="swot.20260901105111.1">@language javascript
+/* global $state */
+
+/**
+ * private 字段（`#done = $state(false)`）示例
+ * 文档里说 `$state` 可以用在 class 字段上，「无论是 public 还是 private」。
+ * 这里验证 private（`#` 私有字段）的写法，并通过 getter / setter 暴露。
+ */
+export class PrivateTodo {
+    #done = $state(false);  // 私有属性
+
+    /** @param {string} text */
+    constructor(text) {
+        this.text = $state(text);
+    }
+
+    get done() { return this.#done; }
+
+    /** @param {boolean} value */
+    set done(value) { this.#done = value; }
+
+    reset() {
+        this.text = '';
+        this.done = false;
+    }
+}
+</t>
+<t tx="swot.20260901105306.1">@language javascript
+import { describe, expect, it } from 'vitest';
+import { PrivateTodo } from './placement-rules.svelte.js';
+import { createTracker } from './tracker.svelte.js';
+
+// private 字段响应式 / 解构失效（2 个）
+// 跑在 vitest 的 client（浏览器）项目里：只有客户端编译产物中 $effect 才会真正执行。
+
+describe('边界情况', () =&gt; {
+    @others
+});
+</t>
+<t tx="swot.20260901105510.1">@language javascript
+/**
+ * 这个用例跑在 server（node）项目里：只做编译期校验，不需要 $effect，也就不需要浏览器。
+ * 编译期合法性与报错校验（4 个）
+ */
+
+import { compileModule } from 'svelte/compiler';
+import { describe, expect, it } from 'vitest';
+
+/**
+ * 按 client 模式编译一段源码，返回报错信息；没有报错则返回 null。
+ * @param {string} source
+ */
+function compileError(source) {
+    try {
+        compileModule(source, {
+            generate: 'client',
+            filename: 'case.svelte.js'
+        });
+        return null;
+    } catch (error) {
+        return /** @type {Error} */ (error).message;
+    }
+}
+
+describe('$state 在 class 里的合法 / 非法位置', () =&gt; {
+    @others
+});
+</t>
+<t tx="swot.20260901110321.1">@language javascript
+// 注意：不能叫 +page.svelte.spec.js —— SvelteKit 保留 `+` 前缀，会让 svelte-kit sync 直接失败。
+// 去掉 + 之后依然匹配 vitest client 项目的 include：`src/**/*.svelte.{test,spec}.{js,ts}`
+
+import { page } from 'vitest/browser';
+// describe: 分成组进行测试
+// it: 相当于 test，是个测试单元
+// expect: 期望的值
+import { describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import Page from './+page.svelte';
+
+describe('/state-class 页面', () =&gt; {
+    @others
+});
+</t>
+<t tx="swot.20260901110549.1"></t>
+<t tx="swot.20260901110602.1">[cols="2,3,1"]
+|===
+| 写法 | 行为 | 结论
+
+| `done = $state(false)`（字段声明）
+| 改 `todo.done` 时 effect 重跑（runs 1 → 2）
+| ✅ 响应式生效
+
+| `this.text = $state(text)`（构造函数首次赋值）
+| 改 `todo.text` 时 effect 重跑
+| ✅ 响应式生效
+
+| `#done = $state(false)`（private 字段）
+| 编译为 `$.state(false)` + `$.get/$.set`，effect 重跑
+| ✅ 也生效
+
+| 调用 `reset()` 后两个字段仍响应式
+| 两个 effect 在重置后各自再重跑
+| ✅ 生效
+|===
+
+</t>
+<t tx="swot.20260901110632.1">给实例后加一个普通属性，值写进去了，但 effect **没有**重跑——这正是文档说的「只对显式包了 `$state` 的字段生效」：
+
+[source,js]
+----
+@language javascript
+/** @type {Todo &amp; { note?: string }} */
+const todo = new Todo('learn svelte');
+const tracker = createTracker(() =&gt; todo.note);
+
+tracker.run(() =&gt; {
+    todo.note = 'not reactive'; // 写进去了
+});
+
+expect(todo.note).toBe('not reactive');
+expect(tracker.runs).toBe(1); // effect 没重跑 =&gt; 实例不是 proxy
+----
+
+// 注意前面已经有这个例子了
+</t>
+<t tx="swot.20260901110650.1">[source,js]
+----
+@language javascript
+const { text } = todo;          // 只是快照
+const tracker = createTracker(() =&gt; text);
+
+tracker.run(() =&gt; { todo.text = 'changed'; });
+
+expect(todo.text).toBe('changed');
+expect(text).toBe('learn svelte'); // 局部变量不会跟着变
+expect(tracker.runs).toBe(1);
+----
+
+// 注意前面已经有这个例子了
+</t>
+<t tx="swot.20260901110708.1">通过 `compileModule(source, { generate: 'client' })` 直接编译源码得到验证：
+
+[cols="2,3"]
+|===
+| 写法 | 编译结果
+
+| 文档里的两种写法 / private 字段
+| 正常编译（无报错）
+
+| 构造函数里先 `this.text = text` 再 `this.text = $state(text)`
+| 报错 `Cannot assign to a state field before its declaration`
+
+| 在普通方法里 `this.note = $state('x')`
+| 报错 `state_invalid_placement`（消息要求写在构造函数顶层对字段的首次赋值）
+|===
+
+</t>
+<t tx="swot.20260901110733.1">手工对网站进行测试 `npm run dev` 后访问 `/state-class`：
+
+    勾选 checkbox、编辑输入框、`reset()`、新增待办都会实时更新 DOM。
+
+使用工具自动对网站进行测试 `page.svelte.spec.js` 用 Playwright 覆盖了这些行为。
+</t>
+<t tx="swot.20260901110751.1">[source,console]
+----
+$ npm run test
+Test Files  6 passed (6)
+     Tests  19 passed (19)
+----
+
+[source,console]
+----
+$ npm run build     # 通过
+$ npm run check     # 新增文件零类型错误
+----
+
+NOTE: 本机首次运行 `npm run test` 需要先 `npx playwright install chromium`（client 项目依赖浏览器；既有的 `Welcome.svelte.spec.js` 也同样需要）。
+
+</t>
+<t tx="swot.20260901110849.1">* 文档里的 `Todo` 类写法**完全正确**。
+
+* `$state` 可放在：class 字段声明（public 或 private）、构造函数里对属性的**首次**赋值。
+
+* 实例不被 proxy：只有显式用 `$state` 包装的字段才有响应式；后加属性、解构出来的变量都不具备响应式。
+
+* 「首次赋值」由编译器强制，写错位置会直接报编译错误。
+</t>
+<t tx="swot.20260901145520.1">@language html
+@others
+@doc
+可视化页面 `/state-class`
+</t>
+<t tx="swot.20260901145520.2">@language javascript
+@delims //
+&lt;script&gt;
+@others
+@delims &lt;!-- --&gt;
+&lt;/script&gt;
+</t>
+<t tx="swot.20260901145520.3">import { Todo } from '$lib/state-class/Todo.svelte.js';
+
+/** class 实例组成的数组：数组本身被 proxy，实例本身不会 */
+let todos = $state([
+    new Todo('读 Svelte 文档'),
+    new Todo('写验证代码')
+]);
+
+// 用一句话理解：doneCount 是一个"会自动重新计算的数字"，只要跟它相关的数据一变，Svelte 就会自动重算，然后模板里用到它的地方自动更新。
+const doneCount = $derived(
+    todos.filter((todo) =&gt; todo.done).length
+);  // 计算 todos 已完成个数
+
+</t>
+<t tx="swot.20260901145520.4">&lt;svelte:head&gt;
+    &lt;title&gt;$state in class 验证&lt;/title&gt;
+&lt;/svelte:head&gt;
+
+&lt;main class="mx-auto max-w-xl space-y-6 p-8"&gt;
+    @others
+&lt;/main&gt;
+</t>
+<t tx="swot.20260901145520.5">@delims /* */
+&lt;style&gt;
+@others
+@delims &lt;!-- --&gt;
+&lt;/style&gt;
+</t>
+<t tx="swot.20260901170509.1">&lt;div class="space-y-2"&gt;
+    &lt;h1 class="text-2xl font-bold"&gt;$state 用在 class 里&lt;/h1&gt;
+    &lt;p class="text-sm text-gray-600"&gt;
+        已完成
+        &lt;strong data-testid="done-count"&gt;
+            {doneCount} / {todos.length}
+        &lt;/strong&gt;
+    &lt;/p&gt;
+&lt;/div&gt;
+</t>
+<t tx="swot.20260901170528.1">&lt;form onsubmit={addTodo} class="flex gap-2"&gt;
+    &lt;input
+        bind:value={draft}
+        data-testid="draft-input"
+        placeholder="添加一条待办"
+        class="flex-1 rounded border px-3 py-2"
+    /&gt;
+    &lt;button type="submit"
+            data-testid="add"
+            class="rounded bg-blue-600 px-4 py-2 text-white"&gt;
+        添加
+    &lt;/button&gt;
+&lt;/form&gt;
+</t>
+<t tx="swot.20260901170643.1">&lt;ul class="space-y-2"&gt;
+    {#each todos as todo, index (todo)}
+        &lt;li class="flex items-center gap-3 rounded border px-3 py-2"&gt;
+            @others
+        &lt;/li&gt;
+    {/each}
+&lt;/ul&gt;
+</t>
+<t tx="swot.20260901170811.1">&lt;p class="text-sm text-gray-500"&gt;
+    勾选 checkbox 或修改文本，上方内容立即变化，说明「字段声明处」和「构造函数里」的
+    &lt;code&gt;$state&lt;/code&gt; 都生效了。
+&lt;/p&gt;
+</t>
+<t tx="swot.20260901170950.1">&lt;input type="checkbox" 
+       bind:checked={todo.done}
+       data-testid="todo-done-{index}" 
+/&gt;
+</t>
+<t tx="swot.20260901171004.1">&lt;input
+    bind:value={todo.text}
+    data-testid="todo-input-{index}"
+    class="flex-1 rounded border px-2 py-1"
+/&gt;
+</t>
+<t tx="swot.20260901171019.1">&lt;span
+    data-testid="todo-text-{index}"
+    class:text-gray-400={todo.done}
+    class:line-through={todo.done}
+&gt;
+    {todo.text}
+&lt;/span&gt;
+</t>
+<t tx="swot.20260901171033.1">&lt;button
+    type="button"
+    data-testid="reset-{index}"
+    onclick={() =&gt; todo.reset()}
+    class="rounded border px-2 py-1 text-sm"
+&gt;
+    reset()
+&lt;/button&gt;
+</t>
+<t tx="swot.20260902104247.1">let draft = $state('');  // 定义新增待办响应式变量
+
+/** @param {SubmitEvent} event */
+function addTodo(event) {
+    /* 不阻止浏览器的默认行为会发生什么
+        浏览器的默认动作是：把表单字段序列化，然后导航到 action 指定的 URL——这里没有 action，就导航到当前页面地址（/state-class?）。
+        结果是一次整页刷新，后果是：
+            todos、draft 这些 $state 全部被重置，刚加的待办没了；
+            地址栏会多出一个 ?；
+            页面会闪一下（重新走一次 SSR/ hydration
+    */
+    event.preventDefault();
+
+    const text = draft.trim();
+    if (text === '')  // 没有输入内容则退出函数
+        return;
+
+    todos.push(new Todo(text));
+    draft = '';
+}
+</t>
+<t tx="swot.20260902145027.1">it('新增待办后仍然具备响应式', async () =&gt; {
+    render(Page);
+
+    await page.getByTestId('draft-input').fill('跑一遍测试');
+    await page.getByTestId('add').click();
+
+    await expect.element(page.getByTestId('done-count')).toHaveTextContent('0 / 3');
+    await expect.element(page.getByTestId('todo-text-2')).toHaveTextContent('跑一遍测试');
+
+    await page.getByTestId('todo-done-2').click();
+
+    await expect.element(page.getByTestId('done-count')).toHaveTextContent('1 / 3');
+});
+</t>
+<t tx="swot.20260902145053.1">it('点击 reset() 会清空文本并取消勾选', async () =&gt; {
+    render(Page);
+
+    await page.getByTestId('todo-done-0').click();
+    await page.getByTestId('todo-input-0').fill('临时内容');
+    await expect.element(page.getByTestId('done-count')).toHaveTextContent('1 / 2');
+
+    await page.getByTestId('reset-0').click();
+    await expect.element(page.getByTestId('todo-input-0')).toHaveValue('');
+    await expect.element(page.getByTestId('todo-done-0')).not.toBeChecked();
+    await expect.element(page.getByTestId('done-count')).toHaveTextContent('0 / 2');
+});
+</t>
+<t tx="swot.20260902145105.1">it('编辑输入框会同步更新展示（构造函数里的 $state 生效）', async () =&gt; {
+    render(Page);
+
+    await page.getByTestId('todo-input-0').fill('读 Svelte 5 runes 文档');
+    await expect
+        .element(page.getByTestId('todo-text-0'))
+        .toHaveTextContent('读 Svelte 5 runes 文档');
+});
+</t>
+<t tx="swot.20260902145127.1">it('勾选 checkbox 后计数实时更新（class 字段声明处的 $state 生效）', async () =&gt; {
+    render(Page);
+
+    await page.getByTestId('todo-done-0').click();
+    await expect.element(page.getByTestId('done-count')).toHaveTextContent('1 / 2');
+});
+</t>
+<t tx="swot.20260902145135.1">it('初始渲染出两条待办', async () =&gt; {
+    render(Page);
+
+    await expect.element(page.getByTestId('done-count')).toHaveTextContent('0 / 2');
+    await expect.element(page.getByTestId('todo-text-0')).toHaveTextContent('读 Svelte 文档');
+    await expect.element(page.getByTestId('todo-text-1')).toHaveTextContent('写验证代码');
+});
+</t>
+<t tx="swot.20260903103128.1">.#file src/lib/state-class/PrivateTodo.svelte.spec.js
+[source,javascript]
+----
+@others
+----
+</t>
+<t tx="swot.20260903103131.1">.#file src/routes/state-class/+page.svelte
+[source,html]
+----
+@others
+----
+</t>
+<t tx="swot.20260903103337.1">it('实例本身没有被 proxy：后加的普通属性不具备响应式', () =&gt; {
+    /**
+     * note 是后加的普通属性，就是为了测试它不具备响应式
+     * @type {Todo &amp; { note?: string }}
+     */
+    const todo = new Todo('learn svelte');
+    const tracker = createTracker(
+        () =&gt; todo.note
+    );
+
+    expect(tracker.runs).toBe(1);
+
+    tracker.run(() =&gt; {
+        todo.note = 'not reactive';  // 此处可以随便给字符串
+    });
+
+    // 值确实写进去了，但 effect 没有重跑 —— 说明实例不是 proxy 的响应式
+    expect(todo.note).toBe('not reactive');
+    expect(tracker.runs).toBe(1);  // 如果 note 是响应式，就会触发 $effect
+});
+</t>
+<t tx="swot.20260903103419.1">it('reset() 同时重置两个字段，并各自触发更新', () =&gt; {
+    const todo = new Todo('learn svelte');
+    const doneTracker = createTracker(() =&gt; todo.done);
+    const textTracker = createTracker(() =&gt; todo.text);
+
+    doneTracker.run(() =&gt; {
+        todo.done = true;
+        todo.text = 'changed';
+    });
+
+    expect(doneTracker.value).toBe(true);
+    expect(textTracker.value).toBe('changed');
+    expect(doneTracker.runs).toBe(2);
+    expect(textTracker.runs).toBe(2);
+
+    textTracker.run(
+        () =&gt; todo.reset()
+    );
+
+    expect(todo.text).toBe('');
+    expect(todo.done).toBe(false);
+    expect(textTracker.value).toBe('');
+    expect(doneTracker.value).toBe(false);
+    expect(textTracker.runs).toBe(3);
+    expect(doneTracker.runs).toBe(3);
+});
+</t>
+<t tx="swot.20260903103435.1">it('修改 text（构造函数式 $state）会触发响应式更新', () =&gt; {
+    const todo = new Todo('learn svelte');
+    const tracker = createTracker(
+        () =&gt; todo.text
+    );
+
+    expect(tracker.value).toBe('learn svelte');
+
+    tracker.run(() =&gt; {
+        todo.text = 'learn runes';
+    });
+
+    expect(todo.text).toBe('learn runes');
+    expect(tracker.value).toBe('learn runes');
+    expect(tracker.runs).toBe(2);
+});
+</t>
+<t tx="swot.20260903103452.1">it('修改 done（字段声明式 $state）会触发响应式更新', () =&gt; {
+    const todo = new Todo('learn svelte');
+    const tracker = createTracker(
+        () =&gt; todo.done
+    );
+
+    expect(tracker.value).toBe(false);
+    expect(tracker.runs).toBe(1);
+
+    tracker.run(() =&gt; {
+        todo.done = true;
+    });
+
+    expect(todo.done).toBe(true);
+    expect(tracker.value).toBe(true);
+    expect(tracker.runs).toBe(2);
+});
+</t>
+<t tx="swot.20260903103506.1">it('构造函数首次赋值处的 $state(text) 初始值正确', () =&gt; {
+    const todo = new Todo('learn svelte');
+    expect(todo.text).toBe('learn svelte');
+});
+</t>
+<t tx="swot.20260903103516.1">it('字段声明处的 $state(false) 初始值正确', () =&gt; {
+    const todo = new Todo('learn svelte');
+    expect(todo.done).toBe(false);
+});
+</t>
+<t tx="swot.20260904135601.1">.src/lib/state-class/tracker.svelte.js
+[source,javascript]
+----
+@others
+----</t>
+<t tx="swot.20260904140130.1">// 注意 $state 是作为字符串存在的
+it('在普通方法里用 $state 赋值会编译报错', () =&gt; {
+    const message = compileError(`
+        export class Todo {
+            addNote() {
+                this.note = $state('x'); // addNote 是一个普通的方法，不能用 $state
+            }
+        }
+    `);
+    // 只能在类的构造器中使用 $state
+    expect(message).toContain(
+        'the first assignment to a class field at the top level of the constructor'
+    );
+});
+
+/**
+ * 只有三种情况可以使用 $state:
+ * `$state(...)` can only be used as a variable declaration initializer, a class field declaration, or the first assignment to a class field at the top level of the constructor.
+ */
+</t>
+<t tx="swot.20260904140148.1">// 注意 $state 是作为字符串存在的
+it('构造函数里「非首次」赋值会编译报错', () =&gt; {
+    const message = compileError(`
+        export class Todo {
+            constructor(text) {
+                this.text = text;
+                this.text = $state(text);  // 这不是首次赋值
+            }
+        }
+    `);
+    expect(message).toContain(
+        'Cannot assign to a state field before its declaration'
+    );
+});
+</t>
+<t tx="swot.20260904140211.1">// 注意 $state 是作为字符串存在的
+it('private 私有字段也能正常编译', () =&gt; {
+    const message = compileError(`
+        export class Todo {
+            #done = $state(false);
+        }
+    `);
+    expect(message).toBeNull();
+});
+</t>
+<t tx="swot.20260904140228.1">/**
+ * 两种写法：作为属性和构造方法的首次赋值都正确
+ * 注意 $state 是作为字符串存在的
+ */
+it('文档里的两种写法都能正常编译', () =&gt; {
+    const message = compileError(`
+        export class Todo {
+            done = $state(false);
+            constructor(text) {
+                this.text = $state(text);
+            }
+        }
+    `);
+    expect(message).toBeNull();
+});
+</t>
+<t tx="swot.20260904143046.1">it('private 字段 #done = $state(false) 同样具备响应式', () =&gt; {
+    const todo = new PrivateTodo('learn svelte');
+    const tracker = createTracker(
+        () =&gt; todo.done
+    );
+
+    expect(todo.done).toBe(false);
+    expect(tracker.runs).toBe(1);
+
+    tracker.run(() =&gt; {
+        todo.done = true;
+    });
+
+    expect(todo.done).toBe(true);
+    expect(tracker.value).toBe(true);
+    expect(tracker.runs).toBe(2);
+});
+</t>
+<t tx="swot.20260904143100.1">it('解构出来的值只是一份快照，不再具备响应式', () =&gt; {
+    const todo = new PrivateTodo('learn svelte');
+    const { text } = todo;
+    const tracker = createTracker(
+        () =&gt; text
+    );
+
+    expect(text).toBe('learn svelte');
+
+    tracker.run(() =&gt; {
+        todo.text = 'changed';
+    });
+
+    // 实例上的字段变了，但之前解构出来的局部变量不会跟着变
+    expect(todo.text).toBe('changed');
+    expect(text).toBe('learn svelte');
+    expect(tracker.runs).toBe(1);
+});
+</t>
+<t tx="swot.20260904150658.1">.#file src/lib/state-class/placement-rules.spec.js
+[source,javascript]
+----
+@others
+----</t>
+<t tx="swot.20260908084241.1">https://svelte.dev/docs/svelte/$state#Passing-state-into-functions
+
+.用类的方式来实现传递响应式到函数中
+[source,javascript]
+----
+@language javascript
+class Adder {
+    #input;
+  
+    constructor(input) {
+        this.#input = input;
+    }
+  
+    get value() {
+        return this.#input.a + this.#input.b;
+    }
+}
+
+let input = $state({ a: 1, b: 2 });
+let total = new Adder(input);
+console.log(total.value); // 3
+
+input.a = 3;
+input.b = 4;
+console.log(total.value); // 7
+----
+</t>
+<t tx="swot.20260908091500.1">https://svelte.dev/docs/svelte/$state#Passing-state-across-modules
+
+参考官网的例子，可选为
+
+1. 导出响应式的对象
++
+[source,javascript]
+----
+// This is allowed — since we're updating
+// `counter.count` rather than `counter`,
+// Svelte doesn't wrap it in `$.state`
+export const counter = $state({
+	count: 0
+});
+
+export function increment() {
+	counter.count += 1;
+}
+----
+
+2. 只导出操作的函数，不导出响应式
++
+[source,javascript]
+----
+let count = $state(0);
+
+export function getCount() {
+	return count;
+}
+
+export function increment() {
+	count += 1;
+}
+----
+</t>
+<t tx="swot.20260908092002.1">https://svelte.dev/docs/svelte/$state#Built-in-classes
+
+</t>
+<t tx="swot.20260908092149.1"></t>
+<t tx="swot.20260908092317.1"></t>
+<t tx="swot.20260908092413.1"></t>
+<t tx="swot.20260908141104.1">[source,javascript]
+----
+@language javascript
+&lt;script&gt;
+	let count = $state(0);
+	let doubled = $derived(count * 2);
+&lt;/script&gt;
+
+&lt;button onclick={() =&gt; count++}&gt;
+    {doubled}
+&lt;/button&gt;
+
+&lt;p&gt;{count} doubled is {doubled}&lt;/p&gt;
+----
+</t>
+<t tx="swot.20260908142142.1"></t>
+<t tx="swot.20260908143705.1">https://svelte.dev/docs/svelte/$derived#Overriding-derived-values</t>
+<t tx="swot.20260908144923.1">https://svelte.dev/docs/svelte/$derived#Deriveds-and-reactivity
+
+需要注意 $derived() 也可能会影响 $state 定义的变量内容。
+
+[source,javascript]
+----
+@language javascript
+let items = $state([ /*...*/ ]);
+
+let index = $state(0);
+let selected = $derived(items[index]);
+----
+</t>
+<t tx="swot.20260908145127.1">$derived 被解构后，解构出来的变量，依然是响应式的。
+
+.这个例子更容易理解
+[source,html]
+----
+&lt;script&gt;
+    let price = $state(100);
+    let quantity = $state(2);
+    let discount = $state(0.9);
+
+    let {
+        total,
+        count,
+        finalPrice
+    } = $derived({
+        total: price * quantity,
+        count: quantity,
+        finalPrice: price * quantity * discount
+    });
+&lt;/script&gt;
+
+&lt;p&gt;商品数量：{count}&lt;/p&gt;
+&lt;p&gt;原价：{total}&lt;/p&gt;
+&lt;p&gt;折后价：{finalPrice}&lt;/p&gt;
+
+&lt;button onclick={() =&gt; quantity++}&gt;
+    增加一个
+&lt;/button&gt;
+
+&lt;button onclick={() =&gt; discount -= 0.1}&gt;
+    再打九折
+&lt;/button&gt;
+----
+</t>
+<t tx="swot.20260909080648.1">https://svelte.dev/docs/svelte/$effect
+
+Effects are functions that run when state updates, and can be used for things like calling third-party libraries, drawing on &lt;canvas&gt; elements, or making network requests. They only run in the browser, not during server-side rendering.
+写在 $effect 中可以被监测到的响应式变量有更新时，$effect函数中的代码就会运行。可以应用到调用第三方库、画画、做网络访问请求。
+$effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。
+
+Generally speaking, you should not update state inside effects, as it will make code more convoluted and will often lead to never-ending update cycles. If you find yourself doing so, see when not to use $effect to learn about alternative approaches.
+通常来讲，在 $effect 中不要去更新被它监测的变量，因为会特别复杂，也会导致死循环。一旦你这样做了，就去看看 https://svelte.dev/docs/svelte/$effect#When-not-to-use-$effect
+
+举例如下：$effect 监测了 color and size，更改 size or color，则会执行 $effect 函数中的语句
+[source,html]
+----
+&lt;script&gt;
+    let size = $state(50);
+    let color = $state('#ff3e00');
+
+    let canvas;
+
+    $effect(() =&gt; {
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // this will re-run whenever `color` or `size` change
+        context.fillStyle = color;  // 监测 color
+        context.fillRect(0, 0, size, size);  // 监测 size
+    });
+&lt;/script&gt;
+
+&lt;canvas bind:this={canvas} width="100" height="100"&gt;&lt;/canvas&gt;
+
+&lt;div&gt;
+    &lt;label&gt;
+        大小: 
+        &lt;input type="range" min="10" max="100" bind:value={size} /&gt;
+        {size}
+    &lt;/label&gt;
+&lt;/div&gt;
+
+&lt;div&gt;
+    &lt;label&gt;
+        颜色: 
+        &lt;input type="color" bind:value={color} /&gt;
+    &lt;/label&gt;
+&lt;/div&gt;
+----
+</t>
+<t tx="swot.20260909084444.1">https://svelte.dev/docs/svelte/$effect#$effect.pre
+
+$effect.pre 为你提供了在 DOM 更新流程中介入的“前置钩子”，让你有机会在变化发生前读取 DOM 旧状态，从而做出更精确的、与布局相关的操作。
+
+比如这个官方的例子展示的是可以用到聊天工具的对话中，如微信聊天时当前对话来了新的消息，滚动条在屏幕底部附近时直接滚动到最底部，若滚动条在前面看历史记录时，则滚动条不动。
+
+在绝大多数情况下，应该使用标准的 $effect，它会在 DOM 更新之后运行。只有在极少数需要在浏览器绘制新帧之前，读取或操作即将更新的 DOM 状态时，才需要使用 $effect.pre。
+
+.这个例子只是展示打印先后而已
+[source,javascript]
+----
+@language javascript
+&lt;script&gt;
+    let count = $state(0);
+    let div = $state();
+
+    $effect.pre(() =&gt; {
+        console.log('🟡 [pre] DOM 文本:', div?.textContent || '未挂载');
+        console.log('🟡 [pre] count 状态:', count);
+    });
+
+    $effect(() =&gt; {
+        console.log('🟢 [普通] DOM 文本:', div?.textContent || '未挂载');
+        console.log('🟢 [普通] count 状态:', count);
+    });
+&lt;/script&gt;
+
+&lt;div bind:this={div}&gt;Count: {count}&lt;/div&gt;
+&lt;button onclick={() =&gt; count++}&gt;增加&lt;/button&gt;
+----
+</t>
+<t tx="swot.20260909091024.1">https://svelte.dev/docs/svelte/$effect#$effect.tracking
+
+高级工具，95% 情况用不到。
+
+</t>
+<t tx="swot.20260909093616.1">直接在 svelte5 中集成了实现骨架屏或者加载中功能，比 vue 要使用 nuxt 的 useFetch 更加直观和方便。
+</t>
+<t tx="swot.20260909105950.1">在这儿使用过 src/lib/state-class/tracker.svelte.js
+</t>
+<t tx="swot.20260909141418.1">.src/lib/state-class/Todo.svelte.spec.js
+[source,javascript]
+----
+@others
+----</t>
+<t tx="swot.20260909150024.1">Your effects run after the component has been mounted to the DOM, and in a microtask after state changes. Re-runs are batched (i.e. changing color and size in the same moment won’t cause two separate runs), and happen after any DOM updates have been applied.
+
+$effect 函数的执行在组件挂载之后，而且是在监测的响应式变量更新以后在微任务中执行。比如同时更改了 color and size，$effect 中的代码是在 DOM 更新后批量执行的，不会分开执行。
+
+You can use $effect anywhere, not just at the top level of a component, as long as it is called while a parent effect is running.
+
+$effect 不单单是只能在组件的顶层去使用，它在一个已有的 $effect 内部调用也是可以的，但是不能独立在函数或条件分支中直接调用。
+
+.不能用的例子
+[source,html]
+----
+&lt;script&gt;
+	let count = $state(0);
+	
+	function setupEffect() {
+		// ❌ 错误！没有父级 effect 在运行
+		$effect(() =&gt; {
+			console.log(count);
+		});
+	}
+	
+	setupEffect(); // 这里调用会报错
+&lt;/script&gt;
+----
+
+了解 teardown function 函数，在清理副作用时很有用。
+</t>
+<t tx="swot.20260909163341.1">$effect automatically picks up any reactive values ($state, $derived, $props) that are **synchronously** read inside its function body (including indirectly, via function calls) and registers them as dependencies. When those dependencies change, the $effect schedules a re-run.
+
+$effect 监测的 **同步** 运行的响应式变量们，在变化时，$effect 函数中的代码会重新运行。
+
+If $state and $derived are used directly inside the $effect (for example, during creation of a reactive class), those values will not be treated as dependencies.
+
+直接在 $effect 中使用 $state and $derived 定义的变量，就不能被当作 $effect 的依赖。
+
+Values that are read asynchronously — after an await or inside a setTimeout, for example — will not be tracked. Here, the canvas will be repainted when color changes, but not when size changes (demo):
+
+异步读取的响应式变量，也不会成为依赖。如下例 color 是依赖，size 还是依赖。
+
+[source,javascript]
+----
+$effect(() =&gt; {
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    // this will re-run whenever `color` changes...
+    context.fillStyle = color;
+
+    setTimeout(() =&gt; {
+        // ...but not when `size` changes
+        context.fillRect(0, 0, size, size);
+    }, 0);
+});
+----
+
+An effect only reruns when the object it reads changes, not when a property inside it changes. (If you want to observe changes inside an object at dev time, you can use $inspect.)
+
+[source,html]
+----
+&lt;script&gt;
+    let state = $state({ value: 0 });
+    let derived = $derived({ value: state.value * 2 });
+
+    // this will run once, because `state` is never reassigned (only mutated)
+    $effect(() =&gt; {
+        state;
+    });
+
+    // this will run whenever `state.value` changes...
+    $effect(() =&gt; {
+        state.value;
+    });
+
+    // ...and so will this, because `derived` is a new object each time
+    $effect(() =&gt; {
+        derived;
+    });
+&lt;/script&gt;
+
+&lt;button onclick={() =&gt; (state.value += 1)}&gt;
+    {state.value}
+&lt;/button&gt;
+
+&lt;p&gt;{state.value} doubled is {derived.value}&lt;/p&gt;
+----
+
+An effect only depends on the values that it read the last time it ran. This has interesting implications for effects that have conditional code.
+
+注意 $effect 能够监测响应式变量并重新运行的条件是：$effect 上次运行时读取了哪些响应式变量。
+
+For instance, if condition is true in the code snippet below, the code inside the if block will run and color will be evaluated. This means that changes to either condition or color will cause the effect to re-run.
+
+例如，上一次执行 $effect 函数时，condition 是 true 时，condition 和 color 都会被监测到。
+
+Conversely, if condition is false, color will not be evaluated, and the effect will only re-run again when condition changes.
+
+相反地，如果 condition 是 false，color 就不能被监测到，只有当 condition 变化时，$effect 才会重新运行。
+
+[source,javascript]
+----
+import confetti from 'canvas-confetti';
+
+let condition = $state(true);
+let color = $state('#ff3e00');
+
+$effect(() =&gt; {
+    if (condition) {
+        confetti({ colors: [color] });
+    } else {
+        confetti();
+    }
+});
+----
+</t>
+<t tx="swot.20260911083735.1">1. 功能是实现父子组件之间的传值，一般都是从父组件传值给子组件。
+
+2. 子组件解构时定义的 callback valus 不是响应式的。
+
+3. 子组件解构变量时可以重新命名变量。
+
+4. 可以使用 rest 收集剩余的参数。
+
+5. 父组件传入的数据变化时，子组件接收到的数据也会跟着变化。
+
+6. 子组件改变父组件传入的数据时分情况
+
+    6.1 父组件传入的是普通对象，子组件的更改不会有响应式的效果。
+    6.2 父组件传入的是响应式数据，子组件的更改会有响应式的效果，但是会报警告说子组件修改的数据不是子组件自己的。
+    6.3 子组件接收 props 时定义的默认值 fallback 没有响应式的效果。
+    6.4 除非使用了 $bindable 才可以双向绑定。
+
+7. props 是可以写类型安全的。 https://svelte.dev/docs/svelte/$props#Type-safety
+
+</t>
+<t tx="swot.20260911090426.1">文档：https://svelte.dev/docs/svelte/$props#$props.id()
+
+作用: 生成一个**在当前组件实例内唯一且稳定**的 id，主要用于表单元素的可访问性（`label` 和 `input` 的 `for`/`id` 配对）。
+
+基本用法
+
+[source,html]
+----
+&lt;script&gt;
+  const uid = $props.id();
+&lt;/script&gt;
+
+&lt;label for="{uid}-firstname"&gt;First Name:&lt;/label&gt;
+&lt;input id="{uid}-firstname" type="text" /&gt;
+
+&lt;label for="{uid}-lastname"&gt;Last Name:&lt;/label&gt;
+&lt;input id="{uid}-lastname" type="text" /&gt;
+----
+
+**要点：调用一次，存到变量，用后缀拼出多个 id。**
+
+为什么需要它
+
+**核心价值：同一组件被渲染多次时，避免 id 冲突。**
+
+```svelte
+&lt;NameForm /&gt;
+&lt;NameForm /&gt;
+```
+
+- 写死 `id="firstname"` → 页面上出现重复 id，`&lt;label&gt;` 全指向第一个 input，可访问性坏掉
+- 用 `$props.id()` → 每个实例拿到不同 id（如 `svelte-1a2b3c`、`svelte-4d5e6f`），互不干扰
+
+关键结论
+
+. 组件会被多次实例化（可复用组件、表单等），有意义，刚需 
+. 组件在整个应用中只会渲染一次，写死字符串也行
+
+补充
+
+- SSR 场景下，服务端和客户端需要生成**一致的 id** 才能 hydration 成功，`$props.id()` 内部会处理。
+- **不能**用 `Math.random()` 之类的代替，会破坏 hydration。
+
+一句话记忆: 它不是为了"在一个组件里区分多个 id"，而是为了"**让同一组件的不同实例之间 id 不冲突**"。
+</t>
+<t tx="swot.20260911092032.1">@language asciidoc
 :author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
 :icons: font
@@ -42466,14 +43586,161 @@ todos[0].done = !todos[0].done;
 :toc:
 :toc: right
 :toc-title: 目录
-:toclevels: 3
+:toclevels: 4
 :tip-caption: ⚡
 :note-caption: ❕
 :important-caption: ❗
 :caution-caption: ⚠️
-:warning-caption: ‼️
+:warning-caption: ‼️</t>
+<t tx="swot.20260911092347.1">.#edit src/lib/state-class/PrivateTodo.svelte.js
+[source,javascript]
+----
+@others
+----</t>
+<t tx="swot.20260911092648.1">.#file src/routes/state-class/page.svelte.spec.js
+[source,javascript]
+----
+@others
+----</t>
+<t tx="swot.20260911102921.1">@language asciidoc
+通常父子组件之间的数据流向是从父组件到子组件。
+
+不要经常使用，会使用数据流不可预测，也会使组件难以维护。但确实可以简化代码，小心使用吧。
+
+使用了 $bindable 就可以在子组件中去更改父组件传入的响应式变量了。
+
+.App.svelte 父组件
+[source,html]
+----
+@language html
+&lt;script&gt;
+    import FancyInput from './FancyInput.svelte';
+
+    let message = $state('hello');
+&lt;/script&gt;
+
+&lt;FancyInput bind:value={message} /&gt;
+&lt;p&gt;{message}&lt;/p&gt;
+----
 
 
+.FancyInput.svelte 子组件
+[source,html]
+----
+@language html
+&lt;script&gt;
+    let { value = $bindable(), ...props } = $props();
+&lt;/script&gt;
+
+// input 处的 bind 是标签 input 自己的，和本例无关
+&lt;input bind:value={value} {...props} /&gt;
+
+&lt;style&gt;
+    input {
+        font-family: 'Comic Sans MS';
+        color: deeppink;
+    }
+&lt;/style&gt;
+----
+</t>
+<t tx="swot.20260911104028.1">在开发模式使用，在生产模式下会被编译成空操作。
+
+.监测响应式变量
+[source,html]
+----
+@language html
+&lt;script&gt;
+    let count = $state(0);
+    let message = $state('hello');
+
+    $inspect(count, message); // will console.log when `count` or `message` change
+&lt;/script&gt;
+
+&lt;button onclick={() =&gt; count++}&gt;Increment&lt;/button&gt;
+&lt;input bind:value={message} /&gt;
+----
+
+</t>
+<t tx="swot.20260911104702.1">可以自定义操作，取代 console.log()
+
+[source,javascript]
+----
+@language javascript
+&lt;script&gt;
+    let count = $state(0);
+
+    $inspect(count).with((type, count) =&gt; {
+        if (type === 'update') {
+            debugger; // or `console.trace`, or whatever you want
+        }
+    });
+&lt;/script&gt;
+
+&lt;button onclick={() =&gt; count++}&gt;Increment&lt;/button&gt;
+----
+</t>
+<t tx="swot.20260911104943.1">查看是哪个变量导致的 $effect 被执行了
+
+[source,javascript]
+----
+@language javascript
+&lt;script&gt;
+    import { doSomeWork } from './elsewhere';
+
+    $effect(() =&gt; {
+        // $inspect.trace must be the first statement of a function body
+        $inspect.trace();
+        doSomeWork();
+    });
+&lt;/script&gt;
+----
+</t>
+<t tx="swot.20260911105240.1">可以打包成 web component 组件，供其他 js 框架使用。比如让 react / vue3 / 纯js 都可以调用。
+
+$host 可以让你写的 web components 去和宿主进行事件沟通。
+
+可以参考官网的例子：https://svelte.dev/docs/svelte/$host
+
+</t>
+<t tx="swot.20260913104539.1"></t>
+<t tx="swot.20260913104554.1">https://svelte.dev/docs/svelte/basic-markup
+
+</t>
+<t tx="swot.20260913182005.1">
+</t>
+<t tx="swot.20260914084230.1">@language html
+&lt;div&gt;小写字母就是普通的 html 标签&lt;/div&gt;
+&lt;button&gt;按钮&lt;/button&gt;
+</t>
+<t tx="swot.20260914084527.1">@language html
+&lt;script&gt;
+    import Widget from './Widget.svelte';
+&lt;/script&gt;
+
+&lt;div&gt;
+    &lt;Widget /&gt;
+&lt;/div&gt;</t>
+<t tx="swot.20260914085614.1">.src/routes/template-syntax/tags/lower/+page.svelte
+[source,html]
+----
+@others
+----</t>
+<t tx="swot.20260914085627.1">.src/routes/template-syntax/tags/capitalised/+page.svelte
+[source,html]
+----
+@others
+----</t>
+<t tx="swot.20260914085943.1">@language html
+&lt;div&gt;
+    大写字母开头的标签会被当作组件，而不是普通的 html 标签
+&lt;/div&gt;
+</t>
+<t tx="swot.20260914090207.1">.src/routes/template-syntax/tags/capitalised/Widget.svelte
+[source,html]
+----
+@others
+----</t>
+<t tx="swot.20260914090814.1">
 // 只有当后端不是 pdf 时才包含以下内容
 ifndef::backend-pdf[]
 ++++
@@ -42528,188 +43795,125 @@ toggleButton.addEventListener('click', () =&gt; {
 ++++
 endif::[]
 </t>
-<t tx="swot.20260901103641.1">@tabwidth -2
-[source,js]
-----
-class Todo {
-	  done = $state(false);          // 字段声明处使用 $state
+<t tx="swot.20260914090958.1">以点号分隔的是组件，点号前面的一般是命名空间，后面是组件名。
 
-    constructor(text) {
-      this.text = $state(text);   // 构造函数中首次赋值处使用 $state
-    }
+官方机制是**命名空间导入**：`import * as my from '...'` 得到的是包含多个组件的对象，模板里 `&lt;my.stuff /&gt;` 的点号触发“组件”判定。我按这个思路在 `dot` 目录下建一套完整示例。
 
-    reset() {
-        this.text = '';
-        this.done = false;
-    }
-}
-----
+现在运行项目自带的类型检查，验证点号组件的写法确实能被编译通过。
+示例已创建并通过编译校验。访问路径：**`http://localhost:5173/template-syntax/tags/dot`**
+
+[discrete]
+===== 目录结构
+
+```
+src/routes/template-syntax/tags/dot/
+├── +page.svelte   ← 页面（路由入口）
+├── my.js          ← 命名空间模块（关键）
+├── Stuff.svelte   ← 组件 stuff
+└── Thing.svelte   ← 组件 thing
+```
+
+[discrete]
+===== 实现思路
+
+**1. 命名空间模块 `my.js`** — 用对象把多个组件聚合成一个“命名空间”：
+
+```js
+export { default as stuff } from './Stuff.svelte';
+export { default as thing } from './Thing.svelte';
+```
+
+**2. 页面用「命名空间导入」拿到这个对象**：
+
+```src/routes/template-syntax/tags/dot/+page.svelte
+&lt;script&gt;
+	// 命名空间导入：my 是一个对象，my.stuff / my.thing 是其中的组件
+	import * as my from './my.js';
+&lt;/script&gt;
+```
+
+**3. 模板里用点号访问**：
+
+```src/routes/template-syntax/tags/dot/+page.svelte
+	&lt;my.stuff /&gt;
+	&lt;my.thing /&gt;
+```
+
+[discrete]
+===== 核心原理
+
+Svelte 判定一个标签是「组件」还是「HTML 元素」只看标签名：
+
+- 首字母**小写**且**不含点号**（如 `&lt;div&gt;`）→ 普通 HTML 元素；
+- 首字母**大写**（如 `&lt;Widget&gt;`）**或含点号**（如 `&lt;my.stuff&gt;`）→ 组件。
+
+所以 `&lt;my.stuff&gt;` 里的 `my` 必须是**作用域内一个真实存在的对象**，`.stuff` 是它的一个成员、且该成员是一个组件。`import * as my from './my.js'` 正好返回这样“命名空间对象”，点号前面的 `my` 就是命名空间，后面的 `stuff` 就是组件名——和 ES 模块的命名空间语义完全一致。
+
+[discrete]
+===== 校验结果
+
+运行 `svelte-check` 结果：新增的 4 个文件**零错误零警告**，`&lt;my.stuff /&gt;` / `&lt;my.thing /&gt;` 这种点号写法编译通过。
+
+&gt; 备注：若你更想要单文件自包含的写法，也可以不建 `my.js`，直接在页面里 `import Stuff from './Stuff.svelte'; const my = { stuff: Stuff };`，效果一样；但“命名空间”这一概念用 `import * as my` 表达最贴切，所以我选了当前方案。
 </t>
-<t tx="swot.20260901103802.1">为支持 runes，类定义必须放在 `.svelte.js` 后缀的模块里。共新增 7 个文件：
+<t tx="swot.20260914092850.1">@language html
+&lt;script&gt;
+	// 命名空间导入：my 是一个对象，my.stuff / my.thing 是其中的组件
+	import * as my from './my.js';
+&lt;/script&gt;
 
-[cols="2,3"]
-|===
-| 文件 | 作用
-
-| `src/lib/state-class/Todo.svelte.js`
-| 官方示例原样（JSDoc 注释）
-
-| `src/lib/state-class/tracker.svelte.js`
-| 用 `$effect.root` 订阅属性的辅助函数，用于证明「真的响应式」
-
-| `src/lib/state-class/Todo.svelte.spec.js`
-| 单元 + 响应式测试（6 个）
-
-| `src/lib/state-class/edge-cases.svelte.js`
-| private 字段（`#done = $state(false)`）示例
-
-| `src/lib/state-class/edge-cases.svelte.spec.js`
-| private 字段响应式 / 解构失效（2 个）
-
-| `src/lib/state-class/edge-cases.spec.js`
-| 编译期合法性与报错校验（4 个）
-
-| `src/routes/state-class/+page.svelte`
-| 可视化页面 `/state-class`
-
-| `src/routes/state-class/page.svelte.spec.js`
-| 页面交互测试（5 个）
-|===
-
-[NOTE]
-====
-1. 页面测试不能叫 `+page.svelte.spec.js` —— `+` 是 SvelteKit 保留前缀，会让 `svelte-kit sync` 直接失败。
-2. 改用同目录下的 `page.svelte.spec.js`，依然命中 client 项目的 include glob `src/**/*.svelte.{test,spec}.{js,ts}`。
-====
+&lt;div class="space-y-3"&gt;
+	&lt;h1 class="text-2xl font-bold"&gt;点号（命名空间）组件&lt;/h1&gt;
+	&lt;p class="text-sm text-gray-600"&gt;
+		点号写法 &lt;code&gt;&amp;lt;my.stuff /&amp;gt;&lt;/code&gt; 中，点号前是命名空间，点号后是组件名。小写标签如
+		&lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; 是普通 HTML 元素，而带点号的标签一定是组件。
+	&lt;/p&gt;
+	&lt;my.stuff /&gt;
+	&lt;my.thing /&gt;
+&lt;/div&gt;
 </t>
-<t tx="swot.20260901110445.1">`$effect` 在 node/SSR 编译产物里是空实现，所以响应式断言必须跑在 client（浏览器）项目。`tracker.svelte.js` 在 `$effect.root` 里订阅一个 getter：
-
-[source,js]
-----
-import { flushSync } from 'svelte';
-
-export function createTracker(getter) {
-	let value = undefined;
-	let runs = 0;
-
-	const destroy = $effect.root(() =&gt; {
-		$effect(() =&gt; {
-			value = getter();
-			runs += 1;
-		});
-	});
-
-	flushSync();
-
-	return {
-		get value() { return value; },
-		get runs() { return runs; },
-		run(mutate) { flushSync(mutate); },
-		destroy
-	};
-}
-----
+<t tx="swot.20260914092937.1">@language javascript
+/**
+ * 命名空间模块。
+ *
+ * 页面里写 `import * as my from './my.js'` 之后，`my` 就是这个模块导出的对象。
+ * 于是模板中可以写 `&lt;my.stuff /&gt;`、`&lt;my.thing /&gt;`：
+ *   点号前面（my）是命名空间，点号后面（stuff / thing）是组件名。
+ *
+ * 关键点：只要标签里出现点号（或首字母大写），Svelte 就会把它当作“组件”而不是普通 HTML 标签。
+ */
+export { default as stuff } from './Stuff.svelte';
+export { default as thing } from './Thing.svelte';
 </t>
-<t tx="swot.20260901110549.1"></t>
-<t tx="swot.20260901110602.1">[cols="2,3,1"]
-|===
-| 写法 | 行为 | 结论
-
-| `done = $state(false)`（字段声明）
-| 改 `todo.done` 时 effect 重跑（runs 1 → 2）
-| ✅ 响应式生效
-
-| `this.text = $state(text)`（构造函数首次赋值）
-| 改 `todo.text` 时 effect 重跑
-| ✅ 响应式生效
-
-| `#done = $state(false)`（private 字段）
-| 编译为 `$.state(false)` + `$.get/$.set`，effect 重跑
-| ✅ 也生效
-
-| 调用 `reset()` 后两个字段仍响应式
-| 两个 effect 在重置后各自再重跑
-| ✅ 生效
-|===
-
+<t tx="swot.20260914092958.1">@language html
+&lt;div class="rounded border border-emerald-500 bg-emerald-50 px-3 py-2"&gt;
+	我是命名空间 &lt;code&gt;my&lt;/code&gt; 下的组件 &lt;code&gt;stuff&lt;/code&gt;，由 &lt;code&gt;&amp;lt;my.stuff /&amp;gt;&lt;/code&gt; 渲染
+&lt;/div&gt;
 </t>
-<t tx="swot.20260901110632.1">给实例后加一个普通属性，值写进去了，但 effect **没有**重跑——这正是文档说的「只对显式包了 `$state` 的字段生效」：
-
-[source,js]
-----
-/** @type {Todo &amp; { note?: string }} */
-const todo = new Todo('learn svelte');
-const tracker = createTracker(() =&gt; todo.note);
-
-tracker.run(() =&gt; {
-	todo.note = 'not reactive'; // 写进去了
-});
-
-expect(todo.note).toBe('not reactive');
-expect(tracker.runs).toBe(1); // effect 没重跑 =&gt; 实例不是 proxy
-----
+<t tx="swot.20260914093022.1">@language html
+&lt;div class="rounded border border-sky-500 bg-sky-50 px-3 py-2"&gt;
+	我是同一个命名空间下的另一个组件 &lt;code&gt;thing&lt;/code&gt;，由 &lt;code&gt;&amp;lt;my.thing /&amp;gt;&lt;/code&gt; 渲染
+&lt;/div&gt;
 </t>
-<t tx="swot.20260901110650.1">[source,js]
+<t tx="swot.20260914093143.1">.src/routes/template-syntax/tags/dot/+page.svelte
+[source,html]
 ----
-const { text } = todo;          // 只是快照
-const tracker = createTracker(() =&gt; text);
-
-tracker.run(() =&gt; { todo.text = 'changed'; });
-
-expect(todo.text).toBe('changed');
-expect(text).toBe('learn svelte'); // 局部变量不会跟着变
-expect(tracker.runs).toBe(1);
+@others
+----</t>
+<t tx="swot.20260914093236.1">.src/routes/template-syntax/tags/dot/my.js
+[source,javascript]
 ----
-
-</t>
-<t tx="swot.20260901110708.1">通过 `compileModule(source, { generate: 'client' })` 直接编译源码得到验证：
-
-[cols="2,3"]
-|===
-| 写法 | 编译结果
-
-| 文档里的两种写法 / private 字段
-| 正常编译（无报错）
-
-| 构造函数里先 `this.text = text` 再 `this.text = $state(text)`
-| 报错 `Cannot assign to a state field before its declaration`
-
-| 在普通方法里 `this.note = $state('x')`
-| 报错 `state_invalid_placement`（消息要求写在构造函数顶层对字段的首次赋值）
-|===
-
-</t>
-<t tx="swot.20260901110733.1">手工对网站进行测试 `npm run dev` 后访问 `/state-class`：
-
-    勾选 checkbox、编辑输入框、`reset()`、新增待办都会实时更新 DOM。
-
-使用工具自动对网站进行测试 `page.svelte.spec.js` 用 Playwright 覆盖了这些行为。
-</t>
-<t tx="swot.20260901110751.1">[source,console]
+@others
+----</t>
+<t tx="swot.20260914093315.1">.src/routes/template-syntax/tags/dot/Stuff.svelte
+[source,html]
 ----
-$ npm run test
-Test Files  6 passed (6)
-     Tests  19 passed (19)
+@others
+----</t>
+<t tx="swot.20260914093343.1">.src/routes/template-syntax/tags/dot/Thing.svelte
+[source,html]
 ----
-
-[source,console]
-----
-$ npm run build     # 通过
-$ npm run check     # 新增文件零类型错误
-----
-
-NOTE: 本机首次运行 `npm run test` 需要先 `npx playwright install chromium`（client 项目依赖浏览器；既有的 `Welcome.svelte.spec.js` 也同样需要）。
-
-</t>
-<t tx="swot.20260901110849.1">* 文档里的 `Todo` 类写法**完全正确**。
-* `$state` 可放在：class 字段声明（public 或 private）、构造函数里对属性的**首次**赋值。
-* 实例不被 proxy：只有显式用 `$state` 包装的字段才有响应式；后加属性、解构出来的变量都不具备响应式。
-* 「首次赋值」由编译器强制，写错位置会直接报编译错误。
-</t>
-<t tx="swot.20260901111327.1"></t>
-<t tx="swot.20260903103128.1"></t>
-<t tx="swot.20260903103131.1"></t>
-<t tx="swot.20260904135601.1"></t>
-<t tx="swot.20260904150658.1"></t>
+@others
+----</t>
 </tnodes>
 </leo_file>
