@@ -2898,8 +2898,9 @@
 <v t="swot.20260914142952.1"><vh>#file src/routes/template-syntax/element-attributes/+page.svelte</vh></v>
 </v>
 <v t="swot.20260914145819.1"><vh>Text expressions</vh>
-<v t="swot.20260914150800.1"><vh>@file src/routes/template-syntax/text-expressions/+page.svelte</vh></v>
+<v t="swot.20260914150800.1"><vh>#file src/routes/template-syntax/text-expressions/+page.svelte</vh></v>
 </v>
+<v t="swot.20260914161727.1"><vh>Comments</vh></v>
 </v>
 </v>
 </v>
@@ -43975,5 +43976,50 @@ Spread attributes
 <t tx="swot.20260914145819.1">https://svelte.dev/docs/svelte/basic-markup#Text-expressions
 
 </t>
+<t tx="swot.20260914150800.1">@language html
+&lt;script&gt;
+    let name = $state('world');
+    let a = $state(1);
+    let b = $state(2);
+
+    // 下面是正则表达式的例子要用的数据
+    let value = $state('Svelte');
+    let x = '纯字母或空格';
+    let y = '包含其他字符';
+
+    // 下面是「转义」和 {@html} 两个例子要用的数据
+    let raw = $state('&lt;strong&gt;我是 HTML 片段&lt;/strong&gt;');
+&lt;/script&gt;
+
+&lt;main class="mx-auto max-w-xl space-y-4 p-8"&gt;
+    &lt;h1 class="text-2xl font-bold"&gt;Text expressions（文本表达式）&lt;/h1&gt;
+
+    &lt;!-- 1. 花括号里放任意 JS 表达式，结果会作为文本渲染 --&gt;
+    &lt;p&gt;Hello {name}!&lt;/p&gt;
+
+    &lt;!-- 2. 再例如：花括号里可以是运算、函数调用等任意的 JS 表达式 --&gt;
+    &lt;p&gt;{a} + {b} = {a + b}&lt;/p&gt;
+    &lt;p&gt;{name.toUpperCase()}&lt;/p&gt;
+
+    &lt;!-- 3. null / undefined 会被省略，什么也不渲染 --&gt;
+    &lt;p&gt;方括号之间都是空的：[{undefined}] 和 [{null}]&lt;/p&gt;
+
+    &lt;!-- 4. 其他值（数字、布尔值）会被强制转成字符串 --&gt;
+    &lt;p&gt;数字 {a}、布尔值 {true} 都能直接渲染&lt;/p&gt;
+
+    &lt;!-- 5. 想显示字面量的花括号，用 HTML 实体 --&gt;
+    &lt;p&gt;&amp;#123; 这不是表达式 &amp;#125;&lt;/p&gt;
+
+    &lt;!-- 6. 正则字面量（/.../）要加括号，否则会被解析错 --&gt;
+    &lt;div&gt;{(/^[A-Za-z ]+$/).test(value) ? x : y}&lt;/div&gt;
+
+    &lt;!-- 7. 表达式会被字符串化并转义，防止代码注入：这里显示的是字面文本 这是 svelte 给我们设计好的全量转义 --&gt;
+    &lt;p&gt;{raw}&lt;/p&gt;
+
+    &lt;!-- 8. 想真正渲染 HTML，用 {@html}，但务必确保内容可信，防止 XSS --&gt;
+    &lt;div&gt;{@html raw}&lt;/div&gt;
+&lt;/main&gt;
+</t>
+<t tx="swot.20260914161727.1"></t>
 </tnodes>
 </leo_file>
