@@ -612,6 +612,13 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </li>
 <li><a href="#_element_attributes">Element attributes</a></li>
+<li><a href="#_text_expressions">Text expressions</a></li>
+<li><a href="#_comments">Comments</a>
+<ul class="sectlevel4">
+<li><a href="#_使用_main_svelte_的注释">使用 Main.svelte 的注释</a></li>
+<li><a href="#_定义_main_svelte_的注释">定义 Main.svelte 的注释</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -2467,6 +2474,7 @@ $effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。</p>
 <p><a href="https://svelte.dev/docs/svelte/basic-markup#Element-attributes" class="bare">https://svelte.dev/docs/svelte/basic-markup#Element-attributes</a></p>
 </div>
 <div class="listingblock">
+<div class="title">#file src/routes/template-syntax/element-attributes/+page.svelte</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
 <span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">p</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">12</span><span class="tok-p">);</span>
@@ -2477,14 +2485,14 @@ $effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。</p>
     <span class="tok-err">//</span> <span class="tok-na">1</span><span class="tok-err">.</span> <span class="tok-na">属性值里能包含</span> <span class="tok-na">JS</span> <span class="tok-na">表达式</span>
     <span class="tok-na">href</span><span class="tok-o">=</span><span class="tok-s">&quot;page/{p}&quot;</span>
 <span class="tok-p">&gt;</span>
-    <span class="tok-cm">&lt;!-- 2. 属性值可以是 JS 表达式 --&gt;</span>
     page {p}
 <span class="tok-p">&lt;/</span><span class="tok-nt">a</span><span class="tok-p">&gt;</span>
 
 <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;mt-4 flex items-center gap-3&quot;</span><span class="tok-p">&gt;</span>
-    <span class="tok-cm">&lt;!-- {disabled} 等价于 disabled={disabled} --&gt;</span>
     <span class="tok-p">&lt;</span><span class="tok-nt">button</span>
         <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded bg-blue-600 px-3 py-1 text-white disabled:bg-gray-400&quot;</span>
+        <span class="tok-err">//</span> <span class="tok-na">2</span><span class="tok-err">.</span> <span class="tok-na">属性值可以是</span> <span class="tok-na">JS</span> <span class="tok-na">表达式</span>
+        <span class="tok-err">//</span> <span class="tok-na">disabled</span><span class="tok-o">=</span><span class="tok-s">{disabled}</span>
         <span class="tok-err">//</span> <span class="tok-na">3</span><span class="tok-err">.</span> <span class="tok-na">属性名和它的值一样</span><span class="tok-err">，</span><span class="tok-na">则只写一个花括号包围的</span> <span class="tok-na">JS</span> <span class="tok-na">表达式就行了</span>
         <span class="tok-err">{</span><span class="tok-na">disabled</span><span class="tok-err">}</span>
     <span class="tok-p">&gt;</span>
@@ -2497,6 +2505,148 @@ $effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。</p>
 <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/basic-markup#Component-props" class="bare">https://svelte.dev/docs/svelte/basic-markup#Component-props</a></p>
+</div>
+<div class="paragraph">
+<p>Component props 组件的属性和上面的一样。</p>
+</div>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/basic-markup#Spread-attributes" class="bare">https://svelte.dev/docs/svelte/basic-markup#Spread-attributes</a></p>
+</div>
+<div class="paragraph">
+<p>Spread attributes</p>
+</div>
+<div class="listingblock">
+<div class="title">注意：前面同名属性的值会被被后面的覆盖，可以运行的例子省略</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">Widget</span> <span class="tok-na">a</span><span class="tok-o">=</span><span class="tok-s">&quot;b&quot;</span> <span class="tok-err">{...</span><span class="tok-na">things</span><span class="tok-err">}</span> <span class="tok-na">c</span><span class="tok-o">=</span><span class="tok-s">&quot;d&quot;</span> <span class="tok-p">/&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_text_expressions">Text expressions</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/basic-markup#Text-expressions" class="bare">https://svelte.dev/docs/svelte/basic-markup#Text-expressions</a></p>
+</div>
+<div class="listingblock">
+<div class="title">#file src/routes/template-syntax/text-expressions/+page.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-s1">&#39;world&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">a</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">1</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">b</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">2</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 下面是正则表达式的例子要用的数据</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-s1">&#39;Svelte&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">x</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;纯字母或空格&#39;</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">y</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s1">&#39;包含其他字符&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// 下面是「转义」和 {@html} 两个例子要用的数据</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">raw</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-s1">&#39;&lt;strong&gt;我是 HTML 片段&lt;/strong&gt;&#39;</span><span class="tok-p">);</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">main</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;mx-auto max-w-xl space-y-4 p-8&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">h1</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-2xl font-bold&quot;</span><span class="tok-p">&gt;</span>Text expressions（文本表达式）<span class="tok-p">&lt;/</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-cm">&lt;!-- 1. 花括号里放任意 JS 表达式，结果会作为文本渲染 --&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>Hello {name}!<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-cm">&lt;!-- 2. 再例如：花括号里可以是运算、函数调用等任意的 JS 表达式 --&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{a} + {b} = {a + b}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{name.toUpperCase()}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-cm">&lt;!-- 3. null / undefined 会被省略，什么也不渲染 --&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>方括号之间都是空的：[{undefined}] 和 [{null}]<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-cm">&lt;!-- 4. 其他值（数字、布尔值）会被强制转成字符串 --&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>数字 {a}、布尔值 {true} 都能直接渲染<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-cm">&lt;!-- 5. 想显示字面量的花括号，用 HTML 实体 --&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span><span class="tok-ni">&amp;#123;</span> 这不是表达式 <span class="tok-ni">&amp;#125;</span><span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-cm">&lt;!-- 6. 正则字面量（/.../）要加括号，否则会被解析错 --&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>{(/^[A-Za-z ]+$/).test(value) ? x : y}<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-cm">&lt;!-- 7. 表达式会被字符串化并转义，防止代码注入：这里显示的是字面文本 这是 svelte 给我们设计好的全量转义 --&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>{raw}<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+    <span class="tok-cm">&lt;!-- 8. 想真正渲染 HTML，用 {@html}，但务必确保内容可信，防止 XSS --&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>{@html raw}<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">main</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_comments">Comments</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/basic-markup#Comments" class="bare">https://svelte.dev/docs/svelte/basic-markup#Comments</a></p>
+</div>
+<div class="paragraph">
+<p>You can add a special comment starting with @component that will show up when hovering over the component name in other files.</p>
+</div>
+<div class="paragraph">
+<p>下面是这个例子</p>
+</div>
+<div class="sect4">
+<h5 id="_使用_main_svelte_的注释">使用 Main.svelte 的注释</h5>
+<div class="listingblock">
+<div class="title">#file src/routes/template-syntax/comments/+page.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">	</span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">Main</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./Main.svelte&#39;</span><span class="tok-p">;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;space-y-4 p-8&quot;</span><span class="tok-p">&gt;</span>
+	<span class="tok-p">&lt;</span><span class="tok-nt">h1</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-2xl font-bold&quot;</span><span class="tok-p">&gt;</span>Comments（注释）——@component 文档注释<span class="tok-p">&lt;/</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+
+	<span class="tok-cm">&lt;!-- 1. 普通 HTML 注释：不会渲染到 DOM 里 --&gt;</span>
+	<span class="tok-cm">&lt;!-- 这是一条普通的注释，页面上看不到它 --&gt;</span>
+
+	<span class="tok-p">&lt;</span><span class="tok-nt">p</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-sm text-gray-600&quot;</span><span class="tok-p">&gt;</span>
+		把鼠标放到下面这行的 <span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>Main<span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span> 上（在编辑器中，比如 VS Code），会弹出
+		<span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>Main.svelte<span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span> 里以 <span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>@component<span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span> 开头的注释内容（支持 markdown 和代码块）。
+	<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+	<span class="tok-cm">&lt;!-- 2. 使用组件时才看得到悬停提示，页面渲染结果与普通注释一样不受影响 --&gt;</span>
+	<span class="tok-p">&lt;</span><span class="tok-nt">Main</span> <span class="tok-na">name</span><span class="tok-o">=</span><span class="tok-s">&quot;Aretha&quot;</span> <span class="tok-p">/&gt;</span>
+
+	<span class="tok-p">&lt;</span><span class="tok-nt">p</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-sm text-gray-600&quot;</span><span class="tok-p">&gt;</span>
+		注意：注释内容不会出现在页面上；同一文件里有多个 <span class="tok-p">&lt;</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>@component<span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span> 注释时，只有最后一个生效。
+	<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_定义_main_svelte_的注释">定义 Main.svelte 的注释</h5>
+<div class="listingblock">
+<div class="title">#file src/routes/template-syntax/comments/Main.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-cm">&lt;!--</span>
+<span class="tok-cm">@component</span>
+<span class="tok-cm">组件说明注释（doc comment）：以 `@component` 开头的这段注释不会渲染到页面上，</span>
+<span class="tok-cm">它只会在**其他文件**里把鼠标悬停在 `&lt;Main&gt;` 组件名上时，作为提示框（tooltip）弹出。</span>
+
+<span class="tok-cm">- 这里可以用 markdown 语法，比如 **加粗**、`行内代码`、列表等。</span>
+<span class="tok-cm">- 这里也可以用代码块。</span>
+<span class="tok-cm">- Usage（用法）：</span>
+<span class="tok-cm">  ```html</span>
+<span class="tok-cm">  &lt;Main name=&quot;Aretha&quot;&gt;</span>
+<span class="tok-cm">  ```</span>
+<span class="tok-cm">--&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">	</span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$props</span><span class="tok-p">();</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">main</span><span class="tok-p">&gt;</span>
+	<span class="tok-p">&lt;</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+		Hello, {name}
+	<span class="tok-p">&lt;/</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">main</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2504,7 +2654,7 @@ $effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-14 14:40:10 +0800
+Last updated 2026-09-14 16:40:02 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -2900,7 +2900,14 @@
 <v t="swot.20260914145819.1"><vh>Text expressions</vh>
 <v t="swot.20260914150800.1"><vh>#file src/routes/template-syntax/text-expressions/+page.svelte</vh></v>
 </v>
-<v t="swot.20260914161727.1"><vh>Comments</vh></v>
+<v t="swot.20260914161727.1"><vh>Comments</vh>
+<v t="swot.20260914162849.1"><vh>使用 Main.svelte 的注释</vh>
+<v t="swot.20260914163002.1"><vh>#file src/routes/template-syntax/comments/+page.svelte</vh></v>
+</v>
+<v t="swot.20260914162907.1"><vh>定义 Main.svelte 的注释</vh>
+<v t="swot.20260914163001.1"><vh>#file src/routes/template-syntax/comments/Main.svelte</vh></v>
+</v>
+</v>
 </v>
 </v>
 </v>
@@ -43924,6 +43931,7 @@ export { default as thing } from './Thing.svelte';
 ----</t>
 <t tx="swot.20260914104025.1">https://svelte.dev/docs/svelte/basic-markup#Element-attributes
 
+.#file src/routes/template-syntax/element-attributes/+page.svelte
 [source,html]
 ----
 @others
@@ -43975,7 +43983,11 @@ Spread attributes
 </t>
 <t tx="swot.20260914145819.1">https://svelte.dev/docs/svelte/basic-markup#Text-expressions
 
-</t>
+.#file src/routes/template-syntax/text-expressions/+page.svelte
+[source,html]
+----
+@others
+----</t>
 <t tx="swot.20260914150800.1">@language html
 &lt;script&gt;
     let name = $state('world');
@@ -44020,6 +44032,67 @@ Spread attributes
     &lt;div&gt;{@html raw}&lt;/div&gt;
 &lt;/main&gt;
 </t>
-<t tx="swot.20260914161727.1"></t>
+<t tx="swot.20260914161727.1">https://svelte.dev/docs/svelte/basic-markup#Comments
+
+You can add a special comment starting with @component that will show up when hovering over the component name in other files.
+
+下面是这个例子</t>
+<t tx="swot.20260914162849.1">.#file src/routes/template-syntax/comments/+page.svelte
+[source,html]
+----
+@others
+----</t>
+<t tx="swot.20260914162907.1">.#file src/routes/template-syntax/comments/Main.svelte
+[source,html]
+----
+@others
+----</t>
+<t tx="swot.20260914163001.1">@language html
+&lt;!--
+@component
+组件说明注释（doc comment）：以 `@component` 开头的这段注释不会渲染到页面上，
+它只会在**其他文件**里把鼠标悬停在 `&lt;Main&gt;` 组件名上时，作为提示框（tooltip）弹出。
+
+- 这里可以用 markdown 语法，比如 **加粗**、`行内代码`、列表等。
+- 这里也可以用代码块。
+- Usage（用法）：
+  ```html
+  &lt;Main name="Aretha"&gt;
+  ```
+--&gt;
+&lt;script&gt;
+	let { name } = $props();
+&lt;/script&gt;
+
+&lt;main&gt;
+	&lt;h1&gt;
+		Hello, {name}
+	&lt;/h1&gt;
+&lt;/main&gt;
+</t>
+<t tx="swot.20260914163002.1">@language html
+&lt;script&gt;
+	import Main from './Main.svelte';
+&lt;/script&gt;
+
+&lt;div class="space-y-4 p-8"&gt;
+	&lt;h1 class="text-2xl font-bold"&gt;Comments（注释）——@component 文档注释&lt;/h1&gt;
+
+	&lt;!-- 1. 普通 HTML 注释：不会渲染到 DOM 里 --&gt;
+	&lt;!-- 这是一条普通的注释，页面上看不到它 --&gt;
+
+	&lt;p class="text-sm text-gray-600"&gt;
+		把鼠标放到下面这行的 &lt;code&gt;Main&lt;/code&gt; 上（在编辑器中，比如 VS Code），会弹出
+		&lt;code&gt;Main.svelte&lt;/code&gt; 里以 &lt;code&gt;@component&lt;/code&gt; 开头的注释内容（支持 markdown 和代码块）。
+	&lt;/p&gt;
+
+	&lt;!-- 2. 使用组件时才看得到悬停提示，页面渲染结果与普通注释一样不受影响 --&gt;
+	&lt;Main name="Aretha" /&gt;
+
+	&lt;p class="text-sm text-gray-600"&gt;
+		注意：注释内容不会出现在页面上；同一文件里有多个 &lt;code&gt;@component&lt;/code&gt; 注释时，只有最后一个生效。
+	&lt;/p&gt;
+&lt;/div&gt;
+</t>
 </tnodes>
 </leo_file>
