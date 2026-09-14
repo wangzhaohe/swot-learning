@@ -2869,7 +2869,7 @@
 </v>
 <v t="swot.20260913104539.1"><vh>Template Syntax</vh>
 <v t="swot.20260913104554.1"><vh>Basic markup</vh>
-<v t="swot.20260913182005.1"><vh>tag</vh>
+<v t="swot.20260913182005.1"><vh>tags</vh>
 <v t="swot.20260914085614.1"><vh>小写字母就是普通的 html 标签</vh>
 <v t="swot.20260914084230.1"><vh>#file src/routes/template-syntax/tags/lower/+page.svelte</vh></v>
 </v>
@@ -2893,6 +2893,12 @@
 <v t="swot.20260914093022.1"><vh>#file src/routes/template-syntax/tags/dot/Thing.svelte</vh></v>
 </v>
 </v>
+</v>
+<v t="swot.20260914104025.1"><vh>Element attributes</vh>
+<v t="swot.20260914142952.1"><vh>#file src/routes/template-syntax/element-attributes/+page.svelte</vh></v>
+</v>
+<v t="swot.20260914145819.1"><vh>Text expressions</vh>
+<v t="swot.20260914150800.1"><vh>@file src/routes/template-syntax/text-expressions/+page.svelte</vh></v>
 </v>
 </v>
 </v>
@@ -43915,5 +43921,59 @@ export { default as thing } from './Thing.svelte';
 ----
 @others
 ----</t>
+<t tx="swot.20260914104025.1">https://svelte.dev/docs/svelte/basic-markup#Element-attributes
+
+[source,html]
+----
+@others
+----
+
+https://svelte.dev/docs/svelte/basic-markup#Component-props
+
+Component props 组件的属性和上面的一样。
+
+https://svelte.dev/docs/svelte/basic-markup#Spread-attributes
+
+Spread attributes 
+
+.注意：前面同名属性的值会被被后面的覆盖，可以运行的例子省略
+[source,html]
+----
+&lt;Widget a="b" {...things} c="d" /&gt;
+----
+
+</t>
+<t tx="swot.20260914142952.1">@language html
+&lt;script&gt;
+    let p = $state(12);
+    let disabled = $state(false);
+&lt;/script&gt;
+
+&lt;a class="text-blue-600 underline"
+    // 1. 属性值里能包含 JS 表达式
+    href="page/{p}"
+&gt;
+    page {p}
+&lt;/a&gt;
+
+&lt;div class="mt-4 flex items-center gap-3"&gt;
+    &lt;button
+        class="rounded bg-blue-600 px-3 py-1 text-white disabled:bg-gray-400"
+        // 2. 属性值可以是 JS 表达式
+        // disabled={disabled}
+        // 3. 属性名和它的值一样，则只写一个花括号包围的 JS 表达式就行了
+        {disabled}
+    &gt;
+        提交
+    &lt;/button&gt;
+    &lt;label class="flex items-center gap-1"&gt;
+        &lt;input type="checkbox" bind:checked={disabled} /&gt;
+        测试禁用提交按钮
+    &lt;/label&gt;
+&lt;/div&gt;
+</t>
+<t tx="swot.20260914145819.1">https://svelte.dev/docs/svelte/basic-markup#Text-expressions
+
+</t>
 </tnodes>
 </leo_file>
