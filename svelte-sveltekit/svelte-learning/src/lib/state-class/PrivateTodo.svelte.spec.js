@@ -2,7 +2,7 @@
 //@+node:swot.20260901105306.1: * @file src/lib/state-class/PrivateTodo.svelte.spec.js
 //@@language javascript
 import { describe, expect, it } from 'vitest';
-import { PrivateTodo } from './placement-rules.svelte.js';
+import { PrivateTodo } from './PrivateTodo.svelte.js';
 import { createTracker } from './tracker.svelte.js';
 
 // private 字段响应式 / 解构失效（2 个）
