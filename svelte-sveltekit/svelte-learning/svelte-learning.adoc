@@ -1360,7 +1360,7 @@ $host 可以让你写的 web components 去和宿主进行事件沟通。
 === Basic markup
 https://svelte.dev/docs/svelte/basic-markup
 
-==== tag
+==== tags
 
 
 ===== 小写字母就是普通的 html 标签
@@ -1507,6 +1507,40 @@ export { default as thing } from './Thing.svelte';
 ----
 <div class="rounded border border-sky-500 bg-sky-50 px-3 py-2">
 	我是同一个命名空间下的另一个组件 <code>thing</code>，由 <code>&lt;my.thing /&gt;</code> 渲染
+</div>
+----
+
+==== Element attributes
+https://svelte.dev/docs/svelte/basic-markup#Element-attributes
+
+[source,html]
+----
+<script>
+    let p = $state(12);
+    let disabled = $state(false);
+</script>
+
+<a class="text-blue-600 underline"
+    // 1. 属性值里能包含 JS 表达式
+    href="page/{p}"
+>
+    <!-- 2. 属性值可以是 JS 表达式 -->
+    page {p}
+</a>
+
+<div class="mt-4 flex items-center gap-3">
+    <!-- {disabled} 等价于 disabled={disabled} -->
+    <button
+        class="rounded bg-blue-600 px-3 py-1 text-white disabled:bg-gray-400"
+        // 3. 属性名和它的值一样，则只写一个花括号包围的 JS 表达式就行了
+        {disabled}
+    >
+        提交
+    </button>
+    <label class="flex items-center gap-1">
+        <input type="checkbox" bind:checked={disabled} />
+        测试禁用提交按钮
+    </label>
 </div>
 ----
 

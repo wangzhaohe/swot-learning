@@ -603,7 +603,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel2">
 <li><a href="#_basic_markup">Basic markup</a>
 <ul class="sectlevel3">
-<li><a href="#_tag">tag</a>
+<li><a href="#_tags">tags</a>
 <ul class="sectlevel4">
 <li><a href="#_小写字母就是普通的_html_标签">小写字母就是普通的 html 标签</a></li>
 <li><a href="#_大写字母开头是组件定义组件">大写字母开头是组件&#8212;&#8203;定义组件</a></li>
@@ -611,6 +611,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_点号命名空间的方式">点号命名空间的方式</a></li>
 </ul>
 </li>
+<li><a href="#_element_attributes">Element attributes</a></li>
 </ul>
 </li>
 </ul>
@@ -2278,7 +2279,7 @@ $effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。</p>
 <p><a href="https://svelte.dev/docs/svelte/basic-markup" class="bare">https://svelte.dev/docs/svelte/basic-markup</a></p>
 </div>
 <div class="sect3">
-<h4 id="_tag">tag</h4>
+<h4 id="_tags">tags</h4>
 <div class="sect4">
 <h5 id="_小写字母就是普通的_html_标签">小写字母就是普通的 html 标签</h5>
 <div class="listingblock">
@@ -2460,13 +2461,50 @@ $effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。</p>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_element_attributes">Element attributes</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/basic-markup#Element-attributes" class="bare">https://svelte.dev/docs/svelte/basic-markup#Element-attributes</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">p</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">12</span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">disabled</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">);</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">a</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-blue-600 underline&quot;</span>
+    <span class="tok-err">//</span> <span class="tok-na">1</span><span class="tok-err">.</span> <span class="tok-na">属性值里能包含</span> <span class="tok-na">JS</span> <span class="tok-na">表达式</span>
+    <span class="tok-na">href</span><span class="tok-o">=</span><span class="tok-s">&quot;page/{p}&quot;</span>
+<span class="tok-p">&gt;</span>
+    <span class="tok-cm">&lt;!-- 2. 属性值可以是 JS 表达式 --&gt;</span>
+    page {p}
+<span class="tok-p">&lt;/</span><span class="tok-nt">a</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;mt-4 flex items-center gap-3&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-cm">&lt;!-- {disabled} 等价于 disabled={disabled} --&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">button</span>
+        <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded bg-blue-600 px-3 py-1 text-white disabled:bg-gray-400&quot;</span>
+        <span class="tok-err">//</span> <span class="tok-na">3</span><span class="tok-err">.</span> <span class="tok-na">属性名和它的值一样</span><span class="tok-err">，</span><span class="tok-na">则只写一个花括号包围的</span> <span class="tok-na">JS</span> <span class="tok-na">表达式就行了</span>
+        <span class="tok-err">{</span><span class="tok-na">disabled</span><span class="tok-err">}</span>
+    <span class="tok-p">&gt;</span>
+        提交
+    <span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">label</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;flex items-center gap-1&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">input</span> <span class="tok-na">type</span><span class="tok-o">=</span><span class="tok-s">&quot;checkbox&quot;</span> <span class="tok-na">bind:checked</span><span class="tok-o">=</span><span class="tok-s">{disabled}</span> <span class="tok-p">/&gt;</span>
+        测试禁用提交按钮
+    <span class="tok-p">&lt;/</span><span class="tok-nt">label</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-14 10:21:06 +0800
+Last updated 2026-09-14 14:40:10 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
