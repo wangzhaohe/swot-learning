@@ -2897,6 +2897,11 @@
 <v t="swot.20260914104025.1"><vh>Element attributes</vh>
 <v t="swot.20260914142952.1"><vh>#file src/routes/template-syntax/element-attributes/+page.svelte</vh></v>
 </v>
+<v t="swot.20260915083559.1"><vh>Events</vh>
+<v t="swot.20260915084843.1"><vh>这是一个最普通的例子 -- onclick</vh>
+<v t="swot.20260915084807.1"><vh>#edit src/routes/template-syntax/events/+page.svelte</vh></v>
+</v>
+</v>
 <v t="swot.20260914145819.1"><vh>Text expressions</vh>
 <v t="swot.20260914150800.1"><vh>#file src/routes/template-syntax/text-expressions/+page.svelte</vh></v>
 </v>
@@ -44061,13 +44066,13 @@ You can add a special comment starting with @component that will show up when ho
   ```
 --&gt;
 &lt;script&gt;
-	let { name } = $props();
+    let { name } = $props();
 &lt;/script&gt;
 
 &lt;main&gt;
-	&lt;h1&gt;
-		Hello, {name}
-	&lt;/h1&gt;
+    &lt;h1&gt;
+        Hello, {name}
+    &lt;/h1&gt;
 &lt;/main&gt;
 </t>
 <t tx="swot.20260914163002.1">@language html
@@ -44094,5 +44099,37 @@ You can add a special comment starting with @component that will show up when ho
 	&lt;/p&gt;
 &lt;/div&gt;
 </t>
+<t tx="swot.20260915083559.1">https://svelte.dev/docs/svelte/basic-markup#Events
+
+</t>
+<t tx="swot.20260915084807.1">@language html
+&lt;script&gt;
+    let count = $state(0);
+
+    function handleClick() {
+        count += 1;
+    }
+&lt;/script&gt;
+
+&lt;h1&gt;Events&lt;/h1&gt;
+&lt;p&gt;
+    监听 DOM 事件：给元素添加以 &lt;code&gt;on&lt;/code&gt; 开头的属性，例如
+    &lt;code&gt;onclick&lt;/code&gt;。
+&lt;/p&gt;
+
+&lt;button onclick={() =&gt; console.log('clicked')}&gt;
+    点我（仅打印日志）
+&lt;/button&gt;
+
+&lt;hr /&gt;
+
+&lt;button onclick={handleClick}&gt;
+    点我计数：{count}
+&lt;/button&gt;
+</t>
+<t tx="swot.20260915084843.1">[source,html]
+----
+@others
+----</t>
 </tnodes>
 </leo_file>

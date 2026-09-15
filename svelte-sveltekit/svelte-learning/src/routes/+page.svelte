@@ -6,3 +6,4 @@
 <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
 <p><a href={resolve('/state-class')}>$state 用在 class 里的验证页面</a></p>
 <p><a href={resolve('/template-syntax/element-attributes')}>元素属性花括号表达式验证页面</a></p>
+<p><a href={resolve('/template-syntax/events')}>Events 事件监听验证页面</a></p>
