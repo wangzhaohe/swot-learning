@@ -9,7 +9,7 @@
     // ── 1. DOM 事件属性：onclick ──
     let count = $state(0);
 
-    function handleClick() {
+    function handleClickCount() {
         count += 1;
     }
 
@@ -19,7 +19,7 @@
     /**
      * @param {string} payload 子组件调用回调时传回来的数据
      */
-    function handleClickMe(payload) {
+    function onClick(payload) {
         message = `父组件收到：${payload}`;
     }
 </script>
@@ -37,7 +37,7 @@
             开头的属性即可监听 DOM 事件，例如
             <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700">onclick</code>。
         </p>
-        
+
         <div class="flex flex-wrap gap-3">
             <button
                 class="rounded-lg bg-sky-600 px-4 py-2 text-white shadow-sm transition hover:bg-sky-700"
@@ -47,7 +47,7 @@
             </button>
             <button
                 class="rounded-lg bg-emerald-600 px-4 py-2 text-white shadow-sm transition hover:bg-emerald-700"
-                onclick={handleClick}
+                onclick={handleClickCount}
             >
                 点我计数：{count}
             </button>
@@ -55,45 +55,34 @@
     </section>
     <!--@+node:swot.20260915092619.1: *3* 2. 组件事件 = 回调函数作为 prop-->
     <section class="space-y-3 rounded-xl border border-slate-200 p-4">
-        <h2 class="text-lg font-semibold text-violet-700">2. 组件事件 = 回调函数作为 prop</h2>
+        <h2 class="text-lg font-semibold text-violet-700">
+            2. 组件事件 = 回调函数作为 prop
+        </h2>
 
         <p class="text-slate-600">
             <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700"
-                >&lt;Child onClickMe={handleClickMe} /&gt;</code
-            >
+                >&lt;Child onClick=&#123;onClick&#125; /&gt;
+            </code>
             并不是某种特殊的“事件机制”，本质就是父组件把
-            <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700">handleClickMe</code
-            >
+            <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700">
+                onClick
+            </code>
             这个<strong class="text-slate-800">函数当成普通 prop</strong>
             传给子组件；子组件拿到后<strong class="text-slate-800">直接调用它</strong>来通知父组件。
         </p>
-
+        <!--@+others-->
+        <!--@+node:swot.20260915094658.1: *4* 重点代码: 调用子组件传入属性 onClick-->
         <div class="flex flex-wrap items-center gap-3">
-            <Child onClickMe={handleClickMe} />
-            <span class="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-700">{message}</span>
+            <!-- onClick 就是一个普通的属性 -->
+            <!-- 属性和值的完整写法 -->
+            <!-- <Child onClick={onClick} /> -->
+            <!-- 属性与值相同可以简写 -->
+            <Child {onClick} />
+            <span class="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                {message}
+            </span>
         </div>
-
-        <pre
-            class="overflow-x-auto rounded-lg bg-slate-800 p-4 text-sm leading-relaxed text-slate-100">父组件
-    │  onClickMe = handleClickMe
-    ↓
-    子组件
-    │  onClickMe()   ← 调用拿到的回调
-    ↓
-    父组件的 handleClickMe()</pre>
-
-        <p class="text-slate-600">
-            ⚠️ 注意区分这两者：<code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700"
-                >&lt;button onclick={handleClick}&gt;</code
-            >
-            里的 <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700">onclick</code> 是
-            <strong class="text-slate-800">DOM 事件属性</strong>；而
-            <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700"
-                >&lt;Child onClickMe={handleClickMe}&gt;</code
-            >
-            里的 <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700">onClickMe</code>
-            对子组件而言只是一个<strong class="text-slate-800">恰好是函数的普通 prop</strong>。
-        </p>
+        <!--@-others-->
     </section>
     <!--@-others-->
 </div>
