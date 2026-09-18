@@ -159,7 +159,7 @@ https://svelte.dev/docs/svelte/$state#Classes
 环境：Svelte `^5.56.1`，`vite.config.js` 已强制开启 `runes: true`，Vitest（server + client 两个项目）。
 
 ====== 1. 官方示例（后面要验证 $state 的写法）
-.@edit src/lib/state-class/Todo.svelte.js
+.src/lib/state-class/Todo.svelte.js
 [source,javascript]
 ----
 /* global $state */
@@ -1559,6 +1559,634 @@ Spread attributes
 <Widget a="b" {...things} c="d" />
 ----
 
+==== Events
+https://svelte.dev/docs/svelte/basic-markup#Events
+
+===== 点击事件处理页面
+[source,html]
+----
+<script>
+    import Child from './Child.svelte';
+
+    // ── 1. DOM 事件属性：onclick ──
+    let count = $state(0);
+
+    function handleClickCount() {
+        count += 1;
+    }
+
+    // ── 2. 组件事件：其实就是一个回调函数 prop ──
+    let message = $state('（还没收到子组件的消息）');
+
+    /**
+     * @param {string} payload 子组件调用回调时传回来的数据
+     */
+    function onClick(payload) {
+        message = `父组件收到：${payload}`;
+    }
+</script>
+<div class="mx-auto max-w-2xl space-y-6 p-6">
+    <h1 class="text-2xl font-bold text-slate-800">Events</h1>
+    <section class="space-y-3 rounded-xl border border-slate-200 p-4">
+        <h2 class="text-lg font-semibold text-sky-700">1. DOM 事件属性 onclick</h2>
+
+        <p class="text-slate-600">
+            给元素添加以 <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700">on</code
+            >
+            开头的属性即可监听 DOM 事件，例如
+            <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700">onclick</code>。
+        </p>
+
+        <div class="flex flex-wrap gap-3">
+            <button
+                class="rounded-lg bg-sky-600 px-4 py-2 text-white shadow-sm transition hover:bg-sky-700"
+                onclick={() => console.log('clicked')}
+            >
+                点我（控制台打印 clicked）
+            </button>
+            <button
+                class="rounded-lg bg-emerald-600 px-4 py-2 text-white shadow-sm transition hover:bg-emerald-700"
+                onclick={handleClickCount}
+            >
+                点我计数：{count}
+            </button>
+        </div>
+    </section>
+    <section class="space-y-3 rounded-xl border border-slate-200 p-4">
+        <h2 class="text-lg font-semibold text-violet-700">
+            2. 组件事件 = 回调函数作为 prop
+        </h2>
+
+        <p class="text-slate-600">
+            <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700"
+                >&lt;Child onClick=&#123;onClick&#125; /&gt;
+            </code>
+            并不是某种特殊的“事件机制”，本质就是父组件把
+            <code class="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700">
+                onClick
+            </code>
+            这个<strong class="text-slate-800">函数当成普通 prop</strong>
+            传给子组件；子组件拿到后<strong class="text-slate-800">直接调用它</strong>来通知父组件。
+        </p>
+        <div class="flex flex-wrap items-center gap-3">
+            <!-- onClick 就是一个普通的属性 -->
+            <!-- 属性和值的完整写法 -->
+            <!-- <Child onClick={onClick} /> -->
+            <!-- 属性与值相同可以简写 -->
+            <Child {onClick} />
+            <span class="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                {message}
+            </span>
+        </div>
+    </section>
+</div>
+----
+
+===== 子组件调用父组件传入的属性指定的回调函数
+[source,html]
+----
+<script>
+    // 对子组件来说，onClickMe 就是一个普通的 prop，只不过它恰好是一个函数。
+    let { onClick } = $props();
+
+    function handleClick() {
+        // 拿到父组件传进来的回调函数后，直接调用它即可“通知”父组件。
+        onClick?.('hello');  // 实际上调用的是函数 handleClickMe
+    }
+</script>
+
+<button
+    class="rounded-lg bg-violet-600 px-4 py-2 text-white shadow-sm transition hover:bg-violet-700 active:scale-95"
+    // 注意：这里的 onclick 是 DOM 事件属性，和上面的 onClick prop 是两回事。
+    onclick={handleClick}
+>
+    我是子组件，点我调用 onClick 回调
+</button>
+----
+
+===== 在 svelte5 中 passive 属性默认为 true
+When using ontouchstart and ontouchmove event attributes, the handlers
+are passive for better performance. This greatly improves responsiveness
+by allowing the browser to scroll the document immediately, rather than
+waiting to see if the event handler calls event.preventDefault().
+
+这里的 *passive 模式*，核心就一句话：
+
+____
+*告诉浏览器：这个事件处理函数不会调用
+`event.preventDefault()`，所以浏览器不用等你的 JS
+执行完，就可以立即执行默认行为，比如滚动页面。*
+____
+
+====== 1. 先看普通模式
+假设你监听触摸移动：
+
+[source,js]
+----
+element.addEventListener('touchmove', handleMove);
+----
+
+用户手指移动时，浏览器会遇到一个问题：
+
+____
+「这个 `handleMove` 函数里面，会不会调用 `event.preventDefault()` 阻止滚动？」
+____
+
+所以浏览器可能需要：
+
+[source,text]
+----
+用户手指移动
+    ↓
+触发 touchmove
+    ↓
+先等 JS 的 handleMove 执行
+    ↓
+看看有没有 preventDefault()
+    ↓
+确定不会阻止滚动
+    ↓
+浏览器开始滚动
+----
+
+如果 JS 比较慢，就可能感觉到**滚动不跟手**。
+
+====== 2. passive 模式解决这个问题
+如果告诉浏览器：
+
+[source,js]
+----
+element.addEventListener('touchmove', handleMove, {
+    passive: true
+});
+----
+
+意思就是：
+
+____
+*这个 handler 是 passive 的，我保证不会阻止默认行为。*
+____
+
+于是浏览器可以：
+
+[source,text]
+----
+用户手指移动
+    ↓
+浏览器：既然你保证不会 preventDefault()
+    ↓
+立即滚动
+    ↓
+同时处理 touchmove 的 JS
+----
+
+这样滚动响应会更快。
+
+====== 3. preventDefault() 会发生什么？
+例如：
+
+[source,js]
+----
+function handleMove(event) {
+    event.preventDefault();
+}
+----
+
+正常情况下：
+
+[source,text]
+----
+touchmove
+   ↓
+preventDefault()
+   ↓
+阻止浏览器默认滚动
+----
+
+这对于一些场景是有用的，比如你自己实现一个拖拽、滑动区域，不希望页面跟着滚动。
+
+但是如果事件是：
+
+[source,js]
+----
+{ passive: true }
+----
+
+那么你就**不能依靠 `preventDefault()` 阻止默认行为**。
+
+也就是说：
+
+[source,js]
+----
+function handleMove(event) {
+    event.preventDefault(); // passive 下不能用它阻止默认行为
+}
+----
+
+====== 4. 为什么 Svelte 对 `ontouchstart` / `ontouchmove` 特别处理？
+Svelte：
+
+[source,html]
+----
+<div ontouchmove={handleMove}>
+----
+
+这里 Svelte 会以 *passive listener* 的方式处理。即 { passive: true }
+
+结果就是：
+
+[source,text]
+----
+touchmove
+    ↓
+通常与页面滚动密切相关
+    ↓
+浏览器希望尽快开始滚动
+    ↓
+passive 可以避免等待 JS 判断
+    ↓
+滚动更加流畅
+----
+
+所以官方说：
+
+____
+This greatly improves responsiveness
+____
+
+就是**提高触摸滚动的响应速度**。
+
+====== 5. 一个非常重要的限制
+因此，如果你的代码需要：
+
+[source,js]
+----
+event.preventDefault()
+----
+
+来**阻止触摸默认行为**，那么就不能简单依赖：
+
+[source,html]
+----
+ontouchmove={handler}
+----
+
+因为 Svelte 这里的 listener 是 passive: true 的。
+
+你可以把 `passive` 理解成一个**承诺**：
+
+[source,text]
+----
+passive: true
+
+我向浏览器承诺：
+“这个事件处理函数不会调用 preventDefault()。”
+----
+
+浏览器因此可以更积极地进行默认行为。
+
+===== inside an action 解释
+这里的 *`inside an action`* 指的是：
+
+____
+*在 Svelte 的 action（动作函数）里面使用 `on` 来手动注册事件监听器。*
+____
+
+它不是说 `on` 只能在 action 里面用，而是官方这里举了一个**常见场景**。
+
+====== 1. 什么是 Svelte action？
+Svelte 的 action 是一个函数，可以把某种行为附加到 DOM 元素上。
+
+例如：
+
+[source,html]
+----
+<script>
+    function clickOutside(node) {
+        // 对 node 做一些处理
+
+        return {
+            destroy() {
+                // 清理
+            }
+        };
+    }
+</script>
+
+<div use:clickOutside>
+    ...
+</div>
+----
+
+这里：
+
+[source,html]
+----
+<div use:clickOutside>
+----
+
+就是把 `clickOutside` 这个 action 应用到 `++<++div++>++`。
+
+可以粗略理解成：
+
+____
+*给这个 DOM 元素安装一套自定义行为。*
+____
+
+====== 2. 为什么 action 能解决 passive 的问题？
+前面我们说：
+
+[source,html]
+----
+<div ontouchmove={handleMove}>
+----
+
+Svelte 会使用 passive listener。
+
+所以你不能依靠：
+
+[source,js]
+----
+event.preventDefault();
+----
+
+阻止默认行为。
+
+但是某些极少数情况下，你确实需要：
+
+[source,js]
+----
+event.preventDefault();
+----
+
+那么可以在 action 中自己调用 DOM API：
+
+[source,html]
+----
+<script>
+    function myAction(node) {
+        function handleMove(event) {
+            event.preventDefault();
+        }
+
+        node.addEventListener('touchmove', handleMove, {
+            passive: false
+        });
+
+        return {
+            destroy() {
+                node.removeEventListener('touchmove', handleMove);
+            }
+        };
+    }
+</script>
+
+<div use:myAction>
+    ...
+</div>
+----
+
+关键就在这里：
+
+[source,js]
+----
+node.addEventListener('touchmove', handleMove, {
+    passive: false
+});
+----
+
+明确告诉浏览器：
+
+[source,text]
+----
+passive: false
+----
+
+也就是：
+
+____
+*这个 handler 可能调用 `preventDefault()`，请不要假定它不会。*
+____
+
+于是：
+
+[source,js]
+----
+function handleMove(event) {
+    event.preventDefault();
+}
+----
+
+就可以阻止默认行为。
+
+====== 3. 所以官方这句话可以这样理解
+原文：
+
+____
+In the very rare cases that you need to prevent these event defaults,
+you should use `on` instead (for example inside an action).
+____
+
+这里的逻辑是：
+
+[source,text]
+----
+普通情况
+    ↓
+ontouchmove={handler}
+    ↓
+Svelte 使用 passive
+    ↓
+性能更好
+----
+
+极少数情况：
+
+[source,text]
+----
+需要 event.preventDefault()
+    ↓
+不能使用 passive listener
+    ↓
+使用 on / action
+    ↓
+自己控制 addEventListener 的配置
+    ↓
+passive: false
+----
+
+====== 4. 小结
+对于你现在学习 Svelte 5，可以先记成：
+
+____
+*action = 给 DOM 元素封装一套可复用的行为。*
+____
+
+例如：
+
+[source,html]
+----
+<div use:tooltip>
+<div use:clickOutside>
+<div use:drag>
+<div use:myTouchBehavior>
+----
+
+action 拿到的就是这个 DOM 节点：
+
+[source,js]
+----
+function myAction(node) {
+    // node 就是那个 DOM 元素
+}
+----
+
+然后你可以在里面直接使用原生 DOM API。
+
+'''''
+
+不过这里有个细节值得注意：**官方当前 Svelte 5 文档里 `on` 是 Svelte
+提供的事件监听 API，不等同于旧版 `on:click` 语法。**如果你继续往下看这个
+`svelte-events++#++on` 页面，我建议把 `on`
+本身单独理解一下，否则很容易和 `onclick`、旧的 `on:click` 混在一起。
+
+===== 验证 passive 布尔值对 event.preventDefault() 的影响
+为了最小化验证 passive: true 和 passive: false 的区别。
+
+用手机模式打开这个页面，然后在这个 `++<++div++>++` 上上下滑（鼠标按住拖动才会触发 touchmove 事件），这时是可以滑动的。
+
+然后把：
+
+[source,js]
+----
+{ passive: true }
+----
+
+改成：
+
+[source,js]
+----
+{ passive: false }
+----
+
+再测试就不能滑动了。这时：
+
+[source,js]
+----
+event.preventDefault();
+----
+
+就起作用了，阻止了默认行为。
+
+====== #file src/routes/template-syntax/events/passive/+page.svelte
+<script>
+import { on } from 'svelte/events';
+
+/** @param {HTMLElement} node */
+function preventScroll(node) {
+    const off = on(node, 'touchmove', (event) => {
+            // 如果 passive: true，则下面一行无效，且 console 控制台会报错
+            // Unable to preventDefault inside passive event listener invocation
+            event.preventDefault();
+        }, 
+        { passive: false },
+        // { passive: true }
+    );
+    return { destroy: off };
+}
+</script>
+
+<!-- 给 div 绑定一个 action -->
+<div use:preventScroll
+     style="height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 8px;"
+>
+    用手机触摸这里，然后上下滑动
+    {#each Array(30) as _, i}
+        <p>第 {i + 1} 行：这是用来撑出滚动条的内容</p>
+    {/each}
+</div>
+
+===== event gotchas
+To reduce memory footprint and increase performance, Svelte uses a technique called event delegation. This means that for certain events — see the list below — a single event listener at the application root takes responsibility for running any handlers on the event’s path.
+
+There are a few gotchas to be aware of:
+
+- when you manually dispatch an event with a delegated listener, make sure to set the { bubbles: true } option or it won’t reach the application root
+
+- when using addEventListener directly, avoid calling stopPropagation or the event won’t reach the application root and handlers won’t be invoked. Similarly, handlers added manually inside the application root will run before handlers added declaratively deeper in the DOM (with e.g. onclick={...}), in both capturing and bubbling phases. For these reasons it’s better to use the on function imported from svelte/events rather than addEventListener, as it will ensure that order is preserved and stopPropagation is handled correctly.
+
+====== set the { bubbles: true }
+[source,html]
+----
+<script>
+/** @type {HTMLButtonElement | undefined} bind:this 绑定的目标按钮，挂载前为 undefined */
+let targetButton;
+
+/** @param {MouseEvent} event */
+function handleClick(event) {
+    console.log('handleClick:', event.target);
+}
+
+function dispatchClick() {
+    // 组件挂载前 targetButton 为 undefined，这里做空值保护
+    targetButton?.dispatchEvent(
+        new MouseEvent('click', {
+            // true 才能向上冒泡，找到 root 委托去执行 handleClick(event)
+            bubbles: true
+        })
+    );
+}
+</script>
+
+<button bind:this={targetButton} onclick={handleClick}>
+    目标按钮
+</button>
+
+<hr>
+
+<button onclick={dispatchClick}>
+    手动 dispatch click
+</button>
+----
+
+====== addEventListener avoid calling stopPropagation and should use on()
+[source,html]
+----
+<script>
+import { on } from 'svelte/events';
+
+/**
+ * 直接使用 addEventListener 会阻止 <button> 绑定的委托事件
+ * @param {HTMLElement} node
+ */
+// function action(node) {
+//     node.addEventListener('click', (event) => {
+//         console.log('manual');
+//         event.stopPropagation();
+//     });
+// }
+
+/**
+ * 使用 on() 不会阻止 <button> 绑定的委托事件
+ * @param {HTMLElement} node
+ */
+function action(node) {
+    // on() 返回的是移除监听的清理函数，必须包成 { destroy } 才会在元素卸载时被 Svelte 调用
+    const off = on(node, 'click', (event) => {
+        console.log('manual');
+        event.stopPropagation();
+    });
+    return { destroy: off };
+}
+</script>
+
+<div use:action>
+    <button onclick={() => console.log('svelte')}>
+        Click
+    </button>
+</div>
+----
+
 ==== Text expressions
 https://svelte.dev/docs/svelte/basic-markup#Text-expressions
 
@@ -1661,13 +2289,42 @@ You can add a special comment starting with @component that will show up when ho
   ```
 -->
 <script>
-	let { name } = $props();
+    let { name } = $props();
 </script>
 
 <main>
-	<h1>
-		Hello, {name}
-	</h1>
+    <h1>
+        Hello, {name}
+    </h1>
 </main>
+----
+
+=== Each-blocks-without-an-item
+https://svelte.dev/docs/svelte/each#Each-blocks-without-an-item
+
+.画一个黑白相间的棋盘
+[source,html]
+----
+<div class="chess-board">
+    {#each { length: 8 }, rank}
+        {#each { length: 8 }, file}
+            <div class:black={(rank + file) % 2 === 1}></div>
+        {/each}
+    {/each}
+</div>
+
+<style>
+    .chess-board {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        border: 1px solid black;
+        aspect-ratio: 1;
+
+        .black {
+            background: black;
+        }
+    }
+</style>
 ----
 

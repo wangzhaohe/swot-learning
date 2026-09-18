@@ -612,6 +612,16 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </ul>
 </li>
 <li><a href="#_element_attributes">Element attributes</a></li>
+<li><a href="#_events">Events</a>
+<ul class="sectlevel4">
+<li><a href="#_点击事件处理页面">点击事件处理页面</a></li>
+<li><a href="#_子组件调用父组件传入的属性指定的回调函数">子组件调用父组件传入的属性指定的回调函数</a></li>
+<li><a href="#_在_svelte5_中_passive_属性默认为_true">在 svelte5 中 passive 属性默认为 true</a></li>
+<li><a href="#_inside_an_action_解释">inside an action 解释</a></li>
+<li><a href="#_验证_passive_布尔值对_event_preventdefault_的影响">验证 passive 布尔值对 event.preventDefault() 的影响</a></li>
+<li><a href="#_event_gotchas">event gotchas</a></li>
+</ul>
+</li>
 <li><a href="#_text_expressions">Text expressions</a></li>
 <li><a href="#_comments">Comments</a>
 <ul class="sectlevel4">
@@ -621,6 +631,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 </ul>
 </li>
+<li><a href="#_each_blocks_without_an_item">Each-blocks-without-an-item</a></li>
 </ul>
 </li>
 </ul>
@@ -821,7 +832,7 @@ toggleButton.addEventListener('click', () => {
 <div class="sect5">
 <h6 id="_1_官方示例后面要验证_state_的写法">1. 官方示例（后面要验证 $state 的写法）</h6>
 <div class="listingblock">
-<div class="title">@edit src/lib/state-class/Todo.svelte.js</div>
+<div class="title">src/lib/state-class/Todo.svelte.js</div>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="javascript"><span></span><span class="tok-cm">/* global $state */</span>
 
@@ -2525,6 +2536,768 @@ $effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。</p>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_events">Events</h4>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/basic-markup#Events" class="bare">https://svelte.dev/docs/svelte/basic-markup#Events</a></p>
+</div>
+<div class="sect4">
+<h5 id="_点击事件处理页面">点击事件处理页面</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-nx">Child</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;./Child.svelte&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// ── 1. DOM 事件属性：onclick ──</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-mf">0</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">handleClickCount</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">count</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-mf">1</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+
+<span class="tok-w">    </span><span class="tok-c1">// ── 2. 组件事件：其实就是一个回调函数 prop ──</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$state</span><span class="tok-p">(</span><span class="tok-s1">&#39;（还没收到子组件的消息）&#39;</span><span class="tok-p">);</span>
+
+<span class="tok-w">    </span><span class="tok-cm">/**</span>
+<span class="tok-cm">     * @param {string} payload 子组件调用回调时传回来的数据</span>
+<span class="tok-cm">     */</span>
+<span class="tok-w">    </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">onClick</span><span class="tok-p">(</span><span class="tok-nx">payload</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">message</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-sb">`父组件收到：</span><span class="tok-si">${</span><span class="tok-nx">payload</span><span class="tok-si">}</span><span class="tok-sb">`</span><span class="tok-p">;</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;mx-auto max-w-2xl space-y-6 p-6&quot;</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">h1</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-2xl font-bold text-slate-800&quot;</span><span class="tok-p">&gt;</span>Events<span class="tok-p">&lt;/</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">section</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;space-y-3 rounded-xl border border-slate-200 p-4&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">h2</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-lg font-semibold text-sky-700&quot;</span><span class="tok-p">&gt;</span>1. DOM 事件属性 onclick<span class="tok-p">&lt;/</span><span class="tok-nt">h2</span><span class="tok-p">&gt;</span>
+
+        <span class="tok-p">&lt;</span><span class="tok-nt">p</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-slate-600&quot;</span><span class="tok-p">&gt;</span>
+            给元素添加以 <span class="tok-p">&lt;</span><span class="tok-nt">code</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700&quot;</span><span class="tok-p">&gt;</span>on<span class="tok-p">&lt;/</span><span class="tok-nt">code</span>
+            <span class="tok-p">&gt;</span>
+            开头的属性即可监听 DOM 事件，例如
+            <span class="tok-p">&lt;</span><span class="tok-nt">code</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700&quot;</span><span class="tok-p">&gt;</span>onclick<span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>。
+        <span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+
+        <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;flex flex-wrap gap-3&quot;</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">button</span>
+                <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded-lg bg-sky-600 px-4 py-2 text-white shadow-sm transition hover:bg-sky-700&quot;</span>
+                <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{()</span> <span class="tok-err">=</span><span class="tok-p">&gt;</span> console.log(&#39;clicked&#39;)}
+            &gt;
+                点我（控制台打印 clicked）
+            <span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">button</span>
+                <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded-lg bg-emerald-600 px-4 py-2 text-white shadow-sm transition hover:bg-emerald-700&quot;</span>
+                <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{handleClickCount}</span>
+            <span class="tok-p">&gt;</span>
+                点我计数：{count}
+            <span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">section</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">section</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;space-y-3 rounded-xl border border-slate-200 p-4&quot;</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">h2</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-lg font-semibold text-violet-700&quot;</span><span class="tok-p">&gt;</span>
+            2. 组件事件 = 回调函数作为 prop
+        <span class="tok-p">&lt;/</span><span class="tok-nt">h2</span><span class="tok-p">&gt;</span>
+
+        <span class="tok-p">&lt;</span><span class="tok-nt">p</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-slate-600&quot;</span><span class="tok-p">&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">code</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700&quot;</span>
+                <span class="tok-p">&gt;</span><span class="tok-ni">&amp;lt;</span>Child onClick=<span class="tok-ni">&amp;#123;</span>onClick<span class="tok-ni">&amp;#125;</span> /<span class="tok-ni">&amp;gt;</span>
+            <span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>
+            并不是某种特殊的“事件机制”，本质就是父组件把
+            <span class="tok-p">&lt;</span><span class="tok-nt">code</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded bg-slate-100 px-1.5 py-0.5 text-sm text-slate-700&quot;</span><span class="tok-p">&gt;</span>
+                onClick
+            <span class="tok-p">&lt;/</span><span class="tok-nt">code</span><span class="tok-p">&gt;</span>
+            这个<span class="tok-p">&lt;</span><span class="tok-nt">strong</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-slate-800&quot;</span><span class="tok-p">&gt;</span>函数当成普通 prop<span class="tok-p">&lt;/</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>
+            传给子组件；子组件拿到后<span class="tok-p">&lt;</span><span class="tok-nt">strong</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;text-slate-800&quot;</span><span class="tok-p">&gt;</span>直接调用它<span class="tok-p">&lt;/</span><span class="tok-nt">strong</span><span class="tok-p">&gt;</span>来通知父组件。
+        <span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;flex flex-wrap items-center gap-3&quot;</span><span class="tok-p">&gt;</span>
+            <span class="tok-cm">&lt;!-- onClick 就是一个普通的属性 --&gt;</span>
+            <span class="tok-cm">&lt;!-- 属性和值的完整写法 --&gt;</span>
+            <span class="tok-cm">&lt;!-- &lt;Child onClick={onClick} /&gt; --&gt;</span>
+            <span class="tok-cm">&lt;!-- 属性与值相同可以简写 --&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">Child</span> <span class="tok-err">{</span><span class="tok-na">onClick</span><span class="tok-err">}</span> <span class="tok-p">/&gt;</span>
+            <span class="tok-p">&lt;</span><span class="tok-nt">span</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-700&quot;</span><span class="tok-p">&gt;</span>
+                {message}
+            <span class="tok-p">&lt;/</span><span class="tok-nt">span</span><span class="tok-p">&gt;</span>
+        <span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;/</span><span class="tok-nt">section</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_子组件调用父组件传入的属性指定的回调函数">子组件调用父组件传入的属性指定的回调函数</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-c1">// 对子组件来说，onClickMe 就是一个普通的 prop，只不过它恰好是一个函数。</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">onClick</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$props</span><span class="tok-p">();</span>
+
+<span class="tok-w">    </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">handleClick</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 拿到父组件传进来的回调函数后，直接调用它即可“通知”父组件。</span>
+<span class="tok-w">        </span><span class="tok-nx">onClick</span><span class="tok-o">?</span><span class="tok-p">.(</span><span class="tok-s1">&#39;hello&#39;</span><span class="tok-p">);</span><span class="tok-w">  </span><span class="tok-c1">// 实际上调用的是函数 handleClickMe</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">button</span>
+    <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;rounded-lg bg-violet-600 px-4 py-2 text-white shadow-sm transition hover:bg-violet-700 active:scale-95&quot;</span>
+    <span class="tok-err">//</span> <span class="tok-na">注意</span><span class="tok-err">：</span><span class="tok-na">这里的</span> <span class="tok-na">onclick</span> <span class="tok-na">是</span> <span class="tok-na">DOM</span> <span class="tok-na">事件属性</span><span class="tok-err">，</span><span class="tok-na">和上面的</span> <span class="tok-na">onClick</span> <span class="tok-na">prop</span> <span class="tok-na">是两回事</span><span class="tok-err">。</span>
+    <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{handleClick}</span>
+<span class="tok-p">&gt;</span>
+    我是子组件，点我调用 onClick 回调
+<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_在_svelte5_中_passive_属性默认为_true">在 svelte5 中 passive 属性默认为 true</h5>
+<div class="paragraph">
+<p>When using ontouchstart and ontouchmove event attributes, the handlers
+are passive for better performance. This greatly improves responsiveness
+by allowing the browser to scroll the document immediately, rather than
+waiting to see if the event handler calls event.preventDefault().</p>
+</div>
+<div class="paragraph">
+<p>这里的 <strong>passive 模式</strong>，核心就一句话：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>告诉浏览器：这个事件处理函数不会调用
+<code>event.preventDefault()</code>，所以浏览器不用等你的 JS
+执行完，就可以立即执行默认行为，比如滚动页面。</strong></p>
+</div>
+</blockquote>
+</div>
+<div class="sect5">
+<h6 id="_1_先看普通模式">1. 先看普通模式</h6>
+<div class="paragraph">
+<p>假设你监听触摸移动：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-nx">element</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;touchmove&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">handleMove</span><span class="tok-p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>用户手指移动时，浏览器会遇到一个问题：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>「这个 <code>handleMove</code> 函数里面，会不会调用 <code>event.preventDefault()</code> 阻止滚动？」</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>所以浏览器可能需要：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>用户手指移动
+    ↓
+触发 touchmove
+    ↓
+先等 JS 的 handleMove 执行
+    ↓
+看看有没有 preventDefault()
+    ↓
+确定不会阻止滚动
+    ↓
+浏览器开始滚动</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果 JS 比较慢，就可能感觉到<strong>滚动不跟手</strong>。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_2_passive_模式解决这个问题">2. passive 模式解决这个问题</h6>
+<div class="paragraph">
+<p>如果告诉浏览器：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-nx">element</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;touchmove&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">handleMove</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">passive</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>意思就是：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>这个 handler 是 passive 的，我保证不会阻止默认行为。</strong></p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>于是浏览器可以：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>用户手指移动
+    ↓
+浏览器：既然你保证不会 preventDefault()
+    ↓
+立即滚动
+    ↓
+同时处理 touchmove 的 JS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这样滚动响应会更快。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_3_preventdefault_会发生什么">3. preventDefault() 会发生什么？</h6>
+<div class="paragraph">
+<p>例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">handleMove</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>正常情况下：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>touchmove
+   ↓
+preventDefault()
+   ↓
+阻止浏览器默认滚动</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这对于一些场景是有用的，比如你自己实现一个拖拽、滑动区域，不希望页面跟着滚动。</p>
+</div>
+<div class="paragraph">
+<p>但是如果事件是：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">passive</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-w"> </span><span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>那么你就<strong>不能依靠 <code>preventDefault()</code> 阻止默认行为</strong>。</p>
+</div>
+<div class="paragraph">
+<p>也就是说：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">handleMove</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// passive 下不能用它阻止默认行为</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_4_为什么_svelte_对_ontouchstart_ontouchmove_特别处理">4. 为什么 Svelte 对 <code>ontouchstart</code> / <code>ontouchmove</code> 特别处理？</h6>
+<div class="paragraph">
+<p>Svelte：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">ontouchmove</span><span class="tok-o">=</span><span class="tok-s">{handleMove}</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这里 Svelte 会以 <strong>passive listener</strong> 的方式处理。即 { passive: true }</p>
+</div>
+<div class="paragraph">
+<p>结果就是：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>touchmove
+    ↓
+通常与页面滚动密切相关
+    ↓
+浏览器希望尽快开始滚动
+    ↓
+passive 可以避免等待 JS 判断
+    ↓
+滚动更加流畅</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>所以官方说：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>This greatly improves responsiveness</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>就是<strong>提高触摸滚动的响应速度</strong>。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_5_一个非常重要的限制">5. 一个非常重要的限制</h6>
+<div class="paragraph">
+<p>因此，如果你的代码需要：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">()</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>来<strong>阻止触摸默认行为</strong>，那么就不能简单依赖：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span>ontouchmove={handler}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>因为 Svelte 这里的 listener 是 passive: true 的。</p>
+</div>
+<div class="paragraph">
+<p>你可以把 <code>passive</code> 理解成一个<strong>承诺</strong>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>passive: true
+
+我向浏览器承诺：
+“这个事件处理函数不会调用 preventDefault()。”</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>浏览器因此可以更积极地进行默认行为。</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_inside_an_action_解释">inside an action 解释</h5>
+<div class="paragraph">
+<p>这里的 <strong><code>inside an action</code></strong> 指的是：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>在 Svelte 的 action（动作函数）里面使用 <code>on</code> 来手动注册事件监听器。</strong></p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>它不是说 <code>on</code> 只能在 action 里面用，而是官方这里举了一个<strong>常见场景</strong>。</p>
+</div>
+<div class="sect5">
+<h6 id="_1_什么是_svelte_action">1. 什么是 Svelte action？</h6>
+<div class="paragraph">
+<p>Svelte 的 action 是一个函数，可以把某种行为附加到 DOM 元素上。</p>
+</div>
+<div class="paragraph">
+<p>例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">clickOutside</span><span class="tok-p">(</span><span class="tok-nx">node</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-c1">// 对 node 做一些处理</span>
+
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">destroy</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-c1">// 清理</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">use:clickOutside</span><span class="tok-p">&gt;</span>
+    ...
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这里：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">use:clickOutside</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>就是把 <code>clickOutside</code> 这个 action 应用到 <code>&lt;div&gt;</code>。</p>
+</div>
+<div class="paragraph">
+<p>可以粗略理解成：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>给这个 DOM 元素安装一套自定义行为。</strong></p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_2_为什么_action_能解决_passive_的问题">2. 为什么 action 能解决 passive 的问题？</h6>
+<div class="paragraph">
+<p>前面我们说：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">ontouchmove</span><span class="tok-o">=</span><span class="tok-s">{handleMove}</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Svelte 会使用 passive listener。</p>
+</div>
+<div class="paragraph">
+<p>所以你不能依靠：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>阻止默认行为。</p>
+</div>
+<div class="paragraph">
+<p>但是某些极少数情况下，你确实需要：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>那么可以在 action 中自己调用 DOM API：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">myAction</span><span class="tok-p">(</span><span class="tok-nx">node</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">handleMove</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+
+<span class="tok-w">        </span><span class="tok-nx">node</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;touchmove&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">handleMove</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">passive</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">false</span>
+<span class="tok-w">        </span><span class="tok-p">});</span>
+
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">destroy</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">                </span><span class="tok-nx">node</span><span class="tok-p">.</span><span class="tok-nx">removeEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;touchmove&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">handleMove</span><span class="tok-p">);</span>
+<span class="tok-w">            </span><span class="tok-p">}</span>
+<span class="tok-w">        </span><span class="tok-p">};</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">use:myAction</span><span class="tok-p">&gt;</span>
+    ...
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>关键就在这里：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-nx">node</span><span class="tok-p">.</span><span class="tok-nx">addEventListener</span><span class="tok-p">(</span><span class="tok-s1">&#39;touchmove&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">handleMove</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">passive</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">false</span>
+<span class="tok-p">});</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>明确告诉浏览器：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>passive: false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>也就是：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>这个 handler 可能调用 <code>preventDefault()</code>，请不要假定它不会。</strong></p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>于是：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">handleMove</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>就可以阻止默认行为。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_3_所以官方这句话可以这样理解">3. 所以官方这句话可以这样理解</h6>
+<div class="paragraph">
+<p>原文：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>In the very rare cases that you need to prevent these event defaults,
+you should use <code>on</code> instead (for example inside an action).</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>这里的逻辑是：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>普通情况
+    ↓
+ontouchmove={handler}
+    ↓
+Svelte 使用 passive
+    ↓
+性能更好</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>极少数情况：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"><span></span>需要 event.preventDefault()
+    ↓
+不能使用 passive listener
+    ↓
+使用 on / action
+    ↓
+自己控制 addEventListener 的配置
+    ↓
+passive: false</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_4_小结">4. 小结</h6>
+<div class="paragraph">
+<p>对于你现在学习 Svelte 5，可以先记成：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>action = 给 DOM 元素封装一套可复用的行为。</strong></p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">use:tooltip</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">use:clickOutside</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">use:drag</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">use:myTouchBehavior</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>action 拿到的就是这个 DOM 节点：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">myAction</span><span class="tok-p">(</span><span class="tok-nx">node</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// node 就是那个 DOM 元素</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>然后你可以在里面直接使用原生 DOM API。</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>不过这里有个细节值得注意：<strong>官方当前 Svelte 5 文档里 <code>on</code> 是 Svelte
+提供的事件监听 API，不等同于旧版 <code>on:click</code> 语法。</strong>如果你继续往下看这个
+<code>svelte-events#on</code> 页面，我建议把 <code>on</code>
+本身单独理解一下，否则很容易和 <code>onclick</code>、旧的 <code>on:click</code> 混在一起。</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_验证_passive_布尔值对_event_preventdefault_的影响">验证 passive 布尔值对 event.preventDefault() 的影响</h5>
+<div class="paragraph">
+<p>为了最小化验证 passive: true 和 passive: false 的区别。</p>
+</div>
+<div class="paragraph">
+<p>用手机模式打开这个页面，然后在这个 <code>&lt;div&gt;</code> 上上下滑（鼠标按住拖动才会触发 touchmove 事件），这时是可以滑动的。</p>
+</div>
+<div class="paragraph">
+<p>然后把：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">passive</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-w"> </span><span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>改成：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">passive</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-w"> </span><span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>再测试就不能滑动了。这时：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="js"><span></span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>就起作用了，阻止了默认行为。</p>
+</div>
+<div class="sect5">
+<h6 id="_file_srcroutestemplate_syntaxeventspassivepage_svelte">#file src/routes/template-syntax/events/passive/+page.svelte</h6>
+<div class="paragraph">
+<p>&lt;script&gt;
+import { on } from 'svelte/events';</p>
+</div>
+<div class="paragraph">
+<p>/** @param {HTMLElement} node */
+function preventScroll(node) {
+    const off = on(node, 'touchmove', (event) &#8658; {
+            // 如果 passive: true，则下面一行无效，且 console 控制台会报错
+            // Unable to preventDefault inside passive event listener invocation
+            event.preventDefault();
+        },
+        { passive: false },
+        // { passive: true }
+    );
+    return { destroy: off };
+}
+&lt;/script&gt;</p>
+</div>
+<div class="paragraph">
+<p>&lt;!-- 给 div 绑定一个 action -&#8594;
+&lt;div use:preventScroll
+     style="height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 8px;"
+&gt;
+    用手机触摸这里，然后上下滑动
+    {#each Array(30) as _, i}
+        &lt;p&gt;第 {i + 1} 行：这是用来撑出滚动条的内容&lt;/p&gt;
+    {/each}
+&lt;/div&gt;</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_event_gotchas">event gotchas</h5>
+<div class="paragraph">
+<p>To reduce memory footprint and increase performance, Svelte uses a technique called event delegation. This means that for certain events — see the list below — a single event listener at the application root takes responsibility for running any handlers on the event’s path.</p>
+</div>
+<div class="paragraph">
+<p>There are a few gotchas to be aware of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>when you manually dispatch an event with a delegated listener, make sure to set the { bubbles: true } option or it won’t reach the application root</p>
+</li>
+<li>
+<p>when using addEventListener directly, avoid calling stopPropagation or the event won’t reach the application root and handlers won’t be invoked. Similarly, handlers added manually inside the application root will run before handlers added declaratively deeper in the DOM (with e.g. onclick={&#8230;&#8203;}), in both capturing and bubbling phases. For these reasons it’s better to use the on function imported from svelte/events rather than addEventListener, as it will ensure that order is preserved and stopPropagation is handled correctly.</p>
+</li>
+</ul>
+</div>
+<div class="sect5">
+<h6 id="_set_the_bubbles_true">set the { bubbles: true }</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-cm">/** @type {HTMLButtonElement | undefined} bind:this 绑定的目标按钮，挂载前为 undefined */</span>
+<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nx">targetButton</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/** @param {MouseEvent} event */</span>
+<span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">handleClick</span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;handleClick:&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">target</span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
+
+<span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">dispatchClick</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// 组件挂载前 targetButton 为 undefined，这里做空值保护</span>
+<span class="tok-w">    </span><span class="tok-nx">targetButton</span><span class="tok-o">?</span><span class="tok-p">.</span><span class="tok-nx">dispatchEvent</span><span class="tok-p">(</span>
+<span class="tok-w">        </span><span class="tok-ow">new</span><span class="tok-w"> </span><span class="tok-nx">MouseEvent</span><span class="tok-p">(</span><span class="tok-s1">&#39;click&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// true 才能向上冒泡，找到 root 委托去执行 handleClick(event)</span>
+<span class="tok-w">            </span><span class="tok-nx">bubbles</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">true</span>
+<span class="tok-w">        </span><span class="tok-p">})</span>
+<span class="tok-w">    </span><span class="tok-p">);</span>
+<span class="tok-p">}</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">bind:this</span><span class="tok-o">=</span><span class="tok-s">{targetButton}</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{handleClick}</span><span class="tok-p">&gt;</span>
+    目标按钮
+<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">hr</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{dispatchClick}</span><span class="tok-p">&gt;</span>
+    手动 dispatch click
+<span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_addeventlistener_avoid_calling_stoppropagation_and_should_use_on">addEventListener avoid calling stopPropagation and should use on()</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">on</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;svelte/events&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 直接使用 addEventListener 会阻止 &lt;button&gt; 绑定的委托事件</span>
+<span class="tok-cm"> * @param {HTMLElement} node</span>
+<span class="tok-cm"> */</span>
+<span class="tok-c1">// function action(node) {</span>
+<span class="tok-c1">//     node.addEventListener(&#39;click&#39;, (event) =&gt; {</span>
+<span class="tok-c1">//         console.log(&#39;manual&#39;);</span>
+<span class="tok-c1">//         event.stopPropagation();</span>
+<span class="tok-c1">//     });</span>
+<span class="tok-c1">// }</span>
+
+<span class="tok-cm">/**</span>
+<span class="tok-cm"> * 使用 on() 不会阻止 &lt;button&gt; 绑定的委托事件</span>
+<span class="tok-cm"> * @param {HTMLElement} node</span>
+<span class="tok-cm"> */</span>
+<span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">action</span><span class="tok-p">(</span><span class="tok-nx">node</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// on() 返回的是移除监听的清理函数，必须包成 { destroy } 才会在元素卸载时被 Svelte 调用</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">off</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-nx">node</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;click&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;manual&#39;</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">stopPropagation</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-p">});</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">destroy</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">off</span><span class="tok-w"> </span><span class="tok-p">};</span>
+<span class="tok-p">}</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">use:action</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">button</span> <span class="tok-na">onclick</span><span class="tok-o">=</span><span class="tok-s">{()</span> <span class="tok-err">=</span><span class="tok-p">&gt;</span> console.log(&#39;svelte&#39;)}&gt;
+        Click
+    <span class="tok-p">&lt;/</span><span class="tok-nt">button</span><span class="tok-p">&gt;</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_text_expressions">Text expressions</h4>
 <div class="paragraph">
 <p><a href="https://svelte.dev/docs/svelte/basic-markup#Text-expressions" class="bare">https://svelte.dev/docs/svelte/basic-markup#Text-expressions</a></p>
@@ -2636,16 +3409,48 @@ $effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。</p>
 <span class="tok-cm">  ```</span>
 <span class="tok-cm">--&gt;</span>
 <span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
-<span class="tok-w">	</span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$props</span><span class="tok-p">();</span>
+<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">name</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">$props</span><span class="tok-p">();</span>
 <span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
 
 <span class="tok-p">&lt;</span><span class="tok-nt">main</span><span class="tok-p">&gt;</span>
-	<span class="tok-p">&lt;</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
-		Hello, {name}
-	<span class="tok-p">&lt;/</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+    <span class="tok-p">&lt;</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
+        Hello, {name}
+    <span class="tok-p">&lt;/</span><span class="tok-nt">h1</span><span class="tok-p">&gt;</span>
 <span class="tok-p">&lt;/</span><span class="tok-nt">main</span><span class="tok-p">&gt;</span></code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_each_blocks_without_an_item">Each-blocks-without-an-item</h3>
+<div class="paragraph">
+<p><a href="https://svelte.dev/docs/svelte/each#Each-blocks-without-an-item" class="bare">https://svelte.dev/docs/svelte/each#Each-blocks-without-an-item</a></p>
+</div>
+<div class="listingblock">
+<div class="title">画一个黑白相间的棋盘</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class</span><span class="tok-o">=</span><span class="tok-s">&quot;chess-board&quot;</span><span class="tok-p">&gt;</span>
+    {#each { length: 8 }, rank}
+        {#each { length: 8 }, file}
+            <span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">class:black</span><span class="tok-o">=</span><span class="tok-s">{(rank</span> <span class="tok-err">+</span> <span class="tok-na">file</span><span class="tok-err">)</span> <span class="tok-err">%</span> <span class="tok-na">2 </span><span class="tok-o">=</span><span class="tok-s">==</span> <span class="tok-na">1</span><span class="tok-err">}</span><span class="tok-p">&gt;&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+        {/each}
+    {/each}
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span>
+
+<span class="tok-p">&lt;</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span>
+<span class="tok-w">    </span><span class="tok-p">.</span><span class="tok-nc">chess-board</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">display</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-k">grid</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">grid-template-columns</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nf">repeat</span><span class="tok-p">(</span><span class="tok-mi">8</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-n">fr</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">grid-template-rows</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nf">repeat</span><span class="tok-p">(</span><span class="tok-mi">8</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-n">fr</span><span class="tok-p">);</span>
+<span class="tok-w">        </span><span class="tok-k">border</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-kt">px</span><span class="tok-w"> </span><span class="tok-kc">solid</span><span class="tok-w"> </span><span class="tok-kc">black</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-k">aspect-ratio</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">;</span>
+
+<span class="tok-w">        </span><span class="tok-err">.black</span><span class="tok-w"> </span><span class="tok-err">{</span>
+<span class="tok-w">            </span><span class="tok-k">background</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-kc">black</span><span class="tok-p">;</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-err">}</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">style</span><span class="tok-p">&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -2654,7 +3459,7 @@ $effect 函数只会运行在浏览器中，不会运行在 SSR 服务端。</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-14 16:40:02 +0800
+Last updated 2026-09-18 08:55:08 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
