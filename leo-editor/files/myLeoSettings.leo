@@ -1661,7 +1661,8 @@ W;;=WARNING
 i2;;=image::img/&lt;||&gt;.png[]
 </t>
 <t tx="swot.20221226132428.1"># src;;=[source,java,&lt;|linenums|&gt;]
-src;;=[source,javascript]
+# src;;=[source,javascript]
+src;;=[source,html]
 \:----
 \:&lt;||&gt;
 \:----
