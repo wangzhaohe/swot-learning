@@ -3137,6 +3137,37 @@ passive: false</code></pre>
 <div class="paragraph">
 <p>为了最小化验证 passive: true 和 passive: false 的区别。</p>
 </div>
+<div class="listingblock">
+<div class="title">#file src/routes/template-syntax/events/passive/+page.svelte</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="html"><span></span><span class="tok-p">&lt;</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+<span class="tok-k">import</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">on</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-kr">from</span><span class="tok-w"> </span><span class="tok-s1">&#39;svelte/events&#39;</span><span class="tok-p">;</span>
+
+<span class="tok-cm">/** @param {HTMLElement} node */</span>
+<span class="tok-kd">function</span><span class="tok-w"> </span><span class="tok-nx">preventScroll</span><span class="tok-p">(</span><span class="tok-nx">node</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-kd">const</span><span class="tok-w"> </span><span class="tok-nx">off</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nx">on</span><span class="tok-p">(</span><span class="tok-nx">node</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s1">&#39;touchmove&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-nx">event</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-c1">// 如果 passive: true，则下面一行无效，且 console 控制台会报错</span>
+<span class="tok-w">            </span><span class="tok-c1">// Unable to preventDefault inside passive event listener invocation</span>
+<span class="tok-w">            </span><span class="tok-nx">event</span><span class="tok-p">.</span><span class="tok-nx">preventDefault</span><span class="tok-p">();</span>
+<span class="tok-w">        </span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">passive</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kc">false</span><span class="tok-w"> </span><span class="tok-p">},</span>
+<span class="tok-w">        </span><span class="tok-c1">// { passive: true }</span>
+<span class="tok-w">    </span><span class="tok-p">);</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-nx">destroy</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nx">off</span><span class="tok-w"> </span><span class="tok-p">};</span>
+<span class="tok-p">}</span>
+<span class="tok-p">&lt;/</span><span class="tok-nt">script</span><span class="tok-p">&gt;</span>
+
+<span class="tok-cm">&lt;!-- 给 div 绑定一个 action --&gt;</span>
+<span class="tok-p">&lt;</span><span class="tok-nt">div</span> <span class="tok-na">use:preventScroll</span>
+     <span class="tok-na">style</span><span class="tok-o">=</span><span class="tok-s">&quot;height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 8px;&quot;</span>
+<span class="tok-p">&gt;</span>
+    用手机触摸这里，然后上下滑动
+    {#each Array(30) as _, i}
+        <span class="tok-p">&lt;</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>第 {i + 1} 行：这是用来撑出滚动条的内容<span class="tok-p">&lt;/</span><span class="tok-nt">p</span><span class="tok-p">&gt;</span>
+    {/each}
+<span class="tok-p">&lt;/</span><span class="tok-nt">div</span><span class="tok-p">&gt;</span></code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>用手机模式打开这个页面，然后在这个 <code>&lt;div&gt;</code> 上上下滑（鼠标按住拖动才会触发 touchmove 事件），这时是可以滑动的。</p>
 </div>
@@ -3166,39 +3197,6 @@ passive: false</code></pre>
 </div>
 <div class="paragraph">
 <p>就起作用了，阻止了默认行为。</p>
-</div>
-<div class="sect5">
-<h6 id="_file_srcroutestemplate_syntaxeventspassivepage_svelte">#file src/routes/template-syntax/events/passive/+page.svelte</h6>
-<div class="paragraph">
-<p>&lt;script&gt;
-import { on } from 'svelte/events';</p>
-</div>
-<div class="paragraph">
-<p>/** @param {HTMLElement} node */
-function preventScroll(node) {
-    const off = on(node, 'touchmove', (event) &#8658; {
-            // 如果 passive: true，则下面一行无效，且 console 控制台会报错
-            // Unable to preventDefault inside passive event listener invocation
-            event.preventDefault();
-        },
-        { passive: false },
-        // { passive: true }
-    );
-    return { destroy: off };
-}
-&lt;/script&gt;</p>
-</div>
-<div class="paragraph">
-<p>&lt;!-- 给 div 绑定一个 action -&#8594;
-&lt;div use:preventScroll
-     style="height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 8px;"
-&gt;
-    用手机触摸这里，然后上下滑动
-    {#each Array(30) as _, i}
-        &lt;p&gt;第 {i + 1} 行：这是用来撑出滚动条的内容&lt;/p&gt;
-    {/each}
-&lt;/div&gt;</p>
-</div>
 </div>
 </div>
 <div class="sect4">
@@ -3459,7 +3457,7 @@ function preventScroll(node) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-18 08:55:08 +0800
+Last updated 2026-09-18 09:08:23 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

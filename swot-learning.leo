@@ -44630,6 +44630,12 @@ ____
 </t>
 <t tx="swot.20260916083642.1">为了最小化验证 passive: true 和 passive: false 的区别。
 
+.#file src/routes/template-syntax/events/passive/+page.svelte
+[source,html]
+----
+@others
+----
+
 用手机模式打开这个页面，然后在这个 `++&lt;++div++&gt;++` 上上下滑（鼠标按住拖动才会触发 touchmove 事件），这时是可以滑动的。
 
 然后把：

@@ -2053,32 +2053,9 @@ function myAction(node) {
 ===== 验证 passive 布尔值对 event.preventDefault() 的影响
 为了最小化验证 passive: true 和 passive: false 的区别。
 
-用手机模式打开这个页面，然后在这个 `++<++div++>++` 上上下滑（鼠标按住拖动才会触发 touchmove 事件），这时是可以滑动的。
-
-然后把：
-
-[source,js]
+.#file src/routes/template-syntax/events/passive/+page.svelte
+[source,html]
 ----
-{ passive: true }
-----
-
-改成：
-
-[source,js]
-----
-{ passive: false }
-----
-
-再测试就不能滑动了。这时：
-
-[source,js]
-----
-event.preventDefault();
-----
-
-就起作用了，阻止了默认行为。
-
-====== #file src/routes/template-syntax/events/passive/+page.svelte
 <script>
 import { on } from 'svelte/events';
 
@@ -2105,6 +2082,32 @@ function preventScroll(node) {
         <p>第 {i + 1} 行：这是用来撑出滚动条的内容</p>
     {/each}
 </div>
+----
+
+用手机模式打开这个页面，然后在这个 `++<++div++>++` 上上下滑（鼠标按住拖动才会触发 touchmove 事件），这时是可以滑动的。
+
+然后把：
+
+[source,js]
+----
+{ passive: true }
+----
+
+改成：
+
+[source,js]
+----
+{ passive: false }
+----
+
+再测试就不能滑动了。这时：
+
+[source,js]
+----
+event.preventDefault();
+----
+
+就起作用了，阻止了默认行为。
 
 ===== event gotchas
 To reduce memory footprint and increase performance, Svelte uses a technique called event delegation. This means that for certain events — see the list below — a single event listener at the application root takes responsibility for running any handlers on the event’s path.
