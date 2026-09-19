@@ -106,7 +106,9 @@
 <v t="swot.20221230160721.1"><vh>@bool vr3-asciidoctor-diagram=True</vh></v>
 </v>
 <v t="swot.20260313193128.1"><vh>@buttons</vh>
-<v t="swot.20260218013134.1"><vh>@button ascii @key=Ctrl-/</vh></v>
+<v t="swot.20260218013134.1"><vh>@button ascii @key=Ctrl-/</vh>
+<v t="swot.20260920000641.1"><vh>run command adoc</vh></v>
+</v>
 <v t="swot.20260313141102.1"><vh>@button node @key=Alt+Shift+J</vh></v>
 <v t="swot.20260313211116.1"><vh>@button html @key=Alt+Shift+H</vh></v>
 <v t="swot.20260313220645.1"><vh>@button kLive</vh></v>
@@ -2243,6 +2245,10 @@ else:
 c.redraw()
 </t>
 <t tx="swot.20260218013134.1">@language python
+"""
+主要功能：将当前节点所属的 @adoc 节点对应的 AsciiDoc 文件编译成 HTML，并启动/更新一个实时预览服务器（live-server），实现浏览器自动刷新预览。
+"""
+
 import subprocess
 import os
 import atexit
@@ -2263,60 +2269,7 @@ def find_adoc_node(p):
 target_node = find_adoc_node(p)
 
 if target_node:
-    # --- 2. Resolve paths and filenames ---
-    target_dir = c.getNodePath(target_node)
-    adoc_file = target_node.h.replace("@adoc ", "").strip()
-    html_filename = os.path.splitext(adoc_file)[0] + ".html"
-
-    # Unique key to track active servers
-    server_key = (target_dir, html_filename)
-
-    # --- 3. Initialize global registry ---
-    if not hasattr(g, "live_servers_adoc"):
-        g.live_servers_adoc = {}
-
-        # kill live server when leo-editor quit
-        def cleanup_servers():
-            for _, proc in g.live_servers_adoc.items():
-                if proc.poll() is None:
-                    proc.terminate()
-            g.live_servers_adoc.clear()
-        atexit.register(cleanup_servers)
-
-    # --- 4. Execute AsciiDoc conversion ---
-    c.executeMinibufferCommand("adoc")
-
-    # --- 5. Smart Logic: Start or Update ---
-    if server_key not in g.live_servers_adoc:
-        # Scenario A: First start.
-        g.es(f"Starting Live Server: {html_filename}", color="blue")
-
-        # --entry-file opens the specific file
-        # --watch only watch the created html file
-        cmd = [
-            "npx", 
-            "live-server", 
-            f"--entry-file={html_filename}", 
-            f"--watch={html_filename}"
-        ]
-        try:
-            process = subprocess.Popen(cmd, cwd=target_dir)
-            g.live_servers_adoc[server_key] = process
-        except Exception as e:
-            g.es(f"Server error: {e}", color="red")
-    else:
-        # Scenario B: Update only.
-        process = g.live_servers_adoc[server_key]
-        # Check the live server running now?
-        if process.poll() is None:
-            g.es(f"Updated: {html_filename}", color="green")
-            g.es("Browser should auto-reload.", color="grey")
-        else:
-            del g.live_servers_adoc[server_key]
-            g.es(
-                f"Server for {html_filename} has stopped. Run again to restart.",
-                color="red",
-            )
+    @others
 else:
     g.es("Error: No @adoc node found in the hierarchy!", color="red")
 </t>
@@ -3073,6 +3026,62 @@ finally:
     # 清理临时文件
     if os.path.exists(temp_md): os.remove(temp_md)
     if os.path.exists(temp_adoc): os.remove(temp_adoc)
+</t>
+<t tx="swot.20260920000641.1"># --- 2. Resolve paths and filenames ---
+target_dir = c.getNodePath(target_node)
+adoc_file = target_node.h.replace("@adoc ", "").strip()
+html_filename = os.path.splitext(adoc_file)[0] + ".html"
+
+# Unique key to track active servers
+server_key = (target_dir, html_filename)
+
+# --- 3. Initialize global registry ---
+if not hasattr(g, "live_servers_adoc"):
+    g.live_servers_adoc = {}
+
+    # kill live server when leo-editor quit
+    def cleanup_servers():
+        for _, proc in g.live_servers_adoc.items():
+            if proc.poll() is None:
+                proc.terminate()
+        g.live_servers_adoc.clear()
+
+    atexit.register(cleanup_servers)
+
+# --- 4. Execute AsciiDoc conversion ---
+c.executeMinibufferCommand("adoc")
+
+# --- 5. Smart Logic: Start or Update ---
+if server_key not in g.live_servers_adoc:
+    # Scenario A: First start.
+    g.es(f"Starting Live Server: {html_filename}", color="blue")
+
+    # --entry-file opens the specific file
+    # --watch only watch the created html file
+    cmd = [
+        "npx", 
+        "live-server", 
+        f"--entry-file={html_filename}", 
+        f"--watch={html_filename}"
+    ]
+    try:
+        process = subprocess.Popen(cmd, cwd=target_dir)
+        g.live_servers_adoc[server_key] = process
+    except Exception as e:
+        g.es(f"Server error: {e}", color="red")
+else:
+    # Scenario B: Update only.
+    process = g.live_servers_adoc[server_key]
+    # Check the live server running now?
+    if process.poll() is None:
+        g.es(f"Updated: {html_filename}", color="green")
+        g.es("Browser should auto-reload.", color="grey")
+    else:
+        del g.live_servers_adoc[server_key]
+        g.es(
+            f"Server for {html_filename} has stopped. Run again to restart.",
+            color="red",
+        )
 </t>
 </tnodes>
 </leo_file>

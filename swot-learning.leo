@@ -777,6 +777,7 @@
 <v t="swot.20260313114540.16"><vh>1. 字符串拼接的痛点</vh></v>
 <v t="swot.20260313114540.17"><vh>2. 模板字符串（ES6神器）</vh></v>
 </v>
+<v t="swot.20260919200557.1"><vh>五：Undefined 与 Null</vh></v>
 </v>
 <v t="swot.20260313114540.18"><vh>S2：实战演练与项目推进（4课时）</vh>
 <v t="swot.20260313114540.19"><vh>一：随堂实战案例</vh>
@@ -1612,14 +1613,11 @@
 </v>
 <v t="swot.20260411101307.1"><vh>@adoc SurrealDB.adoc</vh>
 <v t="swot.20260411101425.1"><vh>SurrealDB</vh>
-<v t="swot.20260411101440.1"><vh>1. 备份研发中心数据 2026-04-11 126行</vh></v>
-<v t="swot.20260411103424.1"><vh>2. 备份研发中心数据 2026-04-11 144行</vh></v>
 <v t="swot.20260528104346.1"><vh>在 linux 中配置 surrealDB 服务</vh></v>
-<v t="swot.20260528112753.1"><vh>导入数据库</vh></v>
+<v t="swot.20260528112753.1"><vh>从备份文件中恢复数据库</vh></v>
+<v t="swot.20260918165534.1"><vh>临时测试使用（实际部署时不会这样用）</vh>
 <v t="swot.20260529142337.1"><vh>创建 surrealdb 数据库服务 -- 创建数据库服务</vh></v>
-<v t="swot.20260529143110.1"><vh>链接 surrealdb 数据库 -- 使用层面</vh></v>
-<v t="swot.20260530215147.1"><vh>问题</vh></v>
-<v t="swot.20260531215429.1"><vh>图片地址临时备份</vh></v>
+</v>
 </v>
 </v>
 </v>
@@ -3168,10 +3166,7 @@
 <v t="swot.20260305092401.1" descendentVnodeUnknownAttributes="7d710058010000003071017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b64580a000000707269736574646174657106580a000000323032362d30332d3038710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58260000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f63686b626c6b2e706e67710d580700000072656c50617468710e580f000000636c656f2f63686b626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>leo-editor body 编辑时，执行 ctrl + shift + z 光标位置会重置到第一行的 bug</vh></v>
 </v>
 <v t="swot.20260310142409.1"><vh>open-at-leo-file 打开的 leo 文件，不能执行 myLeoSettings.leo 中的命令 @command adoc-live</vh></v>
-<v t="swot.20260316150606.1"><vh>3. Undefined 与 Null -&gt; 有bug，只能写一个 @language javascript，写2个则 asciidoc 生成的 html 乱了</vh></v>
-<v t="swot.20260313114540.196"></v>
 </v>
-<v t="swot.20260308115402.1"><vh>获取 leo 主进程派生的子进程</vh></v>
 </vnodes>
 <tnodes>
 <t tx="swot.20240101100533.1">@language javascript
@@ -20478,37 +20473,6 @@ public class Run {
     }
 }
 </t>
-<t tx="swot.20260308115402.1">import os
-import subprocess
-import leo.core.leoGlobals as g
-
-leo_pid = os.getpid()
-g.es(f"正在扫描 Leo 主进程 (PID: {leo_pid}) 派生的后台子进程...", color="blue")
-print(f"Leo 主进程 PID: {leo_pid}")
-
-try:
-    # 抓取系统中所有进程的 PID, 父进程 PID (PPID) 和 执行命令
-    output = subprocess.check_output(['ps', '-eo', 'pid,ppid,command'], text=True)
-
-    children = []
-    for line in output.splitlines()[1:]:  # 跳过表头
-        parts = line.split(maxsplit=2)
-        # 检查该进程的父进程是否是当前的 Leo 进程
-        if len(parts) &gt;= 3 and parts[1] == str(leo_pid):
-            children.append(line.strip())
-
-    if children:
-        g.es(f"发现 {len(children)} 个由 Leo 启动的外部进程！大概率是它在打印日志：", color="red")
-        for c in children:
-            g.es(c)
-            print("嫌疑子进程:", c)
-    else:
-        g.es("当前 Leo 没有派生任何子进程。")
-        print("未发现子进程，可能是底层 C/C++ 扩展直接打印。")
-
-except Exception as e:
-    g.es(f"扫描子进程失败: {e}")
-</t>
 <t tx="swot.20260308160609.1"></t>
 <t tx="swot.20260308160626.1">Alt + x
 
@@ -30054,25 +30018,6 @@ allLis.forEach(function(li) {
 &lt;/body&gt;
 &lt;/html&gt;
 </t>
-<t tx="swot.20260316150606.1">* `Undefined`：变量声明了但没赋值（盒子是空的，连空气都没有）。
-+
-[source,javascript]
-----
-@language javascript
-let name;
-console.log(typeof name); // 输出: undefined
-----
-
-
-* `Null`：变量赋值为空（盒子是空的，但是人为清空的）。
-+
-[source,javascript]
-----
-let name = null;
-console.log(typeof name); // 输出类型: object
-console.log('name:', name);  // null
-----
-</t>
 <t tx="swot.20260316212622.1">@language javascript
 const box = document.querySelector('#box');
 
@@ -35944,276 +35889,6 @@ toggleButton.addEventListener('click', () =&gt; {
 &lt;/script&gt;
 ++++
 </t>
-<t tx="swot.20260411101440.1">{
-	body: '',
-	id: page:⟨rd-center⟩,
-	layout: 'full',
-	metadata: {
-		rdcenter: {
-			baseImages: [
-				{
-					alt: '基础设施完善',
-					caption: '基础设施完善',
-					src: '/rdcenter/base1.jpg'
-				},
-				{
-					alt: '高标准质量体系',
-					caption: '高标准质量体系',
-					src: '/rdcenter/base2.jpg'
-				},
-				{
-					alt: '配套完整的生产检验设备',
-					caption: '配套完整的生产检验设备',
-					src: '/rdcenter/base3.jpg'
-				}
-			],
-			heroBg: '/rdcenter/banner.jpg',
-			heroTitleEn: 'R&amp;D Center',
-			heroTitleZh: '研发中心',
-			platformDesc: '天然ECM（细胞外基质）由多级微纳结构组成，杭州印生医疗科技有限公司通过微纳生物3D打印技术平台实现天然ECM结构的高度仿生，相当于为细胞搭建一座有序生长的桥梁，让不同细胞能像车辆在立交桥上高效通行一样，快速连接并修复组织缺损。体内的细胞能感知拓扑结构的引导作用，通过3D打印，可制造出细胞更喜欢的"家"，引导它们定向排列和迁移，从而加速组织再生。这一技术模拟了天然ECM的力学和结构特征，实现了纯物理方式调控细胞行为。独创的技术克服了材料降解、电场畸变、静电残余等难题，与现有的个性化定制器械不同，3D打印在这里核心任务是实现规模化量产。',
-			platformImages: [
-				{
-					alt: '微米级精度打印头',
-					caption: '微米级精度',
-					src: '/rdcenter/platform-print.jpg'
-				},
-				{
-					alt: '天然ECM网格结构',
-					caption: '天然ECM结构',
-					src: '/rdcenter/platform-ecm.jpg'
-				}
-			],
-			platformMainTitle: '全球首个
-&lt;span class="inline-flex items-baseline gap-[2px] mx-[2px]"&gt;
-    &lt;span class="text-[#38b2a6] text-[42px] font-bold leading-none tracking-tighter max-md:text-[34px]"&gt;2&lt;/span&gt;
-    &lt;span class="text-[#38b2a6] text-[20px] font-bold max-md:text-base"&gt;μm&lt;/span&gt;
-    &lt;span class="text-[#38b2a6] font-medium"&gt;精度&lt;/span&gt;
-&lt;/span&gt;
-量产打印技术',
-			platformSubTitle: '打印组织再生桥梁 让细胞可控生长',
-			platformSubtitle: 'Core technology platform',
-			platformTitle: '核心技术平台',
-			products: [
-				{
-					id: 1,
-					image: '/rdcenter/product1.jpg',
-					regNumber: '浙械注准20252171626',
-					scenes: '儿童及成人龋齿预防 · 牙本质敏感 ·正畸患者、修复体边缘预防继发龋',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					id: 2,
-					image: '/rdcenter/product2.jpg',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					id: 3,
-					image: '/rdcenter/product3.jpg',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					id: 4,
-					image: '/rdcenter/product4.jpg',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					id: 5,
-					image: '/rdcenter/product5.jpg',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					id: 6,
-					image: '/rdcenter/product6.jpg',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					id: 7,
-					image: '/rdcenter/product6.jpg',
-					scope: '用于牙齿深度修复。',
-					structure: '本产品处于研发阶段...',
-					title: '新型修复材料 (在研)',
-					type: 'research'
-				},
-				{
-					id: 1775404427306,
-					image: '/rdcenter/product5.jpg',
-					regNumber: '',
-					scenes: '',
-					scope: '产品适用范围',
-					structure: '产品结构描述',
-					title: '新产品',
-					type: 'approved'
-				}
-			]
-		}
-	},
-	slug: 'rd-center',
-	template: 'RDCenter',
-	title: '研发中心',
-	updatedAt: d'2026-04-05T15:54:31.472614644Z'
-}</t>
-<t tx="swot.20260411103424.1">{
-	body: '',
-	id: page:⟨rd-center⟩,
-	layout: 'full',
-	metadata: {
-		rdcenter: {
-			baseImages: [
-				{
-					alt: '基础设施完善',
-					caption: '基础设施完善',
-					src: '/rdcenter/base1.jpg'
-				},
-				{
-					alt: '高标准质量体系',
-					caption: '高标准质量体系',
-					src: '/rdcenter/base2.jpg'
-				},
-				{
-					alt: '配套完整的生产检验设备',
-					caption: '配套完整的生产检验设备',
-					src: '/rdcenter/base3.jpg'
-				}
-			],
-			heroBg: '/rdcenter/banner.jpg',
-			heroTitleEn: 'R&amp;D Center',
-			heroTitleZh: '研发中心',
-			platformDesc: '天然ECM（细胞外基质）由多级微纳结构组成，杭州印生医疗科技有限公司通过微纳生物3D打印技术平台实现天然ECM结构的高度仿生，相当于为细胞搭建一座有序生长的桥梁，让不同细胞能像车辆在立交桥上高效通行一样，快速连接并修复组织缺损。体内的细胞能感知拓扑结构的引导作用，通过3D打印，可制造出细胞更喜欢的"家"，引导它们定向排列和迁移，从而加速组织再生。这一技术模拟了天然ECM的力学和结构特征，实现了纯物理方式调控细胞行为。独创的技术克服了材料降解、电场畸变、静电残余等难题，与现有的个性化定制器械不同，3D打印在这里核心任务是实现规模化量产。',
-			platformImages: [
-				{
-					alt: '微米级精度打印头',
-					caption: '微米级精度',
-					src: '/rdcenter/platform-print.jpg'
-				},
-				{
-					alt: '天然ECM网格结构',
-					caption: '天然ECM结构',
-					src: '/rdcenter/platform-ecm.jpg'
-				}
-			],
-			platformMainTitle: '全球首个
-&lt;span class="inline-flex items-baseline gap-[2px] mx-[2px]"&gt;
-    &lt;span class="text-[#38b2a6] text-[42px] font-bold leading-none tracking-tighter max-md:text-[34px]"&gt;2&lt;/span&gt;
-    &lt;span class="text-[#38b2a6] text-[20px] font-bold max-md:text-base"&gt;μm&lt;/span&gt;
-    &lt;span class="text-[#38b2a6] font-medium"&gt;精度&lt;/span&gt;
-&lt;/span&gt;
-量产打印技术',
-			platformSubTitle: '打印组织再生桥梁 让细胞可控生长',
-			platformSubtitle: 'Core technology platform',
-			platformTitle: '核心技术平台',
-			products: [
-				{
-					advantages: [],
-					coreTech: '',
-					id: 1,
-					image: '/rdcenter/product1.jpg',
-					regNumber: '浙械注准20252171626',
-					scenes: '儿童及成人龋齿预防 · 牙本质敏感 ·正畸患者、修复体边缘预防继发龋',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					advantages: [],
-					coreTech: '',
-					id: 2,
-					image: '/rdcenter/product2.jpg',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					advantages: [],
-					coreTech: '',
-					id: 3,
-					image: '/rdcenter/product3.jpg',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					advantages: [],
-					coreTech: '',
-					id: 4,
-					image: '/rdcenter/product4.jpg',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					advantages: [],
-					coreTech: '',
-					id: 5,
-					image: '/rdcenter/product5.jpg',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					advantages: [],
-					coreTech: '',
-					id: 6,
-					image: '/rdcenter/product6.jpg',
-					scope: '该产品用于预防龋齿。',
-					structure: '本产品为微黄色糊状物，由氟化钠(5%)、乙醇、松香、乳香、虫胶、虫白蜡等组成。',
-					title: '氟保护剂',
-					type: 'approved'
-				},
-				{
-					bullets: [],
-					coreAdvantages: [],
-					description: '',
-					id: 7,
-					image: '/rdcenter/product6.jpg',
-					scope: '用于牙齿深度修复。',
-					structure: '本产品处于研发阶段...',
-					subtitle: '',
-					title: '新型修复材料 (在研)',
-					type: 'research'
-				},
-				{
-					advantages: [],
-					coreTech: '',
-					id: 1775404427306,
-					image: '/rdcenter/product5.jpg',
-					regNumber: '',
-					scenes: '',
-					scope: '产品适用范围',
-					structure: '产品结构描述',
-					title: '新产品',
-					type: 'approved'
-				}
-			]
-		}
-	},
-	slug: 'rd-center',
-	template: 'RDCenter',
-	title: '研发中心',
-	updatedAt: d'2026-04-05T15:54:31.472614644Z'
-}</t>
 <t tx="swot.20260413081624.1">假设你有一个银行应用程序，需要执行转账操作。
 转账涉及两个步骤：从一个账户扣款，然后将相同金额存入另一个账户。
 这个过程应该是一个原子操作，要么成功完成，要么完全失败。
@@ -42236,11 +41911,9 @@ endif::[]
 * 仓库风格
 * 黑板风格
 </t>
-<t tx="swot.20260528104346.1">mkdir -p /var/lib/surrealdb/data
-
-sudo vim /etc/systemd/system/surreal.service
-
-[source,javascript]
+<t tx="swot.20260528104346.1">@language asciidoc
+.sudo vim /etc/systemd/system/surreal.service
+[source,python]
 ----
 [Unit]
 Description=SurrealDB Server
@@ -42249,8 +41922,8 @@ After=network.target
 [Service]
 Type=simple
 User=root
-# 这里的启动命令请根据你的实际需求修改。下面是一个将数据持久化存储在 /var/lib/surrealdb 目录的示例：
-ExecStart=/usr/local/bin/surreal start --user root --pass your_secure_password rocksdb:/var/lib/surrealdb/data
+# 这里的启动命令请根据你的实际需求修改。下面是一个将数据持久化存储在 /var/lib/surrealdb/data 目录的示例
+ExecStart=/usr/local/bin/surreal start --user root --pass 你的密码 rocksdb:/var/lib/surrealdb/data
 Restart=on-failure
 RestartSec=5s
 
@@ -42258,19 +41931,22 @@ RestartSec=5s
 WantedBy=multi-user.target
 ----
 
-
+.启动数据库 surreal
+[source,console]
+----
+mkdir -p /var/lib/surrealdb/data
 sudo systemctl daemon-reload
-
 sudo systemctl start surreal
-
 sudo systemctl enable surreal
-
 sudo systemctl status surreal
-
 journalctl -u surreal -f
+----
 </t>
-<t tx="swot.20260528112753.1">1. 导入数据库：
-
+<t tx="swot.20260528112753.1">[upperalpha]
+. 导入数据库：
++
+[source,console]
+----
 surreal import \
   --endpoint http://127.0.0.1:8000 \
   --user root \
@@ -42278,23 +41954,27 @@ surreal import \
   --ns yinlife \
   --db site \
   /home/soft/new-connection-2026-05-28.surql
+----
 
 
-2. 进入数据库：
-
+. 进入数据库：
++
+[source,console]
+----
 surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns yinlife --db site
+----
 
 
-3. 查看数据库：
-
+. 查看数据库：
++
+[source,console]
+----
 INFO FOR DB;
+----
 </t>
 <t tx="swot.20260529142337.1">我现在已经安装 了 surrealdb 数据库，给我启动一个服务，数据存放在当前目录下的 database 中。
 
 surreal start --log debug --user root --pass root surrealkv:database
-</t>
-<t tx="swot.20260529143110.1">命令行测试：
-surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns swzkj --db swzkj
 </t>
 <t tx="swot.20260530155937.1">[upperalpha]
 . *Plan（谋定而后动）*
@@ -42321,11 +42001,6 @@ surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns swzkj 
 . *Commit（落袋为安）*
 ** 确认过程和结果都完美掌控、绝无投毒后，才最终执行 Git Commit。
 ** 形成小步快跑、频繁存档的习惯，彻底锁死每一次的胜利果实。
-</t>
-<t tx="swot.20260530215147.1">??? 虽然没有对外暴露 8000 端口，但是 nginx 有转发，用户名 root 和密码 root 也可以被使用来访问数据库吗？
-
-</t>
-<t tx="swot.20260531215429.1">/about/about_bg_3x.jpg
 </t>
 <t tx="swot.20260601150826.1"></t>
 <t tx="swot.20260608104545.1"></t>
@@ -44815,5 +44490,24 @@ function action(node) {
         }
     }
 &lt;/style&gt;</t>
+<t tx="swot.20260918165534.1"></t>
+<t tx="swot.20260919200557.1">* `Undefined`：变量声明了但没赋值（盒子是空的，连空气都没有）。
++
+[source,javascript]
+----
+let name;
+console.log(typeof name); // 输出: undefined
+----
+
+
+* `Null`：变量赋值为空（盒子是空的，但是人为清空的）。
++
+[source,javascript]
+----
+let name = null;
+console.log(typeof name); // 输出类型: object
+console.log('name:', name);  // null
+----
+</t>
 </tnodes>
 </leo_file>
