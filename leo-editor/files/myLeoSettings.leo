@@ -433,7 +433,6 @@ select-to-matching-bracket = Ctrl-Shift-M
 toggle-angle-brackets = Ctrl-Shift-T
 show-file-line = Ctrl-Shift-L
 # vr3-update = Ctrl-R
-# adoc-live = Ctrl-/
 
 z-open-freewin = Ctrl-\
 
