@@ -1,0 +1,149 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:warning-caption: ‼️
+:caution-caption: ⚠️
+
+= SurrealDB
+
+++++
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+</script>
+++++
+
+== 在容器 podman 中使用 SurrealDB
+注意机器的配置不能太低了，否则会很慢的。
+可以参考这个文档 xref:Podman之开发环境搭建.adoc#_4_wsl2_安装容器环境_podman重点[4. WSL2 安装容器环境 podman — 重点
+]
+
+== 在 linux 中配置 surrealDB 服务
+下面是可以用在生产上的使用方式。
+
+.sudo vim /etc/systemd/system/surreal.service
+[source,python]
+----
+[Unit]
+Description=SurrealDB Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+# 这里的启动命令请根据你的实际需求修改。下面是一个将数据持久化存储在 /var/lib/surrealdb/data 目录的示例
+ExecStart=/usr/local/bin/surreal start --user root --pass 你的密码 rocksdb:/var/lib/surrealdb/data
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+----
+
+.启动数据库 surreal
+[source,console]
+----
+mkdir -p /var/lib/surrealdb/data
+sudo systemctl daemon-reload
+sudo systemctl start surreal
+sudo systemctl enable surreal
+sudo systemctl status surreal
+journalctl -u surreal -f
+----
+
+.临时调试用的场景
+[TIP]
+====
+我现在已经安装了 surrealdb 数据库，给我启动一个服务，数据存放在当前目录下的 database 中。
+
+[source,html]
+----
+surreal start --log debug --user root --pass root surrealkv:database
+----
+====
+
+== 在 linux 中从备份文件中恢复 SurrealDB 数据库
+[upperalpha]
+. 导入数据库：
++
+[source,console]
+----
+surreal import \
+  --endpoint http://127.0.0.1:8000 \
+  --user root \
+  --pass root \
+  --ns yinlife \
+  --db site \
+  /home/soft/new-connection-2026-05-28.surql
+----
+
+
+. 进入数据库：
++
+[source,console]
+----
+surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns yinlife --db site
+----
+
+
+. 查看数据库：
++
+[source,console]
+----
+INFO FOR DB;
+----
+

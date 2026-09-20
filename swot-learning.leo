@@ -1613,11 +1613,9 @@
 </v>
 <v t="swot.20260411101307.1"><vh>@adoc SurrealDB.adoc</vh>
 <v t="swot.20260411101425.1"><vh>SurrealDB</vh>
+<v t="swot.20260920081325.1"><vh>在容器 podman 中使用 SurrealDB</vh></v>
 <v t="swot.20260528104346.1"><vh>在 linux 中配置 surrealDB 服务</vh></v>
-<v t="swot.20260528112753.1"><vh>从备份文件中恢复数据库</vh></v>
-<v t="swot.20260918165534.1"><vh>临时测试使用（实际部署时不会这样用）</vh>
-<v t="swot.20260529142337.1"><vh>创建 surrealdb 数据库服务 -- 创建数据库服务</vh></v>
-</v>
+<v t="swot.20260528112753.1"><vh>在 linux 中从备份文件中恢复 SurrealDB 数据库</vh></v>
 </v>
 </v>
 </v>
@@ -18895,7 +18893,8 @@ OpenJDK 64-Bit Server VM Temurin-17.0.18+8 (build 17.0.18+8, mixed mode, sharing
 
 如果是“已禁用”，就必须进 BIOS 了。
 
-WSL2 和 Podman 实际上是在 Windows 内部运行了一个极简的虚拟机。为了让这个虚拟机运行得飞快（接近原生性能），CPU 必须从硬件层面提供支持：
+WSL2 实际上是在 Windows 内部运行了一个极简的虚拟机，Podman 运行在 WSL2 上。
+为了让这个虚拟机运行得飞快（接近原生性能），CPU 必须从硬件层面提供支持：
 
 * Intel 处理器： 叫 VT-x (Virtualization Technology)。
 * AMD 处理器： 叫 SVM (Secure Virtual Machine)。
@@ -41912,6 +41911,8 @@ endif::[]
 * 黑板风格
 </t>
 <t tx="swot.20260528104346.1">@language asciidoc
+下面是可以用在生产上的使用方式。
+
 .sudo vim /etc/systemd/system/surreal.service
 [source,python]
 ----
@@ -41941,7 +41942,17 @@ sudo systemctl enable surreal
 sudo systemctl status surreal
 journalctl -u surreal -f
 ----
-</t>
+
+.临时调试用的场景
+[TIP]
+====
+我现在已经安装了 surrealdb 数据库，给我启动一个服务，数据存放在当前目录下的 database 中。
+
+[source,html]
+----
+surreal start --log debug --user root --pass root surrealkv:database
+----
+====</t>
 <t tx="swot.20260528112753.1">[upperalpha]
 . 导入数据库：
 +
@@ -41971,10 +41982,6 @@ surreal sql --endpoint http://127.0.0.1:8000 --user root --pass root --ns yinlif
 ----
 INFO FOR DB;
 ----
-</t>
-<t tx="swot.20260529142337.1">我现在已经安装 了 surrealdb 数据库，给我启动一个服务，数据存放在当前目录下的 database 中。
-
-surreal start --log debug --user root --pass root surrealkv:database
 </t>
 <t tx="swot.20260530155937.1">[upperalpha]
 . *Plan（谋定而后动）*
@@ -44490,7 +44497,6 @@ function action(node) {
         }
     }
 &lt;/style&gt;</t>
-<t tx="swot.20260918165534.1"></t>
 <t tx="swot.20260919200557.1">* `Undefined`：变量声明了但没赋值（盒子是空的，连空气都没有）。
 +
 [source,javascript]
@@ -44508,6 +44514,10 @@ let name = null;
 console.log(typeof name); // 输出类型: object
 console.log('name:', name);  // null
 ----
+</t>
+<t tx="swot.20260920081325.1">注意机器的配置不能太低了，否则会很慢的。
+可以参考这个文档 xref:Podman之开发环境搭建.adoc#_4_wsl2_安装容器环境_podman重点[4. WSL2 安装容器环境 podman — 重点
+]
 </t>
 </tnodes>
 </leo_file>
