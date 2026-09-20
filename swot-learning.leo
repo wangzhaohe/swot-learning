@@ -44516,7 +44516,7 @@ console.log('name:', name);  // null
 ----
 </t>
 <t tx="swot.20260920081325.1">注意机器的配置不能太低了，否则会很慢的。
-可以参考这个文档 xref:Podman之开发环境搭建.adoc#_4_wsl2_安装容器环境_podman重点[4. WSL2 安装容器环境 podman — 重点
+可以参考这个文档 xref:Podman之开发环境搭建.adoc#4. WSL2 安装容器环境 podman -- 重点[4. WSL2 安装容器环境 podman — 重点
 ]
 </t>
 </tnodes>
