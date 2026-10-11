@@ -49,6 +49,12 @@ import { fork } from 'svelte';
  */
 let pendingFork = null;
 
+// 用于真正取消 in-flight 请求的 AbortController。
+// 注意：fork 的 discard() 只会 reject async derived 的 deferred（结果不落地），
+// 并不会 abort getAbortSignal()，所以需要手动维护一个 controller 来真正打断网络请求。
+/** @type {AbortController | null} */
+let abortController = null;
+
 // 是否正在「预载」（fork 投机阶段，尚未 commit）。
 // $effect.pending() 会连 fork 的预取请求一起计数，所以需要这个标志把
 // 「投机预载」和「真正提交的加载」区分开，避免 hover 时也闪"加载中…"。
@@ -83,14 +89,21 @@ const result = $derived(
 /**
  * 模拟一个异步网络请求
  * @param {number} userId
+ * @param {AbortSignal | undefined} signal
  * @returns {Promise<Profile>}
  */
-async function fetchProfile(userId) {
-    // 实际项目中这里会是 fetch('/api/user/' + userId)
-    // 模拟网络延迟
-    await new Promise(
-        (r) => setTimeout(r, 6000)
-    );
+async function fetchProfile(userId, signal) {
+    // 真实项目中：const res = await fetch(`/api/user/${userId}`, { signal });
+    // 这里用 setTimeout 模拟延迟，并监听 signal 以支持取消
+    await new Promise((resolve, reject) => {
+        const timer = setTimeout(resolve, 2000);
+        if (signal) {
+            signal.addEventListener('abort', () => {
+                clearTimeout(timer);
+                reject(new DOMException('Aborted', 'AbortError'));
+            });
+        }
+    });
     return {
         id: userId,
         name: `用户 ${userId}`,
@@ -106,11 +119,14 @@ async function fetchProfile(userId) {
 async function loadProfile(userId) {
     try {
         return {
-            profile: await fetchProfile(userId)
+            profile: await fetchProfile(userId, abortController?.signal)
         };
     }
     catch (e) {
-        console.error(e);
+        const error = /** @type {Error} */ (e);
+        // 被主动取消（fork discard 触发 abort）：静默抛出，让 async derived 不落地结果
+        if (error?.name === 'AbortError') throw error;
+        console.error(error);
         return { error: '加载失败' };
     }
 }
@@ -123,6 +139,10 @@ function preloadProfile(userId) {
     if (pendingFork) {
         pendingFork.discard();
     }
+
+    // 取消上一个在飞请求，并为本次预载新建 controller
+    abortController?.abort();
+    abortController = new AbortController();
 
     pendingFork = fork(() => {
         selectedId = userId;
@@ -141,6 +161,7 @@ async function commitProfile(userId) {
         isPreloading = false; // 已提交，不再是投机预载
         await pendingFork.commit();
         pendingFork = null;
+        abortController = null; // 已提交，不再需要取消
     }
     // 没有预加载：键盘(Enter/Space)、触屏点按、程序化点击都不会先触发 mouseenter
     // 加载态由模板里的 $effect.pending() 显示，这里只需触发数据请求
@@ -155,6 +176,9 @@ function cancelPreload() {
         pendingFork.discard();
         pendingFork = null;
     }
+    // 真正打断 in-flight 的网络请求
+    abortController?.abort();
+    abortController = null;
     isPreloading = false;
 }
 //@-others
