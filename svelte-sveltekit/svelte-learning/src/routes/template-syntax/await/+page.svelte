@@ -65,6 +65,15 @@ let isPreloading = $state(false);
 /** @type {number | null} */
 let selectedId = $state(null);
 
+// —— 防抖：mouseleave 后不立即 discard，而是延迟一段时间 ——
+// 期间若重新 mouseenter 同一按钮，则取消即将到来的 discard、复用已有预载，
+// 避免高频移入/移出反复「建 fork → 发起请求 → discard → abort」造成的资源浪费。
+const LEAVE_DEBOUNCE_MS = 200;
+/** 防抖定时器句柄 @type {ReturnType<typeof setTimeout> | null} */
+let leaveTimer = null;
+/** 当前 fork 正在预载的用户 id（防抖窗口内判断是否同一按钮） @type {number | null} */
+let pendingUserId = null;
+
 /**
  * 异步派生：请求由 Svelte 的 async 机制承载。
  * 它的挂起/兑现会自动登记到「创建它时」的那个 batch —— 也就是 fork。
@@ -136,18 +145,29 @@ async function loadProfile(userId) {
  * @param {number} userId
  */
 function preloadProfile(userId) {
+
+    // 防抖窗口内重新进入同一按钮：取消即将到来的 discard，直接复用现有预载
+    if (leaveTimer && pendingUserId === userId) {
+        clearTimeout(leaveTimer);
+        leaveTimer = null;
+        return;
+    }
+
+    // 否则清理旧的（fork + 在飞请求），建立新的预载
+    if (leaveTimer) {
+        clearTimeout(leaveTimer);
+        leaveTimer = null;
+    }
     if (pendingFork) {
         pendingFork.discard();
     }
-
-    // 取消上一个在飞请求，并为本次预载新建 controller
-    abortController?.abort();
+    abortController?.abort();  // 停掉之前的请求（比如网络请求）
     abortController = new AbortController();
 
     pendingFork = fork(() => {
         selectedId = userId;
     });
-
+    pendingUserId = userId;
     isPreloading = true;
 }
 //@+node:swot.20261011162310.1: *3* async function commitProfile(userId)
@@ -157,11 +177,18 @@ function preloadProfile(userId) {
  * @param {number} userId
  */
 async function commitProfile(userId) {
+    // 点击是明确的提交动作：先取消任何尚未执行的防抖 discard
+    if (leaveTimer) {
+        clearTimeout(leaveTimer);
+        leaveTimer = null;
+    }
+
     if (pendingFork) {
         isPreloading = false; // 已提交，不再是投机预载
         await pendingFork.commit();
         pendingFork = null;
         abortController = null; // 已提交，不再需要取消
+        pendingUserId = null;
     }
     // 没有预加载：键盘(Enter/Space)、触屏点按、程序化点击都不会先触发 mouseenter
     // 加载态由模板里的 $effect.pending() 显示，这里只需触发数据请求
@@ -172,14 +199,22 @@ async function commitProfile(userId) {
 //@+node:swot.20261011162329.1: *3* function cancelPreload()
 /** 3. 取消：作废 fork，其中挂起的 async derived 会被 reject(OBSOLETE) */
 function cancelPreload() {
-    if (pendingFork) {
-        pendingFork.discard();
-        pendingFork = null;
+    // 防抖：离开后延迟 discard。若期间重新 enter，preloadProfile 会取消这个定时器
+    if (leaveTimer) {
+        clearTimeout(leaveTimer);
     }
-    // 真正打断 in-flight 的网络请求
-    abortController?.abort();
-    abortController = null;
-    isPreloading = false;
+    leaveTimer = setTimeout(() => {
+        leaveTimer = null;
+        if (pendingFork) {
+            pendingFork.discard();
+            pendingFork = null;
+        }
+        // 真正打断 in-flight 的网络请求
+        abortController?.abort();
+        abortController = null;
+        pendingUserId = null;
+        isPreloading = false;
+    }, LEAVE_DEBOUNCE_MS);
 }
 //@-others
 //@-<< script >>
