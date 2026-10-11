@@ -456,7 +456,8 @@ corresponding closing bracket.  To move past the closing bracket, just type it.<
     
 1. @bool enable-abbreviations = True
 2. *either* this setting or @bool scripting-at-script-nodes = True</t>
-<t tx="swot.20181207204148.1">l;;=@language 
+<t tx="swot.20181207204148.1">
+l;;=@language 
 
 la;;=@language asciidoc
 \:
@@ -497,7 +498,8 @@ lt;;=@language typescript
 \:
 
 # special case, causes core to select next place holder for editing
-,,={|{x='__NEXT_PLACEHOLDER'}|}
+#,,={|{x='__NEXT_PLACEHOLDER'}|}
+,,={|{x=''}|}
 
 # Examples of abbreviations with substitutions, see
 # abbreviations-subst-start and
@@ -3028,8 +3030,10 @@ finally:
 </t>
 <t tx="swot.20260920000641.1"># --- 2. Resolve paths and filenames ---
 target_dir = c.getNodePath(target_node)
+# print("target_dir:", target_dir)
 adoc_file = target_node.h.replace("@adoc ", "").strip()
 html_filename = os.path.splitext(adoc_file)[0] + ".html"
+# print("html_filename:", html_filename)
 
 # Unique key to track active servers
 server_key = (target_dir, html_filename)

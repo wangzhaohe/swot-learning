@@ -1613,9 +1613,28 @@
 </v>
 <v t="swot.20260411101307.1"><vh>@adoc SurrealDB.adoc</vh>
 <v t="swot.20260411101425.1"><vh>SurrealDB</vh>
-<v t="swot.20260920081325.1"><vh>在容器 podman 中使用 SurrealDB</vh></v>
-<v t="swot.20260528104346.1"><vh>在 linux 中配置 surrealDB 服务</vh></v>
-<v t="swot.20260528112753.1"><vh>在 linux 中从备份文件中恢复 SurrealDB 数据库</vh></v>
+<v t="swot.20260920111925.1"><vh>在 windows 中安装虚拟容器 podman</vh>
+<v t="swot.20260301091119.1"></v>
+</v>
+<v t="swot.20260920112140.1"><vh>在 podman 容器中创建 SurrealDB</vh></v>
+<v t="swot.20260920112140.2"><vh>在 podman 使用 SurrealDB</vh></v>
+<v t="swot.20260920144616.1"><vh>在 podman 备份与还原数据库 -&gt; 推荐直接备份卷，不用启动容器也行</vh>
+<v t="swot.20260920144616.3"><vh>方式一 直接从卷备份（**推荐**，无需启动容器）</vh></v>
+<v t="swot.20260920144616.2"><vh>方式二 启动容器备分数据库（不优雅）</vh>
+<v t="swot.20260920150606.1"><vh>podman 恢复方式二备份的数据库</vh>
+<v t="swot.20260920150606.2"><vh>1. 环境与架构背景说明</vh></v>
+<v t="swot.20260920150606.3"><vh>2. 停止运行中的数据库容器</vh></v>
+<v t="swot.20260920150606.4"><vh>3. 清理旧数据并精准恢复结构</vh></v>
+<v t="swot.20260920150606.5"><vh>4. 修复持久化卷的读写权限</vh></v>
+<v t="swot.20260920150606.6"><vh>5. 重启容器与健康检查</vh></v>
+</v>
+</v>
+<v t="swot.20260920112140.4"><vh>方式三 启动容器用tar备份数据卷（有点儿麻烦）</vh>
+<v t="swot.20260920112140.5"><vh>Podman 还原方式三数据命令详解</vh></v>
+</v>
+</v>
+<v t="swot.20260528104346.1"><vh>在 linux 中原生配置 surrealDB 服务</vh></v>
+<v t="swot.20260528112753.1"><vh>在 linux 中原生从备份文件中恢复 SurrealDB 数据库</vh></v>
 </v>
 </v>
 </v>
@@ -2747,9 +2766,10 @@
 <v t="swot.20260817085952.1"><vh>Nuxt 与 SvelteKit 开发模式运行机制对比</vh></v>
 </v>
 <v t="swot.20260831150158.1"><vh>@path svelte-learning</vh>
+<v t="swot.20261011110022.1"><vh>@file vite.config.js</vh></v>
 <v t="swot.20260911092032.1"><vh>@adoc svelte-learning.adoc</vh>
-<v t="swot.20260914090814.1"><vh>学习 Svelte</vh>
-<v t="swot.20260831150240.1"><vh>创建 svelte 项目</vh></v>
+<v t="swot.20260914090814.1"><vh>Svelte Learning</vh>
+<v t="swot.20260831150240.1"><vh>Create svelte Project</vh></v>
 <v t="swot.20260831151858.1"><vh>.svelte 文件</vh></v>
 <v t="swot.20260831152152.1"><vh>.svelte.js / .svelte.ts</vh></v>
 <v t="swot.20260831160959.1"><vh>runes 魔法符文</vh>
@@ -2948,10 +2968,22 @@
 <v t="swot.20260918080955.1"><vh>Each-blocks-without-an-item</vh>
 <v t="swot.20260918084548.1"><vh>#file src/routes/template-syntax/each-without-item/+page.svelte</vh></v>
 </v>
+<v t="swot.20260924092251.1"><vh>#await</vh></v>
+</v>
+<v t="swot.20261007074426.1"><vh>Runtime</vh>
+<v t="swot.20261007074446.1"><vh>Context</vh></v>
+</v>
+<v t="swot.20261011104747.1"><vh>await</vh>
+<v t="swot.20261011110454.1"><vh>实验性配置</vh>
+<v t="swot.20261011110407.1"><vh>&lt;&lt; experimental &gt;&gt;</vh></v>
+</v>
+<v t="swot.20261011110519.1"><vh>测试代码</vh>
+<v t="swot.20261011104931.1"><vh>#file src/routes/template-syntax/await/+page.svelte</vh></v>
+<v t="swot.20261011155549.2"><vh>@file src/routes/template-syntax/await/+page.svelte</vh></v>
 </v>
 </v>
 </v>
-<v t="swot.20260917113903.1"><vh>@adoc ekr-4979.adoc</vh></v>
+</v>
 </v>
 </v>
 <v t="swot.20260213131026.1"><vh>@path system-designer</vh>
@@ -41913,6 +41945,14 @@ endif::[]
 <t tx="swot.20260528104346.1">@language asciidoc
 下面是可以用在生产上的使用方式。
 
+.安装 surrealdb
+[source,console]
+----
+tar -xzf surreal-v2.6.1.linux-amd64.tgz
+sudo mv surreal /usr/local/bin/
+surreal version
+----
+
 .sudo vim /etc/systemd/system/surreal.service
 [source,python]
 ----
@@ -41953,7 +41993,11 @@ journalctl -u surreal -f
 surreal start --log debug --user root --pass root surrealkv:database
 ----
 ====</t>
-<t tx="swot.20260528112753.1">[upperalpha]
+<t tx="swot.20260528112753.1">@language asciidoc
+可以使用 web 界面导出数据: https://studio.surrealdb.com/，
+注意在 linux 中，如果数据库端口没有开放，则无法使用 web 操作。
+
+[upperalpha]
 . 导入数据库：
 +
 [source,console]
@@ -44453,21 +44497,6 @@ function action(node) {
     &lt;/button&gt;
 &lt;/div&gt;
 </t>
-<t tx="swot.20260917113903.1">Some intro text before the first source block.
-
-.App.svelte parent component
-[source,html]
-----
-@language html
-&lt;script&gt;let message = $state('hello');&lt;/script&gt;
-----
-
-.FancyInput.svelte child component
-[source,html]
-----
-@language html
-&lt;input bind:value={value} /&gt;
-----</t>
 <t tx="swot.20260918080955.1">https://svelte.dev/docs/svelte/each#Each-blocks-without-an-item
 
 .画一个黑白相间的棋盘
@@ -44515,9 +44544,399 @@ console.log(typeof name); // 输出类型: object
 console.log('name:', name);  // null
 ----
 </t>
-<t tx="swot.20260920081325.1">注意机器的配置不能太低了，否则会很慢的。
-可以参考这个文档 xref:Podman之开发环境搭建.adoc#4. WSL2 安装容器环境 podman -- 重点[4. WSL2 安装容器环境 podman — 重点
-]
+<t tx="swot.20260920111925.1"></t>
+<t tx="swot.20260920112140.1">@language asciidoc
+[source,console]
+----
+# 1. 确保 Podman 虚拟机已启动
+podman machine list
+podman machine start
+
+# 2. 创建命名卷 (Naming Volume)
+# 解决 Intel Mac 挂载本地目录时的文件锁 (FLOCK) 权限问题
+# podman volume create 卷名
+podman volume create yinlife-data
+
+# 3. 启动 SurrealDB 容器
+podman run --name surrealdb-yinlife -d \
+    -p 8000:8000 \
+    -v yinlife-data:/mydata:Z \
+    surrealdb/surrealdb:v2.2.1 start \
+    --user root --pass root \
+    file:/mydata/yinlife.db
+----
+
+&lt;1&gt; *-d (Detached)*: 后台运行模式。容器启动后会释放终端控制权，不影响后续操作。
+&lt;2&gt; *--name surrealdb-yinlife*: 容器唯一标识符。方便后续使用 `podman stop` 或 `podman logs` 进行管理。
+&lt;3&gt; *-v yinlife-data:/mydata:Z*: 将 Podman 内部管理的命名卷挂载到容器内的 `/mydata` 路径。
+    ** `:Z` 标签用于处理 SELinux 安全上下文（在 macOS 的 Podman 虚拟机中是推荐做法）。
+&lt;4&gt; *surrealdb/surrealdb:v2.2.1*: 指定版本镜像。避开了 v3.0 版本在 Intel 架构下对 `file:` 协议路径解析的已知 Bug。
+&lt;5&gt; *file:/mydata/yinlife.db*: 存储引擎路径。
+     SurrealDB 会在挂载卷中创建 `yinlife.db` 文件夹来持久化存储所有节点数据。
+
+
+[NOTE]
+.数据安全与持久化
+====
+* **容器重启/删除**：即便执行 `podman rm surrealdb-yinlife`，只要不删除 `yinlife-data` 卷，你的应用数据就是安全的。
+* **数据位置**：数据现在位于 Podman 管理的虚拟机磁盘中，虽然在 macOS 的 Finder 中不可见，但可以通过容器内部访问。
+====
+
+.podman 常用维护命令
+****
+* 查看现有镜像: `podman image list`
+* 查看容器状态：`podman ps` (只显示已经启动的容器，确认 STATUS 为 Up)
+* 查看容器状态：`podman ps -a` (显示所有容器，包括未启动的容器)
+* 查看实时日志：`podman logs -f surrealdb-yinlife`
+* 停止数据库容器：`podman stop surrealdb-yinlife`
+* 查看卷列表：`podman volume ls`
+****
 </t>
+<t tx="swot.20260920112140.2">[upperalpha]
+. web 版本管理数据: https://app.surrealdb.com/overview
+. js 链接数据库: 省略
+. 命令行链接数据库: 省略
+</t>
+<t tx="swot.20260920112140.4">@language asciidoc
+该命令利用一个临时容器作为“搬运工”，将 Podman 卷（Volume）中的数据打包压缩并保存到宿主机当前目录。
+
+.备份命令
+[source,bash]
+----
+podman run --rm \
+  -v yinlife-data:/from \
+  -v $(pwd):/to \
+  alpine \
+  tar czvf /to/yinlife_backup.tar.gz -C /from .
+----
+
+[upperalpha]
+. 运行逻辑 (Podman 参数)
+* `*--rm*`: 容器运行结束后自动删除，不留垃圾。
+* `*alpine*`: 极简的 Linux 镜像（约 5MB），作为执行环境，运行速度极快。
+
+. 挂载配置 (数据桥梁)
++
+[cols="1,2"]
+|===
+| 参数 | 作用
+
+| `-v yinlife-data:/from`
+| 将名为 `yinlife-data` 的卷挂载到容器内部的 `*/from*` 路径（**备份源**）。
+
+| `-v $(pwd):/to`
+| 将宿主机的当前工作目录挂载到容器内部的 `*/to*` 路径（**目标地**）。
+|===
+
+. 核心命令 (Tar 打包)
++
+`tar czvf /to/yinlife_backup.tar.gz -C /from .`
+
+* `*czvf*`: 分别代表创建 (c)、压缩 (z)、详细过程 (v) 和指定文件名 (f)。
+* `*/to/yinlife.tar.gz*`: 备份文件在容器内的路径，因为挂载关系，文件会生成在宿主机当前目录下。
+* `*-C /from .*`:
+** `-C /from`: 切换工作目录到 `/from`。
+** `.`: 打包当前目录下的所有文件。
+** *注意*：这样做可以确保备份包内不包含多余的层级路径（如 `/from/xxx`），解压后直接就是数据。
+
+[TIP]
+====
+这条命令执行完毕后，你会发现在当前文件夹下多了一个名为 `yinlife_backup.tar.gz` 的文件。
+====
+</t>
+<t tx="swot.20260920112140.5">@language asciidoc
+该命令通过一个临时容器，将宿主机当前的备份文件解压并恢复到指定的 Podman 卷（Volume）中。
+
+.还原命令
+[source,bash]
+----
+podman run --rm \
+  -v yinlife-data:/to \
+  -v $(pwd):/from \
+  alpine \
+  tar xzvf /from/yinlife_backup.tar.gz -C /to
+----
+
+[upperalpha]
+. 运行逻辑 (Podman 参数)
+* `*--rm*`: 容器完成解压任务后立即销毁，保持系统整洁。
+* `*alpine*`: 使用轻量级镜像作为操作环境。
+
+
+. 挂载配置 (数据桥梁)
++
+[cols="1,2"]
+|===
+| 参数 | 作用
+
+| `-v yinlife-data:/to`
+| 将目标 Podman 卷挂载到容器内部的 `*/to*` 路径（**还原目的地**）。
+
+| `-v $(pwd):/from`
+| 将包含备份文件的当前目录挂载到容器内的 `*/from*` 路径（**备份源位置**）。
+|===
+
+
+. 核心命令 (Tar 解压)
++
+`tar xzvf /from/yinlife_backup.tar.gz -C /to`
+
+* `*xzvf*`: 其中的 `x` 代表解压 (Extract)，其余参数与备份时相同。
+* `*/from/yinlife_backup.tar.gz*`: 指向容器内挂载的备份文件路径。
+* `*-C /to*`: 
+  ** 极其关键的参数。它告诉 `tar` 在开始解压前先切换到 `*/to*` 目录。
+  ** 这样备份包里的数据会被直接释放到 `yinlife-data` 卷的根目录下。
+
+[WARNING]
+====
+还原操作会**覆盖**目标卷中的同名文件。在执行还原之前，请确保目标容器（如果正在运行）已停止，以避免数据一致性问题。
+====
+</t>
+<t tx="swot.20260920144616.1"></t>
+<t tx="swot.20260920144616.2">@language asciidoc
+这个先启动容器，再备份数据库的方式不够段雅。
+
+[source,console]
+----
+# 启动 podman 虚拟机
+podman machine start
+
+# 启动数据库容器
+podman start surrealdb-yinlife
+
+# 先确认容器内数据文件的完整路径
+podman exec surrealdb-yinlife ls -la /mydata/yinlife.db
+
+# 备份数据库 (SurrealSB 启动的时候是用目录保存数据的)
+podman cp surrealdb-yinlife:/mydata/yinlife.db ./yinlife.db.backup
+----
+</t>
+<t tx="swot.20260920144616.3">[source,console]
+----
+# 直接备份整个卷（-o 是 --output 的短选项）
+podman volume export yinlife-data -o yinlife-data.tar
+
+# 或者备份到指定文件
+podman volume export yinlife-data --output=./yinlife-data.tar
+----
+
+.恢复时使用
+[source,javascript]
+----
+podman volume import yinlife-data ./yinlife-data.tar
+----
+</t>
+<t tx="swot.20260920150606.1">经历了一次数据库结构错位与权限风波后，总结出以下最稳妥、最标准的 SurrealDB (RocksDB) 备份恢复流程。
+</t>
+<t tx="swot.20260920150606.2">@language asciidoc
+* *容器管理工具*: Podman
+
+* *数据库引擎*: SurrealDB v2.2.1 (使用 RocksDB 文件引擎)
+
+* *存储方案*: 命名卷 (Named Volume) `yinlife-data` 挂载至容器内 `/mydata`
+
+* *数据库路径*: `file:/mydata/yinlife.db`（实际上在卷中表现为 `yinlife.db/` 文件夹）
+
+* *备份文件*: 本地目录 `./yinlife.db.backup`
+            （内部直接包含 `CURRENT`, `MANIFEST-*`, `*.sst`, `*.blob` 等核心引擎文件）
+</t>
+<t tx="swot.20260920150606.3">@language asciidoc
+在对底层数据文件进行任何写操作前，必须安全停止当前运行的数据库容器，防止 RocksDB 引擎因读写冲突导致数据彻底损坏或发生死锁。
+
+[source,bash]
+----
+podman stop surrealdb-yinlife
+----
+</t>
+<t tx="swot.20260920150606.4">@language asciidoc
+由于直接使用 `podman cp` 容易造成目录多层嵌套或宿主机与容器间的权限错乱，推荐利用一个临时的、用完即焚的 `alpine` 容器来统筹文件操作。
+
+在本地 `yinlife.db.backup` 备份目录所在的路径下，执行以下命令：
+
+[source,bash]
+----
+podman run --rm \
+  -v ./yinlife.db.backup:/from:ro \
+  -v yinlife-data:/to:Z \
+  alpine sh -c "rm -rf /to/* &amp;&amp; mkdir -p /to/yinlife.db &amp;&amp; cp -a /from/. /to/yinlife.db/"
+----
+
+命令核心逻辑解析：
+
+* `-v ./yinlife.db.backup:/from:ro`:: 将本地备份目录作为只读 (`ro`) 挂载。
+* `-v yinlife-data:/to:Z`:: 将目标命名卷挂载为 `/to`，并带上 `:Z` 标签以正确处理 SELinux 权限。
+* `rm -rf /to/*`:: 干净地清空错乱的旧数据，防止残余文件干扰。
+* `mkdir -p /to/yinlife.db`:: **关键步骤**：创建 SurrealDB 启动时指定的底层 RocksDB 目录。
+* `cp -a /from/. /to/yinlife.db/`:: 将备份文件**原封不动（保持属性 `-a`）**克隆到正确的盒子里。
+</t>
+<t tx="swot.20260920150606.5">@language asciidoc
+因为通过临时 `alpine` 容器（默认 `root` 用户）写入的文件所有者与 SurrealDB 容器内的安全运行用户可能不一致，会导致 `Permission denied (Os code 13)` 错误。必须在启动前统一放开权限。
+
+[source,bash]
+----
+podman run --rm -v yinlife-data:/fix:Z alpine chmod -R 777 /fix
+----
+
+</t>
+<t tx="swot.20260920150606.6">@language asciidoc
+完成目录结构归位与权限修复后，即可重新拉起你的 SurrealDB 容器，并实时监控日志以确保 RocksDB 引擎成功加载。
+
+[source,bash]
+----
+# 启动数据库容器
+podman start surrealdb-yinlife
+
+# 查看实时日志，确保没有 "Permission denied" 或 "corrupted" 报错
+podman logs -f surrealdb-yinlife
+----
+
+当日志最后输出类似 `Started kvs store at file:///mydata/yinlife.db` 并开始监听 `8000` 端口时，即宣告数据恢复成功。
+</t>
+<t tx="swot.20260924092251.1">https://svelte.dev/tutorial/svelte/await-blocks
+</t>
+<t tx="swot.20261007074426.1"></t>
+<t tx="swot.20261007074446.1">@language javascript
+[source,html]
+----
+import { createContext } from 'svelte';
+
+export const [getUser, setUser] = createContext();
+----
+
+[qanda]
+Question: getUser, setUser 是随便定义的吗? ::
+Answer: 是列表解构，名字符合 js 表达式即可。
+</t>
+<t tx="swot.20261011104747.1">下面例子参考这两个文档的内容
+
+- https://svelte.dev/docs/svelte/await-expressions#Forking
+- https://svelte.dev/docs/svelte/svelte#fork
+
+</t>
+<t tx="swot.20261011104931.1">@language html
+&lt;script&gt;
+    import { fork } from 'svelte';
+
+    /**
+     * @typedef {{ id: number, name: string, bio: string }} Profile
+     * @typedef {{ profile?: Profile, error?: string }} Result
+     */
+
+    /** 用于持有当前的 fork 实例
+     * @type {import('svelte').Fork | null}
+     */
+    let pendingFork = null;
+
+    // 唯一的真实状态：当前选中的用户。fork 隔离的就是「对它的一次同步写入」
+    /** @type {number | null} */
+    let selectedId = $state(null);
+
+    /**
+     * 异步派生：请求由 Svelte 的 async 机制承载。
+     * 它的挂起/兑现会自动登记到「创建它时」的那个 batch —— 也就是 fork。
+     * 这样才能被 discard() 作废、被 commit() 复用。
+     * @type {Result | null}
+     */
+    const result = $derived(selectedId === null ? null : await loadProfile(selectedId));
+
+    /**
+     * 模拟一个异步网络请求
+     * @param {number} userId
+     * @returns {Promise&lt;Profile&gt;}
+     */
+    async function fetchProfile(userId) {
+        // 实际项目中这里会是 fetch('/api/user/' + userId)
+        await new Promise((r) =&gt; setTimeout(r, 2000)); // 模拟网络延迟
+        return { id: userId, name: `用户 ${userId}`, bio: '这是预加载的个人资料。' };
+    }
+
+    /**
+     * 把异常收进返回值，避免污染 fork 的错误边界
+     * @param {number} userId
+     * @returns {Promise&lt;Result&gt;}
+     */
+    async function loadProfile(userId) {
+        try {
+            return { profile: await fetchProfile(userId) };
+        } catch (e) {
+            console.error(e);
+            return { error: '加载失败' };
+        }
+    }
+
+    /**
+     * 1. 预加载：fork 内只做一次同步写入，请求随即在隔离上下文中起飞
+     * @param {number} userId
+     */
+    function preloadProfile(userId) {
+        if (pendingFork) {
+            pendingFork.discard();
+        }
+
+        pendingFork = fork(() =&gt; {
+            selectedId = userId;
+        });
+    }
+
+    /**
+     * 2. 提交：把 fork 批次一次性写实。
+     *    预取到的结果本身就在 batch.current 里，所以不会二次请求
+     * @param {number} userId
+     */
+    async function commitProfile(userId) {
+        if (pendingFork) {
+            await pendingFork.commit();
+            pendingFork = null;
+        } else {
+            // 没有预加载（例如用户直接点击）→ 走普通路径
+            selectedId = userId;
+        }
+    }
+
+    // 3. 取消：作废 fork，其中挂起的 async derived 会被 reject(OBSOLETE)，
+    //    .then 里的结果永远不会落地
+    function cancelPreload() {
+        if (pendingFork) {
+            pendingFork.discard();
+            pendingFork = null;
+        }
+    }
+&lt;/script&gt;
+
+&lt;!-- 触发预加载的 UI --&gt;
+{#each [1, 2] as userId (userId)}
+    &lt;button
+        onmouseenter={() =&gt; preloadProfile(userId)}
+        onmouseleave={cancelPreload}
+        onclick={() =&gt; commitProfile(userId)}
+        tabindex="0"
+        style="color:grey; border:2px solid gray; font-size: 18px"
+    &gt;
+        查看用户 {userId} 的资料
+    &lt;/button&gt;
+{/each}
+
+&lt;!-- 数据展示区域 --&gt;
+{#if result?.error}
+    &lt;p style="color: red;"&gt;{result.error}&lt;/p&gt;
+{:else if result?.profile}
+    &lt;p&gt;姓名: {result.profile.name}&lt;/p&gt;
+    &lt;p&gt;简介: {result.profile.bio}&lt;/p&gt;
+{:else}
+    &lt;p&gt;将鼠标悬停在按钮上开始预加载。&lt;/p&gt;
+{/if}
+</t>
+<t tx="swot.20261011110407.1">experimental: {
+    async: true  // `fork(...)`、顶层 await 等异步实验特性需要显式开启
+}
+</t>
+<t tx="swot.20261011110454.1">[source,javascript]
+----
+@others
+----</t>
+<t tx="swot.20261011110519.1">[source,html]
+----
+@others
+----</t>
 </tnodes>
 </leo_file>
