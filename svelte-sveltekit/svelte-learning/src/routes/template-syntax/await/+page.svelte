@@ -33,7 +33,7 @@
 <!--@-<< template >>-->
 
 <!--@delims // -->
-<script lang="ts">
+<script>
 //@+<< script >>
 //@+node:swot.20261011155642.1: ** << script >>
 //@@language javascript
