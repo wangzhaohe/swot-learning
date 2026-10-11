@@ -183,16 +183,25 @@ async function commitProfile(userId) {
         leaveTimer = null;
     }
 
-    if (pendingFork) {
+    if (pendingFork && pendingUserId === userId) {
+        // 预载的正是当前用户 → 提交复用，不二次请求
         isPreloading = false; // 已提交，不再是投机预载
         await pendingFork.commit();
         pendingFork = null;
         abortController = null; // 已提交，不再需要取消
         pendingUserId = null;
     }
-    // 没有预加载：键盘(Enter/Space)、触屏点按、程序化点击都不会先触发 mouseenter
-    // 加载态由模板里的 $effect.pending() 显示，这里只需触发数据请求
+    // 没有预载，或预载的是别的用户（例如键盘激活按钮时，鼠标还停在另一个按钮上）
+    // → 丢弃不匹配的旧 fork，按普通路径重新加载当前用户
     else {
+        if (pendingFork) {
+            pendingFork.discard();
+            pendingFork = null;
+        }
+        abortController?.abort();
+        abortController = null;
+        pendingUserId = null;
+        isPreloading = false;
         selectedId = userId;
     }
 }
