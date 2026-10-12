@@ -2987,7 +2987,7 @@
 </v>
 <v t="swot.20260213131026.1"><vh>@path system-designer</vh>
 <v t="swot.20260213131058.1"><vh>@adoc system-design.adoc</vh>
-<v t="swot.20260213130935.1"><vh>系统架构总结</vh>
+<v t="swot.20260213130935.1"><vh>系统架构总结--学习用</vh>
 <v t="swot.20260213075755.1"><vh>2026-02-13 全栈架构模式：从宏观到微观的 MVC 映射及前端 MVVM</vh>
 <v t="swot.20260224073312.1"><vh>1. 宏观视角：系统级 MVC (System Level)</vh></v>
 <v t="swot.20260224073211.1"><vh>2. 后端视角：Spring Boot 内部 MVC</vh></v>
@@ -3026,7 +3026,7 @@
 </v>
 </v>
 <v t="swot.20260522145523.1"><vh>@adoc 软考系统架构设计师.adoc</vh>
-<v t="swot.20260522145549.1"><vh>软考系统架构设计师</vh>
+<v t="swot.20260522145549.1"><vh>软考系统架构设计师--考试用</vh>
 <v t="swot.20260522151135.1"><vh>软件架构风格</vh>
 <v t="swot.20260522151151.1"><vh>基本架构风格</vh>
 <v t="swot.20260522151315.1"><vh>数据流风格</vh></v>
@@ -3035,7 +3035,25 @@
 <v t="swot.20260522151532.1"><vh>虚拟机风格</vh></v>
 <v t="swot.20260522151543.1"><vh>以数据为中心的风格</vh></v>
 </v>
+<v t="swot.20261012085957.1"><vh>大数据架构</vh>
+<v t="swot.20261012090008.1"><vh>Lambda 架构</vh>
+<v t="swot.20261012130635.1"><vh>Lambda 架构演进案例：广告报表写时合并优化</vh>
+<v t="swot.20261012133021.1"><vh>第一版：典型 Lambda 架构（当前痛点：服务层算到崩溃）</vh></v>
+<v t="swot.20261012133039.1"><vh>第二版：缓解 Java 服务层压力（当前痛点：Redis 查询瓶颈）</vh></v>
+<v t="swot.20261012133059.1"><vh>第三版：统一大宽表 + 写时合并（服务层查询极简，写入端成为新关注点）</vh></v>
+<v t="swot.20261012133121.1"><vh>软考“一看就懂”对比总结表</vh></v>
+<v t="swot.20261012133132.1"><vh>给你的复习建议</vh></v>
 </v>
+</v>
+<v t="swot.20261012092938.1"><vh>Kappa 架构</vh></v>
+</v>
+<v t="swot.20261012085031.1"><vh>架构安全</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20261012131756.1"><vh>@adoc 架构案例集锦.adoc</vh>
+<v t="swot.20261012131811.1"><vh>Lambda 架构案例集锦</vh>
+<v t="swot.20261012130635.1"></v>
 </v>
 </v>
 </v>
@@ -44824,5 +44842,239 @@ Answer: 是列表解构，名字符合 js 表达式即可。
 ----
 @others
 ----</t>
+<t tx="swot.20261012085031.1"></t>
+<t tx="swot.20261012085957.1"></t>
+<t tx="swot.20261012090008.1">[cols="1,2,2", options="header"]
+|===
+| 层 | 特点 | 作用
+| Batch Layer（批处理层） | 处理全量历史数据，延迟高但准确 | 生成不可变的、完整的批视图
+| Speed Layer（速度层/流处理层） | 只处理最近增量数据，延迟低 | 弥补批处理层的时间差，提供实时视图
+| Serving Layer（服务层） | 合并上述两个视图 | 对外提供查询结果
+|===
+
+之所以叫 Lambda，是因为它的数据流图形状像希腊字母 λ：
+
+一条线从顶部（数据源）分叉成两条并行路径（批处理 + 流处理）
+
+最后在底部汇合（服务层合并结果）
+
+也就是说，这个名字来自图形形状的类比，λ 的形状恰好描述了“分叉再汇合”的拓扑结构。
+</t>
+<t tx="swot.20261012092938.1"></t>
+<t tx="swot.20261012130635.1">*业务诉求*：在一个广告报表中，同时展示 ##“外部曝光数据”##（第三方如腾讯提供，每天/每小时拉取）和##“内部转化数据”##（用户在平台下单付款，实时产生）。
+
+*技术难点*：两类数据来源不同、时效性不同，如何在报表中完美*合并（Merge）*？
+
+整个架构的演进，就是**“合并（Merge）操作发生的位置”**的演进。
+</t>
+<t tx="swot.20261012131756.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
+<t tx="swot.20261012131811.1">
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+&lt;/script&gt;
+++++
+endif::[]
+</t>
+<t tx="swot.20261012133021.1">*核心逻辑*：底层拼装，把两路数据各自存好，*Java 服务层查询时在内存里做合并（读时合并）*。
+
+[mermaid, target=img/mermaid-广告001, format=svg]
+....
+graph TD
+    subgraph 实时层 [Speed Layer: 实时数据]
+        Kafka2[Kafka2 实时下单/付款消息] --&gt; Spark[Spark Streaming] --&gt; Redis[(Redis 实时转化数据)]
+    end
+
+    subgraph 服务层 [Serving Layer: 压力山大]
+        Java[Java 服务] --&gt;|1.查广告关联| MySQL_Rel[(MySQL 广告关系表)]
+        Java --&gt;|查离线曝光/点击| MySQL_Exp
+        Java --&gt;|查实时转化| Redis
+        Java --&gt;|内存中进行复杂的 Merge 聚合| Result[最终报表]
+    end
+    style Java fill:#f66,color:#fff
+
+    subgraph 批处理层 [Batch Layer: 离线数据]
+        API[第三方曝光/点击数据] --&gt;|每日定时拉取| MySQL_Exp[(MySQL 离线曝光/点击表)]
+        Kafka1[Kafka1 内部浏览/下单日志] --&gt;|每天凌晨| HDFS --&gt; Hive --&gt;|导出| MySQL_Conv[(MySQL 离线转化表)]
+    end
+....
+
+*核心痛点（瓶颈）*：
+
+1. 实时曝光缺失：第三方曝光只按天进入 MySQL，未进入实时层；实时流只处理内部 Kafka 转化消息，因此第一版无法在实时链路中提供小时级曝光，实时报表不完整。
+
+2. 实时层缺少业务维度：Redis 只按追踪链接维度存内部转化聚合，不含广告 ID；Java 服务层虽然可以通过 MySQL 广告关系表补全广告语义，但必须每次查询都做跨源关联和二次聚合，读时合并成本高。
+</t>
+<t tx="swot.20261012133039.1">*核心改进*：增加了一个 Python 常驻脚本，不断调用第三方 API 的小时报表，更新当日的曝光数据表（将其推入实时存储/数据库）。
+
+[mermaid, target=img/mermaid-广告002, format=svg]
+....
+graph TD
+    subgraph 批处理层 [Batch Layer: 离线数据]
+        Kafka1[Kafka1 内部浏览/下单日志] --&gt;|每天凌晨| HDFS --&gt; Hive --&gt;|导出| MySQL_Conv[(MySQL 离线转化表)]
+        API[第三方曝光/点击数据] --&gt;|每日定时拉取，日级/历史| MySQL_Exp[(MySQL 离线曝光/点击表)]
+    end
+
+    subgraph 实时层 [Speed Layer: 实时数据]
+        API2[第三方API] --&gt;|Python脚本每小时拉取，当天准实时| Redis_Exp[(Redis 曝光数据)]
+        Kafka2[Kafka2 实时下单/付款消息] --&gt; Spark[Spark Streaming] --&gt; Redis_Tran[(Redis 实时转化数据)]
+    end
+
+    subgraph 服务层 [Serving Layer: 压力转移]
+        Java[Java 服务] --&gt;|1.查广告关系&lt;br/&gt;补全广告语义| MySQL_Rel[(MySQL 广告关系表)]
+        Java --&gt;|2.查链接维度&lt;br/&gt;实时转化| Redis_Tran
+        Java --&gt;|3.查链接维度&lt;br/&gt;实时曝光| Redis_Exp
+        Java --&gt;|4.内存中关联广告与&lt;br/&gt;链接并二次聚合| Result[最终报表]
+    end
+
+    style Java fill:#3f6,color:#333
+    style Redis_Exp fill:#f9a,color:#333
+    style Redis_Tran fill:#f9a,color:#333
+    style MySQL_Rel fill:#bbf,stroke:#333
+....
+
+第二版将曝光数据接入实时层，减轻了 Java 直接调用第三方 API 和写入曝光的压力，
+但由于 Redis 仍以链接维度存储、缺少广告语义，Java 必须按广告-链接关系扇出查询 Redis_Exp 和 Redis_Tran，并在内存中二次聚合。
+查询次数随“广告数 × 链接数 × 指标数”放大，所有服务实例又共享 Redis，导致 Redis 的 QPS、带宽、内存和单线程处理能力成为新的集中瓶颈。
+因此第二版只是把瓶颈从写路径转移到 Redis 读路径，读时合并问题并未根治。
+</t>
+<t tx="swot.20261012133059.1">*核心逻辑*：在线服务层取消 Redis，只保留一张 MySQL 广告大宽表。
+
+- 大宽表以 `(stday, 广告ID)` 或 `(stday, 广告ID, 追踪链接)` 为唯一键，包含曝光、点击、转化等指标。
+- 把“广告与追踪链接”的关联和指标合并，从查询时提前到写入时，实现写时合并（Write-time Join）。
+
+[mermaid, target=img/mermaid-广告003, format=svg]
+....
+graph TD
+    subgraph 批处理层 [Batch Layer]
+        Hive[Hive表: 转化/曝光数据] -.-&gt;|每天离线任务| MySQL_Big[(MySQL 统一大宽表)]
+        API[第三方API] -.-&gt;|定时任务| MySQL_Big
+    end
+
+    subgraph 实时层 [Speed Layer]
+        Python[Python脚本] --&gt;|更新 stday=当天&lt;br/&gt;的曝光字段| MySQL_Big
+        Kafka[实时下单消息] --&gt; Spark[Spark Streaming]
+        Spark --&gt;|调用更新接口| JavaUpdate[Java 更新接口]
+        JavaUpdate --&gt;|找到追踪链接所属广告&lt;br/&gt;直接 Update stday=当天 的转化字段| MySQL_Big
+    end
+
+    subgraph 服务层 [Serving Layer: 极其丝滑]
+        JavaQuery[Java 查询服务] --&gt;|只读一张表, 无复杂计算| MySQL_Big
+        JavaQuery --&gt; Result[最终报表]
+    end
+    
+    style MySQL_Big fill:#bbf,stroke:#333,stroke-width:4px
+    style JavaQuery fill:#9f9,stroke:#333
+    style JavaUpdate fill:#ff9,stroke:#333
+....
+
+*写入方式*：
+
+* 离线层：Hive/Spark 离线任务每天重算 T+1 及历史数据，按业务日期 `stday` 写入或覆盖大宽表。
+* 实时层：Python 脚本小时级拉取第三方当天曝光，对 `stday = 当天` 的行做 upsert，更新曝光字段；内部实时下单/付款消息经 Spark Streaming 后调用 Java 更新接口，先将追踪链接映射为广告 ID，再对 `stday = 当天、广告ID` 的行做 upsert 或增量更新转化字段。
+** 一致性：通过订单 ID/消息 ID 去重、幂等更新、批量合并、缓冲、分片和监控，避免重复计数与 MySQL 热点行锁。次日由离线任务重算并覆盖当天数据，保证最终一致。
+
+* 服务层*：Java 查询服务只读这张大宽表，不再跨 MySQL 和 Redis 做 Join，也不在查询时做二次聚合，因此查询路径极简；但仍可能有过滤、排序、分页或轻量汇总。
+
+**关键澄清**：`stday` 是业务日期，不是“离线/实时”的来源标记。实时链路只写 `stday = 当天`，离线链路负责 `stday ++&lt;++= 昨天` 及历史修正。第三版解决的是服务层读时合并瓶颈，不是彻底消除所有瓶颈；写入端 MySQL 的并发、幂等、热点和吞吐成为新的关注点。
+
+IMPORTANT: *软考考点*：写时合并（Write-time Join）、计算左移、大宽表设计、读写路径分离、查询极简，同时要说明写放大和写入端治理。
+
+*第三版的核心魔法：写时合并（Write-time Join）*
+
+* *统一存储*：在线服务层利用 MySQL 的 `stday` 字段区分业务日期。
+** `stday = 当天日期`：实时链路写入当天曝光和转化，并做 upsert/增量更新。
+** `stday ++&lt;++= 昨天`：离线链路写入、重算或覆盖历史曝光和转化数据。
+** 次日离线任务重算并覆盖当天数据，保证最终一致。
+
+* *写时关联*：Spark Streaming 不再往 Redis 写，而是调用 Java 更新接口。接口内先把当前下单的追踪链接映射为广告 ID，再对 `stday = 当天` 的大宽表行做 upsert 或增量更新转化字段。
+
+* *服务极简*：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；
+##但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控##。
+</t>
+<t tx="swot.20261012133121.1">[width="100%",cols="&lt;25%,&lt;25%,&lt;25%,&lt;25%",options="header",]
+|===
+|对比维度 |第一版（典型Lambda） |第二版（缓解查询压力） |第三版（终极优化）
+
+|*数据存储* |MySQL (离线) + Redis (实时) |MySQL + Redis (增加曝光写入) |*在线服务层唯一查询表：MySQL 大宽表；Redis 退出在线查询链路*
+
+|*合并（Merge）位置* |Java 服务层内存（读时合并） |Java 服务层内存（读时合并，略微减轻） |*写入时合并（Write-time Join）*
+
+|*Java 服务端操作* |查MySQL + 查Redis + 内存计算 |查MySQL + 查Redis + 二次聚合 |*只查一张大宽表，无跨源Join和查询时二次聚合*
+
+|*第三方准实时曝光* |❌ 不支持实时（T+1） |✅ Python脚本小时级拉取 |✅ Python脚本小时级拉取
+
+|*核心瓶颈* |Java 计算压力极大 |Redis 查询瓶颈、离线依赖链长 |*服务层查询路径极简；写入端成为新关注点，需要幂等、批量合并、分片、缓冲和监控*
+
+|*软考考点* |Lambda架构基础，读时合并弊端 |计算左移（预处理），缓解读压力 |*写时合并、计算左移、大宽表设计、读写路径分离、写放大治理*
+|===
+</t>
+<t tx="swot.20261012133132.1">在软考论文或案例分析中，如果遇到大数据架构题，**“写时合并（Write-time Join）”和“计算左移”**是绝对的高分词汇。
+
+第三版通过“大宽表”把复杂的关联逻辑从“查询阶段”转移到了“数据写入阶段”，这正是架构设计中最经典的优化思想！
+</t>
 </tnodes>
 </leo_file>
