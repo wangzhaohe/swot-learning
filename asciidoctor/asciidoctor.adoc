@@ -181,7 +181,6 @@ Asciidoctor::DEFAULT_ATTRIBUTES.delete('data-uri')
 .link:img/diagram-gantt-2025-05-08-230846.png[gantt]
 [plantuml, target=img/diagram-gantt-2025-05-08-230846, format=png]
 ....
-@startgantt
 scale 1.5
 'skinparam dpi 300
 saturday are closed
@@ -195,7 +194,6 @@ Project starts the 1st of january 2021
 
 2021-01-18 to 2021-01-22 are named [End's committee]
 2021-01-18 to 2021-01-22 are colored in salmon 
-@endgantt
 ....
 
 ==== json
@@ -218,14 +216,12 @@ include::data/diagram-json1.puml[]
 
 [plantuml, target=img/diagram-component-2025-05-09-095950, format=png]
 ....
-@startuml
 component "Frontend" as Frontend
 component "Backend API" as Backend
 interface "API Interface" as API_Interface
 
 Frontend ..> API_Interface
 Backend --|> API_Interface
-@enduml
 ....
 
 ===== Why is the interface needed?
@@ -265,7 +261,6 @@ In future, if there are multiple backend versions like BackendV2, they can imple
 
 [plantuml, target=img/diagram-component-2025-05-09-100211, format=png]
 ....
-@startuml
 component "Frontend" as Frontend
 interface "API interface" as API_Interface
 component "Backend API v1" as BackendV1
@@ -274,7 +269,6 @@ component "Backend API v2" as BackendV2
 Frontend ..> API_Interface
 BackendV1 --> API_Interface
 BackendV2 --> API_Interface
-@enduml
 ....
 
 Now the frontend can switch between BackendV1 and BackendV2 without modifying its code. +
@@ -312,12 +306,10 @@ However, this has poor scalability compared to using interfaces. +
 
 [plantuml, target=img/diagram-component-2025-05-09-100502, format=png]
 ....
-@startuml
 component "前端" as Frontend
 interface "API 接口" as API_Interface
 
 Frontend .> API_Interface : 依赖 API
-@enduml
 ....
 
 **含义：** `Frontend` 依赖 `API_Interface`，但 `Frontend` **不一定知道 `API_Interface` 的实现细节**。
@@ -328,12 +320,10 @@ Frontend .> API_Interface : 依赖 API
 
 [plantuml, target=img/diagram-component-2025-05-09-100635, format=png]
 ....
-@startuml
 interface "API 接口" as API_Interface
 component "后端 API" as Backend
 
 Backend -> API_Interface : 实现 API
-@enduml
 ....
 
 **含义：** `Backend` 提供 `API_Interface` 规范的实现。
@@ -343,14 +333,12 @@ Backend -> API_Interface : 实现 API
 .完整的组件图
 [plantuml, target=img/diagram-component-2025-05-09-100733, format=png]
 ....
-@startuml
 component "前端" as Frontend
 interface "API 接口" as API_Interface
 component "后端 API" as Backend
 
 Frontend .> API_Interface : 依赖 API
 API_Interface <- Backend  : 实现 API
-@enduml
 ....
 
 **解释：**
@@ -363,7 +351,6 @@ API_Interface <- Backend  : 实现 API
 
 [plantuml, target=img/diagram-componet-2025-05-09-103223, format=png]
 ....
-@startuml
 package "前端" {
   component "Vue.js 组件" as Vue
   component "UI 组件库" as UI
@@ -382,7 +369,6 @@ package "数据库" {
 
 Vue ..> API_Interface
 API --> MySQL
-@enduml
 ....
 
 **解释**
@@ -437,7 +423,6 @@ API --> MySQL
 ===== 某官网展示端组件图 home
 [plantuml, target=img/diagram-comonent-dayu-2025-05-09-103243, format=png]
 ....
-@startuml
 'left to right direction
 
 file "HomePage /" as root
@@ -480,14 +465,12 @@ Menu ..> resp
 resp ..> index
 'index ..> root
 
-@enduml
 ....
 
 ===== 某官网展示端组件图 app.js -> clint_news_list.js
 .Express 展示端组件图
 [plantuml, target=img/diagram-component-2025-05-09-102755, format=png]
 ....
-@startuml
 
 package app.js {
 
@@ -509,14 +492,12 @@ package app.js {
         Support_list .up.> news
     }
 }
-@enduml
 ....
 
 ===== 某官网展示端组件图 app.js -> clint_news_detail.js
 .Express 展示端组件图
 [plantuml, target=img/diagram-component-2025-05-09-103024, format=png]
 ....
-@startuml
 
 package app.js {
 
@@ -538,14 +519,12 @@ package app.js {
         Support_detail .up.> news_detail
     }
 }
-@enduml
 ....
 
 ===== 某官网展示端组件图 app.js -> other routes
 .Express 展示端组件图
 [plantuml, target=img/diagram-component-2025-05-09-103049, format=png]
 ....
-@startuml
 left to right direction
 
 package app.js {
@@ -576,7 +555,6 @@ package app.js {
         cookies_form ..> cookies
     }
 }
-@enduml
 ....
 
 ===== 某官网展示端组件图 app.js -> Directory
@@ -585,7 +563,6 @@ package app.js {
 .Express 展示端组件图
 [plantuml, target=img/diagram-component-2025-05-09-103145, format=png]
 ....
-@startuml
 package app.js {
 
     package Directory {
@@ -602,7 +579,6 @@ package app.js {
         }
     }
 }
-@enduml
 ....
 
 ==== deployment
@@ -611,7 +587,6 @@ package app.js {
 .link:img/diagram-deployment-2025-05-09-110113.png[deployment]
 [plantuml, target=img/diagram-deployment-2025-05-09-110113, format=png]
 ....
-@startuml
 
 node "Nginx 服务器" {
     component "Nginx"
@@ -634,7 +609,6 @@ node "前端客户端" {
 "Nginx" ..> "Node.js" : 反向代理
 "Node.js" ..> "MySQL" : 读写数据
 
-@enduml
 ....
 
 ====
@@ -649,7 +623,6 @@ node "前端客户端" {
 .link:img/diagram-deployment-2025-05-09-110102.png[Official website deployment]
 [plantuml, target=img/diagram-deployment-2025-05-09-110102, format=png]
 ....
-@startuml
 node "Ubuntu Linux" {
 
     folder Webhook {
@@ -690,14 +663,12 @@ nuxt -> Webhook
 express -> Webhook
 
 browser --> Nginx
-@enduml
 ....
 
 ==== WBS (Work Breakdown Structure)
 .link:img/diagram-wbs-2025-05-09-111742.svg[wbs]
 [plantuml, target=img/diagram-wbs-2025-05-09-111742, format=svg]
 ....
-@startwbs
 scale 1.2
 * Business Process Modelling WBS
 ** Launch the project
@@ -710,14 +681,12 @@ scale 1.2
 *** Measure AsIs performance metrics
 *** Identify Quick Wins
 ** Complete innovate phase
-@endwbs
 ....
 
 ==== mindmap
 .link:img/diagram-mindmap-2025-05-08-232219.png[mindmap]
 [plantuml, target=img/diagram-mindmap-2025-05-08-232219, format=png]
 ....
-@startmindmap
 * Creole on Mindmap
 left side
 **:==Creole
@@ -779,14 +748,12 @@ Enjoy!;
 ## Another sub item
 # Third item
 ;
-@endmindmap
 ....
 
 ==== Salt -> Draw the prototype diagram
 .link:img/diagram-salt-2025-05-08-225243.png[common prototype]
 [plantuml, target=img/diagram-salt-2025-05-08-225243, format=png]
 ....
-@startsalt
 scale 1.5
 {
   Just plain text
@@ -798,19 +765,16 @@ scale 1.5
   "Enter text here   "
   ^This is a droplist^
 }
-@endsalt
 ....
 
 .link:img/diagram-salt-2025-05-08-225302.png[prototype in flow]
 [plantuml, target=img/diagram-salt-2025-05-08-225302, format=png]
 ....
-@startuml
 start
 repeat :read data;
   :generate diagrams;
 repeat while (\n{{\nsalt\n{^"Next step"\n  Do you want to continue? \n[Yes]|[No]\n}\n}}\n)
 stop
-@enduml
 ....
 
 ==== yaml
@@ -820,7 +784,6 @@ https://plantuml.com/zh/yaml
 .link:img/diagram-yaml-2025-05-08-232919.png[yaml]
 [plantuml, target=img/diagram-yaml-2025-05-08-232919, format=png]
 ....
-@startyaml
 spring:
   application:
     name: mybatis_quickstart-crud
@@ -849,33 +812,31 @@ aliyun:
     accessKeyId: "LQAI5tJ3drn2qkNAGZrxwpnC"
     accessKeySecret: "cMJ6XHSntg361NsN6swGVlyB0Sks84"
     bucketName: "swot-learn"
-@endyaml
 ....
 
 === mermaid
-https://mermaid.js.org/
+官网：https://mermaid.js.org/
 
 安装与 @mermaid-js/mermaid-cli 兼容的 puppeteer
 
-    pnpm add puppeteer@^23 -g
-    验证安装：
-    node -e "console.log(require('puppeteer').executablePath())"
-    输出 Chromium 的路径，说明安装成功
-    /Users/swot/.cache/puppeteer/chrome/mac-131.0.6778.204/chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing
-
+    pnpm add puppeteer@^25 -g
+    puppeteer browsers install chrome-headless-shell
 
 安装 mermaid-cli:
 
+    # 会安装最新的版本，现在是 12.0.0 (2026-10-13 14:43:06)
     npm install -g @mermaid-js/mermaid-cli
 
 查看是否安装成功:
 
     which mmdc  # 在 Linux/macOS 上
     where mmdc  # 在 Windows 上
+    mmdc --version
 
 
-.link:img/mermaid-2025-05-09-113732.png[Example1]
-[mermaid, target=img/mermaid-2025-05-09-113732, format=svg]
+asciidoc 测试 mermaid 文本：
+
+[mermaid, target=img/mermaid-2025-05-09-113732, format=png]
 ....
 graph TD;
     A-->B;
@@ -884,8 +845,8 @@ graph TD;
     C-->D;
 ....
 
+image::img/mermaid-2025-05-09-113732.png[]
 
-.link:img/mermaid_2025-05-09-113741.png[Example2]
 [mermaid, target=img/mermaid_2025-05-09-113741, format=png]
 ....
 sequenceDiagram
@@ -900,6 +861,8 @@ sequenceDiagram
     Middleware->>Middleware: 包装为标准格式
     Middleware->>Client: 发送最终响应
 ....
+
+image::img/mermaid_2025-05-09-113741.png[]
 
 === graphviz
 https://graphviz.org/download/
@@ -1320,4 +1283,57 @@ image::img/mermaid-2026-02-13-131950.svg[]
 ----
 
 IMPORTANT: 实际写的时候没有 source，也没有转义的 `\`，这里有只是为了能以代码的形式显示出来。
+
+== 生成 pdf 文件
+
+
+=== 安装字体 font-noto-serif-sc
+> brew install --cask font-noto-serif-sc
+==> Fetching downloads for: font-noto-serif-sc
+✔︎ Cask font-noto-serif-sc (latest)                                                                                                        Verifying    25.1MB/ 25.1MB
+==> Installing Cask font-noto-serif-sc
+==> Moving Font 'NotoSerifSC[wght].ttf' to '/Users/swot/Library/Fonts/NotoSerifSC[wght].ttf'
+font-noto-serif-sc was successfully installed!
+
+=== vim my-theme.yml
+extends: default
+font:
+  catalog:
+    # 注册你刚刚安装的这个可变字体
+    Noto Serif SC:
+      normal: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
+      bold: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
+      italic: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
+      bold_italic: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
+    # 解决 M+ 1mn 报错
+    M+ 1mn:
+      normal: /System/Library/Fonts/Monaco.ttf
+  fallbacks:
+    - Noto Serif SC
+base:
+  font_family: Noto Serif SC
+  # 1. 稍微调大正文，11pt 在打印件上很清楚
+  font_size: 11
+  line_height: 1.6
+  font_color: #333333
+
+heading:
+  font_family: Noto Serif SC
+  font_color: #222222
+  # 2. 核心：大幅调低一、二级标题的字号
+  # h1 是文档大标题
+  h1_font_size: 22
+  # h2 是章节标题 (==)
+  h2_font_size: 16
+  # h3 是小节标题 (===)
+  h3_font_size: 13
+  # 3. 降低标题的厚重感
+  font_style: bold
+
+code:
+  font_family: M+ 1mn
+  font_size: 9
+
+=== run asciidoctor-pdf
+asciidoctor-pdf -a pdf-theme=my-theme.yml -a scripts=cjk "数据库开发技术大作业要求-学生版本.adoc"
 
