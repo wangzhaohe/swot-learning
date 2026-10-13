@@ -3836,7 +3836,13 @@ If you do not want to embed images as Base64, you can remove this line of code o
 Asciidoctor::DEFAULT_ATTRIBUTES.delete('data-uri')
 ```
 </t>
-<t tx="swot.20250508224645.1"></t>
+<t tx="swot.20250508224645.1">https://docs.asciidoctor.org/diagram-extension/latest/installation/
+
+[source,console]
+----
+gem install asciidoctor-diagram
+----
+</t>
 <t tx="swot.20250508224817.1">1. https://docs.asciidoctor.org/diagram-extension/latest/diagram_types/plantuml/
 2. https://rubygems.org/gems/asciidoctor-diagram-plantuml
 3. https://plantuml.com/zh/
