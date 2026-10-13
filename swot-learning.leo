@@ -106,7 +106,9 @@
 <v t="swot.20250508225006.1"><vh>Salt -&gt; Draw the prototype diagram</vh></v>
 <v t="swot.20250508232842.1"><vh>yaml</vh></v>
 </v>
-<v t="swot.20250509113701.1"><vh>mermaid</vh></v>
+<v t="swot.20250509113701.1"><vh>mermaid</vh>
+<v t="swot.20261013162411.1"><vh>Example</vh></v>
+</v>
 <v t="swot.20250510115002.1"><vh>graphviz</vh></v>
 <v t="swot.20250509155424.1"><vh>Barcode</vh></v>
 <v t="swot.20250509164220.1" descendentVnodeUnknownAttributes="7d710058010000003071017d71025808000000616e6e6f7461746571037d71042858080000007072696f7269747971054d0f27580a000000707269736574646174657106580a000000323032352d30312d333071077573732e"><vh>vega &amp; vegalite</vh>
@@ -3037,7 +3039,7 @@
 </v>
 <v t="swot.20261012085957.1"><vh>大数据架构</vh>
 <v t="swot.20261012090008.1"><vh>Lambda 架构</vh>
-<v t="swot.20261012130635.1"><vh>Lambda 架构演进案例：广告报表写时合并优化</vh>
+<v t="swot.20261012130635.1"><vh>Lambda 架构大数据演进案例：广告报表写时合并优化</vh>
 <v t="swot.20261012133021.1"><vh>第一版：典型 Lambda 架构（当前痛点：服务层算到崩溃）</vh></v>
 <v t="swot.20261012133039.1"><vh>第二版：缓解 Java 服务层压力（当前痛点：Redis 查询瓶颈）</vh></v>
 <v t="swot.20261012133059.1"><vh>第三版：统一大宽表 + 写时合并（服务层查询极简，写入端成为新关注点）</vh></v>
@@ -3045,15 +3047,29 @@
 <v t="swot.20261012133132.1"><vh>给你的复习建议</vh></v>
 </v>
 </v>
-<v t="swot.20261012092938.1"><vh>Kappa 架构</vh></v>
+<v t="swot.20261012092938.1"><vh>Kappa 架构</vh>
+<v t="swot.20261013083341.1"><vh>Kappa 架构大数据系统：某证券公司实时日志分析平台</vh>
+<v t="swot.20261013084742.1"><vh>系统概述</vh></v>
+<v t="swot.20261013094511.1"><vh>系统架构图</vh>
+<v t="swot.20261013103013.1"><vh>%% left</vh>
+<v t="swot.20261013094605.1"><vh>%% 展现层 Presentation</vh></v>
+<v t="swot.20261013094718.1"><vh>%% 逻辑处理层 Logic</vh></v>
+<v t="swot.20261013095017.1"><vh>%% 存储计算层 Storage</vh></v>
+<v t="swot.20261013104349.1"><vh>%% 连接</vh></v>
+</v>
+<v t="swot.20261013095215.1"><vh>%% 功能支持</vh></v>
+</v>
+<v t="swot.20261013084910.1"><vh>实时处理过程</vh></v>
+</v>
+</v>
 </v>
 <v t="swot.20261012085031.1"><vh>架构安全</vh></v>
 </v>
 </v>
 </v>
 <v t="swot.20261012131756.1"><vh>@adoc 架构案例集锦.adoc</vh>
-<v t="swot.20261012131811.1"><vh>Lambda 架构案例集锦</vh>
-<v t="swot.20261012130635.1"></v>
+<v t="swot.20261012131811.1"><vh>架构案例集锦</vh>
+<v t="swot.20261013083341.1"></v>
 </v>
 </v>
 </v>
@@ -4536,53 +4552,23 @@ scale 1.2
 @endwbs
 ....
 </t>
-<t tx="swot.20250509113701.1">https://mermaid.js.org/
+<t tx="swot.20250509113701.1">官网：https://mermaid.js.org/
 
 安装与 @mermaid-js/mermaid-cli 兼容的 puppeteer
 
-    pnpm add puppeteer@^23 -g
-    验证安装：
-    node -e "console.log(require('puppeteer').executablePath())"
-    输出 Chromium 的路径，说明安装成功
-    /Users/swot/.cache/puppeteer/chrome/mac-131.0.6778.204/chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing
-
+    pnpm add puppeteer@^25 -g
+    puppeteer browsers install chrome-headless-shell
 
 安装 mermaid-cli:
 
+    # 会安装最新的版本，现在是 12.0.0 (2026-10-13 14:43:06)
     npm install -g @mermaid-js/mermaid-cli
 
 查看是否安装成功:
 
     which mmdc  # 在 Linux/macOS 上
     where mmdc  # 在 Windows 上
-
-
-.link:img/mermaid-2025-05-09-113732.png[Example1]
-[mermaid, target=img/mermaid-2025-05-09-113732, format=svg]
-....
-graph TD;
-    A--&gt;B;
-    A--&gt;C;
-    B--&gt;D;
-    C--&gt;D;
-....
-
-
-.link:img/mermaid_2025-05-09-113741.png[Example2]
-[mermaid, target=img/mermaid_2025-05-09-113741, format=png]
-....
-sequenceDiagram
-    participant Client
-    participant Middleware
-    participant API Handler
-
-    Client-&gt;&gt;Middleware: 发起请求
-    Middleware-&gt;&gt;Middleware: 执行前置逻辑
-    Middleware-&gt;&gt;API Handler: 自动路由匹配
-    API Handler-&gt;&gt;Middleware: 返回原始数据
-    Middleware-&gt;&gt;Middleware: 包装为标准格式
-    Middleware-&gt;&gt;Client: 发送最终响应
-....
+    mmdc --version
 </t>
 <t tx="swot.20250509155424.1">https://docs.asciidoctor.org/diagram-extension/latest/diagram_types/barcode/
 
@@ -45003,6 +44989,8 @@ graph TD
 </t>
 <t tx="swot.20261012133059.1">*核心逻辑*：在线服务层取消 Redis，只保留一张 MySQL 广告大宽表。
 
+TIP: 对于 MySQL 数据库，大宽表的字段数需评估，若超过 50 列需考虑拆列、分区或改用列式存储引擎。
+
 - 大宽表以 `(stday, 广告ID)` 或 `(stday, 广告ID, 追踪链接)` 为唯一键，包含曝光、点击、转化等指标。
 - 把“广告与追踪链接”的关联和指标合并，从查询时提前到写入时，实现写时合并（Write-time Join）。
 
@@ -45046,14 +45034,15 @@ IMPORTANT: *软考考点*：写时合并（Write-time Join）、计算左移、�
 *第三版的核心魔法：写时合并（Write-time Join）*
 
 * *统一存储*：在线服务层利用 MySQL 的 `stday` 字段区分业务日期。
-** `stday = 当天日期`：实时链路写入当天曝光和转化，并做 upsert/增量更新。
-** `stday ++&lt;++= 昨天`：离线链路写入、重算或覆盖历史曝光和转化数据。
-** 次日离线任务重算并覆盖当天数据，保证最终一致。
+    ** `stday = 当天日期`：实时链路写入当天曝光和转化，并做 upsert/增量更新。
+    ** `stday ++&lt;++= 昨天`：离线链路写入、重算或覆盖历史曝光和转化数据。
+    ** 次日离线任务重算并覆盖当天数据，保证最终一致。
 
 * *写时关联*：Spark Streaming 不再往 Redis 写，而是调用 Java 更新接口。接口内先把当前下单的追踪链接映射为广告 ID，再对 `stday = 当天` 的大宽表行做 upsert 或增量更新转化字段。
 
-* *服务极简*：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；
-##但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控##。
+* *服务极简*：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。
+    ** 最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；
+    ** ##但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控##。
 </t>
 <t tx="swot.20261012133121.1">[width="100%",cols="&lt;25%,&lt;25%,&lt;25%,&lt;25%",options="header",]
 |===
@@ -45075,6 +45064,150 @@ IMPORTANT: *软考考点*：写时合并（Write-time Join）、计算左移、�
 <t tx="swot.20261012133132.1">在软考论文或案例分析中，如果遇到大数据架构题，**“写时合并（Write-time Join）”和“计算左移”**是绝对的高分词汇。
 
 第三版通过“大宽表”把复杂的关联逻辑从“查询阶段”转移到了“数据写入阶段”，这正是架构设计中最经典的优化思想！
+</t>
+<t tx="swot.20261013083341.1"></t>
+<t tx="swot.20261013084742.1">实时日志分析平台基于 Kappa 架构，使用统一的数据处理引擎 *Flink* 可实时处理全部数据，并将其存储到 *Elastic-Search* 与 *OpenTSDB* 中。
+</t>
+<t tx="swot.20261013084910.1">[discrete]
+==== 1. 日志采集
+在各应用系统部署采集组件 *Filebeat*，实时采集日志数据并输出到 *Kafka* 缓存。
+
+[discrete]
+==== 2. 日志清洗与解析
+基于大数据计算集群的 *Flink* 计算框架，实时读取 *Kafka* 中的日志数据进行清洗和解析，提取日志关键内容并转换成指标，以及对指标进行二次加工形成衍生指标。
+
+[discrete]
+==== 3. 日志存储
+将解析后的日志数据分类存储于 *Elastic-Search* 日志库中，各类基于日志的指标存储于 *OpenTSDB* 指标库中，供前端组件搜索与查询。
+
+[discrete]
+==== 4. 日志监控
+通过单独的告警消息队列来保持监控消息的有序管理与实时推送。
+
+[discrete]
+==== 5. 日志应用
+在充分考虑日志搜索专业需求的基础上，平台支持搜索栏常用语句保存，选择日志变量自动形成搜索表达式，以及快速按时间排序过滤、查看日志上下文等功能。
+
+同时，基于可视化分析和全息场景监控可实时展现各种指标和趋势，并在预警中心查看各类告警的优先级和详细信息，进而结合告警信息关联查询系统日志内容来分析解决问题。
+
+此外，开发配置中心还提供了自定义日志解析开发功能，并支持告警规则、告警渠道配置。
+</t>
+<t tx="swot.20261013094511.1">以下是基于 Kappa 架构的实时日志分析平台整体架构图：
+
+[mermaid, target=img/mermaid-某证券公司实时日志分析, format=svg]
+....
+flowchart LR
+    @others
+    left ~~~ Support
+....
+</t>
+<t tx="swot.20261013094605.1">subgraph Presentation[展现层]
+    direction LR
+    LogSearch[日志智能搜索]
+    VisChart[可视化图表]
+    OnlineDev[在线开发]
+    AlertCenter[告警中心]
+    ConfigMgmt[配置管理]
+
+    LogSearch ~~~ VisChart ~~~ OnlineDev ~~~ AlertCenter ~~~ ConfigMgmt
+end
+</t>
+<t tx="swot.20261013094718.1">subgraph Logic[逻辑处理层]
+    direction LR
+    subgraph Collection[日志采集]
+        direction LR
+        subgraph Filebeat
+            direction TB
+            FB1["Filebeat (源系统1)"]
+            FB2["Filebeat (源系统2)"]
+            FB3["Filebeat (源系统3)"]
+        end
+        Kafka[Kafka 缓存]
+    end
+    FB1 --&gt; Kafka
+    FB2 --&gt; Kafka
+    FB3 --&gt; Kafka
+
+    subgraph Analysis[解析分析]
+        direction TB
+        Ctrl[交互控制] --&gt; Script[脚本解析] --&gt; Compile[作业编译] --&gt; FlinkSubmit["任务提交(基于Flink)"]
+    end
+    Collection --&gt; Analysis
+
+    subgraph Alerting[日志告警]
+        direction TB
+        Rule[规则转换] --&gt; AlertCtrl[告警控制] --&gt; AlertQueue[告警队列] --&gt; DataMonitor[数据监控]
+    end
+    Analysis ~~~ Alerting
+end
+</t>
+<t tx="swot.20261013095017.1">subgraph Storage[存储计算层]
+    CDH[计算集群 CDH]
+    ES[日志库 ElasticSearch]
+    OpenTSDB[指标库 OpenTSDB]
+
+    %% ~~~ 是不可见链接，目的是为了从上到下排序
+    CDH ~~~ ES ~~~ OpenTSDB
+end
+</t>
+<t tx="swot.20261013095215.1">subgraph Support[功能支持]
+    direction TB
+    ConfigCenter[配置中心]
+    ServiceReg[服务注册]
+    DataMgmt[数据管理]
+    TaskMgmt[任务管理]
+    SysMgmt[系统管理]
+    
+    %% ~~~ 是不可见链接，目的是为了从上到下排序
+    ConfigCenter ~~~ ServiceReg
+    ServiceReg ~~~ DataMgmt
+    DataMgmt ~~~ TaskMgmt
+    TaskMgmt ~~~ SysMgmt
+end
+</t>
+<t tx="swot.20261013103013.1">subgraph left[ ]
+    direction TB
+    @others
+    Presentation ~~~ Logic ~~~ Storage
+end
+</t>
+<t tx="swot.20261013104349.1">Presentation --&gt; Logic
+Storage --&gt;|"日志警告层读取数据"| Logic
+Logic --&gt;|"解析分析层写入数据"| Storage
+</t>
+<t tx="swot.20261013162411.1">[source,txt]
+----
+[mermaid, target=img/mermaid-2025-05-09-113732, format=png]
+....
+graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+....
+----
+
+image::img/mermaid-2025-05-09-113732.png[]
+
+[source,txt]
+----
+[mermaid, target=img/mermaid_2025-05-09-113741, format=png]
+....
+sequenceDiagram
+    participant Client
+    participant Middleware
+    participant API Handler
+
+    Client-&gt;&gt;Middleware: 发起请求
+    Middleware-&gt;&gt;Middleware: 执行前置逻辑
+    Middleware-&gt;&gt;API Handler: 自动路由匹配
+    API Handler-&gt;&gt;Middleware: 返回原始数据
+    Middleware-&gt;&gt;Middleware: 包装为标准格式
+    Middleware-&gt;&gt;Client: 发送最终响应
+....
+----
+
+image::img/mermaid_2025-05-09-113741.png[]
 </t>
 </tnodes>
 </leo_file>
