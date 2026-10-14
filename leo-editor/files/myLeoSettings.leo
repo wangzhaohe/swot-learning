@@ -3086,7 +3086,7 @@ except Exception as e:
     g.es(f"发生错误: {e}")
 
 @doc
-markdown 转换为 asciidoctor
+pandoc 将 markdown 转换为 asciidoctor
 
 - 使用 pandoc 进行转换 https://github.com/jgm/pandoc
 - 安装 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
