@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
 <meta name="author" content="https://github.com/wangzhaohe/swot-learning">
-<title>Lambda 架构案例集锦</title>
+<title>架构案例集锦</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -466,20 +466,43 @@ html {
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Lambda 架构案例集锦</h1>
+<h1>架构案例集锦</h1>
 <div class="details">
 <span id="author" class="author">https://github.com/wangzhaohe/swot-learning</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
 <ul class="sectlevel1">
-<li><a href="#_lambda_架构演进案例广告报表写时合并优化">Lambda 架构演进案例：广告报表写时合并优化</a>
+<li><a href="#_lambda_架构大数据演进案例广告报表写时合并优化">Lambda 架构大数据演进案例：广告报表写时合并优化</a>
 <ul class="sectlevel2">
 <li><a href="#_第一版典型_lambda_架构当前痛点服务层算到崩溃">第一版：典型 Lambda 架构（当前痛点：服务层算到崩溃）</a></li>
 <li><a href="#_第二版缓解_java_服务层压力当前痛点redis_查询瓶颈">第二版：缓解 Java 服务层压力（当前痛点：Redis 查询瓶颈）</a></li>
 <li><a href="#_第三版统一大宽表_写时合并服务层查询极简写入端成为新关注点">第三版：统一大宽表 + 写时合并（服务层查询极简，写入端成为新关注点）</a></li>
 <li><a href="#_软考一看就懂对比总结表">软考“一看就懂”对比总结表</a></li>
 <li><a href="#_给你的复习建议">给你的复习建议</a></li>
+</ul>
+</li>
+<li><a href="#_kappa_架构大数据系统某证券公司实时日志分析平台">Kappa 架构大数据系统：某证券公司实时日志分析平台</a>
+<ul class="sectlevel2">
+<li><a href="#_系统概述">系统概述</a></li>
+<li><a href="#_系统架构图">系统架构图</a></li>
+<li><a href="#_实时处理过程">实时处理过程</a></li>
+</ul>
+</li>
+<li><a href="#_lambda_和_kappa_大数据架构对比">Lambda 和 Kappa 大数据架构对比</a>
+<ul class="sectlevel2">
+<li><a href="#_一广告报表系统为什么选择_lambda">一、广告报表系统为什么选择 Lambda？</a></li>
+<li><a href="#_二证券公司实时日志平台为什么选择_kappa">二、证券公司实时日志平台为什么选择 Kappa？</a></li>
+<li><a href="#_三对比总结">三、对比总结</a></li>
+<li><a href="#_一句话总结">一句话总结</a></li>
+</ul>
+</li>
+<li><a href="#_lambda_和_kappa_高频词">Lambda 和 Kappa 高频词</a>
+<ul class="sectlevel2">
+<li><a href="#_一lambda_架构关键词">一、Lambda 架构关键词</a></li>
+<li><a href="#_二kappa_架构关键词">二、Kappa 架构关键词</a></li>
+<li><a href="#_三lambda_与_kappa_对比记忆">三、Lambda 与 Kappa 对比记忆</a></li>
+<li><a href="#_四软考答题模板">四、软考答题模板</a></li>
 </ul>
 </li>
 </ul>
@@ -539,7 +562,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_lambda_架构演进案例广告报表写时合并优化">Lambda 架构演进案例：广告报表写时合并优化</h2>
+<h2 id="_lambda_架构大数据演进案例广告报表写时合并优化">Lambda 架构大数据演进案例：广告报表写时合并优化</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><strong>业务诉求</strong>：在一个广告报表中，同时展示 <mark>“外部曝光数据”</mark>（第三方如腾讯提供，每天/每小时拉取）和<mark>“内部转化数据”</mark>（用户在平台下单付款，实时产生）。</p>
@@ -595,6 +618,18 @@ toggleButton.addEventListener('click', () => {
 <h3 id="_第三版统一大宽表_写时合并服务层查询极简写入端成为新关注点">第三版：统一大宽表 + 写时合并（服务层查询极简，写入端成为新关注点）</h3>
 <div class="paragraph">
 <p><strong>核心逻辑</strong>：在线服务层取消 Redis，只保留一张 MySQL 广告大宽表。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+对于 MySQL 数据库，大宽表的字段数需评估，若超过 50 列需考虑拆列、分区或改用列式存储引擎。
+</td>
+</tr>
+</table>
 </div>
 <div class="ulist">
 <ul>
@@ -674,8 +709,17 @@ toggleButton.addEventListener('click', () => {
 <p><strong>写时关联</strong>：Spark Streaming 不再往 Redis 写，而是调用 Java 更新接口。接口内先把当前下单的追踪链接映射为广告 ID，再对 <code>stday = 当天</code> 的大宽表行做 upsert 或增量更新转化字段。</p>
 </li>
 <li>
-<p><strong>服务极简</strong>：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；
-<mark>但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控</mark>。</p>
+<p><strong>服务极简</strong>：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；</p>
+</li>
+<li>
+<p><mark>但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控</mark>。</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -748,10 +792,649 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_kappa_架构大数据系统某证券公司实时日志分析平台">Kappa 架构大数据系统：某证券公司实时日志分析平台</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_系统概述">系统概述</h3>
+<div class="paragraph">
+<p>实时日志分析平台基于 Kappa 架构，使用统一的数据处理引擎 <strong>Flink</strong> 可实时处理全部数据，并将其存储到 <strong>Elastic-Search</strong> 与 <strong>OpenTSDB</strong> 中。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_系统架构图">系统架构图</h3>
+<div class="paragraph">
+<p>以下是基于 Kappa 架构的实时日志分析平台整体架构图：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-某证券公司实时日志分析.svg" alt="mermaid 某证券公司实时日志分析" width="1266" height="1030">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_实时处理过程">实时处理过程</h3>
+<h4 id="_1_日志采集" class="discrete">1. 日志采集</h4>
+<div class="paragraph">
+<p>在各应用系统部署采集组件 <strong>Filebeat</strong>，实时采集日志数据并输出到 <strong>Kafka</strong> 缓存。</p>
+</div>
+<h4 id="_2_日志清洗与解析" class="discrete">2. 日志清洗与解析</h4>
+<div class="paragraph">
+<p>基于大数据计算集群的 <strong>Flink</strong> 计算框架，实时读取 <strong>Kafka</strong> 中的日志数据进行清洗和解析，提取日志关键内容并转换成指标，以及对指标进行二次加工形成衍生指标。</p>
+</div>
+<h4 id="_3_日志存储" class="discrete">3. 日志存储</h4>
+<div class="paragraph">
+<p>将解析后的日志数据分类存储于 <strong>Elastic-Search</strong> 日志库中，各类基于日志的指标存储于 <strong>OpenTSDB</strong> 指标库中，供前端组件搜索与查询。</p>
+</div>
+<h4 id="_4_日志监控" class="discrete">4. 日志监控</h4>
+<div class="paragraph">
+<p>通过单独的告警消息队列来保持监控消息的有序管理与实时推送。</p>
+</div>
+<h4 id="_5_日志应用" class="discrete">5. 日志应用</h4>
+<div class="paragraph">
+<p>在充分考虑日志搜索专业需求的基础上，平台支持搜索栏常用语句保存，选择日志变量自动形成搜索表达式，以及快速按时间排序过滤、查看日志上下文等功能。</p>
+</div>
+<div class="paragraph">
+<p>同时，基于可视化分析和全息场景监控可实时展现各种指标和趋势，并在预警中心查看各类告警的优先级和详细信息，进而结合告警信息关联查询系统日志内容来分析解决问题。</p>
+</div>
+<div class="paragraph">
+<p>此外，开发配置中心还提供了自定义日志解析开发功能，并支持告警规则、告警渠道配置。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lambda_和_kappa_大数据架构对比">Lambda 和 Kappa 大数据架构对比</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>核心判断：<strong>架构选择不是“Lambda 比 Kappa 好”或反之，而是由数据形态、时效要求、历史修正需求、合并复杂度和运维成本共同决定。</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>广告报表系统</strong>：数据源异构、批流并存、需要历史重算与最终一致，所以采用 <strong>Lambda 架构思想</strong>，并在第三版通过“大宽表 + 写时合并”优化服务层。</p>
+</li>
+<li>
+<p><strong>证券公司实时日志分析平台</strong>：数据源同质、天然是事件流、要求实时解析/告警/检索，所以采用 <strong>Kappa 架构</strong>，用 Flink 统一处理全部数据。</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_一广告报表系统为什么选择_lambda">一、广告报表系统为什么选择 Lambda？</h3>
+<div class="paragraph">
+<p>广告报表的业务本质是：<strong>外部曝光数据 + 内部转化数据，在同一个报表中合并展示。</strong></p>
+</div>
+<div class="paragraph">
+<p>它的数据特征决定了很难用纯 Kappa 解决：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">数据</th>
+<th class="tableblock halign-left valign-top">来源</th>
+<th class="tableblock halign-left valign-top">时效</th>
+<th class="tableblock halign-left valign-top">接入方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">外部曝光/点击</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">第三方如腾讯</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">日级/小时级</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API 定时拉取</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">内部转化</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">平台下单付款</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">实时</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kafka 实时消息</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">历史数据</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hive/日志</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">T+1/历史</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">离线批处理</p></td>
+</tr>
+</tbody>
+</table>
+<h4 id="_1_批流数据源天然分离" class="discrete">1. 批流数据源天然分离</h4>
+<div class="paragraph">
+<p>第三方曝光数据不是实时消息流，而是按天或按小时拉取的报表数据；内部转化则是 Kafka 实时下单/付款消息。<br>
+这两类数据<strong>来源不同、时效不同、语义不同</strong>，所以需要：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>批处理层</strong>：处理第三方日级/历史曝光，以及内部浏览/下单日志的 T+1 重算。</p>
+</li>
+<li>
+<p><strong>速度层</strong>：处理当天实时转化，以及 Python 脚本小时级拉取的当天曝光。</p>
+</li>
+<li>
+<p><strong>服务层</strong>：对外提供统一报表查询。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>这正是 Lambda 的典型分层：<strong>Batch Layer + Speed Layer + Serving Layer</strong>。</p>
+</div>
+<h4 id="_2_需要历史重算和最终一致" class="discrete">2. 需要历史重算和最终一致</h4>
+<div class="paragraph">
+<p>广告报表中，<code>stday</code> 是业务日期，不是“离线/实时”来源标记。<br>
+实时链路只写 <code>stday = 当天</code>，离线链路负责 <code>stday &#8656; 昨天</code> 及历史修正。<br>
+次日离线任务重算并覆盖当天数据，保证最终一致。</p>
+</div>
+<div class="paragraph">
+<p>这种“当天实时增量 + 次日离线覆盖修正”的模式，非常适合 Lambda： - 实时层保证当天可看； - 批处理层保证历史准确、可重算； - 服务层统一查询。</p>
+</div>
+<div class="paragraph">
+<p>如果强行用 Kappa，就要假设第三方曝光也能实时流式接入，并且 Kafka 能长期保存所有历史消息、支持全量重放。但案例中第三方只提供日/小时报表，历史全量重算和外部数据修正在批处理中更自然。</p>
+</div>
+<h4 id="_3_合并复杂需要计算左移" class="discrete">3. 合并复杂，需要“计算左移”</h4>
+<div class="paragraph">
+<p>第一版是典型 Lambda，但 Java 服务层做<strong>读时合并</strong>，查 MySQL、Redis 后在内存里聚合，导致服务层崩溃。<br>
+第二版把曝光接入实时层，但 Redis 仍按链接维度存储，Java 仍需按广告-链接关系扇出查询，Redis 成为瓶颈。<br>
+第三版用 <strong>MySQL 大宽表 + 写时合并</strong>，把“广告与追踪链接”的关联从查询时提前到写入时。</p>
+</div>
+<div class="paragraph">
+<p>注意：第三版虽然服务层只读一张大宽表，但底层仍有： - 离线层：Hive/Spark 每天重算 T+1 及历史； - 实时层：Python 脚本和 Spark Streaming 更新当天数据。</p>
+</div>
+<div class="paragraph">
+<p>所以它仍然是 <strong>Lambda 架构的演进</strong>，不是 Kappa。它解决的是服务层读时合并瓶颈，而不是取消批处理层。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_二证券公司实时日志平台为什么选择_kappa">二、证券公司实时日志平台为什么选择 Kappa？</h3>
+<div class="paragraph">
+<p>该平台的核心是：<strong>多源日志实时采集、清洗、解析、指标提取、存储、搜索和告警。</strong></p>
+</div>
+<div class="paragraph">
+<p>它的数据特征非常统一：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>各源系统通过 Filebeat 采集日志；</p>
+</li>
+<li>
+<p>日志进入 Kafka 缓存；</p>
+</li>
+<li>
+<p>Flink 实时读取 Kafka，清洗解析；</p>
+</li>
+<li>
+<p>解析后的日志写 ElasticSearch；</p>
+</li>
+<li>
+<p>指标写 OpenTSDB；</p>
+</li>
+<li>
+<p>告警通过独立消息队列实时推送。</p>
+</li>
+</ul>
+</div>
+<h4 id="_1_数据天然是事件流" class="discrete">1. 数据天然是事件流</h4>
+<div class="paragraph">
+<p>日志本身就是持续产生的事件流。<br>
+Filebeat &#8594; Kafka &#8594; Flink &#8594; ES/OpenTSDB 这条链路，天然适合流处理。<br>
+不需要先落一套批处理层，再单独做一套速度层。</p>
+</div>
+<h4 id="_2_实时性要求高" class="discrete">2. 实时性要求高</h4>
+<div class="paragraph">
+<p>日志智能搜索、可视化图表、告警中心、数据监控都要求低延迟。<br>
+如果采用 Lambda，批处理层通常 T+1 或小时级，实时告警会延迟；而 Kappa 用 Flink 统一实时处理，可以更快产出指标和告警。</p>
+</div>
+<h4 id="_3_处理逻辑可以统一" class="discrete">3. 处理逻辑可以统一</h4>
+<div class="paragraph">
+<p>日志采集后的清洗、解析、指标提取、二次加工、告警规则，都可以用同一套 Flink 作业或同一套流处理逻辑完成。<br>
+这避免了 Lambda 中常见的： - 批处理和流处理两套代码； - 两套指标口径不一致； - 两套运维链路； - 结果对不齐。</p>
+</div>
+<h4 id="_4_历史查询不依赖独立批处理层" class="discrete">4. 历史查询不依赖独立批处理层</h4>
+<div class="paragraph">
+<p>日志平台的历史查询主要面向 ElasticSearch 和 OpenTSDB。<br>
+如果需要重算，Kappa 也可以通过 Kafka 重放历史消息，用同一套 Flink 逻辑重新计算。<br>
+它不像广告报表那样，必须每天用离线任务全量重算历史并覆盖修正外部曝光数据。</p>
+</div>
+<div class="paragraph">
+<p>所以证券公司日志平台选择 Kappa，是因为： - 数据源同质，都是日志事件流； - 实时性要求高； - 处理逻辑可统一； - 存储层分工明确：ES 做日志检索，OpenTSDB 做指标； - 运维一套 Flink 引擎即可，架构更简单。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_三对比总结">三、对比总结</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 34%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">维度</th>
+<th class="tableblock halign-left valign-top">广告报表系统</th>
+<th class="tableblock halign-left valign-top">证券公司日志平台</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">架构选择</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lambda 思想，第三版写时合并</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kappa 架构</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">数据源</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">第三方曝光 + 内部转化，异构</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">多源日志，同质事件流</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">时效</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">日级、小时级、实时混合</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">实时流处理</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">历史处理</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">离线 Hive/Spark 每天重算、覆盖</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kafka 重放或 ES/OpenTSDB 查询</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">合并复杂度</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">高，广告 ID、追踪链接、曝光、转化需关联</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">相对统一，解析、指标、告警</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">核心瓶颈</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">读时合并导致服务层压力；第三版转向写时合并</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">实时处理与告警延迟</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">选择原因</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">批流并存、历史修正、最终一致、大宽表写时合并</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一切皆流、统一 Flink、低延迟、运维简单</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_一句话总结">一句话总结</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>广告报表选 Lambda</strong>：因为它是“异构数据源 + 批流分层 + 历史重算 + 复杂合并”的场景，Lambda 的批处理层和速度层能分别解决历史准确性和当天实时性。</p>
+</li>
+<li>
+<p><strong>证券日志选 Kappa</strong>：因为它是“同质事件流 + 实时处理 + 统一逻辑 + 低延迟告警”的场景，Kappa 用 Flink 一套引擎处理全部数据，架构更简洁、时效更高。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>软考中可用的关键词：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Lambda：批处理层、速度层、服务层、读时合并、写时合并、计算左移、大宽表、最终一致。</p>
+</li>
+<li>
+<p>Kappa：一切皆流、Kafka 重放、Flink 统一处理、流批一体、实时日志分析、低延迟告警。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lambda_和_kappa_高频词">Lambda 和 Kappa 高频词</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Lambda 和 Kappa 是软考大数据架构题里的高频词。答题时不要只写名词，要能串成“架构逻辑”。</p>
+</div>
+<div class="sect2">
+<h3 id="_一lambda_架构关键词">一、Lambda 架构关键词</h3>
+<div class="paragraph">
+<p><strong>Lambda 架构核心：批处理层 + 速度层 + 服务层，批层保准确，速度层保实时，服务层合并查询。</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>批处理层</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>存储全量原始数据，周期性离线重算。</p>
+</li>
+<li>
+<p>优点：数据准确、可重放、吞吐大。</p>
+</li>
+<li>
+<p>缺点：延迟高，不适合秒级响应。</p>
+</li>
+<li>
+<p>软考表述：批处理层负责全量计算，生成批视图，保证最终准确性。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>速度层</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>处理实时增量数据，做近似或增量计算。</p>
+</li>
+<li>
+<p>优点：低延迟，能快速看到最新结果。</p>
+</li>
+<li>
+<p>缺点：可能不完整、不准确，需要批处理层修正。</p>
+</li>
+<li>
+<p>软考表述：速度层负责实时计算，生成实时视图，弥补批处理层延迟。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>服务层</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>存放批视图和实时视图，对外提供查询。</p>
+</li>
+<li>
+<p>常见组件：HBase、Elasticsearch、Redis、ClickHouse 等。</p>
+</li>
+<li>
+<p>软考表述：服务层负责合并查询结果，提供统一数据服务。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>读时合并</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>查询时把“批处理层结果”和“速度层结果”合并。</p>
+</li>
+<li>
+<p>优点：写入简单，批处理重算不影响实时层。</p>
+</li>
+<li>
+<p>缺点：查询复杂、延迟高、服务层压力大。</p>
+</li>
+<li>
+<p>Lambda 经典做法就是读时合并。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>写时合并</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>在写入服务层时就把批结果和实时结果合并好。</p>
+</li>
+<li>
+<p>优点：查询快，直接读结果。</p>
+</li>
+<li>
+<p>缺点：写入复杂，批处理重算时更新代价高。</p>
+</li>
+<li>
+<p>可理解为：用写入成本换查询性能。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>计算左移</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>把计算尽量提前到数据产生、接入或流处理阶段。</p>
+</li>
+<li>
+<p>目的：减少下游批处理压力和查询时计算量。</p>
+</li>
+<li>
+<p>Lambda 中速度层就是计算左移；Kappa 是更彻底的计算左移。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>大宽表</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>把事实数据和维度字段冗余、预关联到一张宽表中。</p>
+</li>
+<li>
+<p>目的：避免查询时 join，提高查询性能。</p>
+</li>
+<li>
+<p>常用于服务层，但会有数据冗余和一致性维护成本。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>最终一致</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>实时结果可能短暂不准确，批处理层定时重算后修正。</p>
+</li>
+<li>
+<p>系统不是强一致，而是经过一段时间后达到一致。</p>
+</li>
+<li>
+<p>软考表述：Lambda 通过批处理层修正速度层，实现最终一致。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Lambda 答题串联：</strong> &gt; Lambda 采用批处理层保证全量准确，速度层保证实时低延迟，服务层通过读时合并或写时合并对外服务；通过计算左移和大宽表优化查询，系统整体最终一致。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_二kappa_架构关键词">二、Kappa 架构关键词</h3>
+<div class="paragraph">
+<p><strong>Kappa 核心：一切皆流，用流处理统一实时和历史，去掉 Lambda 的批处理层。</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>一切皆流</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>认为批数据只是“有界流”，实时数据是“无界流”。</p>
+</li>
+<li>
+<p>所有数据都可用流处理方式处理。</p>
+</li>
+<li>
+<p>软考表述：Kappa 将批视为流的特例，统一用流处理引擎计算。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Kafka 重放</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Kafka 持久化存储消息，可按 offset 重新消费历史数据。</p>
+</li>
+<li>
+<p>需要重算时，从 Kafka 重放数据，而不是跑离线批处理。</p>
+</li>
+<li>
+<p>优点：架构统一；缺点：依赖 Kafka 保留周期和重放成本。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Flink 统一处理</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>用 Flink 同时处理实时流和历史批数据。</p>
+</li>
+<li>
+<p>支持状态管理、窗口、Checkpoint、Exactly-once。</p>
+</li>
+<li>
+<p>软考表述：Flink 提供流批一体能力，一套代码处理实时与历史数据。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>流批一体</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>流处理和批处理用同一套引擎、同一套 API、同一套代码。</p>
+</li>
+<li>
+<p>避免 Lambda 中维护批层和速度层两套链路。</p>
+</li>
+<li>
+<p>优点：架构简单、开发运维成本低。</p>
+</li>
+<li>
+<p>缺点：对消息队列留存、流处理能力要求高。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>实时日志分析</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>典型链路：日志采集 → Kafka → Flink → Elasticsearch/ClickHouse → 看板。</p>
+</li>
+<li>
+<p>适合 Kappa：日志天然是流，实时解析、聚合、统计。</p>
+</li>
+<li>
+<p>软考表述：Kappa 常用于实时日志分析场景。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>低延迟告警</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>流处理逐条或按窗口计算，秒级发现异常。</p>
+</li>
+<li>
+<p>可结合 Flink CEP、规则引擎、阈值判断。</p>
+</li>
+<li>
+<p>软考表述：Kappa 通过流计算实现低延迟告警和实时监控。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Kappa 答题串联：</strong> &gt; Kappa 主张一切皆流，基于 Kafka 重放历史数据，使用 Flink 统一处理，实现流批一体；适合实时日志分析、低延迟告警等场景。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_三lambda_与_kappa_对比记忆">三、Lambda 与 Kappa 对比记忆</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 34%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">维度</th>
+<th class="tableblock halign-left valign-top">Lambda</th>
+<th class="tableblock halign-left valign-top">Kappa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">核心思想</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">批处理 + 流处理两套链路</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一切皆流，一套流处理</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">关键层</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">批处理层、速度层、服务层</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">流处理层、服务层</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">准确性</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">批处理层保证准确</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">依赖流处理重放和状态</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">实时性</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">速度层低延迟</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">全链路低延迟</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">合并方式</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">经典读时合并，也可写时合并</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">持续写入结果，偏写时合并/物化</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">典型组件</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hadoop、Spark、Storm、HBase</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kafka、Flink、ClickHouse</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">适用场景</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">既要实时又要离线准确</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">实时日志、低延迟告警、流批一体</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">缺点</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">架构复杂，两套链路维护成本高</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">依赖消息重放，复杂批处理较弱</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_四软考答题模板">四、软考答题模板</h3>
+<div class="paragraph">
+<p><strong>问 Lambda：</strong> &gt; Lambda 架构分为批处理层、速度层和服务层。批处理层全量重算保证准确性，速度层实时计算保证低延迟，服务层通过读时合并或写时合并提供查询。通过计算左移、大宽表优化性能，系统最终一致。</p>
+</div>
+<div class="paragraph">
+<p><strong>问 Kappa：</strong> &gt; Kappa 架构主张一切皆流，批数据视为有界流。基于 Kafka 重放历史数据，使用 Flink 统一处理，实现流批一体，适合实时日志分析和低延迟告警。</p>
+</div>
+<div class="paragraph">
+<p>背这几个词时，重点记：<strong>Lambda = 三层 + 合并 + 最终一致；Kappa = 一切皆流 + Kafka 重放 + Flink 流批一体。</strong></p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-12 17:25:15 +0800
+Last updated 2026-10-14 11:41:50 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
