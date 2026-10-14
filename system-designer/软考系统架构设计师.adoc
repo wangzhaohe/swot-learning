@@ -129,7 +129,7 @@ endif::[]
 
 也就是说，这个名字来自图形形状的类比，λ 的形状恰好描述了“分叉再汇合”的拓扑结构。
 
-===== Lambda 架构演进案例：广告报表写时合并优化
+===== Lambda 架构大数据演进案例：广告报表写时合并优化
 *业务诉求*：在一个广告报表中，同时展示 ##“外部曝光数据”##（第三方如腾讯提供，每天/每小时拉取）和##“内部转化数据”##（用户在平台下单付款，实时产生）。
 
 *技术难点*：两类数据来源不同、时效性不同，如何在报表中完美*合并（Merge）*？
@@ -203,6 +203,8 @@ graph TD
 ====== 第三版：统一大宽表 + 写时合并（服务层查询极简，写入端成为新关注点）
 *核心逻辑*：在线服务层取消 Redis，只保留一张 MySQL 广告大宽表。
 
+TIP: 对于 MySQL 数据库，大宽表的字段数需评估，若超过 50 列需考虑拆列、分区或改用列式存储引擎。
+
 - 大宽表以 `(stday, 广告ID)` 或 `(stday, 广告ID, 追踪链接)` 为唯一键，包含曝光、点击、转化等指标。
 - 把“广告与追踪链接”的关联和指标合并，从查询时提前到写入时，实现写时合并（Write-time Join）。
 
@@ -246,14 +248,15 @@ IMPORTANT: *软考考点*：写时合并（Write-time Join）、计算左移、�
 *第三版的核心魔法：写时合并（Write-time Join）*
 
 * *统一存储*：在线服务层利用 MySQL 的 `stday` 字段区分业务日期。
-** `stday = 当天日期`：实时链路写入当天曝光和转化，并做 upsert/增量更新。
-** `stday ++<++= 昨天`：离线链路写入、重算或覆盖历史曝光和转化数据。
-** 次日离线任务重算并覆盖当天数据，保证最终一致。
+    ** `stday = 当天日期`：实时链路写入当天曝光和转化，并做 upsert/增量更新。
+    ** `stday ++<++= 昨天`：离线链路写入、重算或覆盖历史曝光和转化数据。
+    ** 次日离线任务重算并覆盖当天数据，保证最终一致。
 
 * *写时关联*：Spark Streaming 不再往 Redis 写，而是调用 Java 更新接口。接口内先把当前下单的追踪链接映射为广告 ID，再对 `stday = 当天` 的大宽表行做 upsert 或增量更新转化字段。
 
-* *服务极简*：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；
-##但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控##。
+* *服务极简*：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。
+    ** 最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；
+    ** ##但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控##。
 
 ====== 软考“一看就懂”对比总结表
 [width="100%",cols="<25%,<25%,<25%,<25%",options="header",]
@@ -278,8 +281,219 @@ IMPORTANT: *软考考点*：写时合并（Write-time Join）、计算左移、�
 
 第三版通过“大宽表”把复杂的关联逻辑从“查询阶段”转移到了“数据写入阶段”，这正是架构设计中最经典的优化思想！
 
+===== Lambda 架构大数据系统：某网奥运观看数据分析
+架构分层：实际设计中扩展为五层（数据采集层、数据集成层、数据存储层、数据计算层、数据展现层）。
+
+====== Lambda 架构图
+[mermaid, target=img/mermaid-test444, format=svg]
+....
+flowchart LR
+    subgraph L1["数据采集层"]
+        S["PC / App / TV"]
+    end
+
+    subgraph L2["数据集成层"]
+        RT["实时接入<br/>Nginx / Flume / Kafka"]
+        OF["离线抽取<br/>Sqoop / ETL"]
+    end
+
+    subgraph L3["数据存储层"]
+        RTS["实时/在线存储<br/>MemSQL / HBase"]
+        OFS["离线存储<br/>HDFS"]
+    end
+
+    subgraph L4["数据计算层"]
+        SS["实时计算<br/>Spark Streaming"]
+        OC["离线计算<br/>Hive / Spark / Impala / MR"]
+        SM["合并计算<br/>Spark"]
+    end
+
+    subgraph L5["数据展现层"]
+        OV["当日概览"]
+        RV["赛事回顾"]
+    end
+
+    S --> RT --> SS
+    S --> OF --> OFS --> OC
+
+    SS --> RTS
+    RTS --> SM
+    OFS --> SM
+
+    SS --> OV
+    SM --> OV
+    OC --> RV
+....
+
+====== 架构特点分析
+[upperalpha]
+. *实时处理特点*： 
+    * 采用增量计算实时数据 
+    * 集群规模不变情况下实现秒级分析 
+    * 秒级分析出当日概览所需要的信息
+
+. *批处理层特点*： 
+    * 采用不可变存储模型 
+    * 通过追加方式维护历史数据 
+    * 满足大规模统计分析需求
+
+. *数据流向*： 
+    * PC/APP/TV端 → Nginx → Flume → Kafka → 实时计算(Spark Streaming) 
+    * 离线数据 → Sqoop/ETL → HDFS → 离线计算(Hive/Spark/Impala/M-R) 
+    * （注：Flume也指向HBase用于实时存储）
+
+. *存储设计*： 
+    * 实时数据：MemSQL/HBase 
+    * 离线数据：HDFS
+
+. *应用场景*： 
+    * 赛事回顾模块需要展现自定义时间段内的历史最高在线人数、逐日播放走势、直播最高在线人数和点播视频排行等 
+    * 奥运数据不需要被经常索引、更新，采用不可变方式存储所有的历史数据，以保证准确性
+
+====== 架构选型分析
+在这个奥运观看数据分析系统里，用 Lambda 架构更合适。原因可以总结为以下几点：
+
+[arabic]
+. *业务需求天然分成两类*
+    * “当日概览”要求秒级实时分析，适合流处理。
+    * “赛事回顾”要求自定义时间段、历史最高在线、逐日播放走势、直播最高在线、点播排行等复杂历史统计，更适合批处理。Lambda 的双链路正好覆盖这两类需求。
+
+. *实时链路和离线链路分工清晰*
+    * 实时链路：`PC/App/TV → Nginx → Flume → Kafka → Spark Streaming → MemSQL/HBase` +
+    * 离线链路：`Sqoop/ETL → HDFS → Hive/Spark/Impala/MR` +
+    * 最后通过 `合并计算 Spark` 统一服务“当日概览”和“赛事回顾”。 这种结构比单纯 Kappa 更容易保证实时性和历史准确性。
+
+. *历史数据适合不可变存储* +
+    * 文档明确说：奥运数据不需要被经常索引、更新，适合采用不可变方式存储全部历史数据，以保证准确性。
+    * 这正是 HDFS + 批处理层的强项，也符合 Lambda 的批处理层设计。
+
+. *批处理层能修正实时层问题* 
+    * 实时流处理可能遇到乱序、迟到、重复、近似计算等问题。
+    * Lambda 的批处理层可以全量重算，用离线结果修正实时结果，保证最终准确性。
+    * 这对“赛事回顾”这类历史统计尤其重要。
+
+. *与现有技术栈匹配，落地更稳*
+    * 系统已经使用 Hadoop、HDFS、Hive、Spark、Impala、Spark Streaming 等。 
+    * Lambda 能直接利用这些成熟组件，开发和运维成本更低。 
+    * 如果改成 Kappa，则要求 Kafka 长期保存全量数据、支持大规模重放、流处理具备强 Exactly-once 和复杂状态管理能力，工程风险和成本更高。
+
+. *Kappa 可行，但不如 Lambda 稳妥* 
+    * Kappa 理论上也能实现同样业务，但它更适合流处理能力很强、数据可长期日志化、愿意统一流批链路的团队。
+    * 在这个系统中，历史数据量大、查询复杂、准确性要求高，而且已有 Hadoop 生态，因此 Lambda 更自然、更稳妥、更容易落地。
+
+// 隔开前面的缩进
+所以最终判断是::
+*Kappa 不是做不到，但在这个“秒级实时 + 大规模历史准确分析 + 不可变 HDFS 存储 + 现有 Hadoop/Spark 生态”的场景下，Lambda 架构更合适。*
+
 ==== Kappa 架构
 
+
+===== Kappa 架构大数据系统：某证券公司实时日志分析平台
+
+
+====== 系统概述
+实时日志分析平台基于 Kappa 架构，使用统一的数据处理引擎 *Flink* 可实时处理全部数据，并将其存储到 *Elastic-Search* 与 *OpenTSDB* 中。
+
+====== 系统架构图
+以下是基于 Kappa 架构的实时日志分析平台整体架构图：
+
+[mermaid, target=img/mermaid-某证券公司实时日志分析, format=svg]
+....
+flowchart LR
+    subgraph left[ ]
+        direction TB
+        subgraph Presentation[展现层]
+            direction LR
+            LogSearch[日志智能搜索]
+            VisChart[可视化图表]
+            OnlineDev[在线开发]
+            AlertCenter[告警中心]
+            ConfigMgmt[配置管理]
+
+            LogSearch ~~~ VisChart ~~~ OnlineDev ~~~ AlertCenter ~~~ ConfigMgmt
+        end
+        subgraph Logic[逻辑处理层]
+            direction LR
+            subgraph Collection[日志采集]
+                direction LR
+                subgraph Filebeat
+                    direction TB
+                    FB1["Filebeat (源系统1)"]
+                    FB2["Filebeat (源系统2)"]
+                    FB3["Filebeat (源系统3)"]
+                end
+                Kafka[Kafka 缓存]
+            end
+            FB1 --> Kafka
+            FB2 --> Kafka
+            FB3 --> Kafka
+
+            subgraph Analysis[解析分析]
+                direction TB
+                Ctrl[交互控制] --> Script[脚本解析] --> Compile[作业编译] --> FlinkSubmit["任务提交(基于Flink)"]
+            end
+            Collection --> Analysis
+
+            subgraph Alerting[日志告警]
+                direction TB
+                Rule[规则转换] --> AlertCtrl[告警控制] --> AlertQueue[告警队列] --> DataMonitor[数据监控]
+            end
+            Analysis ~~~ Alerting
+        end
+        subgraph Storage[存储计算层]
+            CDH[计算集群 CDH]
+            ES[日志库 ElasticSearch]
+            OpenTSDB[指标库 OpenTSDB]
+
+            %% ~~~ 是不可见链接，目的是为了从上到下排序
+            CDH ~~~ ES ~~~ OpenTSDB
+        end
+        Presentation --> Logic
+        Storage -->|"日志警告层读取数据"| Logic
+        Logic -->|"解析分析层写入数据"| Storage
+        Presentation ~~~ Logic ~~~ Storage
+    end
+    subgraph Support[功能支持]
+        direction TB
+        ConfigCenter[配置中心]
+        ServiceReg[服务注册]
+        DataMgmt[数据管理]
+        TaskMgmt[任务管理]
+        SysMgmt[系统管理]
+        
+        %% ~~~ 是不可见链接，目的是为了从上到下排序
+        ConfigCenter ~~~ ServiceReg
+        ServiceReg ~~~ DataMgmt
+        DataMgmt ~~~ TaskMgmt
+        TaskMgmt ~~~ SysMgmt
+    end
+    left ~~~ Support
+....
+
+====== 实时处理过程
+[discrete]
+==== 1. 日志采集
+在各应用系统部署采集组件 *Filebeat*，实时采集日志数据并输出到 *Kafka* 缓存。
+
+[discrete]
+==== 2. 日志清洗与解析
+基于大数据计算集群的 *Flink* 计算框架，实时读取 *Kafka* 中的日志数据进行清洗和解析，提取日志关键内容并转换成指标，以及对指标进行二次加工形成衍生指标。
+
+[discrete]
+==== 3. 日志存储
+将解析后的日志数据分类存储于 *Elastic-Search* 日志库中，各类基于日志的指标存储于 *OpenTSDB* 指标库中，供前端组件搜索与查询。
+
+[discrete]
+==== 4. 日志监控
+通过单独的告警消息队列来保持监控消息的有序管理与实时推送。
+
+[discrete]
+==== 5. 日志应用
+在充分考虑日志搜索专业需求的基础上，平台支持搜索栏常用语句保存，选择日志变量自动形成搜索表达式，以及快速按时间排序过滤、查看日志上下文等功能。
+
+同时，基于可视化分析和全息场景监控可实时展现各种指标和趋势，并在预警中心查看各类告警的优先级和详细信息，进而结合告警信息关联查询系统日志内容来分析解决问题。
+
+此外，开发配置中心还提供了自定义日志解析开发功能，并支持告警规则、告警渠道配置。
 
 === 架构安全
 

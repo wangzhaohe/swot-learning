@@ -689,7 +689,7 @@ toggleButton.addEventListener('click', () => {
 <p>也就是说，这个名字来自图形形状的类比，λ 的形状恰好描述了“分叉再汇合”的拓扑结构。</p>
 </div>
 <div class="sect4">
-<h5 id="_lambda_架构演进案例广告报表写时合并优化">Lambda 架构演进案例：广告报表写时合并优化</h5>
+<h5 id="_lambda_架构大数据演进案例广告报表写时合并优化">Lambda 架构大数据演进案例：广告报表写时合并优化</h5>
 <div class="paragraph">
 <p><strong>业务诉求</strong>：在一个广告报表中，同时展示 <mark>“外部曝光数据”</mark>（第三方如腾讯提供，每天/每小时拉取）和<mark>“内部转化数据”</mark>（用户在平台下单付款，实时产生）。</p>
 </div>
@@ -744,6 +744,18 @@ toggleButton.addEventListener('click', () => {
 <h6 id="_第三版统一大宽表_写时合并服务层查询极简写入端成为新关注点">第三版：统一大宽表 + 写时合并（服务层查询极简，写入端成为新关注点）</h6>
 <div class="paragraph">
 <p><strong>核心逻辑</strong>：在线服务层取消 Redis，只保留一张 MySQL 广告大宽表。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="⚡"></i>
+</td>
+<td class="content">
+对于 MySQL 数据库，大宽表的字段数需评估，若超过 50 列需考虑拆列、分区或改用列式存储引擎。
+</td>
+</tr>
+</table>
 </div>
 <div class="ulist">
 <ul>
@@ -823,8 +835,17 @@ toggleButton.addEventListener('click', () => {
 <p><strong>写时关联</strong>：Spark Streaming 不再往 Redis 写，而是调用 Java 更新接口。接口内先把当前下单的追踪链接映射为广告 ID，再对 <code>stday = 当天</code> 的大宽表行做 upsert 或增量更新转化字段。</p>
 </li>
 <li>
-<p><strong>服务极简</strong>：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；
-<mark>但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控</mark>。</p>
+<p><strong>服务极简</strong>：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；</p>
+</li>
+<li>
+<p><mark>但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控</mark>。</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -896,10 +917,258 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_lambda_架构大数据系统某网奥运观看数据分析">Lambda 架构大数据系统：某网奥运观看数据分析</h5>
+<div class="paragraph">
+<p>架构分层：实际设计中扩展为五层（数据采集层、数据集成层、数据存储层、数据计算层、数据展现层）。</p>
+</div>
+<div class="sect5">
+<h6 id="_lambda_架构图">Lambda 架构图</h6>
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-test444.svg" alt="mermaid test444" width="1272" height="518">
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_架构特点分析">架构特点分析</h6>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p><strong>实时处理特点</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>采用增量计算实时数据</p>
+</li>
+<li>
+<p>集群规模不变情况下实现秒级分析</p>
+</li>
+<li>
+<p>秒级分析出当日概览所需要的信息</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>批处理层特点</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>采用不可变存储模型</p>
+</li>
+<li>
+<p>通过追加方式维护历史数据</p>
+</li>
+<li>
+<p>满足大规模统计分析需求</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>数据流向</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>PC/APP/TV端 → Nginx → Flume → Kafka → 实时计算(Spark Streaming)</p>
+</li>
+<li>
+<p>离线数据 → Sqoop/ETL → HDFS → 离线计算(Hive/Spark/Impala/M-R)</p>
+</li>
+<li>
+<p>（注：Flume也指向HBase用于实时存储）</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>存储设计</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>实时数据：MemSQL/HBase</p>
+</li>
+<li>
+<p>离线数据：HDFS</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>应用场景</strong>：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>赛事回顾模块需要展现自定义时间段内的历史最高在线人数、逐日播放走势、直播最高在线人数和点播视频排行等</p>
+</li>
+<li>
+<p>奥运数据不需要被经常索引、更新，采用不可变方式存储所有的历史数据，以保证准确性</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_架构选型分析">架构选型分析</h6>
+<div class="paragraph">
+<p>在这个奥运观看数据分析系统里，用 Lambda 架构更合适。原因可以总结为以下几点：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>业务需求天然分成两类</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>“当日概览”要求秒级实时分析，适合流处理。</p>
+</li>
+<li>
+<p>“赛事回顾”要求自定义时间段、历史最高在线、逐日播放走势、直播最高在线、点播排行等复杂历史统计，更适合批处理。Lambda 的双链路正好覆盖这两类需求。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>实时链路和离线链路分工清晰</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>实时链路：<code>PC/App/TV → Nginx → Flume → Kafka → Spark Streaming → MemSQL/HBase</code><br></p>
+</li>
+<li>
+<p>离线链路：<code>Sqoop/ETL → HDFS → Hive/Spark/Impala/MR</code><br></p>
+</li>
+<li>
+<p>最后通过 <code>合并计算 Spark</code> 统一服务“当日概览”和“赛事回顾”。 这种结构比单纯 Kappa 更容易保证实时性和历史准确性。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>历史数据适合不可变存储</strong><br></p>
+<div class="ulist">
+<ul>
+<li>
+<p>文档明确说：奥运数据不需要被经常索引、更新，适合采用不可变方式存储全部历史数据，以保证准确性。</p>
+</li>
+<li>
+<p>这正是 HDFS + 批处理层的强项，也符合 Lambda 的批处理层设计。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>批处理层能修正实时层问题</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>实时流处理可能遇到乱序、迟到、重复、近似计算等问题。</p>
+</li>
+<li>
+<p>Lambda 的批处理层可以全量重算，用离线结果修正实时结果，保证最终准确性。</p>
+</li>
+<li>
+<p>这对“赛事回顾”这类历史统计尤其重要。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>与现有技术栈匹配，落地更稳</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>系统已经使用 Hadoop、HDFS、Hive、Spark、Impala、Spark Streaming 等。</p>
+</li>
+<li>
+<p>Lambda 能直接利用这些成熟组件，开发和运维成本更低。</p>
+</li>
+<li>
+<p>如果改成 Kappa，则要求 Kafka 长期保存全量数据、支持大规模重放、流处理具备强 Exactly-once 和复杂状态管理能力，工程风险和成本更高。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Kappa 可行，但不如 Lambda 稳妥</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Kappa 理论上也能实现同样业务，但它更适合流处理能力很强、数据可长期日志化、愿意统一流批链路的团队。</p>
+</li>
+<li>
+<p>在这个系统中，历史数据量大、查询复杂、准确性要求高，而且已有 Hadoop 生态，因此 Lambda 更自然、更稳妥、更容易落地。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">所以最终判断是</dt>
+<dd>
+<p><strong>Kappa 不是做不到，但在这个“秒级实时 + 大规模历史准确分析 + 不可变 HDFS 存储 + 现有 Hadoop/Spark 生态”的场景下，Lambda 架构更合适。</strong></p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_kappa_架构">Kappa 架构</h4>
-
+<div class="sect4">
+<h5 id="_kappa_架构大数据系统某证券公司实时日志分析平台">Kappa 架构大数据系统：某证券公司实时日志分析平台</h5>
+<div class="sect5">
+<h6 id="_系统概述">系统概述</h6>
+<div class="paragraph">
+<p>实时日志分析平台基于 Kappa 架构，使用统一的数据处理引擎 <strong>Flink</strong> 可实时处理全部数据，并将其存储到 <strong>Elastic-Search</strong> 与 <strong>OpenTSDB</strong> 中。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_系统架构图">系统架构图</h6>
+<div class="paragraph">
+<p>以下是基于 Kappa 架构的实时日志分析平台整体架构图：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-某证券公司实时日志分析.svg" alt="mermaid 某证券公司实时日志分析" width="1266" height="1030">
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_实时处理过程">实时处理过程</h6>
+<h4 id="_1_日志采集" class="discrete">1. 日志采集</h4>
+<div class="paragraph">
+<p>在各应用系统部署采集组件 <strong>Filebeat</strong>，实时采集日志数据并输出到 <strong>Kafka</strong> 缓存。</p>
+</div>
+<h4 id="_2_日志清洗与解析" class="discrete">2. 日志清洗与解析</h4>
+<div class="paragraph">
+<p>基于大数据计算集群的 <strong>Flink</strong> 计算框架，实时读取 <strong>Kafka</strong> 中的日志数据进行清洗和解析，提取日志关键内容并转换成指标，以及对指标进行二次加工形成衍生指标。</p>
+</div>
+<h4 id="_3_日志存储" class="discrete">3. 日志存储</h4>
+<div class="paragraph">
+<p>将解析后的日志数据分类存储于 <strong>Elastic-Search</strong> 日志库中，各类基于日志的指标存储于 <strong>OpenTSDB</strong> 指标库中，供前端组件搜索与查询。</p>
+</div>
+<h4 id="_4_日志监控" class="discrete">4. 日志监控</h4>
+<div class="paragraph">
+<p>通过单独的告警消息队列来保持监控消息的有序管理与实时推送。</p>
+</div>
+<h4 id="_5_日志应用" class="discrete">5. 日志应用</h4>
+<div class="paragraph">
+<p>在充分考虑日志搜索专业需求的基础上，平台支持搜索栏常用语句保存，选择日志变量自动形成搜索表达式，以及快速按时间排序过滤、查看日志上下文等功能。</p>
+</div>
+<div class="paragraph">
+<p>同时，基于可视化分析和全息场景监控可实时展现各种指标和趋势，并在预警中心查看各类告警的优先级和详细信息，进而结合告警信息关联查询系统日志内容来分析解决问题。</p>
+</div>
+<div class="paragraph">
+<p>此外，开发配置中心还提供了自定义日志解析开发功能，并支持告警规则、告警渠道配置。</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -911,7 +1180,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-12 17:21:51 +0800
+Last updated 2026-10-14 17:29:41 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
