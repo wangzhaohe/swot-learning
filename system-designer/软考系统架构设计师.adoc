@@ -516,6 +516,91 @@ flowchart LR
 当前架构是“实时处理 + 历史查询”，不是“实时与离线两套计算”，所以 Kappa 更合适。
 历史数据的存在，本身不是使用 Lambda 的充分理由。
 
+===== Kappa 架构大数据系统：电商智能决策 (与某证券公司实时日志分析平台基本一样的架构)
+[discrete]
+==== 一句话定位
+
+面向电商业务的**实时智能决策大数据系统**，基于 *Kappa 架构*，以 *Flink* 为统一流处理引擎，结果落地 *Hive（日志库）+ Tair（实时计算数据）* 供在线决策消费。
+
+[discrete]
+==== 三层职责
+
+[width="100%",cols="34%,33%,33%",options="header",]
+|===
+|层级 |核心内容 |关键词
+|*应用层* |结果本地存储、决策结果展示、参数更新、配置分发、模型验证 |消费结果 + 反哺指令
+|*逻辑处理层* |数据采集（B端实时流 → Kafka）→ 参数过滤（数据获取→脚本解析→作业编译→Flink 任务提交）→ 模型计算（参数获取→数据计算→模型更新→参数存储） |流计算主链路
+|*存储计算层* |计算集群 CDH → 日志库 Hive；实时计算数据 Tair |离线明细 + 在线缓存
+|===
+
+[discrete]
+==== 端到端数据流
+
+B端实时流数据 → *Kafka 缓冲削峰* → *Flink 作业*（脚本解析+作业编译，支持策略热更新）→ *模型计算*（参数获取→数据计算→模型更新→参数存储）→ 结果**双写** Hive（离线分析回溯）与 Tair（毫秒级在线查询）→ 应用层展示消费，并通过**参数更新/配置分发/模型验证**向下游迭代，形成**决策闭环**。
+
+[discrete]
+==== 架构特征
+
+Kappa 单一流链路（无 Lambda 批流双代码负担）· Flink 统一引擎 · Kafka 解耦与重放能力 · 脚本化策略热更新 · 存储读写分层 · 决策闭环迭代。
+
+[discrete]
+==== 三点风险提示
+
+[arabic]
+. Kappa 重算依赖 *Kafka 消息留存与重放*，留存策略须前置规划；
+. Hive/Tair **双写**需一致性校验与补偿；
+. 动态作业编译提升灵活性，但作业版本管理与排障复杂度上升。
+
+适用：实时推荐、风控拦截、动态定价、库存调度等秒级决策场景。
+
+====== 电商智能决策架构图
+[mermaid, target=img/mermaid-电商智能决策, format=svg]
+....
+flowchart LR
+    subgraph left[ ]
+        direction TB
+        subgraph Presentation[应用层]
+            direction LR
+            LocalStore[结果本地存储]
+            ResultView[决策结果展示]
+            ParamUpdate[参数更新]
+            ConfigDist[配置分发]
+            ModelVerify[模型验证]
+            LocalStore ~~~ ResultView ~~~ ParamUpdate ~~~ ConfigDist ~~~ ModelVerify
+        end
+        subgraph Logic[逻辑处理层]
+            direction LR
+            subgraph Collection[数据采集]
+                direction LR
+                StreamSrc["B端实时流数据"]
+                Kafka[Kafka 缓存]
+                StreamSrc --> Kafka
+            end
+            subgraph Filter[参数过滤]
+                direction TB
+                DataFetch[数据获取] --> ScriptParse[脚本解析] --> Compile[作业编译] --> FlinkSubmit["任务提交(基于Flink)"]
+            end
+            Collection --> Filter
+            subgraph Model[模型计算]
+                direction TB
+                ParamFetch[参数获取] --> DataCalc[数据计算] --> ModelUpdate[模型更新] --> ParamStore[参数存储]
+            end
+            Filter --> Model
+        end
+        subgraph Storage[存储计算层]
+            CDH[计算集群 CDH]
+            Hive[日志库 Hive]
+            Tair[实时计算数据 Tair]
+            CDH --> Hive
+            Hive ~~~ Tair
+        end
+        Presentation -->|"参数更新 / 模型验证"| Logic
+        Logic -->|"计算结果写入存储"| Storage
+        Storage -->|"读取日志与实时数据"| Logic
+        Presentation ~~~ Logic ~~~ Storage
+    end
+....
+
 === 架构安全
 
 

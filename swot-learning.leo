@@ -3067,13 +3067,16 @@
 <v t="swot.20261013084910.1"><vh>实时处理过程</vh></v>
 <v t="swot.20261015080426.1"><vh>为什么没有使用 Lambda 架构？</vh></v>
 </v>
+<v t="swot.20261015105939.1"><vh>Kappa 架构大数据系统：电商智能决策平台 (与某证券公司实时日志分析平台基本一样的架构)</vh>
+<v t="swot.20261015105747.1"><vh>电商智能决策架构图</vh></v>
+</v>
 </v>
 </v>
 <v t="swot.20261012085031.1"><vh>架构安全</vh></v>
 </v>
 </v>
 </v>
-<v t="swot.20261012131756.1"><vh>@adoc Lambda与Kappa架构案例对比.adoc</vh>
+<v t="swot.20261012131756.1"><vh>@adoc 大数据Lambda与Kappa架构案例对比.adoc</vh>
 <v t="swot.20261012131811.1"><vh>Lambda 与 Kappa 架构案例对比</vh>
 <v t="swot.20261012130635.1"></v>
 <v t="swot.20261013083341.1"></v>
@@ -3091,7 +3094,7 @@
 </v>
 </v>
 </v>
-<v t="swot.20261014134755.1"><vh>@adoc Lambda架构不同项目技术选型对比.adoc</vh>
+<v t="swot.20261014134755.1"><vh>@adoc 大数据Lambda架构不同项目技术选型对比.adoc</vh>
 <v t="swot.20261014134822.1"><vh>Lambda 架构不同项目技术选型对比</vh>
 <v t="swot.20261012130635.1"></v>
 <v t="swot.20261014142121.1"></v>
@@ -3103,6 +3106,9 @@
 <v t="swot.20261015084913.1"><vh>四、案例二有而案例一没有的技术</vh></v>
 <v t="swot.20261015084908.1"><vh>五、为什么没有使用相同的技术</vh></v>
 </v>
+</v>
+<v t="swot.20261015095105.1"><vh>@adoc test.adoc</vh>
+<v t="swot.20261015095131.1"><vh>test</vh></v>
 </v>
 </v>
 <v t="swot.20250811154633.1"><vh>@path threejs</vh>
@@ -45729,6 +45735,161 @@ flowchart LR
 |服务层 |Java 服务：前两版查 MySQL + Redis + 内存聚合；第三版只读一张 MySQL 大宽表 |文档未展开服务层，展现层为当日概览、赛事回顾
 |特有组件 |Python 常驻脚本（小时级拉第三方 API 更新当日曝光） |Flume、Sqoop、Impala、Nginx（案例一完全没出现）
 |===
+</t>
+<t tx="swot.20261015095105.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
+<t tx="swot.20261015095131.1">
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+&lt;/script&gt;
+++++
+endif::[]
+</t>
+<t tx="swot.20261015105747.1">[mermaid, target=img/mermaid-电商智能决策, format=svg]
+....
+flowchart LR
+    subgraph left[ ]
+        direction TB
+        subgraph Presentation[应用层]
+            direction LR
+            LocalStore[结果本地存储]
+            ResultView[决策结果展示]
+            ParamUpdate[参数更新]
+            ConfigDist[配置分发]
+            ModelVerify[模型验证]
+            LocalStore ~~~ ResultView ~~~ ParamUpdate ~~~ ConfigDist ~~~ ModelVerify
+        end
+        subgraph Logic[逻辑处理层]
+            direction LR
+            subgraph Collection[数据采集]
+                direction LR
+                StreamSrc["B端实时流数据"]
+                Kafka[Kafka 缓存]
+                StreamSrc --&gt; Kafka
+            end
+            subgraph Filter[参数过滤]
+                direction TB
+                DataFetch[数据获取] --&gt; ScriptParse[脚本解析] --&gt; Compile[作业编译] --&gt; FlinkSubmit["任务提交(基于Flink)"]
+            end
+            Collection --&gt; Filter
+            subgraph Model[模型计算]
+                direction TB
+                ParamFetch[参数获取] --&gt; DataCalc[数据计算] --&gt; ModelUpdate[模型更新] --&gt; ParamStore[参数存储]
+            end
+            Filter --&gt; Model
+        end
+        subgraph Storage[存储计算层]
+            CDH[计算集群 CDH]
+            Hive[日志库 Hive]
+            Tair[实时计算数据 Tair]
+            CDH --&gt; Hive
+            Hive ~~~ Tair
+        end
+        Presentation --&gt;|"参数更新 / 模型验证"| Logic
+        Logic --&gt;|"计算结果写入存储"| Storage
+        Storage --&gt;|"读取日志与实时数据"| Logic
+        Presentation ~~~ Logic ~~~ Storage
+    end
+....
+</t>
+<t tx="swot.20261015105939.1">[discrete]
+==== 一句话定位
+
+面向电商业务的**实时智能决策大数据系统**，基于 *Kappa 架构*，以 *Flink* 为统一流处理引擎，结果落地 *Hive（日志库）+ Tair（实时计算数据）* 供在线决策消费。
+
+[discrete]
+==== 三层职责
+
+[width="100%",cols="34%,33%,33%",options="header",]
+|===
+|层级 |核心内容 |关键词
+|*应用层* |结果本地存储、决策结果展示、参数更新、配置分发、模型验证 |消费结果 + 反哺指令
+|*逻辑处理层* |数据采集（B端实时流 → Kafka）→ 参数过滤（数据获取→脚本解析→作业编译→Flink 任务提交）→ 模型计算（参数获取→数据计算→模型更新→参数存储） |流计算主链路
+|*存储计算层* |计算集群 CDH → 日志库 Hive；实时计算数据 Tair |离线明细 + 在线缓存
+|===
+
+[discrete]
+==== 端到端数据流
+
+B端实时流数据 → *Kafka 缓冲削峰* → *Flink 作业*（脚本解析+作业编译，支持策略热更新）→ *模型计算*（参数获取→数据计算→模型更新→参数存储）→ 结果**双写** Hive（离线分析回溯）与 Tair（毫秒级在线查询）→ 应用层展示消费，并通过**参数更新/配置分发/模型验证**向下游迭代，形成**决策闭环**。
+
+[discrete]
+==== 架构特征
+
+Kappa 单一流链路（无 Lambda 批流双代码负担）· Flink 统一引擎 · Kafka 解耦与重放能力 · 脚本化策略热更新 · 存储读写分层 · 决策闭环迭代。
+
+[discrete]
+==== 三点风险提示
+
+[arabic]
+. Kappa 重算依赖 *Kafka 消息留存与重放*，留存策略须前置规划；
+. Hive/Tair **双写**需一致性校验与补偿；
+. 动态作业编译提升灵活性，但作业版本管理与排障复杂度上升。
+
+适用：实时推荐、风控拦截、动态定价、库存调度等秒级决策场景。
 </t>
 </tnodes>
 </leo_file>

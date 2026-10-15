@@ -1205,6 +1205,78 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_kappa_架构大数据系统电商智能决策_与某证券公司实时日志分析平台基本一样的架构">Kappa 架构大数据系统：电商智能决策 (与某证券公司实时日志分析平台基本一样的架构)</h5>
+<h4 id="_一句话定位" class="discrete">一句话定位</h4>
+<div class="paragraph">
+<p>面向电商业务的<strong>实时智能决策大数据系统</strong>，基于 <strong>Kappa 架构</strong>，以 <strong>Flink</strong> 为统一流处理引擎，结果落地 <strong>Hive（日志库）+ Tair（实时计算数据）</strong> 供在线决策消费。</p>
+</div>
+<h4 id="_三层职责" class="discrete">三层职责</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 34%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">层级</th>
+<th class="tableblock halign-left valign-top">核心内容</th>
+<th class="tableblock halign-left valign-top">关键词</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>应用层</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">结果本地存储、决策结果展示、参数更新、配置分发、模型验证</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">消费结果 + 反哺指令</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>逻辑处理层</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">数据采集（B端实时流 → Kafka）→ 参数过滤（数据获取→脚本解析→作业编译→Flink 任务提交）→ 模型计算（参数获取→数据计算→模型更新→参数存储）</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">流计算主链路</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>存储计算层</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">计算集群 CDH → 日志库 Hive；实时计算数据 Tair</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">离线明细 + 在线缓存</p></td>
+</tr>
+</tbody>
+</table>
+<h4 id="_端到端数据流" class="discrete">端到端数据流</h4>
+<div class="paragraph">
+<p>B端实时流数据 → <strong>Kafka 缓冲削峰</strong> → <strong>Flink 作业</strong>（脚本解析+作业编译，支持策略热更新）→ <strong>模型计算</strong>（参数获取→数据计算→模型更新→参数存储）→ 结果<strong>双写</strong> Hive（离线分析回溯）与 Tair（毫秒级在线查询）→ 应用层展示消费，并通过<strong>参数更新/配置分发/模型验证</strong>向下游迭代，形成<strong>决策闭环</strong>。</p>
+</div>
+<h4 id="_架构特征" class="discrete">架构特征</h4>
+<div class="paragraph">
+<p>Kappa 单一流链路（无 Lambda 批流双代码负担）· Flink 统一引擎 · Kafka 解耦与重放能力 · 脚本化策略热更新 · 存储读写分层 · 决策闭环迭代。</p>
+</div>
+<h4 id="_三点风险提示" class="discrete">三点风险提示</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Kappa 重算依赖 <strong>Kafka 消息留存与重放</strong>，留存策略须前置规划；</p>
+</li>
+<li>
+<p>Hive/Tair <strong>双写</strong>需一致性校验与补偿；</p>
+</li>
+<li>
+<p>动态作业编译提升灵活性，但作业版本管理与排障复杂度上升。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>适用：实时推荐、风控拦截、动态定价、库存调度等秒级决策场景。</p>
+</div>
+<div class="sect5">
+<h6 id="_电商智能决策架构图">电商智能决策架构图</h6>
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-电商智能决策.svg" alt="mermaid 电商智能决策" width="964" height="957">
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1216,7 +1288,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-15 08:55:46 +0800
+Last updated 2026-10-15 11:13:46 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
