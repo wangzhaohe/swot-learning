@@ -1168,6 +1168,42 @@ toggleButton.addEventListener('click', () => {
 <p>此外，开发配置中心还提供了自定义日志解析开发功能，并支持告警规则、告警渠道配置。</p>
 </div>
 </div>
+<div class="sect5">
+<h6 id="_为什么没有使用_lambda_架构">为什么没有使用 Lambda 架构？</h6>
+<div class="paragraph">
+<p><strong>为什么该平台用 Kappa 而不是 Lambda？</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>有历史数据 ≠ 必须用 Lambda</strong>。历史数据如果主要用于查询，ES/OpenTSDB 就能承担。</p>
+</li>
+<li>
+<p><strong>Kappa 也能处理历史</strong>：Kafka 可重放，Flink 可把历史数据当有界流重新计算。</p>
+</li>
+<li>
+<p>该平台核心是<strong>实时采集、清洗、解析、告警</strong>，统一用 Flink 链路，口径一致、运维简单。</p>
+</li>
+<li>
+<p><strong>Lambda 成本高</strong>：批处理层 + 流处理层两套代码、两套口径、两套运维，容易结果不一致。</p>
+</li>
+<li>
+<p><strong>Flink 批流一体成熟</strong>，很多场景不再需要独立离线批处理层。</p>
+</li>
+<li>
+<p>前提是：Kafka 或原始日志<strong>可长期保留、可重放</strong>，否则历史只能查，难以重算。</p>
+</li>
+<li>
+<p>若未来需要复杂离线全量重算、机器学习训练、长期低成本归档、实时+离线双口径校验，再考虑 Lambda 或湖仓架构。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>结论：</strong> <br>
+当前架构是“实时处理 + 历史查询”，不是“实时与离线两套计算”，所以 Kappa 更合适。
+历史数据的存在，本身不是使用 Lambda 的充分理由。</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1180,7 +1216,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-14 17:29:41 +0800
+Last updated 2026-10-15 08:14:17 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
