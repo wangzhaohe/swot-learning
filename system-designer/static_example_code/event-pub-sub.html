@@ -1,0 +1,161 @@
+<!--@+leo-ver=5-thin-->
+<!--@+node:swot.20261017205902.1: * @file static_example_code/event-pub-sub.html-->
+<!--@@language html-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>发布-订阅模式演示</title>
+<!--@delims /* */ -->
+        <style>
+            /*@+<< style >>*/
+            /*@+node:swot.20261017210114.1: ** << style >>*/
+            /*@@language css*/
+            body {
+                font-family: system-ui, sans-serif;
+                max-width: 560px;
+                margin: 2rem auto;
+                padding: 0 1rem;
+                color: #1e293b;
+            }
+            input, button {
+                font: inherit;
+                padding: 0.5rem 0.9rem;
+                border-radius: 8px;
+                border: 1px solid #cbd5e1;
+            }
+            button {
+                background: #3b82f6;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+            }
+            .subscriber {
+                padding: 0.6rem 1rem;
+                margin: 0.5rem 0;
+                background: #f1f5f9;
+                border-radius: 8px;
+            }
+            /*@-<< style >>*/
+/*@delims <!-- --> */
+        </style>
+    </head>
+    <body>
+        <!--@+<< body >>-->
+        <!--@+node:swot.20261017232332.1: ** << body >>-->
+        <h1>📡 发布-订阅模式 (Pub/Sub)</h1>
+        <p>发布者只管发事件，完全不认识订阅者；事件中心负责把消息广播给所有订阅者。</p>
+
+        <input id="msg" value="股票上涨 5%" />
+        <button id="publish">发布事件</button>
+
+        <h2>订阅者</h2>
+        <div id="subscribers"></div>
+        <!--@-<< body >>-->
+<!--@delims // -->
+        <script>
+            //@+<< script >>
+            //@+node:swot.20261017210630.1: ** << script >>
+            //@@language javascript
+            //@+others
+            //@+node:swot.20261017232915.1: *3* class EventEmitter -- 事件中心
+            /**
+             * 事件中心：发布-订阅（Pub/Sub）模式的实现，只负责三件事：
+             * - 登记回调（订阅）：`on(name, cb)`
+             * - 删除回调（退订）：`off(name, cb)`
+             * - 广播事件（发布）：`emit(name, data)`
+             *
+             * 内部用 `Map<事件名, Set<回调函数>>` 维护订阅关系，
+             * 发布者只调用 `emit` 即可通知所有订阅者，彼此互不感知。
+             */
+            class EventEmitter {
+                //@+others
+                //@+node:swot.20261018151307.1: *4* constructor
+                constructor() {
+                    // { 事件名: Set<回调函数>, ... }
+                    this.events = new Map();
+                }
+                //@+node:swot.20261018151254.1: *4* on
+                /**
+                 * 订阅一个事件，将回调函数登记到对应的事件名集合上。
+                 * @param {string} name - 事件名。
+                 * @param {(data: any) => void} cb - 事件触发时执行的回调函数，接收事件数据。
+                 * @returns {() => void} 退订函数：调用即可移除本次注册的回调。
+                 */
+                on(name, cb) {
+                    if (!this.events.has(name))
+                        this.events.set(name, new Set());
+                    this.events.get(name).add(cb);
+                    return () => this.off(name, cb); // 返回退订函数
+                }
+                //@+node:swot.20261018151232.1: *4* off
+                /**
+                 * 退订一个事件：从对应事件名集合中移除回调，若集合为空则删除该事件名。
+                 * @param {string} name - 事件名。
+                 * @param {(data: any) => void} cb - 之前通过 on 注册的回调函数。
+                 * @returns {void}
+                 */
+                off(name, cb) {
+                    const set = this.events.get(name);
+                    if (set) {
+                        set.delete(cb);
+                        if (set.size === 0) this.events.delete(name);
+                    }
+                }
+                //@+node:swot.20261018151210.1: *4* emmit
+                /**
+                 * 发布一个事件：将事件数据广播给所有已订阅该事件的回调函数。
+                 * @param {string} name - 事件名。
+                 * @param {any} data - 要传递给回调的事件数据。
+                 * @returns {void}
+                 */
+                emit(name, data) {
+                    const set = this.events.get(name);
+                    // 复制一份，防止遍历中退订出错
+                    if (set) [...set].forEach((cb) => cb(data));
+                }
+                //@-others
+            }
+            //@+node:swot.20261017233259.1: *3* function subscribe(name, format)
+            // 每个订阅者：订阅事件 + 只渲染自己这一块
+            /**
+             * 注册一个订阅者：创建一个 DOM 容器，并订阅指定事件，收到事件后只更新自己的那一块区域。
+             * @param {string} name - 订阅者名称，显示在渲染区域前缀（如「📱 手机端」）。
+             * @param {(data: any) => string} format - 格式化函数，接收事件数据并返回要显示的字符串。
+             * @returns {void}
+             */
+            function subscribe(name, format) {
+
+                const el = document.createElement("div");
+                el.className = "subscriber";
+                el.textContent = `${name}：等待事件…`;
+
+                document.getElementById("subscribers").appendChild(el);
+
+                // 订阅事件
+                bus.on(EVENT, (data) => {
+                    el.textContent = `${name}：${format(data)}`;
+                });
+            }
+            //@-others
+
+            const bus = new EventEmitter();  // 实例化事件中心
+            const EVENT = "priceUpdate";     // 事件名
+
+            // 订阅
+            subscribe("📱 手机端", (d) => `收到 ${d}`);
+            subscribe("💻 桌面端", (d) => `事件 ${d}`);
+            subscribe("🤖 量化机器人", (d) => `消息 ${d}`);
+
+            // 发布者：只管发，不认识任何订阅者
+            document.getElementById("publish").onclick = () => {
+                const data = document.getElementById("msg").value;
+                bus.emit(EVENT, data);
+            };
+            //@-<< script >>
+//@delims <!-- --> 
+        </script>
+    </body>
+</html>
+<!--@-leo-->

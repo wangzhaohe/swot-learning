@@ -473,26 +473,16 @@ html {
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
 <ul class="sectlevel1">
-<li><a href="#_软件架构风格">软件架构风格</a>
+<li><a href="#_选择题">选择题</a>
 <ul class="sectlevel2">
-<li><a href="#_基本架构风格">基本架构风格</a>
+<li><a href="#_软件工程">软件工程</a>
 <ul class="sectlevel3">
-<li><a href="#_数据流风格">数据流风格</a></li>
-<li><a href="#_调用返回风格">调用/返回风格</a></li>
-<li><a href="#_独立构件风格">独立构件风格</a></li>
-<li><a href="#_虚拟机风格">虚拟机风格</a></li>
-<li><a href="#_以数据为中心的风格">以数据为中心的风格</a></li>
+<li><a href="#_cmmi">CMMI</a></li>
 </ul>
 </li>
-<li><a href="#_大数据架构">大数据架构</a>
-<ul class="sectlevel3">
-<li><a href="#_lambda_架构">Lambda 架构</a></li>
-<li><a href="#_kappa_架构">Kappa 架构</a></li>
 </ul>
 </li>
-<li><a href="#_架构安全">架构安全</a></li>
-</ul>
-</li>
+<li><a href="#_老板喊口令先全读再全过滤再全排序">老板喊口令：先全读，再全过滤，再全排序</a></li>
 </ul>
 </div>
 </div>
@@ -550,745 +540,1023 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_软件架构风格">软件架构风格</h2>
+<h2 id="_选择题">选择题</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_基本架构风格">基本架构风格</h3>
+<h3 id="_软件工程">软件工程</h3>
 <div class="sect3">
-<h4 id="_数据流风格">数据流风格</h4>
+<h4 id="_cmmi">CMMI</h4>
 <div class="paragraph">
-<p>面向数据流，按照一定的顺序从前向后执行程序，代表的风格有：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>批处理序列</p>
-</li>
-<li>
-<p>管道-过滤器</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_调用返回风格">调用/返回风格</h4>
-<div class="paragraph">
-<p>构件之间存在互相调用的关系，一般是显式的调用，代表的风格有：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>主程序/子程序</p>
-</li>
-<li>
-<p>面向对象</p>
-</li>
-<li>
-<p>层次结构</p>
-</li>
-<li>
-<p>客户端/服务器风格</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_独立构件风格">独立构件风格</h4>
-<div class="paragraph">
-<p>构件之间是互相独立的，不存在显式的调用关系，而是通过某个事件触发、异步的方式来执行，代表的风格有：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>进程通信</p>
-</li>
-<li>
-<p>事件驱动系统（隐式调用）</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_虚拟机风格">虚拟机风格</h4>
-<div class="paragraph">
-<p>人为构建一个运行环境，在这个环境之上，可以解析与运行自定义的一些语言，这样来增加架构的灵活性。代表的风格有：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>解释器</p>
-</li>
-<li>
-<p>基于规则的系统</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_以数据为中心的风格">以数据为中心的风格</h4>
-<div class="paragraph">
-<p>所有的操作都是围绕建立的数据中心进行的，代表要风格有：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>仓库风格</p>
-</li>
-<li>
-<p>黑板风格</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_大数据架构">大数据架构</h3>
-<div class="sect3">
-<h4 id="_lambda_架构">Lambda 架构</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">层</th>
-<th class="tableblock halign-left valign-top">特点</th>
-<th class="tableblock halign-left valign-top">作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Batch Layer（批处理层）</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">处理全量历史数据，延迟高但准确</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">生成不可变的、完整的批视图</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Speed Layer（速度层/流处理层）</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">只处理最近增量数据，延迟低</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">弥补批处理层的时间差，提供实时视图</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Serving Layer（服务层）</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">合并上述两个视图</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">对外提供查询结果</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>之所以叫 Lambda，是因为它的数据流图形状像希腊字母 λ：</p>
+<p>CMMI 中，组织使用从多个项目收集来的数据对整体的组织级绩效进行关注属于 （D） 级别。</p>
 </div>
 <div class="paragraph">
-<p>一条线从顶部（数据源）分叉成两条并行路径（批处理 + 流处理）</p>
+<p>A 已管理 B 已定义 C 量化管理 D 优化</p>
 </div>
-<div class="paragraph">
-<p>最后在底部汇合（服务层合并结果）</p>
-</div>
-<div class="paragraph">
-<p>也就是说，这个名字来自图形形状的类比，λ 的形状恰好描述了“分叉再汇合”的拓扑结构。</p>
-</div>
-<div class="sect4">
-<h5 id="_lambda_架构大数据演进案例广告报表写时合并优化">Lambda 架构大数据演进案例：广告报表写时合并优化</h5>
-<div class="paragraph">
-<p><strong>业务诉求</strong>：在一个广告报表中，同时展示 <mark>“外部曝光数据”</mark>（第三方如腾讯提供，每天/每小时拉取）和<mark>“内部转化数据”</mark>（用户在平台下单付款，实时产生）。</p>
-</div>
-<div class="paragraph">
-<p><strong>技术难点</strong>：两类数据来源不同、时效性不同，如何在报表中完美*合并（Merge）*？</p>
-</div>
-<div class="paragraph">
-<p>整个架构的演进，就是<strong>“合并（Merge）操作发生的位置”</strong>的演进。</p>
-</div>
-<div class="sect5">
-<h6 id="_第一版典型_lambda_架构当前痛点服务层算到崩溃">第一版：典型 Lambda 架构（当前痛点：服务层算到崩溃）</h6>
-<div class="paragraph">
-<p><strong>核心逻辑</strong>：底层拼装，把两路数据各自存好，<strong>Java 服务层查询时在内存里做合并（读时合并）</strong>。</p>
-</div>
-<div class="imageblock">
+<div class="listingblock">
 <div class="content">
-<img src="img/mermaid-广告001.svg" alt="mermaid 广告001" width="1678" height="762">
+<pre>*能力成熟度模型集成 CMMI*
+
+主要用于指导软件开发过程的改进和进行软件开发能力的评估。CMMI 提供了一个软件能力成熟度的框架，它将软件过程改进的步骤组织成 *5个成熟度等级*，共包括 *18个关键过程域*，*52个过程目标*，*3168种关键实践*（注：原文图片中为“关键时间”，结合软考知识语境应为“关键实践”），它为软件过程不断改进奠定了一个循序渐进的基础。五个成熟度级别如下：
+
+[width="100%",cols="&lt;50%,&lt;50%",options="header",]
+|===
+|能力等级 |特点
+|*初始级* |过程通常是**随意且混乱**的。这些组织的成功依赖于组织内人员的能力与英雄主义。
+|*已管理级* |组织要**确保策划、文档化、执行、监督和控制项目级的过程**，并且需要为过程建立明确的目标，并能实现成本、进度和质量目标等。
+|*已定义级* |企业能够**根据自身的特殊情况定义适合自己企业和项目的标准流程**，将这套管理体系与流程予以制度化，同时企业开始进行项目积累，企业资产的收集。
+|*量化管理级* |组织建立了**产品质量、服务质量以及过程性能的定量目标**。成熟度级别3级与4级的关键区别在于**对过程性能的可预测**。
+|*优化级* |企业的项目管理达到了**最高的境界**。
+          成熟度级别5级关注于通过增量式的与创新式的过程与技术改进，不断地改进过程性能。
+          处于成熟度5级时，组织使用从多个项目收集来的数据对整体的组织级绩效进行关注。
+|===
+
+=== 软件架构风格
+在软件架构风格中，层次型风格中相邻层之间的交互方式是 （1）
+
+
+黑板风格常用的领域是 （2）
+
+
+C2风格中构件与连接件的关系是 （3）
+
+== 软件架构风格
+软件体系结构设计的一个核心目标是重复的体系结构模式，即 ##达到体系结构级的软件重用##。
+也就是说，在不同的软件系统中，使用同一体系结构。
+基于这个目标，主要任务是研究和实践软件体系结构风格和类型问题。
+
+软件体系结构风格是描述某一特定应用领域中系统组织方式的惯用模式。
+架构风格定义一个系统家族，即一个架构定义一个词汇表和一组约束。
+词汇表中包含一些构件和连接件类型，而这组约束指出系统是如何将这些构件和连接件组合起来的。
+
+架构风格反映了领域中众多系统所共有的结构和语义特性，并指导如何将各个模块和子系统有效地组织成一个完整的系统。
+对软件架构风格的研究和实践促进对设计的重用，一些经过实践证实的解决方案也可以可靠地用于解决新的问题。
+
+'''
+
+这段文字是典型的”学术黑话”，把本来挺简单的道理包装得云山雾罩。用大白话翻译一遍：
+
+=== 逐句翻译
+
+*原文：* 软件体系结构设计的一个核心目标是重复的体系结构模式，即达到体系结构级的软件重用。
+
+*人话：* 设计软件架构时，最想干的一件事就是——*别每次都从头造轮子，能抄就抄（抄自己以前的设计）。*
+
+*原文：* 在不同的软件系统中，使用同一体系结构。
+
+*人话：* 就是说，做 A 系统和做 B 系统，可以用同一套”骨架”。
+
+*原文：* 基于这个目标，主要任务是研究和实践软件体系结构风格和类型问题。
+
+*人话：* 所以大家就去研究：到底有哪些常见的”骨架套路”可以用？
+
+*原文：* 软件体系结构风格是描述某一特定应用领域中系统组织方式的惯用模式。
+
+*人话：* 所谓”架构风格”，就是**某个领域里大家约定俗成的搭积木方式。**
+
+*原文：* 架构风格定义一个系统家族，即一个架构定义一个词汇表和一组约束。词汇表中包含一些构件和连接件类型，而这组约束指出系统是如何将这些构件和连接件组合起来的。
+
+*人话：* 一种架构风格规定了：
+
+    - *能用哪些积木*（构件，比如”模块”"`服务`""`过滤器`"）
+    - *积木之间怎么插*（连接件，比如”调用”"`管道`""`消息`"）
+    - *插的时候有什么规矩*（约束，比如”必须分层，不能跨层调用”）
+
+*原文：* 架构风格反映了领域中众多系统所共有的结构和语义特性，并指导如何将各个模块和子系统有效地组织成一个完整的系统。
+
+*人话：* 架构风格就是从一堆同类系统里总结出来的**通用套路**，告诉你这些模块该怎么拼才靠谱。
+
+*原文：* 对软件架构风格的研究和实践促进对设计的重用，一些经过实践证实的解决方案也可以可靠地用于解决新的问题。
+
+*人话：* 研究这些套路的好处是：*别人踩过的坑你不用再踩，验证过的方案直接拿来用。*
+
+'''''
+
+=== 一句话总结
+
+____
+*架构风格 = 搭软件的常用套路。研究它，就是为了能复用、少走弯路。*
+____
+
+=== 为什么这段话”不说人话”
+
+学术写作有几个坏毛病，这段全占了：
+
+[width="100%",cols="30%,70%",options="header",]
+|===
+|毛病 |例子
+|*名词化* |"`达到体系结构级的软件重用`" ← 其实就是”复用架构”
+|*循环定义* |"`架构风格定义一个系统家族，即一个架构定义……`" 用”架构”解释”架构”
+|*抽象叠抽象* |"`词汇表`""`约束`""`构件`""`连接件`"——四个术语套在一起，其实就是在说”零件和拼法”
+|*正确的废话* |"`促进对设计的重用`"——谁不想重用呢？关键是怎么重用，它没说
+|===
+
+所以你读着累，不是你的问题，是写的人**把简单的事说复杂了**。
+考试/论文里这么写是为了显得”严谨”，但日常理解，记住我上面那句大白话就够了。
+
+=== 1. 数据流风格
+面向数据流，按照一定的顺序从前向后执行程序，代表的风格有：
+
+* 批处理序列
+* 管道-过滤器
+
+==== 专业描述
+批处理风格：
+
+* 每个处理步骤是一个单独的程序，每一步必须在前一步结束后才能开始，并且数据必须是完整的，以整体的方式传递。
+* 它的基本构件是独立的应用程序，连接件是某种类型的媒介。
+* 连接件定义了相应的数据流图，表达拓扑结构。
+
+管道-过滤器：
+
+* 把系统分解为几个序贯的处理步骤，这些步骤之间通过数据流连接，一个步骤的输出是另一个步骤的输入。
+* 每个处理步骤由一个过滤器(Filter)实现，处理步骤之间的数据传输由管道(Pipe)负责。
+* 基本构件是过滤器，连接件是数据流传输管道，将一个过滤器的输出传到另一过滤器的输入。
+
+==== 通俗解释
+*本质区别就一句话：谁在指挥？*
+
+*批处理*：有个”老板”在指挥。
+
+- 老板说：第一步，读文件；第二步，算总数；第三步，写结果。
+- 每个步骤干完都得向老板汇报，老板再喊下一步。
+- 步骤之间是**上下级关系**，老板不喊，下一步不动。
+
+*管道*：没有老板，每个人自己管自己。
+
+- 第一个人只管从源头拿数据，拿到就往后扔。
+- 第二个人只管等着，前面扔过来一个就处理一个，再往后扔。
+- 没人指挥，*数据来了就干活，没来就等着*。
+- 每个人甚至不知道后面是谁。
+
+*打个比方*
+
+* 批处理 = *做饭*：你先把菜全切好，再全部下锅，再全部装盘。你是那个老板，每一步你都得盯着。
+* 管道 = *传菜*：洗菜的人洗好一盘就往下一递，切菜的人接到就切，切完再往下递。没人喊”开始”，菜到了就干。
+
+==== Example
+*判断你该用哪个*
+
+* *数据要攒齐才有意义*（比如”算昨天总销售额”）→ 批处理。
+* *数据来一条就能算一条*（比如”实时风控、实时推荐”）→ 管道。
+
+*一句话*
+
+- 批处理：*等齐了再开干，一个老板统管全程。*
+- 管道：*来一个干一个，各干各的靠数据接力。*
+
+===== 日志处理系统
+*批处理做法（老板喊口令）*
+
+- 凌晨2点，定时任务启动。
+- 第一步：把昨天的日志文件全部读进内存。
+- 第二步：全部过滤出error。
+- 第三步：全部统计计数。
+- 第四步：写入报表。 - *特点*：必须等日志文件攒够一天，才能开始。中间任何一步卡住，全停。
+
+*管道做法（传菜）*
+
+- Filebeat 盯着日志文件，来一行就抓一行，扔给下一环。
+- Logstash 接到一行就解析一行，扔给下一环。
+- Elasticsearch 接到就索引一条。
+- *特点*：日志一产生就处理，各环节同时跑，谁也不用等谁。
+
+===== 电商订单
+*批处理做法*
+
+- 每晚跑一次：把所有当天订单读出来 → 算总价 → 扣库存 → 发邮件。
+- 用户下午下的单，晚上才处理。
+
+*管道做法*
+
+- 用户一点”下单”，消息立刻进 Kafka。
+- 库存服务、支付服务、通知服务各自订阅，**同时**收到消息各自处理。
+- 用户几秒内就收到确认。
+
+===== 视频转码
+*批处理*
+
+- 上传完整个视频 → 等转码服务器空闲 → 整个文件转完 → 再上传CDN。
+- 用户得等全片转完才能看。
+
+*管道*
+
+- 视频一边上传，转码器一边分片转码，转好一片就推给CDN一片。
+- 用户几乎能边传边看（直播就是这个思路）。
+
+===== Linux 命令
+*批处理写法*
+
+[source,bash]</pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_老板喊口令先全读再全过滤再全排序" class="sect0">老板喊口令：先全读，再全过滤，再全排序</h1>
 <div class="paragraph">
-<p><strong>核心痛点（瓶颈）</strong>：</p>
+<p>cat access.log &gt; tmp1
+grep "404" tmp1 &gt; tmp2
+sort tmp2 &gt; tmp3
+uniq -c tmp3</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>实时曝光缺失：第三方曝光只按天进入 MySQL，未进入实时层；实时流只处理内部 Kafka 转化消息，因此第一版无法在实时链路中提供小时级曝光，实时报表不完整。</p>
-</li>
-<li>
-<p>实时层缺少业务维度：Redis 只按追踪链接维度存内部转化聚合，不含广告 ID；Java 服务层虽然可以通过 MySQL 广告关系表补全广告语义，但必须每次查询都做跨源关联和二次聚合，读时合并成本高。</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_第二版缓解_java_服务层压力当前痛点redis_查询瓶颈">第二版：缓解 Java 服务层压力（当前痛点：Redis 查询瓶颈）</h6>
-<div class="paragraph">
-<p><strong>核心改进</strong>：增加了一个 Python 常驻脚本，不断调用第三方 API 的小时报表，更新当日的曝光数据表（将其推入实时存储/数据库）。</p>
-</div>
-<div class="imageblock">
+<div class="listingblock">
 <div class="content">
-<img src="img/mermaid-广告002.svg" alt="mermaid 广告002" width="1826" height="656">
+<pre>每步等上一步**全部**做完，还要落盘临时文件。
+
+*管道写法*
+
+[source,bash]</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>第二版将曝光数据接入实时层，减轻了 Java 直接调用第三方 API 和写入曝光的压力，
+<p>cat access.log | grep "404" | sort | uniq -c</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>四个进程**同时**跑，数据像传菜一样一条条流过，不落临时文件。
+
+===== 大数据里的对应
+* *批处理* = Hadoop MapReduce、Spark 批任务。攒一批数据，跑一轮，出一批结果。
+
+* *管道* = Kafka + Flink/Storm 流处理。数据一条条来，一条条算，实时出结果。
+
+=== 2. 调用/返回风格
+构件之间存在互相调用的关系，一般是显式的调用，代表的风格有：
+
+* 主程序/子程序
+* 面向对象
+* 层次结构
+* 客户端/服务器风格
+
+==== 主程序/子程序
+* 单线程控制，把问题划分为若干个处理步骤。
+* 构件即为主程序和子程序，子程序通常可合成为模块。
+* 过程调用作为交互机制，充当**连接件**的角色。
+
+==== 面向对象
+* 构件是对象，对象是抽象数据类型的实例。
+* 连接件即使对象间交互的方式，对象是通过函数和过程的调用来交互的。
+
+==== 层次结构
+* 构件组成一个层次结构，连接件通过决定层间如何交互的协议来定义。
+* 每层为上一层提供服务，使用下一层的服务，只能见到与自己邻接的层。
+* 修改某一层，最多影响其相邻的两层（通常只能影响上层）。
+
+==== 客户端/服务器架构风格
+* 两层C/S 体系结构主要组成部分：数据库服务器、客户应用程序。称为“胖客户机，瘦服务器”。
+
+* 三层C/S 结构：
+** 增加了一个应用服务器。
+** 整个应用逻辑驻留在应用服务器上，只有表示层存在于客户机上，故称为“瘦客户机”。
+** 应用功能分为表示层、功能层和数据层三层。
+
+=== 3. 独立构件风格
+构件之间是互相独立的，不存在显式的调用关系，而是通过某个事件触发、异步的方式来执行，代表的风格有：
+
+* 进程通信
+* 事件驱动系统（隐式调用）
+
+---
+
+[upperalpha]
+. 进程通信风格
+
+* *核心概念*：
+    ** *构件*：独立的过程（通常是命名过程）。
+    ** *连接件*：消息传递。
+* *通信方式*：
+    ** 支持点到点通信。
+    ** 支持同步或异步方式。
+    ** 支持远程过程调用 (RPC)。
+
+
+. 事件驱动系统（隐式调用）
+
+* *核心思想*：
+    ** 构件**不直接调用**过程，而是**触发或广播事件**。
+    ** 其他构件中的过程需先在事件中**注册**。
+    ** 当事件被触发时，系统自动调用所有注册过的过程。
+* *架构组成*：
+    ** *构件*：既可以是模块（过程），也可以是事件的集合。
+    ** *调用方式*：既支持通用方式调用，也支持在系统事件中注册调用。
+* 例子：发布-订阅模式（Pub/Sub）
+
+* 总结：优缺点分析
+** 主要优点
+*** 强大的复用支持：为软件复用提供了强有力的基础。
+*** 易于维护与演化：方便构件的维护和后续演化。
+
+** 主要缺点
+*** 失去控制权：构件放弃了对自己系统计算过程的控制权（因为是被动触发）。
+
+*一句话总结：*
+这一页主要讲的是**独立构件风格**，重点区分了**进程通信**（直接消息传递）和**事件驱动**（隐式调用/注册触发）两种模式，并指出了事件驱动模式虽然利于复用和维护，但牺牲了对计算流程的直接控制。
+
+==== 发布-订阅模式（Pub/Sub）例子
+[mermaid, target=img/mermaid-pub-sub, format=svg]
+....
+flowchart TD
+    subgraph SUB[subscribe 被调用 3 次 — 每次生成一套独立闭包]
+        direction TB
+        Call1["subscribe('📱手机端', fn1)"] --&gt; S1["本次作用域:&lt;br/&gt;el1 = div①&lt;br/&gt;name='📱手机端'&lt;br/&gt;format=fn1"]
+        Call2["subscribe('💻桌面端', fn2)"] --&gt; S2["本次作用域:&lt;br/&gt;el2 = div②&lt;br/&gt;name='💻桌面端'&lt;br/&gt;format=fn2"]
+        Call3["subscribe('🤖量化', fn3)"] --&gt; S3["本次作用域:&lt;br/&gt;el3 = div③&lt;br/&gt;name='🤖量化'&lt;br/&gt;format=fn3"]
+        S1 --&gt; CbA["cbA = (data) =&amp;gt; { el1.textContent = ... }&lt;br/&gt;← 闭包捕获 el1,name,format"]
+        S2 --&gt; CbB["cbB = (data) =&amp;gt; { el2.textContent = ... }&lt;br/&gt;← 闭包捕获 el2,name,format"]
+        S3 --&gt; CbC["cbC = (data) =&amp;gt; { el3.textContent = ... }&lt;br/&gt;← 闭包捕获 el3,name,format"]
+    end
+
+    CbA --&gt; Store["bus.on('priceUpdate', cb)&lt;br/&gt;→ Set[cbA, cbB, cbC]"]
+    CbB --&gt; Store
+    CbC --&gt; Store
+
+    Store -. "函数本体+闭包留在 Map 里" .-&gt; Emit
+
+    subgraph PUB[发布阶段 — emit 取出来逐个调用]
+        Emit["emit('priceUpdate','股票上涨5%')&lt;br/&gt;set = 取回 Set[cbA,cbB,cbC]"]
+        Emit --&gt; ForEach["[...set].forEach(cb =&amp;gt; cb('股票上涨5%'))"]
+        ForEach --&gt; RunA["cbA('股票上涨5%')&lt;br/&gt;→ 用捕获的 el1 改 div①"]
+        ForEach --&gt; RunB["cbB('股票上涨5%')&lt;br/&gt;→ 用捕获的 el2 改 div②"]
+        ForEach --&gt; RunC["cbC('股票上涨5%')&lt;br/&gt;→ 用捕获的 el3 改 div③"]
+    end
+....
+
+.例子代码：#file static_example_code/event-pub-sub.html
+[source,html]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8" /&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+        &lt;title&gt;发布-订阅模式演示&lt;/title&gt;
+        &lt;style&gt;
+            body {
+                font-family: system-ui, sans-serif;
+                max-width: 560px;
+                margin: 2rem auto;
+                padding: 0 1rem;
+                color: #1e293b;
+            }
+            input, button {
+                font: inherit;
+                padding: 0.5rem 0.9rem;
+                border-radius: 8px;
+                border: 1px solid #cbd5e1;
+            }
+            button {
+                background: #3b82f6;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+            }
+            .subscriber {
+                padding: 0.6rem 1rem;
+                margin: 0.5rem 0;
+                background: #f1f5f9;
+                border-radius: 8px;
+            }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;📡 发布-订阅模式 (Pub/Sub)&lt;/h1&gt;
+        &lt;p&gt;发布者只管发事件，完全不认识订阅者；事件中心负责把消息广播给所有订阅者。&lt;/p&gt;</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;input id="msg" value="股票上涨 5%" /&gt;
+&lt;button id="publish"&gt;发布事件&lt;/button&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;h2&gt;订阅者&lt;/h2&gt;
+&lt;div id="subscribers"&gt;&lt;/div&gt;
+&lt;script&gt;
+    /**
+     * 事件中心：发布-订阅（Pub/Sub）模式的实现，只负责三件事：
+     * - 登记回调（订阅）：`on(name, cb)`
+     * - 删除回调（退订）：`off(name, cb)`
+     * - 广播事件（发布）：`emit(name, data)`
+     *
+     * 内部用 `Map&lt;事件名, Set&lt;回调函数&gt;&gt;` 维护订阅关系，
+     * 发布者只调用 `emit` 即可通知所有订阅者，彼此互不感知。
+     */
+    class EventEmitter {
+        constructor() {
+            // { 事件名: Set&lt;回调函数&gt;, ... }
+            this.events = new Map();
+        }
+        /**
+         * 订阅一个事件，将回调函数登记到对应的事件名集合上。
+         * @param {string} name - 事件名。
+         * @param {(data: any) =&gt; void} cb - 事件触发时执行的回调函数，接收事件数据。
+         * @returns {() =&gt; void} 退订函数：调用即可移除本次注册的回调。
+         */
+        on(name, cb) {
+            if (!this.events.has(name))
+                this.events.set(name, new Set());
+            this.events.get(name).add(cb);
+            return () =&gt; this.off(name, cb); // 返回退订函数
+        }
+        /**
+         * 退订一个事件：从对应事件名集合中移除回调，若集合为空则删除该事件名。
+         * @param {string} name - 事件名。
+         * @param {(data: any) =&gt; void} cb - 之前通过 on 注册的回调函数。
+         * @returns {void}
+         */
+        off(name, cb) {
+            const set = this.events.get(name);
+            if (set) {
+                set.delete(cb);
+                if (set.size === 0) this.events.delete(name);
+            }
+        }
+        /**
+         * 发布一个事件：将事件数据广播给所有已订阅该事件的回调函数。
+         * @param {string} name - 事件名。
+         * @param {any} data - 要传递给回调的事件数据。
+         * @returns {void}
+         */
+        emit(name, data) {
+            const set = this.events.get(name);
+            // 复制一份，防止遍历中退订出错
+            if (set) [...set].forEach((cb) =&gt; cb(data));
+        }
+    }
+    // 每个订阅者：订阅事件 + 只渲染自己这一块
+    /**
+     * 注册一个订阅者：创建一个 DOM 容器，并订阅指定事件，收到事件后只更新自己的那一块区域。
+     * @param {string} name - 订阅者名称，显示在渲染区域前缀（如「📱 手机端」）。
+     * @param {(data: any) =&gt; string} format - 格式化函数，接收事件数据并返回要显示的字符串。
+     * @returns {void}
+     */
+    function subscribe(name, format) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const el = document.createElement("div");
+el.className = "subscriber";
+el.textContent = `${name}：等待事件…`;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>document.getElementById("subscribers").appendChild(el);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>    // 订阅事件
+    bus.on(EVENT, (data) =&gt; {
+        el.textContent = `${name}：${format(data)}`;
+    });
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const bus = new EventEmitter();  // 实例化事件中心
+const EVENT = "priceUpdate";     // 事件名</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// 订阅
+subscribe("📱 手机端", (d) =&gt; `收到 ${d}`);
+subscribe("💻 桌面端", (d) =&gt; `事件 ${d}`);
+subscribe("🤖 量化机器人", (d) =&gt; `消息 ${d}`);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>            // 发布者：只管发，不认识任何订阅者
+            document.getElementById("publish").onclick = () =&gt; {
+                const data = document.getElementById("msg").value;
+                bus.emit(EVENT, data);
+            };
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>=== 4. 虚拟机风格
+人为构建一个运行环境，在这个环境之上，可以解析与运行自定义的一些语言，这样来增加架构的灵活性。代表的风格有：
+
+* 解释器
+* 基于规则的系统
+
+=== 5. 以数据为中心的风格
+所有的操作都是围绕建立的数据中心进行的，代表要风格有：
+
+* 仓库风格
+* 黑板风格
+
+== 大数据架构
+
+
+=== Lambda 架构
+[cols="1,2,2", options="header"]
+|===
+| 层 | 特点 | 作用
+| Batch Layer（批处理层） | 处理全量历史数据，延迟高但准确 | 生成不可变的、完整的批视图
+| Speed Layer（速度层/流处理层） | 只处理最近增量数据，延迟低 | 弥补批处理层的时间差，提供实时视图
+| Serving Layer（服务层） | 合并上述两个视图 | 对外提供查询结果
+|===
+
+之所以叫 Lambda，是因为它的数据流图形状像希腊字母 λ：
+
+一条线从顶部（数据源）分叉成两条并行路径（批处理 + 流处理）
+
+最后在底部汇合（服务层合并结果）
+
+也就是说，这个名字来自图形形状的类比，λ 的形状恰好描述了“分叉再汇合”的拓扑结构。
+
+==== Lambda 架构大数据演进案例：广告报表写时合并优化
+*业务诉求*：在一个广告报表中，同时展示 ##“外部曝光数据”##（第三方如腾讯提供，每天/每小时拉取）和##“内部转化数据”##（用户在平台下单付款，实时产生）。
+
+*技术难点*：两类数据来源不同、时效性不同，如何在报表中完美*合并（Merge）*？
+
+整个架构的演进，就是**“合并（Merge）操作发生的位置”**的演进。
+
+===== 第一版：典型 Lambda 架构（当前痛点：服务层算到崩溃）
+*核心逻辑*：底层拼装，把两路数据各自存好，*Java 服务层查询时在内存里做合并（读时合并）*。
+
+[mermaid, target=img/mermaid-广告001, format=svg]
+....
+graph TD
+    subgraph 实时层 [Speed Layer: 实时数据]
+        Kafka2[Kafka2 实时下单/付款消息] --&gt; Spark[Spark Streaming] --&gt; Redis[(Redis 实时转化数据)]
+    end
+
+    subgraph 服务层 [Serving Layer: 压力山大]
+        Java[Java 服务] --&gt;|1.查广告关联| MySQL_Rel[(MySQL 广告关系表)]
+        Java --&gt;|查离线曝光/点击| MySQL_Exp
+        Java --&gt;|查实时转化| Redis
+        Java --&gt;|内存中进行复杂的 Merge 聚合| Result[最终报表]
+    end
+    style Java fill:#f66,color:#fff
+
+    subgraph 批处理层 [Batch Layer: 离线数据]
+        API[第三方曝光/点击数据] --&gt;|每日定时拉取| MySQL_Exp[(MySQL 离线曝光/点击表)]
+        Kafka1[Kafka1 内部浏览/下单日志] --&gt;|每天凌晨| HDFS --&gt; Hive --&gt;|导出| MySQL_Conv[(MySQL 离线转化表)]
+    end
+....
+
+*核心痛点（瓶颈）*：
+
+1. 实时曝光缺失：第三方曝光只按天进入 MySQL，未进入实时层；实时流只处理内部 Kafka 转化消息，因此第一版无法在实时链路中提供小时级曝光，实时报表不完整。
+
+2. 实时层缺少业务维度：Redis 只按追踪链接维度存内部转化聚合，不含广告 ID；Java 服务层虽然可以通过 MySQL 广告关系表补全广告语义，但必须每次查询都做跨源关联和二次聚合，读时合并成本高。
+
+===== 第二版：缓解 Java 服务层压力（当前痛点：Redis 查询瓶颈）
+*核心改进*：增加了一个 Python 常驻脚本，不断调用第三方 API 的小时报表，更新当日的曝光数据表（将其推入实时存储/数据库）。
+
+[mermaid, target=img/mermaid-广告002, format=svg]
+....
+graph TD
+    subgraph 批处理层 [Batch Layer: 离线数据]
+        Kafka1[Kafka1 内部浏览/下单日志] --&gt;|每天凌晨| HDFS --&gt; Hive --&gt;|导出| MySQL_Conv[(MySQL 离线转化表)]
+        API[第三方曝光/点击数据] --&gt;|每日定时拉取，日级/历史| MySQL_Exp[(MySQL 离线曝光/点击表)]
+    end
+
+    subgraph 实时层 [Speed Layer: 实时数据]
+        API2[第三方API] --&gt;|Python脚本每小时拉取，当天准实时| Redis_Exp[(Redis 曝光数据)]
+        Kafka2[Kafka2 实时下单/付款消息] --&gt; Spark[Spark Streaming] --&gt; Redis_Tran[(Redis 实时转化数据)]
+    end
+
+    subgraph 服务层 [Serving Layer: 压力转移]
+        Java[Java 服务] --&gt;|1.查广告关系&lt;br/&gt;补全广告语义| MySQL_Rel[(MySQL 广告关系表)]
+        Java --&gt;|2.查链接维度&lt;br/&gt;实时转化| Redis_Tran
+        Java --&gt;|3.查链接维度&lt;br/&gt;实时曝光| Redis_Exp
+        Java --&gt;|4.内存中关联广告与&lt;br/&gt;链接并二次聚合| Result[最终报表]
+    end
+
+    style Java fill:#3f6,color:#333
+    style Redis_Exp fill:#f9a,color:#333
+    style Redis_Tran fill:#f9a,color:#333
+    style MySQL_Rel fill:#bbf,stroke:#333
+....
+
+第二版将曝光数据接入实时层，减轻了 Java 直接调用第三方 API 和写入曝光的压力，
 但由于 Redis 仍以链接维度存储、缺少广告语义，Java 必须按广告-链接关系扇出查询 Redis_Exp 和 Redis_Tran，并在内存中二次聚合。
 查询次数随“广告数 × 链接数 × 指标数”放大，所有服务实例又共享 Redis，导致 Redis 的 QPS、带宽、内存和单线程处理能力成为新的集中瓶颈。
-因此第二版只是把瓶颈从写路径转移到 Redis 读路径，读时合并问题并未根治。</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_第三版统一大宽表_写时合并服务层查询极简写入端成为新关注点">第三版：统一大宽表 + 写时合并（服务层查询极简，写入端成为新关注点）</h6>
-<div class="paragraph">
-<p><strong>核心逻辑</strong>：在线服务层取消 Redis，只保留一张 MySQL 广告大宽表。</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="⚡"></i>
-</td>
-<td class="content">
-对于 MySQL 数据库，大宽表的字段数需评估，若超过 50 列需考虑拆列、分区或改用列式存储引擎。
-</td>
-</tr>
-</table>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>大宽表以 <code>(stday, 广告ID)</code> 或 <code>(stday, 广告ID, 追踪链接)</code> 为唯一键，包含曝光、点击、转化等指标。</p>
-</li>
-<li>
-<p>把“广告与追踪链接”的关联和指标合并，从查询时提前到写入时，实现写时合并（Write-time Join）。</p>
-</li>
-</ul>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="img/mermaid-广告003.svg" alt="mermaid 广告003" width="1588" height="603">
-</div>
-</div>
-<div class="paragraph">
-<p><strong>写入方式</strong>：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>离线层：Hive/Spark 离线任务每天重算 T+1 及历史数据，按业务日期 <code>stday</code> 写入或覆盖大宽表。</p>
-</li>
-<li>
-<p>实时层：Python 脚本小时级拉取第三方当天曝光，对 <code>stday = 当天</code> 的行做 upsert，更新曝光字段；内部实时下单/付款消息经 Spark Streaming 后调用 Java 更新接口，先将追踪链接映射为广告 ID，再对 <code>stday = 当天、广告ID</code> 的行做 upsert 或增量更新转化字段。</p>
-<div class="ulist">
-<ul>
-<li>
-<p>一致性：通过订单 ID/消息 ID 去重、幂等更新、批量合并、缓冲、分片和监控，避免重复计数与 MySQL 热点行锁。次日由离线任务重算并覆盖当天数据，保证最终一致。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>服务层*：Java 查询服务只读这张大宽表，不再跨 MySQL 和 Redis 做 Join，也不在查询时做二次聚合，因此查询路径极简；但仍可能有过滤、排序、分页或轻量汇总。</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>关键澄清</strong>：<code>stday</code> 是业务日期，不是“离线/实时”的来源标记。实时链路只写 <code>stday = 当天</code>，离线链路负责 <code>stday &lt;= 昨天</code> 及历史修正。第三版解决的是服务层读时合并瓶颈，不是彻底消除所有瓶颈；写入端 MySQL 的并发、幂等、热点和吞吐成为新的关注点。</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="❗"></i>
-</td>
-<td class="content">
-<strong>软考考点</strong>：写时合并（Write-time Join）、计算左移、大宽表设计、读写路径分离、查询极简，同时要说明写放大和写入端治理。
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p><strong>第三版的核心魔法：写时合并（Write-time Join）</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>统一存储</strong>：在线服务层利用 MySQL 的 <code>stday</code> 字段区分业务日期。</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>stday = 当天日期</code>：实时链路写入当天曝光和转化，并做 upsert/增量更新。</p>
-</li>
-<li>
-<p><code>stday &lt;= 昨天</code>：离线链路写入、重算或覆盖历史曝光和转化数据。</p>
-</li>
-<li>
-<p>次日离线任务重算并覆盖当天数据，保证最终一致。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>写时关联</strong>：Spark Streaming 不再往 Redis 写，而是调用 Java 更新接口。接口内先把当前下单的追踪链接映射为广告 ID，再对 <code>stday = 当天</code> 的大宽表行做 upsert 或增量更新转化字段。</p>
-</li>
-<li>
-<p><strong>服务极简</strong>：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。</p>
-<div class="ulist">
-<ul>
-<li>
-<p>最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；</p>
-</li>
-<li>
-<p><mark>但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控</mark>。</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_软考一看就懂对比总结表">软考“一看就懂”对比总结表</h6>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">对比维度</th>
-<th class="tableblock halign-left valign-top">第一版（典型Lambda）</th>
-<th class="tableblock halign-left valign-top">第二版（缓解查询压力）</th>
-<th class="tableblock halign-left valign-top">第三版（终极优化）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>数据存储</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MySQL (离线) + Redis (实时)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MySQL + Redis (增加曝光写入)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>在线服务层唯一查询表：MySQL 大宽表；Redis 退出在线查询链路</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>合并（Merge）位置</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Java 服务层内存（读时合并）</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Java 服务层内存（读时合并，略微减轻）</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>写入时合并（Write-time Join）</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java 服务端操作</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">查MySQL + 查Redis + 内存计算</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">查MySQL + 查Redis + 二次聚合</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>只查一张大宽表，无跨源Join和查询时二次聚合</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>第三方准实时曝光</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">❌ 不支持实时（T+1）</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">✅ Python脚本小时级拉取</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">✅ Python脚本小时级拉取</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>核心瓶颈</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Java 计算压力极大</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Redis 查询瓶颈、离线依赖链长</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>服务层查询路径极简；写入端成为新关注点，需要幂等、批量合并、分片、缓冲和监控</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>软考考点</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lambda架构基础，读时合并弊端</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">计算左移（预处理），缓解读压力</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>写时合并、计算左移、大宽表设计、读写路径分离、写放大治理</strong></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect5">
-<h6 id="_给你的复习建议">给你的复习建议</h6>
-<div class="paragraph">
-<p>在软考论文或案例分析中，如果遇到大数据架构题，<strong>“写时合并（Write-time Join）”和“计算左移”</strong>是绝对的高分词汇。</p>
-</div>
-<div class="paragraph">
-<p>第三版通过“大宽表”把复杂的关联逻辑从“查询阶段”转移到了“数据写入阶段”，这正是架构设计中最经典的优化思想！</p>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_lambda_架构大数据系统某网奥运观看数据分析">Lambda 架构大数据系统：某网奥运观看数据分析</h5>
-<div class="paragraph">
-<p>架构分层：实际设计中扩展为五层（数据采集层、数据集成层、数据存储层、数据计算层、数据展现层）。</p>
-</div>
-<div class="sect5">
-<h6 id="_lambda_架构图">Lambda 架构图</h6>
-<div class="imageblock">
-<div class="content">
-<img src="img/mermaid-某网奥运.svg" alt="mermaid 某网奥运" width="1272" height="518">
-</div>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_架构特点分析">架构特点分析</h6>
-<div class="olist upperalpha">
-<ol class="upperalpha" type="A">
-<li>
-<p><strong>实时处理特点</strong>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>采用增量计算实时数据</p>
-</li>
-<li>
-<p>集群规模不变情况下实现秒级分析</p>
-</li>
-<li>
-<p>秒级分析出当日概览所需要的信息</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>批处理层特点</strong>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>采用不可变存储模型</p>
-</li>
-<li>
-<p>通过追加方式维护历史数据</p>
-</li>
-<li>
-<p>满足大规模统计分析需求</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>数据流向</strong>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>PC/APP/TV端 → Nginx → Flume → Kafka → 实时计算(Spark Streaming)</p>
-</li>
-<li>
-<p>离线数据 → Sqoop/ETL → HDFS → 离线计算(Hive/Spark/Impala/M-R)</p>
-</li>
-<li>
-<p>（注：Flume也指向HBase用于实时存储）</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>存储设计</strong>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>实时数据：MemSQL/HBase</p>
-</li>
-<li>
-<p>离线数据：HDFS</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>应用场景</strong>：</p>
-<div class="ulist">
-<ul>
-<li>
-<p>赛事回顾模块需要展现自定义时间段内的历史最高在线人数、逐日播放走势、直播最高在线人数和点播视频排行等</p>
-</li>
-<li>
-<p>奥运数据不需要被经常索引、更新，采用不可变方式存储所有的历史数据，以保证准确性</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_架构选型分析">架构选型分析</h6>
-<div class="paragraph">
-<p>在这个奥运观看数据分析系统里，用 Lambda 架构更合适。原因可以总结为以下几点：</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>业务需求天然分成两类</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>“当日概览”要求秒级实时分析，适合流处理。</p>
-</li>
-<li>
-<p>“赛事回顾”要求自定义时间段、历史最高在线、逐日播放走势、直播最高在线、点播排行等复杂历史统计，更适合批处理。Lambda 的双链路正好覆盖这两类需求。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>实时链路和离线链路分工清晰</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>实时链路：<code>PC/App/TV → Nginx → Flume → Kafka → Spark Streaming → MemSQL/HBase</code><br></p>
-</li>
-<li>
-<p>离线链路：<code>Sqoop/ETL → HDFS → Hive/Spark/Impala/MR</code><br></p>
-</li>
-<li>
-<p>最后通过 <code>合并计算 Spark</code> 统一服务“当日概览”和“赛事回顾”。 这种结构比单纯 Kappa 更容易保证实时性和历史准确性。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>历史数据适合不可变存储</strong><br></p>
-<div class="ulist">
-<ul>
-<li>
-<p>文档明确说：奥运数据不需要被经常索引、更新，适合采用不可变方式存储全部历史数据，以保证准确性。</p>
-</li>
-<li>
-<p>这正是 HDFS + 批处理层的强项，也符合 Lambda 的批处理层设计。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>批处理层能修正实时层问题</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>实时流处理可能遇到乱序、迟到、重复、近似计算等问题。</p>
-</li>
-<li>
-<p>Lambda 的批处理层可以全量重算，用离线结果修正实时结果，保证最终准确性。</p>
-</li>
-<li>
-<p>这对“赛事回顾”这类历史统计尤其重要。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>与现有技术栈匹配，落地更稳</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>系统已经使用 Hadoop、HDFS、Hive、Spark、Impala、Spark Streaming 等。</p>
-</li>
-<li>
-<p>Lambda 能直接利用这些成熟组件，开发和运维成本更低。</p>
-</li>
-<li>
-<p>如果改成 Kappa，则要求 Kafka 长期保存全量数据、支持大规模重放、流处理具备强 Exactly-once 和复杂状态管理能力，工程风险和成本更高。</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Kappa 可行，但不如 Lambda 稳妥</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Kappa 理论上也能实现同样业务，但它更适合流处理能力很强、数据可长期日志化、愿意统一流批链路的团队。</p>
-</li>
-<li>
-<p>在这个系统中，历史数据量大、查询复杂、准确性要求高，而且已有 Hadoop 生态，因此 Lambda 更自然、更稳妥、更容易落地。</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">所以最终判断是</dt>
-<dd>
-<p><strong>Kappa 不是做不到，但在这个“秒级实时 + 大规模历史准确分析 + 不可变 HDFS 存储 + 现有 Hadoop/Spark 生态”的场景下，Lambda 架构更合适。</strong></p>
-</dd>
-</dl>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_kappa_架构">Kappa 架构</h4>
-<div class="sect4">
-<h5 id="_kappa_架构大数据系统某证券公司实时日志分析平台">Kappa 架构大数据系统：某证券公司实时日志分析平台</h5>
-<div class="sect5">
-<h6 id="_系统概述">系统概述</h6>
-<div class="paragraph">
-<p>实时日志分析平台基于 Kappa 架构，使用统一的数据处理引擎 <strong>Flink</strong> 可实时处理全部数据，并将其存储到 <strong>Elastic-Search</strong> 与 <strong>OpenTSDB</strong> 中。</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_系统架构图">系统架构图</h6>
-<div class="paragraph">
-<p>以下是基于 Kappa 架构的实时日志分析平台整体架构图：</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="img/mermaid-某证券公司实时日志分析.svg" alt="mermaid 某证券公司实时日志分析" width="1266" height="1030">
-</div>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_实时处理过程">实时处理过程</h6>
-<h4 id="_1_日志采集" class="discrete">1. 日志采集</h4>
-<div class="paragraph">
-<p>在各应用系统部署采集组件 <strong>Filebeat</strong>，实时采集日志数据并输出到 <strong>Kafka</strong> 缓存。</p>
-</div>
-<h4 id="_2_日志清洗与解析" class="discrete">2. 日志清洗与解析</h4>
-<div class="paragraph">
-<p>基于大数据计算集群的 <strong>Flink</strong> 计算框架，实时读取 <strong>Kafka</strong> 中的日志数据进行清洗和解析，提取日志关键内容并转换成指标，以及对指标进行二次加工形成衍生指标。</p>
-</div>
-<h4 id="_3_日志存储" class="discrete">3. 日志存储</h4>
-<div class="paragraph">
-<p>将解析后的日志数据分类存储于 <strong>Elastic-Search</strong> 日志库中，各类基于日志的指标存储于 <strong>OpenTSDB</strong> 指标库中，供前端组件搜索与查询。</p>
-</div>
-<h4 id="_4_日志监控" class="discrete">4. 日志监控</h4>
-<div class="paragraph">
-<p>通过单独的告警消息队列来保持监控消息的有序管理与实时推送。</p>
-</div>
-<h4 id="_5_日志应用" class="discrete">5. 日志应用</h4>
-<div class="paragraph">
-<p>在充分考虑日志搜索专业需求的基础上，平台支持搜索栏常用语句保存，选择日志变量自动形成搜索表达式，以及快速按时间排序过滤、查看日志上下文等功能。</p>
-</div>
-<div class="paragraph">
-<p>同时，基于可视化分析和全息场景监控可实时展现各种指标和趋势，并在预警中心查看各类告警的优先级和详细信息，进而结合告警信息关联查询系统日志内容来分析解决问题。</p>
-</div>
-<div class="paragraph">
-<p>此外，开发配置中心还提供了自定义日志解析开发功能，并支持告警规则、告警渠道配置。</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_为什么没有使用_lambda_架构">为什么没有使用 Lambda 架构？</h6>
-<div class="paragraph">
-<p><strong>为什么该平台用 Kappa 而不是 Lambda？</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>有历史数据 ≠ 必须用 Lambda</strong>。历史数据如果主要用于查询，ES/OpenTSDB 就能承担。</p>
-</li>
-<li>
-<p><strong>Kappa 也能处理历史</strong>：Kafka 可重放，Flink 可把历史数据当有界流重新计算。</p>
-</li>
-<li>
-<p>该平台核心是<strong>实时采集、清洗、解析、告警</strong>，统一用 Flink 链路，口径一致、运维简单。</p>
-</li>
-<li>
-<p><strong>Lambda 成本高</strong>：批处理层 + 流处理层两套代码、两套口径、两套运维，容易结果不一致。</p>
-</li>
-<li>
-<p><strong>Flink 批流一体成熟</strong>，很多场景不再需要独立离线批处理层。</p>
-</li>
-<li>
-<p>前提是：Kafka 或原始日志<strong>可长期保留、可重放</strong>，否则历史只能查，难以重算。</p>
-</li>
-<li>
-<p>若未来需要复杂离线全量重算、机器学习训练、长期低成本归档、实时+离线双口径校验，再考虑 Lambda 或湖仓架构。</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>结论：</strong> <br>
-当前架构是“实时处理 + 历史查询”，不是“实时与离线两套计算”，所以 Kappa 更合适。
-历史数据的存在，本身不是使用 Lambda 的充分理由。</p>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_kappa_架构大数据系统电商智能决策_与某证券公司实时日志分析平台基本一样的架构">Kappa 架构大数据系统：电商智能决策 (与某证券公司实时日志分析平台基本一样的架构)</h5>
-<h4 id="_一句话定位" class="discrete">一句话定位</h4>
-<div class="paragraph">
-<p>面向电商业务的<strong>实时智能决策大数据系统</strong>，基于 <strong>Kappa 架构</strong>，以 <strong>Flink</strong> 为统一流处理引擎，结果落地 <strong>Hive（日志库）+ Tair（实时计算数据）</strong> 供在线决策消费。</p>
-</div>
-<h4 id="_三层职责" class="discrete">三层职责</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 34%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">层级</th>
-<th class="tableblock halign-left valign-top">核心内容</th>
-<th class="tableblock halign-left valign-top">关键词</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>应用层</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">结果本地存储、决策结果展示、参数更新、配置分发、模型验证</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">消费结果 + 反哺指令</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>逻辑处理层</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">数据采集（B端实时流 → Kafka）→ 参数过滤（数据获取→脚本解析→作业编译→Flink 任务提交）→ 模型计算（参数获取→数据计算→模型更新→参数存储）</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">流计算主链路</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>存储计算层</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">计算集群 CDH → 日志库 Hive；实时计算数据 Tair</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">离线明细 + 在线缓存</p></td>
-</tr>
-</tbody>
-</table>
-<h4 id="_端到端数据流" class="discrete">端到端数据流</h4>
-<div class="paragraph">
-<p>B端实时流数据 → <strong>Kafka 缓冲削峰</strong> → <strong>Flink 作业</strong>（脚本解析+作业编译，支持策略热更新）→ <strong>模型计算</strong>（参数获取→数据计算→模型更新→参数存储）→ 结果<strong>双写</strong> Hive（离线分析回溯）与 Tair（毫秒级在线查询）→ 应用层展示消费，并通过<strong>参数更新/配置分发/模型验证</strong>向下游迭代，形成<strong>决策闭环</strong>。</p>
-</div>
-<h4 id="_架构特征" class="discrete">架构特征</h4>
-<div class="paragraph">
-<p>Kappa 单一流链路（无 Lambda 批流双代码负担）· Flink 统一引擎 · Kafka 解耦与重放能力 · 脚本化策略热更新 · 存储读写分层 · 决策闭环迭代。</p>
-</div>
-<h4 id="_三点风险提示" class="discrete">三点风险提示</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Kappa 重算依赖 <strong>Kafka 消息留存与重放</strong>，留存策略须前置规划；</p>
-</li>
-<li>
-<p>Hive/Tair <strong>双写</strong>需一致性校验与补偿；</p>
-</li>
-<li>
-<p>动态作业编译提升灵活性，但作业版本管理与排障复杂度上升。</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>适用：实时推荐、风控拦截、动态定价、库存调度等秒级决策场景。</p>
-</div>
-<div class="sect5">
-<h6 id="_电商智能决策架构图">电商智能决策架构图</h6>
-<div class="imageblock">
-<div class="content">
-<img src="img/mermaid-电商智能决策.svg" alt="mermaid 电商智能决策" width="964" height="957">
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_架构安全">架构安全</h3>
+因此第二版只是把瓶颈从写路径转移到 Redis 读路径，读时合并问题并未根治。
 
-</div>
+===== 第三版：统一大宽表 + 写时合并（服务层查询极简，写入端成为新关注点）
+*核心逻辑*：在线服务层取消 Redis，只保留一张 MySQL 广告大宽表。
+
+TIP: 对于 MySQL 数据库，大宽表的字段数需评估，若超过 50 列需考虑拆列、分区或改用列式存储引擎。
+
+- 大宽表以 `(stday, 广告ID)` 或 `(stday, 广告ID, 追踪链接)` 为唯一键，包含曝光、点击、转化等指标。
+- 把“广告与追踪链接”的关联和指标合并，从查询时提前到写入时，实现写时合并（Write-time Join）。
+
+[mermaid, target=img/mermaid-广告003, format=svg]
+....
+graph TD
+    subgraph 批处理层 [Batch Layer]
+        Hive[Hive表: 转化/曝光数据] -.-&gt;|每天离线任务| MySQL_Big[(MySQL 统一大宽表)]
+        API[第三方API] -.-&gt;|定时任务| MySQL_Big
+    end
+
+    subgraph 实时层 [Speed Layer]
+        Python[Python脚本] --&gt;|更新 stday=当天&lt;br/&gt;的曝光字段| MySQL_Big
+        Kafka[实时下单消息] --&gt; Spark[Spark Streaming]
+        Spark --&gt;|调用更新接口| JavaUpdate[Java 更新接口]
+        JavaUpdate --&gt;|找到追踪链接所属广告&lt;br/&gt;直接 Update stday=当天 的转化字段| MySQL_Big
+    end
+
+    subgraph 服务层 [Serving Layer: 极其丝滑]
+        JavaQuery[Java 查询服务] --&gt;|只读一张表, 无复杂计算| MySQL_Big
+        JavaQuery --&gt; Result[最终报表]
+    end
+
+    style MySQL_Big fill:#bbf,stroke:#333,stroke-width:4px
+    style JavaQuery fill:#9f9,stroke:#333
+    style JavaUpdate fill:#ff9,stroke:#333
+....
+
+*写入方式*：
+
+* 离线层：Hive/Spark 离线任务每天重算 T+1 及历史数据，按业务日期 `stday` 写入或覆盖大宽表。
+* 实时层：Python 脚本小时级拉取第三方当天曝光，对 `stday = 当天` 的行做 upsert，更新曝光字段；内部实时下单/付款消息经 Spark Streaming 后调用 Java 更新接口，先将追踪链接映射为广告 ID，再对 `stday = 当天、广告ID` 的行做 upsert 或增量更新转化字段。
+** 一致性：通过订单 ID/消息 ID 去重、幂等更新、批量合并、缓冲、分片和监控，避免重复计数与 MySQL 热点行锁。次日由离线任务重算并覆盖当天数据，保证最终一致。
+
+* 服务层*：Java 查询服务只读这张大宽表，不再跨 MySQL 和 Redis 做 Join，也不在查询时做二次聚合，因此查询路径极简；但仍可能有过滤、排序、分页或轻量汇总。
+
+**关键澄清**：`stday` 是业务日期，不是“离线/实时”的来源标记。实时链路只写 `stday = 当天`，离线链路负责 `stday ++&lt;++= 昨天` 及历史修正。第三版解决的是服务层读时合并瓶颈，不是彻底消除所有瓶颈；写入端 MySQL 的并发、幂等、热点和吞吐成为新的关注点。
+
+IMPORTANT: *软考考点*：写时合并（Write-time Join）、计算左移、大宽表设计、读写路径分离、查询极简，同时要说明写放大和写入端治理。
+
+*第三版的核心魔法：写时合并（Write-time Join）*
+
+* *统一存储*：在线服务层利用 MySQL 的 `stday` 字段区分业务日期。
+    ** `stday = 当天日期`：实时链路写入当天曝光和转化，并做 upsert/增量更新。
+    ** `stday ++&lt;++= 昨天`：离线链路写入、重算或覆盖历史曝光和转化数据。
+    ** 次日离线任务重算并覆盖当天数据，保证最终一致。
+
+* *写时关联*：Spark Streaming 不再往 Redis 写，而是调用 Java 更新接口。接口内先把当前下单的追踪链接映射为广告 ID，再对 `stday = 当天` 的大宽表行做 upsert 或增量更新转化字段。
+
+* *服务极简*：复杂的关联操作（广告与追踪链接）被分散到每条订单下单的处理过程中。
+    ** 最终 Java 服务层只需要读取一张 MySQL 大宽表，不再做跨 MySQL/Redis 的 Join 和查询时二次聚合，查询路径极简；
+    ** ##但写入端成为新的关注点，需要处理幂等、批量合并、分片、缓冲和监控##。
+
+===== 软考“一看就懂”对比总结表
+[width="100%",cols="&lt;25%,&lt;25%,&lt;25%,&lt;25%",options="header",]
+|===
+|对比维度 |第一版（典型Lambda） |第二版（缓解查询压力） |第三版（终极优化）
+
+|*数据存储* |MySQL (离线) + Redis (实时) |MySQL + Redis (增加曝光写入) |*在线服务层唯一查询表：MySQL 大宽表；Redis 退出在线查询链路*
+
+|*合并（Merge）位置* |Java 服务层内存（读时合并） |Java 服务层内存（读时合并，略微减轻） |*写入时合并（Write-time Join）*
+
+|*Java 服务端操作* |查MySQL + 查Redis + 内存计算 |查MySQL + 查Redis + 二次聚合 |*只查一张大宽表，无跨源Join和查询时二次聚合*
+
+|*第三方准实时曝光* |❌ 不支持实时（T+1） |✅ Python脚本小时级拉取 |✅ Python脚本小时级拉取
+
+|*核心瓶颈* |Java 计算压力极大 |Redis 查询瓶颈、离线依赖链长 |*服务层查询路径极简；写入端成为新关注点，需要幂等、批量合并、分片、缓冲和监控*
+
+|*软考考点* |Lambda架构基础，读时合并弊端 |计算左移（预处理），缓解读压力 |*写时合并、计算左移、大宽表设计、读写路径分离、写放大治理*
+|===
+
+===== 给你的复习建议
+在软考论文或案例分析中，如果遇到大数据架构题，**“写时合并（Write-time Join）”和“计算左移”**是绝对的高分词汇。
+
+第三版通过“大宽表”把复杂的关联逻辑从“查询阶段”转移到了“数据写入阶段”，这正是架构设计中最经典的优化思想！
+
+==== Lambda 架构大数据系统：某网奥运观看数据分析
+架构分层：实际设计中扩展为五层（数据采集层、数据集成层、数据存储层、数据计算层、数据展现层）。
+
+===== Lambda 架构图
+[mermaid, target=img/mermaid-某网奥运, format=svg]
+....
+flowchart LR
+    subgraph L1["数据采集层"]
+        S["PC / App / TV"]
+    end
+
+    subgraph L2["数据集成层"]
+        RT["实时接入&lt;br/&gt;Nginx / Flume / Kafka"]
+        OF["离线抽取&lt;br/&gt;Sqoop / ETL"]
+    end
+
+    subgraph L3["数据存储层"]
+        RTS["实时/在线存储&lt;br/&gt;MemSQL / HBase"]
+        OFS["离线存储&lt;br/&gt;HDFS"]
+    end
+
+    subgraph L4["数据计算层"]
+        SS["实时计算&lt;br/&gt;Spark Streaming"]
+        OC["离线计算&lt;br/&gt;Hive / Spark / Impala / MR"]
+        SM["合并计算&lt;br/&gt;Spark"]
+    end
+
+    subgraph L5["数据展现层"]
+        OV["当日概览"]
+        RV["赛事回顾"]
+    end
+
+    S --&gt; RT --&gt; SS
+    S --&gt; OF --&gt; OFS --&gt; OC
+
+    SS --&gt; RTS
+    RTS --&gt; SM
+    OFS --&gt; SM
+
+    SS --&gt; OV
+    SM --&gt; OV
+    OC --&gt; RV
+....
+
+===== 架构特点分析
+[upperalpha]
+. *实时处理特点*：
+    * 采用增量计算实时数据
+    * 集群规模不变情况下实现秒级分析
+    * 秒级分析出当日概览所需要的信息
+
+. *批处理层特点*：
+    * 采用不可变存储模型
+    * 通过追加方式维护历史数据
+    * 满足大规模统计分析需求
+
+. *数据流向*：
+    * PC/APP/TV端 → Nginx → Flume → Kafka → 实时计算(Spark Streaming)
+    * 离线数据 → Sqoop/ETL → HDFS → 离线计算(Hive/Spark/Impala/M-R)
+    * （注：Flume也指向HBase用于实时存储）
+
+. *存储设计*：
+    * 实时数据：MemSQL/HBase
+    * 离线数据：HDFS
+
+. *应用场景*：
+    * 赛事回顾模块需要展现自定义时间段内的历史最高在线人数、逐日播放走势、直播最高在线人数和点播视频排行等
+    * 奥运数据不需要被经常索引、更新，采用不可变方式存储所有的历史数据，以保证准确性
+
+===== 架构选型分析
+在这个奥运观看数据分析系统里，用 Lambda 架构更合适。原因可以总结为以下几点：
+
+[arabic]
+. *业务需求天然分成两类*
+    * “当日概览”要求秒级实时分析，适合流处理。
+    * “赛事回顾”要求自定义时间段、历史最高在线、逐日播放走势、直播最高在线、点播排行等复杂历史统计，更适合批处理。Lambda 的双链路正好覆盖这两类需求。
+
+. *实时链路和离线链路分工清晰*
+    * 实时链路：`PC/App/TV → Nginx → Flume → Kafka → Spark Streaming → MemSQL/HBase` +
+    * 离线链路：`Sqoop/ETL → HDFS → Hive/Spark/Impala/MR` +
+    * 最后通过 `合并计算 Spark` 统一服务“当日概览”和“赛事回顾”。 这种结构比单纯 Kappa 更容易保证实时性和历史准确性。
+
+. *历史数据适合不可变存储* +
+    * 文档明确说：奥运数据不需要被经常索引、更新，适合采用不可变方式存储全部历史数据，以保证准确性。
+    * 这正是 HDFS + 批处理层的强项，也符合 Lambda 的批处理层设计。
+
+. *批处理层能修正实时层问题*
+    * 实时流处理可能遇到乱序、迟到、重复、近似计算等问题。
+    * Lambda 的批处理层可以全量重算，用离线结果修正实时结果，保证最终准确性。
+    * 这对“赛事回顾”这类历史统计尤其重要。
+
+. *与现有技术栈匹配，落地更稳*
+    * 系统已经使用 Hadoop、HDFS、Hive、Spark、Impala、Spark Streaming 等。
+    * Lambda 能直接利用这些成熟组件，开发和运维成本更低。
+    * 如果改成 Kappa，则要求 Kafka 长期保存全量数据、支持大规模重放、流处理具备强 Exactly-once 和复杂状态管理能力，工程风险和成本更高。
+
+. *Kappa 可行，但不如 Lambda 稳妥*
+    * Kappa 理论上也能实现同样业务，但它更适合流处理能力很强、数据可长期日志化、愿意统一流批链路的团队。
+    * 在这个系统中，历史数据量大、查询复杂、准确性要求高，而且已有 Hadoop 生态，因此 Lambda 更自然、更稳妥、更容易落地。
+
+// 隔开前面的缩进
+所以最终判断是::
+*Kappa 不是做不到，但在这个“秒级实时 + 大规模历史准确分析 + 不可变 HDFS 存储 + 现有 Hadoop/Spark 生态”的场景下，Lambda 架构更合适。*
+
+=== Kappa 架构
+
+
+==== Kappa 架构大数据系统：某证券公司实时日志分析平台
+
+
+===== 系统概述
+实时日志分析平台基于 Kappa 架构，使用统一的数据处理引擎 *Flink* 可实时处理全部数据，并将其存储到 *Elastic-Search* 与 *OpenTSDB* 中。
+
+===== 系统架构图
+以下是基于 Kappa 架构的实时日志分析平台整体架构图：
+
+[mermaid, target=img/mermaid-某证券公司实时日志分析, format=svg]
+....
+flowchart LR
+    subgraph left[ ]
+        direction TB
+        subgraph Presentation[展现层]
+            direction LR
+            LogSearch[日志智能搜索]
+            VisChart[可视化图表]
+            OnlineDev[在线开发]
+            AlertCenter[告警中心]
+            ConfigMgmt[配置管理]
+
+            LogSearch ~~~ VisChart ~~~ OnlineDev ~~~ AlertCenter ~~~ ConfigMgmt
+        end
+        subgraph Logic[逻辑处理层]
+            direction LR
+            subgraph Collection[日志采集]
+                direction LR
+                subgraph Filebeat
+                    direction TB
+                    FB1["Filebeat (源系统1)"]
+                    FB2["Filebeat (源系统2)"]
+                    FB3["Filebeat (源系统3)"]
+                end
+                Kafka[Kafka 缓存]
+            end
+            FB1 --&gt; Kafka
+            FB2 --&gt; Kafka
+            FB3 --&gt; Kafka
+
+            subgraph Analysis[解析分析]
+                direction TB
+                Ctrl[交互控制] --&gt; Script[脚本解析] --&gt; Compile[作业编译] --&gt; FlinkSubmit["任务提交(基于Flink)"]
+            end
+            Collection --&gt; Analysis
+
+            subgraph Alerting[日志告警]
+                direction TB
+                Rule[规则转换] --&gt; AlertCtrl[告警控制] --&gt; AlertQueue[告警队列] --&gt; DataMonitor[数据监控]
+            end
+            Analysis ~~~ Alerting
+        end
+        subgraph Storage[存储计算层]
+            CDH[计算集群 CDH]
+            ES[日志库 ElasticSearch]
+            OpenTSDB[指标库 OpenTSDB]
+
+            %% ~~~ 是不可见链接，目的是为了从上到下排序
+            CDH ~~~ ES ~~~ OpenTSDB
+        end
+        Presentation --&gt; Logic
+        Storage --&gt;|"日志警告层读取数据"| Logic
+        Logic --&gt;|"解析分析层写入数据"| Storage
+        Presentation ~~~ Logic ~~~ Storage
+    end
+    subgraph Support[功能支持]
+        direction TB
+        ConfigCenter[配置中心]
+        ServiceReg[服务注册]
+        DataMgmt[数据管理]
+        TaskMgmt[任务管理]
+        SysMgmt[系统管理]
+
+        %% ~~~ 是不可见链接，目的是为了从上到下排序
+        ConfigCenter ~~~ ServiceReg
+        ServiceReg ~~~ DataMgmt
+        DataMgmt ~~~ TaskMgmt
+        TaskMgmt ~~~ SysMgmt
+    end
+    left ~~~ Support
+....
+
+===== 实时处理过程
+[discrete]
+==== 1. 日志采集
+在各应用系统部署采集组件 *Filebeat*，实时采集日志数据并输出到 *Kafka* 缓存。
+
+[discrete]
+==== 2. 日志清洗与解析
+基于大数据计算集群的 *Flink* 计算框架，实时读取 *Kafka* 中的日志数据进行清洗和解析，提取日志关键内容并转换成指标，以及对指标进行二次加工形成衍生指标。
+
+[discrete]
+==== 3. 日志存储
+将解析后的日志数据分类存储于 *Elastic-Search* 日志库中，各类基于日志的指标存储于 *OpenTSDB* 指标库中，供前端组件搜索与查询。
+
+[discrete]
+==== 4. 日志监控
+通过单独的告警消息队列来保持监控消息的有序管理与实时推送。
+
+[discrete]
+==== 5. 日志应用
+在充分考虑日志搜索专业需求的基础上，平台支持搜索栏常用语句保存，选择日志变量自动形成搜索表达式，以及快速按时间排序过滤、查看日志上下文等功能。
+
+同时，基于可视化分析和全息场景监控可实时展现各种指标和趋势，并在预警中心查看各类告警的优先级和详细信息，进而结合告警信息关联查询系统日志内容来分析解决问题。
+
+此外，开发配置中心还提供了自定义日志解析开发功能，并支持告警规则、告警渠道配置。
+
+===== 为什么没有使用 Lambda 架构？
+**为什么该平台用 Kappa 而不是 Lambda？**
+
+- **有历史数据 ≠ 必须用 Lambda**。历史数据如果主要用于查询，ES/OpenTSDB 就能承担。
+
+- **Kappa 也能处理历史**：Kafka 可重放，Flink 可把历史数据当有界流重新计算。
+
+- 该平台核心是**实时采集、清洗、解析、告警**，统一用 Flink 链路，口径一致、运维简单。
+
+- **Lambda 成本高**：批处理层 + 流处理层两套代码、两套口径、两套运维，容易结果不一致。
+
+- **Flink 批流一体成熟**，很多场景不再需要独立离线批处理层。
+
+- 前提是：Kafka 或原始日志**可长期保留、可重放**，否则历史只能查，难以重算。
+
+- 若未来需要复杂离线全量重算、机器学习训练、长期低成本归档、实时+离线双口径校验，再考虑 Lambda 或湖仓架构。
+
+**结论：**  +
+当前架构是“实时处理 + 历史查询”，不是“实时与离线两套计算”，所以 Kappa 更合适。
+历史数据的存在，本身不是使用 Lambda 的充分理由。
+
+==== Kappa 架构大数据系统：电商智能决策平台 (与某证券公司实时日志分析平台基本一样的架构)
+[discrete]
+==== 一句话定位
+
+面向电商业务的**实时智能决策大数据系统**，基于 *Kappa 架构*，以 *Flink* 为统一流处理引擎，结果落地 *Hive（日志库）+ Tair（实时计算数据）* 供在线决策消费。
+
+[discrete]
+==== 三层职责
+
+[width="100%",cols="34%,33%,33%",options="header",]
+|===
+|层级 |核心内容 |关键词
+|*应用层* |结果本地存储、决策结果展示、参数更新、配置分发、模型验证 |消费结果 + 反哺指令
+|*逻辑处理层* |数据采集（B端实时流 → Kafka）→ 参数过滤（数据获取→脚本解析→作业编译→Flink 任务提交）→ 模型计算（参数获取→数据计算→模型更新→参数存储） |流计算主链路
+|*存储计算层* |计算集群 CDH → 日志库 Hive；实时计算数据 Tair |离线明细 + 在线缓存
+|===
+
+[discrete]
+==== 端到端数据流
+
+B端实时流数据 → *Kafka 缓冲削峰* → *Flink 作业*（脚本解析+作业编译，支持策略热更新）→ *模型计算*（参数获取→数据计算→模型更新→参数存储）→ 结果**双写** Hive（离线分析回溯）与 Tair（毫秒级在线查询）→ 应用层展示消费，并通过**参数更新/配置分发/模型验证**向下游迭代，形成**决策闭环**。
+
+[discrete]
+==== 架构特征
+
+Kappa 单一流链路（无 Lambda 批流双代码负担）· Flink 统一引擎 · Kafka 解耦与重放能力 · 脚本化策略热更新 · 存储读写分层 · 决策闭环迭代。
+
+[discrete]
+==== 三点风险提示
+
+[arabic]
+. Kappa 重算依赖 *Kafka 消息留存与重放*，留存策略须前置规划；
+. Hive/Tair **双写**需一致性校验与补偿；
+. 动态作业编译提升灵活性，但作业版本管理与排障复杂度上升。
+
+适用：实时推荐、风控拦截、动态定价、库存调度等秒级决策场景。
+
+===== 电商智能决策架构图
+[mermaid, target=img/mermaid-电商智能决策, format=svg]
+....
+flowchart LR
+    subgraph left[ ]
+        direction TB
+        subgraph Presentation[应用层]
+            direction LR
+            LocalStore[结果本地存储]
+            ResultView[决策结果展示]
+            ParamUpdate[参数更新]
+            ConfigDist[配置分发]
+            ModelVerify[模型验证]
+            LocalStore ~~~ ResultView ~~~ ParamUpdate ~~~ ConfigDist ~~~ ModelVerify
+        end
+        subgraph Logic[逻辑处理层]
+            direction LR
+            subgraph Collection[数据采集]
+                direction LR
+                StreamSrc["B端实时流数据"]
+                Kafka[Kafka 缓存]
+                StreamSrc --&gt; Kafka
+            end
+            subgraph Filter[参数过滤]
+                direction TB
+                DataFetch[数据获取] --&gt; ScriptParse[脚本解析] --&gt; Compile[作业编译] --&gt; FlinkSubmit["任务提交(基于Flink)"]
+            end
+            Collection --&gt; Filter
+            subgraph Model[模型计算]
+                direction TB
+                ParamFetch[参数获取] --&gt; DataCalc[数据计算] --&gt; ModelUpdate[模型更新] --&gt; ParamStore[参数存储]
+            end
+            Filter --&gt; Model
+        end
+        subgraph Storage[存储计算层]
+            CDH[计算集群 CDH]
+            Hive[日志库 Hive]
+            Tair[实时计算数据 Tair]
+            CDH --&gt; Hive
+            Hive ~~~ Tair
+        end
+        Presentation --&gt;|"参数更新 / 模型验证"| Logic
+        Logic --&gt;|"计算结果写入存储"| Storage
+        Storage --&gt;|"读取日志与实时数据"| Logic
+        Presentation ~~~ Logic ~~~ Storage
+    end
+....
+
+== 架构安全</pre>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-15 11:13:46 +0800
+Last updated 2026-10-18 17:10:10 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
