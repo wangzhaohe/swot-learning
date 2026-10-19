@@ -3070,6 +3070,7 @@ try:
     adoc_content = adoc_content.replace("++*++", "*")    # 兜底替换其他孤立的 *
     adoc_content = adoc_content.replace("++&lt;++", "&lt;")    # 兜底替换其他孤立的 &lt;
     adoc_content = adoc_content.replace("++&gt;++", "&gt;")    # 兜底替换其他孤立的 &gt;
+    adoc_content = adoc_content.replace("++##++", "##")  # 兜底替换其他孤立的 &gt;
 
     # 创建一个子节点存放结果
     new_p = p.insertAfter()
