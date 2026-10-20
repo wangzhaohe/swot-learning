@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
+<meta name="author" content="https://github.com/wangzhaohe/swot-learning">
 <title>Asciidoctor</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -538,15 +539,30 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <body class="article toc2 toc-right">
 <div id="header">
 <h1>Asciidoctor</h1>
+<div class="details">
+<span id="author" class="author">https://github.com/wangzhaohe/swot-learning</span><br>
+</div>
 <div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
+<div id="toctitle">目录</div>
 <ul class="sectlevel1">
 <li><a href="#_asciidoctor_default_css_custom_your_export_html">asciidoctor-default.css &#8594; custom your export html</a></li>
 <li><a href="#_options_rb_asciidoctor_config_file">options.rb &#8594; asciidoctor config file</a>
 <ul class="sectlevel2">
-<li><a href="#_data_uri">data-uri</a></li>
+<li><a href="#_edit_options_rb">@edit options.rb</a></li>
 </ul>
 </li>
+<li><a href="#_官方属性模板读走_default_attributes_即可">官方属性，模板读，走 DEFAULT_ATTRIBUTES 即可</a></li>
+<li><a href="#_下面的_postprocessor_可以解决公式渲染错位问题">下面的 postprocessor 可以解决公式渲染错位问题</a></li>
+<li><a href="#_非官方属性_mathjax_url_无效改用_postprocessor_替换字符串">非官方属性 mathjax-url 无效，改用 postprocessor 替换字符串</a>
+<ul class="sectlevel1">
+<li><a href="#_检查_asciidoctor_diagram_是否已安装">检查 asciidoctor-diagram 是否已安装</a></li>
+<li><a href="#_检查_asciidoctor_kroki_是否已安装">检查 asciidoctor-kroki 是否已安装</a></li>
+</ul>
+</li>
+<li><a href="#_启用_data_uri等同于_a_data_uri图片作为_base64_嵌入网页中">启用 data-uri（等同于 -a data-uri），图片作为 base64 嵌入网页中</a></li>
+<li><a href="#_asciidoctordefault_attributesdata_uri">Asciidoctor::DEFAULT_ATTRIBUTES['data-uri'] = ''</a>
+<ul class="sectlevel2">
+<li><a href="#_data_uri">data-uri</a></li>
 <li><a href="#_asciidoctor_diagram_local_drawing">asciidoctor-diagram local drawing</a>
 <ul class="sectlevel2">
 <li><a href="#_plantuml">plantuml</a>
@@ -583,8 +599,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_生成_pdf_文件">生成 pdf 文件</a>
 <ul class="sectlevel2">
 <li><a href="#_安装字体_font_noto_serif_sc">安装字体 font-noto-serif-sc</a></li>
-<li><a href="#_vim_my_theme_yml">vim my-theme.yml</a></li>
-<li><a href="#_run_asciidoctor_pdf">run asciidoctor-pdf</a></li>
+<li><a href="#_编辑配置文件">编辑配置文件</a></li>
+<li><a href="#_生成_pdf_文件_2">生成 pdf 文件</a></li>
+</ul>
+</li>
+<li><a href="#_公式书写_latex_asciimath_对比后选择_latex">公式书写 LaTeX &amp; AsciiMath 对比后选择 LaTex</a></li>
 </ul>
 </li>
 </ul>
@@ -632,6 +651,11 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="content">
 <pre>ln ~/.rvm/gems/ruby-2.7.2/gems/asciidoctor-2.0.23/data/stylesheets/asciidoctor-default.css asciidoctor/
 Now I can edit asciidoctor-default.css in directory asciidoctor.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>/System/Volumes/Data/Users/swot/swot-learning/asciidoctor/asciidoctor-default.css</pre>
 </div>
 </div>
 </div>
@@ -698,7 +722,7 @@ Now I can edit asciidoctor-default.css in directory asciidoctor.</pre>
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-note" title="❕"></i>
 </td>
 <td class="content">
 <div class="paragraph">
@@ -709,6 +733,57 @@ unl://LeoPyRef.leo#Code-&#8594;Core classes-&#8594;@file leoMarkup.py-&#8594;cla
 </tr>
 </table>
 </div>
+<div class="sect2">
+<h3 id="_edit_options_rb">@edit options.rb</h3>
+<div class="paragraph">
+<p>require 'asciidoctor'</p>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_官方属性模板读走_default_attributes_即可" class="sect0">官方属性，模板读，走 DEFAULT_ATTRIBUTES 即可</h1>
+<div class="paragraph">
+<p>Asciidoctor::DEFAULT_ATTRIBUTES['stem'] = 'latexmath'</p>
+</div>
+<h1 id="_下面的_postprocessor_可以解决公式渲染错位问题" class="sect0">下面的 postprocessor 可以解决公式渲染错位问题</h1>
+
+<h1 id="_非官方属性_mathjax_url_无效改用_postprocessor_替换字符串" class="sect0">非官方属性 mathjax-url 无效，改用 postprocessor 替换字符串</h1>
+<div class="paragraph">
+<p>Asciidoctor::Extensions.register do
+  postprocessor do
+    process do |doc, output|
+      output.gsub('config=TeX-MML-AM_CHTML', 'config=TeX-MML-AM_CHTML')
+    end
+  end
+end</p>
+</div>
+<div class="sect1">
+<h2 id="_检查_asciidoctor_diagram_是否已安装">检查 asciidoctor-diagram 是否已安装</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>begin
+  require 'asciidoctor-diagram'
+rescue LoadError
+  warn 'asciidoctor-diagram is not installed'
+end</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_检查_asciidoctor_kroki_是否已安装">检查 asciidoctor-kroki 是否已安装</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>#begin
+#  require 'asciidoctor-kroki'
+#rescue LoadError
+#  warn 'asciidoctor-kroki is not installed'
+#end</p>
+</div>
+</div>
+</div>
+<h1 id="_启用_data_uri等同于_a_data_uri图片作为_base64_嵌入网页中" class="sect0">启用 data-uri（等同于 -a data-uri），图片作为 base64 嵌入网页中</h1>
+
+<h1 id="_asciidoctordefault_attributesdata_uri" class="sect0">Asciidoctor::DEFAULT_ATTRIBUTES['data-uri'] = ''</h1>
 <div class="sect2">
 <h3 id="_data_uri">data-uri</h3>
 <div class="paragraph">
@@ -818,8 +893,6 @@ unl://LeoPyRef.leo#Code-&#8594;Core classes-&#8594;@file leoMarkup.py-&#8594;cla
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="ruby"><span></span><span class="tok-no">Asciidoctor</span><span class="tok-o">::</span><span class="tok-no">DEFAULT_ATTRIBUTES</span><span class="tok-o">.</span><span class="tok-n">delete</span><span class="tok-p">(</span><span class="tok-s1">&#39;data-uri&#39;</span><span class="tok-p">)</span></code></pre>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -1697,7 +1770,7 @@ $ asciidoctor -r asciidoctor-kroki doc.adoc</pre>
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
+<i class="fa icon-warning" title="‼️"></i>
 </td>
 <td class="content">
 <div class="olist arabic">
@@ -1784,7 +1857,7 @@ nginx/1.18.0 (Ubuntu) -&gt; 应该是 nginx 的限制，所以可以尝试将数
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-important" title="Important"></i>
+<i class="fa icon-important" title="❗"></i>
 </td>
 <td class="content">
 实际写的时候没有 source，也没有转义的 <code>\</code>，这里有只是为了能以代码的形式显示出来。
@@ -1799,76 +1872,181 @@ nginx/1.18.0 (Ubuntu) -&gt; 应该是 nginx 的限制，所以可以尝试将数
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_安装字体_font_noto_serif_sc">安装字体 font-noto-serif-sc</h3>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>brew install --cask font-noto-serif-sc
-=&#8658; Fetching downloads for: font-noto-serif-sc
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">brew install --cask font-noto-serif-sc</span></code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">操作结果</div>
+<div class="content">
+<pre>==&gt; Fetching downloads for: font-noto-serif-sc
 ✔︎ Cask font-noto-serif-sc (latest)                                                                                                        Verifying    25.1MB/ 25.1MB
-=&#8658; Installing Cask font-noto-serif-sc
-=&#8658; Moving Font 'NotoSerifSC[wght].ttf' to '/Users/swot/Library/Fonts/NotoSerifSC[wght].ttf'
-font-noto-serif-sc was successfully installed!</p>
+==&gt; Installing Cask font-noto-serif-sc
+==&gt; Moving Font 'NotoSerifSC[wght].ttf' to '/Users/swot/Library/Fonts/NotoSerifSC[wght].ttf'
+font-noto-serif-sc was successfully installed!</pre>
 </div>
-</blockquote>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_vim_my_theme_yml">vim my-theme.yml</h3>
-<div class="paragraph">
-<p>extends: default
-font:
-  catalog:
-    # 注册你刚刚安装的这个可变字体
-    Noto Serif SC:
-      normal: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
-      bold: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
-      italic: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
-      bold_italic: /Users/swot/Library/Fonts/NotoSerifSC[wght].ttf
-    # 解决 M+ 1mn 报错
-    M+ 1mn:
-      normal: /System/Library/Fonts/Monaco.ttf
-  fallbacks:
-    - Noto Serif SC
-base:
-  font_family: Noto Serif SC
-  # 1. 稍微调大正文，11pt 在打印件上很清楚
-  font_size: 11
-  line_height: 1.6
-  font_color: #333333</p>
-</div>
-<div class="paragraph">
-<p>heading:
-  font_family: Noto Serif SC
-  font_color: #222222
-  # 2. 核心：大幅调低一、二级标题的字号
-  # h1 是文档大标题
-  h1_font_size: 22
-  # h2 是章节标题 (==)
-  h2_font_size: 16
-  # h3 是小节标题 (===)
-  h3_font_size: 13
-  # 3. 降低标题的厚重感
-  font_style: bold</p>
-</div>
-<div class="paragraph">
-<p>code:
-  font_family: M+ 1mn
-  font_size: 9</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_run_asciidoctor_pdf">run asciidoctor-pdf</h3>
-<div class="paragraph">
-<p>asciidoctor-pdf -a pdf-theme=my-theme.yml -a scripts=cjk "数据库开发技术大作业要求-学生版本.adoc"</p>
+<h3 id="_编辑配置文件">编辑配置文件</h3>
+<div class="listingblock">
+<div class="title">vim my-theme.yml</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nt">extends</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">default</span>
+<span class="tok-nt">font</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">catalog</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-c1"># 注册你刚刚安装的这个可变字体</span>
+<span class="tok-w">    </span><span class="tok-nt">Noto Serif SC</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">normal</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/Users/swot/Library/Fonts/NotoSerifSC[wght].ttf</span>
+<span class="tok-w">      </span><span class="tok-nt">bold</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/Users/swot/Library/Fonts/NotoSerifSC[wght].ttf</span>
+<span class="tok-w">      </span><span class="tok-nt">italic</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/Users/swot/Library/Fonts/NotoSerifSC[wght].ttf</span>
+<span class="tok-w">      </span><span class="tok-nt">bold_italic</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/Users/swot/Library/Fonts/NotoSerifSC[wght].ttf</span>
+<span class="tok-w">    </span><span class="tok-c1"># 解决 M+ 1mn 报错</span>
+<span class="tok-w">    </span><span class="tok-nt">M+ 1mn</span><span class="tok-p">:</span>
+<span class="tok-w">      </span><span class="tok-nt">normal</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">/System/Library/Fonts/Monaco.ttf</span>
+<span class="tok-w">  </span><span class="tok-nt">fallbacks</span><span class="tok-p">:</span>
+<span class="tok-w">    </span><span class="tok-p tok-p-Indicator">-</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Noto Serif SC</span>
+<span class="tok-nt">base</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">font_family</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Noto Serif SC</span>
+<span class="tok-w">  </span><span class="tok-c1"># 1. 稍微调大正文，11pt 在打印件上很清楚</span>
+<span class="tok-w">  </span><span class="tok-nt">font_size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">11</span>
+<span class="tok-w">  </span><span class="tok-nt">line_height</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">1.6</span>
+<span class="tok-w">  </span><span class="tok-nt">font_color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-c1">#333333</span>
+
+<span class="tok-nt">heading</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">font_family</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">Noto Serif SC</span>
+<span class="tok-w">  </span><span class="tok-nt">font_color</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-c1">#222222</span>
+<span class="tok-w">  </span><span class="tok-c1"># 2. 核心：大幅调低一、二级标题的字号</span>
+<span class="tok-w">  </span><span class="tok-c1"># h1 是文档大标题</span>
+<span class="tok-w">  </span><span class="tok-nt">h1_font_size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">22</span>
+<span class="tok-w">  </span><span class="tok-c1"># h2 是章节标题 (==)</span>
+<span class="tok-w">  </span><span class="tok-nt">h2_font_size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">16</span>
+<span class="tok-w">  </span><span class="tok-c1"># h3 是小节标题 (===)</span>
+<span class="tok-w">  </span><span class="tok-nt">h3_font_size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">13</span>
+<span class="tok-w">  </span><span class="tok-c1"># 3. 降低标题的厚重感</span>
+<span class="tok-w">  </span><span class="tok-nt">font_style</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">bold</span>
+
+<span class="tok-nt">code</span><span class="tok-p">:</span>
+<span class="tok-w">  </span><span class="tok-nt">font_family</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">M+ 1mn</span>
+<span class="tok-w">  </span><span class="tok-nt">font_size</span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">9</span></code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_生成_pdf_文件_2">生成 pdf 文件</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="console"><span></span><span class="tok-go">asciidoctor-pdf -a pdf-theme=my-theme.yml -a scripts=cjk &quot;数据库开发技术大作业要求-学生版本.adoc&quot;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_公式书写_latex_asciimath_对比后选择_latex">公式书写 LaTeX &amp; AsciiMath 对比后选择 LaTex</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>我比较纠结，这次对比让我决定使用 LaTex。</p>
+</div>
+<h3 id="_网络写作用哪个结论先行" class="discrete">网络写作用哪个？结论先行</h3>
+<div class="paragraph">
+<p><strong>主用 LaTeX（MathJax 解析），必要时用 AsciiMath 做速记。</strong> 但如果你的平台/工具链支持，实际最优解往往是 <strong>两者混合</strong>：日常快速敲用 AsciiMath，正式发布前转成 LaTeX。</p>
+</div>
+<h3 id="_为什么网络写作更推荐_latex" class="discrete">为什么网络写作更推荐 LaTeX</h3>
+<div class="paragraph">
+<p><strong>1. 平台兼容性最好</strong> 几乎所有支持数学的写作平台都以 LaTeX 为”一等公民”：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>知乎、微信公众号（部分插件）、CSDN、掘金、Notion、Obsidian、Typora、Hugo/Jekyll、GitHub README</p>
+</li>
+<li>
+<p>MathJax / KaTeX 默认解析 LaTeX</p>
+</li>
+<li>
+<p>AsciiMath 通常需要额外配置或插件，很多平台根本不支持</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>2. 复制粘贴生态成熟</strong> 网上搜到的公式、论文里的公式、AI 生成的公式，绝大多数是 LaTeX。用 LaTeX 可以无缝复用；用 AsciiMath 则经常要转换。</p>
+</div>
+<div class="paragraph">
+<p><strong>3. 复杂公式不会卡壳</strong> 网络文章一旦涉及矩阵、多行推导、分段函数、对齐，AsciiMath 表达力就吃紧，而 LaTeX 从容应对。</p>
+</div>
+<div class="paragraph">
+<p><strong>4. 长期可维护</strong> LaTeX 语义明确、工具链成熟（格式化、校验、转换），文章多年后仍能正常渲染。</p>
+</div>
+<h3 id="_什么情况下_asciimath_更合适" class="discrete">什么情况下 AsciiMath 更合适</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>纯速记/草稿</strong>：在支持 AsciiMath 的编辑器（如某些 MathJax 配置、部分笔记软件）里，<code>a/b</code>、<code>sqrt x</code> 敲起来确实快。</p>
+</li>
+<li>
+<p><strong>教学/科普场景</strong>：读者可能想”看懂源码”，AsciiMath 源码更接近自然书写。</p>
+</li>
+<li>
+<p><strong>平台明确只支持 AsciiMath</strong>：少数轻量工具链如此，那就入乡随俗。</p>
+</li>
+</ul>
+</div>
+<h3 id="_实操建议" class="discrete">实操建议</h3>
+<div class="paragraph">
+<p><strong>推荐工作流：</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>写作时</strong>：在 Obsidian/Typora 等支持 LaTeX 的编辑器里直接写 LaTeX（它们有实时预览，<code>\frac{}{}</code> 也不算慢）。</p>
+</li>
+<li>
+<p><strong>追求输入速度</strong>：用编辑器 snippet/宏（如 VS Code 的 LaTeX snippet、Typora 的快捷输入），把 <code>\frac</code> 映射成几个键，比切到 AsciiMath 更省心。</p>
+</li>
+<li>
+<p><strong>平台不支持 LaTeX 时</strong>：优先换平台或装 MathJax/KaTeX 插件，而不是退回 AsciiMath。</p>
+</li>
+<li>
+<p><strong>需要 AsciiMath 时</strong>：只用于临时草稿，发布前转 LaTeX（MathJax 和在线转换器都能做）。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>一句话：</strong> 网络写作的”通用货币”是 LaTeX，选它就对了；AsciiMath 当草稿纸用，别当发布格式。</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-13 16:31:09 +0800
+Last updated 2026-10-20 14:17:11 +0800
 </div>
 </div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

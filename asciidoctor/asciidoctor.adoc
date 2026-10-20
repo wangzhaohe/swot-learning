@@ -1,10 +1,19 @@
+:author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
 :icons: font
+:font-size: 16px
 :scripts: cjk
+:stem: latexmath
+:experimental:
 :toc:
 :toc: right
-:toc-title: Table of Contents
+:toc-title: 目录
 :toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️
 
 = Asciidoctor
 
@@ -39,6 +48,8 @@ Create a hard link:
 
     ln ~/.rvm/gems/ruby-2.7.2/gems/asciidoctor-2.0.23/data/stylesheets/asciidoctor-default.css asciidoctor/
     Now I can edit asciidoctor-default.css in directory asciidoctor.
+
+    /System/Volumes/Data/Users/swot/swot-learning/asciidoctor/asciidoctor-default.css
 
 == options.rb -> asciidoctor config file
 Purpose: It is unnecessary to change the Leo Editor source code to customize the Asciidoctor command used for generating HTML.
@@ -99,6 +110,39 @@ command = f"{prog} {i_path} -o {o_path} -b html5 -r options"
 leo-editor source code `-r options` position: +
 unl://LeoPyRef.leo#Code-->Core classes-->@file leoMarkup.py-->class MarkupCommands-->markup.command_helper & helpers-->markup.run_asciidoctor
 ====
+
+=== @edit options.rb
+require 'asciidoctor'
+
+# 官方属性，模板读，走 DEFAULT_ATTRIBUTES 即可
+Asciidoctor::DEFAULT_ATTRIBUTES['stem'] = 'latexmath'
+
+# 下面的 postprocessor 可以解决公式渲染错位问题
+# 非官方属性 mathjax-url 无效，改用 postprocessor 替换字符串
+Asciidoctor::Extensions.register do
+  postprocessor do
+    process do |doc, output|
+      output.gsub('config=TeX-MML-AM_HTMLorMML', 'config=TeX-MML-AM_CHTML')
+    end
+  end
+end
+
+## 检查 asciidoctor-diagram 是否已安装
+begin
+  require 'asciidoctor-diagram'
+rescue LoadError
+  warn 'asciidoctor-diagram is not installed'
+end
+
+## 检查 asciidoctor-kroki 是否已安装
+#begin
+#  require 'asciidoctor-kroki'
+#rescue LoadError
+#  warn 'asciidoctor-kroki is not installed'
+#end
+
+# 启用 data-uri（等同于 -a data-uri），图片作为 base64 嵌入网页中
+# Asciidoctor::DEFAULT_ATTRIBUTES['data-uri'] = ''
 
 === data-uri
 This line of code:
@@ -1297,14 +1341,24 @@ IMPORTANT: 实际写的时候没有 source，也没有转义的 `\`，这里有�
 
 
 === 安装字体 font-noto-serif-sc
-> brew install --cask font-noto-serif-sc
+[source,console]
+----
+brew install --cask font-noto-serif-sc
+----
+
+.操作结果
+....
 ==> Fetching downloads for: font-noto-serif-sc
 ✔︎ Cask font-noto-serif-sc (latest)                                                                                                        Verifying    25.1MB/ 25.1MB
 ==> Installing Cask font-noto-serif-sc
 ==> Moving Font 'NotoSerifSC[wght].ttf' to '/Users/swot/Library/Fonts/NotoSerifSC[wght].ttf'
 font-noto-serif-sc was successfully installed!
+....
 
-=== vim my-theme.yml
+=== 编辑配置文件
+.vim my-theme.yml
+[source,yaml]
+----
 extends: default
 font:
   catalog:
@@ -1342,7 +1396,54 @@ heading:
 code:
   font_family: M+ 1mn
   font_size: 9
+----
 
-=== run asciidoctor-pdf
+=== 生成 pdf 文件
+[source,console]
+----
 asciidoctor-pdf -a pdf-theme=my-theme.yml -a scripts=cjk "数据库开发技术大作业要求-学生版本.adoc"
+----
+
+== 公式书写 LaTeX & AsciiMath 对比后选择 LaTex 
+我比较纠结，这次对比让我决定使用 LaTex。
+
+[discrete]
+=== 网络写作用哪个？结论先行
+
+*主用 LaTeX（MathJax 解析），必要时用 AsciiMath 做速记。* 但如果你的平台/工具链支持，实际最优解往往是 *两者混合*：日常快速敲用 AsciiMath，正式发布前转成 LaTeX。
+
+[discrete]
+=== 为什么网络写作更推荐 LaTeX
+
+*1. 平台兼容性最好* 几乎所有支持数学的写作平台都以 LaTeX 为”一等公民”：
+
+* 知乎、微信公众号（部分插件）、CSDN、掘金、Notion、Obsidian、Typora、Hugo/Jekyll、GitHub README
+* MathJax / KaTeX 默认解析 LaTeX
+* AsciiMath 通常需要额外配置或插件，很多平台根本不支持
+
+*2. 复制粘贴生态成熟* 网上搜到的公式、论文里的公式、AI 生成的公式，绝大多数是 LaTeX。用 LaTeX 可以无缝复用；用 AsciiMath 则经常要转换。
+
+*3. 复杂公式不会卡壳* 网络文章一旦涉及矩阵、多行推导、分段函数、对齐，AsciiMath 表达力就吃紧，而 LaTeX 从容应对。
+
+*4. 长期可维护* LaTeX 语义明确、工具链成熟（格式化、校验、转换），文章多年后仍能正常渲染。
+
+[discrete]
+=== 什么情况下 AsciiMath 更合适
+
+* *纯速记/草稿*：在支持 AsciiMath 的编辑器（如某些 MathJax 配置、部分笔记软件）里，`a/b`、`sqrt x` 敲起来确实快。
+* *教学/科普场景*：读者可能想”看懂源码”，AsciiMath 源码更接近自然书写。
+* *平台明确只支持 AsciiMath*：少数轻量工具链如此，那就入乡随俗。
+
+[discrete]
+=== 实操建议
+
+*推荐工作流：*
+
+[arabic]
+. *写作时*：在 Obsidian/Typora 等支持 LaTeX 的编辑器里直接写 LaTeX（它们有实时预览，`++\++frac++{++}++{++}` 也不算慢）。
+. *追求输入速度*：用编辑器 snippet/宏（如 VS Code 的 LaTeX snippet、Typora 的快捷输入），把 `++\++frac` 映射成几个键，比切到 AsciiMath 更省心。
+. *平台不支持 LaTeX 时*：优先换平台或装 MathJax/KaTeX 插件，而不是退回 AsciiMath。
+. *需要 AsciiMath 时*：只用于临时草稿，发布前转 LaTeX（MathJax 和在线转换器都能做）。
+
+*一句话：* 网络写作的”通用货币”是 LaTeX，选它就对了；AsciiMath 当草稿纸用，别当发布格式。
 
