@@ -114,7 +114,11 @@
 <v t="swot.20260313220645.1"><vh>@button kLive</vh></v>
 <v t="swot.20260314203832.1"><vh>@button sumSub</vh></v>
 <v t="swot.20260504093708.1"><vh>@button format</vh></v>
-<v t="swot.20261014102803.1"><vh>@button md2ascii</vh></v>
+<v t="swot.20261014102803.1"><vh>@button md2ascii</vh>
+<v t="swot.20261020081044.1"><vh>md2ascii</vh></v>
+</v>
+<v t="swot.20261019163257.1"><vh>@@button md2ascii</vh></v>
+<v t="swot.20261019161421.1"><vh>Converted: @button md2ascii</vh></v>
 </v>
 <v t="swot.20181207204040.1"><vh>@commands</vh>
 <v t="swot.20260313164643.1"><vh>@@command open-with-nodejs @key=Alt+Shift+J</vh></v>
@@ -3040,6 +3044,84 @@ else:
 </t>
 <t tx="swot.20261014102803.1">@language python
 import subprocess
+import re
+
+# 获取当前节点的内容
+p = c.p
+markdown_text = p.b
+
+try:
+    math_blocks = []
+    math_inlines = []
+
+    @others
+
+    # 创建子节点存放结果
+    new_p = p.insertAfter()
+    new_p.h = f"Converted: {p.h}"
+    new_p.b = adoc_content
+
+    c.redraw()
+    g.es("转换成功！已完美解决公式转义与空行过多的问题。")
+
+except subprocess.CalledProcessError as e:
+    g.es(f"Pandoc 转换失败: {e}\n{e.stderr}")
+
+except Exception as e:
+    g.es(f"发生错误: {e}")
+
+@doc
+pandoc 将 markdown 转换为 asciidoctor
+
+- 使用 pandoc 进行转换 https://github.com/jgm/pandoc
+- 安装 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
+- 卸载 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
+</t>
+<t tx="swot.20261019161421.1">@language python import subprocess
+
+== 获取当前节点的内容
+
+p = c.p markdown++_++text = p.b
+
+try: ++#++ 通过 stdin 传入 markdown，通过 stdout 拿到 asciidoc result = subprocess.run( ## "`pandoc`", "`-f`", "`markdown`", "`-t`", "`asciidoc`", "`–wrap=none`", ##, input=markdown++_++text, capture++_++output=True, text=True, encoding="`utf-8`", check=True, )
+
+....
+adoc_content = result.stdout
+
+# 字符串后处理，手动清洗 Pandoc 的过度转义
+adoc_content = adoc_content.replace("+=", "+=")
+adoc_content = adoc_content.replace("+", "+")   # 兜底替换其他孤立的 +
+adoc_content = adoc_content.replace("*=", "*=")
+adoc_content = adoc_content.replace("*", "*")    # 兜底替换其他孤立的 *
+adoc_content = adoc_content.replace("&lt;", "&lt;")    # 兜底替换其他孤立的 &lt;
+adoc_content = adoc_content.replace("&gt;", "&gt;")    # 兜底替换其他孤立的 &gt;
+adoc_content = adoc_content.replace("##", "##")  # 兜底替换其他孤立的 &gt;
+adoc_content = adoc_content.replace("{", "{")  # 兜底替换其他孤立的 &gt;
+adoc_content = adoc_content.replace("", "")  # 兜底替换其他孤立的 &gt;
+adoc_content = adoc_content.replace("##", "##")  # 兜底替换其他孤立的 &gt;
+adoc_content = adoc_content.replace("##", "##")  # 兜底替换其他孤立的 &gt;
+
+# 创建一个子节点存放结果
+new_p = p.insertAfter()
+new_p.h = f"Converted: {p.h}"
+new_p.b = adoc_content
+
+c.redraw()
+g.es("转换成功！已生成新节点并清洗了转义符号。")
+....
+
+except subprocess.CalledProcessError as e: g.es(f”Pandoc 转换失败: {e}“)
+
+except Exception as e: g.es(f”发生错误: {e}“)
+
+@doc pandoc 将 markdown 转换为 asciidoctor
+
+* 使用 pandoc 进行转换 https://github.com/jgm/pandoc
+* 安装 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
+* 卸载 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
+</t>
+<t tx="swot.20261019163257.1">@language python
+import subprocess
 
 # 获取当前节点的内容
 p = c.p
@@ -3065,12 +3147,17 @@ try:
 
     # 字符串后处理，手动清洗 Pandoc 的过度转义
     adoc_content = adoc_content.replace("{plus}=", "+=")
-    adoc_content = adoc_content.replace("{plus}", "+")   # 兜底替换其他孤立的 +
+    adoc_content = adoc_content.replace("{plus}", "+")
     adoc_content = adoc_content.replace("++*++=", "*=")
-    adoc_content = adoc_content.replace("++*++", "*")    # 兜底替换其他孤立的 *
-    adoc_content = adoc_content.replace("++&lt;++", "&lt;")    # 兜底替换其他孤立的 &lt;
-    adoc_content = adoc_content.replace("++&gt;++", "&gt;")    # 兜底替换其他孤立的 &gt;
-    adoc_content = adoc_content.replace("++##++", "##")  # 兜底替换其他孤立的 &gt;
+    adoc_content = adoc_content.replace("++*++", "*")
+    adoc_content = adoc_content.replace("++&lt;++", "&lt;")
+    adoc_content = adoc_content.replace("++&gt;++", "&gt;")
+    adoc_content = adoc_content.replace("++##++", "##")
+    adoc_content = adoc_content.replace("++{++", "{")
+    adoc_content = adoc_content.replace("++}++", "}")
+    adoc_content = adoc_content.replace("++[++", "[")
+    adoc_content = adoc_content.replace("++]++", "]")
+    adoc_content = adoc_content.replace("++_++", "_")
 
     # 创建一个子节点存放结果
     new_p = p.insertAfter()
@@ -3092,6 +3179,53 @@ pandoc 将 markdown 转换为 asciidoctor
 - 使用 pandoc 进行转换 https://github.com/jgm/pandoc
 - 安装 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
 - 卸载 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
+</t>
+<t tx="swot.20261020081044.1"># 1. 预处理：使用纯字母数字占位符
+def block_replacer(match):
+    math_blocks.append(match.group(1).strip())
+    return f"\nMATHTOKENBLOCK{len(math_blocks) - 1}XYZ\n"
+
+markdown_text = re.sub(r'\\\[\s*(.*?)\s*\\\]', block_replacer, markdown_text, flags=re.DOTALL)
+
+def inline_replacer(match):
+    math_inlines.append(match.group(1).strip())
+    return f"MATHTOKENINLINE{len(math_inlines) - 1}XYZ"
+
+markdown_text = re.sub(r'\\\(\s*(.*?)\s*\\\)', inline_replacer, markdown_text)
+
+# 2. 传给 Pandoc
+result = subprocess.run(
+    [
+        "pandoc",
+        "-f", "markdown",
+        "-t", "asciidoc",
+        "--wrap=none",
+    ],
+    input=markdown_text,
+    capture_output=True,
+    text=True,
+    encoding="utf-8",
+    check=True,
+)
+
+adoc_content = result.stdout
+
+# 3. 后处理：还原为 AsciiDoc 的 stem 语法
+for i, content in enumerate(math_blocks):
+    placeholder = f"MATHTOKENBLOCK{i}XYZ"
+    adoc_content = adoc_content.replace(placeholder, f"[stem]\n++++\n{content}\n++++")
+
+for i, content in enumerate(math_inlines):
+    placeholder = f"MATHTOKENINLINE{i}XYZ"
+    adoc_content = adoc_content.replace(placeholder, f"stem:[{content}]")
+
+# 4. 清理和排版优化
+adoc_content = re.sub(r' \+\n', '\n', adoc_content)           # 清除行尾加号
+adoc_content = adoc_content.replace("{plus}=", "+=")
+adoc_content = adoc_content.replace("{plus}", "+")
+
+# 5. 核心：将 3 个或以上的连续换行符压缩为标准的 2 个，消除多余空行
+adoc_content = re.sub(r'\n{3,}', '\n\n', adoc_content)
 </t>
 </tnodes>
 </leo_file>
