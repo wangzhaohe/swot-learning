@@ -3197,7 +3197,8 @@ markdown_text = re.sub(r'\\\(\s*(.*?)\s*\\\)', inline_replacer, markdown_text)
 result = subprocess.run(
     [
         "pandoc",
-        "-f", "markdown",
+        # "-f", "markdown",
+        "-f", "markdown+lists_without_preceding_blankline",
         "-t", "asciidoc",
         "--wrap=none",
     ],
@@ -3209,6 +3210,7 @@ result = subprocess.run(
 )
 
 adoc_content = result.stdout
+print(adoc_content)
 
 # 3. 后处理：还原为 AsciiDoc 的 stem 语法
 for i, content in enumerate(math_blocks):
@@ -3220,7 +3222,6 @@ for i, content in enumerate(math_inlines):
     adoc_content = adoc_content.replace(placeholder, f"stem:[{content}]")
 
 # 4. 清理和排版优化
-adoc_content = re.sub(r' \+\n', '\n', adoc_content)           # 清除行尾加号
 adoc_content = adoc_content.replace("{plus}=", "+=")
 adoc_content = adoc_content.replace("{plus}", "+")
 
