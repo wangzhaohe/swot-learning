@@ -475,8 +475,14 @@ html {
 <ul class="sectlevel1">
 <li><a href="#_选择题">选择题</a>
 <ul class="sectlevel2">
+<li><a href="#_计算机基础">计算机基础</a>
+<ul class="sectlevel3">
+<li><a href="#_分页内存管理">分页内存管理</a></li>
+</ul>
+</li>
 <li><a href="#_软件工程">软件工程</a>
 <ul class="sectlevel3">
+<li><a href="#_环形复杂度">环形复杂度</a></li>
 <li><a href="#_cmmi">CMMI</a></li>
 </ul>
 </li>
@@ -543,11 +549,151 @@ toggleButton.addEventListener('click', () => {
 <h2 id="_选择题">选择题</h2>
 <div class="sectionbody">
 <div class="sect2">
+<h3 id="_计算机基础">计算机基础</h3>
+<div class="sect3">
+<h4 id="_分页内存管理">分页内存管理</h4>
+<div class="paragraph">
+<p>分页内存管理的核心是将虚拟内存空间和物理内存空间皆划分为大小相同的页面，并以页面作为内存空间的最小分配单位。下图给出了内存管理单元的虚拟地址到物理地址的翻译过程，假设页面大小为4KB，那么CPU发出虚拟地址0010000000000100后，其访问的物理地址是（A）。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="static/分页内存管理.png" alt="分页内存管理" width="600">
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 0110000000000100
+B 0100000000000100
+C 1100000000000000
+D 1100000000000010</pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_答案解析">答案解析</h5>
+<div class="paragraph">
+<p>页面大小为 4KB = \(2^{12}\)B，所以页内偏移占低 12 位。</p>
+</div>
+<div class="paragraph">
+<p>虚拟地址：</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[0010\ 0000\ 0000\ 0100\]
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>虚拟页号 = 高 4 位：\(0010_2=2\)</p>
+</li>
+<li>
+<p>页内偏移 = 低 12 位：\(000000000100_2=4\)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>查页表，页号 2 对应的物理页框号为：</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[110_2=6\]
+</div>
+</div>
+<div class="paragraph">
+<p>物理地址 = 物理页框号拼接页内偏移：</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[110\ 000000000100_2 = 110000000000100_2\]
+</div>
+</div>
+<div class="paragraph">
+<p>即十六进制：</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[0x6004\]
+</div>
+</div>
+<div class="paragraph">
+<p>因此，访问的物理地址是 <strong>0x6004</strong>（或写成二进制 <strong>0110 0000 0000 0100</strong>）。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_追加问题">追加问题</h5>
+<div class="paragraph">
+<p>追问：图片中页表最后一列单个数字列表示什么？</p>
+</div>
+<div class="paragraph">
+<p>图片中页表最后一列的单个数字（0 或 1）表示的是<strong>存在位（Present Bit）</strong>，也叫<strong>有效位（Valid Bit）</strong>。</p>
+</div>
+<div class="paragraph">
+<p>它的含义是：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1</strong>：表示该页面当前*已经调入物理内存*，页表中对应的物理页框号是有效的，可以正常进行地址转换。</p>
+</li>
+<li>
+<p><strong>0</strong>：表示该页面当前*不在物理内存中*（可能还在磁盘上，或者尚未分配），此时如果访问该页面，会触发*缺页中断（Page Fault）*，由操作系统负责将页面从外存调入内存。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>结合图片来看：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>页号 0、1、2、5、9 对应的存在位为 1，说明这些页面在内存中；</p>
+</li>
+<li>
+<p>页号 3、4、6、7、8 对应的存在位为 0，说明这些页面不在内存中。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>题目中访问的虚拟页号是 <strong>2</strong>，查表发现页号 2 的存在位为 <strong>1</strong>，物理页框号为 <strong>110</strong>（即 6），因此可以顺利完成地址转换，得到物理地址 0x6004。如果访问的是页号 3，则会因为存在位为 0 而触发缺页中断。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_软件工程">软件工程</h3>
+<div class="sect3">
+<h4 id="_环形复杂度">环形复杂度</h4>
+<div class="paragraph">
+<p>使用 McCabe 方法可以计算程序流程图的环形复杂度，下图的环形复杂度为（4 ）。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="static/环形复杂度.png" alt="环形复杂度" width="400">
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A 3
+B 4
+C 5
+D 6</pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>解答：图 G 的环形复杂度 V(G)=P+1， 其中，P 是流图中判定结点的数目。</p>
+</div>
+<div class="paragraph">
+<p>判定结点：1、3、6。</p>
+</div>
+<div class="paragraph">
+<p>本题中，P=3，所以V（G）=3+1=4。</p>
+</div>
+</div>
 <div class="sect3">
 <h4 id="_cmmi">CMMI</h4>
 <div class="paragraph">
-<p>CMMI 中，组织使用从多个项目收集来的数据对整体的组织级绩效进行关注属于 （D） 级别。</p>
+<p>CMMI 中，组织使用从多个项目收集来的数据对整体的组织级绩效进行关注属于（D）级别。</p>
 </div>
 <div class="paragraph">
 <p>A 已管理 B 已定义 C 量化管理 D 优化</p>
@@ -570,14 +716,144 @@ toggleButton.addEventListener('click', () => {
           处于成熟度5级时，组织使用从多个项目收集来的数据对整体的组织级绩效进行关注。
 |===
 
-=== 软件架构风格
-在软件架构风格中，层次型风格中相邻层之间的交互方式是 （1）
+==== 设计模式
+设计模式基于面向对象技术，是人们在长期的开发实践中良好经验的结晶，提供了一个简单、统一的描述方法，使得人们可以复用这些软件设计办法、过程管理经验。
+按照设计模式的目的进行划分，现有的设计模式可以分为创建型、（1）和行为型三种类型。
+其中（2）属于创建型模式，（3）属于行为型模式。
+（4 ）模式可以将一个复杂的组件分成功能性抽象和内部实现两个独立的但又相关的继承层次结构，从而可以实现接口与实现分离。
+
+[cols="1,1,1,1",options="header"]
+|===
+|1 |2 |3 |4
+|A 合成型
+|B 组合型
+|#C 结构型#
+|D 聚合型
+
+|A Adaptor
+|B Facade
+|C Command
+|#D Singleton#
+
+|A Decorator
+|B Composite
+|#C Memento#
+|D Builder
+
+|A Prototype
+|B Flyweight
+|C Adapter
+|#D Bridge#
+|===
+
+===== 答案解析
+这道题考查的是设计模式的分类和特点。我们逐空分析：
+
+'''''
+
+*（1）结构型*
+
+设计模式按目的分为三大类：
+
+* *创建型*（Creational）：关注对象的创建
+* *结构型*（Structural）：关注类和对象的组合
+* *行为型*（Behavioral）：关注对象之间的交互和职责分配
+
+所以（1）填 *结构型*，对应选项 *C*。
+
+'''''
+
+*（2）Singleton（单例模式）*
+
+创建型模式包括：Singleton（单例）、Factory Method（工厂方法）、Abstract Factory（抽象工厂）、Builder（建造者）、Prototype（原型）。
+
+选项中：
+
+* Adaptor（适配器）→ 结构型
+* Facade（外观）→ 结构型
+* Command（命令）→ 行为型
+* *Singleton（单例）→ 创建型* ✔
+
+所以（2）选 *D*。
+
+'''''
+
+*（3）Memento（备忘录模式）*
+
+行为型模式包括：Observer、Strategy、Command、State、Chain of Responsibility、Interpreter、Iterator、Mediator、Memento、Template Method、Visitor 等。
+
+选项中：
+
+* Decorator（装饰器）→ 结构型
+* Composite（组合）→ 结构型
+* *Memento（备忘录）→ 行为型* ✔
+* Builder（建造者）→ 创建型
+
+所以（3）选 *C*。
+
+'''''
+
+*（4）Bridge（桥接模式）*
+
+题干描述："`将一个复杂的组件分成功能性抽象和内部实现两个独立的但又相关的继承层次结构，从而实现接口与实现分离。`"
+
+这正是 *Bridge（桥接）模式* 的定义——将抽象部分与它的实现部分分离，使它们都可以独立地变化。
+
+* *Bridge（桥接）→ 结构型* ✔（正确答案）
+* Prototype → 创建型
+* Flyweight → 结构型（但用于共享对象，不是接口与实现分离）
+* Adapter → 结构型（用于接口转换，不是分离抽象与实现）
+
+所以（4）选 *D*。
+
+'''''
+
+设计模式按**目的**分为三大类：
+
+[width="100%",cols="15%,20%,65%",options="header",]
+|===
+|类型 |关注点 |包含的模式
+|*创建型* |对象的创建 |Singleton、Factory Method、Abstract Factory、Builder、Prototype
+|*结构型* |类/对象的组合结构 |Adapter、Bridge、Composite、Decorator、Facade、Flyweight、Proxy
+|*行为型* |对象间的交互与职责分配 |Command、Interpreter、Iterator、Mediator、Memento、Observer、State、Strategy、Template Method、Visitor、Chain of Responsibility
+|===
+
+=== 英语选择
 
 
-黑板风格常用的领域是 （2）
+==== Multi-agent systems
+Multi-agent systems can operate under various （1）.
 
+In centralized networks, a central unit contains the global knowledge base, connects the agents and oversees their information.
 
-C2风格中构件与连接件的关系是 （3）
+A strength of this structure is the ease of communication between agents and （2） knowledge.
+
+A weakness of the centrality is the dependence on the central unit; if it fails, the（3） system of agents fails.
+
+Agents in decentralized networks share information with their（4）agents instead of a global knowledge base. Some benefits of decentralized networks are robustness and modularity.
+
+The failure of one agent does not cause the overall system to fail since there is no central unit.
+
+One challenge of decentralized agents is（5）their behavior to benefit other cooperating agents.
+
+[cols="1,1,1,1,1",options="header"]
+|===
+|1                  |2          |3              |4                |5
+|A structures       |A local    |A diverse      |A adjacent       |A organizing
+|#B architectures#  |#B Global# |B specialized  |#B neighboring#  |#B coordinating#
+|C frameworks       |C shared   |#C uniform#    |C connected      |C managing
+|D designs          |D central  |D common       |D surrounding    |D controlling
+|===
+
+[width="100%",cols="10%,20%,70%",options="header",]
+|===
+|空 |答案 |解析
+|（1） |*B architectures* |多智能体系统可以运行在不同**架构**下。后文 centralized networks / decentralized networks 正是系统架构类型。`architectures` 最专业、最搭配 `operate under`。
+|（2） |*B Global* |集中式网络中有一个 central unit，包含 *global knowledge base*。因此优点是智能体之间以及与**全局知识**的通信较容易。与后文 `global knowledge base` 对应。
+|（3） |*C uniform* |集中式的弱点是依赖中心单元；如果中心单元失效，则整个**统一的**智能体系统失效。`uniform` 表示统一、整体一致的系统。
+|（4） |*B neighboring* |去中心化网络中，智能体与**邻近的**智能体交换信息，而不是依赖全局知识库。固定搭配是 `neighboring agents`。
+|（5） |*B coordinating* |去中心化智能体的一个挑战是**协调**它们的行为，使其他合作智能体受益。`coordinate behavior` 是常见搭配。
+|===
 
 == 软件架构风格
 软件体系结构设计的一个核心目标是重复的体系结构模式，即 ##达到体系结构级的软件重用##。
@@ -805,6 +1081,8 @@ uniq -c tmp3</p>
 
 ==== 客户端/服务器架构风格
 * 两层C/S 体系结构主要组成部分：数据库服务器、客户应用程序。称为“胖客户机，瘦服务器”。
+
+NOTE: 现在不用两层体系结构了
 
 * 三层C/S 结构：
 ** 增加了一个应用服务器。
@@ -1046,7 +1324,140 @@ subscribe("🤖 量化机器人", (d) =&gt; `消息 ${d}`);</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>=== 4. 虚拟机风格
+<pre>==== waiting -- 发布-订阅模式（Pub/Sub）例子的网络版本改进方案
+现在的这个 `event-pub-sub.html` 是一个**纯浏览器内存版、同页面内**的发布-订阅示例。
+一旦让”发布者”和”订阅者”分别跑在**不同的浏览器（甚至只是同一个浏览器的两个标签页）**上，*它们之间完全不会互通*——发布者发出的事件，订阅者一个都收不到。
+
+下面解释为什么，以及要做到”跨网络”需要补什么。
+
+[discrete]
+==== 1. 现在的代码到底在做什么
+
+整套机制的核心是一个内存里的对象 `bus`：
+
+[source,javascript]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>class EventEmitter {
+    constructor() {
+        this.events = new Map();   // { 事件名: Set&lt;回调函数&gt; }
+    }
+    on(name, cb) { &#8230;&#8203; this.events.get(name).add(cb); }
+    emit(name, data) {
+        const set = this.events.get(name);
+        if (set) [&#8230;&#8203;set].forEachcb) &#8658; cb(data;  // 只是循环调用本页面里的函数
+    }
+}</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>发布按钮也只是调用了同一个 `bus` 实例：
+
+[source,javascript]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>const bus = new EventEmitter();  // 实例化事件中心
+const EVENT = "priceUpdate";</p>
+</div>
+<div class="paragraph">
+<p>subscribe("📱 手机端", &#8230;&#8203;);
+subscribe("💻 桌面端", &#8230;&#8203;);
+subscribe("🤖 量化机器人", &#8230;&#8203;);</p>
+</div>
+<div class="paragraph">
+<p>document.getElementById("publish").onclick = () &#8658; {
+    const data = document.getElementById("msg").value;
+    bus.emit(EVENT, data);   // 只在"这一页"的内存里广播
+};</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>关键点：`bus.events` 这个 `Map` 里存的是**当前页面里的函数引用（闭包）**。
+`emit` 做的事就是 `forEach` 调用这些本地函数。整个过程**没有一行代码碰到网络**。
+
+
+[discrete]
+==== 2. 跨浏览器时会怎样（为什么不行）
+
+每个浏览器标签页（tab）/每个浏览器进程，都是一个**独立的 JavaScript 运行时 + 独立内存空间**：
+
+* 你在浏览器 A 打开这个文件 → 它自己 `new` 了一个 `busA`，自己 `subscribe` 了三块 div；
+* 你在浏览器 B 打开同一个文件 → 它自己 `new` 了一个 `busB`，自己 `subscribe` 了三块 div；
+* 浏览器 A 点”发布” → `busA.emit()` → 只触发 `busA` 里的回调 → *只更新浏览器 A 自己的 DOM*；
+* 浏览器 B 自始至终**毫无反应**，因为它从来没往 `busA` 里 `on` 过任何回调，也根本拿不到 `busA` 这个对象（`busA` 在另一个进程的内存里，跨进程/跨机器无法共享一个 JS 对象引用）。
+
+`emit` 里遍历的 `Set&lt;回调&gt;` 是内存里的函数对象，*函数没法序列化、没法通过网络传过去*，所以现在的”事件中心”本质上是个*进程内（in-process）的事件中心*，不是网络事件中心。
+
+____
+补充：就算你把”不同浏览器”降格成”同一浏览器的两个标签页”，结论也一样——每个标签页是独立的 JS 上下文，各自有各自的 `bus`，依然不通。（同浏览器跨标签页可用 `BroadcastChannel`，但它*仅限于同一浏览器的同源页面*，解决不了”不同浏览器/不同机器”。）
+____
+
+[discrete]
+==== 3. 要让它真正跨网络，缺什么
+
+缺一个**网络层的”事件中心 / 消息代理（broker）“**——一个所有浏览器都能连上的中间服务器。浏览器之间不能直接互发，必须都连到这个中心，由中心来转发/广播。
+
+[mermaid, target=img/mermaid-pub-sub-network, format=svg]
+....
+flowchart LR
+    subgraph B1[浏览器 A · 发布者]
+        P[publish 按钮] --&gt;|WS/HTTP 发送事件| S
+    end
+    subgraph S[网络事件中心 / 消息代理&lt;br/&gt;（必须新增的服务器）]
+        HUB[(event hub: 维护连接列表)]
+    end
+    subgraph B2[浏览器 B · 订阅者]
+        S --&gt;|WS/SSE 推送| SUB1[📱 手机端]
+    end
+    subgraph B3[浏览器 C · 订阅者]
+        S --&gt;|WS/SSE 推送| SUB2[💻 桌面端]
+    end
+    subgraph B4[浏览器 D · 订阅者]
+        S --&gt;|WS/SSE 推送| SUB3[🤖 量化机器人]
+    end
+....
+
+也就是说，要把”内存里的 `Map`"`换成`"服务器上维护的**客户端连接列表**”，把 `emit` 换成”向所有连接**写socket**”。
+
+
+[discrete]
+==== 4. 几种可选方案对比
+
+[width="100%",cols="28%,45%,27%",options="header",]
+|===
+|方案 |适合场景 |说明
+|*WebSocket + 自建小服务器*（Node `ws` / Python 等） |双向、实时、最通用 |浏览器连上 WS，发布者 `send` 事件，服务器 `broadcast` 给所有订阅者。最贴近你这个示例。
+|*SSE（Server-Sent Events）* |服务器→浏览器单向推送 |订阅者用 `EventSource` 接收；发布者用普通 `fetch`/`POST` 把事件发给服务器。实现比 WS 简单。
+|*BroadcastChannel* |仅同一浏览器、跨标签页 |零服务器，但**不满足你的”不同浏览器”需求**，这里提一下避免误用。
+|*现成消息中间件*（MQTT / Redis Pub-Sub / Kafka / RabbitMQ） |生产级、多服务 |把 `EventEmitter` 换成连这些 broker 的客户端，概念上最”正统”的分布式 Pub/Sub。
+|===
+
+
+[discrete]
+==== 5. 建议：做一个”网络版”的最小改造方案
+
+如果你愿意，我可以把这个示例升级成**真正跨浏览器的版本**，思路是：
+
+[arabic]
+. 新增一个轻量 WebSocket 服务器（比如 Node 的 `ws`，约 20 行），充当”事件中心”，维护所有连接，`broadcast` 事件；
+. 原 `EventEmitter` 不变，但加一个”网络桥”：`emit` 时通过 WS 发给服务器；浏览器收到服务器推送时，再调用本地 `bus.emit` 去更新 DOM；
+. 前端 `subscribe` 逻辑基本不动，只是把”事件来源”从本地 `emit` 换成”服务器推送”。
+
+这样你用手机浏览器、桌面浏览器、另一台电脑同时打开，任意一端发布，其余端实时收到——这才是真正的分布式 Pub/Sub。
+
+'''''
+
+要不要我按上面第 5 点给你写一份**具体的改造方案（含服务器代码 + 前端改动）**？如果要，请确认你倾向哪种技术栈：
+
+* *A*：Node.js + `ws`（WebSocket，最贴近原示例，推荐）
+* *B*：Node.js + SSE（实现更简单，单向推送）
+* *C*：直接用 MQTT / Redis 这类现成 broker（更”生产级”）
+
+确认后我可以给出完整可运行的代码与步骤（注意：当前是 ask 模式，需要你切换到 craft 模式我才能帮你落地文件）。
+
+=== 4. 虚拟机风格
 人为构建一个运行环境，在这个环境之上，可以解析与运行自定义的一些语言，这样来增加架构的灵活性。代表的风格有：
 
 * 解释器
@@ -1556,7 +1967,7 @@ flowchart LR
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-18 17:10:10 +0800
+Last updated 2026-10-20 17:08:33 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
@@ -1582,6 +1993,6 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
   })
 })
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

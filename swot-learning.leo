@@ -3034,13 +3034,21 @@
 <v t="swot.20260522145523.1"><vh>@adoc 软考系统架构设计师.adoc</vh>
 <v t="swot.20260522145549.1"><vh>软考系统架构设计师--考试用</vh>
 <v t="swot.20261015220751.1"><vh>选择题</vh>
-<v t="swot.20261019111604.1"><vh>环形复杂度</vh></v>
+<v t="swot.20261020143444.1"><vh>计算机基础</vh>
 <v t="swot.20261019110114.1"><vh>分页内存管理</vh>
 <v t="swot.20261020081257.1"><vh>答案解析</vh></v>
 <v t="swot.20261020115227.1"><vh>追加问题</vh></v>
 </v>
+</v>
 <v t="swot.20261015223451.1"><vh>软件工程 </vh>
+<v t="swot.20261019111604.1"><vh>环形复杂度</vh></v>
 <v t="swot.20261015230413.1"><vh>CMMI</vh></v>
+<v t="swot.20261020163255.1"><vh>设计模式</vh>
+<v t="swot.20261020164622.1"><vh>答案解析</vh></v>
+</v>
+</v>
+<v t="swot.20261020145018.1"><vh>英语选择</vh>
+<v t="swot.20261020145038.1"><vh>Multi-agent systems</vh></v>
 </v>
 </v>
 <v t="swot.20260522151135.1"><vh>软件架构风格</vh>
@@ -46022,7 +46030,7 @@ Kappa 单一流链路（无 Lambda 批流双代码负担）· Flink 统一引擎
 </t>
 <t tx="swot.20261015220751.1"></t>
 <t tx="swot.20261015223451.1"></t>
-<t tx="swot.20261015230413.1">CMMI 中，组织使用从多个项目收集来的数据对整体的组织级绩效进行关注属于 （D） 级别。
+<t tx="swot.20261015230413.1">CMMI 中，组织使用从多个项目收集来的数据对整体的组织级绩效进行关注属于（D）级别。
 
 A 已管理 B 已定义 C 量化管理 D 优化
 
@@ -46536,10 +46544,10 @@ image::static/分页内存管理.png[分页内存管理,600]
 
 image::static/环形复杂度.png[环形复杂度, 400,]
 
-A 3 
-B 4 
-C 5 
-D 6
+    A 3 
+    B 4 
+    C 5 
+    D 6
 
 ---
 
@@ -46647,6 +46655,142 @@ D 6
 ----
 @others
 ----
+</t>
+<t tx="swot.20261020143444.1"></t>
+<t tx="swot.20261020145018.1"></t>
+<t tx="swot.20261020145038.1">@language asciidoc
+Multi-agent systems can operate under various （1）.
+
+In centralized networks, a central unit contains the global knowledge base, connects the agents and oversees their information. 
+
+A strength of this structure is the ease of communication between agents and （2） knowledge. 
+
+A weakness of the centrality is the dependence on the central unit; if it fails, the（3） system of agents fails. 
+
+Agents in decentralized networks share information with their（4）agents instead of a global knowledge base. Some benefits of decentralized networks are robustness and modularity. 
+
+The failure of one agent does not cause the overall system to fail since there is no central unit. 
+
+One challenge of decentralized agents is（5）their behavior to benefit other cooperating agents.
+
+[cols="1,1,1,1,1",options="header"]
+|===
+|1                  |2          |3              |4                |5
+|A structures       |A local    |A diverse      |A adjacent       |A organizing
+|#B architectures#  |#B Global# |B specialized  |#B neighboring#  |#B coordinating#
+|C frameworks       |C shared   |#C uniform#    |C connected      |C managing
+|D designs          |D central  |D common       |D surrounding    |D controlling
+|===
+
+[width="100%",cols="10%,20%,70%",options="header",]
+|===
+|空 |答案 |解析
+|（1） |*B architectures* |多智能体系统可以运行在不同**架构**下。后文 centralized networks / decentralized networks 正是系统架构类型。`architectures` 最专业、最搭配 `operate under`。
+|（2） |*B Global* |集中式网络中有一个 central unit，包含 *global knowledge base*。因此优点是智能体之间以及与**全局知识**的通信较容易。与后文 `global knowledge base` 对应。
+|（3） |*C uniform* |集中式的弱点是依赖中心单元；如果中心单元失效，则整个**统一的**智能体系统失效。`uniform` 表示统一、整体一致的系统。
+|（4） |*B neighboring* |去中心化网络中，智能体与**邻近的**智能体交换信息，而不是依赖全局知识库。固定搭配是 `neighboring agents`。
+|（5） |*B coordinating* |去中心化智能体的一个挑战是**协调**它们的行为，使其他合作智能体受益。`coordinate behavior` 是常见搭配。
+|===
+</t>
+<t tx="swot.20261020163255.1">设计模式基于面向对象技术，是人们在长期的开发实践中良好经验的结晶，提供了一个简单、统一的描述方法，使得人们可以复用这些软件设计办法、过程管理经验。
+按照设计模式的目的进行划分，现有的设计模式可以分为创建型、（1）和行为型三种类型。
+其中（2）属于创建型模式，（3）属于行为型模式。
+（4 ）模式可以将一个复杂的组件分成功能性抽象和内部实现两个独立的但又相关的继承层次结构，从而可以实现接口与实现分离。
+
+[cols="1,1,1,1",options="header"]
+|===
+|1 |2 |3 |4
+|A 合成型
+|B 组合型
+|#C 结构型#
+|D 聚合型
+
+|A Adaptor
+|B Facade
+|C Command
+|#D Singleton#
+
+|A Decorator
+|B Composite
+|#C Memento#
+|D Builder
+
+|A Prototype
+|B Flyweight
+|C Adapter
+|#D Bridge#
+|===
+</t>
+<t tx="swot.20261020164622.1">这道题考查的是设计模式的分类和特点。我们逐空分析：
+
+'''''
+
+*（1）结构型*
+
+设计模式按目的分为三大类：
+
+* *创建型*（Creational）：关注对象的创建
+* *结构型*（Structural）：关注类和对象的组合
+* *行为型*（Behavioral）：关注对象之间的交互和职责分配
+
+所以（1）填 *结构型*，对应选项 *C*。
+
+'''''
+
+*（2）Singleton（单例模式）*
+
+创建型模式包括：Singleton（单例）、Factory Method（工厂方法）、Abstract Factory（抽象工厂）、Builder（建造者）、Prototype（原型）。
+
+选项中：
+
+* Adaptor（适配器）→ 结构型
+* Facade（外观）→ 结构型
+* Command（命令）→ 行为型
+* *Singleton（单例）→ 创建型* ✔
+
+所以（2）选 *D*。
+
+'''''
+
+*（3）Memento（备忘录模式）*
+
+行为型模式包括：Observer、Strategy、Command、State、Chain of Responsibility、Interpreter、Iterator、Mediator、Memento、Template Method、Visitor 等。
+
+选项中：
+
+* Decorator（装饰器）→ 结构型
+* Composite（组合）→ 结构型
+* *Memento（备忘录）→ 行为型* ✔
+* Builder（建造者）→ 创建型
+
+所以（3）选 *C*。
+
+'''''
+
+*（4）Bridge（桥接模式）*
+
+题干描述："`将一个复杂的组件分成功能性抽象和内部实现两个独立的但又相关的继承层次结构，从而实现接口与实现分离。`"
+
+这正是 *Bridge（桥接）模式* 的定义——将抽象部分与它的实现部分分离，使它们都可以独立地变化。
+
+* *Bridge（桥接）→ 结构型* ✔（正确答案）
+* Prototype → 创建型
+* Flyweight → 结构型（但用于共享对象，不是接口与实现分离）
+* Adapter → 结构型（用于接口转换，不是分离抽象与实现）
+
+所以（4）选 *D*。
+
+'''''
+
+设计模式按**目的**分为三大类：
+
+[width="100%",cols="15%,20%,65%",options="header",]
+|===
+|类型 |关注点 |包含的模式
+|*创建型* |对象的创建 |Singleton、Factory Method、Abstract Factory、Builder、Prototype
+|*结构型* |类/对象的组合结构 |Adapter、Bridge、Composite、Decorator、Facade、Flyweight、Proxy
+|*行为型* |对象间的交互与职责分配 |Command、Interpreter、Iterator、Mediator、Memento、Observer、State、Strategy、Template Method、Visitor、Chain of Responsibility
+|===
 </t>
 </tnodes>
 </leo_file>
