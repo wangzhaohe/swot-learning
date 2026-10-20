@@ -123,12 +123,12 @@
 <v t="swot.20260213153402.1"><vh>github 条件判断渲染图片</vh></v>
 <v t="swot.20260413112205.1"><vh>生成 pdf 文件</vh>
 <v t="swot.20260413111958.1"><vh>安装字体 font-noto-serif-sc</vh></v>
+<v t="swot.20261020141450.1"><vh>编辑配置文件</vh>
 <v t="swot.20260413111953.1"><vh>vim my-theme.yml</vh></v>
-<v t="swot.20260413112200.1"><vh>run asciidoctor-pdf</vh></v>
 </v>
-<v t="swot.20261019155753.1"><vh>公式书写 LaTeX &amp; AsciiMath</vh>
-<v t="swot.20261019155906.1"><vh>LaTeX &amp; AsciiMath 对比</vh></v>
+<v t="swot.20260413112200.1"><vh>生成 pdf 文件</vh></v>
 </v>
+<v t="swot.20261020140918.1"><vh>公式书写 LaTeX &amp; AsciiMath 对比后选择 LaTex </vh></v>
 </v>
 </v>
 </v>
@@ -3035,7 +3035,10 @@
 <v t="swot.20260522145549.1"><vh>软考系统架构设计师--考试用</vh>
 <v t="swot.20261015220751.1"><vh>选择题</vh>
 <v t="swot.20261019111604.1"><vh>环形复杂度</vh></v>
-<v t="swot.20261019110114.1"><vh>分页内存管理</vh></v>
+<v t="swot.20261019110114.1"><vh>分页内存管理</vh>
+<v t="swot.20261020081257.1"><vh>答案解析</vh></v>
+<v t="swot.20261020115227.1"><vh>追加问题</vh></v>
+</v>
 <v t="swot.20261015223451.1"><vh>软件工程 </vh>
 <v t="swot.20261015230413.1"><vh>CMMI</vh></v>
 </v>
@@ -3149,11 +3152,7 @@
 </v>
 </v>
 <v t="swot.20261015095105.1"><vh>@adoc test.adoc</vh>
-<v t="swot.20261015095131.1"><vh>test</vh>
-<v t="swot.20261019110114.1"></v>
-<v t="swot.20261019161724.1"><vh>@ignore-node aaaa</vh></v>
-<v t="swot.20261020081257.1"><vh>Converted: @ignore-node aaaa</vh></v>
-</v>
+<v t="swot.20261015095131.1"><vh>test</vh></v>
 </v>
 </v>
 <v t="swot.20250811154633.1"><vh>@path threejs</vh>
@@ -36296,14 +36295,24 @@ code:
   font_family: M+ 1mn
   font_size: 9
 </t>
-<t tx="swot.20260413111958.1">&gt; brew install --cask font-noto-serif-sc
+<t tx="swot.20260413111958.1">[source,console]
+----
+brew install --cask font-noto-serif-sc
+----
+
+.操作结果
+....
 ==&gt; Fetching downloads for: font-noto-serif-sc
 ✔︎ Cask font-noto-serif-sc (latest)                                                                                                        Verifying    25.1MB/ 25.1MB
 ==&gt; Installing Cask font-noto-serif-sc
 ==&gt; Moving Font 'NotoSerifSC[wght].ttf' to '/Users/swot/Library/Fonts/NotoSerifSC[wght].ttf'
 font-noto-serif-sc was successfully installed!
+....
 </t>
-<t tx="swot.20260413112200.1">asciidoctor-pdf -a pdf-theme=my-theme.yml -a scripts=cjk "数据库开发技术大作业要求-学生版本.adoc"
+<t tx="swot.20260413112200.1">[source,console]
+----
+asciidoctor-pdf -a pdf-theme=my-theme.yml -a scripts=cjk "数据库开发技术大作业要求-学生版本.adoc"
+----
 </t>
 <t tx="swot.20260413112205.1"></t>
 <t tx="swot.20260413144357.1">[upperalphaa]
@@ -46518,10 +46527,10 @@ flowchart LR
 
 image::static/分页内存管理.png[分页内存管理,600]
 
-A 0110000000000100
-B 0100000000000100
-C 1100000000000000
-D 1100000000000010
+    A 0110000000000100
+    B 0100000000000100
+    C 1100000000000000
+    D 1100000000000010
 </t>
 <t tx="swot.20261019111604.1">使用 McCabe 方法可以计算程序流程图的环形复杂度，下图的环形复杂度为（4 ）。
 
@@ -46539,33 +46548,6 @@ D 6
 判定结点：1、3、6。
 
 本题中，P=3，所以V（G）=3+1=4。
-</t>
-<t tx="swot.20261019155753.1"></t>
-<t tx="swot.20261019155906.1"></t>
-<t tx="swot.20261019161724.1">页面大小为 4KB = \(2^{12}\)B，所以页内偏移占低 12 位。
-
-虚拟地址：  
-\[
-0010\ 0000\ 0000\ 0100
-\]
-- 虚拟页号 = 高 4 位：\(0010_2=2\)
-- 页内偏移 = 低 12 位：\(000000000100_2=4\)
-
-查页表，页号 2 对应的物理页框号为：  
-\[
-110_2=6
-\]
-
-物理地址 = 物理页框号拼接页内偏移：  
-\[
-110\ 000000000100_2 = 110000000000100_2
-\]
-即十六进制：
-\[
-0x6004
-\]
-
-因此，访问的物理地址是 **0x6004**（或写成二进制 **0110 0000 0000 0100**）。
 </t>
 <t tx="swot.20261020081257.1">页面大小为 4KB = stem:[2^{12}]B，所以页内偏移占低 12 位。
 
@@ -46601,6 +46583,70 @@ D 6
 ++++
 
 因此，访问的物理地址是 *0x6004*（或写成二进制 *0110 0000 0000 0100*）。
+</t>
+<t tx="swot.20261020115227.1">追问：图片中页表最后一列单个数字列表示什么？
+
+图片中页表最后一列的单个数字（0 或 1）表示的是**存在位（Present Bit）**，也叫**有效位（Valid Bit）**。
+
+它的含义是：
+
+* *1*：表示该页面当前*已经调入物理内存*，页表中对应的物理页框号是有效的，可以正常进行地址转换。
+* *0*：表示该页面当前*不在物理内存中*（可能还在磁盘上，或者尚未分配），此时如果访问该页面，会触发*缺页中断（Page Fault）*，由操作系统负责将页面从外存调入内存。
+
+结合图片来看：
+
+* 页号 0、1、2、5、9 对应的存在位为 1，说明这些页面在内存中；
+* 页号 3、4、6、7、8 对应的存在位为 0，说明这些页面不在内存中。
+
+题目中访问的虚拟页号是 *2*，查表发现页号 2 的存在位为 *1*，物理页框号为 *110*（即 6），因此可以顺利完成地址转换，得到物理地址 0x6004。如果访问的是页号 3，则会因为存在位为 0 而触发缺页中断。
+</t>
+<t tx="swot.20261020140918.1">我比较纠结，这次对比让我决定使用 LaTex。
+
+[discrete]
+=== 网络写作用哪个？结论先行
+
+*主用 LaTeX（MathJax 解析），必要时用 AsciiMath 做速记。* 但如果你的平台/工具链支持，实际最优解往往是 *两者混合*：日常快速敲用 AsciiMath，正式发布前转成 LaTeX。
+
+[discrete]
+=== 为什么网络写作更推荐 LaTeX
+
+*1. 平台兼容性最好* 几乎所有支持数学的写作平台都以 LaTeX 为”一等公民”：
+
+* 知乎、微信公众号（部分插件）、CSDN、掘金、Notion、Obsidian、Typora、Hugo/Jekyll、GitHub README
+* MathJax / KaTeX 默认解析 LaTeX
+* AsciiMath 通常需要额外配置或插件，很多平台根本不支持
+
+*2. 复制粘贴生态成熟* 网上搜到的公式、论文里的公式、AI 生成的公式，绝大多数是 LaTeX。用 LaTeX 可以无缝复用；用 AsciiMath 则经常要转换。
+
+*3. 复杂公式不会卡壳* 网络文章一旦涉及矩阵、多行推导、分段函数、对齐，AsciiMath 表达力就吃紧，而 LaTeX 从容应对。
+
+*4. 长期可维护* LaTeX 语义明确、工具链成熟（格式化、校验、转换），文章多年后仍能正常渲染。
+
+[discrete]
+=== 什么情况下 AsciiMath 更合适
+
+* *纯速记/草稿*：在支持 AsciiMath 的编辑器（如某些 MathJax 配置、部分笔记软件）里，`a/b`、`sqrt x` 敲起来确实快。
+* *教学/科普场景*：读者可能想”看懂源码”，AsciiMath 源码更接近自然书写。
+* *平台明确只支持 AsciiMath*：少数轻量工具链如此，那就入乡随俗。
+
+[discrete]
+=== 实操建议
+
+*推荐工作流：*
+
+[arabic]
+. *写作时*：在 Obsidian/Typora 等支持 LaTeX 的编辑器里直接写 LaTeX（它们有实时预览，`++\++frac++{++}++{++}` 也不算慢）。
+. *追求输入速度*：用编辑器 snippet/宏（如 VS Code 的 LaTeX snippet、Typora 的快捷输入），把 `++\++frac` 映射成几个键，比切到 AsciiMath 更省心。
+. *平台不支持 LaTeX 时*：优先换平台或装 MathJax/KaTeX 插件，而不是退回 AsciiMath。
+. *需要 AsciiMath 时*：只用于临时草稿，发布前转 LaTeX（MathJax 和在线转换器都能做）。
+
+*一句话：* 网络写作的”通用货币”是 LaTeX，选它就对了；AsciiMath 当草稿纸用，别当发布格式。
+</t>
+<t tx="swot.20261020141450.1">.vim my-theme.yml
+[source,yaml]
+----
+@others
+----
 </t>
 </tnodes>
 </leo_file>
