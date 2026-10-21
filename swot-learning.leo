@@ -3064,7 +3064,12 @@
 <v t="swot.20261021105222.1"><vh>ABSD 基于架构的软件设计</vh></v>
 <v t="swot.20261021111306.1"><vh>ABSDM 基于架构的软件开发/管理模型</vh></v>
 </v>
-<v t="swot.20261020212311.1"><vh>项目管理</vh></v>
+<v t="swot.20261021143942.1"><vh>项目管理</vh>
+<v t="swot.20261020212311.1"><vh>敏捷开发之 Scrum</vh></v>
+<v t="swot.20261021143727.1"><vh>进度管理</vh>
+<v t="swot.20261021152655.1"><vh>答题解析</vh></v>
+</v>
+</v>
 <v t="swot.20261020145018.1"><vh>英语选择</vh>
 <v t="swot.20261020145038.1"><vh>Multi-agent systems</vh></v>
 </v>
@@ -3187,6 +3192,8 @@
 <v t="swot.20261021142543.1"><vh>试用 asciidoctor js 版本</vh></v>
 <v t="swot.20261021142853.1"><vh>给 asciidoc 做语法高亮</vh></v>
 <v t="swot.20261021142942.1"><vh>leo-editor 的可撤销策略是什么？</vh></v>
+<v t="swot.20261021150615.1"><vh>哪些特殊的图形字符去哪儿选择使用？</vh></v>
+<v t="swot.20261021150856.1"><vh>restructText 比 asciidoc 写时麻烦吗？</vh></v>
 </v>
 <v t="swot.20250811154633.1"><vh>@path threejs</vh>
 <v t="swot.20250812085446.1"><vh>@adoc Three.js.adoc</vh>
@@ -47177,5 +47184,80 @@ ABSDM 中，架构需求获取的来源有三方面：系统质量目标、系�
 </t>
 <t tx="swot.20261021142853.1"></t>
 <t tx="swot.20261021142942.1"></t>
+<t tx="swot.20261021143727.1">某项目包含任务 A、B、C、D、E、F，其持续时间及前序关系如下：
+
+* A 需要 4 天，无前序；
+* B 需要 3 天，前序为 A；
+* C 需要 5 天，前序为 B；
+* D 需要 3 天，前序为 C 和 E；
+* E 需要 4 天，前序为 A；
+* F 需要 1 天，前序为 D。
+
+项目从第 1 天早上开始。请问任务 E 最晚可以在第几天早上开始？C 9
+
+* A 5
+* B 8
+* #C 9#
+* D 10
+</t>
+<t tx="swot.20261021143942.1"></t>
+<t tx="swot.20261021150615.1">=== 比如下面的字符从哪儿来的？
+
+&lt;!--@+leo-ver=5-thin--&gt;
+&lt;!--@+node:swot.20261016170000.1: * @file test-icon-in-body.html--&gt;
+&lt;html&gt;
+&lt;body&gt;
+&lt;div class="container"&gt;
+  &lt;h1&gt;
+    🚀 Launch the satellite 📡 and watch the signal
+    &lt;span&gt;Pub/Sub&lt;/span&gt;
+  &lt;/h1&gt;
+  &lt;div class="subtitle"&gt;
+    💡 The publisher (Publisher) emits events and the event bus (EventEmitter)
+    notifies every subscriber; each subscriber then updates itself.
+  &lt;/div&gt;
+  &lt;ul&gt;
+    &lt;li&gt;🔥 Hot reload works after 🌟 a stellar edit&lt;/li&gt;
+    &lt;li&gt;👍 Great job with the 🤖 robot demo&lt;/li&gt;
+    &lt;li&gt;The arrow → (BMP) is handled, but the emoji above are astral and are not.&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&lt;!--@-leo--&gt;</t>
+<t tx="swot.20261021150856.1"></t>
+<t tx="swot.20261021152655.1">这道题可以拆解成一个**“画时间轴”**的简单方法。
+
+[discrete]
+==== 第一步：正向推算（找最长的那条路）
+
+我们从左往右推，看看每个任务最早什么时候能做完。*（注意：遇到有多个前序任务时，必须等最晚的那个做完才能开始）*
+
+[arabic]
+. *A（4天）*：第1天开始，第4天结束。画一条线 `1----4`。
+. *B（3天）*：等A做完，第5天开始，第7天结束。画线 `5---7`。
+. *C（5天）*：等B做完，第8天开始，第12天结束。画线 `8-----12`。
+. *E（4天）*：*E的前序也是A*。所以A在第4天做完，E就可以在第5天开始，第8天结束。画线 `5----8`。
+. *D（3天）*：*D的前序是C和E*。必须等C和E**都**做完。C在第12天做完，E在第8天做完。既然要等两个，那就得等最晚的那个（C）。所以D只能从第13天开始，第15天结束。画线 `13--15`。
+. *F（1天）*：等D做完，第16天开始，第16天结束。
+
+*到这里，总工期算出来了，是16天。* 最关键的那条路是 A -++&gt;++ B -++&gt;++ C -++&gt;++ D -++&gt;++ F（一步都不能拖）。
+
+[discrete]
+==== 第二步：反向推算（找E的最晚底线）
+
+现在我们从右往左推，看看任务E最晚能拖到什么时候，还不至于让整个项目延期（必须保证在第16天完成）。
+
+[arabic]
+. *F* 必须在第16天结束。
+. *D* 必须在第15天结束（因为F要做1天）。
+. *D 需要做3天*，所以D最晚必须在**第13天**开始（13, 14, 15）。
+. 现在看 *E*：E做完之后，D才能开始。既然D最晚第13天早上必须开工，那么*E最晚必须在第12天结束*。
+. *E 需要做4天*。如果第12天结束，往前数4天（12、11、10、9），*E最晚必须在第9天开始*。
+
+*所以答案就是：第9天。*
+
+*考试技巧总结：* 看到这种题，*不要纯在脑子里想*。在草稿纸上把任务顺着排一下，遇到分叉就并排画，遇到汇合就选时间长的那个。算出总工期后，倒着往回减，一分钟就能出结果。这道题在系统架构设计师的选择题里经常出现，属于必须拿分的“送分题”。
+</t>
 </tnodes>
 </leo_file>
