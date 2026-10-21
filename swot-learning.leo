@@ -3181,9 +3181,7 @@
 </v>
 </v>
 <v t="swot.20261015095105.1"><vh>@adoc test.adoc</vh>
-<v t="swot.20261015095131.1"><vh>test</vh>
-<v t="swot.20261021113408.1"></v>
-</v>
+<v t="swot.20261015095131.1"><vh>test</vh></v>
 </v>
 <v t="swot.20261021142052.1"><vh>asciidoc 有实时编辑的软件吗？类似于 markText.app</vh></v>
 <v t="swot.20261021142543.1"><vh>试用 asciidoctor js 版本</vh></v>
