@@ -3031,8 +3031,7 @@
 </v>
 </v>
 </v>
-<v t="swot.20260522145523.1"><vh>@adoc 软考系统架构设计师.adoc</vh>
-<v t="swot.20260522145549.1"><vh>软考系统架构设计师--考试用</vh>
+<v t="swot.20261021090123.1"><vh>@adoc 软考系统架构设计师--选择题.adoc</vh>
 <v t="swot.20261015220751.1"><vh>选择题</vh>
 <v t="swot.20261020143444.1"><vh>计算机基础</vh>
 <v t="swot.20261019110114.1"><vh>分页内存管理</vh>
@@ -3052,11 +3051,17 @@
 <v t="swot.20261020214847.1"><vh>系统工程之霍尔三维结构</vh></v>
 <v t="swot.20261020204205.1"><vh>商业智能系统</vh></v>
 </v>
+<v t="swot.20261021082120.1"><vh>软件架构设计</vh>
+<v t="swot.20261021082126.1"><vh>基于构件的开发模型</vh></v>
+</v>
 <v t="swot.20261020212311.1"><vh>项目管理</vh></v>
 <v t="swot.20261020145018.1"><vh>英语选择</vh>
 <v t="swot.20261020145038.1"><vh>Multi-agent systems</vh></v>
 </v>
 </v>
+</v>
+<v t="swot.20260522145523.1"><vh>@adoc 软考系统架构设计师.adoc</vh>
+<v t="swot.20260522145549.1"><vh>软考系统架构设计师--考试用</vh>
 <v t="swot.20260522151135.1"><vh>软件架构风格</vh>
 <v t="swot.20260522151315.1"><vh>1. 数据流风格</vh>
 <v t="swot.20261016103049.1"><vh>专业描述</vh></v>
@@ -46034,19 +46039,73 @@ Kappa 单一流链路（无 Lambda 批流双代码负担）· Flink 统一引擎
 
 适用：实时推荐、风控拦截、动态定价、库存调度等秒级决策场景。
 </t>
-<t tx="swot.20261015220751.1"></t>
+<t tx="swot.20261015220751.1">
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
+&lt;/script&gt;
+++++
+endif::[]
+</t>
 <t tx="swot.20261015223451.1"></t>
 <t tx="swot.20261015230413.1">CMMI 中，组织使用从多个项目收集来的数据对整体的组织级绩效进行关注属于（D）级别。
 
 A 已管理 B 已定义 C 量化管理 D 优化
 
-----
+---
 
 *能力成熟度模型集成 CMMI*
 
 主要用于指导软件开发过程的改进和进行软件开发能力的评估。CMMI 提供了一个软件能力成熟度的框架，它将软件过程改进的步骤组织成 *5个成熟度等级*，共包括 *18个关键过程域*，*52个过程目标*，*3168种关键实践*（注：原文图片中为“关键时间”，结合软考知识语境应为“关键实践”），它为软件过程不断改进奠定了一个循序渐进的基础。五个成熟度级别如下：
 
-[width="100%",cols="&lt;50%,&lt;50%",options="header",]
+[width="100%",cols="&lt;15%,&lt;85%",options="header",]
 |===
 |能力等级 |特点
 |*初始级* |过程通常是**随意且混乱**的。这些组织的成功依赖于组织内人员的能力与英雄主义。
@@ -46698,9 +46757,9 @@ One challenge of decentralized agents is（5）their behavior to benefit other c
 |（5） |*B coordinating* |去中心化智能体的一个挑战是**协调**它们的行为，使其他合作智能体受益。`coordinate behavior` 是常见搭配。
 |===
 </t>
-<t tx="swot.20261020163255.1">设计模式基于面向对象技术，是人们在长期的开发实践中良好经验的结晶，提供了一个简单、统一的描述方法，使得人们可以复用这些软件设计办法、过程管理经验。
-按照设计模式的目的进行划分，现有的设计模式可以分为创建型、（1）和行为型三种类型。
-其中（2）属于创建型模式，（3）属于行为型模式。
+<t tx="swot.20261020163255.1">设计模式基于面向对象技术，是人们在长期的开发实践中良好经验的结晶，提供了一个简单、统一的描述方法，使得人们可以复用这些软件设计办法、过程管理经验。 +
+按照设计模式的目的进行划分，现有的设计模式可以分为创建型、（1）和行为型三种类型。 +
+其中（2）属于创建型模式，（3）属于行为型模式。 +
 （4 ）模式可以将一个复杂的组件分成功能性抽象和内部实现两个独立的但又相关的继承层次结构，从而可以实现接口与实现分离。
 
 [cols="1,1,1,1",options="header"]
@@ -46815,10 +46874,10 @@ One challenge of decentralized agents is（5）their behavior to benefit other c
 |惯用法 |最低层 |语言相关技巧 |C++ 引用计数、RAII、PIMPL
 |===
 </t>
-<t tx="swot.20261020204205.1">商业智能系统的处理过程包括四个主要阶段：
-数据预处理通过（1）实现企业原始数据的初步整合；
-建立数据仓库是后续数据处理的基础；
-数据分析是体现系统智能的关键，主要采用（2）和（3）技术，前者能够实现数据的上卷、下钻和旋转分析，后者利用隐藏的知识，通过建立分析模型预测企业未来发展趋势；
+<t tx="swot.20261020204205.1">商业智能系统的处理过程包括四个主要阶段： +
+数据预处理通过（1）实现企业原始数据的初步整合； +
+建立数据仓库是后续数据处理的基础； +
+数据分析是体现系统智能的关键，主要采用（2）和（3）技术，前者能够实现数据的上卷、下钻和旋转分析，后者利用隐藏的知识，通过建立分析模型预测企业未来发展趋势； +
 数据展现主要完成数据处理结果的可视化。
 
 
@@ -46870,12 +46929,9 @@ BI(商业智能)系统包括数据预处理、建立数据仓库、数据分析�
 
 因此，正确答案为 D（Scrum）
 </t>
-<t tx="swot.20261020214847.1">系统工程利用计算机作为工具，对系统的结构、元素、（ ）和反馈等进行分析，以达到最优（ ）、最优设计、最优管理和最优控制的目的。
-
-霍尔（A.D. Hall）于1969年提出了系统方法的三维结构体系，通常称为霍尔三维结构，这是系统工程方法论的基础。
-
-霍尔三维结构以时间维、（ ）维、知识维组成的立体结构概括性地表示出系统工程的各阶段、各步骤以及所涉及的知识范围。
-
+<t tx="swot.20261020214847.1">系统工程利用计算机作为工具，对系统的结构、元素、（ ）和反馈等进行分析，以达到最优（ ）、最优设计、最优管理和最优控制的目的。 +
+霍尔（A.D. Hall）于1969年提出了系统方法的三维结构体系，通常称为霍尔三维结构，这是系统工程方法论的基础。 +
+霍尔三维结构以时间维、（ ）维、知识维组成的立体结构概括性地表示出系统工程的各阶段、各步骤以及所涉及的知识范围。 +
 其中时间维是系统的工作进程，对于一个具体的工程项目，可以分为7个阶段，在（ ）阶段会做出研制方案及生产计划。
 
 * A 知识 / B 需求 / C 文档 / *D 信息*
@@ -46885,5 +46941,49 @@ BI(商业智能)系统包括数据预处理、建立数据仓库、数据分析�
 
 答案是 D B D C
 </t>
+<t tx="swot.20261021082120.1"></t>
+<t tx="swot.20261021082126.1">基于构件的开发模型包括：软件的需求分析定义、（1）、（2）、（3）以及测试和发布5个顺序执行的阶段。
+
+(1) 
+A 构件接口设计
+#B 体系结构设计# 
+C 元数据设计
+D 集成环境设计
+
+(2) 
+A 数据库建模
+B 业务过程建模
+C 对象建模
+#D 构件库建立# 
+
+(3) 
+#A 应用软件构建# 
+B 构件配置管理
+C 构件单元测试
+D 构件编码实现
+
+---
+
+基于构件的开发模型利用模块化方法将整个系统模块化，并在一定构件模型的支持下复用构件库中的一个或多个软件构件，通过组合手段高效率、高质量地构造应用软件系统的过程。 +
+基于构件的开发模型融合了螺旋模型的许多特征，本质上是演化形的，开发过程是迭代的。 +
+基于构件的开发模型由软件的需求分析定义、体系结构设计、构件库建立、应用软件构建以及测试和发布 5 个阶段组成。
+</t>
+<t tx="swot.20261021090123.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
 </tnodes>
 </leo_file>
