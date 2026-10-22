@@ -545,6 +545,22 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
 <ul class="sectlevel1">
+<li><a href="#_数据库">数据库</a>
+<ul class="sectlevel2">
+<li><a href="#_事务管理">事务管理</a>
+<ul class="sectlevel3">
+<li><a href="#_并发控制基本概念图">并发控制基本概念图</a></li>
+<li><a href="#_封锁协议">封锁协议</a></li>
+<li><a href="#_封锁协议通俗诠释">封锁协议通俗诠释</a></li>
+<li><a href="#_两段锁协议">两段锁协议</a></li>
+<li><a href="#_上面文字说了三件事">上面文字说了三件事</a></li>
+<li><a href="#_画成一条线">画成一条线</a></li>
+<li><a href="#_为什么这么规定">为什么这么规定</a></li>
+<li><a href="#_一句话">一句话</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#_软件架构风格">软件架构风格</a>
 <ul class="sectlevel2">
 <li><a href="#_逐句翻译">逐句翻译</a></li>
@@ -646,6 +662,324 @@ toggleButton.addEventListener('click', () => {
     toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
 });
 </script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_数据库">数据库</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_事务管理">事务管理</h3>
+<div class="paragraph">
+<p>事务提交是 commit，事务回滚是 rollback。</p>
+</div>
+<div class="paragraph">
+<p>事务: 由一系列操作组成，这些操作，要么全做，要么全不做，拥有四种特性，详解如下:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>(操作)原子性: 要么全做，要么全不做。</p>
+</li>
+<li>
+<p>(数据)一致性: 事务发生后数据是一致的，例如银行转账，不会存在A账户转出，但是B账户没收到的情况。</p>
+</li>
+<li>
+<p>(执行)隔离性: 任一事务的更新操作直到其成功提交的整个过程对其他事务都是不可见的，不同事务之间是隔离的，互不干涉。</p>
+</li>
+<li>
+<p>(改变)持续性: 事务操作的结果是持续性的。即事务一旦提交，结果永久有效，系统故障也不丢失。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>事务是并发控制的前提条件，并发控制就是控制不同的事务并发执行，提高系统效率，但是并发控制中存在下面三个问题:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>丢失更新: 事务 1 对数据 A 进行了修改并写回，事务 2 也对 A 进行了修改并写回，此时事务 2 写回的数据会覆盖事务 1 写回的数据，就丢失了事务 1 对 A 的更新。即对数据 A 的更新会被覆盖。</p>
+</li>
+<li>
+<p>不可重复读: 事务 1 读 A，而后事务 2 对数据 A 进行了修改并写回，此时若事务 1 再读 A，发现数据不对。即一个事务重复读 A 两次，会发现数据 A 有误。</p>
+</li>
+<li>
+<p>读脏数据: 事务 1 对数据 A 进行了修改后，事务 2 读数据 A，而后事务 1 回滚，数据 A 恢复了原来的值，那么事务 2 对再对数据 A 做什么就不对了，因为 事务 2 读到的是脏数据。</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="static/事务三种问题.png" alt="事务三种问题" width="600">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_并发控制基本概念图">并发控制基本概念图</h4>
+<div class="imageblock">
+<div class="content">
+<img src="img/mermaid-并发控制基本概念图.png" alt="mermaid 并发控制基本概念图" width="574" height="736">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_封锁协议">封锁协议</h4>
+<div class="paragraph">
+<p>x 锁是排它锁(写锁)：若事务 T 对数据对象 A 加上 X 锁，则只允许 T 读取和修改 A，其他事务都不能再对 A 加任何类型的锁，直到 T 释放 A 上的锁。</p>
+</div>
+<div class="paragraph">
+<p>S 锁是共享锁(读锁)：若事务 T 对数据对象 A 加上 S 锁，则只允许 T 读取 A，但不能修改 A。其他事务只能再对 A 加 S 锁(即能读不能修改)，直到 T 释放 A 上的 S 锁。</p>
+</div>
+<div class="paragraph">
+<p>共有三级封锁协议，定义如下:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>一级封锁协议: 事务在修改数据 R 之前必须先对其加 X 锁，直到事务结束才释放。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>可解决丢失更新问题。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>二级封锁协议: 一级封锁协议的基础上加上事务 T 在读数据 R 之前必须先对其加 S 锁，读完后即可释放 S 锁。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>可解决丢失更新、读脏数据问题。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>三级封锁协议: 一级封锁协议加上事务 T 在读取数据 R 之前先对其加 S 锁，直到事务结束才释放。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>可解决丢失更新、读脏数据、数据重复读问题。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_封锁协议通俗诠释">封锁协议通俗诠释</h4>
+<div class="paragraph">
+<p>可以把“数据”想成一本<strong>公共账本</strong>，事务就是来账本上办事的人。</p>
+</div>
+<div class="sect4">
+<h5 id="_1_两种锁用生活话理解">1. 两种锁用生活话理解</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>X 锁（排它锁/写锁）＝“我要改，门锁上”</strong><br>
+谁拿了 X 锁，谁就能读和改；别人<strong>什么锁都不能加</strong>，只能等。相当于“我正在改，谁都别碰”。</p>
+</li>
+<li>
+<p><strong>S 锁（共享锁/读锁）＝“我只看看，贴个阅览牌”</strong><br>
+谁拿了 S 锁，谁只能读不能改；别人还能继续加 S 锁一起读，但<strong>不能加 X 锁改</strong>。相当于“大家可以一起看，但谁也别改”。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>一句话：<strong>X 锁排斥所有人；S 锁只排斥想改的人。</strong></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_2_三级封锁协议用改账本看账本解释">2. 三级封锁协议，用“改账本/看账本”解释</h5>
+<h5 id="_一级封锁协议改之前先独占改完到事务结束才还钥匙" class="discrete">一级封锁协议：改之前先独占，改完到事务结束才还钥匙</h5>
+<div class="paragraph">
+<p>规则：<br>
+<strong>事务要修改数据 R，必须先加 X 锁，而且一直持有到事务结束（提交或回滚）才释放。</strong></p>
+</div>
+<div class="paragraph">
+<p>生活比喻：<br>
+你要改账本，先把账本锁进柜子，钥匙拿到自己手里；<strong>改完不算完，要等整个事情办完（提交/回滚）才还钥匙</strong>。</p>
+</div>
+<div class="paragraph">
+<p>解决：<strong>丢失更新</strong>。<br>
+例子：余额 100，T1 想改成 110，T2 想改成 120。<br>
+如果没有锁，两人都读到 100，最后可能一个修改把另一个覆盖掉。<br>
+一级协议下，T1 改之前拿 X 锁，T2 想改只能等，不会同时改。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>一级协议只管“写”，不管“读”。所以它防不住脏读。</p>
+</div>
+</blockquote>
+</div>
+<h5 id="_二级封锁协议一级_读之前先领阅览牌读完马上还" class="discrete">二级封锁协议：一级 + 读之前先领“阅览牌”，读完马上还</h5>
+<div class="paragraph">
+<p>规则：<br>
+在一级基础上，<strong>事务读 R 之前必须先加 S 锁，读完立刻释放 S 锁</strong>。<br>
+注意：写操作仍然要 X 锁并持有到事务结束。</p>
+</div>
+<div class="paragraph">
+<p>生活比喻：<br>
+你要看账本，先领“共享阅览牌”；如果有人在改账本（拿着 X 锁），你领不到牌，只能等。你<strong>看完马上还牌</strong>。</p>
+</div>
+<div class="paragraph">
+<p>解决：<strong>丢失更新 + 读脏数据</strong>。</p>
+</div>
+<div class="paragraph">
+<p>脏读就是：别人改了数据但还没提交，甚至可能回滚，你却读到了。<br>
+二级协议下，别人改数据时拿着 X 锁，你读之前要 S 锁，但 S 和 X 不能共存，所以你只能等，<strong>读不到别人没提交的中间值</strong>。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>二级协议读完就还 S 锁，所以防不住“不可重复读”。</p>
+</div>
+</blockquote>
+</div>
+<h5 id="_三级封锁协议一级_读之前领牌而且一直拿到事务结束" class="discrete">三级封锁协议：一级 + 读之前领牌，而且一直拿到事务结束</h5>
+<div class="paragraph">
+<p>规则：<br>
+在一级基础上，<strong>事务读 R 之前先加 S 锁，并且一直持有到事务结束才释放</strong>。</p>
+</div>
+<div class="paragraph">
+<p>生活比喻：<br>
+你要看账本，先领“共享阅览牌”，而且<strong>看了一次不还牌，直到你整个事情办完才还</strong>。这样期间别人想改账本也改不了。</p>
+</div>
+<div class="paragraph">
+<p>解决：<strong>丢失更新 + 读脏数据 + 不可重复读</strong>。</p>
+</div>
+<div class="paragraph">
+<p>不可重复读就是：<br>
+T1 第一次读余额是 100；T2 改成 90 并提交；T1 再读变成 90，两次读不一样。<br>
+三级协议下，T1 第一次读时拿 S 锁并一直拿到结束，T2 想改就要 X 锁，但 X 和 S 不能共存，所以 T2 改不了。T1 两次读都还是 100。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_3_一张表总结">3. 一张表总结</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">协议</th>
+<th class="tableblock halign-left valign-top">写怎么锁</th>
+<th class="tableblock halign-left valign-top">读怎么锁</th>
+<th class="tableblock halign-left valign-top">能解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一级</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">改前加 X 锁，直到事务结束</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">不管读</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">丢失更新</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">二级</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">同一级</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">读前加 S 锁，读完马上放</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">丢失更新、脏读</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">三级</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">同一级</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">读前加 S 锁，直到事务结束才放</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">丢失更新、脏读、不可重复读</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>最容易记的口诀</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>一级：写要独占到底。</strong></p>
+</li>
+<li>
+<p><strong>二级：一级 + 读时加共享锁，读完就放。</strong></p>
+</li>
+<li>
+<p><strong>三级：一级 + 读时加共享锁，读到事务结束才放。</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>再短一点：
+<strong>一级防“两人同时改”；二级再防“读到别人没提交的脏数据”；三级再防“我读两次之间别人插进来改”。</strong></p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_两段锁协议">两段锁协议</h4>
+<div class="paragraph">
+<p>每个事务的执行可以分为两个阶段: 生长阶段(加锁阶段)和衰退阶段(解锁阶段)</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>加锁阶段: 在该阶段可以进行加锁操作。
+在对任何数据进行读操作之前要申请并获得 S 锁，在进行写操作之前要申请并获得 x 锁。
+加锁不成功，则事务进入等待状态，直到加锁成功才继续执行。</p>
+</li>
+<li>
+<p>解锁阶段: 当事务释放了一个封锁以后，事务进入解锁阶段，在该阶段只能进行解锁操作不能再进行加锁操作。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>两段封锁法可以这样来实现:
+事务开始后就处于加锁阶段，一直到执行 ROLLBACK 和 COMMIT 之前都是加锁阶段。
+ROLLBACK 和 COMMIT 使事务进入解锁阶段，即在 ROLLBACK 和 COMMIT 模块中 DBMS 释放所有封锁。</p>
+</div>
+<hr>
+</div>
+<div class="sect3">
+<h4 id="_上面文字说了三件事">上面文字说了三件事</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>事务开始后，只加锁，不解锁。</strong> 读之前加 S 锁，写之前加 X 锁，加不到就等着。</p>
+</li>
+<li>
+<p><strong>一旦释放了第一个锁，就进入解锁阶段，之后只能解锁，不能再加锁。</strong></p>
+</li>
+<li>
+<p><strong>实现上，事务开始到 COMMIT/ROLLBACK 之前都算加锁阶段；COMMIT/ROLLBACK 时一次性释放所有锁。</strong></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_画成一条线">画成一条线</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>事务开始 ———————————————— COMMIT/ROLLBACK ———— 结束
+        [      加锁阶段：只能加锁      ] [解锁阶段：释放所有锁]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>分界线就是<strong>第一次解锁</strong>。在此之前只能加锁，在此之后只能解锁。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_为什么这么规定">为什么这么规定</h4>
+<div class="paragraph">
+<p>防止一个事务“先解锁、再回头加锁”，那样并发执行会乱，结果不可串行化。仅此而已。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_一句话">一句话</h4>
+<div class="paragraph">
+<p><strong>加锁要一口气加完，然后才能开始解锁；解锁后不许再加锁。</strong></p>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -2295,7 +2629,7 @@ uniq<span class="tok-w"> </span>-c<span class="tok-w"> </span>tmp3</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-21 09:07:30 +0800
+Last updated 2026-10-22 15:48:39 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
