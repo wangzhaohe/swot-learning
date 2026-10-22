@@ -131,6 +131,9 @@
 <v t="swot.20261020140918.1"><vh>公式书写 LaTeX &amp; AsciiMath 对比后选择 LaTex </vh></v>
 </v>
 </v>
+<v t="swot.20261022160306.1"><vh>@adoc 文本写作对比.adoc</vh>
+<v t="swot.20261022160151.1"><vh>reStructuredText（rST）在写作时通常比 AsciiDoc 更麻烦一些</vh></v>
+</v>
 </v>
 <v t="swot.20250906075341.1"><vh>@path docker</vh>
 <v t="swot.20250906075354.1"><vh>@adoc docker.adoc</vh>
@@ -3213,16 +3216,13 @@
 </v>
 </v>
 <v t="swot.20261015095105.1"><vh>@adoc test.adoc</vh>
-<v t="swot.20261015095131.1"><vh>test</vh>
-<v t="swot.20261022085253.1"></v>
-</v>
+<v t="swot.20261015095131.1"><vh>test</vh></v>
 </v>
 <v t="swot.20261021142052.1"><vh>asciidoc 有实时编辑的软件吗？类似于 markText.app</vh></v>
 <v t="swot.20261021142543.1"><vh>试用 asciidoctor js 版本</vh></v>
 <v t="swot.20261021142853.1"><vh>给 asciidoc 做语法高亮</vh></v>
 <v t="swot.20261021142942.1"><vh>leo-editor 的可撤销策略是什么？</vh></v>
 <v t="swot.20261021150615.1"><vh>哪些特殊的图形字符去哪儿选择使用？</vh></v>
-<v t="swot.20261021150856.1"><vh>restructText 比 asciidoc 写时麻烦吗？</vh></v>
 <v t="swot.20261021215618.1"><vh>找下 leo-editor 都有哪些测试</vh></v>
 </v>
 <v t="swot.20250811154633.1"><vh>@path threejs</vh>
@@ -47258,7 +47258,6 @@ ABSDM 中，架构需求获取的来源有三方面：系统质量目标、系�
 &lt;/body&gt;
 &lt;/html&gt;
 &lt;!--@-leo--&gt;</t>
-<t tx="swot.20261021150856.1"></t>
 <t tx="swot.20261021152655.1">这道题可以拆解成一个**“画时间轴”**的简单方法。
 
 [discrete]
@@ -47882,5 +47881,58 @@ ROLLBACK 和 COMMIT 使事务进入解锁阶段，即在 ROLLBACK 和 COMMIT 模
 
 **加锁要一口气加完，然后才能开始解锁；解锁后不许再加锁。**
 </t>
+<t tx="swot.20261022160151.1">我之前在 leo-editor 中选择了 AsciiDoc 来写作，现在对比一下，增强信心的。Markdown 就不对比了，因为太简单了。
+
+*reStructuredText（rST）在写作时通常比 AsciiDoc 更麻烦一些*，尤其是在基础语法和日常书写体验上。
+
+这种“麻烦”主要体现在语法的直观性和一致性上。虽然两者功能都很强大，但 AsciiDoc 的设计目标之一就是让源文本更接近自然书写，而 rST 则带有更明显的标记语言痕迹。
+
+[discrete]
+==== 标题语法：rST 需要手动维护装饰线
+
+这是两者最直观的差异。
+
+* *AsciiDoc*：使用简单的等号（`=`）层级，输入直观且无需担心长度。例如 `= 一级标题`，`== 二级标题`。
+* *reStructuredText*：必须使用标点符号（如 `=`、`-`、`~`）在标题文字下方（或上下方）画线，且*装饰线的长度必须大于或等于标题文字的长度*。如果标题文字改长了，装饰线也得跟着加长，否则构建时可能会报错或格式异常，这种手工对齐在频繁修改时比较繁琐。
+
+[discrete]
+==== 语法直觉与复杂度：AsciiDoc 更接近 Markdown
+
+* *AsciiDoc*：整体语法更接近 Markdown 的直觉，易于上手。它的设计初衷包含了让非技术人员也能快速阅读和书写，学习曲线相对平缓。
+* *reStructuredText*：语法相对更复杂，且对*缩进和空白字符非常敏感*（这源于 Python 社区的传统）。例如，插入代码块需要在上一行末尾加 `::` 并保持缩进，这种规则对于新手来说不太直观。有观点认为 rST 的语法“独特且难以掌握”，特别是对于习惯了其他标记语言的人。
+
+[discrete]
+==== 表格与复杂排版
+
+* *AsciiDoc*：内置了对复杂表格的原生支持，语法相对统一。
+* *reStructuredText*：虽然也支持表格，但通常需要通过指令（如 `.. list-table::` 或 `.. csv-table::`）来实现，或者使用需要精细调整的网格表格。相比之下，AsciiDoc 的表格语法在书写复杂内容时通常更直接一些。
+
+[discrete]
+==== 总结与适用场景
+
+虽然 *AsciiDoc 写起来更顺手*，但 rST 也有其不可替代的优势，特别是如果身处 Python 生态或需要 Sphinx 的强大扩展能力（例如自动生成 API 文档）。
+
+*建议*：
+
+* 如果追求**书写效率和低学习成本**，或者团队里有非技术写作者，*AsciiDoc* 是更舒服的选择。
+* 如果文档是 **Python 项目**的一部分，且深度依赖 *Sphinx* 的自动化功能，那么为了工具链的完整性，忍受 rST 稍显繁琐的语法通常是值得的。
+</t>
+<t tx="swot.20261022160306.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
 </tnodes>
 </leo_file>
