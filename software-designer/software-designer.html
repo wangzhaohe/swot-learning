@@ -700,26 +700,37 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </li>
 <li><a href="#_9_数据库">9 数据库</a>
 <ul class="sectlevel2">
-<li><a href="#_9_1_关系模式">9.1 关系模式</a>
+<li><a href="#_9_1_数据库范式">9.1 数据库范式</a>
 <ul class="sectlevel3">
-<li><a href="#_9_1_1_求候选键">9.1.1 求候选键</a></li>
-<li><a href="#_9_1_2_无损连接分解">9.1.2 无损连接分解</a></li>
-<li><a href="#_9_1_3_保持函数依赖">9.1.3 保持函数依赖</a></li>
+<li><a href="#_先铺垫范式到底是啥">先铺垫：范式到底是啥？</a></li>
+<li><a href="#_1nf第一范式每个格子只能放一个东西">1NF（第一范式）：每个格子只能放一个东西</a></li>
+<li><a href="#_2nf第二范式小弟必须认整个大哥团队不能只认一个">2NF（第二范式）：小弟必须认整个大哥团队，不能只认一个</a></li>
+<li><a href="#_3nf第三范式小弟只能直接认大哥不能认小弟的小弟">3NF（第三范式）：小弟只能直接认大哥，不能认小弟的小弟</a></li>
+<li><a href="#_bcnf巴斯范式连大哥内部也不能互相管">BCNF（巴斯范式）：连大哥内部也不能互相管</a></li>
+<li><a href="#_4nf第四范式一张表不能有两个独立的一对多">4NF（第四范式）：一张表不能有两个独立的“一对多”</a></li>
+<li><a href="#_最后一张表总结">最后一张表总结</a></li>
 </ul>
 </li>
-<li><a href="#_9_2_关系代数表达式">9.2 关系代数表达式</a>
+<li><a href="#_9_2_关系模式">9.2 关系模式</a>
 <ul class="sectlevel3">
-<li><a href="#_9_2_1_问题1">9.2.1 问题1</a></li>
-<li><a href="#_9_2_2_问题2">9.2.2 问题2</a></li>
-<li><a href="#_9_2_3_举一个具体例子">9.2.3 举一个具体例子‌</a></li>
+<li><a href="#_求候选键">求候选键</a></li>
+<li><a href="#_无损连接分解">无损连接分解</a></li>
+<li><a href="#_保持函数依赖">保持函数依赖</a></li>
 </ul>
 </li>
-<li><a href="#_9_3_数据库模式">9.3 数据库模式</a></li>
-<li><a href="#_9_4_数据库设计">9.4 数据库设计</a></li>
-<li><a href="#_9_5_数据库锁">9.5 数据库锁</a></li>
-<li><a href="#_9_6_not_exists">9.6 NOT EXISTS</a>
+<li><a href="#_9_3_关系代数表达式">9.3 关系代数表达式</a>
 <ul class="sectlevel3">
-<li><a href="#_9_6_1_如何理解该_sql">9.6.1 如何理解该 SQL</a></li>
+<li><a href="#_问题1">问题1</a></li>
+<li><a href="#_问题2">问题2</a></li>
+<li><a href="#_举一个具体例子">举一个具体例子‌</a></li>
+</ul>
+</li>
+<li><a href="#_9_4_数据库模式">9.4 数据库模式</a></li>
+<li><a href="#_9_5_数据库设计">9.5 数据库设计</a></li>
+<li><a href="#_9_6_数据库锁">9.6 数据库锁</a></li>
+<li><a href="#_9_7_not_exists">9.7 NOT EXISTS</a>
+<ul class="sectlevel3">
+<li><a href="#_如何理解该_sql">如何理解该 SQL</a></li>
 </ul>
 </li>
 </ul>
@@ -8059,7 +8070,667 @@ D P1、P2是非阻塞节点，P3是阻塞节点，该图不可以化简，是死
 <h2 id="_9_数据库">9 数据库</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_9_1_关系模式">9.1 关系模式</h3>
+<h3 id="_9_1_数据库范式">9.1 数据库范式</h3>
+<div class="paragraph">
+<p>了解基本术语</p>
+</div>
+<div class="paragraph">
+<p>一、核心「键」术语对照表</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 8%;">
+<col style="width: 37%;">
+<col style="width: 20%;">
+<col style="width: 35%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">术语</th>
+<th class="tableblock halign-left valign-top">通俗定义</th>
+<th class="tableblock halign-left valign-top">大白话速记</th>
+<th class="tableblock halign-left valign-top">关键规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">超键</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">能唯一确定一行数据的字段/字段组合，可带多余字段</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">能找人就行，带不带累赘不管</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">只要求唯一性，不要求精简</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">候选键</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">最精简的超键，去掉任意一个字段就无法唯一确定数据</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">精干小分队，刚好能找人</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">是主键的候选人，一张表可以有多个</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">主键</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">从候选键里人为选定的、官方唯一标识</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表的官方身份证号</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一张表只能有一个，不能为空、不能重复</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">外键</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A表中的字段，刚好是B表的主键</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">两张表的联姻凭证</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">用来关联表，保证数据对应关系合法</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">主属性</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">所有候选键里出现过的字段</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">有资格当主键的「领导层」</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">不是只有主键字段才算，所有候选键包含的字段都是</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">非主属性</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">从未出现在任何候选键里的字段</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">纯纯的「小弟」</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">只能被别人决定，不能决定别人</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>二、核心「依赖」术语对照表</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 44%;">
+<col style="width: 25%;">
+<col style="width: 16%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">术语</th>
+<th class="tableblock halign-left valign-top">通俗定义</th>
+<th class="tableblock halign-left valign-top">大白话速记</th>
+<th class="tableblock halign-left valign-top">对应消除范式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">函数依赖</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">确定A就能唯一确定B，记作A→B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A能说了算B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">范式的基础概念</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">部分函数依赖</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">组合主键里，非主属性只依赖主键的一部分</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">小弟只认半个大哥团队</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2NF消除</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">传递函数依赖</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A→B，B→C，C通过B间接依赖A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">小弟通过中间商认大哥</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3NF消除</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">多值依赖</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一张表里同时存在两个独立的一对多关系</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">两个不相干的事挤一张表</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4NF消除</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_先铺垫范式到底是啥">先铺垫：范式到底是啥？</h4>
+<div class="paragraph">
+<p>数据库范式，就是<strong>设计数据库表的“整洁等级”</strong> ，从1NF到4NF，等级越高，表拆得越细，数据重复越少，也越不容易出现“加不进去、删错了、改半天”的奇葩问题。</p>
+</div>
+<div class="paragraph">
+<p>就像整理书包：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>1NF = 把东西都摊开，不揉成一团</p>
+</li>
+<li>
+<p>2NF = 分课本、文具两个袋子装</p>
+</li>
+<li>
+<p>3NF = 课本里再分语文袋、数学袋</p>
+</li>
+<li>
+<p>BCNF = 袋子上的标签也不能互相混淆</p>
+</li>
+<li>
+<p>4NF = 水杯、跳绳这种和课本无关的也单独放</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>核心原则只有一句话：<strong>一张表只说一件事</strong>。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_1nf第一范式每个格子只能放一个东西">1NF（第一范式）：每个格子只能放一个东西</h4>
+<div class="paragraph">
+<p><strong>核心要求</strong>：表中每一列都是不可拆分的“最小单元”，不能一列塞好几个信息。 <strong>大白话</strong>：每个格子只能放一个东西，不能打包塞一堆。</p>
+</div>
+<div class="paragraph">
+<p>❌ 不符合1NF的反面教材：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">学号</th>
+<th class="tableblock halign-left valign-top">个人信息</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三,男,一班</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>“个人信息”列同时装了姓名、性别、班级，还能继续拆，所以不符合1NF。</p>
+</div>
+<div class="paragraph">
+<p>✅ 符合1NF的正确打开方式：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">学号</th>
+<th class="tableblock halign-left valign-top">姓名</th>
+<th class="tableblock halign-left valign-top">性别</th>
+<th class="tableblock halign-left valign-top">班级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">男</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一班</p></td>
+</tr>
+</tbody>
+</table>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>1NF是最基础的门槛，连这个都达不到，后面的都免谈。</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2nf第二范式小弟必须认整个大哥团队不能只认一个">2NF（第二范式）：小弟必须认整个大哥团队，不能只认一个</h4>
+<div class="paragraph">
+<p>先补个常识：<strong>主键</strong>就是能唯一确定一行数据的“身份证”，可以是一个字段，也可以是几个字段组队。</p>
+</div>
+<div class="paragraph">
+<p><strong>核心要求</strong>：在1NF基础上，所有非主键字段，必须*完全依赖整个主键*，不能只依赖主键的一部分。 <strong>大白话</strong>：主键如果是“双人组合”，那每个小弟都必须认整个组合，不能只跟组合里一个人混。</p>
+</div>
+<div class="paragraph">
+<p>❌ 不符合2NF的反面教材（成绩表，主键是「学号+课程号」组队）：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">学号</th>
+<th class="tableblock halign-left valign-top">课程号</th>
+<th class="tableblock halign-left valign-top">姓名</th>
+<th class="tableblock halign-left valign-top">课程名</th>
+<th class="tableblock halign-left valign-top">分数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">101</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">数学</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">90</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">002</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">101</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">李四</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">数学</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">85</p></td>
+</tr>
+</tbody>
+</table>
+<h4 id="_问题出在哪" class="discrete">问题出在哪？</h4>
+<div class="paragraph">
+<p>主键是「学号+课程号」两个人组队，但：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>「姓名」只靠「学号」就能确定，跟课程号没关系 → 只认了半个大哥</p>
+</li>
+<li>
+<p>「课程名」只靠「课程号」就能确定，跟学号没关系 → 也只认了半个大哥</p>
+</li>
+<li>
+<p>只有「分数」必须「学号+课程号」一起才能确定 → 认了整个团队</p>
+</li>
+</ul>
+</div>
+<h4 id="_会惹什么麻烦" class="discrete">会惹什么麻烦？</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>冗余爆炸</strong>：数学这门课100个学生选，“数学”俩字要重复存100遍</p>
+</li>
+<li>
+<p><strong>插不进去</strong>：新开一门课，还没人选，这门课的信息根本插不进去（主键里学号不能为空）</p>
+</li>
+<li>
+<p><strong>删没了</strong>：某门课所有人都退课了，这门课本身的信息也跟着被删掉了</p>
+</li>
+<li>
+<p><strong>改累死</strong>：把“数学”改成“高等数学”，得改100条记录</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>✅ 怎么改符合2NF？<strong>拆表！</strong> 一张表拆成三张，每张只干一件事：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>学生表（学号，姓名）→ 主键：学号</p>
+</li>
+<li>
+<p>课程表（课程号，课程名）→ 主键：课程号</p>
+</li>
+<li>
+<p>成绩表（学号，课程号，分数）→ 主键：学号+课程号</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>现在每张表里，非主键字段都完全依赖主键，符合2NF。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_3nf第三范式小弟只能直接认大哥不能认小弟的小弟">3NF（第三范式）：小弟只能直接认大哥，不能认小弟的小弟</h4>
+<div class="paragraph">
+<p><strong>核心要求</strong>：在2NF基础上，消除*传递依赖*——非主键字段不能依赖其他非主键字段，必须直接依赖主键。 <strong>大白话</strong>：小弟只能直接认大哥，不能通过另一个小弟间接认大哥，中间不许有“中间商”。</p>
+</div>
+<div class="paragraph">
+<p>❌ 不符合3NF的反面教材（学生表，主键是「学号」）：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">学号</th>
+<th class="tableblock halign-left valign-top">姓名</th>
+<th class="tableblock halign-left valign-top">班级</th>
+<th class="tableblock halign-left valign-top">班主任</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一班</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">王老师</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">002</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">李四</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一班</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">王老师</p></td>
+</tr>
+</tbody>
+</table>
+<h4 id="_问题出在哪_2" class="discrete">问题出在哪？</h4>
+<div class="paragraph">
+<p>「班主任」不直接依赖学号，而是依赖「班级」，「班级」才依赖学号。 相当于：学号 → 班级 → 班主任，中间隔了一层，这就是“传递依赖”。</p>
+</div>
+<h4 id="_会惹什么麻烦_2" class="discrete">会惹什么麻烦？</h4>
+<div class="paragraph">
+<p>和2NF的麻烦一模一样：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>一班50个学生，“王老师”重复存50遍</p>
+</li>
+<li>
+<p>新班级没学生，班主任信息插不进去</p>
+</li>
+<li>
+<p>学生都毕业，班主任信息也没了</p>
+</li>
+<li>
+<p>换班主任得改50条记录</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>✅ 怎么改符合3NF？<strong>继续拆！</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>学生表（学号，姓名，班级号）→ 主键：学号</p>
+</li>
+<li>
+<p>班级表（班级号，班主任）→ 主键：班级号</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>现在所有非主键字段都直接依赖主键，没有中间商赚差价，符合3NF。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>划重点：<strong>3NF是业界最常用的范式</strong>，绝大多数业务系统设计到3NF就够用了。</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_bcnf巴斯范式连大哥内部也不能互相管">BCNF（巴斯范式）：连大哥内部也不能互相管</h4>
+<div class="paragraph">
+<p>这是最容易懵的，也是你重点想听的，咱们掰开揉碎讲。</p>
+</div>
+<h4 id="_先回忆3nf的漏洞" class="discrete">先回忆3NF的漏洞</h4>
+<div class="paragraph">
+<p>3NF的规矩是：<strong>只管“小弟”（非主键字段），不管“大哥团队”（主键里的字段）内部</strong>。 3NF说“小弟不能依赖小弟”，但没说“大哥团队里，一个大哥不能管另一个大哥”。</p>
+</div>
+<div class="paragraph">
+<p>BCNF就是把这个漏洞补上了。</p>
+</div>
+<div class="paragraph">
+<p><strong>核心要求</strong>：只要某个字段能决定别的字段，那它自己必须是*完整的主键*（候选键）。 <strong>大白话</strong>：不管是大哥还是小弟，只要你能说了算，你就必须是“一把手”，不能是二把手就能管另一个二把手。</p>
+</div>
+<h4 id="_举个生活化的例子社团报名表" class="discrete">举个生活化的例子：社团报名表</h4>
+<div class="paragraph">
+<p>先定规则：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>每个社团只有1个指导老师</p>
+</li>
+<li>
+<p>每个老师只指导1个社团</p>
+</li>
+<li>
+<p>一个学生可以报多个社团，一个社团有多个学生</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>❌ <strong>符合3NF，但不符合BCNF</strong>的表（主键是「学生+社团」）：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">学生</th>
+<th class="tableblock halign-left valign-top">社团</th>
+<th class="tableblock halign-left valign-top">指导老师</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">篮球社</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">李老师</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">李四</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">篮球社</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">李老师</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">动漫社</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">王老师</p></td>
+</tr>
+</tbody>
+</table>
+<h5 id="_先讲为什么它符合3nf" class="discrete">先讲：为什么它符合3NF？</h5>
+<div class="paragraph">
+<p>这张表里，能当主键的组合有两个：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>「学生 + 社团」→ 能确定老师</p>
+</li>
+<li>
+<p>「学生 + 老师」→ 能确定社团</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>也就是说，<strong>三个字段都是“有资格当主键的人”（主属性），没有纯小弟（非主属性）</strong> 。 而3NF管的是“非主属性不能依赖非主属性”，既然连非主属性都没有，那它天然符合3NF。</p>
+</div>
+<h5 id="_但它有大问题" class="discrete">但它有大问题：</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>插不进去</strong>：我想新成立“围棋社”，指定“赵老师”当指导，但还没人报名。根本插不进去——因为主键里的“学生”不能为空。</p>
+</li>
+<li>
+<p><strong>改累死</strong>：篮球社换指导老师了，得把所有报篮球社的学生记录都改一遍。</p>
+</li>
+<li>
+<p><strong>删没了</strong>：篮球社的学生都退社了，篮球社和李老师的对应关系也跟着没了。</p>
+</li>
+</ol>
+</div>
+<h5 id="_病根在哪" class="discrete">病根在哪？</h5>
+<div class="paragraph">
+<p><strong>「社团」能决定「指导老师」，但「社团」自己不是一个完整的主键</strong>（主键是学生+社团组队）。 它只是大哥团队里的一员，却能决定另一个大哥成员——这就是BCNF禁止的。</p>
+</div>
+<div class="paragraph">
+<p>✅ <strong>怎么改符合BCNF？拆成两张表：</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>社团表</strong>（社团，指导老师）→ 主键：社团</p>
+</li>
+<li>
+<p><strong>报名表</strong>（学生，社团）→ 主键：学生+社团</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>现在再看：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>社团表里，社团是主键，老师依赖社团 → 能决定别人的，自己就是完整主键</p>
+</li>
+<li>
+<p>报名内外，学生+社团是主键，没有其他字段 → 没问题</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>所有“能说了算”的字段，自己都是完整的一把手，完美解决所有异常。</p>
+</div>
+<h4 id="_一句话记住3nf和bcnf的区别" class="discrete">一句话记住3NF和BCNF的区别</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>3NF：小弟不能依赖小弟</strong>（管住底层）</p>
+</li>
+<li>
+<p><strong>BCNF：大哥内部也不能互相依赖</strong>（管住高层）</p>
+</li>
+<li>
+<p>更简单的记法：<strong>一张表里，只要“A能推出B”，A就必须是整张表的主键</strong>。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_4nf第四范式一张表不能有两个独立的一对多">4NF（第四范式）：一张表不能有两个独立的“一对多”</h4>
+<div class="paragraph">
+<p><strong>核心要求</strong>：在BCNF基础上，消除*多值依赖*——一张表里不能同时有两个互相独立的“一对多”关系。 <strong>大白话</strong>：一张表只讲一个“一对多”，两个没关系的一对多不能放一起，不然会交叉繁殖出一堆冗余数据。</p>
+</div>
+<div class="paragraph">
+<p>❌ 不符合4NF的反面教材：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">学生</th>
+<th class="tableblock halign-left valign-top">兴趣</th>
+<th class="tableblock halign-left valign-top">特长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">篮球</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">画画</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">篮球</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">钢琴</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">游泳</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">画画</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">张三</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">游泳</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">钢琴</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>一个学生可以有多个兴趣，也可以有多个特长，<strong>兴趣和特长之间半毛钱关系都没有</strong>。 张三有2个兴趣、2个特长，结果存了4条记录（2×2）。如果有3个兴趣、4个特长，就要存12条，冗余爆炸。</p>
+</div>
+<div class="paragraph">
+<p>✅ 怎么改符合4NF？<strong>拆！</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>学生兴趣表（学生，兴趣）→ 管兴趣这一个一对多</p>
+</li>
+<li>
+<p>学生特长表（学生，特长）→ 管特长这一个一对多</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>各管各的，互不干扰，冗余立刻消失。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_最后一张表总结">最后一张表总结</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">范式</th>
+<th class="tableblock halign-left valign-top">核心目标</th>
+<th class="tableblock halign-left valign-top">大白话记忆</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1NF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">字段原子性</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">每个格子只放一个东西</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2NF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">消除部分依赖</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">小弟必须认整个大哥团队</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3NF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">消除传递依赖</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">小弟只能直接认大哥</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BCNF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">消除主属性内部依赖</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">能说了算的，必须是完整大哥</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4NF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">消除多值依赖</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一张表只能有一个“一对多”</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>实际开发小建议</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>绝大多数业务场景，<strong>3NF就够用了</strong>，兼顾整洁和查询性能。</p>
+</li>
+<li>
+<p>要求高一点可以到BCNF，进一步减少数据异常。</p>
+</li>
+<li>
+<p>4NF用得很少，一般只有数据仓库、极端去冗余场景才会用到。</p>
+</li>
+<li>
+<p>范式不是越高越好：表拆得越多，查询时连表就越多，性能会下降。有时候为了查询快，还会故意“反范式”（加一点冗余字段）。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_2_关系模式">9.2 关系模式</h3>
 <div class="paragraph">
 <p>设有关系模式 R（课程，教师，学生，成绩，时间，教室），其中函数依赖集 F 如下：</p>
 </div>
@@ -8369,15 +9040,42 @@ R3（学生，时间，教室，课程 ），</pre>
 </div>
 <hr>
 <div class="paragraph">
-<p>该视频 1NF/2NF/3NF 讲得清楚 <a href="https://www.youtube.com/watch?v=rHiyuR2bElE" class="bare">https://www.youtube.com/watch?v=rHiyuR2bElE</a></p>
+<p>该视频 1NF/2NF/3NF 讲得清楚: <a href="https://www.youtube.com/watch?v=rHiyuR2bElE" class="bare">https://www.youtube.com/watch?v=rHiyuR2bElE</a></p>
 </div>
-<div class="imageblock">
-<div class="content">
-<img src="img/Snipaste_2025-05-10_17-21-37.png" alt="1NF-2NF-3NF" width="520">
+<div class="paragraph">
+<p>数据库设计三范式：设计数据库表的时候所依据的规范，共三个规范。</p>
 </div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>第一范式：要求有主键，并且要求每一个字段原子性不可再分</p>
+</li>
+<li>
+<p>第二范式：要求所有非主键字段完全依赖主键，不能产生部分依赖</p>
+</li>
+<li>
+<p>第三范式：所有非主键字段和主键字段之间不能产生传递依赖</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>几个比较经典的设计：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>一对一</p>
+</li>
+<li>
+<p>一对多</p>
+</li>
+<li>
+<p>多对多</p>
+</li>
+</ul>
 </div>
 <div class="sect3">
-<h4 id="_9_1_1_求候选键">9.1.1 求候选键</h4>
+<h4 id="_求候选键">求候选键</h4>
 <h5 id="_数据库中的候选键candidate_key" class="discrete">数据库中的候选键（Candidate Key）</h5>
 <div class="paragraph">
 <p>在数据库中，<strong>候选键（Candidate Key）</strong> 是指在一个关系（表）中，能够唯一标识元组（记录）的属性或属性组合。</p>
@@ -8492,7 +9190,7 @@ R3（学生，时间，教室，课程 ），</pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_9_1_2_无损连接分解">9.1.2 无损连接分解</h4>
+<h4 id="_无损连接分解">无损连接分解</h4>
 <div class="paragraph">
 <p>什么是无损连接分解？</p>
 </div>
@@ -8649,7 +9347,7 @@ R3（学生，时间，教室，课程 ），</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_9_1_3_保持函数依赖">9.1.3 保持函数依赖</h4>
+<h4 id="_保持函数依赖">保持函数依赖</h4>
 <div class="paragraph">
 <p>给定关系模式R(A1，A2，A3，A4)上的函数依赖集F={A1A3&#8594;A2,A2&#8594;A3}。若将R分解为p ={(A1,A2),(A1,A3)}，则该分解是（D）的。</p>
 </div>
@@ -8759,14 +9457,14 @@ D 有损联接且不保持函数依赖</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_9_2_关系代数表达式">9.2 关系代数表达式</h3>
+<h3 id="_9_3_关系代数表达式">9.3 关系代数表达式</h3>
 <div class="paragraph">
 <p>给定关系 R(A，B，C，D) 和关系 S(A，D，E，F)</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>若对这两个关系进行自然连接运算 R▷◁S 后的属性列有（ ）个;</p>
+<p>若对这两个关系进行自然连接运算 R▷◁S 后的属性列有（6）个;</p>
 </li>
 <li>
 <p>关系代数表达式 σR.B&gt;S.F(R▷◁S) 与（ ）等价。</p>
@@ -8861,13 +9559,16 @@ D  π1，2，3，4，7，8(σ1=5^"2"&gt;"8"^4=6(RxS))</pre>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-希腊字母 σ（sigma） 的中文读音是 “西格玛”（拼音：xī gé mǎ）。
+<div class="paragraph">
+<p>希腊字母 σ（sigma） 的中文读音是 “西格玛”（拼音：xī gé mǎ）。<br>
+“π”读作：pài（派），是希腊字母 pi，中文常读“派”。</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_9_2_1_问题1">9.2.1 问题1</h4>
+<h4 id="_问题1">问题1</h4>
 <div class="paragraph">
 <p>问题1‌：自然连接 R▷◁S 后有多少列？</p>
 </div>
@@ -8900,7 +9601,7 @@ D  π1，2，3，4，7，8(σ1=5^"2"&gt;"8"^4=6(RxS))</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_9_2_2_问题2">9.2.2 问题2</h4>
+<h4 id="_问题2">问题2</h4>
 <div class="paragraph">
 <p>问题2‌：σR.B &gt; S.F(R▷◁S) 等价于哪个选项？</p>
 </div>
@@ -8932,7 +9633,7 @@ D: π1,2,3,4,7,8(σ1=5∧"2"&gt;"8"∧4=6(R×S))</pre>
 <div class="ulist">
 <ul>
 <li>
-<p>列顺序：R.A, R.B, R.C, R.D, S.A, S.D, S.E, S.F（即第1-8列）。</p>
+<p>列顺序：R.A, R.B, R.C, R.D, S.A, S.D, S.E, S.F（即第 1-8 列）。</p>
 </li>
 </ul>
 </div>
@@ -9017,7 +9718,7 @@ D: 引号错误（同C）。</pre>
 <p>自然连接 R▷◁S 后有 ‌6列‌（A, B, C, D, E, F）。</p>
 </li>
 <li>
-<p>σR.B &gt; S.F(R▷◁S) 等价于 ‌选项B‌：</p>
+<p>σR.B &gt; S.F(R▷◁S) 等价于 ‌选项 B‌：</p>
 <div class="ulist">
 <ul>
 <li>
@@ -9030,7 +9731,7 @@ D: 引号错误（同C）。</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_9_2_3_举一个具体例子">9.2.3 举一个具体例子‌</h4>
+<h4 id="_举一个具体例子">举一个具体例子‌</h4>
 <table class="tableblock frame-all grid-all" style="width: 50%;">
 <caption class="title">R 表：</caption>
 <colgroup>
@@ -9225,17 +9926,17 @@ D: 引号错误（同C）。</pre>
 <div class="ulist">
 <ul>
 <li>
-<p>自然连接后的列数：‌6列‌</p>
+<p>自然连接后的列数：‌6 列‌</p>
 </li>
 <li>
-<p>等价的关系代数表达式：‌选项B‌</p>
+<p>等价的关系代数表达式：‌选项 B‌</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_9_3_数据库模式">9.3 数据库模式</h3>
+<h3 id="_9_4_数据库模式">9.4 数据库模式</h3>
 <div class="paragraph">
 <p>数据的物理独立性和逻辑独立性分别是通过修改（ ）来完成的。</p>
 </div>
@@ -9256,7 +9957,7 @@ D: 引号错误（同C）。</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_9_4_数据库设计">9.4 数据库设计</h3>
+<h3 id="_9_5_数据库设计">9.5 数据库设计</h3>
 <div class="paragraph">
 <p>确定系统边界和关系规范化分别在数据库设计的（A）阶段进行。</p>
 </div>
@@ -9287,7 +9988,7 @@ D 逻辑设计和概念设计</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_9_5_数据库锁">9.5 数据库锁</h3>
+<h3 id="_9_6_数据库锁">9.6 数据库锁</h3>
 <div class="paragraph">
 <p>若事务 T1 对数据 A 已加排它锁，那么其它事务对数据 A（D） 。</p>
 </div>
@@ -9328,7 +10029,7 @@ D 加共享锁、加排它锁都失败</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_9_6_not_exists">9.6 NOT EXISTS</h3>
+<h3 id="_9_7_not_exists">9.7 NOT EXISTS</h3>
 <div class="paragraph">
 <p>设供应商供应零件的关系模式为 SP(Sno，Pno，Qty)，其中 Sno 表示供应商号，Pno 表示零件号，Qty 表示零件数量。查询至少包含了供应商 “168” 所供应的全部零件的供应商号的 SQL 语句如下：</p>
 </div>
@@ -9382,7 +10083,7 @@ D 加共享锁、加排它锁都失败</pre>
 <p>这种查询模式被称为"关系除法"，是SQL中解决"包含所有"这类问题的标准方法。它使用了双重否定(NOT EXISTS中嵌套NOT EXISTS)来表达"全部包含"的概念。</p>
 </div>
 <div class="sect3">
-<h4 id="_9_6_1_如何理解该_sql">9.6.1 如何理解该 SQL</h4>
+<h4 id="_如何理解该_sql">如何理解该 SQL</h4>
 <div class="paragraph">
 <p>当子查询嵌套得很深时，如何调试、打印每一层的结果？</p>
 </div>
@@ -12468,7 +13169,7 @@ ImageReader pngReader = new PngAdapter();</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-22 08:08:12 +0800
+Last updated 2026-10-23 16:30:55 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
