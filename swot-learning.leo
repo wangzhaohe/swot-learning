@@ -3200,6 +3200,49 @@
 </v>
 </v>
 <v t="swot.20261012085031.1"><vh>架构安全</vh></v>
+<v t="swot.20261026102226.1"><vh>23 种设计模式</vh>
+<v t="swot.20261026104055.1"><vh>创建型模式 (5 种)</vh>
+<v t="swot.20261026104716.1"><vh>工厂方法</vh></v>
+<v t="swot.20261026104716.2"><vh>抽象工厂</vh></v>
+<v t="swot.20261026104716.3"><vh>建造者</vh></v>
+<v t="swot.20261026104716.4"><vh>原型</vh></v>
+<v t="swot.20261026104716.5"><vh>单例</vh></v>
+</v>
+<v t="swot.20261026104229.1"><vh>结构型模式 (7 种)</vh>
+<v t="swot.20261026104608.1"><vh>适配器</vh></v>
+<v t="swot.20261026104608.2"><vh>桥接</vh></v>
+<v t="swot.20261026104608.3"><vh>组合</vh></v>
+<v t="swot.20261026104608.4"><vh>装饰器</vh></v>
+<v t="swot.20261026104608.5"><vh>外观</vh></v>
+<v t="swot.20261026104608.6"><vh>享元</vh></v>
+<v t="swot.20261026104608.7"><vh>代理</vh></v>
+</v>
+<v t="swot.20261026103825.1"><vh>行为型模式 (11 种)</vh>
+<v t="swot.20261026103746.1"><vh>策略（Strategy）—— 适用于初学者</vh>
+<v t="swot.20261026105023.1"><vh>为什么需要它？</vh></v>
+<v t="swot.20261026105115.1"><vh>名词解释</vh></v>
+<v t="swot.20261026105253.1"><vh>什么时候该把函数传进去？（三种情况）</vh></v>
+<v t="swot.20261026105818.1"><vh>判断使用条件</vh></v>
+<v t="swot.20261026110143.1"><vh>JS 完整示例代码</vh>
+<v t="swot.20261026105949.1"><vh>#file code/23-design-patterns/01-strategy.js</vh>
+<v t="swot.20261026110815.1"><vh>可选扩展：策略表</vh></v>
+<v t="swot.20261026110806.1"><vh>可选扩展：上下文类</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20261026104452.1"><vh>责任链</vh></v>
+<v t="swot.20261026104452.2"><vh>命令</vh></v>
+<v t="swot.20261026104452.3"><vh>解释器</vh></v>
+<v t="swot.20261026104452.4"><vh>迭代器</vh></v>
+<v t="swot.20261026104452.5"><vh>中介者</vh></v>
+<v t="swot.20261026104452.6"><vh>备忘录</vh></v>
+<v t="swot.20261026104452.7"><vh>观察者</vh></v>
+<v t="swot.20261026104452.8"><vh>状态</vh></v>
+<v t="swot.20261026104452.9"><vh>策略</vh></v>
+<v t="swot.20261026104452.10"><vh>模板方法</vh></v>
+<v t="swot.20261026104452.11"><vh>访问者</vh></v>
+</v>
+</v>
 </v>
 </v>
 <v t="swot.20261012131756.1"><vh>@adoc 大数据Lambda与Kappa架构案例对比.adoc</vh>
@@ -3234,9 +3277,11 @@
 </v>
 </v>
 <v t="swot.20261015095105.1"><vh>@adoc test.adoc</vh>
-<v t="swot.20261015095131.1"><vh>test</vh></v>
+<v t="swot.20261015095131.1"><vh>test</vh>
+<v t="swot.20261026103746.1"></v>
 </v>
-<v t="swot.20261021142052.1"><vh>asciidoc 有实时编辑的软件吗？类似于 markText.app</vh></v>
+</v>
+<v t="swot.20261026083544.1"><vh>设计模式-策略模式的名词有哪些？ context ?</vh></v>
 <v t="swot.20261021142543.1"><vh>试用 asciidoctor js 版本</vh></v>
 <v t="swot.20261021142853.1"><vh>给 asciidoc 做语法高亮</vh></v>
 <v t="swot.20261021142942.1"><vh>leo-editor 的可撤销策略是什么？</vh></v>
@@ -3400,6 +3445,7 @@
 </v>
 <v t="swot.20260310142409.1"><vh>open-at-leo-file 打开的 leo 文件，不能执行 myLeoSettings.leo 中的命令 @command adoc-live</vh></v>
 </v>
+<v t="swot.20261026104709.1"><vh>change-all:、</vh></v>
 </vnodes>
 <tnodes>
 <t tx="swot.20240101100533.1">@language javascript
@@ -47247,7 +47293,6 @@ ABSDM 中，架构需求获取的来源有三方面：系统质量目标、系�
 该技术通过在日志中记录所有对数据库的修改操作，将一个事务的所有写操作延迟到事务提交后才执行，日志中需要记录“事务开始”和“事务提交”时间，还需要记录数据项被事务修改后的新值， #无需记录数据项被事务修改前的原始值#。
 当系统发生故障时，如果某个事务已经开始，但没有提交，则该事务对数据项的修改尚未体现在数据库中， #因此无需做任何恢复动作#。
 </t>
-<t tx="swot.20261021142052.1"></t>
 <t tx="swot.20261021142543.1">https://docs.asciidoctor.org/asciidoctor.js/latest/
 </t>
 <t tx="swot.20261021142853.1"></t>
@@ -48352,6 +48397,211 @@ D. 生成性、多模态与互动性 +
 * *生成性*：能够创造遵守物理定律、空间一致的世界；
 * *多模态*：能够处理图像、视频、深度、文本及动作等多种输入模态；
 * *互动性*：能够根据动作预测世界状态随时间的演变或交互结果。
+</t>
+<t tx="swot.20261026083544.1"></t>
+<t tx="swot.20261026102226.1"></t>
+<t tx="swot.20261026103746.1">____
+配套 JS 示例 + 讲解
+____
+
+一句话定义： 把「做某件事的具体做法」单独拎出来，做成一个可替换的零件，谁要用，就把它传进去。算法（做法）本身和使用它的地方解耦。
+</t>
+<t tx="swot.20261026103825.1"></t>
+<t tx="swot.20261026104055.1">工厂方法
+抽象工厂
+建造者
+原型
+单例</t>
+<t tx="swot.20261026104229.1"></t>
+<t tx="swot.20261026104452.1"></t>
+<t tx="swot.20261026104452.10"></t>
+<t tx="swot.20261026104452.11"></t>
+<t tx="swot.20261026104452.2"></t>
+<t tx="swot.20261026104452.3"></t>
+<t tx="swot.20261026104452.4"></t>
+<t tx="swot.20261026104452.5"></t>
+<t tx="swot.20261026104452.6"></t>
+<t tx="swot.20261026104452.7"></t>
+<t tx="swot.20261026104452.8"></t>
+<t tx="swot.20261026104452.9"></t>
+<t tx="swot.20261026104608.1"></t>
+<t tx="swot.20261026104608.2"></t>
+<t tx="swot.20261026104608.3"></t>
+<t tx="swot.20261026104608.4"></t>
+<t tx="swot.20261026104608.5"></t>
+<t tx="swot.20261026104608.6"></t>
+<t tx="swot.20261026104608.7"></t>
+<t tx="swot.20261026104709.1">@nosearch
+# Ignore Case, [Node Only], Head, Body
+
+  ignore-case: True
+        regex: False
+   whole-word: False
+search string: 、
+
+node: 创建型模式 (5 种)...
+body: matches: 4
+     line  1, col  4: 工厂方法
+     line  2, col  9: 抽象工厂
+     line  3, col 13: 建造者
+     line  4, col 16: 原型
+</t>
+<t tx="swot.20261026104716.1"></t>
+<t tx="swot.20261026104716.2"></t>
+<t tx="swot.20261026104716.3"></t>
+<t tx="swot.20261026104716.4"></t>
+<t tx="swot.20261026104716.5"></t>
+<t tx="swot.20261026105023.1">同一个调用点，可能今天用做法 A、明天用做法 B（比如支付方式、排序规则、折扣策略）。如果把这些做法写死在调用点里，每加一种就得回去改一遍，越改越乱。策略模式让「做法」可插拔。
+</t>
+<t tx="swot.20261026105115.1">右边是本文示例里对应的真实角色
+
+[width="100%",cols="34%,33%,33%",options="header",]
+|===
+|角色 |说明 |示例中对应内容
+|Strategy（策略接口） |对「一种做法」长什么样的约定。JS 里通常用函数签名表示。 |`@typedef Strategy = (a, b) =++&gt;++ number`
+|ConcreteStrategy（具体策略） |实现了上述约定的某个具体做法。 |`add` / `subtract` / `multiply`
+|Context（上下文 / 环境） |持有策略、并负责「替你调用」它的那个角色。它不关心具体做法是啥，只管把调用转交给当前拿到的策略。 |极简版：`execute(strategy, a, b)` 标准版：`class Calculator`（能持有并运行时切换）
+|Client（客户端） |决定「到底用哪个策略、传什么参数」的代码，也就是真正调用 `execute` / `calc` / `calcBy` 的地方。 |末尾那些 `console.log(...)` 调用
+|===
+
+常见变体——策略表（Strategy Registry）
+
+* 把多个具体策略按名字登记到一个对象里，调用点只传 key，再由一个分发函数去表里取。用来替代 if/else 分支。
+* 示例：`strategies` 对象 + `calcBy(op, a, b)`
+* 记住：在 JS 里「策略」「回调」「高阶函数」机制上是一回事（都是把函数当参数传），区别只在意图——策略强调**可替换的做法**。
+</t>
+<t tx="swot.20261026105253.1">【1】流程是别人搭好的，你只管填「内容」 排序、遍历这套流程语言/引擎已经写好且优化过，你拿来用，只需把「每一步干什么」填进去。这不是设计选择，是 API 规矩。
+
+....
+[3,1,2].sort((a,b) =&gt; a-b);          // 怎么排是引擎定的
+[1,2,3].map(x =&gt; x*2);               // 怎么走是引擎定的
+....
+
+手写 for 也能跑，但放弃了下面的便利
+
+① 链式：`map/filter/sort` 都返回新数组，可一节节接（`.filter().map().sort()`）；手写 for 要拆成多个中间数组。 +
+② 不可变：`map` 承诺「不动原数组，只产新数组」；手写 for 全凭自觉，一不留神 `arr++[++i++]++=...` 就改了原数据。 +
+③ 引擎优化：对 sort 是真优势——引擎用 Timsort(O(n log n))，你手写多半退化为 O(n²)；对 map 则谈不上（手写 for 速度能追上），真正收益是前两条 + 可读性。 
+
+【2】同一件事有好几种做法，临场才定用哪个 支付方式、校验规则、折扣策略都属此类。做法来自用户输入/配置，写代码时未知。把「选择」从 if/else 挪到参数/策略表。
+
+....
+const payers = { wechat: wechatPay, alipay: aliPay };
+const pay = (method, amount) =&gt; payers[method](amount);
+pay('alipay', 100);   // 用户选了啥就传啥，pay 不用改
+....
+
+收益：新增做法只加一行登记，不动已有调用方（开闭原则）
+
+【3】不管用哪种做法，手续统一办 记账、计时、缓存、重试这些横切逻辑只在外层写一次，具体策略保持纯净。
+
+....
+const run = (strategy, ...args) =&gt; {
+  const t = Date.now();
+  try { return strategy(...args); }      // 策略只管干活
+  finally { console.log('耗时', Date.now() - t); }
+};
+....
+</t>
+<t tx="swot.20261026105818.1">判断要不要把匿名函数「提升为具名策略/策略表成员」
+满足任一才值得单独拎出来：
+
+* 做法会变
+* 要反复复用
+* 要单测或需正经名字
+* 内联会损害可读性
+
+一条都不占，就随手写在内联箭头函数里即可。
+</t>
+<t tx="swot.20261026105949.1">@language javascript
+/**
+ * 策略接口：接收两个数字，返回结果
+ * @typedef {(a: number, b: number) =&gt; number} Strategy
+ */
+
+// 具体策略
+
+/** @type {Strategy} 加法 */
+const add = (a, b) =&gt; a + b;
+
+/** @type {Strategy} 减法 */
+const subtract = (a, b) =&gt; a - b;
+
+/** @type {Strategy} 乘法 */
+const multiply = (a, b) =&gt; a * b;
+
+/**
+ * 核心就这一行：上下文（Context）把算法委托给传入的策略
+ * @param {Strategy} strategy 具体策略
+ * @param {number} a
+ * @param {number} b
+ */
+const execute = (strategy, a, b) =&gt; strategy(a, b);
+
+console.log(execute(add, 1, 2));      // 3
+console.log(execute(subtract, 5, 2)); // 3
+console.log(execute(multiply, 3, 4)); // 12
+
+@others
+</t>
+<t tx="swot.20261026110143.1">
+[source,javascript]
+----
+@others
+----</t>
+<t tx="swot.20261026110806.1">// ===== 可选扩展：只在需要「保存策略、多次复用」时才用类 =====
+
+/**
+ * 上下文类：持有策略，避免每次调用都要传一遍
+ */
+class Calculator {
+  /** @param {Strategy} strategy 初始策略 */
+  constructor(strategy) {
+    this.strategy = strategy;
+  }
+
+  /** @param {Strategy} strategy 运行时切换策略 */
+  setStrategy(strategy) {
+    this.strategy = strategy;
+  }
+
+  /**
+   * 执行计算
+   * @param {number} a
+   * @param {number} b
+   */
+  calc(a, b) {
+    return this.strategy(a, b);
+  }
+}
+
+const calc = new Calculator(add);
+console.log(calc.calc(1, 2)); // 3
+
+calc.setStrategy(multiply);
+console.log(calc.calc(3, 4)); // 12
+</t>
+<t tx="swot.20261026110815.1">// ===== 可选扩展：策略表，用于替代 if/else 分支分发 =====
+
+/**
+ * 策略表：用 key 选择策略
+ * @type {Record&lt;string, Strategy&gt;}
+ */
+const strategies = { add, subtract, multiply };
+
+/**
+ * 按操作名分发
+ * @param {keyof typeof strategies} op
+ * @param {number} a
+ * @param {number} b
+ */
+const calcBy = (op, a, b) =&gt; {
+  const strategy = strategies[op];
+  if (!strategy) throw new Error(`未知策略: ${op}`);
+  return strategy(a, b);
+};
+
+console.log(calcBy('multiply', 3, 4)); // 12
 </t>
 </tnodes>
 </leo_file>
