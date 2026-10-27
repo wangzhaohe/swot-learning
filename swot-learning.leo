@@ -3277,15 +3277,10 @@
 </v>
 </v>
 <v t="swot.20261015095105.1"><vh>@adoc test.adoc</vh>
-<v t="swot.20261015095131.1"><vh>test</vh>
-<v t="swot.20261026103746.1"></v>
+<v t="swot.20261015095131.1"><vh>test</vh></v>
 </v>
-</v>
-<v t="swot.20261026083544.1"><vh>设计模式-策略模式的名词有哪些？ context ?</vh></v>
 <v t="swot.20261021142543.1"><vh>试用 asciidoctor js 版本</vh></v>
-<v t="swot.20261021142853.1"><vh>给 asciidoc 做语法高亮</vh></v>
 <v t="swot.20261021142942.1"><vh>leo-editor 的可撤销策略是什么？</vh></v>
-<v t="swot.20261021150615.1"><vh>哪些特殊的图形字符去哪儿选择使用？</vh></v>
 <v t="swot.20261021215618.1"><vh>找下 leo-editor 都有哪些测试</vh></v>
 <v t="swot.20261023163706.1"><vh>建议 leo-deitor cmd + shift + d 不要往前排节点</vh></v>
 </v>
@@ -47295,7 +47290,6 @@ ABSDM 中，架构需求获取的来源有三方面：系统质量目标、系�
 </t>
 <t tx="swot.20261021142543.1">https://docs.asciidoctor.org/asciidoctor.js/latest/
 </t>
-<t tx="swot.20261021142853.1"></t>
 <t tx="swot.20261021142942.1"></t>
 <t tx="swot.20261021143727.1">某项目包含任务 A、B、C、D、E、F，其持续时间及前序关系如下：
 
@@ -47314,31 +47308,6 @@ ABSDM 中，架构需求获取的来源有三方面：系统质量目标、系�
 * D 10
 </t>
 <t tx="swot.20261021143942.1"></t>
-<t tx="swot.20261021150615.1">=== 比如下面的字符从哪儿来的？
-
-&lt;!--@+leo-ver=5-thin--&gt;
-&lt;!--@+node:swot.20261016170000.1: * @file test-icon-in-body.html--&gt;
-&lt;html&gt;
-&lt;body&gt;
-&lt;div class="container"&gt;
-  &lt;h1&gt;
-    🚀 Launch the satellite 📡 and watch the signal
-    &lt;span&gt;Pub/Sub&lt;/span&gt;
-  &lt;/h1&gt;
-  &lt;div class="subtitle"&gt;
-    💡 The publisher (Publisher) emits events and the event bus (EventEmitter)
-    notifies every subscriber; each subscriber then updates itself.
-  &lt;/div&gt;
-  &lt;ul&gt;
-    &lt;li&gt;🔥 Hot reload works after 🌟 a stellar edit&lt;/li&gt;
-    &lt;li&gt;👍 Great job with the 🤖 robot demo&lt;/li&gt;
-    &lt;li&gt;The arrow → (BMP) is handled, but the emoji above are astral and are not.&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-&lt;!--@-leo--&gt;
-</t>
 <t tx="swot.20261021152655.1">这道题可以拆解成一个**“画时间轴”**的简单方法。
 
 [discrete]
@@ -48347,8 +48316,16 @@ BCNF就是把这个漏洞补上了。
 <t tx="swot.20261023163706.1">aaa
 
 bbb
+b1
+b2
 
 ccc
+
+&lt;&lt;a&gt;&gt;
+
+&lt;&lt;b&gt;&gt;
+
+&lt;&lt;c&gt;&gt;
 </t>
 <t tx="swot.20261023170541.1">* 适用：效用树、架构评估案例题，一级质量属性共4个：*性能、安全性、可用性、可修改性* +
 * 区分：ISO25010模型里可维护性是独立一级，和这个体系不一样，做题看题干！
@@ -48398,7 +48375,6 @@ D. 生成性、多模态与互动性 +
 * *多模态*：能够处理图像、视频、深度、文本及动作等多种输入模态；
 * *互动性*：能够根据动作预测世界状态随时间的演变或交互结果。
 </t>
-<t tx="swot.20261026083544.1"></t>
 <t tx="swot.20261026102226.1"></t>
 <t tx="swot.20261026103746.1">____
 配套 JS 示例 + 讲解
@@ -48544,11 +48520,11 @@ console.log(execute(multiply, 3, 4)); // 12
 
 @others
 </t>
-<t tx="swot.20261026110143.1">
-[source,javascript]
+<t tx="swot.20261026110143.1">[source,javascript]
 ----
 @others
-----</t>
+----
+</t>
 <t tx="swot.20261026110806.1">// ===== 可选扩展：只在需要「保存策略、多次复用」时才用类 =====
 
 /**
