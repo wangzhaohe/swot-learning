@@ -175,12 +175,10 @@
 <v t="swot.20181207204148.1"><vh>@data abbreviations</vh>
 <v t="swot.20230331173337.1"><vh>common</vh></v>
 <v t="swot.20221029071117.1"><vh>leo-editor</vh></v>
-<v t="swot.20240314073153.1"><vh>java</vh></v>
 <v t="swot.20221124162354.1"><vh>asciidoc</vh>
-<v t="swot.20260316223014.1"><vh>sidebar</vh></v>
+<v t="swot.20221230220909.1"><vh>toc</vh></v>
 <v t="swot.20260413122406.1"><vh>sidebar</vh></v>
 <v t="swot.20230101091320.1"><vh>temp</vh></v>
-<v t="swot.20221230220909.1"><vh>toc</vh></v>
 <v t="swot.20221213173218.1"><vh>Admonitions</vh></v>
 <v t="swot.20221213172702.1"><vh>block</vh></v>
 <v t="swot.20221213172720.1"><vh>callout</vh></v>
@@ -208,8 +206,6 @@
 <v t="swot.20230816100435.1"><vh>css</vh></v>
 <v t="swot.20220211081841.1"><vh>javascript</vh></v>
 <v t="swot.20231228095327.1"><vh>nuxt3</vh></v>
-<v t="swot.20230412134154.1"><vh>node.js</vh></v>
-<v t="swot.20230715163332.1"><vh>uni</vh></v>
 </v>
 <v t="swot.20260222181758.1"><vh>@data body-style-settings</vh></v>
 <v t="swot.20190506212541.1"><vh>@outline-data tree-abbreviations</vh>
@@ -333,9 +329,7 @@
 </v>
 </v>
 <v t="swot.20230331173553.1"><vh>waiting abbrevitations</vh>
-<v t="swot.20221105082204.1"><vh>dart</vh>
-<v t="swot.20210928082726.1"><vh>main</vh></v>
-</v>
+<v t="swot.20261027084028.1"><vh>java</vh></v>
 <v t="swot.20210906170429.1"><vh>flutter</vh>
 <v t="swot.20220525094101.1"><vh>import dart</vh></v>
 <v t="swot.20220917231125.1"><vh>switch</vh></v>
@@ -357,12 +351,6 @@
 </v>
 </v>
 <v t="swot.20190502223127.1"><vh>python</vh></v>
-<v t="swot.20190502223338.1"><vh>django</vh>
-<v t="swot.20190507135651.1"><vh>djimport</vh></v>
-<v t="swot.20190502223431.1"><vh>admin</vh></v>
-<v t="swot.20190507135303.1"><vh>model</vh></v>
-<v t="swot.20220417195033.1"><vh>template</vh></v>
-</v>
 <v t="swot.20210131093848.1"><vh>not offen</vh></v>
 </v>
 </vnodes>
@@ -528,7 +516,7 @@ date;;={|{x=time.strftime("%Y/%m/%d")}|}
 Ctrl-W or middle mouse click, so this optionally hides the
 redundant 'X'</t>
 <t tx="swot.20190429165218.1"></t>
-<t tx="swot.20190502223127.1">ipdb;;=import ipdb&lt;||&gt;ipdb.set_trace()
+<t tx="swot.20190502223127.1">ipdb;;=import ipdb
 
 py;;=@first #! /usr/bin/env python
 \:@first # -*- coding: utf-8 -*-
@@ -537,16 +525,8 @@ py;;=@first #! /usr/bin/env python
 \:@others
 
 print;;=print("*" * 30)
-\:
 
 i;;=import 
-
-ir;;=import requests
-
-rf;;=rest_framework
-
-mainp;;=if __name__ == "__main__":
-\:    pass
 
 # make balanced indented Django web template tags, see @data abbreviations-subst-env
 };;={|{django_tag();x=''}|}
@@ -579,38 +559,6 @@ def;;=def {|{x=ask("function name",default=c.p.h)}|}({|{x=in_class()}|}{|{x=ask(
 \:
 \:    &lt;|code|&gt;
 </t>
-<t tx="swot.20190502223338.1"></t>
-<t tx="swot.20190502223431.1"># admin;;=# class {|{x=ask("class name",default=c.p.h.replace('class ','').replace('Admin',''))}|}Inline(admin.StackedInline):
-# \:class {|{x=get("class name")}|}Inline(admin.TabularInline):
-# \:
-# \:    model = models.{|{x=get("class name")}|}
-# \:    extra = 3
-# \:
-# \:
-# \:@admin.register(models.{|{x=get("class name")}|})
-# \:class {|{x=get("class name")}|}Admin(admin.ModelAdmin):
-# \:
-# \:    pass
-# \:    ## list attribute
-# \:    # list_display_links = ()
-# \:    # list_display = ()
-# \:    # list_filter = ()
-# \:    # date_hierarchy = ""
-# \:    # search_fields = []
-# \:    # list_per_page = 100
-# \:    # actions_on_bottom = True
-# \:    # actions_on_top = False
-# \:
-# \:    ## page attribute
-# \:    # fields = []
-# \:    # fieldsets = []
-# \:    # inlines = [xxxInline]
-# \:
-# \:    # @others
-# \:
-# \:
-# \:# admin.site.register(models.{|{x=get("class name")}|}, {|{x=get("class name")}|}Admin)
-# \:</t>
 <t tx="swot.20190503184609.1">True: run Pyflakes on each saved files, but only if it has been changed.</t>
 <t tx="swot.20190503184623.1">True: raise a dialog warning about Python errors when writing files.</t>
 <t tx="swot.20190506212541.1">app;;
@@ -636,37 +584,6 @@ vue;;
 
 sv;;
 </t>
-<t tx="swot.20190507135303.1">model;;=class {|{x=ask("class name",default=c.p.h.replace('class ',''))}|}(models.Model):
-\:
-\:    ''' &lt;|doc|&gt; '''
-\:
-\:    ## column
-\:    # &lt;|keyword|&gt; = models.CharField("&lt;|name|&gt;", max_length=50, blank=True)
-\:    # &lt;|keyword|&gt; = models.DateTimeField("&lt;|name|&gt;", auto_now_add=False, blank=False, null=True, help_text="")
-\:    # &lt;|keyword|&gt; = models.PositiveIntegerField("&lt;|name|&gt;", blank=True, null=True, editable=True)
-\:    # &lt;|keyword|&gt; = models.BooleanField("&lt;|name|&gt;", default=False)
-\:    # &lt;|keyword|&gt; = models.TextField("&lt;|name|&gt;", blank=True, help_text="")
-\:    # &lt;|keyword|&gt; = models.ForeignKey(&lt;|class|&gt;, on_delete=models.CASCADE, null=True, verbose_name="&lt;|name|&gt;")
-\:
-\:    @others
-\:</t>
-<t tx="swot.20190507135651.1">djimport;;=# from django.contrib.auth.models import User, Group
-\:
-\:## admin.py
-\:# from django.contrib import admin
-\:# from . import models
-\:
-\:## models.py
-\:# from django.db import models
-\:
-\:## views.py
-\:# from django.http import HttpResponse
-\:# from django.shortcuts import render
-\:# from . import models
-\:
-\:## urls.py
-\:#from django.urls import include, path
-\:</t>
 <t tx="swot.20200206155945.1">valid values are: outline, body, tabs
 
 Warning: you may have to clear the caches in .leo/db after changing this setting.
@@ -1041,10 +958,6 @@ alapp;;=@language dart
 \:
 
 </t>
-<t tx="swot.20210928082726.1">maind;;=void main(List&lt;String&gt; arguments) {
-\:  &lt;||&gt;
-\:}
-\:</t>
 <t tx="swot.20211014175000.1"></t>
 <t tx="swot.20211114155346.1">@language python
 n = 0
@@ -1175,10 +1088,6 @@ h3;;=&lt;h3&gt;&lt;||&gt;&lt;/h3&gt;
 h4;;=&lt;h4&gt;&lt;||&gt;&lt;/h4&gt;
 h5;;=&lt;h5&gt;&lt;||&gt;&lt;/h5&gt;
 h6;;=&lt;h6&gt;&lt;||&gt;&lt;/h6&gt;
-</t>
-<t tx="swot.20220417195033.1">csrf;;={% csrf_token %}
-\:
-
 </t>
 <t tx="swot.20220525094101.1">ma;;=import 'package:flutter/material.dart';
 \:
@@ -1425,25 +1334,20 @@ pop;;=Navigator.pop(context);
   @others
 )&lt;||&gt;
 </t>
-<t tx="swot.20221029071117.1">c;;=component 
-
+<t tx="swot.20221029071117.1">c;;=@clean 
 f;;=@file 
-
 d;;=@doc
-
 o;;=@others
-
 s;;=&lt;&lt; &lt;||&gt; &gt;&gt;
 
 t2;;=@tabwidth -2
-
 t4;;=@tabwidth -4
 
 in;;=@ignore-node 
-
 it;;=@ignore-tree 
-
 ih;;=@no-head 
+
+ipdb;;=import ipdb; ipdb.set_trace()   # 一行写法，调试时常用
 </t>
 <t tx="swot.20221029093037.1">wh;;=width: &lt;||&gt;.0,
 \:height: &lt;||&gt;.0,
@@ -1523,7 +1427,6 @@ else;;=else {&lt;||&gt;}
 dum;;=duration: const Duration(milliseconds: 300),
 
 </t>
-<t tx="swot.20221105082204.1"></t>
 <t tx="swot.20221111202504.1"></t>
 <t tx="swot.20221111202533.1">SingleChildScrollView(
   child:
@@ -1936,13 +1839,6 @@ r;;=return
 
 </t>
 <t tx="swot.20230331173553.1"></t>
-<t tx="swot.20230412134154.1">m;;=mongoose.
-
-redirect;;=router.get("&lt;||&gt;", async function (req, res) {
-\:  res.redirect("&lt;||&gt;");
-\:});
-
-</t>
 <t tx="swot.20230415193400.1">green;;=[green]#&lt;||&gt;#
 gray;;=[gray]#&lt;||&gt;#
 red;;=[red]#&lt;||&gt;#
@@ -1974,8 +1870,6 @@ export default {
 }
 </t>
 <t tx="swot.20230516162423.4">@language css
-</t>
-<t tx="swot.20230715163332.1">view;;=&lt;view class="&lt;||&gt;"&gt;&lt;/view&gt;
 </t>
 <t tx="swot.20230816100435.1">bgc;;=background-color: &lt;||&gt;;
 
@@ -2138,33 +2032,6 @@ def renumber_child_headlines(p, nb: str) -&gt; None:
 \:Question: &lt;||&gt;? ::
 \:Answer: &lt;||&gt;
 \:
-</t>
-<t tx="swot.20240314073153.1">mainj;;=@language java
-\:package com.company;
-\:
-\:public class Main {
-\:
-\:    public static void main(String[] args) {
-\:        // write your code here
-\:    }
-\:}
-\:
-
-psvm;;=public static void main(String[] args) {
-\:    &lt;||&gt;
-\:  }
-\:
-
-sout;;=System.out.println(&lt;||&gt;);
-
-sb;;=Spring Boot 
-
-rrs;;=return Result.success(&lt;||&gt;);
-\:
-
-iftest;;=&lt;if test = "&lt;||&gt; != null"&gt; &lt;||&gt; = #{&lt;||&gt;}, &lt;/if&gt;
-
-hd;;=hdfs dfs 
 </t>
 <t tx="swot.20241223112834.1">plantuml;;=[plantuml, target=img/diagram-&lt;|name|&gt;, format=svg]
 \:....
@@ -2668,86 +2535,6 @@ c.setChanged()
 c.redraw()
 g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 </t>
-<t tx="swot.20260316223014.1">dir;;=
-\:++++
-\:&lt;style&gt;
-\:/* 1. 默认状态：初始就是隐藏的 */
-\:#toc {
-\:    max-width: 0 !important;
-\:    opacity: 0 !important;
-\:    padding-left: 0 !important;
-\:    padding-right: 0 !important;
-\:    border: none !important;
-\:    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
-\:    white-space: nowrap !important;
-\:    
-\:    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
-\:    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-\:                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-\:                opacity 0.3s ease;
-\:}
-\:
-\:/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
-\:#toc.active {
-\:    max-width: 530px !important;
-\:    opacity: 1 !important;
-\:    padding: 10px !important; /* 根据需要恢复 padding */
-\:    overflow-y: auto !important;
-\:}
-\:
-\:/* 3. 列表样式保持不变 */
-\:#toc ul, #toc li {
-\:    margin-bottom: 8px !important;
-\:    line-height: 1.4 !important;
-\:}
-\:&lt;/style&gt;
-\:
-\:&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
-\:&lt;div id="toc"&gt;
-\:    &lt;/div&gt;
-\:
-\:&lt;script&gt;
-\:const toggleButton = document.getElementById('toggleButton');
-\:const contentDiv = document.getElementById('toc');
-\:
-\:toggleButton.addEventListener('click', () =&gt; {
-\:    // 切换 active 类
-\:    const isExpanded = contentDiv.classList.toggle('active');
-\:    
-\:    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
-\:    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
-\:});
-\:&lt;/script&gt;
-\:++++
-\:
-
-
-\:////
-\:对应于 ~/.rvm/gems/ruby-2.7.2/gems/asciidoctor-2.0.23/data/stylesheets/asciidoctor-default.css
-\:
-\:/* 自定义输出 HTML 样式 */
-\:/* 固定按钮在左上角 */
-\:#toggleButton {
-\:    position: fixed;
-\:    top: 10px;
-\:    left: 10px;
-\:    z-index: 1000;
-\:    /*background-color: lightgrey;*/
-\:    color: #AB2C21;
-\:    border: none;
-\:    /*padding: 6px 10px;*/
-\:    cursor: pointer;
-\:}
-\:#toc.toc2{width:40em}
-\:#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:85em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
-\:
-\:body.toc2.toc-right {
-\:    padding-left: 0;
-\:    padding-right: 0em;
-\:}
-\:////
-\:
-</t>
 <t tx="swot.20260317093115.1">html;;=@language xml
 \:&lt;!DOCTYPE html&gt;
 \:&lt;html&gt;
@@ -3227,6 +3014,33 @@ adoc_content = adoc_content.replace("{plus}", "+")
 
 # 5. 核心：将 3 个或以上的连续换行符压缩为标准的 2 个，消除多余空行
 adoc_content = re.sub(r'\n{3,}', '\n\n', adoc_content)
+</t>
+<t tx="swot.20261027084028.1">mainj;;=@language java
+\:package com.company;
+\:
+\:public class Main {
+\:
+\:    public static void main(String[] args) {
+\:        // write your code here
+\:    }
+\:}
+\:
+
+psvm;;=public static void main(String[] args) {
+\:    &lt;||&gt;
+\:  }
+\:
+
+sout;;=System.out.println(&lt;||&gt;);
+
+sb;;=Spring Boot 
+
+rrs;;=return Result.success(&lt;||&gt;);
+\:
+
+iftest;;=&lt;if test = "&lt;||&gt; != null"&gt; &lt;||&gt; = #{&lt;||&gt;}, &lt;/if&gt;
+
+hd;;=hdfs dfs 
 </t>
 </tnodes>
 </leo_file>
