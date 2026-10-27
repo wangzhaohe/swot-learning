@@ -1558,6 +1558,31 @@ I;;=IMPORTANT
 C;;=CAUTION
 
 W;;=WARNING
+
+NN;;=[NOTE]
+\:====
+\:&lt;||&gt;
+\:====
+
+TT;;=[TIP]
+\:====
+\:&lt;||&gt;
+\:====
+
+II;;=[IMPORTANT]
+\:====
+\:&lt;||&gt;
+\:====
+
+CC;;=[CAUTION]
+\:====
+\:&lt;||&gt;
+\:====
+
+WW;;=[WARNING]
+\:====
+\:&lt;||&gt;
+\:====
 </t>
 <t tx="swot.20221219085641.1">tb;;=[caption=]
 \:&lt;|.Table title|&gt;
