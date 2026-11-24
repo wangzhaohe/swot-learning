@@ -17,7 +17,7 @@
 <v t="swot.20250927110835.1"><vh>Redis</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 <v t="swot.20260215181527.1"><vh>system-designer</vh></v>
-<v t="swot.20260213123722.1"><vh>五笔86 -&gt; 70后的最爱</vh></v>
+<v t="swot.20260213123722.1"><vh>中文输入法五笔 86 版 -&gt; 70-90 后的最爱</vh></v>
 </v>
 </v>
 <v t="swot.20261124083738.1"><vh>@adoc index.adoc</vh>
@@ -3600,18 +3600,17 @@ Outline nodes may appear in more than one place, allowing multiple organizations
 
 xref:leo-editor/leo-editor.adoc[ Read leo-editor learning Notes ]
 
-https://leo-editor.github.io/leo-editor/[ Leo’s Home Page ]
+Offical: https://leo-editor.github.io/leo-editor/[ Leo’s Home Page ]
 
-https://github.com/leo-editor/leo-editor[ Leo's GitHub repository ]
+Offical: https://github.com/leo-editor/leo-editor[ Leo's GitHub repository ]
 
-https://groups.google.com/g/leo-editor[ Leo's forum ]
-
+Offical: https://groups.google.com/g/leo-editor[ Leo's forum ]
 </t>
 <t tx="swot.20250508123848.1">Asciidoctor is a fast, open source, text processor for parsing AsciiDoc into a document model, then converting it to output formats such as HTML 5, DocBook 5, man(ual) pages, PDF, and EPUB 3. Asciidoctor is written in the Ruby programming language.
 
 xref:asciidoctor/asciidoctor.adoc[ Read Asciidoctor learning Notes ]
 
-https://docs.asciidoctor.org/asciidoctor/latest/[ Asciidoctor Documentation ]
+Offical: https://docs.asciidoctor.org/asciidoctor/latest/[ Asciidoctor Documentation ]
 </t>
 <t tx="swot.20250508124711.1"></t>
 <t tx="swot.20250508134253.1">1. Clone leo-editor source code
@@ -3830,10 +3829,9 @@ git push --force --tags
 
 xref:git/git.adoc[ Read git learning Notes ]
 
-https://git-scm.com/
+Offical: https://git-scm.com/
 
-https://git-scm.com/downloads
-
+Offical: https://git-scm.com/downloads
 </t>
 <t tx="swot.20250508162519.1"></t>
 <t tx="swot.20250508162628.1">@language asciidoc
@@ -3872,10 +3870,9 @@ https://git-scm.com/downloads
 
 xref:software-designer/software-designer.adoc[ Read software-designer learning Notes ]
 
-https://bm.ruankao.org.cn/sign/welcome
+Offical: https://bm.ruankao.org.cn/sign/welcome
 
-https://ruankaodaren.com/exam/#/
-
+Offical: https://ruankaodaren.com/exam/#/
 </t>
 <t tx="swot.20250508163105.1"></t>
 <t tx="swot.20250508163140.1"></t>
@@ -10534,9 +10531,9 @@ https://github.com/wangzhaohe/nuxt3-basic.git
 
 xref:nuxt/nuxt3/nuxt3.adoc[ Read Nuxt3 learning Notes ]
 
-https://nuxt.com/
+Offical: https://nuxt.com/
 
-https://github.com/nuxt/nuxt
+Offical: https://github.com/nuxt/nuxt
 </t>
 <t tx="swot.20250521145258.1">@language asciidoc
 :source-highlighter: pygments
@@ -12821,7 +12818,7 @@ image::img/docker_container_nginx.png[]
 
 </t>
 <t tx="swot.20250927110835.1">@language asciidoc
-https://github.com/redis/redis
+Offical: https://github.com/redis/redis
 
 For developers, who are building real-time data-driven applications, Redis is the preferred, fastest, and most feature-rich cache, data structure server, and document and vector query engine.
 
@@ -15193,7 +15190,7 @@ pnpm-lock.yaml text eol=lf
 
 </t>
 <t tx="swot.20260213123722.1">@language asciidoc
-https://github.com/wangzhaohe/swot-learning/blob/main/wubi86/wubi86.adoc
+xref:wubi86/wubi86.adoc[ 中文输入法五笔 86 版 ]
 </t>
 <t tx="swot.20260213130935.1">
 ++++
@@ -16370,7 +16367,7 @@ set PGPASSWORD=
 pause
 ----
 </t>
-<t tx="swot.20260215181304.1">https://www.postgresql.org/
+<t tx="swot.20260215181304.1">Offical: https://www.postgresql.org/
 </t>
 <t tx="swot.20260215181527.1">关于架构的知识。
 </t>
