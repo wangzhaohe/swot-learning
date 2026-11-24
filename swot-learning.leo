@@ -17,7 +17,7 @@
 <v t="swot.20250927110835.1"><vh>Redis</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 <v t="swot.20260215181527.1"><vh>system-designer</vh></v>
-<v t="swot.20260213123722.1"><vh>中文输入法五笔 86 版 -&gt; 70-90 后的最爱</vh></v>
+<v t="swot.20260213123722.1"><vh>中文输入法五笔 86 版 -&gt; 70-80 后的最爱</vh></v>
 </v>
 </v>
 <v t="swot.20261124083738.1"><vh>@adoc index.adoc</vh>
