@@ -16382,7 +16382,7 @@ pause
 <t tx="swot.20260215181527.1">@language asciidoc
 关于架构的知识。
 
-xref:system-designer/@adoc 长尾商品.adoc[从系统架构设计师考题出发：一文搞懂“长尾商品”与“长尾查询”]
+xref:system-designer/长尾商品.adoc[从系统架构设计师考题出发：一文搞懂“长尾商品”与“长尾查询”]
 </t>
 <t tx="swot.20260215190317.1">@language asciidoc
 :source-highlighter: pygments
