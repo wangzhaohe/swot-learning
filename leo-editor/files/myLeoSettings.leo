@@ -2622,7 +2622,7 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 \:}
 \:&lt;/style&gt;
 \:
-\:&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
+\:&lt;button id="toggleButton"&gt;Open Toc&lt;/button&gt;
 \:&lt;div id="toc"&gt;
 \:    &lt;/div&gt;
 \:
@@ -2635,7 +2635,7 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 \:    const isExpanded = contentDiv.classList.toggle('active');
 \:    
 \:    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
-\:    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+\:    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
 \:});
 \:&lt;/script&gt;
 \:++++
