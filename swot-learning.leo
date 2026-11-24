@@ -42486,9 +42486,17 @@ INFO FOR DB;
 <t tx="swot.20260601150826.1"></t>
 <t tx="swot.20260608104545.1"></t>
 <t tx="swot.20260703082407.1">@language asciidoc
-.一级简码表
-image::img/one_level.jpeg[,600]
+[cols="10*1", options="header"]
+|===
+|Q |W |E |R |T |Y |U |I |O |P
+|我|人|有|的|和|主|产|不|为|这
 
+|A |S |D |F |G |H |J |K |L
+|工|要|在|地|一|上|是|中|国
+
+|X |C |V |B |N |M
+|经|以|发|了|民|同
+|===
 </t>
 <t tx="swot.20260729213729.1"></t>
 <t tx="swot.20260729213805.1">https://svelte-use.ariefsn.dev/
