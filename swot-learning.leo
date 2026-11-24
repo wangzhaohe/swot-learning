@@ -8,8 +8,7 @@
 <vnodes>
 <v t="swot.20250508123413.1"><vh>@adoc README.adoc</vh>
 <v t="swot.20250508123515.1"><vh>learning contents</vh>
-<v t="swot.20250508125533.1"><vh>Read document</vh></v>
-<v t="swot.20250521172443.1"><vh>Learning Structure</vh></v>
+<v t="swot.20250521172443.1"><vh>Directory Structure</vh></v>
 <v t="swot.20250508123848.1"><vh>Asciidoctor</vh></v>
 <v t="swot.20250508161823.1"><vh>Git</vh></v>
 <v t="swot.20250508123546.1"><vh>LEO-Editor</vh></v>
@@ -20,6 +19,9 @@
 <v t="swot.20260215181527.1"><vh>system-designer</vh></v>
 <v t="swot.20260213123722.1"><vh>五笔86 -&gt; 70后的最爱</vh></v>
 </v>
+</v>
+<v t="swot.20261124083738.1"><vh>@adoc index.adoc</vh>
+<v t="swot.20250508123515.1"></v>
 </v>
 <v t="swot.20250521151644.1"><vh>@edit .gitignore</vh></v>
 <v t="swot.20260213134825.1"><vh>@path AI</vh>
@@ -3534,26 +3536,59 @@ Create a hard link:
 :caution-caption: ⚠️
 </t>
 <t tx="swot.20250508123515.1">
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
 ++++
-&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
-&lt;script&gt;
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () =&gt; {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
 &lt;/script&gt;
 ++++
+endif::[]
 </t>
 <t tx="swot.20250508123546.1">Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers. 
 Outline nodes may appear in more than one place, allowing multiple organizations of data within a single outline.
@@ -3574,8 +3609,6 @@ xref:asciidoctor/asciidoctor.adoc[ Read Asciidoctor learning Notes ]
 https://docs.asciidoctor.org/asciidoctor/latest/[ Asciidoctor Documentation ]
 </t>
 <t tx="swot.20250508124711.1"></t>
-<t tx="swot.20250508125533.1">The AsciiDoc file(.adoc) is intended for online viewing, while the HTML file(.html) is for offline access.
-</t>
 <t tx="swot.20250508134253.1">1. Clone leo-editor source code
 
     git clone https://github.com/leo-editor/leo-editor.git
@@ -10534,16 +10567,19 @@ https://github.com/nuxt/nuxt
 </t>
 <t tx="swot.20250521172443.1">. Use leo-editor's swot-learning.leo file to manage outlined knowledge.
 
-. swot-learning.leo is managed by git.
+. swot-learning.leo is managed by git, together with all project directories in one single repository.
 
-. .gitignore add each project.
+. Each project keeps its own .gitignore file; these .gitignore files are tracked by the parent repository.
 
-. Each project is managed by it's own git.
+. The parent repository's .gitignore must NOT ignore project directories; it only ignores build artifacts, dependencies, and environment files.
 
-. Each project use pnpm-workspace.yaml of monorepo.
+. Each project MUST NOT have its own .git directory; all projects are plain directories under the single parent repository.
 
-. Use `git worktree` to manage each project.
+. Each project uses pnpm-workspace.yaml of monorepo, e.g. packages: ['projects/*'].
 
+. Use `git sparse-checkout` to check out only the project directories you need.
+
+. Use `git worktree` only for parallel branch work inside the single parent repository (e.g. feature development + hotfix), not for managing individual projects.
 </t>
 <t tx="swot.20250521181940.1">Add worktree nuxt3-layout
 
@@ -49037,5 +49073,22 @@ flowchart TB
 | 算法层（协同过滤） | 近邻 / 冷启动 | 相似度只靠共同交互计算；共同项太少→近邻失真；零交互→冷启动算不出相似度 |
 | 算法层（内容推荐） | 属性匹配 / 召回覆盖 | 画像基于商品自身属性，不依赖交互；全库商品均可参与匹配，长尾被纳入候选集 |
 </t>
+<t tx="swot.20261124083738.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
 </tnodes>
 </leo_file>

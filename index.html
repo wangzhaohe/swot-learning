@@ -473,8 +473,7 @@ html {
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
 <ul class="sectlevel1">
-<li><a href="#_read_document">Read document</a></li>
-<li><a href="#_learning_structure">Learning Structure</a></li>
+<li><a href="#_directory_structure">Directory Structure</a></li>
 <li><a href="#_asciidoctor">Asciidoctor</a></li>
 <li><a href="#_git">Git</a></li>
 <li><a href="#_leo_editor">LEO-Editor</a></li>
@@ -541,15 +540,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_read_document">Read document</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The AsciiDoc file(.adoc) is intended for online viewing, while the HTML file(.html) is for offline access.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_learning_structure">Learning Structure</h2>
+<h2 id="_directory_structure">Directory Structure</h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
@@ -557,19 +548,25 @@ toggleButton.addEventListener('click', () => {
 <p>Use leo-editor&#8217;s swot-learning.leo file to manage outlined knowledge.</p>
 </li>
 <li>
-<p>swot-learning.leo is managed by git.</p>
+<p>swot-learning.leo is managed by git, together with all project directories in one single repository.</p>
 </li>
 <li>
-<p>.gitignore add each project.</p>
+<p>Each project keeps its own .gitignore file; these .gitignore files are tracked by the parent repository.</p>
 </li>
 <li>
-<p>Each project is managed by it&#8217;s own git.</p>
+<p>The parent repository&#8217;s .gitignore must NOT ignore project directories; it only ignores build artifacts, dependencies, and environment files.</p>
 </li>
 <li>
-<p>Each project use pnpm-workspace.yaml of monorepo.</p>
+<p>Each project MUST NOT have its own .git directory; all projects are plain directories under the single parent repository.</p>
 </li>
 <li>
-<p>Use <code>git worktree</code> to manage each project.</p>
+<p>Each project uses pnpm-workspace.yaml of monorepo, e.g. packages: ['projects/*'].</p>
+</li>
+<li>
+<p>Use <code>git sparse-checkout</code> to check out only the project directories you need.</p>
+</li>
+<li>
+<p>Use <code>git worktree</code> only for parallel branch work inside the single parent repository (e.g. feature development + hotfix), not for managing individual projects.</p>
 </li>
 </ol>
 </div>
@@ -699,7 +696,7 @@ Outline nodes may appear in more than one place, allowing multiple organizations
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-24 08:38:26 +0800
+Last updated 2026-11-24 09:04:37 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -71,21 +71,22 @@ toggleButton.addEventListener('click', () => {
 ++++
 endif::[]
 
-== Read document
-The AsciiDoc file(.adoc) is intended for online viewing, while the HTML file(.html) is for offline access.
-
-== Learning Structure
+== Directory Structure
 . Use leo-editor's swot-learning.leo file to manage outlined knowledge.
 
-. swot-learning.leo is managed by git.
+. swot-learning.leo is managed by git, together with all project directories in one single repository.
 
-. .gitignore add each project.
+. Each project keeps its own .gitignore file; these .gitignore files are tracked by the parent repository.
 
-. Each project is managed by it's own git.
+. The parent repository's .gitignore must NOT ignore project directories; it only ignores build artifacts, dependencies, and environment files.
 
-. Each project use pnpm-workspace.yaml of monorepo.
+. Each project MUST NOT have its own .git directory; all projects are plain directories under the single parent repository.
 
-. Use `git worktree` to manage each project.
+. Each project uses pnpm-workspace.yaml of monorepo, e.g. packages: ['projects/*'].
+
+. Use `git sparse-checkout` to check out only the project directories you need.
+
+. Use `git worktree` only for parallel branch work inside the single parent repository (e.g. feature development + hotfix), not for managing individual projects.
 
 == Asciidoctor
 Asciidoctor is a fast, open source, text processor for parsing AsciiDoc into a document model, then converting it to output formats such as HTML 5, DocBook 5, man(ual) pages, PDF, and EPUB 3. Asciidoctor is written in the Ruby programming language.
