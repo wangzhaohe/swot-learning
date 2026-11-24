@@ -3536,7 +3536,8 @@ Create a hard link:
 :caution-caption: ⚠️
 </t>
 <t tx="swot.20250508123515.1">
-// 只有当后端不是 pdf 时才包含以下内容
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
 ifndef::backend-pdf[]
 ++++
 &lt;style&gt;
@@ -3588,6 +3589,7 @@ toggleButton.addEventListener('click', () =&gt; {
 });
 &lt;/script&gt;
 ++++
+endif::[]
 endif::[]
 </t>
 <t tx="swot.20250508123546.1">Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers. 
