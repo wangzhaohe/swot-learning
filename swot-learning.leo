@@ -12876,9 +12876,16 @@ image::img/5bi.jpeg[,800]
 
 </t>
 <t tx="swot.20251026094312.1">@language asciidoc
-.末笔表
-image::img/5bimobi.jpg[,800]
+[cols="^1,^1,^1,^1", options="header", frame="all", grid="all"]
+|===
+|{nbsp} |左右型 |上下型 |杂合型
 
+|1-横 |11-G |12-F |13-D
+|2-竖 |21-H |22-J |23-K
+|3-撇 |31-T |32-R |33-E
+|4-捺 |41-Y |42-U |43-I
+|5-折 |51-N |52-B |53-V
+|===
 </t>
 <t tx="swot.20251028083904.1"></t>
 <t tx="swot.20251028083912.1"></t>
