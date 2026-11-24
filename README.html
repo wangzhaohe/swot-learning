@@ -171,7 +171,7 @@ body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-b
 body.toc2.toc-right{padding-left:0;padding-right:15em}
 body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
 @media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
-#toc.toc2{width:45em}
+#toc.toc2{width:35em}
 #toc.toc2 #toctitle{font-size:1.375em}
 #toc.toc2>ul{font-size:.95em}
 #toc.toc2 ul ul{padding-left:1.25em}
@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #toggleButton {
     position: fixed;
     top: 10px;
-    left: 10px;
+    right: 10px;
     z-index: 1000;
     /*background-color: lightgrey;*/
     color: #AB2C21;
@@ -454,6 +454,12 @@ body.toc2.toc-right {
     padding-left: 0;
     padding-right: 0em;
 }
+
+/* 设置整个 HTML 文档的滚动留白 */
+html {
+    scroll-padding-top: 10px; /* 这个数值就是跳转后标题距离屏幕顶部的像素 */
+    scroll-behavior: smooth;  /* 顺便加上平滑滚动效果，跳转不突兀 */
+}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -463,8 +469,7 @@ body.toc2.toc-right {
 <div id="toc" class="toc2">
 <div id="toctitle">目录</div>
 <ul class="sectlevel1">
-<li><a href="#_read_document">Read document</a></li>
-<li><a href="#_learning_structure">Learning Structure</a></li>
+<li><a href="#_directory_structure">Directory Structure</a></li>
 <li><a href="#_asciidoctor">Asciidoctor</a></li>
 <li><a href="#_git">Git</a></li>
 <li><a href="#_leo_editor">LEO-Editor</a></li>
@@ -480,36 +485,58 @@ body.toc2.toc-right {
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<button id="toggleButton">目录开关</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
 </script>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_read_document">Read document</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The AsciiDoc file(.adoc) is intended for online viewing, while the HTML file(.html) is for offline access.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_learning_structure">Learning Structure</h2>
+<h2 id="_directory_structure">Directory Structure</h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
@@ -517,19 +544,25 @@ body.toc2.toc-right {
 <p>Use leo-editor&#8217;s swot-learning.leo file to manage outlined knowledge.</p>
 </li>
 <li>
-<p>swot-learning.leo is managed by git.</p>
+<p>swot-learning.leo is managed by git, together with all project directories in one single repository.</p>
 </li>
 <li>
-<p>.gitignore add each project.</p>
+<p>Each project keeps its own .gitignore file; these .gitignore files are tracked by the parent repository.</p>
 </li>
 <li>
-<p>Each project is managed by it&#8217;s own git.</p>
+<p>The parent repository&#8217;s .gitignore must NOT ignore project directories; it only ignores build artifacts, dependencies, and environment files.</p>
 </li>
 <li>
-<p>Each project use pnpm-workspace.yaml of monorepo.</p>
+<p>Each project MUST NOT have its own .git directory; all projects are plain directories under the single parent repository.</p>
 </li>
 <li>
-<p>Use <code>git worktree</code> to manage each project.</p>
+<p>Each project uses pnpm-workspace.yaml of monorepo, e.g. packages: ['projects/*'].</p>
+</li>
+<li>
+<p>Use <code>git sparse-checkout</code> to check out only the project directories you need.</p>
+</li>
+<li>
+<p>Use <code>git worktree</code> only for parallel branch work inside the single parent repository (e.g. feature development + hotfix), not for managing individual projects.</p>
 </li>
 </ol>
 </div>
@@ -659,7 +692,7 @@ Outline nodes may appear in more than one place, allowing multiple organizations
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-02-15 18:16:59 +0800
+Last updated 2026-11-24 09:17:06 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
@@ -685,6 +718,6 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
   })
 })
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
