@@ -3534,6 +3534,9 @@ Create a hard link:
 :important-caption: ❗
 :warning-caption: ‼️
 :caution-caption: ⚠️
+
+// Used for github Code to display
+// https://github.com/wangzhaohe/swot-learning
 </t>
 <t tx="swot.20250508123515.1">
 // 只有当后端不是 pdf or github 时才包含以下内容
@@ -49091,6 +49094,10 @@ flowchart TB
 :note-caption: ❕
 :important-caption: ❗
 :caution-caption: ⚠️
-:warning-caption: ‼️</t>
+:warning-caption: ‼️
+
+// Used for github pages to display
+// https://wangzhaohe.github.io/swot-learning/
+</t>
 </tnodes>
 </leo_file>
