@@ -14,42 +14,76 @@
 
 = learning contents
 
+// 只有当后端不是 pdf 时才包含以下内容
+ifndef::backend-pdf[]
 ++++
-<button id="toggleButton">目录开关</button>
-<script>
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
 
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () => {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">展开目录</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
+});
 </script>
 ++++
+endif::[]
 
-== Read document
-The AsciiDoc file(.adoc) is intended for online viewing, while the HTML file(.html) is for offline access.
-
-== Learning Structure
+== Directory Structure
 . Use leo-editor's swot-learning.leo file to manage outlined knowledge.
 
-. swot-learning.leo is managed by git.
+. swot-learning.leo is managed by git, together with all project directories in one single repository.
 
-. .gitignore add each project.
+. Each project keeps its own .gitignore file; these .gitignore files are tracked by the parent repository.
 
-. Each project is managed by it's own git.
+. The parent repository's .gitignore must NOT ignore project directories; it only ignores build artifacts, dependencies, and environment files.
 
-. Each project use pnpm-workspace.yaml of monorepo.
+. Each project MUST NOT have its own .git directory; all projects are plain directories under the single parent repository.
 
-. Use `git worktree` to manage each project.
+. Each project uses pnpm-workspace.yaml of monorepo, e.g. packages: ['projects/*'].
+
+. Use `git sparse-checkout` to check out only the project directories you need.
+
+. Use `git worktree` only for parallel branch work inside the single parent repository (e.g. feature development + hotfix), not for managing individual projects.
 
 == Asciidoctor
 Asciidoctor is a fast, open source, text processor for parsing AsciiDoc into a document model, then converting it to output formats such as HTML 5, DocBook 5, man(ual) pages, PDF, and EPUB 3. Asciidoctor is written in the Ruby programming language.
