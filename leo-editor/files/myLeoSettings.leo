@@ -2586,7 +2586,8 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 &lt;|文件描述|&gt;
 </t>
 <t tx="swot.20260413122406.1">dir;;=
-\:// 只有当后端不是 pdf 时才包含以下内容
+\:// 只有当后端不是 pdf or github 时才包含以下内容
+\:ifndef::env-github[]
 \:ifndef::backend-pdf[]
 \:++++
 \:&lt;style&gt;
@@ -2638,6 +2639,7 @@ g.es(f"已汇总 {len(list(target.subtree()))} 个节点的内容")
 \:});
 \:&lt;/script&gt;
 \:++++
+\:endif::[]
 \:endif::[]
 \:
 
