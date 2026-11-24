@@ -12828,22 +12828,16 @@ For developers, who are building real-time data-driven applications, Redis is th
 <t tx="swot.20251026094138.1">@language asciidoc
 https://wubi.xuelai.com/
 
+```
 anh 蔬
-
 egc 县
-
 glf 盏
-
-mfd 冉  最后一笔为橫，杂合结构
-
+mfd 冉 -- 最后一笔为橫，杂合结构
 rtth 斤
-
 tak 升
-
 uhk 丫
-
-xfm 贯
-
+xfm 贯 -- 都是字根码
+```
 </t>
 <t tx="swot.20251026094157.1">@language asciidoc
 :source-highlighter: pygments
