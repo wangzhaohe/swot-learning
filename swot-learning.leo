@@ -49429,6 +49429,8 @@ flowchart LR
 <t tx="swot.20261125115637.1">mmdc 12.2.0 的 dependencies.mermaid 为 ^12.2.0，锁文件解析到 12.3.0；步骤动画由 12.3.0 引入，故导出的 SVG 内嵌 &lt;animateMotion&gt; 等 SMIL 元素，浏览器打开即播放。
 </t>
 <t tx="swot.20261125115825.1">xref:mermaid/mermaid-animateMotion.adoc[ mermaid support animateMotion ]
+
+xref:mermaid/mermaid-svg-to-gif-analyse.adoc[SVG 里的动画，到底是谁在播？]
 </t>
 <t tx="swot.20261125155930.1">配套脚本做的事就是第 4 节那四行的循环：探测本机 `chrome-headless-shell` → 逐帧 `setCurrentTime(t)` 截图 → ffmpeg 合成 GIF。输入是任意带 SMIL 动画的 SVG，输出同名 `.gif`；把 `src/` 换成自己的文件即可复用，不必改脚本。
 
