@@ -3297,13 +3297,7 @@
 </v>
 </v>
 <v t="swot.20261015095105.1"><vh>@adoc test.adoc</vh>
-<v t="swot.20261015095131.1"><vh>test</vh>
-<v t="swot.20261123111149.1"><vh>从系统架构设计师考题出发：一文搞懂“长尾商品”与“长尾查询”</vh></v>
-<v t="swot.20261123130234.1"><vh>长尾曲线</vh></v>
-<v t="swot.20261123131955.1"><vh>长尾商品"稀疏"是什么意思？</vh></v>
-<v t="swot.20261123134511.1"><vh>为什么近邻算不准、还有冷启动？</vh></v>
-<v t="swot.20261123140742.1"><vh>"正好覆盖长尾"是什么覆盖法？</vh></v>
-</v>
+<v t="swot.20261125084544.1"><vh>test</vh></v>
 </v>
 <v t="swot.20261021142543.1"><vh>试用 asciidoctor js 版本</vh></v>
 <v t="swot.20261021142942.1"><vh>leo-editor 的可撤销和重做策略是什么？</vh></v>
@@ -46156,61 +46150,6 @@ flowchart LR
 :important-caption: ❗
 :caution-caption: ⚠️
 :warning-caption: ‼️</t>
-<t tx="swot.20261015095131.1">
-// 只有当后端不是 pdf 时才包含以下内容
-ifndef::backend-pdf[]
-++++
-&lt;style&gt;
-/* 1. 默认状态：初始就是隐藏的 */
-#toc {
-    max-width: 0 !important;
-    opacity: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    border: none !important;
-    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
-    white-space: nowrap !important;
-    
-    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
-    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease;
-}
-
-/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
-#toc.active {
-    max-width: 530px !important;
-    opacity: 1 !important;
-    padding: 10px !important; /* 根据需要恢复 padding */
-    overflow-y: auto !important;
-}
-
-/* 3. 列表样式保持不变 */
-#toc ul, #toc li {
-    margin-bottom: 8px !important;
-    line-height: 1.4 !important;
-}
-&lt;/style&gt;
-
-&lt;button id="toggleButton"&gt;展开目录&lt;/button&gt;
-&lt;div id="toc"&gt;
-    &lt;/div&gt;
-
-&lt;script&gt;
-const toggleButton = document.getElementById('toggleButton');
-const contentDiv = document.getElementById('toc');
-
-toggleButton.addEventListener('click', () =&gt; {
-    // 切换 active 类
-    const isExpanded = contentDiv.classList.toggle('active');
-    
-    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
-    toggleButton.textContent = isExpanded ? '收起目录' : '展开目录';
-});
-&lt;/script&gt;
-++++
-endif::[]
-</t>
 <t tx="swot.20261015105747.1">[mermaid, target=img/mermaid-电商智能决策, format=svg]
 ....
 flowchart LR
@@ -48853,249 +48792,6 @@ stateDiagram-v2
 
 - 本文四段代码在 Mermaid 12.1.0（mmdc 12.0.0）下实测均可渲染；沙箱环境跑 mmdc 报 `ConnectionClosedError` 时，用 `-p` 传入 `{"args":["--no-sandbox"]}` 即可，与图语法无关。
 </t>
-<t tx="swot.20261123111149.1">&gt; 2026年10月系统架构设计师案例分析考了长尾商品，本文把概念、算法选择和工程实践串起来学习一下。
-
-## 一、长尾商品到底是什么？
-
-我的第一反应是“长期卖的产品”，这个理解偏了。长尾商品的核心不是“卖得久”，而是：
-
-&gt; **单个卖得少、种类极多，聚合起来总量惊人。**
-
-它对应的是长尾曲线“尾部”的海量冷门、小众的利基商品，与曲线“头部”的少数畅销爆款相对。互联网让存储和流通成本急剧降低，商家可以陈列海量冷门商品，每款可能只卖出一两件，但成千上万种零散销量加起来，总收益甚至能和少数爆款抗衡。
-
-一句话记：**长尾商品 = 冷门小众商品的大集合，靠“种类多”取胜，不是靠“单个卖得火”或“卖得久”。**
-
-.爆款与尾部商品特点
-[mermaid, target=img/mermaid-longtail-2026-11-23-125834, format=png]
-....
----
-config:
-  theme: default
----
-flowchart LR
-A[全部商品&lt;br/&gt;按热度排名] --&gt; B[头部 Head&lt;br/&gt;少数爆款]
-A --&gt; C[尾部 Tail&lt;br/&gt;海量冷门商品]
-B --&gt; B1[单品销量高&lt;br/&gt;交互数据密集]
-B --&gt; B2[协同过滤有效&lt;br/&gt;近邻多、相似度准]
-C --&gt; C1[单品销量低&lt;br/&gt;交互稀疏、曝光少]
-C --&gt; C2[内容推荐有效&lt;br/&gt;不依赖用户交互]
-C --&gt; C3[聚合总量大&lt;br/&gt;种类多取胜]
-....
-
-## 二、2026年10月系统架构设计师考了什么？
-
-考题出现在**案例分析**科目，是商品推荐系统那道题，主要问两点：
-
-1. **长尾商品的特点**：数量庞大、种类繁多；单个商品交互数据稀疏、曝光率低、属于冷门商品；但集合总销量可能很大。
-2. **协同过滤与内容推荐，哪个更适合长尾商品推荐？** 标准答案是**内容推荐更适合**。
-
-### 为什么协同过滤不适合？
-
-协同过滤依赖用户-物品交互历史（点击、购买、评分）计算相似度。长尾商品交互数据极少，找不到足够“近邻”，相似度算不准，还有冷启动问题。
-
-### 为什么内容推荐适合？
-
-内容推荐基于商品自身属性、标签、描述来推荐，**不依赖用户交互量**。哪怕一个冷门商品没人买过，只要它有属性特征，就能被推荐出去，正好覆盖长尾。
-
-## 三、工程实践里的“长尾查询”又是什么？
-
-在向量检索场景中，还有一个容易混淆的概念：**长尾查询**。
-
-- **长尾商品**：供给侧的长尾，冷门、小众的商品，单个需求少、种类多。
-- **长尾查询**：需求侧的长尾，冷门、具体、不常见的用户搜索词，单个搜索量少，但种类极多。
-
-两者共享长尾分布的统计特征——**单个少、种类多、聚合起来有价值**，但一个在商品供给侧，一个在用户需求侧，不是同一件事。
-
-一个真实工程例子：向量检索用余弦相似度排序，设 `MIN_SEARCH_SCORE = 0.45` 阈值。实测无关问题（问天气、问注册证数量）最高分只有 0.37~0.40，而真实长尾查询（如“牙周手术用什么”）能到 0.52。阈值调高会误杀长尾查询，调低则让无关问题拿到“看起来像答案”的产品。所以**返回空列表是合法结果**，不是错误。
-
-这也说明：长尾查询虽然冷门，但语义上是真实需求，不能被高阈值一刀切掉。
-
-## 四、核心结论
-
-| 概念 | 含义 | 关键点 |
-|---|---|---|
-| 长尾商品 | 冷门小众商品的大集合 | 单个销量低，靠种类多聚合取胜 |
-| 长尾查询 | 冷门但真实的具体搜索词 | 单个搜索量低，容易被阈值误杀 |
-| 算法选择 | 长尾推荐用内容推荐 | 不依赖稀疏交互数据 |
-| 工程阈值 | 余弦分阈值不能太高 | 高了误杀长尾，低了引入噪声 |
-
-**总结：长尾的本质是“单个冷门、聚合有价值”。商品侧靠内容推荐覆盖，查询侧靠合理阈值保护，两者统计同源、场景不同。**</t>
-<t tx="swot.20261123130234.1">长尾曲线（The Long Tail）这个概念由 Chris Anderson 在 2004 年提出，本质上是一条幂律分布曲线：横轴是商品按热度的排名，纵轴是单品销量。左边短短一截高高翘起的是"头部"——少数爆款；向右拖出的那条又长又低平的尾巴就是"尾部"——海量冷门商品，单品卖得少，但种类极多、累积起来的总面积能和头部抗衡。
-
-.长尾曲线图示例
-[mermaid, target=img/mermaid-test-2026-11-23-103952, format=png]
-....
----
-config:
-  themeVariables:
-    xyChart:
-      plotColorPalette: '#D85A30, #0F6E56, #5F5E5A'
----
-xychart
-    title "长尾曲线：头部与尾部的颜色分区"
-    x-axis ["Top1","Top2","Top3","#4","#10","#20","#50","#100","#500","#1000"]
-    y-axis "单品销量" 2 --&gt; 110
-    bar "头部爆款" [100, 72, 55, 0, 0, 0, 0, 0, 0, 0]
-    bar "尾部冷门" [0, 0, 0, 36, 26, 17, 10, 6, 3, 2]
-    line "长尾曲线" [100 "头部", 72, 55, 36 "尾部起点", 26, 17, 10, 6, 3, 2]
-....
-</t>
-<t tx="swot.20261123131955.1">稀疏是相对"稠密"而言的：把用户当行、商品当列，每个格子记录"这个用户有没有碰过这个商品"（评分、点击、购买），就得到一张用户—物品交互矩阵。真实推荐系统里这张矩阵几乎全是空格，有效率常常不到 1%，这就是稀疏。
-
-长尾商品把稀疏推向极端：它曝光率低，看到的人少，看到的人里愿意点的人更少，所以它的那一列几乎全空——上面矩阵右侧的青色格子就是零星几次交互，其余都是空格。注意稀疏是供给侧和需求侧共同作用的结果：商品冷门 → 曝光少 → 交互少 → 数据更少 → 更难被推荐，形成闭环。
-
-[mermaid, target=img/mermaid-xishu-2026-11-23-132013, format=png]
-....
----
-config:
-  block:
-    padding: 2
----
-block
-  columns 12
-  space:1 gH["头部商品 · 种类少"]:3 gT["长尾商品 · 种类极多"]:8
-  space:1 c1["B1"] c2["B2"] c3["B3"] c4["T1"] c5["T2"] c6["T3"] c7["T4"] c8["T5"] c9["T6"] c10["T7"] c11["T8"]
-  r1["U1"] a11["5"] a12["4"] a13[" "] a14[" "] a15[" "] a16["3"] a17[" "] a18[" "] a19[" "] a110[" "] a111[" "]
-  r2["U2"] a21["4"] a22[" "] a23["5"] a24[" "] a25[" "] a26[" "] a27[" "] a28[" "] a29[" "] a210[" "] a211[" "]
-  r3["U3"] a31[" "] a32["5"] a33["4"] a34[" "] a35[" "] a36[" "] a37[" "] a38[" "] a39["2"] a310[" "] a311[" "]
-  r4["U4"] a41["3"] a42[" "] a43[" "] a44[" "] a45["4"] a46[" "] a47[" "] a48[" "] a49[" "] a410[" "] a411[" "]
-  r5["U5"] a51[" "] a52["4"] a53[" "] a54[" "] a55[" "] a56[" "] a57[" "] a58[" "] a59[" "] a510[" "] a511["5"]
-  r6["U6"] a61["5"] a62["3"] a63["4"] a64[" "] a65[" "] a66[" "] a67[" "] a68[" "] a69[" "] a610[" "] a611[" "]
-  space:1 l1["头部：有较多交互"]:3 l2["长尾：偶有交互"]:3 l3["无交互：空格"]:5
-
-  classDef head fill:#F5C4B3,stroke:#D85A30,color:#712B13
-  classDef tail fill:#9FE1CB,stroke:#1D9E75,color:#085041
-  classDef blank fill:#F1EFE8,stroke:#D3D1C7,color:#5F5E5A
-  classDef axis fill:transparent,stroke:transparent,color:#5F5E5A
-  classDef gHead fill:#FAECE7,stroke:#D85A30,color:#712B13
-  classDef gTail fill:#E1F5EE,stroke:#0F6E56,color:#085041
-  class a11,a12,a21,a23,a32,a33,a41,a52,a61,a62,a63 head
-  class a16,a39,a45,a511 tail
-  class a13,a14,a15,a17,a18,a19,a110,a111,a22,a24,a25,a26,a27,a28,a29,a210,a211,a31,a34,a35,a36,a37,a38,a310,a311,a42,a43,a44,a46,a47,a48,a49,a410,a411,a51,a53,a54,a55,a56,a57,a58,a59,a510,a64,a65,a66,a67,a68,a69,a610,a611 blank
-  class r1,r2,r3,r4,r5,r6,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11 axis
-  class gH gHead
-  class gT gTail
-  class l1 head
-  class l2 tail
-  class l3 blank
-....
-</t>
-<t tx="swot.20261123134511.1">协同过滤的全部逻辑都建立在"共同交互"上：要判断两个用户像不像，就看他们有没有共同评过同一批商品；要判断两个商品像不像，就看有没有同一批用户同时买过它们。
-
-.稀疏 → 近邻失效 → 长尾商品进不了协同过滤的候选集
-[mermaid, target=img/mermaid-jinling-2026-11-23-134530, format=png]
-....
----
-config:
-  block:
-    padding: 8
----
-block
-  columns 2
-  block:L
-    columns 1
-    LT["头部商品 B1"]
-    block:LS
-      columns 4
-      ls1["U1:5"] ls2["U2:4"] ls3["U4:3"] ls4["U6:5"]
-    end
-    Ln["4 个评分样本"]
-    L1["共同评分维度多&lt;br/&gt;向量有 4 个有效分量"]
-    L2["相似度稳定可信&lt;br/&gt;余弦/皮尔逊有统计意义"]
-    L3["近邻充足，推荐有效&lt;br/&gt;爆款之间互相推荐"]
-  end
-  block:R
-    columns 1
-    RT["长尾商品 T8"]
-    block:RS
-      columns 4
-      rs1["U5:5"] rs2["空"] rs3["空"] rs4["空"]
-    end
-    Rn["仅 1 个评分样本"]
-    R1["共同评分维度极少&lt;br/&gt;向量仅 1 个有效分量"]
-    R2["相似度严重失真&lt;br/&gt;一个重合分就可能被误判为近邻"]
-    R3["近邻不足 → 冷启动&lt;br/&gt;零交互的新商品根本算不出相似度"]
-  end
-
-  classDef headTitle fill:transparent,stroke:transparent,color:#993C1D
-  classDef tailTitle fill:transparent,stroke:transparent,color:#085041
-  classDef headSample fill:#F5C4B3,stroke:#D85A30,color:#712B13
-  classDef tailSample fill:#9FE1CB,stroke:#1D9E75,color:#085041
-  classDef emptySample fill:#F1EFE8,stroke:#D3D1C7,color:#888780
-  classDef note fill:transparent,stroke:transparent,color:#5F5E5A
-  classDef headBox fill:#FAECE7,stroke:#D85A30,color:#712B13
-  classDef tailBox fill:#E1F5EE,stroke:#0F6E56,color:#085041
-  classDef hideFrame fill:transparent,stroke:transparent
-  class LT headTitle
-  class RT tailTitle
-  class ls1,ls2,ls3,ls4 headSample
-  class rs1 tailSample
-  class rs2,rs3,rs4 emptySample
-  class Ln,Rn note
-  class L1,L2,L3 headBox
-  class R1,R2,R3 tailBox
-  class L,R hideFrame
-....
-
-图里把链路画清楚了。补充两个术语的准确含义：
-
-- 近邻（neighbor）​：协同过滤要先为目标用户找"口味最像的其他用户"（UserCF），或为目标商品找"被同一批人买过的其他商品"（ItemCF），这些被找出来的就是近邻。相似度通常用余弦相似度或皮尔逊相关系数计算，而计算依据只能是双方共同交互过的那部分物品——矩阵里两行/两列重叠的非空格子。头部商品重叠格子多，相似度可信；长尾商品重叠格子极少甚至为零，"近邻"要么找不到，要么只靠一两个偶然重合的评分算出来，统计上完全不可靠。
-
-- 冷启动（cold start）​：这是稀疏的极端情况——新上架的商品一次交互都没有，它的向量全是空，协同过滤连相似度都无从算起，自然不可能被推荐；新注册用户没有历史行为，同样找不到近邻。长尾商品虽然不至于全新，但交互量低到接近冷启动状态。
-</t>
-<t tx="swot.20261123140742.1">这里的"覆盖"指的是候选集召回覆盖：推荐系统的第一步是从全库商品里捞出一批候选，内容推荐能把长尾商品也捞进来，靠的是属性匹配，而不是交互记录。
-
-[mermaid, target=img/mermaid-longtail-2026-11-23-141935, format=png]
-....
----
-config:
-  flowchart:
-    curve: linear
-    nodeSpacing: 60
-    rankSpacing: 45
-    htmlLabels: true
----
-flowchart TB
-    U("&lt;b&gt;用户兴趣画像&lt;/b&gt;&lt;br/&gt;从交互过的商品中提取属性&lt;br/&gt;如：偏好 口腔护理 / 手术器械")
-    I("&lt;b&gt;商品属性画像&lt;/b&gt;&lt;br/&gt;来自类目 / 标签 / 标题 / 描述&lt;br/&gt;不依赖有没有人买过它")
-    M("&lt;b&gt;属性相似度匹配&lt;/b&gt;&lt;br/&gt;画像向量 vs 每件商品特征向量")
-    R("&lt;b&gt;候选集：头部爆款 + 长尾冷门商品&lt;/b&gt;&lt;br/&gt;零交互商品只要有属性，就能被召回")
-
-    U --- M
-    I --- M
-    M --- R
-
-    linkStyle 0,1,2 stroke:#5F5E5A,stroke-width:1.5px;
-
-    classDef user fill:#E6F1FB,stroke:#185FA5,color:#0C447C,font-size:14px
-    classDef item fill:#E1F5EE,stroke:#0F6E56,color:#085041,font-size:14px
-    classDef match fill:#F1EFE8,stroke:#D3D1C7,color:#2C2C2A,font-size:14px
-    classDef result fill:#FAEEDA,stroke:#BA7517,color:#633806,font-size:14px
-
-    class U user
-    class I item
-    class M match
-    class R result
-....
-
-具体覆盖过程就是上图这条链路：
-
-1. **建用户画像**：把用户点过、买过、收藏过的商品，提取其类目、标签、品牌、标题关键词等属性，加权聚合成一个用户兴趣向量（比如"口腔护理 0.8 / 手术器械 0.6 / 低价 0.3"）。
-2. **建商品画像**：每个商品用自己的属性直接生成特征向量——**这一步完全不需要任何用户交互**，只要它上架时填了类目、标签、描述就有。
-3. **匹配召回**：拿用户画像向量去和全库每一件商品的特征向量算相似度，得分高的进入候选集。哪怕商品 T8 从来没人买过，只要它的属性和用户兴趣对得上，就会被召回。
-
-所以"覆盖"的本质是**绕开了交互数据这一前提**：协同过滤必须先有"用户—物品"的共现记录才能算相似度，长尾没有共现就被排除；内容推荐只问"属性像不像"，长尾商品天生带属性，因此整条尾巴都在可推荐范围内。
-
-要注意它也不是万能的：依赖商品属性是否完整规范（长尾商品往往信息不全，这会打折）；而且只推属性相似的东西，容易越推越窄、缺乏惊喜，所以工程上常用**协同过滤 + 内容推荐的混合方案**，内容推荐负责兜底长尾和冷启动。
-
-三点归纳成一条因果链，正好可以作为考卷答题的展开结构：
-
-| 环节  | 关键词 | 答题要点 |
-| --- | --- | --- |
-| 数据层 | 稀疏  | 用户—物品矩阵极空；长尾曝光低→交互少，单品只有零星样本 |
-| 算法层（协同过滤） | 近邻 / 冷启动 | 相似度只靠共同交互计算；共同项太少→近邻失真；零交互→冷启动算不出相似度 |
-| 算法层（内容推荐） | 属性匹配 / 召回覆盖 | 画像基于商品自身属性，不依赖交互；全库商品均可参与匹配，长尾被纳入候选集 |
-</t>
 <t tx="swot.20261124083738.1">@language asciidoc
 :author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
@@ -49438,6 +49134,63 @@ flowchart TB
 |算法层（协同过滤） |近邻 / 冷启动 |相似度只靠共同交互计算；共同项太少→近邻失真；零交互→冷启动算不出相似度
 |算法层（内容推荐） |属性匹配 / 召回覆盖 |画像基于商品自身属性，不依赖交互；全库商品均可参与匹配，长尾被纳入候选集
 |===
+</t>
+<t tx="swot.20261125084544.1">
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;Open Toc&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+});
+&lt;/script&gt;
+++++
+endif::[]
+endif::[]
 </t>
 </tnodes>
 </leo_file>
