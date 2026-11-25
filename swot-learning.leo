@@ -12,6 +12,7 @@
 <v t="swot.20250508123848.1"><vh>Asciidoctor</vh></v>
 <v t="swot.20250508161823.1"><vh>Git</vh></v>
 <v t="swot.20250508123546.1"><vh>LEO-Editor</vh></v>
+<v t="swot.20261125115825.1"><vh>mermaid</vh></v>
 <v t="swot.20250521144332.1"><vh>Nuxt3</vh></v>
 <v t="swot.20260215181304.1"><vh>postgresql</vh></v>
 <v t="swot.20250927110835.1"><vh>Redis</vh></v>
@@ -1892,6 +1893,16 @@
 <v t="swot.20260308181026.1"><vh>@adoc linux_skills.adoc</vh>
 <v t="swot.20260308181053.1"><vh>Linux 技巧汇总</vh>
 <v t="swot.20260308181110.1"><vh>查找文件硬链接</vh></v>
+</v>
+</v>
+</v>
+<v t="swot.20261125115009.1"><vh>@path mermaid</vh>
+<v t="swot.20261125115451.1"><vh>@adoc mermaid-animateMotion.adoc</vh>
+<v t="swot.20261125115444.1"><vh>mermaid 12.3.0 支持 svg 动画</vh>
+<v t="swot.20261125115637.1"><vh>支持版本</vh></v>
+<v t="swot.20261125115444.2"><vh>基本动画</vh></v>
+<v t="swot.20261125115444.3"><vh>加数字标</vh></v>
+<v t="swot.20261125115444.4"><vh>并发动画</vh></v>
 </v>
 </v>
 </v>
@@ -49191,6 +49202,214 @@ toggleButton.addEventListener('click', () =&gt; {
 ++++
 endif::[]
 endif::[]
+</t>
+<t tx="swot.20261125115009.1"></t>
+<t tx="swot.20261125115444.1">
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;Open Toc&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+});
+&lt;/script&gt;
+++++
+endif::[]
+endif::[]
+</t>
+<t tx="swot.20261125115444.2">[mermaid, target=img/mermaid-test-2026-11-22-113447, format=svg]
+....
+---
+config:
+  theme: default
+  themeVariables:
+    edgeLabelBackground: '#ffffff'
+    fontSize: '15px'
+---
+flowchart LR
+  U["用户点击登录"] e1@--&gt;|触发| L["wx.login 拿 code"]
+  L e2@--&gt;|code| S["云函数换 openid"]
+  S e3@--&gt;|token| V["setData 渲染登录态"]
+
+  e1@{ step: 1 }
+  e2@{ step: 2 }
+  e3@{ step: 3 }
+....
+
+[source,css]
+----
+---
+config:
+  theme: default
+  themeVariables:
+    edgeLabelBackground: '#ffffff'
+    fontSize: '15px'
+---
+flowchart LR
+  U["用户点击登录"] e1@--&gt;|触发| L["wx.login 拿 code"]
+  L e2@--&gt;|code| S["云函数换 openid"]
+  S e3@--&gt;|token| V["setData 渲染登录态"]
+
+  e1@{ step: 1 }
+  e2@{ step: 2 }
+  e3@{ step: 3 }
+----</t>
+<t tx="swot.20261125115444.3">[mermaid, target=img/mermaid-test-2026-11-22-125752, format=svg]
+....
+---
+config:
+  theme: default
+  themeVariables:
+    edgeLabelBackground: '#ffffff'
+    fontSize: '15px'
+  flowchart:
+    stepNumbers: true
+---
+flowchart LR
+  U["用户点击登录"] e1@--&gt;|触发| L["wx.login 拿 code"]
+  L e2@--&gt;|code| S["云函数换 openid"]
+  S e3@--&gt;|token| V["setData 渲染登录态"]
+
+  e1@{ step: 1 }
+  e2@{ step: 2 }
+  e3@{ step: 3 }
+....
+
+[source,css]
+----
+---
+config:
+  theme: default
+  themeVariables:
+    edgeLabelBackground: '#ffffff'
+    fontSize: '15px'
+  flowchart:
+    stepNumbers: true
+---
+flowchart LR
+  U["用户点击登录"] e1@--&gt;|触发| L["wx.login 拿 code"]
+  L e2@--&gt;|code| S["云函数换 openid"]
+  S e3@--&gt;|token| V["setData 渲染登录态"]
+
+  e1@{ step: 1 }
+  e2@{ step: 2 }
+  e3@{ step: 3 }
+----
+</t>
+<t tx="swot.20261125115444.4">[mermaid, target=img/mermaid-test-2026-11-22-130426, format=svg]
+....
+---
+config:
+  theme: default
+  themeVariables:
+    edgeLabelBackground: '#ffffff'
+    fontSize: '15px'
+  flowchart:
+    stepNumbers: true
+---
+flowchart LR
+  Q["wx.request"] e1@--&gt; S["云函数"]
+  S e2@--&gt; A[(用户表)]
+  S e3@--&gt; B[(订单表)]
+  A e4@--&gt; M["合并响应"]
+  B e5@--&gt; M
+
+  e1@{ step: 1 }
+  e2@{ step: 2 }
+  e3@{ step: 2 }
+  e4@{ step: 3 }
+  e5@{ step: 3 }
+....
+
+[source,css]
+----
+---
+config:
+  theme: default
+  themeVariables:
+    edgeLabelBackground: '#ffffff'
+    fontSize: '15px'
+  flowchart:
+    stepNumbers: true
+---
+flowchart LR
+  Q["wx.request"] e1@--&gt; S["云函数"]
+  S e2@--&gt; A[(用户表)]
+  S e3@--&gt; B[(订单表)]
+  A e4@--&gt; M["合并响应"]
+  B e5@--&gt; M
+
+  e1@{ step: 1 }
+  e2@{ step: 2 }
+  e3@{ step: 2 }
+  e4@{ step: 3 }
+  e5@{ step: 3 }
+----
+</t>
+<t tx="swot.20261125115451.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
+<t tx="swot.20261125115637.1">mmdc 12.2.0 的 dependencies.mermaid 为 ^12.2.0，锁文件解析到 12.3.0；步骤动画由 12.3.0 引入，故导出的 SVG 内嵌 &lt;animateMotion&gt; 等 SMIL 元素，浏览器打开即播放。
+</t>
+<t tx="swot.20261125115825.1">xref:mermaid/mermaid-animateMotion.adoc[ mermaid support animateMotion ]
 </t>
 </tnodes>
 </leo_file>
