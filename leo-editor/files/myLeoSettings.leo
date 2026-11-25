@@ -117,8 +117,6 @@
 <v t="swot.20261014102803.1"><vh>@button md2ascii</vh>
 <v t="swot.20261020081044.1"><vh>md2ascii</vh></v>
 </v>
-<v t="swot.20261019163257.1"><vh>@@button md2ascii</vh></v>
-<v t="swot.20261019161421.1"><vh>Converted: @button md2ascii</vh></v>
 </v>
 <v t="swot.20181207204040.1"><vh>@commands</vh>
 <v t="swot.20260313164643.1"><vh>@@command open-with-nodejs @key=Alt+Shift+J</vh></v>
@@ -2877,109 +2875,6 @@ try:
 
     c.redraw()
     g.es("转换成功！已完美解决公式转义与空行过多的问题。")
-
-except subprocess.CalledProcessError as e:
-    g.es(f"Pandoc 转换失败: {e}\n{e.stderr}")
-
-except Exception as e:
-    g.es(f"发生错误: {e}")
-
-@doc
-pandoc 将 markdown 转换为 asciidoctor
-
-- 使用 pandoc 进行转换 https://github.com/jgm/pandoc
-- 安装 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
-- 卸载 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
-</t>
-<t tx="swot.20261019161421.1">@language python import subprocess
-
-== 获取当前节点的内容
-
-p = c.p markdown++_++text = p.b
-
-try: ++#++ 通过 stdin 传入 markdown，通过 stdout 拿到 asciidoc result = subprocess.run( ## "`pandoc`", "`-f`", "`markdown`", "`-t`", "`asciidoc`", "`–wrap=none`", ##, input=markdown++_++text, capture++_++output=True, text=True, encoding="`utf-8`", check=True, )
-
-....
-adoc_content = result.stdout
-
-# 字符串后处理，手动清洗 Pandoc 的过度转义
-adoc_content = adoc_content.replace("+=", "+=")
-adoc_content = adoc_content.replace("+", "+")   # 兜底替换其他孤立的 +
-adoc_content = adoc_content.replace("*=", "*=")
-adoc_content = adoc_content.replace("*", "*")    # 兜底替换其他孤立的 *
-adoc_content = adoc_content.replace("&lt;", "&lt;")    # 兜底替换其他孤立的 &lt;
-adoc_content = adoc_content.replace("&gt;", "&gt;")    # 兜底替换其他孤立的 &gt;
-adoc_content = adoc_content.replace("##", "##")  # 兜底替换其他孤立的 &gt;
-adoc_content = adoc_content.replace("{", "{")  # 兜底替换其他孤立的 &gt;
-adoc_content = adoc_content.replace("", "")  # 兜底替换其他孤立的 &gt;
-adoc_content = adoc_content.replace("##", "##")  # 兜底替换其他孤立的 &gt;
-adoc_content = adoc_content.replace("##", "##")  # 兜底替换其他孤立的 &gt;
-
-# 创建一个子节点存放结果
-new_p = p.insertAfter()
-new_p.h = f"Converted: {p.h}"
-new_p.b = adoc_content
-
-c.redraw()
-g.es("转换成功！已生成新节点并清洗了转义符号。")
-....
-
-except subprocess.CalledProcessError as e: g.es(f”Pandoc 转换失败: {e}“)
-
-except Exception as e: g.es(f”发生错误: {e}“)
-
-@doc pandoc 将 markdown 转换为 asciidoctor
-
-* 使用 pandoc 进行转换 https://github.com/jgm/pandoc
-* 安装 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
-* 卸载 pandoc: https://github.com/jgm/pandoc/blob/main/INSTALL.md
-</t>
-<t tx="swot.20261019163257.1">@language python
-import subprocess
-
-# 获取当前节点的内容
-p = c.p
-markdown_text = p.b
-
-try:
-    # 通过 stdin 传入 markdown，通过 stdout 拿到 asciidoc
-    result = subprocess.run(
-        [
-            "pandoc",
-            "-f", "markdown",
-            "-t", "asciidoc",
-            "--wrap=none",
-        ],
-        input=markdown_text,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        check=True,
-    )
-
-    adoc_content = result.stdout
-
-    # 字符串后处理，手动清洗 Pandoc 的过度转义
-    adoc_content = adoc_content.replace("{plus}=", "+=")
-    adoc_content = adoc_content.replace("{plus}", "+")
-    adoc_content = adoc_content.replace("++*++=", "*=")
-    adoc_content = adoc_content.replace("++*++", "*")
-    adoc_content = adoc_content.replace("++&lt;++", "&lt;")
-    adoc_content = adoc_content.replace("++&gt;++", "&gt;")
-    adoc_content = adoc_content.replace("++##++", "##")
-    adoc_content = adoc_content.replace("++{++", "{")
-    adoc_content = adoc_content.replace("++}++", "}")
-    adoc_content = adoc_content.replace("++[++", "[")
-    adoc_content = adoc_content.replace("++]++", "]")
-    adoc_content = adoc_content.replace("++_++", "_")
-
-    # 创建一个子节点存放结果
-    new_p = p.insertAfter()
-    new_p.h = f"Converted: {p.h}"
-    new_p.b = adoc_content
-
-    c.redraw()
-    g.es("转换成功！已生成新节点并清洗了转义符号。")
 
 except subprocess.CalledProcessError as e:
     g.es(f"Pandoc 转换失败: {e}\n{e.stderr}")
