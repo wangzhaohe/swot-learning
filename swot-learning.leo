@@ -50259,8 +50259,13 @@ ability.can('delete', 'links')
 </t>
 <t tx="swot.20261126201415.1">[mermaid, target=img/mermaid-casl-2026-11-26-201447, format=svg]
 ....
-%%{init: {'theme':'default', 'themeVariables': {'edgeLabelBackground':'#ffffff', 'fontSize':'18px'}}}%%
-
+---
+config:
+    theme: default
+    themeVariables:
+        edgeLabelBackground: "#ffffff"
+        fontSize: 16px
+---
 flowchart TD
     A["角色表 roles.permissions&lt;br/&gt;JSON 字符串"] --&gt; B["查用户时替换变量&lt;br/&gt;${user.id} 变成真实 id"]
     B --&gt; C["权限规则数组"]
@@ -50329,10 +50334,10 @@ if (!ability.can(required.action, required.subject)) {
 ....
 sequenceDiagram
     autonumber
-    participant L as default.vue (onMounted)
+    participant L as default.vue&lt;br/&gt;(onMounted)
     participant F as clientFetch
     participant M as auth 中间件
-    participant D as 数据库 users + roles
+    participant D as 数据库&lt;br/&gt;users + roles
     participant API as find-user 接口
     participant B as $ability
 
