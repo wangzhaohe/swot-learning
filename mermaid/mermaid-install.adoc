@@ -1,0 +1,139 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️
+
+= 使用 pnpm 安装与升级 mermaid 指南 
+
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
+ifndef::backend-pdf[]
+++++
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">Open Toc</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+});
+</script>
+++++
+endif::[]
+endif::[]
+
+== 注意事项
+官网: https://mermaid.js.org/
+
+* 全程只用 pnpm，不要混用 npm。混用会在 nvm 全局目录另装一份 mmdc， 与 pnpm 版在 PATH 里冲突（2026-11-22 实际踩过，Ctrl+C 中断还留下半成品）。
+* pnpm 全局 bin（macOS）：/Users/swot/Library/pnpm，需确保在 PATH 中。
+* 查看全局包目录：pnpm root -g
+
+== 1. 安装兼容的 puppeteer（peer 依赖）
+.@mermaid-js/mermaid-cli 的 peerDependencies 为 puppeteer: ^25.0.0
+[source,console]
+----
+pnpm add puppeteer@^25 -g
+----
+
+== 2. 下载无头浏览器
+.验证 puppeteer browsers list
+[source,console]
+----
+puppeteer browsers install chrome-headless-shell
+----
+
+== 3. 安装 mermaid-cli
+截至 2026-11-22，registry 最新为 12.2.0（2026-11-02 发布）
+
+[source,console]
+----
+pnpm add -g @mermaid-js/mermaid-cli
+----
+
+== 4. 查看是否安装成功
+[source,console]
+----
+which mmdc                 # Linux/macOS，本机应为 /Users/swot/Library/pnpm/mmdc
+where mmdc                 # Windows
+mmdc --version             # 本机当前 12.0.0
+pnpm list -g --depth=0 | grep -Ei "mermaid|puppeteer"
+----
+
+== 5. 升级
+推荐：在全局 package.json 的 ^12.0.0 范围内升级，不改动 spec
+
+[source,console]
+----
+pnpm update -g @mermaid-js/mermaid-cli
+----
+
+.强制到 latest（跨大版本时用），下面两条等价
+****
+[source,console]
+----
+pnpm update -g –latest @mermaid-js/mermaid-cli
+pnpm add -g @mermaid-js/mermaid-cli@latest
+----
+****
+
+
+升级后重跑一次浏览器安装（幂等，已装会跳过）并验证
+
+[source,console]
+----
+puppeteer browsers install chrome-headless-shell
+mmdc –version
+----
+

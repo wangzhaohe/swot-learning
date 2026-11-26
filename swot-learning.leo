@@ -1898,6 +1898,16 @@
 </v>
 </v>
 <v t="swot.20261125115009.1"><vh>@path mermaid</vh>
+<v t="swot.20261126110953.1"><vh>@adoc mermaid-install.adoc</vh>
+<v t="swot.20261126111023.1"><vh>使用 pnpm 安装与升级 mermaid 指南 </vh>
+<v t="swot.20261126110958.1"><vh>注意事项</vh></v>
+<v t="swot.20261126111132.1"><vh>1. 安装兼容的 puppeteer（peer 依赖）</vh></v>
+<v t="swot.20261126111144.1"><vh>2. 下载无头浏览器</vh></v>
+<v t="swot.20261126111158.1"><vh>3. 安装 mermaid-cli</vh></v>
+<v t="swot.20261126111211.1"><vh>4. 查看是否安装成功</vh></v>
+<v t="swot.20261126111300.1"><vh>5. 升级</vh></v>
+</v>
+</v>
 <v t="swot.20261125115451.1"><vh>@adoc mermaid-animateMotion.adoc</vh>
 <v t="swot.20261125115444.1"><vh>mermaid 12.3.0 支持 svg 动画</vh>
 <v t="swot.20261125115637.1"><vh>支持版本</vh></v>
@@ -4872,76 +4882,7 @@ scale 1.2
 @endwbs
 ....
 </t>
-<t tx="swot.20250509113701.1">官网：https://mermaid.js.org/
-
-* 全程只用 pnpm，不要混用 npm。混用会在 nvm 全局目录另装一份 mmdc， 与 pnpm 版在 PATH 里冲突（2026-11-22 实际踩过，Ctrl+C 中断还留下半成品）。
-* pnpm 全局 bin（macOS）：/Users/swot/Library/pnpm，需确保在 PATH 中。
-* 查看全局包目录：pnpm root -g
-
-[discrete]
-=== 1. 安装兼容的 puppeteer（peer 依赖）
-
-.@mermaid-js/mermaid-cli 的 peerDependencies 为 puppeteer: ^25.0.0
-[source,console]
-----
-pnpm add puppeteer@^25 -g
-----
-
-[discrete]
-=== 2. 下载无头浏览器
-
-.验证 puppeteer browsers list
-[source,console]
-----
-puppeteer browsers install chrome-headless-shell
-----
-
-[discrete]
-=== 3. 安装 mermaid-cli
-
-截至 2026-11-22，registry 最新为 12.2.0（2026-11-02 发布）
-
-[source,console]
-----
-pnpm add -g @mermaid-js/mermaid-cli
-----
-
-[discrete]
-=== 4. 查看是否安装成功
-
-which mmdc                 # Linux/macOS，本机应为 /Users/swot/Library/pnpm/mmdc
-where mmdc                 # Windows
-mmdc --version             # 本机当前 12.0.0
-pnpm list -g --depth=0 | grep -Ei "mermaid|puppeteer"
-
-[discrete]
-=== 5. 升级
-
-推荐：在全局 package.json 的 ^12.0.0 范围内升级，不改动 spec
-
-[source,console]
-----
-pnpm update -g @mermaid-js/mermaid-cli
-----
-
-.强制到 latest（跨大版本时用），下面两条等价
-****
-[source,console]
-----
-pnpm update -g –latest @mermaid-js/mermaid-cli
-pnpm add -g @mermaid-js/mermaid-cli@latest
-----
-****
-
-[discrete]
-=== 升级后重跑一次浏览器安装（幂等，已装会跳过）并验证
-
-[source,console]
-----
-puppeteer browsers install chrome-headless-shell
-mmdc –version
-----
-</t>
+<t tx="swot.20250509113701.1"></t>
 <t tx="swot.20250509155424.1">https://docs.asciidoctor.org/diagram-extension/latest/diagram_types/barcode/
 
 Install:
@@ -49438,10 +49379,11 @@ flowchart LR
 :warning-caption: ‼️</t>
 <t tx="swot.20261125115637.1">mmdc 12.2.0 的 dependencies.mermaid 为 ^12.2.0，锁文件解析到 12.3.0；步骤动画由 12.3.0 引入，故导出的 SVG 内嵌 &lt;animateMotion&gt; 等 SMIL 元素，浏览器打开即播放。
 </t>
-<t tx="swot.20261125115825.1">xref:mermaid/mermaid-animateMotion.adoc[ mermaid support animateMotion ]
+<t tx="swot.20261125115825.1">xref:mermaid/mermaid-install.adoc[使用 pnpm 安装与升级 mermaid 指南 ]
+
+xref:mermaid/mermaid-animateMotion.adoc[ mermaid support animateMotion ]
 
 xref:mermaid/mermaid-svg-to-gif-analyse.adoc[SVG 里的动画，到底是谁在播？]
-
 </t>
 <t tx="swot.20261125155930.1">配套脚本做的事就是第 4 节那四行的循环：探测本机 `chrome-headless-shell` → 逐帧 `setCurrentTime(t)` 截图 → ffmpeg 合成 GIF。输入是任意带 SMIL 动画的 SVG，输出同名 `.gif`；把 `src/` 换成自己的文件即可复用，不必改脚本。
 
@@ -49899,6 +49841,139 @@ endif::[]
 提前跑一次 `--dry-run` 很省事：标签不存在、摘要长度不对这类问题，都会在这一步报出来，还没写远端。标签改好后可以 `juejin tag list --json` 查可用名称；想同时归入专栏，发布时加 `--columns ++&lt;++column-id++&gt;++`，ID 从 `juejin column list --json` 取。
 </t>
 <t tx="swot.20261126102251.1">xref:tools/掘金博客命令行自动上传.adoc[掘金博客命令行自动上传]
+</t>
+<t tx="swot.20261126110953.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
+<t tx="swot.20261126110958.1">官网: https://mermaid.js.org/
+
+* 全程只用 pnpm，不要混用 npm。混用会在 nvm 全局目录另装一份 mmdc， 与 pnpm 版在 PATH 里冲突（2026-11-22 实际踩过，Ctrl+C 中断还留下半成品）。
+* pnpm 全局 bin（macOS）：/Users/swot/Library/pnpm，需确保在 PATH 中。
+* 查看全局包目录：pnpm root -g
+</t>
+<t tx="swot.20261126111023.1">
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;Open Toc&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+});
+&lt;/script&gt;
+++++
+endif::[]
+endif::[]
+</t>
+<t tx="swot.20261126111132.1">.@mermaid-js/mermaid-cli 的 peerDependencies 为 puppeteer: ^25.0.0
+[source,console]
+----
+pnpm add puppeteer@^25 -g
+----
+</t>
+<t tx="swot.20261126111144.1">.验证 puppeteer browsers list
+[source,console]
+----
+puppeteer browsers install chrome-headless-shell
+----
+</t>
+<t tx="swot.20261126111158.1">截至 2026-11-22，registry 最新为 12.2.0（2026-11-02 发布）
+
+[source,console]
+----
+pnpm add -g @mermaid-js/mermaid-cli
+----
+
+</t>
+<t tx="swot.20261126111211.1">[source,console]
+----
+which mmdc                 # Linux/macOS，本机应为 /Users/swot/Library/pnpm/mmdc
+where mmdc                 # Windows
+mmdc --version             # 本机当前 12.0.0
+pnpm list -g --depth=0 | grep -Ei "mermaid|puppeteer"
+----
+</t>
+<t tx="swot.20261126111300.1">推荐：在全局 package.json 的 ^12.0.0 范围内升级，不改动 spec
+
+[source,console]
+----
+pnpm update -g @mermaid-js/mermaid-cli
+----
+
+.强制到 latest（跨大版本时用），下面两条等价
+****
+[source,console]
+----
+pnpm update -g –latest @mermaid-js/mermaid-cli
+pnpm add -g @mermaid-js/mermaid-cli@latest
+----
+****
+
+
+升级后重跑一次浏览器安装（幂等，已装会跳过）并验证
+
+[source,console]
+----
+puppeteer browsers install chrome-headless-shell
+mmdc –version
+----
 </t>
 </tnodes>
 </leo_file>
