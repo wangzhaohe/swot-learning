@@ -49231,6 +49231,8 @@ flowchart LR
 </t>
 <t tx="swot.20261125115825.1">xref:mermaid/mermaid-install.adoc[使用 pnpm 安装与升级 mermaid 指南 ]
 
+xref:mermaid/mermaid-draw-4-orders.adoc[mermaid 一张订单的四种需求画法]
+
 xref:mermaid/mermaid-animateMotion.adoc[ mermaid support animateMotion ]
 
 xref:mermaid/mermaid-svg-to-gif-analyse.adoc[SVG 里的动画，到底是谁在播？]
@@ -49869,7 +49871,10 @@ IMPORTANT: 记法：流程看先后，泳道看归属，时序看往返，状态
 
 [mermaid, target=img/mermaid-use-1-2026-11-21-160023, format=svg]
 ....
-%%{init: {'theme':'default'}}%%
+---
+config:
+  theme: default
+---
 flowchart LR
   A[提交订单] --&gt; B{库存够吗}
   B --&gt;|够| C[扣库存]
@@ -49888,8 +49893,12 @@ flowchart LR
 
 [mermaid, target=img/mermaid-use-2-2026-11-21-160125, format=svg]
 ....
-%%{init: {'themeVariables': {'fontSize':'16px'}}}%%
-swimlane-beta LR
+---
+config:
+  themeVariables:
+    fontSize: 16px
+---
+swimlane-beta TB
   subgraph buyer [买家]
     submit[提交订单]
     pay[完成支付]
@@ -49916,7 +49925,10 @@ swimlane-beta LR
 
 [mermaid, target=img/mermaid-use-3-2026-11-21-160202, format=svg]
 ....
-%%{init: {'fontSize': 14}}%%
+---
+config:
+  fontSize: 14
+---
 sequenceDiagram
   actor U as 用户
   participant MP as 小程序
@@ -49940,8 +49952,13 @@ sequenceDiagram
 
 [mermaid, target=img/mermaid-use-4-2026-11-21-160232, format=svg]
 ....
-%%{init: {'theme':'default', 'themeVariables': {'edgeLabelBackground':'#ffffff', 'fontSize':'18px'}}}%%
-
+---
+config:
+  theme: default
+  themeVariables:
+    edgeLabelBackground: '#ffffff'
+    fontSize: 18px
+---
 stateDiagram-v2
   direction LR
   state "待支付" as pending
@@ -49977,23 +49994,27 @@ stateDiagram-v2
 
 一张图讲不清就摆三张（泳道 + 时序 + 状态），别硬塞进一张。动手之前，先把要回答的那句问句写在草稿上——写不出来，说明还没想清楚要讲什么，这时候画哪张图都一样。
 </t>
-<t tx="swot.20261126112112.8">- `swimlane-beta` 需要 **Mermaid ≥ 11.16.0**，仍处 beta，后续可能不兼容地改；v12.0.0 起默认 `redux-color` 主题 + `neo` look。WorkBuddy 预览面板内置的是 **11.15.0**，差一个小版本，所以这张图渲染不出来。要看效果可以贴到 mermaid.live（在线版本较新），或用本地 mmdc 渲染：`mmdc -i x.mmd -o x.png -p puppeteer.json`。
+<t tx="swot.20261126112112.8">- `%%{init: ...}%%` 指令自 Mermaid v10.5 起已废弃，官方改推图首的 YAML frontmatter `config:`；本文四段代码均已照此改写（frontmatter 自 v10.5 起支持）。
+
+- `swimlane-beta` 需要 **Mermaid ≥ 11.16.0**，仍处 beta，后续可能不兼容地改；
+v12.0.0 起默认 `redux-color` 主题 + `neo` look。
+WorkBuddy 预览面板内置的是 **11.15.0**，差一个小版本，所以这张图渲染不出来。要看效果可以贴到 mermaid.live（在线版本较新），或用本地 mmdc 渲染：`mmdc -i x.mmd -o x.png -p puppeteer.json`。
 
 - 泳道名带空格或中文，用 `subgraph id [显示名]` 比直接写稳妥。
 
-- Mermaid 12 默认主题下，普通 flowchart 节点是白底深灰描边的线框，颜色只给泳道带和 subgraph 分组（`cluster`）——所以本文第 1 张图看着"素"、第 2 张泳道是彩的，这是同一套默认主题的正常表现，不是渲染出错。想让节点回到经典淡紫，在代码块首行加 `%%{init: {'theme':'default'}}%%` 即可，泳道图不受影响。
+- Mermaid 12 默认主题下，普通 flowchart 节点是白底深灰描边的线框，颜色只给泳道带和 subgraph 分组（`cluster`）——所以本文第 1 张图看着"素"、第 2 张泳道是彩的，这是同一套默认主题的正常表现，不是渲染出错。想让节点回到经典淡紫，在代码块开头的 frontmatter `config:` 下写 `theme: default` 即可，泳道图不受影响。
 
-- 嫌泳道图文字小，在代码块首行加一行 `%%{init: {'themeVariables': {'fontSize':'22px'}}}%%`：节点文字、箭头标签、泳道名一起从默认 14px 变大（泳道名的外框会按新字号重算，不会裁切），默认 `redux-color` 主题不受影响，数字按需调。本地出 PNG 再加 `-s 2` 整体放大。**注意**：fontSize 改的是 SVG 内部字号，但 LR 泳道画布很宽（20px 时约 1950px），网页按容器宽度压缩显示后会抵消大半——实测 900px 容器里 20px 只显示约 9px，比旁边 14px 的窄图还小。想真正显大：把 `LR` 改成 `TB`（泳道变竖带，画布缩到约 770px，20px 字近乎原尺寸显示），或把字号加到 28px 以上。
+- 嫌泳道图文字小，在代码块开头 frontmatter 的 `config.themeVariables.fontSize` 调字号（如 `fontSize: 22px`）：节点文字、箭头标签、泳道名一起变大，默认 `redux-color` 主题不受影响，数字按需调。本地出 PNG 再加 `-s 2` 整体放大。**注意**：字号改的是 SVG 内部尺寸，网页按容器宽度缩放会抵消一部分。本文第 2 张图已改用 `TB`（泳道变竖带）：本机 mmdc 12.2.0 实测 16px 下画布由 LR 的 1196×1014 变为 TB 的 1390×332，高度省了约三分之二；横向变宽会把显示字号压小，嫌小就继续加大 `fontSize`。
 
-- 时序图的字号是另一套机制：`themeVariables.fontSize` 对它**无效**——消息和参与者名字是内联 `style="font-size:16px"`，压过根字号。正确写法是顶层 `fontSize`：`%%{init: {'fontSize': 20}}%%`（数字或 `'20px'` 都行）。反过来这个写法对 flowchart 和泳道图也无效，两类图不通用。好处是时序图画布不会随字号大幅变宽，页面压缩抵消的问题基本没有。
+- 时序图的字号是另一套机制：`themeVariables.fontSize` 对它**无效**——消息和参与者名字是内联 `style="font-size:16px"`，压过根字号。正确写法是 frontmatter 顶层的 `config.fontSize`（如 `fontSize: 20`，数字或 `'20px'` 都行）。反过来这个写法对 flowchart 和泳道图也无效，两类图不通用。好处是时序图画布不会随字号大幅变宽，页面压缩抵消的问题基本没有。
 
-- 同一页面放多张图时，init 里的字号数字**不能跨图比较**：每张 SVG 都是按容器宽度缩放的，实际显示字号 ≈ 内部字号 × 显示宽 ÷ 画布宽。画布窄的图（时序约 850px）按原尺寸显示，写多少显示多少；画布宽的图（泳道 LR 约 1950px）被压到容器宽，字号同比缩水。实测：泳道 20px 在页面里约显示 13.6px，和时序图不缩放的 14px 几乎一样大。想视觉统一就按这个比例反算，或者让宽图改 TB / 原尺寸显示。
+- 同一页面放多张图时，frontmatter 里的字号数字**不能跨图比较**：每张 SVG 都是按容器宽度缩放的，实际显示字号 ≈ 内部字号 × 显示宽 ÷ 画布宽。画布窄的图（时序约 850px）按原尺寸显示，写多少显示多少；画布宽的图（泳道 LR 约 1200px、TB 约 1390px）被压到容器宽，字号同比缩水。想视觉统一就按这个比例反算，或者让宽图改用 TB / 原尺寸显示。
 
 - 状态图里中文状态名要用 `state "显示名" as id` 声明，直接拿中文当状态 id，部分版本解析不了。
 
-- 想出深色图：命令行 `mmdc -t dark`，或代码块里加 `%%{init: {'theme':'dark'}}%%`。
+- 想出深色图：命令行 `mmdc -t dark`，或代码块开头的 frontmatter `config:` 下写 `theme: dark`。
 
-- 本文四段代码在 Mermaid 12.1.0（mmdc 12.0.0）下实测均可渲染；沙箱环境跑 mmdc 报 `ConnectionClosedError` 时，用 `-p` 传入 `{"args":["--no-sandbox"]}` 即可，与图语法无关。
+- 本文四段代码在 Mermaid 12.x（本机 mmdc 12.2.0）下实测均可渲染；沙箱环境跑 mmdc 报 `ConnectionClosedError` 时，用 `-p` 传入 `{"args":["--no-sandbox"]}` 即可，与图语法无关。
 </t>
 <t tx="swot.20261126112201.1">
 // 只有当后端不是 pdf or github 时才包含以下内容
