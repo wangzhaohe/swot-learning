@@ -1,0 +1,391 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️
+
+= 初识 CASL 权限管理
+
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
+ifndef::backend-pdf[]
+++++
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">Open Toc</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+});
+</script>
+++++
+endif::[]
+endif::[]
+
+== 1. 基本描述
+从入门角度讲解 CASL 权限管理。
+
+NOTE: 业务逻辑的整理来源：《lvheng 账务管理系统》
+
+== 2. 理解 CASL
+CASL 是一个**门禁系统**，用一张规则表判断：
+
+> 当前这个人，能不能对某个东西，做某件事？比如当前用户能查看用户列表吗？
+
+对应到代码就一句话，其他都是围绕它展开的。
+
+```ts
+ability.can('read', 'users')
+```
+
+== 3. 记住 3 个词
+[width="100%",cols="17%,7%,76%",options="header",]
+|===
+|词 |含义 |项目里的例子
+|`action` |做什么 |`read`、`create`、`update`、`delete`、`manage`
+|`subject` |对什么 |`users`、`roles`、`links`、`all`
+|`rule` |一条规则 |`++{++ action: 'read', subject: 'users' }`
+|===
+
+Example:
+
+[source,ts]
+----
+{ action: 'read', subject: 'users' }
+// 能查看用户
+----
+
+[source,ts]
+----
+{ action: 'manage', subject: 'all' }
+// 超级管理员：什么都能干
+----
+
+其中：
+
+* `manage` = 所有动作
+* `all` = 所有资源
+
+所以 `manage + all` 就是什么都能干
+
+== 4. 权限规则存在哪里？
+存在数据库的角色表里：`roles.permissions`。 它本质上是一段 JSON 字符串，比如：
+
+```json
+[
+  { "action": "read", "subject": "links" },
+  { "action": "update", "subject": "links", "conditions": { "authorId": 2 } }
+]
+```
+
+第二条 rule 多了一个 `conditions`，意思是：
+
+> 只能改 `authorId` 等于 2 的链接，也就是自己写的链接。
+
+项目里为了灵活，把用户 id 写成模板：
+
+```json
+{ "authorId": "${user.id}" }
+```
+
+查用户的时候，会把 `${user.id}` 替换成真实 id，再变成真正的规则数组。
+
+先不用记住替换函数叫什么，只要知道：
+
+> **数据库里存的是字符串，运行时变成数组。**
+
+== 5. 规则数组怎么变成“门禁”？
+项目里有一个函数，把“规则数组”包装成一个有 `can()` 方法的对象。
+
+```ts
+const ability = createAbility(rules)
+```
+
+之后所有判断都靠它：
+
+```ts
+ability.can('read', 'users')
+ability.can('update', 'users')
+ability.can('delete', 'links')
+```
+
+代码里有的那一堆 TypeScript 类型先别管，它们只是让编辑器给提示，不改变这个核心逻辑。
+
+> 这也是我最头疼的语法，基础不过关呀！
+
+== 6. 一张图看完整流程
+[mermaid, target=img/mermaid-casl-2026-11-26-201447, format=svg]
+....
+%%{init: {'theme':'default', 'themeVariables': {'edgeLabelBackground':'#ffffff', 'fontSize':'18px'}}}%%
+
+flowchart TD
+    A["角色表 roles.permissions<br/>JSON 字符串"] --> B["查用户时替换变量<br/>${user.id} 变成真实 id"]
+    B --> C["权限规则数组"]
+
+    C --> D["后端 createAbility<br/>得到 event.context.ability"]
+    C --> E["前端拉取权限<br/>ability.update"]
+
+    F["浏览器请求页面 / API"] --> D
+    D --> G{"后端 ability.can?"}
+    G -->|通过| H["继续执行业务"]
+    G -->|拒绝| I["返回 403"]
+
+    E --> K["路由 meta.requiredAbility"]
+    K --> L{"前端 ability.can?"}
+    L -->|通过| M["进入页面"]
+    L -->|拒绝| N["跳转 /403 页面"]
+    M --> J["Can 组件<br/>控制菜单和按钮"]
+....
+
+重点理解：**同一份规则，前端用来控制“看不看得见”，后端用来决定“放不放行”。**
+
+== 7. 前端：负责体验
+前端拿到规则后，主要做三件事。
+
+=== 7.1 菜单 / 按钮要不要显示
+```vue
+<Can I="read" a="users">
+  ...
+</Can>
+```
+
+意思是：有 `read users` 权限，才渲染这块内容。
+
+=== 7.2 按钮显示但禁用
+有些按钮不是隐藏，而是变灰：
+
+```vue
+<Can I="create" :a="tableName" passThrough v-slot="{ allowed }">
+  <el-button :disabled="!allowed">新增</el-button>
+</Can>
+```
+
+这里的 `allowed` 就是 CASL 算出来的结果。
+
+=== 7.3 页面级别拦截
+页面里写：
+
+```ts
+definePageMeta({
+  requiredAbility: { action: 'read', subject: 'users' }
+})
+```
+
+全局路由中间件会检查：
+
+```ts
+if (!ability.can(required.action, required.subject)) {
+  return navigateTo('/403')
+}
+```
+
+没权限就去 `/403`。
+
+前端拉取权限的时序如下（对应总览图节点 "前端拉取权限 ability.update"）：
+
+[mermaid, target=img/mermaid-casl-2026-11-26-201739, format=svg]
+....
+sequenceDiagram
+    autonumber
+    participant L as default.vue (onMounted)
+    participant F as clientFetch
+    participant M as auth 中间件
+    participant D as 数据库 users + roles
+    participant API as find-user 接口
+    participant B as $ability
+
+    L->>F: clientFetch('/api/others/find-user')
+    F->>F: 取 useAuthStore().token<br/>写入 Authorization: Bearer
+    F->>M: GET /api/others/find-user
+    M->>M: jwt.verify 得到 userId
+    M->>D: findUserBy({ id }) 连表查询
+    D-->>M: roles.permissions (JSON 字符串)
+    M->>M: interpolate 替换变量<br/>→ permissions 规则数组
+    M->>M: createAbility() → event.context.ability<br/>user → event.context.user
+    M->>API: 放行
+    API-->>F: { code: 0, data: { user } }
+    F-->>L: res
+    L->>B: $ability.update(user.permissions)
+
+    opt 拉取失败（未登录 / 401）
+        L->>B: $ability.update([]) 清空规则
+    end
+....
+
+要点：**接口本身不查权限**，规则由 `auth` 中间件验 token 时查好放进 `event.context.user`，`find-user` 只是原样返回；`update()` 是整份覆盖（见 9.1）。
+
+== 8. 后端：真正的安全线
+前端隐藏按钮没用，因为用户可以：
+
+- 手动敲网址
+- 直接用 Postman 调接口
+- 改前端代码
+
+所以后端必须自己再查一次。
+
+项目流程是：
+
+```text
+API 请求
+  ↓
+auth 中间件验证 JWT
+  ↓
+查用户和角色权限
+  ↓
+createAbility
+  ↓
+放进 event.context.ability
+  ↓
+API 里 checkPermission / checkTablePermission
+  ↓
+ability.can 不通过就 403
+```
+
+最常见的一句：
+
+```ts
+checkTablePermission(event, 'read')
+```
+
+它做了两件事：
+
+1. 从路由里拿到表名，比如 `users`
+2. 检查当前用户能不能 `read users`
+
+不通过就抛 403。
+
+== 9. 前后端为什么要各做一次？
+[cols=",,",options="header",]
+|===
+|哪端 |做什么 |本质
+|前端 |隐藏菜单、禁用按钮、跳 `/403` |用户体验
+|后端 |API 里真正拒绝请求 |真正安全
+|===
+
+____
+*前端是“别让你看到”，后端是“不让你拿到”。*
+____
+
+== 10. 几个容易懵的小点
+9.1 `update(rules)` 是覆盖，不是追加
+
+```ts
+ability.update(newRules)
+```
+
+意思是：用新规则整份替换旧规则。不是往旧规则里再加一条。
+
+
+9.2 `conditions` 目前没有真正做行级过滤
+
+举例：
+
+```ts
+ability.can('read', table)
+```
+
+这里传的是表名字符串，不是某一条具体数据。
+
+所以它判断的是：
+
+> 能不能读这个表？
+
+而不是：
+
+> 能不能读这一行？
+
+要按每条数据判断，得把那条数据也交给 CASL。（这里没有举例）
+
+== 11. 速查表
+[cols=",",options="header",]
+|===
+|你想做的事 |去哪里看 / 怎么写
+|加一个新资源 |`appAbility.ts` 的 `subjects` 数组
+|配角色权限 |角色编辑页勾选，存到 `roles.permissions`
+|菜单隐藏 |`++<++Can I="read" a="xxx"++>++`
+|按钮禁用 |`Can` + `passThrough` + `allowed`
+|页面没权限跳 403 |`definePageMeta(++{++ requiredAbility })`
+|API 拦截 |`checkTablePermission(event, 'read')`
+|超级管理员 |`++{++ action: 'manage', subject: 'all' }`
+|===
+
+____
+注：具体内容可参考代码
+____
+
+== 12. 读代码顺序
+1. `shared/utils/appAbility.ts`：只看 `actions`、`subjects`、`createAbility`
+2. `app/pages/roles/[id].vue`：权限是怎么勾出来的
+3. `server/utils/findUserBy.ts`：权限字符串怎么变成数组
+4. `server/middleware/auth.ts`：后端 ability 怎么创建
+5. `app/layouts/default.vue`：前端 ability 怎么更新
+6. `app/components/CrudList.vue`：按钮怎么根据权限显示
+7. `server/utils/permissions.ts`：API 怎么真正拦截
+
+== 13. 最后总结
+CASL 在 project 里就干了一件事：
+
+```text
+角色权限 → 规则数组 → ability → can(action, subject)
+```
+
+然后：
+
+- 前端拿 `can()` 控制显示
+- 后端拿 `can()` 控制放行
+
+我们记住这句就够了：
+
+> **ability.can('动作', '资源')，true 就放行，false 就拦住。**
+

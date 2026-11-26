@@ -2522,7 +2522,7 @@
 </v>
 </v>
 <v t="swot.20260729213729.1"><vh>@path svelte-sveltekit</vh>
-<v t="swot.20260729213805.1"><vh>svelte-use 已经写好的可以拿来即用的库波函数</vh></v>
+<v t="swot.20260729213805.1"><vh>svelte-use 已经写好的可以拿来即用的库函数</vh></v>
 <v t="swot.20260831092122.1"><vh>@adoc Nuxt与SvelteKit开发模式运行机制对比.adoc</vh>
 <v t="swot.20260817085952.1"><vh>Nuxt 与 SvelteKit 开发模式运行机制对比</vh></v>
 </v>
@@ -3361,7 +3361,7 @@
 </v>
 </v>
 </v>
-<v t="swot.20260220145006.1" descendentVnodeUnknownAttributes="7d71005803000000302e3271017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b15580a000000707269736574646174657106580a000000323032362d30322d3237710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58240000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f78626c6b2e706e67710d580700000072656c50617468710e580d000000636c656f2f78626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>@path tools</vh>
+<v t="swot.20260220145006.1" descendentVnodeUnknownAttributes="7d71005803000000302e3371017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b15580a000000707269736574646174657106580a000000323032362d30322d3237710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58240000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f78626c6b2e706e67710d580700000072656c50617468710e580d000000636c656f2f78626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>@path tools</vh>
 <v t="swot.20261126095013.1"><vh>@adoc 掘金博客命令行自动上传.adoc</vh>
 <v t="swot.20261126095025.1"><vh>掘金博客命令行自动上传</vh>
 <v t="swot.20261126095056.1"><vh>资源</vh></v>
@@ -3369,6 +3369,27 @@
 <v t="swot.20261126102030.1"><vh>自动上传到底做了什么</vh></v>
 <v t="swot.20261126102139.1"><vh>frontmatter 速查</vh></v>
 <v t="swot.20261126102102.1"><vh>几个容易踩的坑</vh></v>
+</v>
+</v>
+<v t="swot.20261126201007.1"><vh>@adoc 初识CASL权限管理.adoc</vh>
+<v t="swot.20261126201018.1"><vh>初识 CASL 权限管理</vh>
+<v t="swot.20261126200747.1"><vh>1. 基本描述</vh></v>
+<v t="swot.20261126201156.1"><vh>2. 理解 CASL</vh></v>
+<v t="swot.20261126201234.1"><vh>3. 记住 3 个词</vh></v>
+<v t="swot.20261126201307.1"><vh>4. 权限规则存在哪里？</vh></v>
+<v t="swot.20261126201336.1"><vh>5. 规则数组怎么变成“门禁”？</vh></v>
+<v t="swot.20261126201415.1"><vh>6. 一张图看完整流程</vh></v>
+<v t="swot.20261126201546.1"><vh>7. 前端：负责体验</vh>
+<v t="swot.20261126201621.1"><vh>7.1 菜单 / 按钮要不要显示</vh></v>
+<v t="swot.20261126201631.1"><vh>7.2 按钮显示但禁用</vh></v>
+<v t="swot.20261126201655.1"><vh>7.3 页面级别拦截</vh></v>
+</v>
+<v t="swot.20261126201816.1"><vh>8. 后端：真正的安全线</vh></v>
+<v t="swot.20261126201927.1"><vh>9. 前后端为什么要各做一次？</vh></v>
+<v t="swot.20261126202003.1"><vh>10. 几个容易懵的小点</vh></v>
+<v t="swot.20261126202126.1"><vh>11. 速查表</vh></v>
+<v t="swot.20261126202141.1"><vh>12. 读代码顺序</vh></v>
+<v t="swot.20261126202200.1"><vh>13. 最后总结</vh></v>
 </v>
 </v>
 <v t="swot.20260220171008.1"><vh>@path key_mouse</vh>
@@ -42542,7 +42563,7 @@ No stores. No external dependencies. SSR-safe. Fully typed.
 == 总结
 
 Nuxt 和 SvelteKit 在开发模式下均采用“按需即时编译”的模式运行，属于“解释 + 即时编译”的混合体。SvelteKit 凭借“轻启动 + 按需编译”的设计，在开发服务的**首次启动速度**上具有明显优势，这是由两者架构设计和启动策略的根本差异决定的。
-```</t>
+</t>
 <t tx="swot.20260831092122.1">@language asciidoc
 :author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
@@ -49693,6 +49714,8 @@ endif::[]
 提前跑一次 `--dry-run` 很省事：标签不存在、摘要长度不对这类问题，都会在这一步报出来，还没写远端。标签改好后可以 `juejin tag list --json` 查可用名称；想同时归入专栏，发布时加 `--columns ++&lt;++column-id++&gt;++`，ID 从 `juejin column list --json` 取。
 </t>
 <t tx="swot.20261126102251.1">xref:tools/掘金博客命令行自动上传.adoc[掘金博客命令行自动上传]
+
+xref:tools/初识CASL权限管理.adoc[初识CASL权限管理]
 </t>
 <t tx="swot.20261126110953.1">@language asciidoc
 :author: https://github.com/wangzhaohe/swot-learning
@@ -50072,6 +50095,385 @@ toggleButton.addEventListener('click', () =&gt; {
 ++++
 endif::[]
 endif::[]
+</t>
+<t tx="swot.20261126200747.1">从入门角度讲解 CASL 权限管理。
+
+NOTE: 业务逻辑的整理来源：《lvheng 账务管理系统》
+</t>
+<t tx="swot.20261126201007.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
+<t tx="swot.20261126201018.1">
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;Open Toc&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+});
+&lt;/script&gt;
+++++
+endif::[]
+endif::[]
+</t>
+<t tx="swot.20261126201156.1">CASL 是一个**门禁系统**，用一张规则表判断：
+
+&gt; 当前这个人，能不能对某个东西，做某件事？比如当前用户能查看用户列表吗？
+
+对应到代码就一句话，其他都是围绕它展开的。
+
+```ts
+ability.can('read', 'users')
+```
+</t>
+<t tx="swot.20261126201234.1">[width="100%",cols="17%,7%,76%",options="header",]
+|===
+|词 |含义 |项目里的例子
+|`action` |做什么 |`read`、`create`、`update`、`delete`、`manage`
+|`subject` |对什么 |`users`、`roles`、`links`、`all`
+|`rule` |一条规则 |`++{++ action: 'read', subject: 'users' }`
+|===
+
+Example:
+
+[source,ts]
+----
+{ action: 'read', subject: 'users' }
+// 能查看用户
+----
+
+[source,ts]
+----
+{ action: 'manage', subject: 'all' }
+// 超级管理员：什么都能干
+----
+
+其中：
+
+* `manage` = 所有动作
+* `all` = 所有资源
+
+所以 `manage + all` 就是什么都能干
+</t>
+<t tx="swot.20261126201307.1">存在数据库的角色表里：`roles.permissions`。 它本质上是一段 JSON 字符串，比如：
+
+```json
+[
+  { "action": "read", "subject": "links" },
+  { "action": "update", "subject": "links", "conditions": { "authorId": 2 } }
+]
+```
+
+第二条 rule 多了一个 `conditions`，意思是：
+
+&gt; 只能改 `authorId` 等于 2 的链接，也就是自己写的链接。
+
+项目里为了灵活，把用户 id 写成模板：
+
+```json
+{ "authorId": "${user.id}" }
+```
+
+查用户的时候，会把 `${user.id}` 替换成真实 id，再变成真正的规则数组。
+
+先不用记住替换函数叫什么，只要知道：
+
+&gt; **数据库里存的是字符串，运行时变成数组。**
+
+</t>
+<t tx="swot.20261126201336.1">项目里有一个函数，把“规则数组”包装成一个有 `can()` 方法的对象。
+
+```ts
+const ability = createAbility(rules)
+```
+
+之后所有判断都靠它：
+
+```ts
+ability.can('read', 'users')
+ability.can('update', 'users')
+ability.can('delete', 'links')
+```
+
+代码里有的那一堆 TypeScript 类型先别管，它们只是让编辑器给提示，不改变这个核心逻辑。
+
+&gt; 这也是我最头疼的语法，基础不过关呀！
+</t>
+<t tx="swot.20261126201415.1">[mermaid, target=img/mermaid-casl-2026-11-26-201447, format=svg]
+....
+%%{init: {'theme':'default', 'themeVariables': {'edgeLabelBackground':'#ffffff', 'fontSize':'18px'}}}%%
+
+flowchart TD
+    A["角色表 roles.permissions&lt;br/&gt;JSON 字符串"] --&gt; B["查用户时替换变量&lt;br/&gt;${user.id} 变成真实 id"]
+    B --&gt; C["权限规则数组"]
+
+    C --&gt; D["后端 createAbility&lt;br/&gt;得到 event.context.ability"]
+    C --&gt; E["前端拉取权限&lt;br/&gt;ability.update"]
+
+    F["浏览器请求页面 / API"] --&gt; D
+    D --&gt; G{"后端 ability.can?"}
+    G --&gt;|通过| H["继续执行业务"]
+    G --&gt;|拒绝| I["返回 403"]
+
+    E --&gt; K["路由 meta.requiredAbility"]
+    K --&gt; L{"前端 ability.can?"}
+    L --&gt;|通过| M["进入页面"]
+    L --&gt;|拒绝| N["跳转 /403 页面"]
+    M --&gt; J["Can 组件&lt;br/&gt;控制菜单和按钮"]
+....
+
+重点理解：**同一份规则，前端用来控制“看不看得见”，后端用来决定“放不放行”。**
+
+</t>
+<t tx="swot.20261126201546.1">前端拿到规则后，主要做三件事。
+</t>
+<t tx="swot.20261126201621.1">```vue
+&lt;Can I="read" a="users"&gt;
+  ...
+&lt;/Can&gt;
+```
+
+意思是：有 `read users` 权限，才渲染这块内容。
+
+</t>
+<t tx="swot.20261126201631.1">有些按钮不是隐藏，而是变灰：
+
+```vue
+&lt;Can I="create" :a="tableName" passThrough v-slot="{ allowed }"&gt;
+  &lt;el-button :disabled="!allowed"&gt;新增&lt;/el-button&gt;
+&lt;/Can&gt;
+```
+
+这里的 `allowed` 就是 CASL 算出来的结果。
+
+</t>
+<t tx="swot.20261126201655.1">页面里写：
+
+```ts
+definePageMeta({
+  requiredAbility: { action: 'read', subject: 'users' }
+})
+```
+
+全局路由中间件会检查：
+
+```ts
+if (!ability.can(required.action, required.subject)) {
+  return navigateTo('/403')
+}
+```
+
+没权限就去 `/403`。
+
+前端拉取权限的时序如下（对应总览图节点 "前端拉取权限 ability.update"）：
+
+[mermaid, target=img/mermaid-casl-2026-11-26-201739, format=svg]
+....
+sequenceDiagram
+    autonumber
+    participant L as default.vue (onMounted)
+    participant F as clientFetch
+    participant M as auth 中间件
+    participant D as 数据库 users + roles
+    participant API as find-user 接口
+    participant B as $ability
+
+    L-&gt;&gt;F: clientFetch('/api/others/find-user')
+    F-&gt;&gt;F: 取 useAuthStore().token&lt;br/&gt;写入 Authorization: Bearer
+    F-&gt;&gt;M: GET /api/others/find-user
+    M-&gt;&gt;M: jwt.verify 得到 userId
+    M-&gt;&gt;D: findUserBy({ id }) 连表查询
+    D--&gt;&gt;M: roles.permissions (JSON 字符串)
+    M-&gt;&gt;M: interpolate 替换变量&lt;br/&gt;→ permissions 规则数组
+    M-&gt;&gt;M: createAbility() → event.context.ability&lt;br/&gt;user → event.context.user
+    M-&gt;&gt;API: 放行
+    API--&gt;&gt;F: { code: 0, data: { user } }
+    F--&gt;&gt;L: res
+    L-&gt;&gt;B: $ability.update(user.permissions)
+
+    opt 拉取失败（未登录 / 401）
+        L-&gt;&gt;B: $ability.update([]) 清空规则
+    end
+....
+
+要点：**接口本身不查权限**，规则由 `auth` 中间件验 token 时查好放进 `event.context.user`，`find-user` 只是原样返回；`update()` 是整份覆盖（见 9.1）。
+</t>
+<t tx="swot.20261126201816.1">前端隐藏按钮没用，因为用户可以：
+
+- 手动敲网址
+- 直接用 Postman 调接口
+- 改前端代码
+
+所以后端必须自己再查一次。
+
+项目流程是：
+
+```text
+API 请求
+  ↓
+auth 中间件验证 JWT
+  ↓
+查用户和角色权限
+  ↓
+createAbility
+  ↓
+放进 event.context.ability
+  ↓
+API 里 checkPermission / checkTablePermission
+  ↓
+ability.can 不通过就 403
+```
+
+最常见的一句：
+
+```ts
+checkTablePermission(event, 'read')
+```
+
+它做了两件事：
+
+1. 从路由里拿到表名，比如 `users`
+2. 检查当前用户能不能 `read users`
+
+不通过就抛 403。
+</t>
+<t tx="swot.20261126201927.1">[cols=",,",options="header",]
+|===
+|哪端 |做什么 |本质
+|前端 |隐藏菜单、禁用按钮、跳 `/403` |用户体验
+|后端 |API 里真正拒绝请求 |真正安全
+|===
+
+____
+*前端是“别让你看到”，后端是“不让你拿到”。*
+____
+</t>
+<t tx="swot.20261126202003.1">9.1 `update(rules)` 是覆盖，不是追加
+
+```ts
+ability.update(newRules)
+```
+
+意思是：用新规则整份替换旧规则。不是往旧规则里再加一条。
+
+
+9.2 `conditions` 目前没有真正做行级过滤
+
+举例：
+
+```ts
+ability.can('read', table)
+```
+
+这里传的是表名字符串，不是某一条具体数据。
+
+所以它判断的是：
+
+&gt; 能不能读这个表？
+
+而不是：
+
+&gt; 能不能读这一行？
+
+要按每条数据判断，得把那条数据也交给 CASL。（这里没有举例）
+</t>
+<t tx="swot.20261126202126.1">[cols=",",options="header",]
+|===
+|你想做的事 |去哪里看 / 怎么写
+|加一个新资源 |`appAbility.ts` 的 `subjects` 数组
+|配角色权限 |角色编辑页勾选，存到 `roles.permissions`
+|菜单隐藏 |`++&lt;++Can I="read" a="xxx"++&gt;++`
+|按钮禁用 |`Can` + `passThrough` + `allowed`
+|页面没权限跳 403 |`definePageMeta(++{++ requiredAbility })`
+|API 拦截 |`checkTablePermission(event, 'read')`
+|超级管理员 |`++{++ action: 'manage', subject: 'all' }`
+|===
+
+____
+注：具体内容可参考代码
+____
+</t>
+<t tx="swot.20261126202141.1">1. `shared/utils/appAbility.ts`：只看 `actions`、`subjects`、`createAbility`
+2. `app/pages/roles/[id].vue`：权限是怎么勾出来的
+3. `server/utils/findUserBy.ts`：权限字符串怎么变成数组
+4. `server/middleware/auth.ts`：后端 ability 怎么创建
+5. `app/layouts/default.vue`：前端 ability 怎么更新
+6. `app/components/CrudList.vue`：按钮怎么根据权限显示
+7. `server/utils/permissions.ts`：API 怎么真正拦截
+
+</t>
+<t tx="swot.20261126202200.1">CASL 在 project 里就干了一件事：
+
+```text
+角色权限 → 规则数组 → ability → can(action, subject)
+```
+
+然后：
+
+- 前端拿 `can()` 控制显示
+- 后端拿 `can()` 控制放行
+
+我们记住这句就够了：
+
+&gt; **ability.can('动作', '资源')，true 就放行，false 就拦住。**
 </t>
 </tnodes>
 </leo_file>
