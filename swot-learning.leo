@@ -18,6 +18,7 @@
 <v t="swot.20250927110835.1"><vh>Redis</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
 <v t="swot.20260215181527.1"><vh>system-designer</vh></v>
+<v t="swot.20261126102251.1"><vh>Tools</vh></v>
 <v t="swot.20260213123722.1"><vh>中文输入法五笔 86 版 -&gt; 70-80 后的最爱</vh></v>
 </v>
 </v>
@@ -3347,7 +3348,16 @@
 </v>
 </v>
 </v>
-<v t="swot.20260220145006.1" descendentVnodeUnknownAttributes="7d71005803000000302e3171017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b15580a000000707269736574646174657106580a000000323032362d30322d3237710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58240000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f78626c6b2e706e67710d580700000072656c50617468710e580d000000636c656f2f78626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>@path tools</vh>
+<v t="swot.20260220145006.1" descendentVnodeUnknownAttributes="7d71005803000000302e3271017d7102285808000000616e6e6f7461746571037d71042858080000007072696f7269747971054b15580a000000707269736574646174657106580a000000323032362d30322d3237710775580500000069636f6e7371085d71097d710a28580400000074797065710b580400000066696c65710c680c58240000002f55736572732f73776f742f2e6c656f2f49636f6e732f636c656f2f78626c6b2e706e67710d580700000072656c50617468710e580d000000636c656f2f78626c6b2e706e67710f580500000077686572657110580e0000006265666f7265486561646c696e6571115807000000796f666673657471124b005807000000786f666673657471134b0258040000007870616471144b0158020000006f6e71155805000000766e6f646571165808000000636c656f49636f6e71175801000000317118756175732e"><vh>@path tools</vh>
+<v t="swot.20261126095013.1"><vh>@adoc 掘金博客命令行自动上传.adoc</vh>
+<v t="swot.20261126095025.1"><vh>掘金博客命令行自动上传</vh>
+<v t="swot.20261126095056.1"><vh>资源</vh></v>
+<v t="swot.20261126094910.1"><vh>操作此步骤</vh></v>
+<v t="swot.20261126102030.1"><vh>自动上传到底做了什么</vh></v>
+<v t="swot.20261126102139.1"><vh>frontmatter 速查</vh></v>
+<v t="swot.20261126102102.1"><vh>几个容易踩的坑</vh></v>
+</v>
+</v>
 <v t="swot.20260220171008.1"><vh>@path key_mouse</vh>
 <v t="swot.20260220165251.1"><vh>@adoc 键皇战况统计系统开发设计.adoc</vh>
 <v t="swot.20260220170018.1"><vh>键皇战况统计系统开发设计</vh>
@@ -49431,6 +49441,7 @@ flowchart LR
 <t tx="swot.20261125115825.1">xref:mermaid/mermaid-animateMotion.adoc[ mermaid support animateMotion ]
 
 xref:mermaid/mermaid-svg-to-gif-analyse.adoc[SVG 里的动画，到底是谁在播？]
+
 </t>
 <t tx="swot.20261125155930.1">配套脚本做的事就是第 4 节那四行的循环：探测本机 `chrome-headless-shell` → 逐帧 `setCurrentTime(t)` 截图 → ffmpeg 合成 GIF。输入是任意带 SMIL 动画的 SVG，输出同名 `.gif`；把 `src/` 换成自己的文件即可复用，不必改脚本。
 
@@ -49738,5 +49749,156 @@ image::img/3-frames.png[三个时刻,900,]
 *检验方法* 换一张图，先 `grep -o "begin='[^']*'" x.svg` 看重复基准是不是 `id.end+Ns`；是，周期就是 `dur + N`。
 </t>
 <t tx="swot.20261125165722.1"></t>
+<t tx="swot.20261126094910.1">先从一个最小的例子说起。
+假设你写好了一篇文章 `hello.md`，正文里引用了一张本地图片：
+
+```markdown
+---
+title: 我的第一篇掘金文章
+brief: 从一份带 frontmatter 的 Markdown 出发，用掘金 CLI 走完登录、预检、建草稿到发布的全过程。图片会自动上传到 ImageX 并替换为 CDN 链接，原文件保持不变，适合把本地写作流程直接接上掘金。
+category: 前端
+tags:
+  - JavaScript
+cover: ./img/demo.png
+---
+
+这是正文。
+
+![示意图](./img/demo.png)
+```
+
+同目录下放一张 `img/demo.png`。接下来几条命令，就能把它变成掘金上的文章：
+
+```bash
+# 1. 安装（要求 Node ≥ 22.16）
+pnpm add -g @ganzhibin/juejin-cli@latest
+
+# 2. 登录：会打开独立浏览器窗口，需要本人扫码，这一步代替不了
+juejin auth setup
+juejin auth login
+
+# 3. 确认标签在平台上存在
+juejin tag search "JavaScript" --json
+
+# 4. 预检：只解析 frontmatter、校验摘要长度、列出待上传图片，不写远端
+juejin draft create hello.md --dry-run
+
+# 5. 建草稿：自动把 ./img/demo.png 上传到掘金 ImageX，正文里换成 CDN 链接
+juejin draft create hello.md --json
+#    记下返回的 draft_id
+
+# 6. 打开草稿预览确认无误后发布
+juejin article publish --draft &lt;draft-id&gt; --json
+```
+
+这就是命令行自动上传的全部过程：写好带 frontmatter 的 Markdown → 登录 → 预检 → 建草稿 → 发布。
+</t>
+<t tx="swot.20261126095013.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
+<t tx="swot.20261126095025.1">
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;Open Toc&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+});
+&lt;/script&gt;
+++++
+endif::[]
+endif::[]
+</t>
+<t tx="swot.20261126095056.1">- 相关资源: https://www.npmjs.com/package/@ganzhibin/juejin-cli
+- github: https://github.com/Ganzhib/juejin-cli
+</t>
+<t tx="swot.20261126102030.1">关键在于第 5 步。`juejin draft create` 会做三件事：
+
+1. 读取 frontmatter，拿到标题、摘要、分类、标签、封面；
+2. 扫描正文里引用的本地图片，逐张上传到掘金的 ImageX，把 `./img/...` 替换成 CDN 链接；
+3. 在远端创建草稿，返回 `draft_id`。
+
+原 `hello.md` **不会被改写**，本地图片路径保持不变。上传只认正文里真正引用到的文件——`img/` 里没写进正文的图片不会被上传，也不会出现在掘金上。封面如果用的是正文里的同一张图，只会上传一次。
+
+</t>
+<t tx="swot.20261126102102.1">- **全程用 pnpm，别混 npm。** 同一个项目里混装命令行工具，很容易出现版本对不上的怪问题。
+- **图片必须写进正文。** CLI 只上传 Markdown 里引用的图片，光放在 `img/` 目录里没有用。
+- **登录只能本人操作。** `auth setup` 会打开独立浏览器窗口扫码，脚本里没法代劳；登录一次后后续命令复用凭据。
+- **预检通过再建草稿。** 建草稿会真上传图片、真写远端，发现问题要改的话重跑一次即可，但没必要先制造一份错草稿。
+
+流程跑顺之后，本地写作到掘金发布就是两步：`juejin draft create &lt;文件&gt;`，确认预览，再 `juejin article publish --draft &lt;id&gt;`。
+</t>
+<t tx="swot.20261126102139.1">[width="100%",cols="50%,50%",options="header",]
+|===
+|字段 |作用
+|title |文章标题。正文不用再写一级标题，避免和编辑器标题栏重复
+|brief |摘要，要求 50–100 字；长度不符时按报错微调，不要动正文
+|category |分类，如 `前端` / `全栈`
+|tags |标签列表。*先用 `juejin tag search` 验证存在*，不存在就换成平台已有的标签
+|cover |封面图路径，建议用正文中已有的横图
+|===
+
+提前跑一次 `--dry-run` 很省事：标签不存在、摘要长度不对这类问题，都会在这一步报出来，还没写远端。标签改好后可以 `juejin tag list --json` 查可用名称；想同时归入专栏，发布时加 `--columns ++&lt;++column-id++&gt;++`，ID 从 `juejin column list --json` 取。
+</t>
+<t tx="swot.20261126102251.1">xref:tools/掘金博客命令行自动上传.adoc[掘金博客命令行自动上传]
+</t>
 </tnodes>
 </leo_file>
