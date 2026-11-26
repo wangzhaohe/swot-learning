@@ -50266,7 +50266,7 @@ config:
         edgeLabelBackground: "#ffffff"
         fontSize: 16px
 ---
-flowchart TD
+flowchart LR
     A["角色表 roles.permissions&lt;br/&gt;JSON 字符串"] --&gt; B["查用户时替换变量&lt;br/&gt;${user.id} 变成真实 id"]
     B --&gt; C["权限规则数组"]
 
