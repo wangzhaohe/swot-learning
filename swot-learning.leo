@@ -113,15 +113,6 @@
 </v>
 <v t="swot.20250509113701.1"><vh>mermaid</vh>
 <v t="swot.20261013162411.1"><vh>Example</vh></v>
-<v t="swot.20261121193237.1"><vh>mermaid 一张订单的四种需求画法</vh>
-<v t="swot.20261121193237.2"><vh>先看一张对照</vh></v>
-<v t="swot.20261121193237.3"><vh>1. 流程图：只管先后</vh></v>
-<v t="swot.20261121193237.4"><vh>2. 泳道图：多问一句「归谁」</vh></v>
-<v t="swot.20261121193237.5"><vh>3. 时序图：看消息怎么来回</vh></v>
-<v t="swot.20261121193237.6"><vh>4. 状态图：只盯一个对象</vh></v>
-<v t="swot.20261121193237.7"><vh>怎么选</vh></v>
-<v t="swot.20261121193237.8"><vh>备注：版本与渲染</vh></v>
-</v>
 </v>
 <v t="swot.20250510115002.1"><vh>graphviz</vh></v>
 <v t="swot.20250509155424.1"><vh>Barcode</vh></v>
@@ -1906,6 +1897,18 @@
 <v t="swot.20261126111158.1"><vh>3. 安装 mermaid-cli</vh></v>
 <v t="swot.20261126111211.1"><vh>4. 查看是否安装成功</vh></v>
 <v t="swot.20261126111300.1"><vh>5. 升级</vh></v>
+</v>
+</v>
+<v t="swot.20261126112109.1"><vh>@adoc mermaid-draw-4-orders.adoc</vh>
+<v t="swot.20261126112201.1"><vh>mermaid 一张订单的四种需求画法</vh>
+<v t="swot.20261126112112.1"><vh>官网文档引入</vh></v>
+<v t="swot.20261126112112.2"><vh>先看一张对照</vh></v>
+<v t="swot.20261126112112.3"><vh>1. 流程图：只管先后</vh></v>
+<v t="swot.20261126112112.4"><vh>2. 泳道图：多问一句「归谁」</vh></v>
+<v t="swot.20261126112112.5"><vh>3. 时序图：看消息怎么来回</vh></v>
+<v t="swot.20261126112112.6"><vh>4. 状态图：只盯一个对象</vh></v>
+<v t="swot.20261126112112.7"><vh>怎么选</vh></v>
+<v t="swot.20261126112112.8"><vh>备注：版本与渲染</vh></v>
 </v>
 </v>
 <v t="swot.20261125115451.1"><vh>@adoc mermaid-animateMotion.adoc</vh>
@@ -48620,159 +48623,6 @@ console.log(calcBy('multiply', 3, 4)); // 12
 </t>
 <t tx="swot.20261105103438.1">pnpm install -g @tencent-ai/codebuddy-code
 </t>
-<t tx="swot.20261121193237.1">https://mermaid.js.org/syntax/swimlanes.html
-
-Mermaid 泳道图那页文档的最后，有三行不起眼的话：
-
-____
-Use a regular flowchart when ownership is not important and you only need to show sequence or branching. Use a sequence diagram when the focus is messages over time between participants. Use a state diagram when the focus is how one thing changes state.
-____
-
-三句话没展开没举例，但比整页语法都有用。流程图、泳道图、时序图、状态图都能画框和箭头，长得像，真正的分界不在画法，在脑子里的问句：*这张图到底要回答什么？*
-
-问句一定，图就定了。下面用同一笔订单，把四种问法各画一遍。
-</t>
-<t tx="swot.20261121193237.2">[width="100%",cols="25%,25%,25%,25%",options="header",]
-|===
-|图 |回答的问题 |框里装的是 |箭头上的字
-|流程图 flowchart |下一步干什么 |动作 |分支条件（是 / 否）
-|泳道图 swimlane |这一步归谁 |动作，按责任分道 |交接依据（单据、消息）
-|时序图 sequence |谁在什么时候跟谁说了什么 |参与者的生命线 |请求 / 响应
-|状态图 state |这个东西现在什么状态 |状态 |触发它的事件
-|===
-
-IMPORTANT: 记法：流程看先后，泳道看归属，时序看往返，状态看变迁。
-</t>
-<t tx="swot.20261121193237.3">节点是动作，箭头是先后和分支。谁做的、花了多久，都不关心。
-
-[mermaid, target=img/mermaid-use-1-2026-11-21-160023, format=svg]
-....
-%%{init: {'theme':'default'}}%%
-flowchart LR
-  A[提交订单] --&gt; B{库存够吗}
-  B --&gt;|够| C[扣库存]
-  B --&gt;|不够| D[提示缺货]
-  C --&gt; E[发起支付]
-  E --&gt; F{支付成功?}
-  F --&gt;|是| G[生成发货单]
-  F --&gt;|否| H[关闭订单]
-....
-
-我默认从 flowchart 起手，八成场景它都能兜住。
-
-*换图的信号*：节点里开始出现「后端校验库存」这种写法——归属信息被你塞进了文字里，读图的人得自己抠。这时候该换泳道。
-</t>
-<t tx="swot.20261121193237.4">流程一跨部门、跨系统，就得把责任摆到台面上。每条道是一个岗位或系统，`subgraph` 在这里直接被渲染成泳道带；跨道的箭头就是交接，最好标上依据——`订单已提交`、`支付成功`，都是能落到单据或消息上的东西，那正是责任换手、最容易扯皮的地方。
-
-[mermaid, target=img/mermaid-use-2-2026-11-21-160125, format=svg]
-....
-%%{init: {'themeVariables': {'fontSize':'20px'}}}%%
-swimlane-beta LR
-  subgraph buyer [买家]
-    submit[提交订单]
-    pay[完成支付]
-  end
-  subgraph seller [商家]
-    check[校验库存]
-    lock[锁定库存]
-  end
-  subgraph warehouse [仓库]
-    pick[拣货]
-    ship[发货]
-  end
-
-  submit --&gt;|订单已提交| check
-  check --&gt; lock --&gt; pay
-  pay --&gt;|支付成功| pick --&gt; ship
-....
-
-`swimlane-beta` 是 Mermaid 11.16.0 才加的原生语法，目前仍是 beta。预览器不出图，多半是内置版本低于这个数，处理办法见文末备注。
-
-*换图的信号*（反向）：把泳道标题全遮住，图还读得通，就用 flowchart，别为了好看多套一层。
-</t>
-<t tx="swot.20261121193237.5">订单从小程序到服务端再到支付网关，来回几趟，中间夹着一次回调。这种事泳道画不了——泳道只说「谁负责」，不说「第几趟、等多久、有没有返回」。
-
-[mermaid, target=img/mermaid-use-3-2026-11-21-160202, format=svg]
-....
-%%{init: {'fontSize': 14}}%%
-sequenceDiagram
-  actor U as 用户
-  participant MP as 小程序
-  participant S as 服务端
-  participant P as 支付网关
-
-  U-&gt;&gt;MP: 点「提交订单」
-  MP-&gt;&gt;S: POST /orders
-  S--&gt;&gt;MP: 订单号 + 金额
-  MP-&gt;&gt;P: 调起支付
-  P--&gt;&gt;MP: 支付结果
-  MP-&gt;&gt;S: 确认支付状态
-  S--&gt;&gt;MP: 已支付
-....
-
-纵轴是时间，一条虚线一条生命线，实线请求、虚线响应。重试、超时、并发，`loop`、`alt`、`par` 直接往上加，这是时序图的主场。
-
-*易混点*：跟泳道都有「参与者」，但泳道里那条道是岗位，时序里那条道是时间。泳道看交接，时序看往返。
-</t>
-<t tx="swot.20261121193237.6">最容易画错的就是这个。很容易把订单状态画成流程图，`是否申请退款` 一个菱形加一堆回退箭头，画到一半自己都绕晕了。问题出在节点上：流程图的节点是「正在做什么」，状态图的节点是「眼下处于什么情况」，不是一回事。
-
-[mermaid, target=img/mermaid-use-4-2026-11-21-160232, format=svg]
-....
-%%{init: {'theme':'default', 'themeVariables': {'edgeLabelBackground':'#ffffff', 'fontSize':'18px'}}}%%
-
-stateDiagram-v2
-  direction LR
-  state "待支付" as pending
-  state "已支付" as paid
-  state "待发货" as awaiting
-  state "已发货" as shipped
-  state "已完成" as done
-  state "已取消" as cancelled
-  state "退款中" as refunding
-
-  [*] --&gt; pending
-  pending --&gt; cancelled: 超时未付 / 用户取消
-  pending --&gt; paid: 支付成功
-  paid --&gt; awaiting: 商家接单
-  awaiting --&gt; shipped: 出库
-  shipped --&gt; done: 确认收货
-  paid --&gt; refunding: 申请退款
-  refunding --&gt; [*]: 退款完成
-  done --&gt; [*]
-....
-
-只盯住「订单」一个对象，别的都不管。箭头上的字也不是「是 / 否」，而是触发它的事件：`支付成功`、`超时未付`、`申请退款`。退款、取消这类回退路径，状态图几行就交代清楚，换成流程图得拐出一团乱麻。
-
-*检验方法*：把节点挨个读一遍。能读成「正在 XXX」，是流程图；能读成「处于 XXX」，是状态图。读不顺，多半是两种图混在一张里了。
-</t>
-<t tx="swot.20261121193237.7">没有硬规则，我一般这么走：
-
-[arabic]
-. 先 flowchart 打底；
-. 开始纠结这一步归谁 → 换泳道；
-. 开始画请求和响应 → 换时序；
-. 开始反复补「已付款又退款怎么办」这种分支 → 停下，改状态图。
-
-一张图讲不清就摆三张（泳道 + 时序 + 状态），别硬塞进一张。动手之前，先把要回答的那句问句写在草稿上——写不出来，说明还没想清楚要讲什么，这时候画哪张图都一样。
-</t>
-<t tx="swot.20261121193237.8">- `swimlane-beta` 需要 **Mermaid ≥ 11.16.0**，仍处 beta，后续可能不兼容地改；v12.0.0 起默认 `redux-color` 主题 + `neo` look。WorkBuddy 预览面板内置的是 **11.15.0**，差一个小版本，所以这张图渲染不出来。要看效果可以贴到 mermaid.live（在线版本较新），或用本地 mmdc 渲染：`mmdc -i x.mmd -o x.png -p puppeteer.json`。
-
-- 泳道名带空格或中文，用 `subgraph id [显示名]` 比直接写稳妥。
-
-- Mermaid 12 默认主题下，普通 flowchart 节点是白底深灰描边的线框，颜色只给泳道带和 subgraph 分组（`cluster`）——所以本文第 1 张图看着"素"、第 2 张泳道是彩的，这是同一套默认主题的正常表现，不是渲染出错。想让节点回到经典淡紫，在代码块首行加 `%%{init: {'theme':'default'}}%%` 即可，泳道图不受影响。
-
-- 嫌泳道图文字小，在代码块首行加一行 `%%{init: {'themeVariables': {'fontSize':'22px'}}}%%`：节点文字、箭头标签、泳道名一起从默认 14px 变大（泳道名的外框会按新字号重算，不会裁切），默认 `redux-color` 主题不受影响，数字按需调。本地出 PNG 再加 `-s 2` 整体放大。**注意**：fontSize 改的是 SVG 内部字号，但 LR 泳道画布很宽（20px 时约 1950px），网页按容器宽度压缩显示后会抵消大半——实测 900px 容器里 20px 只显示约 9px，比旁边 14px 的窄图还小。想真正显大：把 `LR` 改成 `TB`（泳道变竖带，画布缩到约 770px，20px 字近乎原尺寸显示），或把字号加到 28px 以上。
-
-- 时序图的字号是另一套机制：`themeVariables.fontSize` 对它**无效**——消息和参与者名字是内联 `style="font-size:16px"`，压过根字号。正确写法是顶层 `fontSize`：`%%{init: {'fontSize': 20}}%%`（数字或 `'20px'` 都行）。反过来这个写法对 flowchart 和泳道图也无效，两类图不通用。好处是时序图画布不会随字号大幅变宽，页面压缩抵消的问题基本没有。
-
-- 同一页面放多张图时，init 里的字号数字**不能跨图比较**：每张 SVG 都是按容器宽度缩放的，实际显示字号 ≈ 内部字号 × 显示宽 ÷ 画布宽。画布窄的图（时序约 850px）按原尺寸显示，写多少显示多少；画布宽的图（泳道 LR 约 1950px）被压到容器宽，字号同比缩水。实测：泳道 20px 在页面里约显示 13.6px，和时序图不缩放的 14px 几乎一样大。想视觉统一就按这个比例反算，或者让宽图改 TB / 原尺寸显示。
-
-- 状态图里中文状态名要用 `state "显示名" as id` 声明，直接拿中文当状态 id，部分版本解析不了。
-
-- 想出深色图：命令行 `mmdc -t dark`，或代码块里加 `%%{init: {'theme':'dark'}}%%`。
-
-- 本文四段代码在 Mermaid 12.1.0（mmdc 12.0.0）下实测均可渲染；沙箱环境跑 mmdc 报 `ConnectionClosedError` 时，用 `-p` 传入 `{"args":["--no-sandbox"]}` 即可，与图语法无关。
-</t>
 <t tx="swot.20261124083738.1">@language asciidoc
 :author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
@@ -49974,6 +49824,233 @@ pnpm add -g @mermaid-js/mermaid-cli@latest
 puppeteer browsers install chrome-headless-shell
 mmdc –version
 ----
+</t>
+<t tx="swot.20261126112109.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
+<t tx="swot.20261126112112.1">https://mermaid.js.org/syntax/swimlanes.html
+
+Mermaid 泳道图那页文档的最后，有三行不起眼的话：
+
+____
+Use a regular flowchart when ownership is not important and you only need to show sequence or branching. Use a sequence diagram when the focus is messages over time between participants. Use a state diagram when the focus is how one thing changes state.
+____
+
+三句话没展开没举例，但比整页语法都有用。流程图、泳道图、时序图、状态图都能画框和箭头，长得像，真正的分界不在画法，在脑子里的问句：*这张图到底要回答什么？*
+
+问句一定，图就定了。下面用同一笔订单，把四种问法各画一遍。
+</t>
+<t tx="swot.20261126112112.2">[width="100%",cols="25%,25%,25%,25%",options="header",]
+|===
+|图 |回答的问题 |框里装的是 |箭头上的字
+|流程图 flowchart |下一步干什么 |动作 |分支条件（是 / 否）
+|泳道图 swimlane |这一步归谁 |动作，按责任分道 |交接依据（单据、消息）
+|时序图 sequence |谁在什么时候跟谁说了什么 |参与者的生命线 |请求 / 响应
+|状态图 state |这个东西现在什么状态 |状态 |触发它的事件
+|===
+
+IMPORTANT: 记法：流程看先后，泳道看归属，时序看往返，状态看变迁。
+</t>
+<t tx="swot.20261126112112.3">节点是动作，箭头是先后和分支。谁做的、花了多久，都不关心。
+
+[mermaid, target=img/mermaid-use-1-2026-11-21-160023, format=svg]
+....
+%%{init: {'theme':'default'}}%%
+flowchart LR
+  A[提交订单] --&gt; B{库存够吗}
+  B --&gt;|够| C[扣库存]
+  B --&gt;|不够| D[提示缺货]
+  C --&gt; E[发起支付]
+  E --&gt; F{支付成功?}
+  F --&gt;|是| G[生成发货单]
+  F --&gt;|否| H[关闭订单]
+....
+
+我默认从 flowchart 起手，八成场景它都能兜住。
+
+*换图的信号*：节点里开始出现「后端校验库存」这种写法——归属信息被你塞进了文字里，读图的人得自己抠。这时候该换泳道。
+</t>
+<t tx="swot.20261126112112.4">流程一跨部门、跨系统，就得把责任摆到台面上。每条道是一个岗位或系统，`subgraph` 在这里直接被渲染成泳道带；跨道的箭头就是交接，最好标上依据——`订单已提交`、`支付成功`，都是能落到单据或消息上的东西，那正是责任换手、最容易扯皮的地方。
+
+[mermaid, target=img/mermaid-use-2-2026-11-21-160125, format=svg]
+....
+%%{init: {'themeVariables': {'fontSize':'16px'}}}%%
+swimlane-beta LR
+  subgraph buyer [买家]
+    submit[提交订单]
+    pay[完成支付]
+  end
+  subgraph seller [商家]
+    check[校验库存]
+    lock[锁定库存]
+  end
+  subgraph warehouse [仓库]
+    pick[拣货]
+    ship[发货]
+  end
+
+  submit --&gt;|订单已提交| check
+  check --&gt; lock --&gt; pay
+  pay --&gt;|支付成功| pick --&gt; ship
+....
+
+`swimlane-beta` 是 Mermaid 11.16.0 才加的原生语法，目前仍是 beta。预览器不出图，多半是内置版本低于这个数，处理办法见文末备注。
+
+*换图的信号*（反向）：把泳道标题全遮住，图还读得通，就用 flowchart，别为了好看多套一层。
+</t>
+<t tx="swot.20261126112112.5">订单从小程序到服务端再到支付网关，来回几趟，中间夹着一次回调。这种事泳道画不了——泳道只说「谁负责」，不说「第几趟、等多久、有没有返回」。
+
+[mermaid, target=img/mermaid-use-3-2026-11-21-160202, format=svg]
+....
+%%{init: {'fontSize': 14}}%%
+sequenceDiagram
+  actor U as 用户
+  participant MP as 小程序
+  participant S as 服务端
+  participant P as 支付网关
+
+  U-&gt;&gt;MP: 点「提交订单」
+  MP-&gt;&gt;S: POST /orders
+  S--&gt;&gt;MP: 订单号 + 金额
+  MP-&gt;&gt;P: 调起支付
+  P--&gt;&gt;MP: 支付结果
+  MP-&gt;&gt;S: 确认支付状态
+  S--&gt;&gt;MP: 已支付
+....
+
+纵轴是时间，一条虚线一条生命线，实线请求、虚线响应。重试、超时、并发，`loop`、`alt`、`par` 直接往上加，这是时序图的主场。
+
+*易混点*：跟泳道都有「参与者」，但泳道里那条道是岗位，时序里那条道是时间。泳道看交接，时序看往返。
+</t>
+<t tx="swot.20261126112112.6">最容易画错的就是这个。很容易把订单状态画成流程图，`是否申请退款` 一个菱形加一堆回退箭头，画到一半自己都绕晕了。问题出在节点上：流程图的节点是「正在做什么」，状态图的节点是「眼下处于什么情况」，不是一回事。
+
+[mermaid, target=img/mermaid-use-4-2026-11-21-160232, format=svg]
+....
+%%{init: {'theme':'default', 'themeVariables': {'edgeLabelBackground':'#ffffff', 'fontSize':'18px'}}}%%
+
+stateDiagram-v2
+  direction LR
+  state "待支付" as pending
+  state "已支付" as paid
+  state "待发货" as awaiting
+  state "已发货" as shipped
+  state "已完成" as done
+  state "已取消" as cancelled
+  state "退款中" as refunding
+
+  [*] --&gt; pending
+  pending --&gt; cancelled: 超时未付 / 用户取消
+  pending --&gt; paid: 支付成功
+  paid --&gt; awaiting: 商家接单
+  awaiting --&gt; shipped: 出库
+  shipped --&gt; done: 确认收货
+  paid --&gt; refunding: 申请退款
+  refunding --&gt; [*]: 退款完成
+  done --&gt; [*]
+....
+
+只盯住「订单」一个对象，别的都不管。箭头上的字也不是「是 / 否」，而是触发它的事件：`支付成功`、`超时未付`、`申请退款`。退款、取消这类回退路径，状态图几行就交代清楚，换成流程图得拐出一团乱麻。
+
+*检验方法*：把节点挨个读一遍。能读成「正在 XXX」，是流程图；能读成「处于 XXX」，是状态图。读不顺，多半是两种图混在一张里了。
+</t>
+<t tx="swot.20261126112112.7">没有硬规则，我一般这么走：
+
+[arabic]
+. 先 flowchart 打底；
+. 开始纠结这一步归谁 → 换泳道；
+. 开始画请求和响应 → 换时序；
+. 开始反复补「已付款又退款怎么办」这种分支 → 停下，改状态图。
+
+一张图讲不清就摆三张（泳道 + 时序 + 状态），别硬塞进一张。动手之前，先把要回答的那句问句写在草稿上——写不出来，说明还没想清楚要讲什么，这时候画哪张图都一样。
+</t>
+<t tx="swot.20261126112112.8">- `swimlane-beta` 需要 **Mermaid ≥ 11.16.0**，仍处 beta，后续可能不兼容地改；v12.0.0 起默认 `redux-color` 主题 + `neo` look。WorkBuddy 预览面板内置的是 **11.15.0**，差一个小版本，所以这张图渲染不出来。要看效果可以贴到 mermaid.live（在线版本较新），或用本地 mmdc 渲染：`mmdc -i x.mmd -o x.png -p puppeteer.json`。
+
+- 泳道名带空格或中文，用 `subgraph id [显示名]` 比直接写稳妥。
+
+- Mermaid 12 默认主题下，普通 flowchart 节点是白底深灰描边的线框，颜色只给泳道带和 subgraph 分组（`cluster`）——所以本文第 1 张图看着"素"、第 2 张泳道是彩的，这是同一套默认主题的正常表现，不是渲染出错。想让节点回到经典淡紫，在代码块首行加 `%%{init: {'theme':'default'}}%%` 即可，泳道图不受影响。
+
+- 嫌泳道图文字小，在代码块首行加一行 `%%{init: {'themeVariables': {'fontSize':'22px'}}}%%`：节点文字、箭头标签、泳道名一起从默认 14px 变大（泳道名的外框会按新字号重算，不会裁切），默认 `redux-color` 主题不受影响，数字按需调。本地出 PNG 再加 `-s 2` 整体放大。**注意**：fontSize 改的是 SVG 内部字号，但 LR 泳道画布很宽（20px 时约 1950px），网页按容器宽度压缩显示后会抵消大半——实测 900px 容器里 20px 只显示约 9px，比旁边 14px 的窄图还小。想真正显大：把 `LR` 改成 `TB`（泳道变竖带，画布缩到约 770px，20px 字近乎原尺寸显示），或把字号加到 28px 以上。
+
+- 时序图的字号是另一套机制：`themeVariables.fontSize` 对它**无效**——消息和参与者名字是内联 `style="font-size:16px"`，压过根字号。正确写法是顶层 `fontSize`：`%%{init: {'fontSize': 20}}%%`（数字或 `'20px'` 都行）。反过来这个写法对 flowchart 和泳道图也无效，两类图不通用。好处是时序图画布不会随字号大幅变宽，页面压缩抵消的问题基本没有。
+
+- 同一页面放多张图时，init 里的字号数字**不能跨图比较**：每张 SVG 都是按容器宽度缩放的，实际显示字号 ≈ 内部字号 × 显示宽 ÷ 画布宽。画布窄的图（时序约 850px）按原尺寸显示，写多少显示多少；画布宽的图（泳道 LR 约 1950px）被压到容器宽，字号同比缩水。实测：泳道 20px 在页面里约显示 13.6px，和时序图不缩放的 14px 几乎一样大。想视觉统一就按这个比例反算，或者让宽图改 TB / 原尺寸显示。
+
+- 状态图里中文状态名要用 `state "显示名" as id` 声明，直接拿中文当状态 id，部分版本解析不了。
+
+- 想出深色图：命令行 `mmdc -t dark`，或代码块里加 `%%{init: {'theme':'dark'}}%%`。
+
+- 本文四段代码在 Mermaid 12.1.0（mmdc 12.0.0）下实测均可渲染；沙箱环境跑 mmdc 报 `ConnectionClosedError` 时，用 `-p` 传入 `{"args":["--no-sandbox"]}` 即可，与图语法无关。
+</t>
+<t tx="swot.20261126112201.1">
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;Open Toc&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+});
+&lt;/script&gt;
+++++
+endif::[]
+endif::[]
 </t>
 </tnodes>
 </leo_file>
