@@ -1,0 +1,230 @@
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️
+
+= OSS 不续费，把上传改回服务器本地：一次完整的踩坑记录
+
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
+ifndef::backend-pdf[]
+++++
+<style>
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+</style>
+
+<button id="toggleButton">Open Toc</button>
+<div id="toc">
+    </div>
+
+<script>
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () => {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+});
+</script>
+++++
+endif::[]
+endif::[]
+
+== 起因
+NOTE: 业务逻辑的整理来源：《红枫视觉官网项目》
+
+客户那边 OSS 不续费了，需要把媒体上传从阿里云 OSS 切回后台服务器本地存储。
+
+这套系统是前后端分离的：后台是 Nuxt 3 项目，跑在 8000 端口；官网前台是 Express 项目，跑在 3000 端口；两边通过 MySQL 的一张 `content_info` 表和一张 `slide_adv` 表打交道。图片和视频以前走 OSS，上传完把公网 URL 写进数据库，前台直接渲染。现在要改成本地上传，文件落到服务器的 `/home/www/media`，通过 nginx 的 alias 映射成 `/admin/media/xxx` 对外访问。
+
+听起来是个挺直接的活儿——把上传地址换掉，把返回值的解析改一下，完事。真做起来才发现，坑一个接一个。
+
+== 第一步：改两个上传组件
+
+后台里有两个上传组件，`ImageUpload.vue` 和 `VideoUpload.vue`。以前它们的 `actionUrl` 指向 `/admin/api/oss-stream-upload`，改成 `/admin/api/uploads` 就行。服务端那个 `uploads.post.ts` 本来就在，以前是给 UEditor 用的，formidable 把文件写到本地目录，返回 `/admin/media/<newFilename>`，直接拿来用。
+
+改的时候顺手发现两处返回值解析也得跟着动：
+
+以前 OSS 接口返回 `{ data: { url: '...' } }`，本地接口返回 `{ data: { file: ['...'] } }`。所以 `handleAvatarSuccess` 里从 `response.data.url` 改成 `response.data.file[0]`。
+
+视频组件里更有意思。它的 `handleVideoSuccess` 本来就有两个分支，一个读 `response.data.video[0]`（本地格式），一个读 `response.data.url`（OSS 格式）。但 el-upload 的 `name` 是 `"file"`，本地接口返回的字段名就是 `file`，不是 `video`。所以那个"本地格式"分支的字段名一直是错的，只是以前走 OSS 从没生效过。顺手改成 `data.file`。
+
+还有自定义视频封面那处，写的是 `/api/uploads?waterMark=false`，少了 `/admin` 前缀。跟其他接口不一致，也一并补上。
+
+这几个改动本身没什么难度，改完本地跑了一遍，上传正常，提交部署。
+
+== 第二步：上线就报 ENOENT
+
+部署完没多久，PM2 日志里冒出来这么一段：
+
+```
+H3Error: ENOENT: no such file or directory, open '/Users/swot/learning/nuxt/RedMapleVisual/public/media/xxx.mp4'
+```
+
+一台 Linux 服务器，报的路径是 `/Users/swot/...`——这是开发机的 macOS 路径。文件当然写不进去。
+
+顺着链路查下去：
+
+`.env` 里有一行 `NUXT_PUBLIC_UPLOAD_DIR=/Users/swot/.../public/media`，这是开发时配的本地目录。`nuxt.config.ts` 里虽然写了默认值 `/home/www/media`，但 Nuxt 的 `NUXT_PUBLIC_*` 环境变量会在运行时覆盖 `runtimeConfig.public`，`.env` 的值优先级更高。
+
+那 `.env` 怎么会跑到服务器上？查了一下 git，文件根本没进 `.gitignore`——里面写了 `.env.*`，但裸的 `.env` 不匹配这个模式，所以一直被 git 跟踪着，随代码一起部署了。服务器上 `ecosystem.config.cjs` 第一行又有 `require('dotenv').config()`，启动的时候把 `.env` 读进环境，开发机的路径就这么覆盖了生产配置。
+
+修复倒是不复杂。PM2 的 `env` 字段在启动子进程时优先级比 dotenv 高，所以在 `ecosystem.config.cjs` 的 `env` 里显式加一行：
+
+```js
+NUXT_PUBLIC_UPLOAD_DIR: "/home/www/media",
+```
+
+开发机的路径就被压过去了，`.env` 都不用动。
+
+这里踩了个小坑：`pm2 restart` 用的是已保存的旧配置，不会重新读 `ecosystem.config.cjs`，env 改动不生效。得用 `pm2 startOrReload ecosystem.config.cjs --update-env`，或者干脆 delete 掉重新 start。
+
+== 第三步：视频传上去了，但回显不出来
+
+上传通了之后，新的问题来了：视频能传，但重新进入编辑页，视频区域显示的是"上传视频文件"的占位符，之前传的东西不见了。
+
+查了一圈，问题出在保存和读取用了不同的字段。
+
+那张 `slide_adv` 表的设计是老系统留下的：媒体只有一个 `file` 字段，用 `file_type`（0 图片、1 视频）区分类型。读取的时候：
+
+```js
+form.value = {
+    ...slide,
+    file_type: fileTypeNum,
+    image: fileTypeNum === 0 ? slide.file : "",
+    video: fileTypeNum === 1 ? slide.file : ""
+};
+```
+
+回显的源头永远是 `slide.file`。
+
+但前端表单里，上传组件更新的是 `form.image` 和 `form.video`，`form.file` 从初始化之后就没人动过。以前的 `handleSave` 直接展开 `...form.value` 提交，于是 `file` 字段是空串，视频 URL 跑到了 `video` 字段——而表里压根没有这一列。
+
+保存成功了，数据库里 `file` 是空的。重新进编辑页，读出来自然是空。
+
+修法是在提交前做一次收口：
+
+```js
+const file_type = String(form.value.file_type)
+const slideData = {
+    ...form.value,
+    file_type,
+    file: file_type === "0" ? form.value.image : form.value.video
+};
+delete slideData.image;
+delete slideData.video;
+```
+
+按 `file_type` 把值写回 `file`，再把前端临时用的两个字段删掉。这样写入端和读取端就对上了。
+
+== 第四步：视频回来了，封面还是没有
+
+修完上一步，视频本身能回显了，但封面图还是出不来。
+
+`VideoUpload` 里生成封面的函数开头有一句：
+
+```js
+if (!videoRef.value || videoRef.value.readyState < 2)
+    return
+```
+
+这个函数是被 `@loadedmetadata` 事件触发的。问题就在这儿：`loadedmetadata` 触发的那一刻，视频的 `readyState` 恰好等于 1（HAVE_METADATA，只有元数据，当前帧数据还没加载）。所以 `readyState < 2` 判断恒成立，函数每次都直接 return，抓帧的代码一行都跑不到。
+
+写这段的时候应该是想做防御性检查——帧数据没就绪就别画，免得抓到黑图。动机没问题，但检查放错了地方。真正保证帧可用的是后面 `captureFrame` 里的 `seeked` 事件：设置 `video.currentTime = time` 触发跳转，跳转完成的那一刻帧数据就位了，在回调里 `drawImage` 才是安全的。外层那个基于时机的检查既多余又有害。
+
+删掉之后，封面就出来了。
+
+== 为什么 dev 环境一直没暴露
+
+这个 bug 挺有意思的地方在于，它在开发环境下是"正常"的。
+
+`buildFullUrl` 拼视频地址的时候，如果 `serverUrl` 为空就用 `window.location.origin`。开发环境里 `.env` 的 `NUXT_PUBLIC_PRODUCT_SERVER` 被注释掉了，`serverUrl` 就是空串，所以视频走的是 `http://localhost:3019/admin/media/xxx`——回环地址加本地磁盘，加载速度是毫秒级的。
+
+`loadedmetadata` 事件只是被丢进事件队列，等主线程空闲了回调才执行。本地加载太快，等回调真正跑起来的时候，视频数据可能早就加载完了，`readyState` 已经跳到 2 甚至更高，检查自然通过。生产环境从公网加载，回调执行时数据还在下载，`readyState` 老老实实卡在 1，检查必然命中。
+
+典型的时序竞态。本地环境恰好是最快、最理想的情况，把缺陷完美掩盖了。再加上反复测试命中浏览器缓存，更容易产生"明明是好的"这种错觉。
+
+== 更早的一层原因：OSS 跨域
+
+跟作者聊的时候才挖出更早的一层背景。
+
+OSS 时代视频是跨域资源，canvas 抓帧有个安全限制：跨域视频 `drawImage` 到 canvas 之后，canvas 就被污染了，再调 `toDataURL()` 会抛 `SecurityError`。抓帧的核心恰恰就是这两步，所以生产环境里必然失败。
+
+代码里留着当时妥协的痕迹：
+
+```js
+try {
+    ctx.drawImage(video, 0, 0, canvasWidth, canvasHeight)
+    const dataURL = canvas.toDataURL('image/jpeg', 0.8)
+    resolve(dataURL)
+} catch (error) {
+    console.warn('无法生成缩略图，可能是跨域限制:', error)
+    resolve(null)
+}
+```
+
+还有几处注释写着"对于跨域视频，无法生成缩略图时的降级处理"。当时作者去 OSS 控制台配过 CORS，没配成功，就放弃了封面回显。这个决定在当时的技术背景下是合理的——跨域不解决，抓帧这条路本身就走不通。
+
+而且就算 CORS 配对了，光配服务端那一半也不够。`<video>` 元素还得显式加 `crossorigin="anonymous"`，浏览器才会用 CORS 模式重新发请求、带上 Origin 头，服务端的 CORS 规则才有机会生效。代码里那个 video 标签从来没有过这个属性。
+
+OSS 跨域的问题把 `readyState` 的 bug 完全盖住了：就算检查通过，`toDataURL` 照样抛错，封面照样出不来，根本没机会发现前面还蹲着另一个坑。这次改成同域本地存储，跨域障碍自动消失，被压着的两个 bug 才一个一个浮出来。
+
+== 最后
+
+整件事从头到尾没什么高深的技术，就是字段对不上、检查放错时机、环境变量优先级这几个问题。但每个都花了不少时间，因为它们都藏在"看起来没问题"的表象下面——代码能跑，本地测试通过，只有到了线上才现原形。
+
+几个教训：
+
+改上传方式的时候，写入端和读取端要一起看。光改上传地址不改字段映射，等于存了个寂寞。
+
+环境变量的优先级值得单独留个心眼。`.env` 被 git 跟踪这种事，平时没感觉，一到部署就出事。
+
+浏览器那些跟事件时机相关的 API，本地快环境很容易骗过人。涉及 `readyState`、`loadedmetadata` 这类东西，最好别依赖回调执行那个瞬间的状态值，用语义更明确的事件（比如 `seeked`）兜底。
+
+还有一点，AI 补的代码单看每一行都挺像样，但未必经得起放到完整调用链里推敲。那句 `readyState < 2` 就是典型的"看起来很专业"的防御性写法，结果把功能整个锁死了。用归用，关键路径还是得自己过一遍。
+
+那几处跨域降级的注释和 `catch` 留着没动，反正无害，真遇到跨域还能优雅降级。按"够用就行"的原则，没必要专门清理。
+
