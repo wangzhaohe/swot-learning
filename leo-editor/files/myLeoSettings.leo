@@ -2085,11 +2085,7 @@ def renumber_child_headlines(p, nb: str) -&gt; None:
 </t>
 <t tx="swot.20250513150552.1">mermaid;;=[mermaid, target=img/mermaid-&lt;||&gt;, format=svg]
 \:....
-\:graph TD;
-\:    A--&gt;B;
-\:    A--&gt;C;
-\:    B--&gt;D;
-\:    C--&gt;D;
+\:&lt;||&gt;
 \:....
 \:
 </t>
