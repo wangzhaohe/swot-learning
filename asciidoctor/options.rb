@@ -18,7 +18,7 @@ Asciidoctor::Extensions.register do
         toolbar = <<~HTML
           <div id="toc-toolbar">
             <a id="homeButton" href="/" title="Back to home">Home</a>
-            <button id="toggleButton" type="button">Open Toc</button>
+            <button id="toggleButton" type="button">Open TOC</button>
           </div>
           <script>
           (function () {

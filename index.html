@@ -496,6 +496,14 @@ a:active {
     top: auto !important;
     right: auto !important;
     z-index: auto !important;
+    /* 固定宽度 + 居中，避免 Open/Close TOC 文字长度不同导致切换抖动。
+       注意 box-sizing:border-box，width 含 padding 和 border，110px 才够放 Close TOC。
+       用 width 而非 min-width，文字再长也不会撑开按钮。
+       !important 用于压过旧文档里 body 中的内联 style。 */
+    width: 110px !important;
+    text-align: center !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
 }
 #toc-toolbar > * {
     font: inherit;
@@ -784,7 +792,7 @@ Outline nodes may appear in more than one place, allowing multiple organizations
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-28 20:20:53 +0800
+Last updated 2026-11-28 20:36:19 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
@@ -813,7 +821,7 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 <div id="toc-toolbar">
   <a id="homeButton" href="/" title="Back to home">Home</a>
-  <button id="toggleButton" type="button">Open Toc</button>
+  <button id="toggleButton" type="button">Open TOC</button>
 </div>
 <script>
 (function () {
