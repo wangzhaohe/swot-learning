@@ -3622,7 +3622,6 @@
 </v>
 <v t="swot.20261128172418.1"><vh>---</vh></v>
 <v t="swot.20261128172151.1"><vh>写 ascii 博客</vh></v>
-<v t="swot.20261128202418.1"><vh>adoc 文档结构研究，到底需要几层 leo outline?</vh></v>
 </vnodes>
 <tnodes>
 <t tx="swot.20240101100533.1">@language javascript
@@ -12862,37 +12861,8 @@ uhk 丫
 xfm 贯 -- 都是字根码
 ```
 </t>
-<t tx="swot.20251026094157.1">@language asciidoc
-:source-highlighter: pygments
-:icons: font
-:scripts: cjk
-:stem: latexmath
-:toc:
-:toc: right
-:toc-title: 目录
-:toclevels: 3</t>
-<t tx="swot.20251026094246.1">
-++++
-&lt;button id="toggleButton"&gt;目录开关&lt;/button&gt;
-&lt;script&gt;
-    // 获取按钮和 div 元素
-    const toggleButton = document.getElementById('toggleButton');
-    const contentDiv = document.getElementById('toc');
-    contentDiv.style.display = 'block';
-
-    // 添加点击事件监听器
-    toggleButton.addEventListener('click', () =&gt; {
-        // 切换 div 的显示状态
-        // if (contentDiv.style.display === 'none' || contentDiv.style.display === '') {
-        if (contentDiv.style.display === 'none') {
-            contentDiv.style.display = 'block';
-        } else {
-            contentDiv.style.display = 'none';
-        }
-    });
-&lt;/script&gt;
-++++
-</t>
+<t tx="swot.20251026094157.1"></t>
+<t tx="swot.20251026094246.1"></t>
 <t tx="swot.20251026094301.1">@language asciidoc
 .字根表
 image::img/5bi.jpeg[,800]
@@ -15214,7 +15184,7 @@ pnpm-lock.yaml text eol=lf
 
 </t>
 <t tx="swot.20260213123722.1">@language asciidoc
-xref:wubi86/wubi86.adoc[ 中文输入法五笔 86 版 ]
+xref:wubi86/wubi86.adoc[中文输入法五笔 86 版]
 </t>
 <t tx="swot.20260213130935.1">
 ++++
@@ -52240,6 +52210,5 @@ export function validate_load_response(data, location_description) {
 </t>
 <t tx="swot.20261128172151.1"></t>
 <t tx="swot.20261128172418.1"></t>
-<t tx="swot.20261128202418.1"></t>
 </tnodes>
 </leo_file>
