@@ -18,6 +18,7 @@
 <v t="swot.20260215181304.1"><vh>postgresql</vh></v>
 <v t="swot.20250927110835.1"><vh>Redis</vh></v>
 <v t="swot.20250508162744.1"><vh>Software-Designer</vh></v>
+<v t="swot.20261128094349.1"><vh>svelte-sveltekit</vh></v>
 <v t="swot.20260215181527.1"><vh>system-designer</vh></v>
 <v t="swot.20261126102251.1"><vh>Tools</vh></v>
 <v t="swot.20260213123722.1"><vh>中文输入法五笔 86 版 -&gt; 70-80 后的最爱</vh></v>
@@ -2588,6 +2589,22 @@
 </v>
 </v>
 <v t="swot.20260729213729.1"><vh>@path svelte-sveltekit</vh>
+<v t="swot.20261128080344.1"><vh>@adoc Sveltekit-Remote-Function-Using.adoc</vh>
+<v t="swot.20261128092206.1"><vh>SvelteKit Remote Functions 使用指南</vh>
+<v t="swot.20261128092340.1"><vh>1. 它解决什么</vh></v>
+<v t="swot.20261128093655.1"><vh>2. 开它要两个开关</vh></v>
+<v t="swot.20261128092206.4"><vh>3. 四种函数</vh>
+<v t="swot.20261128092507.1"><vh>3.1 query：读</vh></v>
+<v t="swot.20261128092615.1"><vh>3.2 form：写</vh></v>
+<v t="swot.20261128092743.1"><vh>3.3 command：不挂表单的写</vh></v>
+<v t="swot.20261128092810.1"><vh>3.4 prerender：构建期写死</vh></v>
+</v>
+<v t="swot.20261128092206.9"><vh>4. 静态站只能用 prerender</vh></v>
+<v t="swot.20261128092852.1"><vh>5. 写完之后顺手刷新读</vh></v>
+<v t="swot.20261128092913.1"><vh>6. 认证得写进函数里</vh></v>
+<v t="swot.20261128092936.1"><vh>7. 最后</vh></v>
+</v>
+</v>
 <v t="swot.20260729213805.1"><vh>svelte-use 已经写好的可以拿来即用的库函数</vh></v>
 <v t="swot.20260831092122.1"><vh>@adoc Nuxt与SvelteKit开发模式运行机制对比.adoc</vh>
 <v t="swot.20260817085952.1"><vh>Nuxt 与 SvelteKit 开发模式运行机制对比</vh></v>
@@ -51365,6 +51382,375 @@ OSS 跨域的问题把 `readyState` 的 bug 完全盖住了：就算检查通过
 还有一点，AI 补的代码单看每一行都挺像样，但未必经得起放到完整调用链里推敲。那句 `readyState &lt; 2` 就是典型的"看起来很专业"的防御性写法，结果把功能整个锁死了。用归用，关键路径还是得自己过一遍。
 
 那几处跨域降级的注释和 `catch` 留着没动，反正无害，真遇到跨域还能优雅降级。按"够用就行"的原则，没必要专门清理。
+</t>
+<t tx="swot.20261128080344.1">@language asciidoc
+:author: https://github.com/wangzhaohe/swot-learning
+:source-highlighter: pygments
+:icons: font
+:font-size: 16px
+:scripts: cjk
+:stem: latexmath
+:experimental:
+:toc:
+:toc: right
+:toc-title: 目录
+:toclevels: 3
+:tip-caption: ⚡
+:note-caption: ❕
+:important-caption: ❗
+:caution-caption: ⚠️
+:warning-caption: ‼️</t>
+<t tx="swot.20261128092206.1">
+// 只有当后端不是 pdf or github 时才包含以下内容
+ifndef::env-github[]
+ifndef::backend-pdf[]
+++++
+&lt;style&gt;
+/* 1. 默认状态：初始就是隐藏的 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
+    white-space: nowrap !important;
+    
+    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+
+/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important; /* 根据需要恢复 padding */
+    overflow-y: auto !important;
+}
+
+/* 3. 列表样式保持不变 */
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+&lt;/style&gt;
+
+&lt;button id="toggleButton"&gt;Open Toc&lt;/button&gt;
+&lt;div id="toc"&gt;
+    &lt;/div&gt;
+
+&lt;script&gt;
+const toggleButton = document.getElementById('toggleButton');
+const contentDiv = document.getElementById('toc');
+
+toggleButton.addEventListener('click', () =&gt; {
+    // 切换 active 类
+    const isExpanded = contentDiv.classList.toggle('active');
+    
+    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
+    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+});
+&lt;/script&gt;
+++++
+endif::[]
+endif::[]
+</t>
+<t tx="swot.20261128092206.4">从 `$app/server` 导入的一共有四种：`query` 读数据，`form` 处理表单，`command` 做不挂在表单上的写操作，`prerender` 是构建时就算好、之后基本不变的数据。挨个说。
+</t>
+<t tx="swot.20261128092206.9">如果你的站点用 `adapter-static` 构建成纯静态文件（没有运行时服务器），那四种函数里只有 `prerender` 能用。
+
+原因很简单：`query`、`command`、`form` 编译之后，都是向"SvelteKit 自己的服务器"发请求。静态站部署到 CDN 之后没有这个服务器，请求根本没地方去。而且 `query` 在整页预渲染的页面上是被明确禁用的。
+
+`prerender` 能用是因为它反着来——不靠运行时服务器，而是在构建阶段就把结果算好，嵌进静态文件里。代价是数据"定死"在构建那一刻，像"用户点一下、值变一下"这种交互，纯静态站做不到，除非另接一个外部后端。
+
+所以判断很简单：部署后有个服务器在跑（`adapter-node`、`adapter-vercel` 这些）→ 四种都能用；部署成纯静态（`adapter-static`）→ 只有 `prerender`，交互写操作另想办法。
+
+</t>
+<t tx="swot.20261128092340.1">SvelteKit 2.27 加了个叫 Remote Functions 的东西，还标着”实验性”。我这两天把它过了一遍，把用法记下来。
+
+在 SvelteKit 里，读数据通常写 `load`，提交表单写 `actions`，剩下那些不挂表单上的读写，就开一个 `+server.ts`，前端再用 `fetch` 去调。三套写法，规矩还不一样。最烦的是类型对不上——服务端接口返回什么，前端 TypeScript 完全不知道，得自己写一堆 `as any` 或者手动维护类型。
+
+Remote Functions 想把这些并成一件：你在组件里 `import` 一个函数，然后 `await` 它，完事。
+
+[source,ts]
+----
+// data.remote.ts —— 注意文件名里要有 remote 这个词
+import { query } from '$app/server';
+import * as db from '$lib/server/database';
+
+export const getPosts = query(async () =&gt; {
+    return await db.sql`SELECT * FROM post ORDER BY published_at DESC`;
+});
+----
+
+[source,html]
+----
+&lt;script&gt;
+    import { getPosts } from './data.remote';
+&lt;/script&gt;
+
+{#each await getPosts() as post}
+    &lt;p&gt;{post.title}&lt;/p&gt;
+{/each}
+----
+
+函数体永远在服务器上跑，浏览器只拿结果。所以里面可以放心用数据库密码、环境变量这类不能漏到前端的东西。
+</t>
+<t tx="swot.20261128092507.1">不带参数的最简单：
+
+[source,javascript]
+----
+export const getPosts = query(async () =&gt; {
+    return await db.sql`SELECT title, slug FROM post ORDER BY published_at DESC`;
+});
+----
+
+要带参数，比如按 slug 查单篇，就写在 `$derived` 里：
+
+[source,html]
+----
+&lt;script&gt;
+    import { getPost } from '../data.remote';
+    let { params } = $props();
+
+    const post = $derived(await getPost(params.slug));
+&lt;/script&gt;
+
+&lt;h1&gt;{post.title}&lt;/h1&gt;
+----
+
+这里有个必须提醒的事：带参数之后，这个函数就变成了一个公开的 HTTP 端点，任何人都能往上面灌数据。所以参数一定得校验。把 schema 作为第一个参数传进去就行，Zod、Valibot 这些标准 schema 库都行：
+
+[source,javascript]
+----
+import { z } from 'zod';
+import { error } from '@sveltejs/kit';
+import { query } from '$app/server';
+import * as db from '$lib/server/database';
+
+export const getPost = query(z.string(), async (slug) =&gt; {
+    const [post] = await db.sql`SELECT * FROM post WHERE slug = ${slug}`;
+    if (!post) error(404, 'Not found');
+    return post;
+});
+----
+
+参数和返回值用 `devalue` 序列化，`Date`、`Map`、`Set` 都能传，不止 JSON。
+
+两个附带的好处。一是去重：同样的 query、同样的参数，只执行一次，`getPosts() === getPosts()`，你在组件里 `await` 过一次，按钮里再 `await` 一次也不会发第二个请求。二是能手动刷新：
+
+[source,html]
+----
+&lt;button onclick={() =&gt; getPosts().refresh()}&gt;刷新&lt;/button&gt;
+----
+
+不用先存引用，`getPosts()` 每次拿到的是同一个实例，直接 `.refresh()` 就行。
+
+还有两个进阶版。`query.batch` 解决列表场景的 n+1：比如一页渲染十个城市，每个城市要单独查一次天气，`batch` 能把同一批请求合成一次数据库查询。`query.live` 是实时数据，回调写成一个 async generator，靠长连接推流，返回的东西带 `connected` 属性和 `reconnect()` 方法。注意 `batch` 和 `live` 是 2.35 之后才加的，更早的版本没有。这两个用得上再查文档，先知道有这回事。
+</t>
+<t tx="swot.20261128092615.1">四种里最省事的是 `form`，因为表单的提交、校验、错误提示、回填，它几乎全包了。
+
+[source,javascript]
+----
+import { z } from 'zod';
+import { redirect } from '@sveltejs/kit';
+import { form } from '$app/server';
+import * as db from '$lib/server/database';
+
+export const createPost = form(
+    z.object({
+        title: z.string().min(1, '标题不能为空'),
+        content: z.string().min(1, '内容不能为空')
+    }),
+    async ({ title, content }) =&gt; {
+        await db.insert({ title, content });
+        redirect(303, `/blog/${title}`);
+    }
+);
+----
+
+[source,python]
+----
+&lt;form {...createPost}&gt;
+    &lt;label&gt;
+        标题
+        &lt;input {...createPost.fields.title.as('text')} /&gt;
+    &lt;/label&gt;
+    &lt;label&gt;
+        内容
+        &lt;textarea {...createPost.fields.content.as('text')}&gt;&lt;/textarea&gt;
+    &lt;/label&gt;
+    &lt;button&gt;发布&lt;/button&gt;
+&lt;/form&gt;
+----
+
+`{...createPost}` 这个展开做了不少事：没有 JavaScript 的时候它退化成普通表单提交加整页刷新，有 JS 的时候走渐进增强、不刷新页面。校验失败，输入框会自动回填你填过的值，还自动加 `aria-invalid`。
+
+字段的输入类型由 `.as()` 决定，`'text'`、`'number'`、`'checkbox'`、`'radio'`、`'file'` 这些。radio 和 checkbox 记得传第二个参数（值）。
+
+错误信息这么读：
+
+[source,html]
+----
+{#each createPost.fields.title.issues() ?? [] as issue}
+    &lt;p style="color:red"&gt;{issue.message}&lt;/p&gt;
+{/each}
+----
+
+`issues()` 在校验没通过时返回 `[{ message }]`，通过或者还没校验时是 `undefined`。想一次性拿所有字段的错误，用 `createPost.fields.allIssues()`。
+
+读值、写值也有现成接口：`createPost.fields.title.value()` 实时跟随用户输入，`createPost.fields.set({ ... })` 用来程序化填值（比如编辑已有数据）。如果想让用户打字时就校验，给 `&lt;form&gt;` 加个 `oninput={() =&gt; createPost.validate()}`。
+
+两个可能用到的进阶点：`preflight(schema)` 可以在客户端先校验一遍、不合法就直接不发请求；`enhance(fn)` 用来接管提交流程，比如提交成功后弹个 toast、手动 `reset` 表单。列表里要渲染多个同款表单时，用 `modifyTodo.for(id)` 给每个隔离实例。
+</t>
+<t tx="swot.20261128092743.1">`form` 好是好，但它绑在 `&lt;form&gt;` 元素上。点赞、删除这种按钮操作，用 `command`：
+
+[source,javascript]
+----
+import { z } from 'zod';
+import { command } from '$app/server';
+import * as db from '$lib/server/database';
+
+export const addLike = command(z.string(), async (id) =&gt; {
+    await db.sql`UPDATE item SET likes = likes + 1 WHERE id = ${id}`;
+});
+----
+
+[source,python]
+----
+&lt;button onclick={async () =&gt; {
+    await addLike(item.id);
+}}&gt;
+    点赞
+&lt;/button&gt;
+----
+
+两个限制：渲染期间不能调 `command`（只能放事件里），`command` 里也不能用 `redirect`——需要的话用 `error(401)`，或者返回 `{ redirect: location }` 自己在客户端处理。
+</t>
+<t tx="swot.20261128092810.1">跟 `query` 差不多，但数据在构建时就定好了，之后不变：
+
+[source,ts]
+----
+import { prerender } from '$app/server';
+import * as db from '$lib/server/database';
+
+export const getPosts = prerender(async () =&gt; {
+    return await db.sql`SELECT title, slug FROM post`;
+});
+----
+
+结果会进 CDN，导航飞快。代价是不能放私有数据，因为构建期运行、结果公开成静态文件。带参数时用 `inputs` 指定要预渲染哪些值。
+</t>
+<t tx="swot.20261128092852.1">写数据和读数据常常成对出现：创建了一条 post，列表就得刷新。老办法是两次请求，先写、再查。Remote Functions 支持单次往返，在 `form` 或 `command` 的回调里直接刷新对应的 query：
+
+[source,ts]
+----
+export const createPost = form(z.object({/* ... */}), async (data) =&gt; {
+    await db.insert(data);
+    void getPosts().refresh();   // 结果随本次响应一起回来
+    redirect(303, '/blog/new');
+});
+----
+
+服务端能做的刷新有三种：`getPosts().refresh()` 重新取，`getPost(id).set(newPost)` 直接覆盖，`getNotifications(userId).reconnect()` 重连 live query。
+
+如果服务端不知道客户端渲染了哪些参数组合（比如列表带了 `{ filter: 'xxx' }`），可以反过来让客户端点名要刷新哪些，服务端用 `requested()` 接。这个偏进阶，用到再说。
+</t>
+<t tx="swot.20261128092913.1">远程函数能被任意页面调用，请求的 URL 也是客户端能伪造的，所以认证的**检查**必须写在函数内部；可信上下文（比如 `locals.user`）可以照常在 `handle` hook 里从 cookie 派生注入，不必挪进函数。
+
+[source,ts]
+----
+// $lib/server/auth.ts
+import { redirect } from '@sveltejs/kit';
+import { getRequestEvent } from '$app/server';
+
+export function requireLogin() {
+    const { locals } = getRequestEvent();
+    if (!locals.user) redirect(303, '/login');
+    return locals.user;
+}
+----
+
+[source,ts]
+----
+export const getMyProjects = query(async () =&gt; {
+    const user = requireLogin();
+    return await getProjects(user.id);
+});
+----
+
+`getRequestEvent()` 拿到的对象里，`route`（当前路由）、`params`（URL 里的动态段，比如 `[slug]`）、`url`（完整地址）这三个字段要特别注意。
+
+先看 `query`。它会把结果缓存，参数相同就不重新执行。假如你在 `query` 里读了 `url`，用户从 `/a` 跳到 `/b`，因为参数没变，函数不会重跑，返回的还是 `/a` 时的旧结果，数据就过时了。所以这三个字段在 `query` 里直接被禁用，一读就报错。真想依赖它们，就把需要的值当参数传进来。
+
+再看 `form` 和 `command`。这里虽然能读这三个字段，但它们描述的是”调用这个函数的那个页面”——这是客户端发来的信息，可以伪造。所以别拿它们判断用户有没有权限，权限检查要写在函数内部，像前面那个 `requireLogin`。
+</t>
+<t tx="swot.20261128092936.1">这东西值不值得现在就用，看情况。好处是类型安全、少写一堆 `fetch` 和 `res.json()`，交互后刷新局部数据也干净。但它是实验性的，升级可能踩坑；而且只在页面渲染时取一次数据的场景，`load` 更直接；接口要给别人用、或者需要 PUT/DELETE/PATCH 这种动词，还是得写 `+server.ts`。
+
+一句话：它适合”自己页面的门”，不适合”对外的门”。
+
+下面这个例子是我测试用的，复制过去就能跑。
+
+`vite.config.js`：
+
+[source,js]
+----
+sveltekit({
+    experimental: { remoteFunctions: true },
+    compilerOptions: { experimental: { async: true } }
+})
+----
+
+`src/routes/counter/data.remote.ts`：
+
+[source,javascript]
+----
+import { z } from 'zod';
+import { command, query } from '$app/server';
+
+// 演示用：count 存在内存里，serverless 环境会重置、多用户共享，真实项目请存数据库
+let count = 0;
+
+export const getCount = query(async () =&gt; count);
+
+export const increment = command(z.number().default(1), async (n) =&gt; {
+    count += n;
+});
+----
+
+`src/routes/counter/+page.svelte`：
+
+[source,html]
+----
+&lt;script&gt;
+    import { getCount, increment } from './data.remote';
+&lt;/script&gt;
+
+&lt;p&gt;当前值：{await getCount()}&lt;/p&gt;
+
+&lt;button onclick={async () =&gt; {
+    await increment(1);
+    await getCount().refresh();
+}}&gt;
+    +1
+&lt;/button&gt;
+----
+</t>
+<t tx="swot.20261128093655.1">现在是实验性的，默认关着，`vite.config.js` 里得开两处：
+
+[source,javascript]
+----
+sveltekit({
+    experimental: { remoteFunctions: true },
+    compilerOptions: { experimental: { async: true } }
+})
+----
+
+`remoteFunctions` 是开这个功能，`async` 是让组件能在渲染到一半时停下来等一个 Promise。 第二个其实挺关键，因为 `await getPosts()` 这种写法依赖它。
+</t>
+<t tx="swot.20261128094349.1">xref:svelte-sveltekit/Sveltekit-Remote-Function-Using.adoc[Sveltekit-Remote-Function-Using]
 </t>
 </tnodes>
 </leo_file>
