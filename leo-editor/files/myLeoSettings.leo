@@ -2927,6 +2927,7 @@ for i, content in enumerate(math_inlines):
     adoc_content = adoc_content.replace(placeholder, f"stem:[{content}]")
 
 # 4. 清理和排版优化
+adoc_content = adoc_content.replace("++", "")
 adoc_content = adoc_content.replace("{plus}=", "+=")
 adoc_content = adoc_content.replace("{plus}", "+")
 
