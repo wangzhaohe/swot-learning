@@ -3685,24 +3685,7 @@ Create a hard link:
 &lt;/script&gt;
 ++++
 </t>
-<t tx="swot.20250508123413.1">@language asciidoc
-:source-highlighter: pygments
-:icons: font
-:scripts: cjk
-:stem: latexmath
-:toc:
-:toc: right
-:toc-title: 目录
-:toclevels: 3
-:tip-caption: ⚡
-:note-caption: ❕
-:important-caption: ❗
-:warning-caption: ‼️
-:caution-caption: ⚠️
-
-// Used for github Code to display
-// https://github.com/wangzhaohe/swot-learning
-</t>
+<t tx="swot.20250508123413.1"></t>
 <t tx="swot.20250508123515.1"></t>
 <t tx="swot.20250508123546.1">Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers. 
 Outline nodes may appear in more than one place, allowing multiple organizations of data within a single outline.
@@ -48676,27 +48659,7 @@ console.log(calcBy('multiply', 3, 4)); // 12
 </t>
 <t tx="swot.20261105103438.1">pnpm install -g @tencent-ai/codebuddy-code
 </t>
-<t tx="swot.20261124083738.1">@language asciidoc
-:author: https://github.com/wangzhaohe/swot-learning
-:source-highlighter: pygments
-:icons: font
-:font-size: 16px
-:scripts: cjk
-:stem: latexmath
-:experimental:
-:toc:
-:toc: right
-:toc-title: 目录
-:toclevels: 3
-:tip-caption: ⚡
-:note-caption: ❕
-:important-caption: ❗
-:caution-caption: ⚠️
-:warning-caption: ‼️
-
-// Used for github pages to display
-// https://wangzhaohe.github.io/swot-learning/
-</t>
+<t tx="swot.20261124083738.1"></t>
 <t tx="swot.20261124170600.1">@language asciidoc
 :author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
