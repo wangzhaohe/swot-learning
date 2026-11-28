@@ -468,3 +468,69 @@ a:active {
     }
 }
 
+/* TOC 工具条：由 options.rb 的 postprocessor 全局注入，无需在每个 .adoc 写 dir 指令 */
+/* 固定在视口右上角；z-index 1001 > 原生 #toc.toc2 的 1000，展开时不被遮挡 */
+#toc-toolbar {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+/* 抵消上方 #toggleButton 的 position:fixed，让它回到工具条内 */
+#toc-toolbar #toggleButton {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    z-index: auto !important;
+}
+#toc-toolbar > * {
+    font: inherit;
+    line-height: 1.4;
+    padding: 4px 10px;
+    border: 1px solid #d0d7de;
+    border-radius: 4px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+#toc-toolbar > *:hover {
+    background: #f6f8fa;
+}
+
+/* 默认隐藏原生目录，加 .active 后展开 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important;
+    overflow-y: auto !important;
+}
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+/* 打印时不需要交互工具条，目录正常展开 */
+@media print {
+    #toc-toolbar { display: none !important; }
+    #toc {
+        max-width: none !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+    }
+}
+

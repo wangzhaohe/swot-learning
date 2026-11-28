@@ -478,6 +478,72 @@ a:active {
         text-decoration: none !important;
     }
 }
+
+/* TOC 工具条：由 options.rb 的 postprocessor 全局注入，无需在每个 .adoc 写 dir 指令 */
+/* 固定在视口右上角；z-index 1001 > 原生 #toc.toc2 的 1000，展开时不被遮挡 */
+#toc-toolbar {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+/* 抵消上方 #toggleButton 的 position:fixed，让它回到工具条内 */
+#toc-toolbar #toggleButton {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    z-index: auto !important;
+}
+#toc-toolbar > * {
+    font: inherit;
+    line-height: 1.4;
+    padding: 4px 10px;
+    border: 1px solid #d0d7de;
+    border-radius: 4px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+#toc-toolbar > *:hover {
+    background: #f6f8fa;
+}
+
+/* 默认隐藏原生目录，加 .active 后展开 */
+#toc {
+    max-width: 0 !important;
+    opacity: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+}
+#toc.active {
+    max-width: 530px !important;
+    opacity: 1 !important;
+    padding: 10px !important;
+    overflow-y: auto !important;
+}
+#toc ul, #toc li {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+/* 打印时不需要交互工具条，目录正常展开 */
+@media print {
+    #toc-toolbar { display: none !important; }
+    #toc {
+        max-width: none !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+    }
+}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -580,87 +646,6 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
-<style>
-/* 工具条：fixed 到视口右上角；z-index 1001 > 原生 #toc.toc2 的 1000，展开时不被遮挡 */
-#toc-toolbar {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 1001;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-/* 抵消外部 CSS 里 #toggleButton 的 position:fixed，让它回到工具条内 */
-#toc-toolbar #toggleButton {
-  position: static !important;
-  top: auto !important;
-  right: auto !important;
-  z-index: auto !important;
-}
-#toc-toolbar > * {
-  font: inherit;
-  line-height: 1.4;
-  padding: 4px 10px;
-  border: 1px solid #d0d7de;
-  border-radius: 4px;
-  background: #fff;
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-}
-#toc-toolbar > *:hover { background: #f6f8fa; }
-
-/* 1. 默认状态：隐藏 Asciidoctor 原生目录 */
-#toc {
-max-width: 0 !important;
-opacity: 0 !important;
-padding-left: 0 !important;
-padding-right: 0 !important;
-border: none !important;
-overflow: hidden !important;
-white-space: nowrap !important;
-transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-opacity 0.3s ease;
-}
-/* 2. 展开状态 */
-#toc.active {
-max-width: 530px !important;
-opacity: 1 !important;
-padding: 10px !important;
-overflow-y: auto !important;
-}
-/* 3. 列表样式保持不变 */
-#toc ul, #toc li {
-margin-bottom: 8px !important;
-line-height: 1.4 !important;
-}
-</style>
-<div id="toc-toolbar">
-  <a id="homeButton" href="/" title="Back to home">Home</a>
-  <button id="toggleButton" type="button">Open Toc</button>
-</div>
-<script>
-// Home：域名根部署 → "/"；GitHub Pages 项目站点 → 自动回到项目根
-const homeBtn = document.getElementById('homeButton');
-const segs = location.pathname.split('/').filter(Boolean);
-homeBtn.href = (location.hostname.endsWith('github.io') && segs.length)
-  ? '/' + segs[0] + '/'
-  : '/';
-
-// 不要再写空的 <div id="toc">，它与 Asciidoctor 原生目录 ID 冲突
-const toggleButton = document.getElementById('toggleButton');
-const contentDiv = document.getElementById('toc');
-toggleButton.addEventListener('click', () => {
-  const isExpanded = contentDiv.classList.toggle('active');
-  toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
-});
-</script>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_1_它解决什么">1. 它解决什么</h2>
 <div class="sectionbody">
@@ -1045,7 +1030,7 @@ toggleButton.addEventListener('click', () => {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-11-28 19:52:23 +0800
+Last updated 2026-11-28 20:20:05 +0800
 </div>
 </div>
 <script type="text/x-mathjax-config">
@@ -1072,5 +1057,27 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
 })
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<div id="toc-toolbar">
+  <a id="homeButton" href="/" title="Back to home">Home</a>
+  <button id="toggleButton" type="button">Open Toc</button>
+</div>
+<script>
+(function () {
+  // Home：域名根部署 -> "/"；GitHub Pages 项目站点 -> 自动回到项目根
+  var home = document.getElementById('homeButton');
+  var segs = location.pathname.split('/').filter(Boolean);
+  home.href = (location.hostname.endsWith('github.io') && segs.length)
+    ? '/' + segs[0] + '/' : '/';
+
+  var toc = document.getElementById('toc');
+  var btn = document.getElementById('toggleButton');
+  // 没有原生目录时只保留 Home，不显示无意义的开关
+  if (!toc) { btn.style.display = 'none'; return; }
+  btn.addEventListener('click', function () {
+    var open = toc.classList.toggle('active');
+    btn.textContent = open ? 'Close TOC' : 'Open TOC';
+  });
+})();
+</script>
 </body>
 </html>

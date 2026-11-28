@@ -3621,8 +3621,8 @@
 </v>
 </v>
 <v t="swot.20261128172418.1"><vh>---</vh></v>
-<v t="swot.20261128195138.1"><vh>newHeadline</vh></v>
 <v t="swot.20261128172151.1"><vh>写 ascii 博客</vh></v>
+<v t="swot.20261128202418.1"><vh>adoc 文档结构研究，到底需要几层 leo outline?</vh></v>
 </vnodes>
 <tnodes>
 <t tx="swot.20240101100533.1">@language javascript
@@ -3703,92 +3703,7 @@ Create a hard link:
 // Used for github Code to display
 // https://github.com/wangzhaohe/swot-learning
 </t>
-<t tx="swot.20250508123515.1">
-// 只有当后端不是 pdf or github 时才包含以下内容
-ifndef::env-github[]
-ifndef::backend-pdf[]
-++++
-&lt;style&gt;
-/* 工具条：fixed 到视口右上角；z-index 1001 &gt; 原生 #toc.toc2 的 1000，展开时不被遮挡 */
-#toc-toolbar {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 1001;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-/* 抵消外部 CSS 里 #toggleButton 的 position:fixed，让它回到工具条内 */
-#toc-toolbar #toggleButton {
-  position: static !important;
-  top: auto !important;
-  right: auto !important;
-  z-index: auto !important;
-}
-#toc-toolbar &gt; * {
-  font: inherit;
-  line-height: 1.4;
-  padding: 4px 10px;
-  border: 1px solid #d0d7de;
-  border-radius: 4px;
-  background: #fff;
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-}
-#toc-toolbar &gt; *:hover { background: #f6f8fa; }
-
-/* 1. 默认状态：隐藏 Asciidoctor 原生目录 */
-#toc {
-max-width: 0 !important;
-opacity: 0 !important;
-padding-left: 0 !important;
-padding-right: 0 !important;
-border: none !important;
-overflow: hidden !important;
-white-space: nowrap !important;
-transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-opacity 0.3s ease;
-}
-/* 2. 展开状态 */
-#toc.active {
-max-width: 530px !important;
-opacity: 1 !important;
-padding: 10px !important;
-overflow-y: auto !important;
-}
-/* 3. 列表样式保持不变 */
-#toc ul, #toc li {
-margin-bottom: 8px !important;
-line-height: 1.4 !important;
-}
-&lt;/style&gt;
-&lt;div id="toc-toolbar"&gt;
-  &lt;a id="homeButton" href="/" title="Back to home"&gt;Home&lt;/a&gt;
-  &lt;button id="toggleButton" type="button"&gt;Open Toc&lt;/button&gt;
-&lt;/div&gt;
-&lt;script&gt;
-// Home：域名根部署 → "/"；GitHub Pages 项目站点 → 自动回到项目根
-const homeBtn = document.getElementById('homeButton');
-const segs = location.pathname.split('/').filter(Boolean);
-homeBtn.href = (location.hostname.endsWith('github.io') &amp;&amp; segs.length)
-  ? '/' + segs[0] + '/'
-  : '/';
-
-// 不要再写空的 &lt;div id="toc"&gt;，它与 Asciidoctor 原生目录 ID 冲突
-const toggleButton = document.getElementById('toggleButton');
-const contentDiv = document.getElementById('toc');
-toggleButton.addEventListener('click', () =&gt; {
-  const isExpanded = contentDiv.classList.toggle('active');
-  toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
-});
-&lt;/script&gt;
-++++
-endif::[]
-endif::[]
-</t>
+<t tx="swot.20250508123515.1"></t>
 <t tx="swot.20250508123546.1">Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers. 
 Outline nodes may appear in more than one place, allowing multiple organizations of data within a single outline.
 
@@ -51455,92 +51370,7 @@ OSS 跨域的问题把 `readyState` 的 bug 完全盖住了：就算检查通过
 :important-caption: ❗
 :caution-caption: ⚠️
 :warning-caption: ‼️</t>
-<t tx="swot.20261128092206.1">
-// 只有当后端不是 pdf or github 时才包含以下内容
-ifndef::env-github[]
-ifndef::backend-pdf[]
-++++
-&lt;style&gt;
-/* 工具条：fixed 到视口右上角；z-index 1001 &gt; 原生 #toc.toc2 的 1000，展开时不被遮挡 */
-#toc-toolbar {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 1001;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-/* 抵消外部 CSS 里 #toggleButton 的 position:fixed，让它回到工具条内 */
-#toc-toolbar #toggleButton {
-  position: static !important;
-  top: auto !important;
-  right: auto !important;
-  z-index: auto !important;
-}
-#toc-toolbar &gt; * {
-  font: inherit;
-  line-height: 1.4;
-  padding: 4px 10px;
-  border: 1px solid #d0d7de;
-  border-radius: 4px;
-  background: #fff;
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-}
-#toc-toolbar &gt; *:hover { background: #f6f8fa; }
-
-/* 1. 默认状态：隐藏 Asciidoctor 原生目录 */
-#toc {
-max-width: 0 !important;
-opacity: 0 !important;
-padding-left: 0 !important;
-padding-right: 0 !important;
-border: none !important;
-overflow: hidden !important;
-white-space: nowrap !important;
-transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-opacity 0.3s ease;
-}
-/* 2. 展开状态 */
-#toc.active {
-max-width: 530px !important;
-opacity: 1 !important;
-padding: 10px !important;
-overflow-y: auto !important;
-}
-/* 3. 列表样式保持不变 */
-#toc ul, #toc li {
-margin-bottom: 8px !important;
-line-height: 1.4 !important;
-}
-&lt;/style&gt;
-&lt;div id="toc-toolbar"&gt;
-  &lt;a id="homeButton" href="/" title="Back to home"&gt;Home&lt;/a&gt;
-  &lt;button id="toggleButton" type="button"&gt;Open Toc&lt;/button&gt;
-&lt;/div&gt;
-&lt;script&gt;
-// Home：域名根部署 → "/"；GitHub Pages 项目站点 → 自动回到项目根
-const homeBtn = document.getElementById('homeButton');
-const segs = location.pathname.split('/').filter(Boolean);
-homeBtn.href = (location.hostname.endsWith('github.io') &amp;&amp; segs.length)
-  ? '/' + segs[0] + '/'
-  : '/';
-
-// 不要再写空的 &lt;div id="toc"&gt;，它与 Asciidoctor 原生目录 ID 冲突
-const toggleButton = document.getElementById('toggleButton');
-const contentDiv = document.getElementById('toc');
-toggleButton.addEventListener('click', () =&gt; {
-  const isExpanded = contentDiv.classList.toggle('active');
-  toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
-});
-&lt;/script&gt;
-++++
-endif::[]
-endif::[]
-</t>
+<t tx="swot.20261128092206.1"></t>
 <t tx="swot.20261128092206.4">从 `$app/server` 导入的一共有四种：`query` 读数据，`form` 处理表单，`command` 做不挂在表单上的写操作，`prerender` 是构建时就算好、之后基本不变的数据。挨个说。
 </t>
 <t tx="swot.20261128092206.9">如果你的站点用 `adapter-static` 构建成纯静态文件（没有运行时服务器），那四种函数里只有 `prerender` 能用。
@@ -52447,6 +52277,6 @@ export function validate_load_response(data, location_description) {
 </t>
 <t tx="swot.20261128172151.1"></t>
 <t tx="swot.20261128172418.1"></t>
-<t tx="swot.20261128195138.1"></t>
+<t tx="swot.20261128202418.1"></t>
 </tnodes>
 </leo_file>
