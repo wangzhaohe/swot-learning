@@ -25,51 +25,80 @@ ifndef::env-github[]
 ifndef::backend-pdf[]
 ++++
 <style>
-/* 1. 默认状态：初始就是隐藏的 */
+/* 工具条：fixed 到视口右上角；z-index 1001 > 原生 #toc.toc2 的 1000，展开时不被遮挡 */
+#toc-toolbar {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* 抵消外部 CSS 里 #toggleButton 的 position:fixed，让它回到工具条内 */
+#toc-toolbar #toggleButton {
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  z-index: auto !important;
+}
+#toc-toolbar > * {
+  font: inherit;
+  line-height: 1.4;
+  padding: 4px 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+#toc-toolbar > *:hover { background: #f6f8fa; }
+
+/* 1. 默认状态：隐藏 Asciidoctor 原生目录 */
 #toc {
-    max-width: 0 !important;
-    opacity: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    border: none !important;
-    overflow: hidden !important; /* 必须在这里，保证收缩时内容不溢出 */
-    white-space: nowrap !important;
-
-    /* 【关键】：过渡动画必须放在基类里，这样“展开”和“收回”都有动画 */
-    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease;
+max-width: 0 !important;
+opacity: 0 !important;
+padding-left: 0 !important;
+padding-right: 0 !important;
+border: none !important;
+overflow: hidden !important;
+white-space: nowrap !important;
+transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+opacity 0.3s ease;
 }
-
-/* 2. 展开状态：点击后添加 .active 或 .expanded 类 */
+/* 2. 展开状态 */
 #toc.active {
-    max-width: 530px !important;
-    opacity: 1 !important;
-    padding: 10px !important; /* 根据需要恢复 padding */
-    overflow-y: auto !important;
+max-width: 530px !important;
+opacity: 1 !important;
+padding: 10px !important;
+overflow-y: auto !important;
 }
-
 /* 3. 列表样式保持不变 */
 #toc ul, #toc li {
-    margin-bottom: 8px !important;
-    line-height: 1.4 !important;
+margin-bottom: 8px !important;
+line-height: 1.4 !important;
 }
 </style>
-
-<button id="toggleButton">Open Toc</button>
-<div id="toc">
-    </div>
-
+<div id="toc-toolbar">
+  <a id="homeButton" href="/" title="Back to home">Home</a>
+  <button id="toggleButton" type="button">Open Toc</button>
+</div>
 <script>
+// Home：域名根部署 → "/"；GitHub Pages 项目站点 → 自动回到项目根
+const homeBtn = document.getElementById('homeButton');
+const segs = location.pathname.split('/').filter(Boolean);
+homeBtn.href = (location.hostname.endsWith('github.io') && segs.length)
+  ? '/' + segs[0] + '/'
+  : '/';
+
+// 不要再写空的 <div id="toc">，它与 Asciidoctor 原生目录 ID 冲突
 const toggleButton = document.getElementById('toggleButton');
 const contentDiv = document.getElementById('toc');
-
 toggleButton.addEventListener('click', () => {
-    // 切换 active 类
-    const isExpanded = contentDiv.classList.toggle('active');
-
-    // 逻辑：如果现在是 expanded (true)，说明打开了，按钮应该提示“收起”
-    toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
+  const isExpanded = contentDiv.classList.toggle('active');
+  toggleButton.textContent = isExpanded ? 'Close TOC' : 'Open TOC';
 });
 </script>
 ++++
