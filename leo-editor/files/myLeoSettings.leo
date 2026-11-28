@@ -109,7 +109,10 @@
 <v t="swot.20260313193128.1"><vh>@buttons</vh>
 <v t="swot.20260218013134.1"><vh>@button ascii @key=Ctrl-/</vh>
 <v t="swot.20261128103842.1"><vh>&lt;&lt; doc &gt;&gt;</vh></v>
-<v t="swot.20260920000641.1"><vh>run command adoc</vh></v>
+<v t="swot.20260920000641.1"><vh>run command adoc</vh>
+<v t="swot.20261128151136.1"><vh>&lt;&lt; register cleanup_servers &gt;&gt;</vh></v>
+<v t="swot.20261128150724.1"><vh>&lt;&lt; live-server &gt;&gt;</vh></v>
+</v>
 </v>
 <v t="swot.20260313141102.1"><vh>@button node @key=Alt+Shift+J</vh></v>
 <v t="swot.20260313211116.1"><vh>@button html @key=Alt+Shift+H</vh></v>
@@ -2155,8 +2158,9 @@ def find_adoc_node(p):
         curr.moveToParent()
     return None
 
-
+# leo-editor 节点对象
 target_node = find_adoc_node(p)
+print("target_node:", target_node)
 
 if target_node:
     @others
@@ -2791,71 +2795,69 @@ else:
         except Exception as e:
             g.es(f"Execution error: {e}", color='red')
 </t>
-<t tx="swot.20260920000641.1"># --- 2. Resolve paths and filenames ---
+<t tx="swot.20260920000641.1"># 节点上的 @path 路径，实际上就是硬盘上的目录，这下面或者子目录会存放生成的 .adoc &amp; .html 文件
+# 如: /Users/swot/swot-learning/svelte-sveltekit
 target_dir = c.getNodePath(target_node)
-# print("target_dir:", target_dir)
+print("target_dir:", target_dir)
+
+# 获取 .adoc 的文件名
 adoc_file = target_node.h.replace("@adoc ", "").strip()
-# html_filename = os.path.splitext(adoc_file)[0] + ".html"  # 只去一层扩展名，xxx.js.adoc 会算成 xxx.js.html。
-# 与 Leo 的 leoMarkup.compute_opath() 保持一致：最多去掉 3 层扩展名。
-# Keep in sync with leoMarkup.compute_opath(): strip up to 3 extensions.
-html_filename = adoc_file
-for _ in range(3):
-    html_filename, ext = os.path.splitext(html_filename)
-    if not ext:
-        break
-html_filename += ".html"
-# print("html_filename:", html_filename)
+
+# 两个 HTML 文件名要分清：
+# 1) o_html_filename：Leo 的 compute_opath() 算出的产物名（最多剥 3 层扩展名），是重命名的源。
+# 2) xref_html_filename：Asciidoctor xref 把 .adoc 换成 .html 后的名字（保留 .js 等中间扩展名），
+#    是重命名的目标，也是 live-server 打开和监视的名字。
+xref_html_filename = os.path.splitext(adoc_file)[0] + ".html"
+# print("xref_html_filename:", xref_html_filename)
 
 # Unique key to track active servers
-server_key = (target_dir, html_filename)
+server_key = (target_dir, xref_html_filename)
 
-# --- 3. Initialize global registry ---
-if not hasattr(g, "live_servers_adoc"):
-    g.live_servers_adoc = {}
-
-    # kill live server when leo-editor quit
-    def cleanup_servers():
-        for _, proc in g.live_servers_adoc.items():
-            if proc.poll() is None:
-                proc.terminate()
-        g.live_servers_adoc.clear()
-
-    atexit.register(cleanup_servers)
+&lt;&lt; register cleanup_servers &gt;&gt;
 
 # --- 4. Execute AsciiDoc conversion ---
-c.executeMinibufferCommand("adoc")
+# 保留原来的命令调用方式。executeMinibufferCommand 会透传 adoc 命令的返回值，
+# 也就是刚写出的 .adoc 路径列表；输出 HTML 路径仍由 Leo 的 compute_opath() 计算。
+i_paths = c.executeMinibufferCommand("adoc") or []
+print("i_paths:", i_paths)
 
-# --- 5. Smart Logic: Start or Update ---
-if server_key not in g.live_servers_adoc:
-    # Scenario A: First start.
-    g.es(f"Starting Live Server: {html_filename}", color="blue")
+# 从 adoc 命令写出的路径列表中挑出与 @adoc 标题同名的那一个：
+# next() 短路，找到第一个即停；找不到时返回 None，触发下面的兜底。
+# Pick the path whose basename matches the @adoc title; next() short-circuits.
+i_path = next((x for x in i_paths if os.path.basename(x) == adoc_file), None)
 
-    # --entry-file opens the specific file
-    # --watch only watch the created html file
-    cmd = [
-        "npx", 
-        "live-server", 
-        f"--entry-file={html_filename}", 
-        f"--watch={html_filename}"
-    ]
-    try:
-        process = subprocess.Popen(cmd, cwd=target_dir)
-        g.live_servers_adoc[server_key] = process
-    except Exception as e:
-        g.es(f"Server error: {e}", color="red")
-else:
-    # Scenario B: Update only.
-    process = g.live_servers_adoc[server_key]
-    # Check the live server running now?
-    if process.poll() is None:
-        g.es(f"Updated: {html_filename}", color="green")
-        g.es("Browser should auto-reload.", color="grey")
+# 如果标题里写的是带路径的形式（比如 @adoc sub/foo.adoc），basename 匹配会失败——此时 next(..., None) 返回 None，正好触发兜底，退而用第一个路径。若用 next(gen) 不带默认值，这里会直接异常，兜底代码根本走不到。
+if i_path is None and i_paths:
+    i_path = i_paths[0]
+
+# 让 Leo 自己算出 .adoc 对应的 HTML 输出路径（即重命名前的源）。
+# compute_opath() 最多剥 3 层扩展名，o_path 为 None 表示 Leo 没报告输出。
+# Let Leo compute its HTML output path; None means no output was reported.
+o_path = c.markupCommands.compute_opath(i_path) if i_path else None
+print('o_path:', o_path)
+
+# o_path 的文件名部分（重命名前的 HTML 文件名），仅用于日志提示。
+# basename of o_path (the pre-rename HTML filename), used only in log messages.
+o_html_filename = os.path.basename(o_path) if o_path else ""
+print("o_html_filename:", o_html_filename)
+
+if not o_path:
+    g.es("Warning: Leo did not report an output file for @adoc.", color="orange")
+
+# 重命名产物：让 HTML 文件名与 Asciidoctor xref 的 href 一致 ---
+# 源：o_path（Leo 产物，o_html_filename）；目标：xref_path（xref 链接指向，xref_html_filename）
+# 用 os.replace 而非复制，磁盘上只保留一份 HTML，live-server 监视的也是它。
+xref_path = os.path.join(target_dir, xref_html_filename)
+if o_path and os.path.normpath(o_path) != os.path.normpath(xref_path):
+    if os.path.exists(o_path):
+        try:
+            os.replace(o_path, xref_path)
+        except OSError as e:
+            g.es(f"Rename error: {e}", color="red")
     else:
-        del g.live_servers_adoc[server_key]
-        g.es(
-            f"Server for {html_filename} has stopped. Run again to restart.",
-            color="red",
-        )
+        g.es(f"Warning: {o_html_filename} not found after adoc command.", color="orange")
+
+&lt;&lt; live-server &gt;&gt;
 </t>
 <t tx="swot.20261014102803.1">@language python
 import subprocess
@@ -2974,6 +2976,50 @@ hd;;=hdfs dfs
 1. 解决 xxx.js.adoc 不能打开网页的问题。
 2. 在 log 中打印网址，这样以后可以直接打开网址。
 """
+</t>
+<t tx="swot.20261128150724.1"># --- Smart Logic: Start or Update ---
+if server_key not in g.live_servers_adoc:
+    # Scenario A: First start.
+    g.es(f"Starting Live Server: {xref_html_filename}", color="blue")
+
+    # --entry-file opens the specific file
+    # --watch only watch the created html file
+    cmd = [
+        "npx", 
+        "live-server", 
+        f"--entry-file={xref_html_filename}", 
+        f"--watch={xref_html_filename}"
+    ]
+    try:
+        process = subprocess.Popen(cmd, cwd=target_dir)
+        g.live_servers_adoc[server_key] = process
+    except Exception as e:
+        g.es(f"Server error: {e}", color="red")
+else:
+    # Scenario B: Update only.
+    process = g.live_servers_adoc[server_key]
+    # Check the live server running now?
+    if process.poll() is None:
+        g.es(f"Updated: {xref_html_filename}", color="green")
+        g.es("Browser should auto-reload.", color="grey")
+    else:
+        del g.live_servers_adoc[server_key]
+        g.es(
+            f"Server for {xref_html_filename} has stopped. Run again to restart.",
+            color="red",
+        )
+</t>
+<t tx="swot.20261128151136.1">if not hasattr(g, "live_servers_adoc"):
+    g.live_servers_adoc = {}
+
+    # kill live server when leo-editor quit
+    def cleanup_servers():
+        for _, proc in g.live_servers_adoc.items():
+            if proc.poll() is None:
+                proc.terminate()
+        g.live_servers_adoc.clear()
+
+    atexit.register(cleanup_servers)
 </t>
 </tnodes>
 </leo_file>
