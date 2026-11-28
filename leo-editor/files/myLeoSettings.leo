@@ -106,7 +106,10 @@
 <v t="swot.20221230160721.1"><vh>@bool vr3-asciidoctor-diagram=True</vh></v>
 </v>
 <v t="swot.20260313193128.1"><vh>@buttons</vh>
-<v t="swot.20261128104421.1"><vh>@file my-ascii-test.py</vh></v>
+<v t="swot.20260218013134.1"><vh>@button ascii @key=Ctrl-/</vh>
+<v t="swot.20261128103842.1"><vh>&lt;&lt; doc &gt;&gt;</vh></v>
+<v t="swot.20260920000641.1"><vh>run command adoc</vh></v>
+</v>
 <v t="swot.20260313141102.1"><vh>@button node @key=Alt+Shift+J</vh></v>
 <v t="swot.20260313211116.1"><vh>@button html @key=Alt+Shift+H</vh></v>
 <v t="swot.20260313220645.1"><vh>@button kLive</vh></v>
@@ -2133,6 +2136,32 @@ else:
 
 c.redraw()
 </t>
+<t tx="swot.20260218013134.1">@language python
+&lt;&lt; doc &gt;&gt;
+import subprocess
+import os
+import atexit
+import leo.core.leoGlobals as g
+
+# 1. Search upwards for the @adoc node
+def find_adoc_node(p):
+    curr = p.copy()
+    while curr:
+        if curr.h.startswith("@adoc "):
+            return curr
+        if not curr.parent():
+            break
+        curr.moveToParent()
+    return None
+
+
+target_node = find_adoc_node(p)
+
+if target_node:
+    @others
+else:
+    g.es("Error: No @adoc node found in the hierarchy!", color="red")
+</t>
 <t tx="swot.20260218222902.1"></t>
 <t tx="swot.20260219100306.1">import sys
 from leo.core import leoGlobals as g
@@ -2761,6 +2790,72 @@ else:
         except Exception as e:
             g.es(f"Execution error: {e}", color='red')
 </t>
+<t tx="swot.20260920000641.1"># --- 2. Resolve paths and filenames ---
+target_dir = c.getNodePath(target_node)
+# print("target_dir:", target_dir)
+adoc_file = target_node.h.replace("@adoc ", "").strip()
+# html_filename = os.path.splitext(adoc_file)[0] + ".html"  # 只去一层扩展名，xxx.js.adoc 会算成 xxx.js.html。
+# 与 Leo 的 leoMarkup.compute_opath() 保持一致：最多去掉 3 层扩展名。
+# Keep in sync with leoMarkup.compute_opath(): strip up to 3 extensions.
+html_filename = adoc_file
+for _ in range(3):
+    html_filename, ext = os.path.splitext(html_filename)
+    if not ext:
+        break
+html_filename += ".html"
+# print("html_filename:", html_filename)
+
+# Unique key to track active servers
+server_key = (target_dir, html_filename)
+
+# --- 3. Initialize global registry ---
+if not hasattr(g, "live_servers_adoc"):
+    g.live_servers_adoc = {}
+
+    # kill live server when leo-editor quit
+    def cleanup_servers():
+        for _, proc in g.live_servers_adoc.items():
+            if proc.poll() is None:
+                proc.terminate()
+        g.live_servers_adoc.clear()
+
+    atexit.register(cleanup_servers)
+
+# --- 4. Execute AsciiDoc conversion ---
+c.executeMinibufferCommand("adoc")
+
+# --- 5. Smart Logic: Start or Update ---
+if server_key not in g.live_servers_adoc:
+    # Scenario A: First start.
+    g.es(f"Starting Live Server: {html_filename}", color="blue")
+
+    # --entry-file opens the specific file
+    # --watch only watch the created html file
+    cmd = [
+        "npx", 
+        "live-server", 
+        f"--entry-file={html_filename}", 
+        f"--watch={html_filename}"
+    ]
+    try:
+        process = subprocess.Popen(cmd, cwd=target_dir)
+        g.live_servers_adoc[server_key] = process
+    except Exception as e:
+        g.es(f"Server error: {e}", color="red")
+else:
+    # Scenario B: Update only.
+    process = g.live_servers_adoc[server_key]
+    # Check the live server running now?
+    if process.poll() is None:
+        g.es(f"Updated: {html_filename}", color="green")
+        g.es("Browser should auto-reload.", color="grey")
+    else:
+        del g.live_servers_adoc[server_key]
+        g.es(
+            f"Server for {html_filename} has stopped. Run again to restart.",
+            color="red",
+        )
+</t>
 <t tx="swot.20261014102803.1">@language python
 import subprocess
 import re
@@ -2871,6 +2966,13 @@ rrs;;=return Result.success(&lt;||&gt;);
 iftest;;=&lt;if test = "&lt;||&gt; != null"&gt; &lt;||&gt; = #{&lt;||&gt;}, &lt;/if&gt;
 
 hd;;=hdfs dfs 
+</t>
+<t tx="swot.20261128103842.1">"""
+主要功能：将当前节点所属的 @adoc 节点对应的 AsciiDoc 文件编译成 HTML，并启动/更新一个实时预览服务器（live-server），实现浏览器自动刷新预览。
+
+1. 解决 xxx.js.adoc 不能打开网页的问题。
+2. 在 log 中打印网址，这样以后可以直接打开网址。
+"""
 </t>
 </tnodes>
 </leo_file>
