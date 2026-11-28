@@ -110,6 +110,8 @@
 <v t="swot.20260218013134.1"><vh>@button ascii @key=Ctrl-/</vh>
 <v t="swot.20261128103842.1"><vh>&lt;&lt; doc &gt;&gt;</vh></v>
 <v t="swot.20260920000641.1"><vh>run command adoc</vh>
+<v t="swot.20261128165956.1"><vh>&lt;&lt; get output html file name &gt;&gt;</vh></v>
+<v t="swot.20261128165623.1"><vh>&lt;&lt; rename html file name &gt;&gt;</vh></v>
 <v t="swot.20261128151136.1"><vh>&lt;&lt; register cleanup_servers &gt;&gt;</vh></v>
 <v t="swot.20261128150724.1"><vh>&lt;&lt; live-server &gt;&gt;</vh></v>
 </v>
@@ -2147,7 +2149,7 @@ import os
 import atexit
 import leo.core.leoGlobals as g
 
-# 1. Search upwards for the @adoc node
+# Search upwards for the @adoc node
 def find_adoc_node(p):
     curr = p.copy()
     while curr:
@@ -2810,53 +2812,9 @@ adoc_file = target_node.h.replace("@adoc ", "").strip()
 xref_html_filename = os.path.splitext(adoc_file)[0] + ".html"
 # print("xref_html_filename:", xref_html_filename)
 
-# Unique key to track active servers
-server_key = (target_dir, xref_html_filename)
-
+&lt;&lt; get output html file name &gt;&gt;
+&lt;&lt; rename html file name &gt;&gt;
 &lt;&lt; register cleanup_servers &gt;&gt;
-
-# --- 4. Execute AsciiDoc conversion ---
-# 保留原来的命令调用方式。executeMinibufferCommand 会透传 adoc 命令的返回值，
-# 也就是刚写出的 .adoc 路径列表；输出 HTML 路径仍由 Leo 的 compute_opath() 计算。
-i_paths = c.executeMinibufferCommand("adoc") or []
-print("i_paths:", i_paths)
-
-# 从 adoc 命令写出的路径列表中挑出与 @adoc 标题同名的那一个：
-# next() 短路，找到第一个即停；找不到时返回 None，触发下面的兜底。
-# Pick the path whose basename matches the @adoc title; next() short-circuits.
-i_path = next((x for x in i_paths if os.path.basename(x) == adoc_file), None)
-
-# 如果标题里写的是带路径的形式（比如 @adoc sub/foo.adoc），basename 匹配会失败——此时 next(..., None) 返回 None，正好触发兜底，退而用第一个路径。若用 next(gen) 不带默认值，这里会直接异常，兜底代码根本走不到。
-if i_path is None and i_paths:
-    i_path = i_paths[0]
-
-# 让 Leo 自己算出 .adoc 对应的 HTML 输出路径（即重命名前的源）。
-# compute_opath() 最多剥 3 层扩展名，o_path 为 None 表示 Leo 没报告输出。
-# Let Leo compute its HTML output path; None means no output was reported.
-o_path = c.markupCommands.compute_opath(i_path) if i_path else None
-print('o_path:', o_path)
-
-# o_path 的文件名部分（重命名前的 HTML 文件名），仅用于日志提示。
-# basename of o_path (the pre-rename HTML filename), used only in log messages.
-o_html_filename = os.path.basename(o_path) if o_path else ""
-print("o_html_filename:", o_html_filename)
-
-if not o_path:
-    g.es("Warning: Leo did not report an output file for @adoc.", color="orange")
-
-# 重命名产物：让 HTML 文件名与 Asciidoctor xref 的 href 一致 ---
-# 源：o_path（Leo 产物，o_html_filename）；目标：xref_path（xref 链接指向，xref_html_filename）
-# 用 os.replace 而非复制，磁盘上只保留一份 HTML，live-server 监视的也是它。
-xref_path = os.path.join(target_dir, xref_html_filename)
-if o_path and os.path.normpath(o_path) != os.path.normpath(xref_path):
-    if os.path.exists(o_path):
-        try:
-            os.replace(o_path, xref_path)
-        except OSError as e:
-            g.es(f"Rename error: {e}", color="red")
-    else:
-        g.es(f"Warning: {o_html_filename} not found after adoc command.", color="orange")
-
 &lt;&lt; live-server &gt;&gt;
 </t>
 <t tx="swot.20261014102803.1">@language python
@@ -2977,7 +2935,10 @@ hd;;=hdfs dfs
 2. 在 log 中打印网址，这样以后可以直接打开网址。
 """
 </t>
-<t tx="swot.20261128150724.1"># --- Smart Logic: Start or Update ---
+<t tx="swot.20261128150724.1"># Unique key to track active servers
+server_key = (target_dir, xref_html_filename)
+
+# --- Smart Logic: Start or Update ---
 if server_key not in g.live_servers_adoc:
     # Scenario A: First start.
     g.es(f"Starting Live Server: {xref_html_filename}", color="blue")
@@ -3020,6 +2981,49 @@ else:
         g.live_servers_adoc.clear()
 
     atexit.register(cleanup_servers)
+</t>
+<t tx="swot.20261128165623.1"># 重命名产物：让 HTML 文件名与 Asciidoctor xref 的 href 一致 ---
+# 源：o_path（Leo 产物，o_html_filename）；目标：xref_path（xref 链接指向，xref_html_filename）
+# 用 os.replace 而非复制，磁盘上只保留一份 HTML，live-server 监视的也是它。
+
+xref_path = os.path.join(target_dir, xref_html_filename)
+
+if o_path and os.path.normpath(o_path) != os.path.normpath(xref_path):
+    if os.path.exists(o_path):
+        try:
+            os.replace(o_path, xref_path)
+        except OSError as e:
+            g.es(f"Rename error: {e}", color="red")
+    else:
+        g.es(f"Warning: {o_html_filename} not found after adoc command.", color="orange")
+</t>
+<t tx="swot.20261128165956.1"># 保留原来的命令调用方式。executeMinibufferCommand 会透传 adoc 命令的返回值，
+# 也就是刚写出的 .adoc 路径列表；输出 HTML 路径仍由 Leo 的 compute_opath() 计算。
+i_paths = c.executeMinibufferCommand("adoc") or []
+print("i_paths:", i_paths)
+
+# 从 adoc 命令写出的路径列表中挑出与 @adoc 标题同名的那一个：
+# next() 短路，找到第一个即停；找不到时返回 None，触发下面的兜底。
+# Pick the path whose basename matches the @adoc title; next() short-circuits.
+i_path = next((x for x in i_paths if os.path.basename(x) == adoc_file), None)
+
+# 如果标题里写的是带路径的形式（比如 @adoc sub/foo.adoc），basename 匹配会失败——此时 next(..., None) 返回 None，正好触发兜底，退而用第一个路径。若用 next(gen) 不带默认值，这里会直接异常，兜底代码根本走不到。
+if i_path is None and i_paths:
+    i_path = i_paths[0]
+
+# 让 Leo 自己算出 .adoc 对应的 HTML 输出路径（即重命名前的源）。
+# compute_opath() 最多剥 3 层扩展名，o_path 为 None 表示 Leo 没报告输出。
+# Let Leo compute its HTML output path; None means no output was reported.
+o_path = c.markupCommands.compute_opath(i_path) if i_path else None
+print('o_path:', o_path)
+
+# o_path 的文件名部分（重命名前的 HTML 文件名），仅用于日志提示。
+# basename of o_path (the pre-rename HTML filename), used only in log messages.
+o_html_filename = os.path.basename(o_path) if o_path else ""
+print("o_html_filename:", o_html_filename)
+
+if not o_path:
+    g.es("Warning: Leo did not report an output file for @adoc.", color="orange")
 </t>
 </tnodes>
 </leo_file>
