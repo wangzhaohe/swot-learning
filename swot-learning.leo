@@ -3620,6 +3620,10 @@
 <v t="swot.20260310142409.1"><vh>open-at-leo-file 打开的 leo 文件，不能执行 myLeoSettings.leo 中的命令 @command adoc-live</vh></v>
 </v>
 </v>
+<v t="swot.20261128172418.1"><vh>---</vh></v>
+<v t="swot.20261128172109.1"><vh>页面加个 Home</vh></v>
+<v t="swot.20261128172127.1"><vh>页面去掉 &lt;a&gt; 下划线</vh></v>
+<v t="swot.20261128172151.1"><vh>写 ascii 博客</vh></v>
 </vnodes>
 <tnodes>
 <t tx="swot.20240101100533.1">@language javascript
@@ -3641,7 +3645,8 @@ Create a hard link:
     ln ~/.rvm/gems/ruby-2.7.2/gems/asciidoctor-2.0.23/data/stylesheets/asciidoctor-default.css asciidoctor/
     Now I can edit asciidoctor-default.css in directory asciidoctor.
 
-    /System/Volumes/Data/Users/swot/swot-learning/asciidoctor/asciidoctor-default.css</t>
+    /System/Volumes/Data/Users/swot/swot-learning/asciidoctor/asciidoctor-default.css
+</t>
 <t tx="swot.20250508105244.1">@language asciidoc
 :author: https://github.com/wangzhaohe/swot-learning
 :source-highlighter: pygments
@@ -52383,5 +52388,9 @@ export function validate_load_response(data, location_description) {
 
 任何不能暴露给浏览器的逻辑，比如有密钥、服务器环境变量等。
 </t>
+<t tx="swot.20261128172109.1"></t>
+<t tx="swot.20261128172127.1"></t>
+<t tx="swot.20261128172151.1"></t>
+<t tx="swot.20261128172418.1"></t>
 </tnodes>
 </leo_file>
