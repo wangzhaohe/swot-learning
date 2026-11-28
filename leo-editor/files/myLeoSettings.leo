@@ -105,7 +105,6 @@
 <v t="swot.20221206220343.1"><vh>@@string vr3-asciidoctor-imagesdir=img</vh></v>
 <v t="swot.20221230160721.1"><vh>@bool vr3-asciidoctor-diagram=True</vh></v>
 </v>
-<v t="swot.20261128113047.1"><vh>@file my-ascii-test.py</vh></v>
 <v t="swot.20260313193128.1"><vh>@buttons</vh>
 <v t="swot.20260218013134.1"><vh>@button ascii @key=Ctrl-/</vh>
 <v t="swot.20261128103842.1"><vh>&lt;&lt; doc &gt;&gt;</vh></v>
