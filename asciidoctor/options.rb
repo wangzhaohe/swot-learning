@@ -1,7 +1,25 @@
 require 'asciidoctor'
 
 # 官方属性，模板读，走 DEFAULT_ATTRIBUTES 即可
+# 等价于每篇 .adoc 头部的 :xxx: 定义，无需在 leo-editor 里输入 toc;; 指令
+# 单篇文档若写了同名属性，文档内的值会覆盖这里的默认值
 Asciidoctor::DEFAULT_ATTRIBUTES['stem'] = 'latexmath'
+{
+  'author' => 'https://github.com/wangzhaohe/swot-learning',
+  'source-highlighter' => 'pygments',
+  'icons' => 'font',
+  'font-size' => '16px',
+  'scripts' => 'cjk',
+  'experimental' => '',
+  'toc' => 'right',
+  'toc-title' => '目录',
+  'toclevels' => '3',
+  'tip-caption' => '⚡',
+  'note-caption' => '❕',
+  'important-caption' => '❗',
+  'caution-caption' => '⚠️',
+  'warning-caption' => '‼️'
+}.each { |key, value| Asciidoctor::DEFAULT_ATTRIBUTES[key] = value }
 
 # postprocessor：
 # 1. 解决公式渲染错位问题（非官方属性 mathjax-url 无效，改用字符串替换）
